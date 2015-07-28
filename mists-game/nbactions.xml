@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-pit</actionName>
+        <displayName>pit</displayName>
+        <goals>
+            <goal>org.pitest:pitest-maven:mutationCoverage</goal>
+        </goals>
+    </action>
+</actions>
