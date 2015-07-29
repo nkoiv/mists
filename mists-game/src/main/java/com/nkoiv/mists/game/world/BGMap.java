@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.Mists;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -15,14 +16,29 @@ import javafx.scene.image.Image;
 public class BGMap implements Map{
     
     Image image;
+    double width;
+    double height;
     
     public BGMap (Image i) {
         this.image = i;
+        this.width = i.getWidth();
+        this.height = i.getHeight();
+        Mists.logger.info("Generated a BGMap");
     }
     
     @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage( image, 0, 0 );
+    public void render(double xOffset, double yOffset, GraphicsContext gc) {
+        gc.drawImage( image, xOffset, yOffset );
+    }
+
+    @Override
+    public double getWidth() {
+        return this.width;
+    }
+
+    @Override
+    public double getHeight() {
+        return this.height;
     }
     
 }

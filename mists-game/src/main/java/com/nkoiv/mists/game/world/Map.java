@@ -13,7 +13,9 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public interface Map {
     
-    void render(GraphicsContext gc);
+    void render(double xOffset, double yOffset, GraphicsContext gc);
     
+    double getWidth();
+    double getHeight();
     
 }
