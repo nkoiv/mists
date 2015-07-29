@@ -17,25 +17,17 @@ import javafx.scene.image.Image;
  */
 public class PlayerCharacter extends MapObject implements Combatant {
     private Direction facing;
-    private int ID;
-	
     private boolean alive;
-	
+    
+    //A bunch of Strings to be used for describing various attacks
     private ArrayList<String> overpoweringAttack;
     private ArrayList<String> overpoweringDefense;
     private ArrayList<String> weakAttack;
     private ArrayList<String> weakDefense;
 	
-    //Ulkonäkö
+    private boolean gender; //true=male, false=female
 	
-    public static final int HUMAN=0;
-    private int race;
-    private boolean male; //true=male, false=female
-    private int headNumber;
-    private Sprite baseHead;
-    private Sprite baseBody;
-	
-    //Ominaisuudet
+    //Attributes
     private int maxHealth;
     private int health;
     private int attackValue;
