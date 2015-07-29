@@ -21,6 +21,8 @@ public class Sprite
 {
     private Image image;
     private ArrayList<Image> images;
+    private double width;
+    private double height;
     /** Position for Sprite is pixel coordinates on the screen 
      *   Not to be confused with position for game objects (they're at a location)
      */
@@ -31,10 +33,10 @@ public class Sprite
      */
     private double velocityX;
     private double velocityY;
-    private double width;
-    private double height;
-    /**
-     * 
+
+    /** Sprite animation is optional, and every sprite should be usable inanimate.
+     *  There is no internal timer for the animation and every next frame is called every time the Sprite gets drawn
+     *  To extend the length of a frame, add duplicates to the images-array.
      */
     private boolean animated;
     private int currentFrame;
