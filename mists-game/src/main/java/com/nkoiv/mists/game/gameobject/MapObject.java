@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.world.Location;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -20,34 +21,49 @@ public class MapObject implements Global {
     
     private final String name;
     private Sprite sprite;
-    //private Location location;
+    private Location location;
 
     private boolean visible;
     
     public MapObject (String name, Image image) {
         this.name = name;
         this.sprite = new Sprite(image);
+        this.visible = true;
     }
     
     public MapObject (String name, Image image, double xCoor, double yCoor) {
         this.name = name;
         this.sprite = new Sprite(image);
         this.sprite.setPosition(xCoor, yCoor);
+        this.visible = true;
     }
     
-    public void render(GraphicsContext gc) {
+    public void setLocation(Location l) {
+        this.location = l;
+    }
+    
+    public Location getLocation() {
+        return this.location;
+    }
+    
+    public double getxPos(){
+        return this.sprite.getXPos();
+    }
+    
+    public double getyPos(){
+        return this.sprite.getYPos();
+    }
+    
+    public void render(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.visible) {
-            this.sprite.render(gc);
+            this.sprite.render(xOffset, yOffset, gc);
         }
-    }
-    
-    public void setPosition (double xCoor, double yCoor) {
-        this.sprite.setPosition(xCoor, yCoor);
-    }
-    
+    }   
+   
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }
+    
     
     public Sprite getSprite() {
         return this.sprite;
