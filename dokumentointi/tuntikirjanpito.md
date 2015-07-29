@@ -1,7 +1,12 @@
 
 
 
-#Viikko 1 (9½h)
+#Viikko 1 (14h)
+
+##29.7
+* 1½h [OHJELMOINTI] Luotu keskeiset luokat Sprite, MapObject, Location) POCia varten
+* 2h [OPISKELU] Tutustuttu erilaisiin tapoihin käsitellä Spritejä
+* 1h [MÄÄRITTELY] Piirretty alustava luokkakaavio
 
 ##28.7
 * ½h [OHJELMOINTI] Ensimmäiset rivit koodia (JavaFX-stagen alustus)
