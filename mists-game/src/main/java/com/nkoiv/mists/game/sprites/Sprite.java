@@ -121,6 +121,7 @@ public class Sprite
         velocityX += x;
         velocityY += y;
     }
+    
 
     public void update(double time)
     {
@@ -128,9 +129,9 @@ public class Sprite
         positionY += velocityY * time;
     }
 
-    public void render(GraphicsContext gc)
+    public void render(double xOffset, double yOffset, GraphicsContext gc)
     {
-        gc.drawImage( image, positionX, positionY );
+        gc.drawImage( image, positionX-xOffset, positionY-yOffset );
 
     }
 
@@ -142,6 +143,14 @@ public class Sprite
     public boolean intersects(Sprite s)
     {
         return s.getBoundary().intersects( this.getBoundary() );
+    }
+    
+    public double getXPos() {
+        return this.positionX;
+    }
+    
+    public double getYPos() {
+        return this.positionY;
     }
     
     @Override
