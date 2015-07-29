@@ -31,9 +31,20 @@ public class Location {
   
     }
     
+    public void setMap(Map m) {
+        this.map = m;
+    }
+    
+    public Map getMap() {
+        return this.map;
+    }
+    
     public void render (GraphicsContext gc) {
         
-        
+        this.map.render(gc);
+        /*
+        * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
+        */
         for (MapObject mob : this.mapObjects) {
             mob.render(gc);
         }
