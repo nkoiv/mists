@@ -28,6 +28,7 @@ public class PlayerCharacter extends MapObject implements Combatant {
     private boolean gender; //true=male, false=female
 	
     //Attributes
+    private int speed;
     private int maxHealth;
     private int health;
     private int attackValue;
@@ -41,6 +42,7 @@ public class PlayerCharacter extends MapObject implements Combatant {
         this.health = this.maxHealth;
         this.attackValue = 10;
         this.defenseValue = 10;
+        this.speed = 20;
     }
     
     @Override
@@ -107,6 +109,10 @@ public class PlayerCharacter extends MapObject implements Combatant {
         this.maxHealth = maxHealth;
     }
 
+    public void stopMovement() {
+        this.getSprite().setVelocity(0, 0);
+    }
+    
     @Override
     public boolean moveTowards (Direction direction) {
         switch(direction) {
@@ -125,42 +131,46 @@ public class PlayerCharacter extends MapObject implements Combatant {
     }
     
     private boolean moveUp() {
-        this.getSprite().setVelocity(0, -10);
+        this.getSprite().addVelocity(0, -this.speed);
         return true;
     }
     
     private boolean moveDown() {
-        this.getSprite().setVelocity(0, 10);
+        this.getSprite().addVelocity(0, this.speed);
         return true;
     }
         
     private boolean moveLeft() {
-        this.getSprite().setVelocity(-10, 0);
+        this.getSprite().addVelocity(-this.speed, 0);
         return true;
     }
     
     private boolean moveRight() {
-        this.getSprite().setVelocity(10, 0);
+        this.getSprite().addVelocity(this.speed, 0);
         return true;
     }
 
     private boolean moveUpRight() {
-        this.getSprite().setVelocity(5, -5);
+        this.moveUp();
+        this.moveDown();
         return true;
     }
     
     private boolean moveUpLeft() {
-        this.getSprite().setVelocity(-5, -5);
+        this.moveUp();
+        this.moveLeft();
         return true;
     }
         
     private boolean moveDownRight() {
-        this.getSprite().setVelocity(5, 5);
+        this.moveDown();
+        this.moveRight();
         return true;
     }
     
     private boolean moveDownLeft() {
-        this.getSprite().setVelocity(-5, 5);
+        this.moveDown();
+        this.moveLeft();
         return true;
     }
 }
