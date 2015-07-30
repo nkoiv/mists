@@ -122,6 +122,13 @@ public class Sprite
         velocityY += y;
     }
     
+    public double getXVelocity() {
+        return this.velocityX;
+    }
+    
+    public double getYVelocity() {
+        return this.velocityY;
+    }
 
     public void update(double time)
     {
@@ -137,7 +144,9 @@ public class Sprite
 
     public Rectangle2D getBoundary()
     {
-        return new Rectangle2D(positionX,positionY,width,height);
+        //Collision boxes should be slightly smaller than the Sprite itself
+        //Otherwise it will be really hard to move between tiles
+        return new Rectangle2D(positionX+1,positionY+1,width-2,height-2);
     }
 
     public boolean intersects(Sprite s)
