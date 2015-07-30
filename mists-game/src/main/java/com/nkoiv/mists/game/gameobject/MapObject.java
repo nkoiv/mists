@@ -48,6 +48,10 @@ public class MapObject implements Global {
         return this.collisionLevel;
     }
     
+    public boolean instersects(MapObject o) {
+        return o.getSprite().getBoundary().intersects( this.getSprite().getBoundary() );
+    }
+    
     public void setVisible(boolean v) {
         this.visible = v;
     }

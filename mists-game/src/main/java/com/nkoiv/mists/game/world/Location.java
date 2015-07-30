@@ -111,7 +111,7 @@ public class Location implements Global {
         }
     }
     
-    public MapObject checkCollisions (Sprite s) {
+    public MapObject checkCollisions (MapObject o) {
         /*
         * TODO: Maybe only check collisions from nearby objects?
         */
@@ -119,8 +119,8 @@ public class Location implements Global {
         while ( mapObjectsIter.hasNext() )
         {
             MapObject collidingObject = mapObjectsIter.next();
-            if (!collidingObject.getSprite().equals(s)) { // Colliding with yourself is not really a collision
-                if ( s.intersects(collidingObject.getSprite()) ) 
+            if (!collidingObject.equals(o)) { // Colliding with yourself is not really a collision
+                if ( o.instersects(collidingObject) ) 
                  {
                     return collidingObject;
                 }

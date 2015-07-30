@@ -121,11 +121,11 @@ public class PlayerCharacter extends MapObject implements Combatant {
         * Check collisions before movement
         * TODO: Add in pixel-based collision detection (compare alphamaps?)
         */
-        if (this.getLocation().checkCollisions(this.getSprite()) == null) {
+        if (this.getLocation().checkCollisions(this) == null) {
             this.getSprite().update(time); //Collided with nothing, free to move
         } else {
             
-            MapObject collidingObject = this.getLocation().checkCollisions(this.getSprite()); //Get the colliding object
+            MapObject collidingObject = this.getLocation().checkCollisions(this); //Get the colliding object
             double collidingX = collidingObject.getSprite().getXPos()+(collidingObject.getSprite().getImage().getWidth()/2);
             double collidingY = collidingObject.getSprite().getYPos()+(collidingObject.getSprite().getImage().getHeight()/2);
             double thisX = this.getSprite().getXPos()+(this.getSprite().getImage().getWidth()/2);
