@@ -7,14 +7,14 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.sprites.Sprite;
-import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
 
 /**
- *
+ * PlayerCharacter is currently designed to be unique per game
+ * TODO: Implement "World owner" as the main target instead of player,
+ * so that several players can coexist in a single game
  * @author daedra
  */
 public class PlayerCharacter extends MapObject implements Combatant {
@@ -195,21 +195,25 @@ public class PlayerCharacter extends MapObject implements Combatant {
     }
     
     private boolean moveUp() {
+        this.facing = Direction.UP;
         this.getSprite().addVelocity(0, -this.speed);
         return true;
     }
     
     private boolean moveDown() {
+        this.facing = Direction.DOWN;
         this.getSprite().addVelocity(0, this.speed);
         return true;
     }
         
     private boolean moveLeft() {
+        this.facing = Direction.LEFT;
         this.getSprite().addVelocity(-this.speed, 0);
         return true;
     }
     
     private boolean moveRight() {
+        this.facing = Direction.RIGHT;
         this.getSprite().addVelocity(this.speed, 0);
         return true;
     }
@@ -217,6 +221,7 @@ public class PlayerCharacter extends MapObject implements Combatant {
     private boolean moveUpRight() {
         this.moveUp();
         this.moveDown();
+        this.facing = Direction.UPRIGHT;
         return true;
     }
     
@@ -229,12 +234,14 @@ public class PlayerCharacter extends MapObject implements Combatant {
     private boolean moveDownRight() {
         this.moveDown();
         this.moveRight();
+        this.facing = Direction.DOWNRIGHT;
         return true;
     }
     
     private boolean moveDownLeft() {
         this.moveDown();
         this.moveLeft();
+        this.facing = Direction.DOWNLEFT;
         return true;
     }
 }
