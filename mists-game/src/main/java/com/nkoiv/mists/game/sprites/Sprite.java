@@ -60,6 +60,17 @@ public class Sprite
         height = i.getHeight();
         animated = false;
     }
+    
+    public Sprite (Image i, double xPosition, double yPosition) {
+        positionX = xPosition;
+        positionY = yPosition;    
+        velocityX = 0;
+        velocityY = 0;
+        image = i;
+        width = i.getWidth();
+        height = i.getHeight();
+        animated = false;
+    }
 
     public void setImage(Image i)
     {
