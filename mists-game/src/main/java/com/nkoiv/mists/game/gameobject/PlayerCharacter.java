@@ -6,9 +6,11 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import javafx.scene.image.Image;
 
 /**
@@ -126,53 +128,47 @@ public class PlayerCharacter extends MapObject implements Combatant {
         } else {
             
             MapObject collidingObject = this.getLocation().checkCollisions(this); //Get the colliding object
+            Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
             double collidingX = collidingObject.getSprite().getXPos()+(collidingObject.getSprite().getImage().getWidth()/2);
             double collidingY = collidingObject.getSprite().getYPos()+(collidingObject.getSprite().getImage().getHeight()/2);
             double thisX = this.getSprite().getXPos()+(this.getSprite().getImage().getWidth()/2);
             double thisY = this.getSprite().getYPos()+(this.getSprite().getImage().getHeight()/2);
             
-            double allowedXDistance = (this.getSprite().getImage().getWidth()/2)+(collidingObject.getSprite().getImage().getWidth()/2);
-            double allowedYDistance = (this.getSprite().getImage().getHeight()/2)+(collidingObject.getSprite().getImage().getHeight()/2);
+            double xDistance = Math.abs(thisX - collidingX);
+            double yDistance = Math.abs(thisY - collidingY);
+            Mists.logger.log(Level.INFO, "At the distance of x: {0} y: {1}", new Object[]{xDistance, yDistance});
+            //double allowedXDistance = (this.getSprite().getImage().getWidth()/2)+(collidingObject.getSprite().getImage().getWidth()/2);
+            //double allowedYDistance = (this.getSprite().getImage().getHeight()/2)+(collidingObject.getSprite().getImage().getHeight()/2);
+            
             /*
-            * Move slightly away from the colliding object &
-            * prevent movement towards collision
+            * Prevent further going into colliding object
+            * 
             */
-
-            if(this.getSprite().getXVelocity() != 0) {
+            
+            if(this.getSprite().getXVelocity() != 0 && (yDistance<xDistance)) {
                 if (thisX<collidingX) { //Colliding object is to the right
-                    if ((collidingX-thisX)<allowedXDistance) { //We're already inside colliding object!
-                        this.getSprite().setPosition(this.getSprite().getXPos()-1, this.getSprite().getYPos());
-                    }
                     if (this.getSprite().getXVelocity()>0) { // Check if we're trying to move right
                         this.getSprite().setVelocity(0, this.getSprite().getYVelocity()); //Stop movement right
                     }
                 } else if (thisX>collidingX) { //Colliding object is to the left 
-                    if ((thisX-collidingX)<allowedXDistance) {
-                        this.getSprite().setPosition(this.getSprite().getXPos()+1, this.getSprite().getYPos());
-                    }
                     if (this.getSprite().getXVelocity()<0) { //We're trying to move left
                         this.getSprite().setVelocity(0, this.getSprite().getYVelocity());
                     }
                 }
             }
-           if(this.getSprite().getYVelocity() != 0) {
+           if(this.getSprite().getYVelocity() != 0 && (xDistance<yDistance)) {
                 if (thisY<collidingY) { //Colliding object is below
-                    if ((collidingY-thisY)<allowedYDistance) {
-                        this.getSprite().setPosition(this.getSprite().getXPos(), this.getSprite().getYPos()-1);
-                    }
                     if (this.getSprite().getYVelocity()>0) { //We're trying to move down
                         this.getSprite().setVelocity(this.getSprite().getXVelocity(),0);
                     }
                 } else if (thisY>collidingY) { //Colliding object is above
-                    if ((thisY-collidingY)<allowedYDistance) {
-                        this.getSprite().setPosition(this.getSprite().getXPos(), this.getSprite().getYPos()+1);
-                    }
+
                     if (this.getSprite().getYVelocity()<0) { //We're trying to move up
                         this.getSprite().setVelocity(this.getSprite().getXVelocity(),0);
                     }
                 }
            }
-            this.getSprite().update(time);
+           this.getSprite().update(time);
             
         }
     }
