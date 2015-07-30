@@ -7,9 +7,11 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * PlayerCharacter is currently designed to be unique per game
@@ -19,6 +21,7 @@ import javafx.scene.image.Image;
  */
 public class PlayerCharacter extends MapObject implements Combatant {
     private Direction facing;
+    private boolean moving;
     private boolean alive;
     
     //A bunch of Strings to be used for describing various attacks
@@ -28,13 +31,41 @@ public class PlayerCharacter extends MapObject implements Combatant {
     private ArrayList<String> weakDefense;
 	
     private boolean gender; //true=male, false=female
-	
+    
+    //Sprite-Arrays for animated movement
+    /*
+    * TODO: Make a separate SpriteSheet-cutter class
+    * to manage different animations via one picture
+    */
+    private SpriteAnimation walkUp;
+    private SpriteAnimation walkDown;
+    private SpriteAnimation walkLeft;
+    private SpriteAnimation walkRight;
+    
+    
     //Attributes
     private int speed;
     private int maxHealth;
     private int health;
     private int attackValue;
     private int defenseValue;
+    
+    public PlayerCharacter() {
+        //Dummy player for testing
+        super ("Himmu",new Image("/images/himmu.png"));
+        this.walkDown = new SpriteAnimation (
+                new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 64, 64 );
+        this.walkUp = new SpriteAnimation (
+                new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 64, 64 );        
+        this.facing = Direction.DOWN;
+        this.alive = true;
+        this.maxHealth = 100;
+        this.health = this.maxHealth;
+        this.attackValue = 10;
+        this.defenseValue = 10;
+        this.speed = 50;
+    }
+    
 
     public PlayerCharacter(String name, Image image) {
         super(name, image);
@@ -111,15 +142,38 @@ public class PlayerCharacter extends MapObject implements Combatant {
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
+    
+    public void setSpeed (int s) {
+        this.speed = s;
+    }
 
     @Override
     public void update (double time) {
+        this.updateSprite();
         this.applyMovement(time);
         
     }
     
+    private void updateSprite() {
+        if (this.moving) {
+            //Mists.logger.log(Level.INFO, "{0} is moving {1}", new Object[]{this.getName(), this.facing});
+            switch(this.facing) {
+                case UP: this.getSprite().setAnimation(this.walkUp); break;
+                case DOWN: this.getSprite().setAnimation(this.walkDown);break;
+                case LEFT: ;
+                case RIGHT: ;
+                case UPRIGHT:;
+                case UPLEFT: ;
+                case DOWNRIGHT: ;
+                case DOWNLEFT: ;
+                default: break;
+            }
+        }
+        
+    }
+    
     private void applyMovement(double time){
-                /*
+        /*
         * Check collisions before movement
         * TODO: Add in pixel-based collision detection (compare alphamaps?)
         */
@@ -128,17 +182,15 @@ public class PlayerCharacter extends MapObject implements Combatant {
         } else {
             
             MapObject collidingObject = this.getLocation().checkCollisions(this); //Get the colliding object
-            Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
-            double collidingX = collidingObject.getSprite().getXPos()+(collidingObject.getSprite().getImage().getWidth()/2);
-            double collidingY = collidingObject.getSprite().getYPos()+(collidingObject.getSprite().getImage().getHeight()/2);
-            double thisX = this.getSprite().getXPos()+(this.getSprite().getImage().getWidth()/2);
-            double thisY = this.getSprite().getYPos()+(this.getSprite().getImage().getHeight()/2);
+            //Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
+            double collidingX = collidingObject.getSprite().getXPos()+(collidingObject.getSprite().getWidth()/2);
+            double collidingY = collidingObject.getSprite().getYPos()+(collidingObject.getSprite().getHeight()/2);
+            double thisX = this.getSprite().getXPos()+(this.getSprite().getWidth()/2);
+            double thisY = this.getSprite().getYPos()+(this.getSprite().getHeight()/2);
             
             double xDistance = Math.abs(thisX - collidingX);
             double yDistance = Math.abs(thisY - collidingY);
-            Mists.logger.log(Level.INFO, "At the distance of x: {0} y: {1}", new Object[]{xDistance, yDistance});
-            //double allowedXDistance = (this.getSprite().getImage().getWidth()/2)+(collidingObject.getSprite().getImage().getWidth()/2);
-            //double allowedYDistance = (this.getSprite().getImage().getHeight()/2)+(collidingObject.getSprite().getImage().getHeight()/2);
+            //Mists.logger.log(Level.INFO, "At the distance of x: {0} y: {1}", new Object[]{xDistance, yDistance});
             
             /*
             * Prevent further going into colliding object
@@ -174,11 +226,13 @@ public class PlayerCharacter extends MapObject implements Combatant {
     }
     
     public void stopMovement() {
+        this.moving = false;
         this.getSprite().setVelocity(0, 0);
     }
     
     @Override
     public boolean moveTowards (Direction direction) {
+        this.moving = true;
         switch(direction) {
         case UP: return moveUp();
         case DOWN: return moveDown();
@@ -190,7 +244,7 @@ public class PlayerCharacter extends MapObject implements Combatant {
         case DOWNLEFT: return moveDownLeft();
         default: break;
         }
-
+        
         return false;
     }
     
@@ -228,6 +282,7 @@ public class PlayerCharacter extends MapObject implements Combatant {
     private boolean moveUpLeft() {
         this.moveUp();
         this.moveLeft();
+        this.facing = Direction.UPLEFT;
         return true;
     }
         

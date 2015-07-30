@@ -64,6 +64,10 @@ public class MapObject implements Global {
         this.location = l;
     }
     
+    public void setPosition (double xPos, double yPos) {
+        this.sprite.setPosition(xPos, yPos);
+    }
+    
     public Location getLocation() {
         return this.location;
     }

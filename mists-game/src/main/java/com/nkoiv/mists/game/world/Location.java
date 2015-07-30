@@ -40,7 +40,7 @@ public class Location implements Global {
         this.mapObjects = new ArrayList<>();
         this.map = new BGMap(new Image("/images/pocmap.png"));
         
-        PlayerCharacter himmu = new PlayerCharacter("Himmu", new Image("/images/himmu.png"));
+        PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setPosition(300, 200);
         himmu.setLocation(this);
         this.setPlayer(himmu);
@@ -71,6 +71,10 @@ public class Location implements Global {
     
     public PlayerCharacter getPlayer() {
         return this.player;
+    }
+    
+    public void setScreenFocus(MapObject focus) {
+        this.screenFocus = focus;
     }
     
     public double getxOffset(double xPos){
@@ -137,14 +141,22 @@ public class Location implements Global {
         double xOffset = getxOffset(screenFocus.getSprite().getXPos());
         double yOffset = getyOffset(screenFocus.getSprite().getYPos());
         
-        this.map.render(-xOffset, -yOffset, gc);
+        this.map.render(-xOffset, -yOffset, gc); //First we draw the underlying map
         /*
         * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
         */
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) {
-                mob.render(xOffset, yOffset, gc);
+                mob.render(xOffset, yOffset, gc); //Draw objects on the ground
             }    
+        }
+        
+        if (!this.mapObjects.isEmpty()) {
+            for (MapObject struct : this.mapObjects) {
+                if (struct instanceof Structure) {
+                    //struct.renderExtras(xOffset, yOffset, gc); //Draw extra frill (leaves on trees etc)
+                }
+            }
         }
         
         

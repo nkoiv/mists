@@ -26,6 +26,8 @@ import javafx.stage.Stage;
 
 /**
  *
+ * TODO: Separate a main Game-class from this one
+ * something that can be instanced easily
  * @author nkoiv
  */
 public class Mists extends Application implements Global {

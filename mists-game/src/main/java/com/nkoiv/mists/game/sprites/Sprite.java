@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Sprite-class handles (movable) images.
@@ -20,7 +21,8 @@ import javafx.scene.image.Image;
 public class Sprite
 {
     private Image image;
-    private ArrayList<Image> images;
+    //private ArrayList<Image> images; // Was considered for animation, but using separate class for now
+    private SpriteAnimation animation;
     private double width;
     private double height;
     /** Position for Sprite is pixel coordinates on the screen 
@@ -88,31 +90,29 @@ public class Sprite
     
     public Image getImage() {
         if (this.animated) {
-           this.image = this.images.get(currentFrame);
-           this.nextFrame();
+           this.animation.getCurrentFrame();
         } 
         return this.image;
     }
     
-    public void setAnimation (ArrayList<Image> images) {
-        this.images = new ArrayList<>();
-        for (Image animationFrame : images) {
-            this.images.add(animationFrame);
-        }
-        this.image = this.images.get(0);
+    public void setAnimation (SpriteAnimation animation) {
+        this.animation = animation;
         this.animated = true;
+        this.width = animation.getFrameWidth();
+        this.height = animation.getFrameHeight();
         this.currentFrame = 0;
     };
     
-    private void nextFrame () {
-        if (this.animated) {
-            if (this.currentFrame < this.images.size()) {
-                this.currentFrame++;
-            } else {
-                this.currentFrame = 0;
-            }
-        }
-        
+    public void removeAnimation () {
+        this.animated = false;
+        this.width = this.image.getWidth();
+        this.height = this.image.getHeight();
+    }
+    
+    public void setAnimation (ImageView image, int frameCount, int offsetX, int offsetY, int width,   int height) {
+        this.animation = new SpriteAnimation (image, frameCount, offsetX, offsetY, width, height);
+        this.animated = true;
+        this.currentFrame = 0;
     }
     
     public void setPosition(double x, double y)
@@ -140,6 +140,14 @@ public class Sprite
     public double getYVelocity() {
         return this.velocityY;
     }
+    
+    public double getWidth() {
+        return this.width;
+    }
+    
+    public double getHeight() {
+        return this.height;
+    }
 
     public void update(double time)
     {
@@ -149,7 +157,12 @@ public class Sprite
 
     public void render(double xOffset, double yOffset, GraphicsContext gc)
     {
-        gc.drawImage( image, positionX-xOffset, positionY-yOffset );
+        if (this.animated) {
+            gc.drawImage( this.animation.getCurrentFrame(), positionX-xOffset, positionY-yOffset );
+        } else {
+            gc.drawImage( image, positionX-xOffset, positionY-yOffset );
+        }
+        
 
     }
 
