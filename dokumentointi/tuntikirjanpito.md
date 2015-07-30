@@ -1,9 +1,16 @@
 
 
 
-#Viikko 1 (14h)
+#Viikko 1 (23h)
+
+##30.7
+* 2h [OHJELMOINTI] Lisätty animimointi pelaajan liikkeeseen
+* 1h [PIIRTÄMINEN] Luotu pari spriteä (Himmu) testausta varten
+* 2h [OHJELMOINTI] Lisätty CollisionDetection spriteille
+* 2h [OPISKELU] Tutustuttu törmäysten hoitamiseen
 
 ##29.7
+* 3h [OHJELMOINTI] Rakennettu main loop (animation timer) ja tehty pelaajasta liikuteltava objekti
 * 1½h [OHJELMOINTI] Luotu keskeiset luokat Sprite, MapObject, Location) POCia varten
 * 2h [OPISKELU] Tutustuttu erilaisiin tapoihin käsitellä Spritejä
 * 1h [MÄÄRITTELY] Piirretty alustava luokkakaavio
