@@ -36,13 +36,14 @@ public class PlayerCharacter extends MapObject implements Combatant {
 
     public PlayerCharacter(String name, Image image) {
         super(name, image);
+        this.setCollisionLevel(100);
         this.facing = Direction.DOWN;
         this.alive = true;
         this.maxHealth = 100;
         this.health = this.maxHealth;
         this.attackValue = 10;
         this.defenseValue = 10;
-        this.speed = 20;
+        this.speed = 50;
     }
     
     @Override
@@ -109,6 +110,73 @@ public class PlayerCharacter extends MapObject implements Combatant {
         this.maxHealth = maxHealth;
     }
 
+    @Override
+    public void update (double time) {
+        this.applyMovement(time);
+        
+    }
+    
+    private void applyMovement(double time){
+                /*
+        * Check collisions before movement
+        * TODO: Add in pixel-based collision detection (compare alphamaps?)
+        */
+        if (this.getLocation().checkCollisions(this.getSprite()) == null) {
+            this.getSprite().update(time); //Collided with nothing, free to move
+        } else {
+            
+            MapObject collidingObject = this.getLocation().checkCollisions(this.getSprite()); //Get the colliding object
+            double collidingX = collidingObject.getSprite().getXPos()+(collidingObject.getSprite().getImage().getWidth()/2);
+            double collidingY = collidingObject.getSprite().getYPos()+(collidingObject.getSprite().getImage().getHeight()/2);
+            double thisX = this.getSprite().getXPos()+(this.getSprite().getImage().getWidth()/2);
+            double thisY = this.getSprite().getYPos()+(this.getSprite().getImage().getHeight()/2);
+            
+            double allowedXDistance = (this.getSprite().getImage().getWidth()/2)+(collidingObject.getSprite().getImage().getWidth()/2);
+            double allowedYDistance = (this.getSprite().getImage().getHeight()/2)+(collidingObject.getSprite().getImage().getHeight()/2);
+            /*
+            * Move slightly away from the colliding object &
+            * prevent movement towards collision
+            */
+
+            if(this.getSprite().getXVelocity() != 0) {
+                if (thisX<collidingX) { //Colliding object is to the right
+                    if ((collidingX-thisX)<allowedXDistance) { //We're already inside colliding object!
+                        this.getSprite().setPosition(this.getSprite().getXPos()-1, this.getSprite().getYPos());
+                    }
+                    if (this.getSprite().getXVelocity()>0) { // Check if we're trying to move right
+                        this.getSprite().setVelocity(0, this.getSprite().getYVelocity()); //Stop movement right
+                    }
+                } else if (thisX>collidingX) { //Colliding object is to the left 
+                    if ((thisX-collidingX)<allowedXDistance) {
+                        this.getSprite().setPosition(this.getSprite().getXPos()+1, this.getSprite().getYPos());
+                    }
+                    if (this.getSprite().getXVelocity()<0) { //We're trying to move left
+                        this.getSprite().setVelocity(0, this.getSprite().getYVelocity());
+                    }
+                }
+            }
+           if(this.getSprite().getYVelocity() != 0) {
+                if (thisY<collidingY) { //Colliding object is below
+                    if ((collidingY-thisY)<allowedYDistance) {
+                        this.getSprite().setPosition(this.getSprite().getXPos(), this.getSprite().getYPos()-1);
+                    }
+                    if (this.getSprite().getYVelocity()>0) { //We're trying to move down
+                        this.getSprite().setVelocity(this.getSprite().getXVelocity(),0);
+                    }
+                } else if (thisY>collidingY) { //Colliding object is above
+                    if ((thisY-collidingY)<allowedYDistance) {
+                        this.getSprite().setPosition(this.getSprite().getXPos(), this.getSprite().getYPos()+1);
+                    }
+                    if (this.getSprite().getYVelocity()<0) { //We're trying to move up
+                        this.getSprite().setVelocity(this.getSprite().getXVelocity(),0);
+                    }
+                }
+           }
+            this.getSprite().update(time);
+            
+        }
+    }
+    
     public void stopMovement() {
         this.getSprite().setVelocity(0, 0);
     }
