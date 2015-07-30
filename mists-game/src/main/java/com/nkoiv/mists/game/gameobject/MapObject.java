@@ -24,6 +24,7 @@ public class MapObject implements Global {
     private Location location;
 
     private boolean visible;
+    private int collisionLevel;
     
     public MapObject (String name, Image image) {
         this.name = name;
@@ -31,11 +32,32 @@ public class MapObject implements Global {
         this.visible = true;
     }
     
-    public MapObject (String name, Image image, double xCoor, double yCoor) {
+    public MapObject (String name, Image image, Location location, double xCoor, double yCoor) {
         this.name = name;
+        this.location = location;
         this.sprite = new Sprite(image);
         this.sprite.setPosition(xCoor, yCoor);
         this.visible = true;
+    }
+    
+    public void setCollisionLevel(int c) {
+        this.collisionLevel = c;
+    }
+    
+    public int getCollisionLevel() {
+        return this.collisionLevel;
+    }
+    
+    public boolean instersects(MapObject o) {
+        return o.getSprite().getBoundary().intersects( this.getSprite().getBoundary() );
+    }
+    
+    public void setVisible(boolean v) {
+        this.visible = v;
+    }
+    
+    public boolean isVisible() {
+        return this.visible;
     }
     
     public void setLocation(Location l) {
@@ -64,6 +86,9 @@ public class MapObject implements Global {
         this.sprite = sprite;
     }
     
+    public void update(double time) {
+        this.sprite.update(time);
+    }
     
     public Sprite getSprite() {
         return this.sprite;
@@ -73,5 +98,11 @@ public class MapObject implements Global {
         return this.name;
     }
 
+    @Override
+    public String toString(){
+        String s;
+        s = this.name + " at " + this.location.getName() + ":" + this.sprite.getXPos()+","+this.sprite.getYPos();
+        return s;
+    }
     
 }
