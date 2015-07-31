@@ -33,7 +33,8 @@ public class Location implements Global {
     private PlayerCharacter player;
     
     /*
-    * Constructer for demofield
+    * Constructor for demofield
+    * TODO: load this from some XML or somesuch
     */
     public Location() {
         this.name = "POCmap";
@@ -47,8 +48,17 @@ public class Location implements Global {
         this.mapObjects.add(himmu);
         this.screenFocus = himmu;
         
-        Structure block = new Structure("CollisionTest", new Image("/images/block.png"), this, 450, 350);
-        this.mapObjects.add(block);
+        Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 450, 350);
+        this.mapObjects.add(rock);
+        
+        Structure tree1 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 400, 240);
+        tree1.addExtra(new Image("/images/tree.png"), -35, -96);
+        this.mapObjects.add(tree1);
+        
+        Structure tree2 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 230, 340);
+        tree2.addExtra(new Image("/images/tree.png"), -35, -96);
+        this.mapObjects.add(tree2);
+        
     }
     
     public void addStructure(String name, Image image, int xPos, int yPos) {

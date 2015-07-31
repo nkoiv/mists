@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 /**
  * Structures are MapObjects with varying collision boxes
  * A single structure may have some parts of it causing collision, others not
+ * TODO: utilize ImageView viewport to show pieces from same file
  * @author nkoiv
  */
 public class Structure extends MapObject {
@@ -56,6 +57,12 @@ public class Structure extends MapObject {
                 extraSprite.render(xOffset, yOffset, gc);
             }
         }
+    }
+    
+    @Override
+    public void render(double xOffset, double yOffset, GraphicsContext gc) {
+        super.render(xOffset, yOffset, gc);
+        this.renderExtras(xOffset, yOffset, gc);
     }
     
     //setPosition is overwritten to move extras along with the main sprite
