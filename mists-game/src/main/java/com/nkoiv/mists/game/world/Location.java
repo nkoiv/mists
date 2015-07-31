@@ -15,6 +15,9 @@ import java.util.Iterator;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Shape;
 
 /**
  *
@@ -43,6 +46,7 @@ public class Location implements Global {
         
         PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setPosition(300, 200);
+        himmu.getSprite().setCollisionAreaShape(2);
         himmu.setLocation(this);
         this.setPlayer(himmu);
         this.mapObjects.add(himmu);
@@ -158,7 +162,19 @@ public class Location implements Global {
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) {
                 mob.render(xOffset, yOffset, gc); //Draw objects on the ground
-            }    
+                if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
+                    gc.setStroke(Color.RED);
+                    if (mob.getSprite().getCollisionAreaType() == 1) {
+                        gc.strokeRect(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
+                        mob.getSprite().getWidth(), mob.getSprite().getHeight());
+                    } else if (mob.getSprite().getCollisionAreaType() == 2) {
+                        gc.strokeOval(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
+                        mob.getSprite().getWidth(), mob.getSprite().getHeight());
+                    }
+                    
+                }
+                
+            }
         }
         
         if (!this.mapObjects.isEmpty()) {

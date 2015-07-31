@@ -6,8 +6,10 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -52,7 +54,6 @@ public class PlayerCharacter extends MapObject implements Combatant {
     public PlayerCharacter() {
         //Dummy player for testing
         super ("Himmu",new Image("/images/himmu.png"));
-        this.getSprite().setCollisionAreaShape(2); //set collision area to ellipse
         this.walkDown = new SpriteAnimation (
                 new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 64, 64 );
         this.walkUp = new SpriteAnimation (
@@ -182,7 +183,7 @@ public class PlayerCharacter extends MapObject implements Combatant {
         } else {
             
             MapObject collidingObject = this.getLocation().checkCollisions(this); //Get the colliding object
-            //Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
+            Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
             double collidingX = collidingObject.getSprite().getXPos()+(collidingObject.getSprite().getWidth()/2);
             double collidingY = collidingObject.getSprite().getYPos()+(collidingObject.getSprite().getHeight()/2);
             double thisX = this.getSprite().getXPos()+(this.getSprite().getWidth()/2);

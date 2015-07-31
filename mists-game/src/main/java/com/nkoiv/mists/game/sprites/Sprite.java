@@ -45,7 +45,7 @@ public class Sprite
      */
     private boolean animated;
     
-    private int collisionArea; // 1=Rectangle, 2=Ellipse
+    private int collisionArea = 1; // 1=Rectangle, 2=Ellipse
 
     public Sprite()
     {
@@ -81,6 +81,10 @@ public class Sprite
     public void setCollisionAreaShape (int ShapeNumber) {
         // 1=Rectangle, 2=Ellipse
         this.collisionArea = ShapeNumber;
+    }
+    
+    public int getCollisionAreaType () {
+        return this.collisionArea;
     }
     
     public void setImage(Image i)
@@ -175,12 +179,13 @@ public class Sprite
 
     public Shape getBoundary()
     {
+        //Consider:
         //Collision boxes should be slightly smaller than the Sprite itself
         //Otherwise it will be really hard to move between tiles
         
         switch(collisionArea) {
             case 1: return new Rectangle(positionX+1,positionY+1,width-2,height-2);
-            case 2: return new Ellipse(positionX+1,positionY+1,(width-2)/2,(height-2)/2);
+            case 2: return new Ellipse(positionX+(width/2),positionY+(height/2),(width)/2,(height)/2);
             default: break;
         }
         
@@ -190,7 +195,8 @@ public class Sprite
 
     public boolean intersects(Sprite s)
     {
-        return s.getBoundary().getBoundsInParent().intersects(this.getBoundary().getBoundsInParent());
+        Shape shape = Shape.intersect(s.getBoundary(), this.getBoundary());
+        return shape.getBoundsInLocal().getWidth() != -1;
     }
     
     public double getXPos() {
