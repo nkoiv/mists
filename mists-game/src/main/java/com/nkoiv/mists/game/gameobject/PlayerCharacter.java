@@ -15,7 +15,8 @@ import javafx.scene.image.ImageView;
  * PlayerCharacter is currently designed to be unique per game
  * TODO: Implement "World owner" as the main target instead of player,
  * so that several players can coexist in a single game
- * @author daedra
+ * TODO: Consider having PlayerCharacter extend Creature to make things easier
+ * @author nkoiv
  */
 public class PlayerCharacter extends MapObject implements Combatant {
     private Direction facing;
