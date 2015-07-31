@@ -6,10 +6,8 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
