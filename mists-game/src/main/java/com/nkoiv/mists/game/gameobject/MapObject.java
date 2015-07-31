@@ -49,7 +49,7 @@ public class MapObject implements Global {
     }
     
     public boolean instersects(MapObject o) {
-        return o.getSprite().getBoundary().intersects( this.getSprite().getBoundary() );
+        return o.getSprite().getBoundary().getBoundsInParent().intersects(this.getSprite().getBoundary().getBoundsInParent());
     }
     
     public void setVisible(boolean v) {

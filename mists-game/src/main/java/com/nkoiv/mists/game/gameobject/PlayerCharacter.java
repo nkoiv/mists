@@ -52,6 +52,7 @@ public class PlayerCharacter extends MapObject implements Combatant {
     public PlayerCharacter() {
         //Dummy player for testing
         super ("Himmu",new Image("/images/himmu.png"));
+        this.getSprite().setCollisionAreaShape(2); //set collision area to ellipse
         this.walkDown = new SpriteAnimation (
                 new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 64, 64 );
         this.walkUp = new SpriteAnimation (

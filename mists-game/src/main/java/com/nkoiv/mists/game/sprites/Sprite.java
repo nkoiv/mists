@@ -9,6 +9,10 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 /**
  * Sprite-class handles (movable) images.
@@ -40,7 +44,8 @@ public class Sprite
      *  To extend the length of a frame, add duplicates to the images-array.
      */
     private boolean animated;
-    private int currentFrame;
+    
+    private int collisionArea; // 1=Rectangle, 2=Ellipse
 
     public Sprite()
     {
@@ -73,6 +78,11 @@ public class Sprite
         animated = false;
     }
 
+    public void setCollisionAreaShape (int ShapeNumber) {
+        // 1=Rectangle, 2=Ellipse
+        this.collisionArea = ShapeNumber;
+    }
+    
     public void setImage(Image i)
     {
         image = i;
@@ -99,7 +109,6 @@ public class Sprite
         this.animated = true;
         this.width = animation.getFrameWidth();
         this.height = animation.getFrameHeight();
-        this.currentFrame = 0;
     };
     
     public void removeAnimation () {
@@ -111,7 +120,6 @@ public class Sprite
     public void setAnimation (ImageView image, int frameCount, int offsetX, int offsetY, int width,   int height) {
         this.animation = new SpriteAnimation (image, frameCount, offsetX, offsetY, width, height);
         this.animated = true;
-        this.currentFrame = 0;
     }
     
     public void setPosition(double x, double y)
@@ -165,16 +173,24 @@ public class Sprite
 
     }
 
-    public Rectangle2D getBoundary()
+    public Shape getBoundary()
     {
         //Collision boxes should be slightly smaller than the Sprite itself
         //Otherwise it will be really hard to move between tiles
-        return new Rectangle2D(positionX+1,positionY+1,width-2,height-2);
+        
+        switch(collisionArea) {
+            case 1: return new Rectangle(positionX+1,positionY+1,width-2,height-2);
+            case 2: return new Ellipse(positionX+1,positionY+1,(width-2)/2,(height-2)/2);
+            default: break;
+        }
+        
+        return new Rectangle(positionX+1,positionY+1,width-2,height-2);
+        //return new Rectangle2D(positionX+1,positionY+1,width-2,height-2);
     }
 
     public boolean intersects(Sprite s)
     {
-        return s.getBoundary().intersects( this.getBoundary() );
+        return s.getBoundary().getBoundsInParent().intersects(this.getBoundary().getBoundsInParent());
     }
     
     public double getXPos() {
