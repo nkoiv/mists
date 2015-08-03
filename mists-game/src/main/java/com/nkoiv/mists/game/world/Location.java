@@ -6,18 +6,16 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Shape;
 
 /**
  *
@@ -39,6 +37,12 @@ public class Location implements Global {
     * Constructor for demofield
     * TODO: load this from some XML or somesuch
     */
+    
+    
+    public Location(String name) {
+        this.mapObjects = new ArrayList<>();
+    }
+    
     public Location() {
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
@@ -65,14 +69,29 @@ public class Location implements Global {
         
     }
     
-    public void addStructure(String name, Image image, int xPos, int yPos) {
-        MapObject newMob = new MapObject(name, image);
-        newMob.setLocation(this);
-        newMob.getSprite().setPosition(xPos, yPos);
+    public void addStructure(Structure s, int xPos, int yPos) {
+        this.mapObjects.add(s);
+        s.setLocation(this);
+        s.getSprite().setPosition(xPos, yPos);
+    }
+    
+    public void addCreature(Creature c) {
+        this.mapObjects.add(c);
+        c.setLocation(this);
+    }
+    
+    public void addPlayerCharacter(PlayerCharacter p) {
+        this.mapObjects.add(p);
+        p.setLocation(this);
+        
     }
     
     public void setMap(Map m) {
         this.map = m;
+    }
+    
+    public void removeMapObject (MapObject o) {
+        this.mapObjects.remove(o);
     }
     
     public Map getMap() {

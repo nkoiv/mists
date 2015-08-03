@@ -94,7 +94,7 @@ public class Sprite
         height = i.getHeight();
         animated = false;
     }
-
+    
     public void setImage(String filename)
     {
         Image i = new Image(filename);
@@ -183,20 +183,34 @@ public class Sprite
         //Collision boxes should be slightly smaller than the Sprite itself
         //Otherwise it will be really hard to move between tiles
         
-        switch(collisionArea) {
-            case 1: return new Rectangle(positionX+1,positionY+1,width-2,height-2);
-            case 2: return new Ellipse(positionX+(width/2),positionY+(height/2),(width)/2,(height)/2);
-            default: break;
-        }
-        
+    switch(collisionArea) {
+        case 1: return new Rectangle(positionX+1,positionY+1,width-2,height-2);
+        case 2: return new Ellipse(positionX+(width/2),positionY+(height/2),(width)/2,(height)/2);
+        default: break;
+    }
+   
         return new Rectangle(positionX+1,positionY+1,width-2,height-2);
         //return new Rectangle2D(positionX+1,positionY+1,width-2,height-2);
     }
 
+    private boolean pixelCollision (Image i) {
+        
+        /*TODO: Pixel based collisions
+        * This is checked if the collision boxes intersect
+        * For now returns always true
+        */
+        return true;
+    }
+    
     public boolean intersects(Sprite s)
     {
         Shape shape = Shape.intersect(s.getBoundary(), this.getBoundary());
-        return shape.getBoundsInLocal().getWidth() != -1;
+        if (shape.getBoundsInLocal().getWidth() != -1) {
+            return pixelCollision(s.getImage());
+        } else {
+            return false;
+        }
+  
     }
     
     public double getXPos() {

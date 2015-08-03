@@ -57,7 +57,11 @@ public class PlayerCharacter extends MapObject implements Combatant {
         this.walkDown = new SpriteAnimation (
                 new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 64, 64 );
         this.walkUp = new SpriteAnimation (
-                new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 64, 64 );        
+                new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 64, 64 );       
+        this.walkLeft = new SpriteAnimation (
+                new ImageView("/images/himmu_walk_left.png"), 4, 0, 0, 64, 64 );
+        this.walkRight = new SpriteAnimation (
+                new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 64, 64 );
         this.facing = Direction.DOWN;
         this.alive = true;
         this.maxHealth = 100;
@@ -161,8 +165,8 @@ public class PlayerCharacter extends MapObject implements Combatant {
             switch(this.facing) {
                 case UP: this.getSprite().setAnimation(this.walkUp); break;
                 case DOWN: this.getSprite().setAnimation(this.walkDown);break;
-                case LEFT: ;
-                case RIGHT: ;
+                case LEFT: this.getSprite().setAnimation(this.walkLeft);break;
+                case RIGHT: this.getSprite().setAnimation(this.walkRight);break;
                 case UPRIGHT:;
                 case UPLEFT: ;
                 case DOWNRIGHT: ;
