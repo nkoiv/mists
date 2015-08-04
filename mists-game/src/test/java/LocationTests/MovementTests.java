@@ -67,8 +67,8 @@ public class MovementTests extends Application {
             testPlayer.update(0.16f); //At 60 FPS, one tick is 0.16f
         }
         
-
-        
+        //testPlayer should still be on the left (smaller X) side of the rock, because collisions prevented it going past it:
+        assert(TestTools.CompareTools.isGreaterThan(testRock.getxPos(), testPlayer.getxPos()));
         
     }
     
