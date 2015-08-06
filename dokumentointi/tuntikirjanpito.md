@@ -1,7 +1,17 @@
+#Viikko 2 (7½h)
 
+##6.8
+* 1h [TESTAUS] Tehty testit pelaajan liikkumiselle
 
+##3.8
+* 3h [TESTAUS] Kirjoitettu testi pelaajan ja rakennusten törmäyksille
+* 2h [OPISKELU] Selvitetty JUnit testien tekemistä Canvakselle
 
-#Viikko 1 (23h)
+##1.8
+* ½h [OHJELMOINTI] Korjattu liikkumista
+* 1h [PIIRTÄMINEN] Tehty alustavat spritet puuttuville pelaajan puuttuville suunnille (vasen-oikea)
+
+#Viikko 1 (24h)
 
 ##30.7
 * 2h [OHJELMOINTI] Lisätty animimointi pelaajan liikkeeseen
