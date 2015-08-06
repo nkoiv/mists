@@ -6,6 +6,7 @@ package LocationTests;
  * and open the template in the editor.
  */
 
+import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -104,7 +105,7 @@ public class MovementTests extends Application {
         assert(TestTools.CompareTools.isGreaterThan(testRock.getxPos(), testPlayer.getxPos()));
         
     }
-    
+
     
     
     @After

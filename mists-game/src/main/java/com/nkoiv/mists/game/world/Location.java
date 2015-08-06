@@ -90,6 +90,10 @@ public class Location implements Global {
         this.map = m;
     }
     
+    public List<MapObject> getMOBList() {
+        return this.mapObjects;
+    }
+    
     public void removeMapObject (MapObject o) {
         this.mapObjects.remove(o);
     }

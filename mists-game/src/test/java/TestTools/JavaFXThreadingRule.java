@@ -1,4 +1,4 @@
-package LocationTests;
+package TestTools;
 
 import java.util.concurrent.CountDownLatch;
 
