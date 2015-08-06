@@ -48,6 +48,40 @@ public class MovementTests extends Application {
 
     }
     
+    
+    @Test
+    public void movementShouldChangePlayerCoordinates() {
+        Location testLocation = new Location("TestLocation");
+        PlayerCharacter testPlayer = new PlayerCharacter();
+        testPlayer.setLocation(testLocation);
+        testLocation.addPlayerCharacter(testPlayer);
+        testPlayer.setPosition(300, 200);
+        testPlayer.setSpeed(50); //Should move 50 per tick
+        
+        double originalYPos = testPlayer.getyPos();
+        testPlayer.moveTowards(Direction.DOWN);
+        testPlayer.update(0.16f);
+        
+        assert(originalYPos != testPlayer.getyPos());
+        
+    }
+    
+    @Test
+    public void zeroSpeedPlayerShouldNotMove() {
+        Location testLocation = new Location("TestLocation");
+        PlayerCharacter testPlayer = new PlayerCharacter();
+        testPlayer.setLocation(testLocation);
+        testLocation.addPlayerCharacter(testPlayer);
+        testPlayer.setPosition(300, 200);
+        testPlayer.setSpeed(0); //Movement set to zero
+        
+        double originalYPos = testPlayer.getyPos();
+        testPlayer.moveTowards(Direction.UP);
+        testPlayer.update(0.16f);
+        
+        assert(originalYPos == testPlayer.getyPos()); //Should still be at original position
+    }
+    
     @Test
     public void testPlayerCollisionsOnStructure() {
         System.out.println("Testing Player collisions on Structures");
@@ -60,7 +94,6 @@ public class MovementTests extends Application {
         testLocation.addStructure(testRock, 500 , 200);
         testPlayer.setPosition(300, 200); //Same Y as testRock, just 200 to the left
         testPlayer.setSpeed(50); //Should move 50 per tick
-        
         for (int i=0;i<10;i++) {
             System.out.println(testPlayer.getName()+ " currently at "+ testPlayer.getxPos() + " / "+testPlayer.getyPos());
             testPlayer.moveTowards(Direction.RIGHT);
@@ -71,6 +104,8 @@ public class MovementTests extends Application {
         assert(TestTools.CompareTools.isGreaterThan(testRock.getxPos(), testPlayer.getxPos()));
         
     }
+    
+    
     
     @After
     public void tearDown() {
