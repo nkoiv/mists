@@ -27,9 +27,9 @@ import org.junit.Test;
  *
  * @author daedra
  */
-public class GeneralLocationTests extends Application {
+public class GeneralLocationTest extends Application {
     
-    public GeneralLocationTests() {
+    public GeneralLocationTest() {
     }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();

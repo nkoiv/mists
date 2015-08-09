@@ -27,9 +27,9 @@ import org.junit.Test;
  *
  * @author daedra
  */
-public class MovementTests extends Application {
+public class MovementTest extends Application {
     
-    public MovementTests() {
+    public MovementTest() {
     }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
