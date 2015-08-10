@@ -15,7 +15,6 @@ import javafx.scene.image.ImageView;
  * PlayerCharacter is currently designed to be unique per game
  * TODO: Implement "World owner" as the main target instead of player,
  * so that several players can coexist in a single game
- * TODO: Consider having PlayerCharacter extend Creature to make things easier
  * @author nkoiv
  */
 public class PlayerCharacter extends Creature implements Combatant {
@@ -63,7 +62,7 @@ public class PlayerCharacter extends Creature implements Combatant {
 
     public PlayerCharacter(String name, Image image) {
         super(name, image);
-        this.setCollisionLevel(100);
+        this.setFlag("collisionLevel", 100);
         this.setFacing(Direction.DOWN);
         this.setAlive(true);
         this.setMaxHealth(100);

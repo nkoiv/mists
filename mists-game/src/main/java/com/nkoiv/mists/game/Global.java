@@ -7,6 +7,7 @@ package com.nkoiv.mists.game;
 
 /**
  * The Global interface works as a dummy global config -file
+ * TODO: load this from some external file
  * @author nkoiv
  */
 public interface Global {
@@ -18,6 +19,8 @@ public interface Global {
     public static final int HEIGHT = 600;
     public static final int TILES_DRAWN_X = (WIDTH/TILESIZE)+1;
     public static final int TILES_DRAWN_Y = (HEIGHT/TILESIZE)+1;
+    
+    //FPS limit
     public static final float MAXIMUM_STEP = 0.5f;
 	
     //Config mode

@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
+import java.util.HashMap;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -21,44 +22,68 @@ public class MapObject implements Global {
     
     private final String name;
     private Sprite sprite;
+    
+    /*Flags are stored in integers for utility, 
+    * but can be manipulad as booleans (>0) by "isFlagged" & "addFlag" methods
+    */
+    private HashMap<String, Integer> flags;
+    
     private Location location;
 
-    private boolean visible;
-    private int collisionLevel;
     
     public MapObject (String name, Image image) {
+        this.flags  = new HashMap<>();
         this.name = name;
         this.sprite = new Sprite(image);
-        this.visible = true;
+        this.addFlag("visible");
     }
     
     public MapObject (String name, Image image, Location location, double xCoor, double yCoor) {
+        this.flags  = new HashMap<>();
         this.name = name;
         this.location = location;
         this.sprite = new Sprite(image);
         this.sprite.setPosition(xCoor, yCoor);
-        this.visible = true;
     }
     
-    public void setCollisionLevel(int c) {
-        this.collisionLevel = c;
+    public void setFlag(String flag, int value) {
+        if (this.flags.containsKey(flag)) {
+            this.flags.replace(flag, value);
+        } else {
+            this.flags.put(flag, value);
+        }   
     }
     
-    public int getCollisionLevel() {
-        return this.collisionLevel;
+    public int getFlag(String flag) {
+        if (this.flags.containsKey(flag)) {
+            return this.flags.get(flag);
+        } else {
+            return 0;
+        }
     }
     
+    //TODO: Consider if adding flag should NOT reset flag value to 1 if flag already exists
+    public void addFlag(String flag){
+       if (this.flags.containsKey(flag)) {
+            this.flags.replace(flag, 1);
+        } else {
+            this.flags.put(flag, 1);
+        } 
+    }
+    
+    public boolean isFlagged (String flag) {
+        if (this.flags.containsKey(flag)) {
+            return this.flags.get(flag) > 0;
+        } else {
+            return false;
+        }
+    }
+    
+
     public boolean instersects(MapObject o) {
         return o.getSprite().intersects(this.getSprite());
     }
     
-    public void setVisible(boolean v) {
-        this.visible = v;
-    }
-    
-    public boolean isVisible() {
-        return this.visible;
-    }
     
     public void setLocation(Location l) {
         this.location = l;
@@ -81,7 +106,7 @@ public class MapObject implements Global {
     }
     
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.visible) {
+        if (this.isFlagged("visible")) {
             this.sprite.render(xOffset, yOffset, gc);
         }
     }   

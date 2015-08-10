@@ -44,6 +44,9 @@ public class Location implements Global {
     }
     
     public Location() {
+        /*TODO: This general constructor is just for the Proof of Concept -map
+        * and should be removed later to avoid misuse
+        */
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
         this.map = new BGMap(new Image("/images/pocmap.png"));
@@ -56,6 +59,7 @@ public class Location implements Global {
         this.mapObjects.add(himmu);
         this.screenFocus = himmu;
         
+        //TODO: Create structures from structure library once its finished
         Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 450, 350);
         this.mapObjects.add(rock);
         

@@ -23,7 +23,14 @@ public class Creature extends MapObject implements Combatant {
     private boolean alive;
     private boolean visible;
     
-    //Attributes
+    /*Attributes
+    * These are not Flags because they're mandatory and limited to creatures
+    * Would be too easy to accidentally make walls alive if they were
+    * TODO: Consider if the above would be awesome
+    */
+    private int strength;
+    private int agility;
+    private int intelligence;
     private int speed;
     private int maxHealth;
     private int health;

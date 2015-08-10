@@ -19,17 +19,20 @@ import javafx.scene.image.Image;
  */
 public class Structure extends MapObject {
     
+    //Extra sprites are used as a non-collision part of the structure
     private ArrayList<Sprite> extraSprites;
 
     public Structure(String name, Image image, int collisionLevel) {
         super(name, image);
-        super.setCollisionLevel(collisionLevel);
+        this.setFlag("collisionLevel", 100);
+        this.addFlag("visible");
         this.extraSprites = new ArrayList<>();
     }
     
     public Structure(String name, Image image, Location location, int xCoor, int yCoor) {
         super(name, image, location, xCoor, yCoor);
-        this.setCollisionLevel(100);
+        this.setFlag("collisionLevel", 100);
+        this.addFlag("visible");
         this.extraSprites = new ArrayList<>();
     }
     
@@ -61,8 +64,11 @@ public class Structure extends MapObject {
     
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        super.render(xOffset, yOffset, gc);
-        this.renderExtras(xOffset, yOffset, gc);
+        if (this.isFlagged("visible")) {
+            super.render(xOffset, yOffset, gc);
+            this.renderExtras(xOffset, yOffset, gc);
+        }
+        
     }
     
     //setPosition is overwritten to move extras along with the main sprite

@@ -1,3 +1,11 @@
+#Viikko 3
+
+##10.8
+* 2h [OHJELMOINTI] Rakennettu MapObjectit käyttämään HashMappiä flageihin
+
+##9.8
+* 1h [OHJELMOINTI] Muokattu PlayerCharacter peritytymään Creature -luokasta
+
 #Viikko 2 (7½h)
 
 ##6.8
