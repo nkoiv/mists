@@ -16,11 +16,7 @@ public interface Combatant {
 	
 	int getDV();
 
-	void setDV(int defenseValue);
-
 	int getAV();
-
-	void setAV(int attackValue);
 	
 	void takeDamage(int damage);
 	

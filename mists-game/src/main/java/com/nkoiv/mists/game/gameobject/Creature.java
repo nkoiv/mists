@@ -24,44 +24,76 @@ public class Creature extends MapObject implements Combatant {
     
     private Direction facing;
     private HashMap<String, SpriteAnimation> spriteAnimations;
-    private boolean moving;
-    private boolean alive;
-    private boolean visible;
     
-    /*Attributes
-    * These are not Flags because they're mandatory and limited to creatures
+    /*Attributes are stored in a separate HashMap
+    * These are not Flags because they're limited to creatures
     * Would be too easy to accidentally make walls alive if they were
     * TODO: Consider if the above would be awesome
-    * TODO: Consider making an "attributes" HashMap for these
     */
-    private int strength;
-    private int agility;
-    private int intelligence;
-    private int speed;
-    private int maxHealth;
-    private int health;
-    private int attackValue;
-    private int defenseValue;
+    
+    private HashMap<String, Integer> attributes;
     
     
-    //Constructor for a creature with one static image
+    //Constructor for a creature template with one static image
     public Creature (String name, Image image) {
         super (name, image);
-        this.visible = true;
+        this.setFacing(Direction.DOWN);
+        this.initializeAttributes();
+        this.initializeFlags();
     }
     
-    //Constructing a creature with sprite animations
+    //Constructing a creature template with sprite animations
     public Creature (String name, ImageView imageView, int frameCount, int startingXTile, int startingYTile, int frameWidth, int frameHeight) {
         super(name);
+        this.setFacing(Direction.DOWN);
         this.setAnimations(imageView, frameCount, startingXTile, startingYTile, frameWidth, frameHeight);
         this.setSprite(new Sprite(this.spriteAnimations.get("downMovement").getCurrentFrame()));
+        this.initializeAttributes();
+        this.initializeFlags();
 
     }
 
+    /*Constructing a creature with only a still image
+    * TODO: This should not be needed once Libraries are done
+    */
     public Creature(String name, Image image, Location location, double xCoor, double yCoor) {
         super(name, image, location, xCoor, yCoor);
+        this.setFacing(Direction.DOWN);
+        this.initializeAttributes();
+        this.initializeFlags();
     }
     
+    private void initializeAttributes() {
+        this.attributes = new HashMap<>();
+        this.setAttribute("Strength", 1);
+        this.setAttribute("Agility", 1);
+        this.setAttribute("Intelligence", 1);
+        this.setAttribute("Speed", 50);
+        this.setAttribute("MaxHealth", 100 );
+        this.setAttribute("Health", 100);
+    }
+    
+    private void initializeFlags() {
+        this.setFlag("isVisible", 1);
+        this.setFlag("collisionLevel", 100);
+    }
+    
+    public void setAttribute (String attribute, int value) {
+        if (this.attributes.containsKey(attribute)) {
+            this.attributes.replace(attribute, value);
+        } else {
+            this.attributes.put(attribute, value);
+        }
+    }
+    
+    public int getAttribute(String attribute) {
+        if (this.attributes.containsKey(attribute)) {
+            return this.attributes.get(attribute);
+        } else {
+            return 0;
+        }
+        
+    }
     
     /* setAnimations is used to easily set all movement animations
     *  It assumes spritesheet is set up with rows for Down, Left, Right, Up - in that order
@@ -105,8 +137,8 @@ public class Creature extends MapObject implements Combatant {
     * Is everything animated?
     */
     void updateSprite() {
-        if (this.moving && !this.spriteAnimations.isEmpty()) {
-            //Mists.logger.log(Level.INFO, "{0} is moving {1}", new Object[]{this.getName(), this.facing});
+        if (this.isFlagged("isVisible") && !this.spriteAnimations.isEmpty()) {
+            //Mists.logger.log(Level.INFO, "{0} is facing {1}", new Object[]{this.getName(), this.facing});
             switch(this.facing) {
                 case UP: this.getSprite().setAnimation(this.spriteAnimations.get("upMovement")); break;
                 case DOWN: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
@@ -177,7 +209,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public boolean moveTowards (Direction direction) {
-        this.moving = true;
+        this.setFlag("Moving", 1);
         switch(direction) {
         case UP: return moveUp();
         case DOWN: return moveDown();
@@ -195,25 +227,25 @@ public class Creature extends MapObject implements Combatant {
     
     private boolean moveUp() {
         this.facing = Direction.UP;
-        this.getSprite().addVelocity(0, -this.speed);
+        this.getSprite().addVelocity(0, -this.getAttribute("Speed"));
         return true;
     }
     
     private boolean moveDown() {
         this.facing = Direction.DOWN;
-        this.getSprite().addVelocity(0, this.speed);
+        this.getSprite().addVelocity(0, this.getAttribute("Speed"));
         return true;
     }
         
     private boolean moveLeft() {
         this.facing = Direction.LEFT;
-        this.getSprite().addVelocity(-this.speed, 0);
+        this.getSprite().addVelocity(-this.getAttribute("Speed"), 0);
         return true;
     }
     
     private boolean moveRight() {
         this.facing = Direction.RIGHT;
-        this.getSprite().addVelocity(this.speed, 0);
+        this.getSprite().addVelocity(this.getAttribute("Speed"), 0);
         return true;
     }
 
@@ -244,18 +276,11 @@ public class Creature extends MapObject implements Combatant {
         this.facing = Direction.DOWNLEFT;
         return true;
     }
-    
-    public boolean isMoving() {
-        return this.moving;
-    }
-    
-    private void setMoving(boolean b) {
-        this.moving = b;
-    }
-    
+
     public void stopMovement() {
-        this.moving = false;
+        this.setFlag("Moving", 0);
         this.getSprite().setVelocity(0, 0);
+        this.getSprite().setImage(this.getSprite().getImage());
     }
 
     public Direction getFacing() {
@@ -266,72 +291,51 @@ public class Creature extends MapObject implements Combatant {
         this.facing = d;
     }
     
-    public boolean isAlive() {
-            return alive;
-    }
-
-    public void setAlive(boolean alive) {
-            this.alive = alive;
-    }
-    
+    //TODO: Calculate attack and defense values from their sources
     @Override
     public int getDV() {
-        return defenseValue;
+        return 0;
     }
-
-
-    @Override
-    public void setDV(int defenseValue) {
-        this.defenseValue = defenseValue;
-    }
-
 
     @Override
     public int getAV() {
-        return attackValue;
+        return 0;
     }
-
-
-    @Override
-    public void setAV(int attackValue) {
-        this.attackValue = attackValue;
-    }
-
 
     public int getHealth() {
-        return health;
+        return this.getAttribute("Health");
     }
 
 
     public void setHealth(int health) {
-        this.health = health;
+        this.setAttribute("Health", health);
     }
 
 
     public int getMaxHealth() {
-        return maxHealth;
+        return this.getAttribute("MaxHealth");
     }
 
 
     public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
+        this.setAttribute("MaxHealth", maxHealth);
     }
     
     public void setSpeed (int s) {
-        this.speed = s;
+        this.setAttribute("Speed", s);
     }
 
     @Override
     public void takeDamage(int damage) {
-        this.health-=damage;
+        this.setHealth(this.getHealth()-damage);
         //TODO: Check death
     }
 	
     @Override
     public void healHealth(int healing) {
-        this.health+=healing;
+        this.setHealth(this.getHealth()+healing);
         //Prevent healing over MaxHP
-        if(this.health>this.maxHealth){this.health=this.maxHealth;} 
+        if(this.getHealth()>this.getMaxHealth()){this.setHealth(this.getMaxHealth());} 
     }
     
 }

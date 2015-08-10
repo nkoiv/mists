@@ -50,12 +50,9 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setAnimation("upMovement", new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 0, 0, 64, 64 );       
         this.setAnimation("leftMovement", new ImageView("/images/himmu_walk_left.png"), 4, 0, 0, 0, 0, 64, 64 );
         this.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
-        this.setFacing(Direction.DOWN);
-        this.setAlive(true);
+        this.setFlag("Alive", 1);
         this.setMaxHealth(100);
         this.setHealth(this.getMaxHealth());
-        this.setAV(10);
-        this.setDV(10);
         this.setSpeed(50);
     }
     
@@ -64,11 +61,9 @@ public class PlayerCharacter extends Creature implements Combatant {
         super(name, image);
         this.setFlag("collisionLevel", 100);
         this.setFacing(Direction.DOWN);
-        this.setAlive(true);
+        this.setFlag("Alive", 1);
         this.setMaxHealth(100);
         this.setHealth(this.getMaxHealth());
-        this.setAV(10);
-        this.setDV(10);
         this.setSpeed(50);
     }
      
