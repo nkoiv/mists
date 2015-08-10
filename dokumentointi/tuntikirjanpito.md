@@ -1,6 +1,8 @@
 #Viikko 3
 
 ##10.8
+* 1h [OHJELMOINTI] Alettu rakentamaan Action -luokkaa
+* 2h [OPISKELU] Tutkittu vaihtoehtoja taistelusysteemiin
 * 2h [OHJELMOINTI] Rakennettu MapObjectit käyttämään HashMappiä flageihin
 
 ##9.8

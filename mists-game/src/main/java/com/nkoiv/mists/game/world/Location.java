@@ -29,7 +29,7 @@ public class Location implements Global {
     */
     private final List<MapObject> mapObjects;
     private String name;
-    private Map map;
+    private GameMap map;
     
     private MapObject screenFocus;
     private PlayerCharacter player;
@@ -53,10 +53,9 @@ public class Location implements Global {
         this.map = new BGMap(new Image("/images/pocmap.png"));
         
         PlayerCharacter himmu = new PlayerCharacter();
-        himmu.getSprite().setPosition(300, 200);
         himmu.getSprite().setCollisionAreaShape(2);
         this.setPlayer(himmu);
-        this.addCreature(himmu);
+        this.addCreature(himmu, 300, 200);
         this.screenFocus = himmu;
         
         //TODO: Create structures from structure library once its finished
@@ -71,10 +70,9 @@ public class Location implements Global {
         tree2.addExtra(new Image("/images/tree.png"), -35, -96);
         this.mapObjects.add(tree2);
         
-        Creature monster1 = new Creature("Pupu", new ImageView("/images/monster3.png"), 3, 0, 4, 64, 64);
-        monster1.setPosition(380, 400);
+        Creature monster1 = new Creature("Otus", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         monster1.getSprite().setCollisionAreaShape(2);
-        this.addCreature(monster1);
+        this.addCreature(monster1, 380, 400);
         
     }
     
@@ -84,9 +82,10 @@ public class Location implements Global {
         s.getSprite().setPosition(xPos, yPos);
     }
     
-    public void addCreature(Creature c) {
+    public void addCreature(Creature c, int xPos, int yPos) {
         this.mapObjects.add(c);
         c.setLocation(this);
+        c.getSprite().setPosition(xPos, yPos);
     }
     
     public void addPlayerCharacter(PlayerCharacter p) {
@@ -95,7 +94,7 @@ public class Location implements Global {
         
     }
     
-    public void setMap(Map m) {
+    public void setMap(GameMap m) {
         this.map = m;
     }
     
@@ -107,7 +106,7 @@ public class Location implements Global {
         this.mapObjects.remove(o);
     }
     
-    public Map getMap() {
+    public GameMap getMap() {
         return this.map;
     }
     

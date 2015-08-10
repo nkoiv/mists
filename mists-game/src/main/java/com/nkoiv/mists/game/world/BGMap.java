@@ -13,7 +13,7 @@ import javafx.scene.image.Image;
  *
  * @author lp35567
  */
-public class BGMap implements Map{
+public class BGMap implements GameMap{
     
     Image image;
     double width;

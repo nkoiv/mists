@@ -11,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
  *
  * @author lp35567
  */
-public interface Map {
+public interface GameMap {
     
     void render(double xOffset, double yOffset, GraphicsContext gc);
     
