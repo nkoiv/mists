@@ -35,7 +35,7 @@ public class MapObject implements Global {
         this.flags  = new HashMap<>();
         this.name = name;
         this.sprite = new Sprite(image);
-        this.addFlag("visible");
+        this.addFlag("isVisible");
     }
     
     public MapObject (String name, Image image, Location location, double xCoor, double yCoor) {
@@ -106,7 +106,7 @@ public class MapObject implements Global {
     }
     
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
+        if (this.isFlagged("isVisible")) {
             this.sprite.render(xOffset, yOffset, gc);
         }
     }   

@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * A library is a collection of map objects
+ * A library is a collection of map objects templates.
  * Monsters are stored in a monlibrary, structures in a struclibrary, etc
  * 
  * The concept was inspired (read: stolen) from Mikeras' Tyrant (github.com/mikera/tyrant/)
@@ -21,7 +21,7 @@ import java.util.*;
  * @author nkoiv
  */
 public class Library extends Object implements Serializable, Cloneable {
-    
+/*    
     // all library objects, indexed by Name
     private HashMap<String, Object> library = new HashMap<>();
     private HashMap<String, String> lowerCaseNames=new HashMap<>();
@@ -59,7 +59,7 @@ public class Library extends Object implements Serializable, Cloneable {
         return o;
     }
     
-        public static void add(MapObject mob) {
+    public static void add(MapObject mob) {
         Library library = instance();
         if (library == null)
             throw new Error("Game.hero.lib not available!");
@@ -79,6 +79,10 @@ public class Library extends Object implements Serializable, Cloneable {
 
     }   
     
+    //Pre-prosessing ensures no broken mobs can get into a library
+    public static void prepareAdd (MapObject mob) {
+        //TODO: Pre-processing
+    }    
     
     public static MapObject get(String name) {
         return (MapObject) Library.instance().library.get(name);
@@ -112,5 +116,5 @@ public class Library extends Object implements Serializable, Cloneable {
         mob = new MapObject("base mob", new Image());
         Library.add(mob);
     }
-    
+ */   
 }

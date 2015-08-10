@@ -121,8 +121,8 @@ public class Sprite
         this.height = this.image.getHeight();
     }
     
-    public void setAnimation (ImageView image, int frameCount, int offsetX, int offsetY, int width,   int height) {
-        this.animation = new SpriteAnimation (image, frameCount, offsetX, offsetY, width, height);
+    public void setAnimation (ImageView image, int frameCount, int startX, int startY, int offsetX, int offsetY, int width,   int height) {
+        this.animation = new SpriteAnimation (image, frameCount, startX, startY, offsetX, offsetY, width, height);
         this.animated = true;
     }
     

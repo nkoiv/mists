@@ -25,14 +25,14 @@ public class Structure extends MapObject {
     public Structure(String name, Image image, int collisionLevel) {
         super(name, image);
         this.setFlag("collisionLevel", 100);
-        this.addFlag("visible");
+        this.addFlag("isVisible");
         this.extraSprites = new ArrayList<>();
     }
     
     public Structure(String name, Image image, Location location, int xCoor, int yCoor) {
         super(name, image, location, xCoor, yCoor);
         this.setFlag("collisionLevel", 100);
-        this.addFlag("visible");
+        this.addFlag("isVisible");
         this.extraSprites = new ArrayList<>();
     }
     
@@ -64,7 +64,7 @@ public class Structure extends MapObject {
     
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
+        if (this.isFlagged("isVisible")) {
             super.render(xOffset, yOffset, gc);
             this.renderExtras(xOffset, yOffset, gc);
         }

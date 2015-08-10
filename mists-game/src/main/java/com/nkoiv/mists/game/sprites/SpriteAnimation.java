@@ -31,6 +31,8 @@ public class SpriteAnimation {
     private final int frameCount;
     private final int offsetX;
     private final int offsetY;
+    private final int startX;
+    private final int startY;
     private final double frameWidth;
     private final double frameHeight;
     private int frameDurationMs;
@@ -39,7 +41,7 @@ public class SpriteAnimation {
     private long lastFrameChangeMs;
 
     public SpriteAnimation(
-            ImageView imageView, int frameCount, int offsetX, int offsetY, int frameWidth,   int frameHeight) {
+            ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
         this.imageView = imageView;
         this.frameCount = frameCount;
         this.offsetX   = offsetX;
@@ -49,6 +51,8 @@ public class SpriteAnimation {
         this.frameDurationMs = 500;
         this.currentFrame = 0;
         this.lastFrameChangeMs = 0;
+        this.startX = startX;
+        this.startY = startY;
         
     }
     
@@ -68,7 +72,7 @@ public class SpriteAnimation {
     public Image getCurrentFrame () {
         if (this.lastFrameChangeMs == 0) {
             this.lastFrameChangeMs = System.currentTimeMillis();
-            imageView.setViewport(new Rectangle2D((currentFrame * frameWidth)+(currentFrame* offsetX), 0, frameWidth, frameHeight));
+            imageView.setViewport(new Rectangle2D((currentFrame * frameWidth)+(currentFrame* offsetX)+startX, 0+startY, frameWidth, frameHeight));
         }
         if ((System.currentTimeMillis() - lastFrameChangeMs) > this.frameDurationMs) {
             if (this.currentFrame < this.frameCount-1) {
@@ -78,7 +82,7 @@ public class SpriteAnimation {
             }
             this.lastFrameChangeMs = System.currentTimeMillis();
             //Mists.logger.info("Changed to next frame");
-            imageView.setViewport(new Rectangle2D((currentFrame * frameWidth)+(currentFrame* offsetX), 0, frameWidth, frameHeight));
+            imageView.setViewport(new Rectangle2D((currentFrame * frameWidth)+(currentFrame* offsetX)+startX, 0+startY, frameWidth, frameHeight));
         }
          
         WritableImage snapshot = null;
