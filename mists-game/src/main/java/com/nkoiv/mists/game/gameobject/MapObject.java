@@ -29,6 +29,12 @@ public class MapObject implements Global {
     private HashMap<String, Integer> flags;
     
     private Location location;
+    
+    public MapObject (String name) {
+        this.flags = new HashMap<>();
+        this.name = name;
+        this.addFlag("isVisible");
+    }
 
     
     public MapObject (String name, Image image) {
@@ -44,6 +50,7 @@ public class MapObject implements Global {
         this.location = location;
         this.sprite = new Sprite(image);
         this.sprite.setPosition(xCoor, yCoor);
+        this.addFlag("isVisible");
     }
     
     public void setFlag(String flag, int value) {

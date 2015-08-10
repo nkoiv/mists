@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class Creature extends MapObject implements Combatant {
     * These are not Flags because they're mandatory and limited to creatures
     * Would be too easy to accidentally make walls alive if they were
     * TODO: Consider if the above would be awesome
+    * TODO: Consider making an "attributes" HashMap for these
     */
     private int strength;
     private int agility;
@@ -42,9 +44,18 @@ public class Creature extends MapObject implements Combatant {
     private int defenseValue;
     
     
-     public Creature (String name, Image image) {
+    //Constructor for a creature with one static image
+    public Creature (String name, Image image) {
         super (name, image);
         this.visible = true;
+    }
+    
+    //Constructing a creature with sprite animations
+    public Creature (String name, ImageView imageView, int frameCount, int startingXTile, int startingYTile, int frameWidth, int frameHeight) {
+        super(name);
+        this.setAnimations(imageView, frameCount, startingXTile, startingYTile, frameWidth, frameHeight);
+        this.setSprite(new Sprite(this.spriteAnimations.get("downMovement").getCurrentFrame()));
+
     }
 
     public Creature(String name, Image image, Location location, double xCoor, double yCoor) {
@@ -69,8 +80,7 @@ public class Creature extends MapObject implements Combatant {
         );
         this.setAnimation("upMovement",
           imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+(frameHeight*3), 0, 0, frameWidth, frameHeight      
-        );
-        
+        );    
     }
     
     public void setAnimation(String animationName, ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
@@ -81,19 +91,14 @@ public class Creature extends MapObject implements Combatant {
             this.spriteAnimations.replace(animationName, new SpriteAnimation(imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight));
         } else {
             this.spriteAnimations.put(animationName, new SpriteAnimation(imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight));
-        }
-        
-        
+        }    
     }
-    
     
     @Override
     public void update (double time) {
         this.updateSprite();
-        this.applyMovement(time);
-        
+        this.applyMovement(time);   
     }
-    
     
     /*
     * TODO: General sprite updates for general creatures

@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 /**
@@ -54,9 +55,8 @@ public class Location implements Global {
         PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setPosition(300, 200);
         himmu.getSprite().setCollisionAreaShape(2);
-        himmu.setLocation(this);
         this.setPlayer(himmu);
-        this.mapObjects.add(himmu);
+        this.addCreature(himmu);
         this.screenFocus = himmu;
         
         //TODO: Create structures from structure library once its finished
@@ -70,6 +70,11 @@ public class Location implements Global {
         Structure tree2 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 230, 340);
         tree2.addExtra(new Image("/images/tree.png"), -35, -96);
         this.mapObjects.add(tree2);
+        
+        Creature monster1 = new Creature("Pupu", new ImageView("/images/monster3.png"), 3, 0, 4, 64, 64);
+        monster1.setPosition(380, 400);
+        monster1.getSprite().setCollisionAreaShape(2);
+        this.addCreature(monster1);
         
     }
     
