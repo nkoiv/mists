@@ -78,8 +78,8 @@ public class Creature extends MapObject implements Combatant {
     }
     
     private void initializeFlags() {
-        this.setFlag("isVisible", 1);
-        this.setFlag("collisionLevel", 100);
+        this.setFlag("visible", 1);
+        this.setFlag("collisionlevel", 100);
     }
     
     public void setAttribute (String attribute, int value) {
@@ -183,7 +183,7 @@ public class Creature extends MapObject implements Combatant {
     * Is everything animated?
     */
     void updateSprite() {
-        if (this.isFlagged("isVisible") && !this.spriteAnimations.isEmpty()) {
+        if (this.isFlagged("visible") && !this.spriteAnimations.isEmpty()) {
             //Mists.logger.log(Level.INFO, "{0} is facing {1}", new Object[]{this.getName(), this.facing});
             switch(this.facing) {
                 case UP: this.getSprite().setAnimation(this.spriteAnimations.get("upMovement")); break;
@@ -256,7 +256,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public boolean moveTowards (Direction direction) {
-        this.setFlag("Moving", 1);
+        this.setFlag("moving", 1);
         switch(direction) {
         case UP: return moveUp();
         case DOWN: return moveDown();
@@ -325,7 +325,7 @@ public class Creature extends MapObject implements Combatant {
     }
 
     public void stopMovement() {
-        this.setFlag("Moving", 0);
+        this.setFlag("moving", 0);
         this.getSprite().setVelocity(0, 0);
         this.getSprite().setImage(this.getSprite().getImage());
     }

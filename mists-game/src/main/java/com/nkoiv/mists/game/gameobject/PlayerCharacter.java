@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     private HashMap<String, SpriteAnimation> spriteAnimations;
     
+    
     public PlayerCharacter() {
         //Dummy player for testing
         super ("Himmu",new Image("/images/himmu.png"));
@@ -50,7 +52,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setAnimation("upMovement", new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 0, 0, 64, 64 );       
         this.setAnimation("leftMovement", new ImageView("/images/himmu_walk_left.png"), 4, 0, 0, 0, 0, 64, 64 );
         this.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
-        this.setFlag("Alive", 1);
+        this.setFlag("alive", 1);
         this.setMaxHealth(100);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
@@ -59,13 +61,17 @@ public class PlayerCharacter extends Creature implements Combatant {
 
     public PlayerCharacter(String name, Image image) {
         super(name, image);
-        this.setFlag("collisionLevel", 100);
+        this.setFlag("collisionlevel", 100);
         this.setFacing(Direction.DOWN);
-        this.setFlag("Alive", 1);
+        this.setFlag("alive", 1);
         this.setMaxHealth(100);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
     }
      
-
+    @Override
+    public void useAction(String action ) {
+        
+    }
+    
 }

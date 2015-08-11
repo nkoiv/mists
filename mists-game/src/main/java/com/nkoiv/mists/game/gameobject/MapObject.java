@@ -33,7 +33,7 @@ public class MapObject implements Global {
     public MapObject (String name) {
         this.flags = new HashMap<>();
         this.name = name;
-        this.addFlag("isVisible");
+        this.setFlag("visible", 1);
     }
 
     
@@ -41,7 +41,7 @@ public class MapObject implements Global {
         this.flags  = new HashMap<>();
         this.name = name;
         this.sprite = new Sprite(image);
-        this.addFlag("isVisible");
+        this.setFlag("visible", 1);
     }
     
     public MapObject (String name, Image image, Location location, double xCoor, double yCoor) {
@@ -50,7 +50,7 @@ public class MapObject implements Global {
         this.location = location;
         this.sprite = new Sprite(image);
         this.sprite.setPosition(xCoor, yCoor);
-        this.addFlag("isVisible");
+        this.setFlag("visible", 1);
     }
     
     public void setFlag(String flag, int value) {
@@ -67,15 +67,6 @@ public class MapObject implements Global {
         } else {
             return 0;
         }
-    }
-    
-    //TODO: Consider if adding flag should NOT reset flag value to 1 if flag already exists
-    public void addFlag(String flag){
-       if (this.flags.containsKey(flag)) {
-            this.flags.replace(flag, 1);
-        } else {
-            this.flags.put(flag, 1);
-        } 
     }
     
     public boolean isFlagged (String flag) {
@@ -113,7 +104,7 @@ public class MapObject implements Global {
     }
     
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("isVisible")) {
+        if (this.isFlagged("visible")) {
             this.sprite.render(xOffset, yOffset, gc);
         }
     }   

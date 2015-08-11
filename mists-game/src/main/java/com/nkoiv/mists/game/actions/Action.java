@@ -20,6 +20,7 @@ public class Action implements Serializable {
     private static int nextId = 0;
     private String name;
     private int id;
+    private HashMap<String, Integer> flags;    
     
     private static Map<Integer, Action> allById;
     
@@ -30,6 +31,7 @@ public class Action implements Serializable {
     public Action(String name, int id) {
         this.name = name;
         this.id = id;
+        this.flags = new HashMap<>();
         getAllById().put(id, this);
     }
     
@@ -43,6 +45,30 @@ public class Action implements Serializable {
     public void use(Creature actor) {
         //Override this to do things
         Mists.logger.log(Level.INFO, "{0} used by {1}", new Object[]{this.toString(), actor.getName()});
+    }
+    
+    public void setFlag(String flag, int value) {
+        if (this.flags.containsKey(flag)) {
+            this.flags.replace(flag, value);
+        } else {
+            this.flags.put(flag, value);
+        }   
+    }
+    
+    public int getFlag(String flag) {
+        if (this.flags.containsKey(flag)) {
+            return this.flags.get(flag);
+        } else {
+            return 0;
+        }
+    }
+      
+    public boolean isFlagged (String flag) {
+        if (this.flags.containsKey(flag)) {
+            return this.flags.get(flag) > 0;
+        } else {
+            return false;
+        }
     }
 
     @Override

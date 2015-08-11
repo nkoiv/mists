@@ -20,6 +20,7 @@ public class MeleeAttack extends Action implements AttackAction {
     public MeleeAttack() {
         super("MeleeAttack");
         this.setAnimation(new ImageView("/images/attackAnimations.png"), 4, 32, 0, 0, 0, 32, 32);
+        this.setFlag("Range", 0);
     }
     
     public void setAnimation(ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
