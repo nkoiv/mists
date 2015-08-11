@@ -153,11 +153,19 @@ public class Sprite
     }
     
     public double getWidth() {
-        return this.width;
-    }
+        if (this.animated) {
+            return this.animation.getFrameWidth();
+        } else {    
+            return this.width;
+        }
+    }   
     
     public double getHeight() {
-        return this.height;
+        if (this.animated) {
+            return this.animation.getFrameHeight();
+        } else {
+            return this.height;
+        }
     }
 
     public void update(double time)

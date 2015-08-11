@@ -6,10 +6,12 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -71,6 +73,11 @@ public class PlayerCharacter extends Creature implements Combatant {
      
     @Override
     public void useAction(String action ) {
+        if (this.getAvailableActions() != null) {
+            if (this.getAvailableActions().containsKey(action)) this.getAvailableActions().get(action).use(this);
+        } else {
+            Mists.logger.log(Level.INFO, "{0} tried using action [{1}], but doesnt have the ability.", new Object[]{this.getName(), action});
+        }
         
     }
     

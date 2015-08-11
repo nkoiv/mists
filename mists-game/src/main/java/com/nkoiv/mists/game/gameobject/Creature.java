@@ -128,10 +128,12 @@ public class Creature extends MapObject implements Combatant {
     public void useAction(String name) {
         if (this.availableActions != null) {
             if (this.availableActions.containsKey(name)) this.availableActions.get(name).use(this);
+        } else {
+            Mists.logger.info(this.getName() + " tried using action ["+name+"], but doesnt have the ability." );
         }
     }
     
-    public ArrayList<String> getAvailableActions() {
+    public ArrayList<String> getAvailableActionNames() {
         ArrayList<String> listOfActions = new ArrayList<>();
         if (this.availableActions != null) {
             for (String actionName : this.availableActions.keySet()) {
@@ -139,6 +141,10 @@ public class Creature extends MapObject implements Combatant {
             }
         }
         return listOfActions;
+    }
+    
+    public HashMap<String, Action> getAvailableActions(){
+        return this.availableActions;
     }
     
     /* setAnimations is used to easily set all movement animations
@@ -204,6 +210,7 @@ public class Creature extends MapObject implements Combatant {
         /*
         * Check collisions before movement
         * TODO: Add in pixel-based collision detection (compare alphamaps?)
+        * TODO: Make collisions respect collisionlevel -flag.
         */
         if (this.getLocation().checkCollisions(this) == null) {
             this.getSprite().update(time); //Collided with nothing, free to move
@@ -258,16 +265,16 @@ public class Creature extends MapObject implements Combatant {
     public boolean moveTowards (Direction direction) {
         this.setFlag("moving", 1);
         switch(direction) {
-        case UP: return moveUp();
-        case DOWN: return moveDown();
-        case LEFT: return moveLeft();
-        case RIGHT: return moveRight();
-        case UPRIGHT: return moveUpRight();
-        case UPLEFT: return moveUpLeft();
-        case DOWNRIGHT: return moveDownRight();
-        case DOWNLEFT: return moveDownLeft();
+            case UP: return moveUp();
+            case DOWN: return moveDown();
+            case LEFT: return moveLeft();
+            case RIGHT: return moveRight();
+            case UPRIGHT: return moveUpRight();
+            case UPLEFT: return moveUpLeft();
+            case DOWNRIGHT: return moveDownRight();
+            case DOWNLEFT: return moveDownLeft();
         default: break;
-    }
+        }
         
         return false;
     }

@@ -6,7 +6,9 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -28,6 +30,7 @@ public class Location implements Global {
     * TODO: Lists for various types of MapObjects, from creatures to frills.
     */
     private final List<MapObject> mapObjects;
+    private final List<Effect> temporaryEffects;
     private String name;
     private GameMap map;
     
@@ -42,6 +45,7 @@ public class Location implements Global {
     
     public Location(String name) {
         this.mapObjects = new ArrayList<>();
+        this.temporaryEffects = new ArrayList<>();
     }
     
     public Location() {
@@ -50,10 +54,12 @@ public class Location implements Global {
         */
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
+        this.temporaryEffects = new ArrayList<>();
         this.map = new BGMap(new Image("/images/pocmap.png"));
         
         PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setCollisionAreaShape(2);
+        himmu.addAction(new MeleeAttack());
         this.setPlayer(himmu);
         this.addCreature(himmu, 300, 200);
         this.screenFocus = himmu;
@@ -76,16 +82,22 @@ public class Location implements Global {
         
     }
     
-    public void addStructure(Structure s, int xPos, int yPos) {
+    public void addStructure(Structure s, double xPos, double yPos) {
         this.mapObjects.add(s);
         s.setLocation(this);
         s.getSprite().setPosition(xPos, yPos);
     }
     
-    public void addCreature(Creature c, int xPos, int yPos) {
+    public void addCreature(Creature c, double xPos, double yPos) {
         this.mapObjects.add(c);
         c.setLocation(this);
         c.getSprite().setPosition(xPos, yPos);
+    }
+    
+    public void addEffect(Effect e, double xPos, double yPos) {
+        this.temporaryEffects.add(e);
+        e.setLocation(this);
+        e.getSprite().setPosition(xPos, yPos);
     }
     
     public void addPlayerCharacter(PlayerCharacter p) {
@@ -103,7 +115,11 @@ public class Location implements Global {
     }
     
     public void removeMapObject (MapObject o) {
-        this.mapObjects.remove(o);
+        if(this.mapObjects.contains(o)) this.mapObjects.remove(o);
+    }
+    
+    public void removeEffect (Effect e) {
+        if(this.temporaryEffects.contains(e)) this.temporaryEffects.remove(e);
     }
     
     public GameMap getMap() {
@@ -158,6 +174,12 @@ public class Location implements Global {
                 mob.update(time);
             }    
         }
+        if (!this.temporaryEffects.isEmpty()) {
+            for (Effect e : this.temporaryEffects) {
+                if(e.isFlagged("removable"))this.removeEffect(e);
+            }
+        }
+        
     }
     
     public MapObject checkCollisions (MapObject o) {
@@ -211,8 +233,14 @@ public class Location implements Global {
         if (!this.mapObjects.isEmpty()) {
             for (MapObject struct : this.mapObjects) {
                 if (struct instanceof Structure) {
-                    //struct.renderExtras(xOffset, yOffset, gc); //Draw extra frill (leaves on trees etc)
+                    ((Structure)struct).renderExtras(xOffset, yOffset, gc); //Draw extra frill (leaves on trees etc)
                 }
+            }
+        }
+        //Draw extra effects (battle swings, projectiles, spells...) on the screen
+        if (!this.temporaryEffects.isEmpty()) {
+            for (Effect e : this.temporaryEffects) {
+                e.render(xOffset, yOffset, gc);
             }
         }
         
