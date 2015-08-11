@@ -5,9 +5,12 @@
  */
 package com.nkoiv.mists.game.actions;
 
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Creature;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * All actions are stored in allById -map
@@ -27,13 +30,19 @@ public class Action implements Serializable {
     public Action(String name, int id) {
         this.name = name;
         this.id = id;
-        getAllById().put(new Integer(id), this);
+        getAllById().put(id, this);
     }
     
     private Map<Integer, Action> getAllById() {
-        if(allById == null)
+        if(allById == null) {
             allById = new HashMap<>();
+        }
         return allById;
+    }
+    
+    public void use(Creature actor) {
+        //Override this to do things
+        Mists.logger.log(Level.INFO, "{0} used by {1}", new Object[]{this.toString(), actor.getName()});
     }
 
     @Override

@@ -25,6 +25,10 @@ public interface Combatant {
 	String getName();
         
 	Location getLocation();
+        
+        void setEffect(String effect, int value);
+                
+        int getEffectValue(String effect);
 	
 	boolean moveTowards (Direction direction);
 

@@ -1,4 +1,8 @@
-#Viikko 3
+#Viikko 3 (7h)
+
+##11.8
+* 1h [OHJELMOINTI] Käyty rakentamaan POC "MeleeAttack"iä
+* 1h [MÄÄRITTELY] Pohdittu hyökkäysten mallintamista
 
 ##10.8
 * 1h [OHJELMOINTI] Alettu rakentamaan Action -luokkaa

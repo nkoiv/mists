@@ -7,9 +7,11 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
@@ -32,7 +34,9 @@ public class Creature extends MapObject implements Combatant {
     */
     
     private HashMap<String, Integer> attributes;
-    
+    private HashMap<String, Integer> effects;
+    //TODO: Consider if effects should be used for MapObjects (can a wall or a rock get debuffs/buffs?)
+    private HashMap<String, Action> availableActions;
     
     //Constructor for a creature template with one static image
     public Creature (String name, Image image) {
@@ -86,13 +90,55 @@ public class Creature extends MapObject implements Combatant {
         }
     }
     
+    /* GetAttribute returns 0 when attribute is not found.
+    *  If creature has no Armour, "getAttribute("Armour") gives 0.
+    *  Due to this no combat mechanics should ever use division by attributes.
+    */
     public int getAttribute(String attribute) {
         if (this.attributes.containsKey(attribute)) {
             return this.attributes.get(attribute);
         } else {
             return 0;
         }
-        
+    }
+    
+    @Override
+    public void setEffect(String effect, int value) {
+        if (this.effects.containsKey(effect)) {
+            this.effects.replace(effect, value);
+        } else {
+            this.effects.put(effect, value);
+        }
+    }
+    
+    @Override
+    public int getEffectValue(String effect) {
+        if (this.effects.containsKey(effect)) {
+            return this.effects.get(effect);
+        } else {
+            return 0;
+        }
+    }
+    
+    public void addAction(Action a) {
+        if (this.availableActions == null) this.availableActions = new HashMap<>();
+        if (!this.availableActions.containsKey(a.toString())) this.availableActions.put(a.toString(), a);
+    }
+    
+    public void useAction(String name) {
+        if (this.availableActions != null) {
+            if (this.availableActions.containsKey(name)) this.availableActions.get(name).use(this);
+        }
+    }
+    
+    public ArrayList<String> getAvailableActions() {
+        ArrayList<String> listOfActions = new ArrayList<>();
+        if (this.availableActions != null) {
+            for (String actionName : this.availableActions.keySet()) {
+                listOfActions.add(actionName);
+            }
+        }
+        return listOfActions;
     }
     
     /* setAnimations is used to easily set all movement animations
@@ -176,7 +222,8 @@ public class Creature extends MapObject implements Combatant {
             
             /*
             * Prevent further going into colliding object
-            * 
+            * Because every other directino is allowed "jittering" past two colliding objects might be possible
+            * TODO: Test collisions on tiles and see if tweaking is needed
             */
             
             if(this.getSprite().getXVelocity() != 0 && (yDistance<xDistance)) {
