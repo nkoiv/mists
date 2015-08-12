@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.sprites;
 
+import com.nkoiv.mists.game.Direction;
+import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -183,6 +185,39 @@ public class Sprite
         }
         
 
+    }
+    
+    public ArrayList<Double> getCorner(Direction d) {
+        ArrayList<Double> corner = new ArrayList<>();
+         switch(d) {
+            case UP: corner.add(this.positionX+(this.width/2));
+                    corner.add(this.positionY);
+                    break;
+            case DOWN: corner.add(this.positionX+(this.width/2));
+                    corner.add(this.positionY+this.height);
+                    break;
+            case LEFT: corner.add(this.positionX);
+                    corner.add(this.positionY+(this.height/2));
+                    break;
+            case RIGHT: corner.add(this.positionX+(this.width));
+                    corner.add(this.positionY+(this.height/2));
+                    break;
+            case UPRIGHT: corner.add(this.positionX+(this.width));
+                    corner.add(this.positionY);
+                    break;
+            case UPLEFT: corner.add(this.positionX);
+                    corner.add(this.positionY);
+                    break;
+            case DOWNRIGHT: corner.add(this.positionX+(this.width));
+                    corner.add(this.positionY+this.height);
+                    break;
+            case DOWNLEFT: corner.add(this.positionX);
+                    corner.add(this.positionY+this.height);
+                    break;
+        default: corner.add(this.positionX);corner.add(this.positionY);break;
+         }
+        
+        return corner;
     }
 
     public Shape getBoundary()

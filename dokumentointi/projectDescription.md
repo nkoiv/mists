@@ -8,3 +8,11 @@ Unlike in most roguelikes, the player character in Mists is accompanied by a hel
 * Play the game
 * Save a game to pause progress
 * Resume a saved game
+
+**Playing the game**
+So far only the Location -level of the game has been developed.
+Further down the road, there should be a world map to travel from a location to another.
+
+***Location (POC)***
+Moving around: Arrow keys
+Using ability: Space

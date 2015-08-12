@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.actions;
 
-import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
@@ -41,44 +40,15 @@ public class MeleeAttack extends Action implements AttackAction {
         attackSprite.setPosition(actor.getxPos(), actor.getyPos());
         return attackSprite;
     }
-    
-    private ArrayList<Double> getAttackPoint(Creature actor) {
-        Mists.logger.log(Level.INFO, "Size of {0}: {1}/{2}", new Object[]{actor.getName(), actor.getSprite().getWidth(), actor.getSprite().getHeight()});
-        ArrayList<Double> attackPoint = new ArrayList<>();
-        Direction actorFacing = actor.getFacing();
-        double actorLeftX = actor.getxPos();
-        double actorRightX = (actor.getxPos()+actor.getSprite().getWidth());
-        double actorTopY = actor.getyPos();
-        double actorBottomY = (actor.getyPos()+actor.getSprite().getHeight());
-        switch(actorFacing) {
-            case UP: attackPoint.add(actorLeftX+(actor.getSprite().getWidth()/2));
-                     attackPoint.add(actorTopY) ; break;
-            case DOWN: attackPoint.add(actorLeftX+(actor.getSprite().getWidth())/2);
-                     attackPoint.add(actorBottomY) ; break;
-            case LEFT: attackPoint.add(actorLeftX);
-                     attackPoint.add(actorTopY+(actor.getSprite().getHeight()/2)) ; break;
-            case RIGHT: attackPoint.add(actorRightX);
-                     attackPoint.add(actorTopY+(actor.getSprite().getHeight()/2));break;
-            case UPRIGHT: break;
-            case UPLEFT: break;
-            case DOWNRIGHT: break;
-            case DOWNLEFT: break;
-        default: break;
-        }
-        
-        if (attackPoint.isEmpty()) {
-            attackPoint.add(actorTopY);
-            attackPoint.add(actorLeftX);
-        }
-        return attackPoint;
-    }
-    
     @Override
     public void use(Creature actor) {
-        Mists.logger.log(Level.INFO, "{0} used by {1}", new Object[]{this.toString(), actor.getName()});
-        ArrayList<Double> attackPoint = this.getAttackPoint(actor);
+        Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
+        ArrayList<Double> attackPoint = actor.getSprite().getCorner(actor.getFacing());
         Effect attackEffect = new Effect(
-                "meleeattack",actor.getLocation(), attackPoint.get(0), attackPoint.get(1),this.getSprite(actor),400);
+                "meleeattack",actor.getLocation(),
+                (attackPoint.get(0)-(this.attackAnimation.getFrameWidth()/2)),
+                (attackPoint.get(1)-(this.attackAnimation.getFrameHeight()/2)),
+                this.getSprite(actor),400);
     }
     
     @Override

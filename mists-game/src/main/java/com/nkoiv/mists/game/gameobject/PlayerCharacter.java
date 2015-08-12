@@ -25,12 +25,11 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     
     //A bunch of Strings to be used for describing various attacks
+    //TODO: Consider moving these into a map
     private ArrayList<String> overpoweringAttack;
     private ArrayList<String> overpoweringDefense;
     private ArrayList<String> weakAttack;
     private ArrayList<String> weakDefense;
-	
-    private boolean gender; //true=male, false=female
     
     //Sprite-Arrays for animated movement
     /*
