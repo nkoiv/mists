@@ -1,4 +1,9 @@
-#Viikko 3 (7h)
+#Viikko 3 (12h)
+
+##12.8
+* 1h [OHJELMOINTI] Tehty POC-action "MeleeAttack" toimivaksi
+* 2h [OHJELMOINTI] Rakennettu Efektit
+* 1h [OHJELMOINTI] Luotu Actionit
 
 ##11.8
 * 1h [OHJELMOINTI] Käyty rakentamaan POC "MeleeAttack"iä
