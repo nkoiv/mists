@@ -90,7 +90,7 @@ public class Game {
         
         //TODO: These should be directed to the UI-layer, which knows which abilities player has bound where
         if (inputLog.contains("SPACE")) {
-            Mists.logger.log(Level.INFO, "{0} TRIED USING ABILITY 0", currentLocation.getPlayer().getName());
+            //Mists.logger.log(Level.INFO, "{0} TRIED USING ABILITY 0", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().useAction("MeleeAttack");
         }
 

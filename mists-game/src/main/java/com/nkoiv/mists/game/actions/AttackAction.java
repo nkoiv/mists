@@ -5,7 +5,9 @@
  */
 package com.nkoiv.mists.game.actions;
 
+import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,4 +17,5 @@ public interface AttackAction {
     SpriteAnimation getSpriteAnimation();
 
     boolean isOnCooldown();
+    
 }

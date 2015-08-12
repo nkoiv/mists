@@ -30,7 +30,7 @@ public class Location implements Global {
     * TODO: Lists for various types of MapObjects, from creatures to frills.
     */
     private final List<MapObject> mapObjects;
-    private final List<Effect> temporaryEffects;
+    private final List<Effect> effects;
     private String name;
     private GameMap map;
     
@@ -45,7 +45,7 @@ public class Location implements Global {
     
     public Location(String name) {
         this.mapObjects = new ArrayList<>();
-        this.temporaryEffects = new ArrayList<>();
+        this.effects = new ArrayList<>();
     }
     
     public Location() {
@@ -54,7 +54,7 @@ public class Location implements Global {
         */
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
-        this.temporaryEffects = new ArrayList<>();
+        this.effects = new ArrayList<>();
         this.map = new BGMap(new Image("/images/pocmap.png"));
         
         PlayerCharacter himmu = new PlayerCharacter();
@@ -95,7 +95,7 @@ public class Location implements Global {
     }
     
     public void addEffect(Effect e, double xPos, double yPos) {
-        this.temporaryEffects.add(e);
+        this.effects.add(e);
         e.setLocation(this);
         e.getSprite().setPosition(xPos, yPos);
     }
@@ -119,7 +119,7 @@ public class Location implements Global {
     }
     
     public void removeEffect (Effect e) {
-        if(this.temporaryEffects.contains(e)) this.temporaryEffects.remove(e);
+        if(this.effects.contains(e)) this.effects.remove(e);
     }
     
     public GameMap getMap() {
@@ -170,31 +170,38 @@ public class Location implements Global {
         * Movement, combat and triggers should all be handled here
         */
         if (!this.mapObjects.isEmpty()) {
-            for (MapObject mob : this.mapObjects) {
+            for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
                 mob.update(time);
             }
-            Iterator<MapObject> mobIterator = mapObjects.iterator();
+            Iterator<MapObject> mobIterator = mapObjects.iterator(); //Cleanup of mobs
             while (mobIterator.hasNext()) {
                 if (mobIterator.next().isFlagged("removable")) {
                     mobIterator.remove();
                 }
             }
         }
-        if (!this.temporaryEffects.isEmpty()) {
-            Iterator<Effect> effectsIterator = temporaryEffects.iterator();
+        if (!this.effects.isEmpty()) {
+            for (Effect e : this.effects) { //Handle effects landing on something
+                if (!this.checkCollisions(e).isEmpty()) {
+                    e.getOwner().hitOn(this.checkCollisions((e)));
+                }
+            }
+            Iterator<Effect> effectsIterator = effects.iterator(); //Cleanup of effects
             while (effectsIterator.hasNext()) {
                 if (effectsIterator.next().isFlagged("removable")) {
                     effectsIterator.remove();
-                }
+                } 
             }
         }
         
     }
     
-    public MapObject checkCollisions (MapObject o) {
+    public ArrayList<MapObject> checkCollisions (MapObject o) {
         /*
         * TODO: Maybe only check collisions from nearby objects?
         */
+        ArrayList<MapObject> collidingObjects = new ArrayList<>();
+        
         Iterator<MapObject> mapObjectsIter = mapObjects.iterator();
         while ( mapObjectsIter.hasNext() )
         {
@@ -202,11 +209,11 @@ public class Location implements Global {
             if (!collidingObject.equals(o)) { // Colliding with yourself is not really a collision
                 if ( o.instersects(collidingObject) ) 
                  {
-                    return collidingObject;
+                    collidingObjects.add(collidingObject);
                 }
             }
         }
-        return null;
+        return collidingObjects;
     }
     
     public void render (GraphicsContext gc) {
@@ -247,8 +254,8 @@ public class Location implements Global {
             }
         }
         //Draw extra effects (battle swings, projectiles, spells...) on the screen
-        if (!this.temporaryEffects.isEmpty()) {
-            for (Effect e : this.temporaryEffects) {
+        if (!this.effects.isEmpty()) {
+            for (Effect e : this.effects) {
                 e.render(xOffset, yOffset, gc);
             }
         }

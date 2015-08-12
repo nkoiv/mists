@@ -6,8 +6,10 @@
 package com.nkoiv.mists.game.actions;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Combatant;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class MeleeAttack extends Action implements AttackAction {
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
         this.setFlag("cooldown", 1000);
+        this.setFlag("triggered", 0);
     }
     
     public void setAnimation(ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
@@ -45,16 +48,36 @@ public class MeleeAttack extends Action implements AttackAction {
     @Override
     public void use(Creature actor) {
         if (this.isOnCooldown()) {
-            Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
+            //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {
+            this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
             this.lastUsed = System.currentTimeMillis();
             ArrayList<Double> attackPoint = actor.getSprite().getCorner(actor.getFacing());
             Effect attackEffect = new Effect(
-                    "meleeattack",actor.getLocation(),
+                    this, "meleeattack",actor.getLocation(),
                     (attackPoint.get(0)-(this.attackAnimation.getFrameWidth()/2)),
                     (attackPoint.get(1)-(this.attackAnimation.getFrameHeight()/2)),
                     this.getSprite(actor),400);
+            actor.getLocation().addEffect(attackEffect,
+                    (attackPoint.get(0)-(this.attackAnimation.getFrameWidth()/2)),
+                    (attackPoint.get(1)-(this.attackAnimation.getFrameHeight()/2)));
+        }
+    }
+    
+    @Override
+    public void hitOn(ArrayList<MapObject> mobs) {        
+        if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
+            //Mists.logger.info(this.toString() + " landed on " + mobs.toString());
+            this.setFlag("triggered", 1);
+            for (MapObject mob : mobs) {
+                if (!mob.equals(this.getOwner())) {
+                    if (mob instanceof Combatant) {
+                        ((Combatant)mob).takeDamage(50);
+                        Mists.logger.info("Hit "+mob.getName()+" for 50 damage");
+                    }
+                }
+            }
         }
     }
     
@@ -65,11 +88,7 @@ public class MeleeAttack extends Action implements AttackAction {
 
     @Override
     public boolean isOnCooldown() {
-        if (System.currentTimeMillis() < (this.lastUsed+this.getFlag("cooldown"))) {
-            return true;
-        } else {
-            return false;
-        }
+        return System.currentTimeMillis() < (this.lastUsed+this.getFlag("cooldown"));
     }
     
 }

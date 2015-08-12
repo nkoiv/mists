@@ -7,7 +7,10 @@ package com.nkoiv.mists.game.actions;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -20,6 +23,8 @@ public class Action implements Serializable {
     private static int nextId = 0;
     private String name;
     private int id;
+    private MapObject owner;
+    private ArrayList<Effect> effects;
     private HashMap<String, Integer> flags;    
     
     private static Map<Integer, Action> allById;
@@ -40,6 +45,14 @@ public class Action implements Serializable {
             allById = new HashMap<>();
         }
         return allById;
+    }
+    
+    public void setOwner(MapObject o) {
+        this.owner = o;
+    }
+    
+    public MapObject getOwner() {
+        return this.owner;
     }
     
     public void use(Creature actor) {
@@ -71,7 +84,11 @@ public class Action implements Serializable {
         }
     }
 
-    @Override
+    public void hitOn(ArrayList<MapObject> mobs) {
+        
+    }
+    
+     @Override
     public String toString() {
         return name;
     }

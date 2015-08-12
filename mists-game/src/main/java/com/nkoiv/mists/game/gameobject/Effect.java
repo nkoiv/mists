@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class Effect extends MapObject {
 
+    private Action owner;
     private long startTime;
     private long endTime;
     
@@ -24,8 +26,9 @@ public class Effect extends MapObject {
         super(name);
     }
     
-    public Effect(String name, Location location, double xPos, double yPos, Sprite sprite, int durationMS) {
+    public Effect(Action owner, String name, Location location, double xPos, double yPos, Sprite sprite, int durationMS) {
         super(name);
+        this.owner = owner;
         this.setSprite(sprite);
         this.getSprite().setPosition(xPos, yPos);
         this.setLocation(location);
@@ -33,7 +36,10 @@ public class Effect extends MapObject {
         this.setFlag("startdurationMS", durationMS);
         this.startTime = System.currentTimeMillis();
         this.endTime = startTime + (durationMS);
-        location.addEffect(this, xPos, yPos);
+    }
+    
+    public Action getOwner() {
+        return this.owner;
     }
     
     @Override

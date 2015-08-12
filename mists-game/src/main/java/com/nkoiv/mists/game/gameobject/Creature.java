@@ -122,7 +122,11 @@ public class Creature extends MapObject implements Combatant {
     
     public void addAction(Action a) {
         if (this.availableActions == null) this.availableActions = new HashMap<>();
-        if (!this.availableActions.containsKey(a.toString())) this.availableActions.put(a.toString(), a);
+        if (!this.availableActions.containsKey(a.toString())) {
+            this.availableActions.put(a.toString(), a);
+            a.setOwner(this);
+        }
+        
     }
     
     public void useAction(String name) {
@@ -212,27 +216,29 @@ public class Creature extends MapObject implements Combatant {
         * TODO: Add in pixel-based collision detection (compare alphamaps?)
         * TODO: Make collisions respect collisionlevel -flag.
         */
-        if (this.getLocation().checkCollisions(this) == null) {
+        if (this.getLocation().checkCollisions(this).isEmpty()) {
             this.getSprite().update(time); //Collided with nothing, free to move
         } else {
             
-            MapObject collidingObject = this.getLocation().checkCollisions(this); //Get the colliding object
-            Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
+            ArrayList<MapObject> collidingObjects = this.getLocation().checkCollisions(this); //Get the colliding object
+            
+            MapObject collidingObject = collidingObjects.get(0);
+            //Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
             double collidingX = collidingObject.getSprite().getXPos()+(collidingObject.getSprite().getWidth()/2);
             double collidingY = collidingObject.getSprite().getYPos()+(collidingObject.getSprite().getHeight()/2);
             double thisX = this.getSprite().getXPos()+(this.getSprite().getWidth()/2);
             double thisY = this.getSprite().getYPos()+(this.getSprite().getHeight()/2);
-            
+
             double xDistance = Math.abs(thisX - collidingX);
             double yDistance = Math.abs(thisY - collidingY);
             //Mists.logger.log(Level.INFO, "At the distance of x: {0} y: {1}", new Object[]{xDistance, yDistance});
-            
+
             /*
             * Prevent further going into colliding object
             * Because every other directino is allowed "jittering" past two colliding objects might be possible
             * TODO: Test collisions on tiles and see if tweaking is needed
             */
-            
+
             if(this.getSprite().getXVelocity() != 0 && (yDistance<xDistance)) {
                 if (thisX<collidingX) { //Colliding object is to the right
                     if (this.getSprite().getXVelocity()>0) { // Check if we're trying to move right
@@ -244,6 +250,7 @@ public class Creature extends MapObject implements Combatant {
                     }
                 }
             }
+
            if(this.getSprite().getYVelocity() != 0 && (xDistance<yDistance)) {
                 if (thisY<collidingY) { //Colliding object is below
                     if (this.getSprite().getYVelocity()>0) { //We're trying to move down
@@ -257,7 +264,7 @@ public class Creature extends MapObject implements Combatant {
                 }
            }
            this.getSprite().update(time);
-            
+
         }
     }
     
@@ -382,7 +389,10 @@ public class Creature extends MapObject implements Combatant {
     @Override
     public void takeDamage(int damage) {
         this.setHealth(this.getHealth()-damage);
-        //TODO: Check death
+        Mists.logger.log(Level.INFO,"{0} took {1}"+"points of damage"+" ({2}/{3})",
+                new Object[]{this.getName(), damage, this.getHealth(), this.getMaxHealth()});
+        //TODO: Expand death
+        if(this.getHealth()<1) this.setFlag("removable", 1);
     }
 	
     @Override
