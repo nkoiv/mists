@@ -21,6 +21,7 @@ import javafx.scene.image.ImageView;
 public class MeleeAttack extends Action implements AttackAction {
 
     private SpriteAnimation attackAnimation;
+    private long lastUsed;
     
     public MeleeAttack() {
         super("MeleeAttack");
@@ -28,6 +29,7 @@ public class MeleeAttack extends Action implements AttackAction {
         this.getSpriteAnimation().setAnimationSpeed(100);
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
+        this.setFlag("cooldown", 1000);
     }
     
     public void setAnimation(ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
@@ -42,18 +44,32 @@ public class MeleeAttack extends Action implements AttackAction {
     }
     @Override
     public void use(Creature actor) {
-        Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
-        ArrayList<Double> attackPoint = actor.getSprite().getCorner(actor.getFacing());
-        Effect attackEffect = new Effect(
-                "meleeattack",actor.getLocation(),
-                (attackPoint.get(0)-(this.attackAnimation.getFrameWidth()/2)),
-                (attackPoint.get(1)-(this.attackAnimation.getFrameHeight()/2)),
-                this.getSprite(actor),400);
+        if (this.isOnCooldown()) {
+            Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
+        } else {
+            Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
+            this.lastUsed = System.currentTimeMillis();
+            ArrayList<Double> attackPoint = actor.getSprite().getCorner(actor.getFacing());
+            Effect attackEffect = new Effect(
+                    "meleeattack",actor.getLocation(),
+                    (attackPoint.get(0)-(this.attackAnimation.getFrameWidth()/2)),
+                    (attackPoint.get(1)-(this.attackAnimation.getFrameHeight()/2)),
+                    this.getSprite(actor),400);
+        }
     }
     
     @Override
     public SpriteAnimation getSpriteAnimation() {
         return this.attackAnimation;
+    }
+
+    @Override
+    public boolean isOnCooldown() {
+        if (System.currentTimeMillis() < (this.lastUsed+this.getFlag("cooldown"))) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
 }
