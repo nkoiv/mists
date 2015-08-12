@@ -95,7 +95,7 @@ public class Mists extends Application implements Global {
                     String code = e.getCode().toString();
                     if ( !inputLog.contains(code) )
                         inputLog.add( code );
-                        logger.log(Level.INFO, "{0} pressed", code);
+                        //logger.log(Level.INFO, "{0} pressed", code);
                 }
             });
 
@@ -107,7 +107,7 @@ public class Mists extends Application implements Global {
                 {
                     String code = e.getCode().toString();
                     inputLog.remove( code );
-                    logger.log(Level.INFO, "{0} released", code);
+                    //logger.log(Level.INFO, "{0} released", code);
                 }
             });
     }

@@ -5,19 +5,13 @@
  */
 package com.nkoiv.mists.game.sprites;
 
-import com.nkoiv.mists.game.Mists;
 import java.util.ArrayList;
-import javafx.animation.Interpolator;
-import javafx.animation.Transition;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 /**
  * Based on Mikes Sprite Animation guide from

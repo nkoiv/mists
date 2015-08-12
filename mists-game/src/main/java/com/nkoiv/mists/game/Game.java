@@ -72,19 +72,19 @@ public class Game {
 
         
         if (inputLog.contains("UP")) {
-            Mists.logger.log(Level.INFO, "Moving {0} UP", currentLocation.getPlayer().getName());
+            //Mists.logger.log(Level.INFO, "Moving {0} UP", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.UP);            
         }
         if (inputLog.contains("DOWN")) {
-            Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
+            //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.DOWN);
         }
         if (inputLog.contains("LEFT")) {
-            Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
+            //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.LEFT);
         }
         if (inputLog.contains("RIGHT")) {
-            Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
+            //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.RIGHT);
         }
         
