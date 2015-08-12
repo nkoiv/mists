@@ -172,7 +172,13 @@ public class Location implements Global {
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) {
                 mob.update(time);
-            }    
+            }
+            Iterator<MapObject> mobIterator = mapObjects.iterator();
+            while (mobIterator.hasNext()) {
+                if (mobIterator.next().isFlagged("removable")) {
+                    mobIterator.remove();
+                }
+            }
         }
         if (!this.temporaryEffects.isEmpty()) {
             Iterator<Effect> effectsIterator = temporaryEffects.iterator();
