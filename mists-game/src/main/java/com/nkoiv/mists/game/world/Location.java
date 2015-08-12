@@ -175,8 +175,11 @@ public class Location implements Global {
             }    
         }
         if (!this.temporaryEffects.isEmpty()) {
-            for (Effect e : this.temporaryEffects) {
-                if(e.isFlagged("removable"))this.removeEffect(e);
+            Iterator<Effect> effectsIterator = temporaryEffects.iterator();
+            while (effectsIterator.hasNext()) {
+                if (effectsIterator.next().isFlagged("removable")) {
+                    effectsIterator.remove();
+                }
             }
         }
         
