@@ -1,4 +1,7 @@
-#Viikko 3 (12h)
+#Viikko 3 (15h)
+
+##13.8
+* 3h [TESTAUS] Testien rakentaminen taistelulle ja MapObjecteille
 
 ##12.8
 * 1h [OHJELMOINTI] Tehty POC-action "MeleeAttack" toimivaksi

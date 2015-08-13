@@ -50,14 +50,33 @@ public class MovementTest extends Application {
     public void setUp() {
        testLocation = new Location("TestLocation");
        testPlayer = new PlayerCharacter();
+       testPlayer.setLocation(testLocation);
+       testLocation.addPlayerCharacter(testPlayer);
+       testPlayer.setPosition(300, 200);
+    }
+    
+    @Test
+    public void thereIsNoPlayerMovementBeforeUpdate() {
+        testPlayer.setSpeed(50); //Should move 50 per tick
+        double originalYPos = testPlayer.getyPos();
+        double originalXPos = testPlayer.getxPos();
+        testPlayer.moveTowards(Direction.UPRIGHT);
+        testPlayer.moveTowards(Direction.RIGHT);
+        testPlayer.moveTowards(Direction.DOWNRIGHT);
+        testPlayer.moveTowards(Direction.DOWN);
+        testPlayer.moveTowards(Direction.DOWNLEFT);
+        testPlayer.moveTowards(Direction.LEFT);
+        testPlayer.moveTowards(Direction.UPLEFT);
+        testPlayer.moveTowards(Direction.UP);
+        //testPlayer.update(0.16f);
+        assert(testPlayer.getxPos()==originalXPos);
+        assert(testPlayer.getyPos()==originalYPos);
+        
     }
     
     
     @Test
     public void movementShouldChangePlayerCoordinates() {
-        testPlayer.setLocation(testLocation);
-        testLocation.addPlayerCharacter(testPlayer);
-        testPlayer.setPosition(300, 200);
         testPlayer.setSpeed(50); //Should move 50 per tick
         
         double originalYPos = testPlayer.getyPos();
@@ -65,14 +84,10 @@ public class MovementTest extends Application {
         testPlayer.update(0.16f);
         
         assert(originalYPos != testPlayer.getyPos());
-        
     }
     
     @Test
     public void zeroSpeedPlayerShouldNotMove() {
-        testPlayer.setLocation(testLocation);
-        testLocation.addPlayerCharacter(testPlayer);
-        testPlayer.setPosition(300, 200);
         testPlayer.setSpeed(0); //Movement set to zero
         
         double originalYPos = testPlayer.getyPos();
@@ -86,9 +101,7 @@ public class MovementTest extends Application {
     public void testPlayerCollisionsOnStructure() {
         System.out.println("Testing Player collisions on Structures");
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
-        testPlayer.setLocation(testLocation);
         testRock.setLocation(testLocation);
-        testLocation.addPlayerCharacter(testPlayer);
         testLocation.addStructure(testRock, 500 , 200);
         testPlayer.setPosition(300, 200); //Same Y as testRock, just 200 to the left
         testPlayer.setSpeed(50); //Should move 50 per tick

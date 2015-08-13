@@ -8,11 +8,16 @@ package LocationTests;
 
 import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.world.BGMap;
+import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import javafx.application.Application;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -30,6 +35,8 @@ import org.junit.Test;
 public class GeneralLocationTest extends Application {
     
     Location testLocation;
+    Creature testCreature;
+    GameMap testMap; 
     
     public GeneralLocationTest() {
     }
@@ -48,7 +55,8 @@ public class GeneralLocationTest extends Application {
     @Before
     public void setUp() {
        testLocation = new Location("TestLocation");
-
+       testCreature = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+       testMap = new BGMap(new Image("/images/pocmap.png"));
     }
     
     @Test
@@ -59,10 +67,8 @@ public class GeneralLocationTest extends Application {
     @Test
     public void addedStructuresShouldBeInMOBList() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
-        
         testLocation.addStructure(testRock, 500 , 200);
         assert(testLocation.getMOBList().contains(testRock));
-        
     }
     
     @Test
@@ -74,6 +80,53 @@ public class GeneralLocationTest extends Application {
         assert(testLocation.getMOBList().isEmpty());
     }
     
+    @Test
+    public void addedCreaturesKnowTheirLocation() {
+        testLocation.addCreature(testCreature, 7, 8);
+        assert(testCreature.getLocation()==testLocation);
+    }
+    
+    @Test
+    public void addedStructuresKnowTheirLocation() {
+        Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
+        testLocation.addStructure(testRock, 300 , 200);
+        assert(testRock.getLocation() == testLocation);
+    }
+    
+    @Test
+    public void locationHasNoMapUntilItIsAssignedOne() {
+        assert(testLocation.getMap() == null);
+    }
+    
+    @Test
+    public void xOffsetCanNeverBeMoreThanScreenWidth() {
+        testLocation.setMap(testMap);
+        assert(testLocation.getxOffset(10000)<=Global.WIDTH);
+    }
+    
+    @Test
+    public void yOffsetCanNeverBeMoreThanScreenHeight() {
+        testLocation.setMap(testMap);
+        assert(testLocation.getyOffset(10000)<=Global.HEIGHT);
+    }
+    
+    @Test
+    public void xOffsetCanNeverBeUnderZero() {
+        assert(testLocation.getxOffset(-10000)>=0);
+    }
+    
+    @Test
+    public void yOffsetCanNeverBeUnderZero(){
+        assert(testLocation.getyOffset(-10000)>=0);
+    }
+    
+    @Test
+    public void removableMobsAreRemovedOnUpdate() {
+        testLocation.addCreature(testCreature, 50, 70);
+        testCreature.setFlag("removable", 1);
+        testLocation.update(1);
+        assert(testLocation.getMOBList().isEmpty());
+    }
     
     @After
     public void tearDown() {
