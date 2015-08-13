@@ -25,9 +25,12 @@ import org.junit.Test;
 
 /**
  *
- * @author daedra
+ * @author nkoiv
  */
 public class MovementTest extends Application {
+    
+    Location testLocation;
+    PlayerCharacter testPlayer;
     
     public MovementTest() {
     }
@@ -45,15 +48,13 @@ public class MovementTest extends Application {
     
     @Before
     public void setUp() {
-       
-
+       testLocation = new Location("TestLocation");
+       testPlayer = new PlayerCharacter();
     }
     
     
     @Test
     public void movementShouldChangePlayerCoordinates() {
-        Location testLocation = new Location("TestLocation");
-        PlayerCharacter testPlayer = new PlayerCharacter();
         testPlayer.setLocation(testLocation);
         testLocation.addPlayerCharacter(testPlayer);
         testPlayer.setPosition(300, 200);
@@ -69,8 +70,6 @@ public class MovementTest extends Application {
     
     @Test
     public void zeroSpeedPlayerShouldNotMove() {
-        Location testLocation = new Location("TestLocation");
-        PlayerCharacter testPlayer = new PlayerCharacter();
         testPlayer.setLocation(testLocation);
         testLocation.addPlayerCharacter(testPlayer);
         testPlayer.setPosition(300, 200);
@@ -86,9 +85,7 @@ public class MovementTest extends Application {
     @Test
     public void testPlayerCollisionsOnStructure() {
         System.out.println("Testing Player collisions on Structures");
-        Location testLocation = new Location("TestLocation");
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
-        PlayerCharacter testPlayer = new PlayerCharacter();
         testPlayer.setLocation(testLocation);
         testRock.setLocation(testLocation);
         testLocation.addPlayerCharacter(testPlayer);

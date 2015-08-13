@@ -66,7 +66,7 @@ public class MeleeAttack extends Action implements AttackAction {
     }
     
     @Override
-    public void hitOn(ArrayList<MapObject> mobs) {        
+    public void hitOn(ArrayList<MapObject> mobs) {
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
             //Mists.logger.info(this.toString() + " landed on " + mobs.toString());
             this.setFlag("triggered", 1);

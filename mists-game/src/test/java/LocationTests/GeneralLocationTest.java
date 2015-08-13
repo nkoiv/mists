@@ -25,9 +25,11 @@ import org.junit.Test;
 
 /**
  *
- * @author daedra
+ * @author nkoiv
  */
 public class GeneralLocationTest extends Application {
+    
+    Location testLocation;
     
     public GeneralLocationTest() {
     }
@@ -45,24 +47,31 @@ public class GeneralLocationTest extends Application {
     
     @Before
     public void setUp() {
-       
+       testLocation = new Location("TestLocation");
 
     }
     
     @Test
     public void testLocationStartsWithEmptyMOBList() {
-        Location testLocation = new Location("TestLocation");
         assert(testLocation.getMOBList().isEmpty());
     }
     
     @Test
     public void addedStructuresShouldBeInMOBList() {
-        Location testLocation = new Location("TestLocation");
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
         
         testLocation.addStructure(testRock, 500 , 200);
         assert(testLocation.getMOBList().contains(testRock));
         
+    }
+    
+    @Test
+    public void removableFlaggedMobsShouldBeRemovedOnUpdate() {
+        Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
+        testRock.setFlag("removable", 1);
+        testLocation.addStructure(testRock, 500 , 200);
+        testLocation.update(1);
+        assert(testLocation.getMOBList().isEmpty());
     }
     
     
