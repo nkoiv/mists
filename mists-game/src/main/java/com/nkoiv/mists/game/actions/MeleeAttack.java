@@ -73,8 +73,8 @@ public class MeleeAttack extends Action implements AttackAction {
             for (MapObject mob : mobs) {
                 if (!mob.equals(this.getOwner())) {
                     if (mob instanceof Combatant) {
-                        ((Combatant)mob).takeDamage(50);
                         Mists.logger.info("Hit "+mob.getName()+" for 50 damage");
+                        ((Combatant)mob).takeDamage(50);
                     }
                 }
             }
