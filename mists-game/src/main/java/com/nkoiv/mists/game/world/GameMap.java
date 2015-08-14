@@ -9,7 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 /**
  *
- * @author lp35567
+ * @author nkoiv
  */
 public interface GameMap {
     
