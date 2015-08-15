@@ -84,7 +84,7 @@ public class Creature extends MapObject implements Combatant {
     
     private void initializeFlags() {
         this.setFlag("visible", 1);
-        this.setFlag("collisionlevel", 100);
+        this.setFlag("collisionLevel", 5);
     }
     
     public void setAttribute (String attribute, int value) {
@@ -196,6 +196,7 @@ public class Creature extends MapObject implements Combatant {
     
     public void moveTowardsPlayer() {
         //TODO: Temporary for just following player
+        if (!this.isFlagged("testFlag")) return; //Dont my unless flagged
         Direction directionToMoveTowards =
         (this.getLocation().getPathFinder().pathTowards
         (this.crossableTerrain, this.getxPos(), this.getyPos(),

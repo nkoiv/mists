@@ -20,6 +20,7 @@ import java.util.logging.Level;
 public class PathFinder {
 
     Location location;
+    int nodeSize;
     int mapTileWidth;
     int mapTileHeight;
     Node[][] nodeMap;
@@ -27,15 +28,16 @@ public class PathFinder {
     
     public PathFinder (Location l) {
         this.location = l;
-        this.maxSearchDepth = 30;
+        this.maxSearchDepth = 10;
+        this.nodeSize = 32; //size of nodes in map pixels - usually same as tilesize
         //First we'll convert map to tiles, even if it's BGMap
-        mapTileWidth = (int)(l.getMap().getWidth() / Global.TILESIZE);
-        mapTileHeight = (int)(l.getMap().getHeight() / Global.TILESIZE); 
+        mapTileWidth = (int)(l.getMap().getWidth() / nodeSize);
+        mapTileHeight = (int)(l.getMap().getHeight() / nodeSize); 
         nodeMap = new Node[mapTileWidth][mapTileHeight];
         //Then populate a nodemap with empty (=passable) nodes
         for (int row = 0; row < this.mapTileHeight;row++) {
             for (int column = 0; column < this.mapTileWidth; column++) {
-                this.nodeMap[column][row] = new Node(column, row, Global.TILESIZE);
+                this.nodeMap[column][row] = new Node(column, row, nodeSize);
             }
         }
         //Update the nodes to match Location mobs
@@ -43,15 +45,16 @@ public class PathFinder {
     }
     
     public Direction pathTowards (List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
-        Node startNode = nodeMap[(int)startX/Global.TILESIZE][(int)startY/Global.TILESIZE];
-        Node goalNode = nodeMap[(int)goalX/Global.TILESIZE][(int)goalY/Global.TILESIZE];
+        Node startNode = nodeMap[(int)startX/nodeSize][(int)startY/nodeSize];
+        Node goalNode = nodeMap[(int)goalX/nodeSize][(int)goalY/nodeSize];
         List<PathPoint> pathToGoal = this.calculatePath(crossableTerrain, startNode, goalNode);
         if (pathToGoal.size()<1) {
+            //Mists.logger.info("Next to object, staying put");
             return Direction.STAY;
         } else {
             int xChange = pathToGoal.get(0).node.getX() - startNode.getX();
             int yChange = pathToGoal.get(0).node.getY() - startNode.getY();
-            Mists.logger.log(Level.INFO, "Figuring direction from {0},{1} to {2},{3}", new Object[]{startNode.getX(), startNode.getY(), pathToGoal.get(0).node.getX(), pathToGoal.get(0).node.getY()});
+            //Mists.logger.log(Level.INFO, "Figuring direction from {0},{1} to {2},{3}", new Object[]{startNode.getX(), startNode.getY(), pathToGoal.get(0).node.getX(), pathToGoal.get(0).node.getY()});
             return getDirection(xChange, yChange);
         }
     }
@@ -155,21 +158,76 @@ public class PathFinder {
         }      
         return result;
     }
+    
+    private boolean listHasNode (int x, int y, List<Node> nodes) {
+        for (Node n : nodes) {
+            if (n.getX()==x && n.getY()==y) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private void printNeighboursInGridForTesting(Node n, List<Node> nb) {
+        //System.out.println("Neighbouring tiles:");
+        for (int row=n.getY()-1; row<n.getY()+2;row++) {
+            System.out.println();
+            for (int column=n.getX()-1;column<n.getX()+2;column++) {
+                if (listHasNode(column, row, nb)) {
+                    System.out.print("X");
+                } else {
+                    System.out.print("O");
+                }
+            }
+        }
+        System.out.println();
+    }
       
     public void updateCollisionLevels() {
+        //Clear the old map
+        this.nodeMap = new Node[mapTileWidth][mapTileHeight];
+        //Then populate a nodemap with empty (=passable) nodes
+        for (int row = 0; row < this.mapTileHeight;row++) {
+            for (int column = 0; column < this.mapTileWidth; column++) {
+                this.nodeMap[column][row] = new Node(column, row, nodeSize);
+            }
+        }
         //Go through all the nodes and check the location if it has something at them
         List<MapObject> mobs = this.location.getMOBList();
+        //Mists.logger.info("Moblist has " +mobs.size()+" objects");
         for (MapObject mob : mobs) {
-            int mobXNode = ((int)mob.getxPos() / Global.TILESIZE);
-            int mobYNode = ((int)mob.getyPos() / Global.TILESIZE);
+            //Mob blocks nodes from its top left corner...
+            int mobXNodeStart = ((int)mob.getxPos() / nodeSize);
+            int mobYNodeStart = ((int)mob.getyPos() / nodeSize);
+            //... to its bottom right corner
+            int mobXNodeEnd = ((int)(mob.getxPos()+mob.getSprite().getWidth())/ nodeSize); 
+            int mobYNodeEnd = ((int)(mob.getyPos()+mob.getSprite().getHeight())/ nodeSize); 
             int mobCL = mob.getFlag("collisionLevel");
-            this.nodeMap[mobXNode][mobYNode].setCollisionLevel(mobCL);
+            //Mark all blocked nodes with collisionLevel
+            for (int row = mobYNodeStart; row < mobYNodeEnd;row++ ) {
+                for (int column = mobXNodeStart; column < mobXNodeEnd;column++) {
+                    this.nodeMap[column][row].setCollisionLevel(mobCL);
+                }
+            }
+            //Mists.logger.info("["+mobXNode+","+mobYNode+"] has a "+mob.getName()+ ": set to CL "+mobCL);
         }
+    }
+    
+    public void printCollisionMapIntoConsole() { // for testing
+        System.out.println("-------");
+        for (int row = 0; row < this.mapTileHeight;row++) {
+            System.out.println("");
+            for (int column = 0; column < this.mapTileWidth; column++) {
+                System.out.print("["+this.nodeMap[column][row].collisionLevel+"]");
+            }
+        }
+        //System.out.println("-------");
     }
     
     private List<PathPoint> calculatePath(List<Integer> crossableTerrain, Node start, Node goal) {
         ArrayList<PathPoint> path = new ArrayList<>();
         PathPoint startPoint = new PathPoint(start.getX(), start.getY());
+        startPoint.distanceToGoal = DiagonalDistance(startPoint.node, goal);
         PathPoint goalPoint = new PathPoint (goal.getX(), goal.getY());
        
         ArrayList<PathPoint> openPoints = new ArrayList<>();
@@ -186,12 +244,19 @@ public class PathFinder {
             if(currentPoint.node == goalPoint.node) { //we're at the goal
                 //Mists.logger.info("Found goal!");
                 openPoints.clear();
+                break;
+            } else if (!crossableTerrain.contains(goalPoint.node.collisionLevel)
+                    && currentPoint.distanceToGoal <= 2 ) { //We're next to Goal, but it's unreachable
+                //Mists.logger.info("Next to goal but cant go there");
+                openPoints.clear();
+                break;
             } else { //not at goal yet
                 //find open neighbours
                 List<Node> neighbours = new ArrayList<>(); //add in all traversable neighbours
                 neighbours.addAll(this.Neighbours(crossableTerrain, currentPoint.node.getX(), currentPoint.node.getY()));
                 neighbours.addAll(this.DiagonalNeighbours(crossableTerrain, currentPoint.node.getX(), currentPoint.node.getY()));
                 neighbours.removeAll(closedNodes); //Close routes we know are bad
+                this.printNeighboursInGridForTesting(currentPoint.node, neighbours);
                 //Mists.logger.log(Level.INFO, "{0} neighbouring tiles found for {1},{2}", new Object[]{neighbours.size(), currentPoint.node.getX(), currentPoint.node.getY()});
                 if (neighbours.size()<=1) { //if we can only go backwards
                     closedNodes.add(currentPoint.node); //Close this zone from further testing
@@ -208,7 +273,7 @@ public class PathFinder {
                             currentNeighbours.add(pp);
                         }
                     }
-                    currentPoint = currentNeighbours.get(0);
+                    //currentPoint = currentNeighbours.get(0);
                     //Mists.logger.info("Current distance to goal: "+currentPoint.distanceToGoal);
                     for (PathPoint pp : currentNeighbours) {
                         //find the best open node
@@ -217,7 +282,7 @@ public class PathFinder {
                                 " to " +pp.node.getX() + "," + pp.node.getY()
                                 ); 
                         */
-                        if(pp.compareTo(currentPoint) < 0) {
+                        if(pp.distanceToGoal < currentPoint.distanceToGoal) {
                             //Mists.logger.info("Found a better node to go to: "+pp.node.getX()+","+pp.node.getY());
                             currentPoint = pp;
                         }
@@ -225,9 +290,7 @@ public class PathFinder {
                     path.add(currentPoint); //add the best point to path and move there
                     closedNodes.add(currentPoint.node); // this node doesnt need to be calculated again
                 }
-            }
-            
-            
+            }    
         }
         path.remove(0); //remove start from path;
         return path;

@@ -31,7 +31,8 @@ public class Mists extends Application implements Global {
     public Game MistsGame;
     
     public boolean running = false;
-    public final ArrayList<String> inputLog = new ArrayList<>();
+    public final ArrayList<String> pressedButtons = new ArrayList<>();
+    public final ArrayList<String> releasedButtons = new ArrayList<>();
     public Scene currentScene;
     
 
@@ -70,7 +71,7 @@ public class Mists extends Application implements Global {
             
                 double elapsedNanoTime = (currentNanoTime - previousNanoTime) / 1000000000.0;
                 previousNanoTime = currentNanoTime;
-                MistsGame.tick(elapsedNanoTime, inputLog);
+                MistsGame.tick(elapsedNanoTime, pressedButtons, releasedButtons);
                 MistsGame.render(locationCanvas);          
             } 
          }.start();
@@ -86,27 +87,27 @@ public class Mists extends Application implements Global {
     
     private void setupKeyHandlers(Stage primaryStage) {
         /** KeyPresses and releases are stored separately, so that holding down a button continues to execute commands **/
-        primaryStage.getScene().setOnKeyPressed(
-            new EventHandler<KeyEvent>()
+        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>()
             {
                 @Override
                 public void handle(KeyEvent e)
                 {
                     String code = e.getCode().toString();
-                    if ( !inputLog.contains(code) )
-                        inputLog.add( code );
+                    if ( !pressedButtons.contains(code) )
+                        pressedButtons.add( code );
                         //logger.log(Level.INFO, "{0} pressed", code);
                 }
             });
 
-        primaryStage.getScene().setOnKeyReleased(
-            new EventHandler<KeyEvent>()
+        primaryStage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>()
             {
                 @Override
                 public void handle(KeyEvent e)
                 {
                     String code = e.getCode().toString();
-                    inputLog.remove( code );
+                    pressedButtons.remove( code );
+                    if (!releasedButtons.contains(code)) 
+                        releasedButtons.add( code );
                     //logger.log(Level.INFO, "{0} released", code);
                 }
             });

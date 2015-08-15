@@ -36,13 +36,13 @@ public class Game {
         currentLocation = l;
     }
  
-    public void tick(double time, ArrayList<String> inputLog) {
+    public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
         /*
         * Tick checks keybuffer, initiates actions and does just about everything.
         * Tick needs to know how much time has passed since the last tick, so it can
         * even out actions and avoid rollercoaster game speed. 
         */
-        handleKeyPress(inputLog);
+        handleKeyPress(pressedButtons, releasedButtons);
         currentLocation.update(time);
 
     }
@@ -58,7 +58,7 @@ public class Game {
         //logger.info("Rendered on canvas");
     }
     
-    private void handleKeyPress(ArrayList<String> inputLog) {
+    private void handleKeyPress(ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
         /*
         * TODO: External loadable configfile for keybindings
         * (probably via a class of its own)
@@ -66,39 +66,44 @@ public class Game {
         
         currentLocation.getPlayer().stopMovement();
         
-        if (inputLog.isEmpty()) {
+        if (pressedButtons.isEmpty() && releasedButtons.isEmpty()) {
             return;
         }
 
         
-        if (inputLog.contains("UP")) {
+        if (pressedButtons.contains("UP")) {
             //Mists.logger.log(Level.INFO, "Moving {0} UP", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.UP);            
         }
-        if (inputLog.contains("DOWN")) {
+        if (pressedButtons.contains("DOWN")) {
             //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.DOWN);
         }
-        if (inputLog.contains("LEFT")) {
+        if (pressedButtons.contains("LEFT")) {
             //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.LEFT);
         }
-        if (inputLog.contains("RIGHT")) {
+        if (pressedButtons.contains("RIGHT")) {
             //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.RIGHT);
         }
         
         //TODO: These should be directed to the UI-layer, which knows which abilities player has bound where
-        if (inputLog.contains("SPACE")) {
+        if (pressedButtons.contains("SPACE")) {
             //Mists.logger.log(Level.INFO, "{0} TRIED USING ABILITY 0", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().useAction("MeleeAttack");
         }
         
-        if (inputLog.contains("ENTER")) {
-            
+        if (releasedButtons.contains("ENTER")) {
+            currentLocation.getPathFinder().printCollisionMapIntoConsole();
             
         }
-
         
+        if (releasedButtons.contains("SHIFT")) {
+            currentLocation.getCreatureByName("Otus").toggleFlag("testFlag");
+        
+        }
+        
+        releasedButtons.clear(); //Button releases are handled only once
     }
 }

@@ -24,14 +24,14 @@ public class Structure extends MapObject {
 
     public Structure(String name, Image image, int collisionLevel) {
         super(name, image);
-        this.setFlag("collisionlevel", 100);
+        this.setFlag("collisionLevel", 1);
         this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
     }
     
     public Structure(String name, Image image, Location location, int xCoor, int yCoor) {
         super(name, image, location, xCoor, yCoor);
-        this.setFlag("collisionlevel", 100);
+        this.setFlag("collisionLevel", 1);
         this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
     }

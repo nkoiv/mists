@@ -61,6 +61,15 @@ public class MapObject implements Global {
         }   
     }
     
+    public void toggleFlag(String flag) {
+        if (this.isFlagged(flag)) {
+            this.setFlag(flag, 0);
+        } else {
+            this.setFlag(flag, 1);
+        }
+        
+    }
+    
     public int getFlag(String flag) {
         if (this.flags.containsKey(flag)) {
             return this.flags.get(flag);
