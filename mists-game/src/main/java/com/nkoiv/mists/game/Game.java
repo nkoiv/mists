@@ -93,6 +93,11 @@ public class Game {
             //Mists.logger.log(Level.INFO, "{0} TRIED USING ABILITY 0", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().useAction("MeleeAttack");
         }
+        
+        if (inputLog.contains("ENTER")) {
+            
+            
+        }
 
         
     }

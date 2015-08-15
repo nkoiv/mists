@@ -33,6 +33,7 @@ public class Location implements Global {
     private final List<Effect> effects;
     private String name;
     private GameMap map;
+    private PathFinder pathFinder;
     
     private MapObject screenFocus;
     private PlayerCharacter player;
@@ -46,6 +47,7 @@ public class Location implements Global {
     public Location(String name) {
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
+        this.pathFinder = new PathFinder(this);
     }
     
     public Location() {
@@ -56,6 +58,7 @@ public class Location implements Global {
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
         this.map = new BGMap(new Image("/images/pocmap.png"));
+        this.pathFinder = new PathFinder(this);
         
         PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setCollisionAreaShape(2);
@@ -78,8 +81,25 @@ public class Location implements Global {
         
         Creature monster1 = new Creature("Otus", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         monster1.getSprite().setCollisionAreaShape(2);
-        this.addCreature(monster1, 380, 400);
-        
+        this.addCreature(monster1, 380, 400);   
+    }
+    
+    public Creature getCreatureByName(String name) {
+        ArrayList<Creature> creatures = new ArrayList<>();
+        for (MapObject mob : this.mapObjects) {
+            if (mob instanceof Creature) creatures.add((Creature)mob);
+        }
+        for (Creature c : creatures) {
+            if (c.getName().equals(name)) {
+                return c;
+            }
+        }
+        return null;
+    }
+    
+    public PathFinder getPathFinder() {
+        if (this.pathFinder == null) this.pathFinder = new PathFinder(this);
+        return this.pathFinder;
     }
     
     public void addStructure(Structure s, double xPos, double yPos) {
@@ -169,6 +189,7 @@ public class Location implements Global {
         * Update is the main "tick" of the Location.
         * Movement, combat and triggers should all be handled here
         */
+        this.pathFinder.updateCollisionLevels();
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
                 mob.update(time);

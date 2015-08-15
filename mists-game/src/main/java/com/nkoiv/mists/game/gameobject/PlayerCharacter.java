@@ -69,6 +69,12 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
     }
+    
+    @Override
+    public void update(double time) {
+        this.updateSprite();
+        this.applyMovement(time);  
+    }
      
     @Override
     public void useAction(String action ) {

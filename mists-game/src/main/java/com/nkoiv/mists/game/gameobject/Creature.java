@@ -37,6 +37,7 @@ public class Creature extends MapObject implements Combatant {
     private HashMap<String, Integer> effects;
     //TODO: Consider if effects should be used for MapObjects (can a wall or a rock get debuffs/buffs?)
     private HashMap<String, Action> availableActions;
+    private ArrayList<Integer> crossableTerrain; //List of terrains we can go through;
     
     //Constructor for a creature template with one static image
     public Creature (String name, Image image) {
@@ -54,6 +55,8 @@ public class Creature extends MapObject implements Combatant {
         this.setSprite(new Sprite(this.spriteAnimations.get("downMovement").getCurrentFrame()));
         this.initializeAttributes();
         this.initializeFlags();
+        this.crossableTerrain = new ArrayList<>();
+        this.crossableTerrain.add(0);
 
     }
 
@@ -65,6 +68,8 @@ public class Creature extends MapObject implements Combatant {
         this.setFacing(Direction.DOWN);
         this.initializeAttributes();
         this.initializeFlags();
+        this.crossableTerrain = new ArrayList<>();
+        this.crossableTerrain.add(0);
     }
     
     private void initializeAttributes() {
@@ -184,8 +189,19 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public void update (double time) {
+        this.moveTowardsPlayer(); //TODO: Temporary before actual AI and behaviours
         this.updateSprite();
         this.applyMovement(time);   
+    }
+    
+    public void moveTowardsPlayer() {
+        //TODO: Temporary for just following player
+        Direction directionToMoveTowards =
+        (this.getLocation().getPathFinder().pathTowards
+        (this.crossableTerrain, this.getxPos(), this.getyPos(),
+                this.getLocation().getPlayer().getxPos(), this.getLocation().getPlayer().getyPos()));
+        //Mists.logger.info("Trying to move towards " +directionToMoveTowards);
+        this.moveTowards(directionToMoveTowards);
     }
     
     /*
@@ -270,6 +286,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public boolean moveTowards (Direction direction) {
+        this.stopMovement();
         this.setFlag("moving", 1);
         switch(direction) {
             case UP: return moveUp();
@@ -280,6 +297,7 @@ public class Creature extends MapObject implements Combatant {
             case UPLEFT: return moveUpLeft();
             case DOWNRIGHT: return moveDownRight();
             case DOWNLEFT: return moveDownLeft();
+            case STAY: return stopMovement();
         default: break;
         }
         
@@ -338,10 +356,11 @@ public class Creature extends MapObject implements Combatant {
         return true;
     }
 
-    public void stopMovement() {
+    public boolean stopMovement() {
         this.setFlag("moving", 0);
         this.getSprite().setVelocity(0, 0);
         this.getSprite().setImage(this.getSprite().getImage());
+        return true;
     }
 
     public Direction getFacing() {
