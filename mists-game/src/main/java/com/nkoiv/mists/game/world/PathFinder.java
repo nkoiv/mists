@@ -6,12 +6,9 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Global;
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * 
