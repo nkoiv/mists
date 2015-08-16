@@ -53,7 +53,10 @@ public class Game {
         * By default render is called 60 times per second (or as close to as possible) by AnimationTimer -thread.
         */
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, 800, 600);
+        double screenWidth = canvas.getWidth();
+        double screenHeight = canvas.getHeight();
+        //Clear old stuff from the screen
+        gc.clearRect(0, 0, screenWidth, screenHeight);
         currentLocation.render(gc);
         //logger.info("Rendered on canvas");
     }
@@ -95,7 +98,7 @@ public class Game {
         }
         
         if (releasedButtons.contains("ENTER")) {
-            //currentLocation.getPathFinder().printCollisionMapIntoConsole();
+            currentLocation.getPathFinder().printCollisionMapIntoConsole();
             currentLocation.getPathFinder().printClearanceMapIntoConsole(0);
             
         }

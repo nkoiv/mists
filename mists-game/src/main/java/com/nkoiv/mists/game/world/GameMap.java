@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.gameobject.Structure;
+import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -13,8 +15,13 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public interface GameMap {
     
+    //Render the map background
     void render(double xOffset, double yOffset, GraphicsContext gc);
     
+    //If the map has static stuctures (walls etc), get them for the location
+    ArrayList<Structure> getStaticStructures();
+    
+    //Map size
     double getWidth();
     double getHeight();
     

@@ -98,28 +98,7 @@ public class GeneralLocationTest extends Application {
         assert(testLocation.getMap() == null);
     }
     
-    @Test
-    public void xOffsetCanNeverBeMoreThanScreenWidth() {
-        testLocation.setMap(testMap);
-        assert(testLocation.getxOffset(10000)<=Global.WIDTH);
-    }
-    
-    @Test
-    public void yOffsetCanNeverBeMoreThanScreenHeight() {
-        testLocation.setMap(testMap);
-        assert(testLocation.getyOffset(10000)<=Global.HEIGHT);
-    }
-    
-    @Test
-    public void xOffsetCanNeverBeUnderZero() {
-        assert(testLocation.getxOffset(-10000)>=0);
-    }
-    
-    @Test
-    public void yOffsetCanNeverBeUnderZero(){
-        assert(testLocation.getyOffset(-10000)>=0);
-    }
-    
+   
     @Test
     public void removableMobsAreRemovedOnUpdate() {
         testLocation.addCreature(testCreature, 50, 70);

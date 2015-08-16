@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
@@ -17,10 +18,12 @@ import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 
 /**
  *
@@ -61,7 +64,8 @@ public class Location implements Global {
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
-        this.map = new BGMap(new Image("/images/pocmap.png"));
+        //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
+        this.loadMap(new TileMap("/mapdata/tilemaptest.map"));
         this.collisionMap = new CollisionMap(this, 32);
         this.collisionMap.setStructuresOnly(true);
         this.pathFinder = new PathFinder(this.collisionMap, 200, true);
@@ -88,6 +92,14 @@ public class Location implements Global {
         Creature monster1 = new Creature("Otus", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         monster1.getSprite().setCollisionAreaShape(2);
         this.addCreature(monster1, 380, 400);   
+    }
+    
+    private void loadMap(GameMap map) {
+        this.map = map;
+        // Add in all the static structures from the selected map
+        for (Structure s : map.getStaticStructures()) {
+            this.mapObjects.add(s);
+        }
     }
     
     public Creature getCreatureByName(String name) {
@@ -164,27 +176,29 @@ public class Location implements Global {
         this.screenFocus = focus;
     }
     
-    public double getxOffset(double xPos){
+    public double getxOffset(GraphicsContext gc, double xPos){
+        double windowWidth = gc.getCanvas().getWidth();
 	//Calculate Offset to ensure Player is centered on the screen
-        double xOffset = xPos - (WIDTH) / 2;
+        double xOffset = xPos - (windowWidth / 2);
         //Prevent leaving the screen
         if (xOffset < 0) {
             xOffset = 0;
-        } else if (xOffset > map.getWidth() -(WIDTH)) {
-            xOffset = map.getWidth() - (WIDTH);
+        } else if (xOffset > map.getWidth() -(windowWidth)) {
+            xOffset = map.getWidth() - (windowWidth);
         }
         
         return xOffset;
 	}
 	
-    public double getyOffset(double yPos){
+    public double getyOffset(GraphicsContext gc, double yPos){
+        double windowHeight = gc.getCanvas().getHeight();
 	//Calculate Offset to ensure Player is centered on the screen
-        double yOffset = yPos - (HEIGHT) / 2;
+        double yOffset = yPos - (windowHeight / 2);
         //Prevent leaving the screen
         if (yOffset < 0) {
             yOffset = 0;
-        } else if (yOffset > map.getHeight() -(HEIGHT)) {
-            yOffset = map.getHeight() - (HEIGHT);
+        } else if (yOffset > map.getHeight() -(windowHeight)) {
+            yOffset = map.getHeight() - (windowHeight);
         }
         
         return yOffset;
@@ -248,9 +262,9 @@ public class Location implements Global {
         /*
         * Update Offsets first to know which parts of the location are drawn
         */
-        double xOffset = getxOffset(screenFocus.getSprite().getXPos());
-        double yOffset = getyOffset(screenFocus.getSprite().getYPos());
-        
+        double xOffset = getxOffset(gc, screenFocus.getSprite().getXPos());
+        double yOffset = getyOffset(gc, screenFocus.getSprite().getYPos());
+        //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.map.render(-xOffset, -yOffset, gc); //First we draw the underlying map
         /*
         * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.

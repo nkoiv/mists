@@ -14,7 +14,7 @@ public interface Global {
     
     //TileSize
     public static final int SCALE = 1;
-    public static final int TILESIZE = 64;
+    public static final int TILESIZE = 32;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     public static final int TILES_DRAWN_X = (WIDTH/TILESIZE)+1;

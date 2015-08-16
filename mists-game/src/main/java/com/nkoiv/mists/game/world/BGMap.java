@@ -6,6 +6,8 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Structure;
+import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -32,6 +34,14 @@ public class BGMap implements GameMap{
     }
 
     @Override
+    public ArrayList<Structure> getStaticStructures() {
+        //BGmaps have no static structures 
+        //So empty list is returned (TODO: at least yet)
+        ArrayList<Structure> staticStructures = new ArrayList<>();
+        return staticStructures;
+    }
+    
+    @Override
     public double getWidth() {
         return this.width;
     }
@@ -40,5 +50,7 @@ public class BGMap implements GameMap{
     public double getHeight() {
         return this.height;
     }
+
+
     
 }
