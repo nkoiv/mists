@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game.world;
+package com.nkoiv.mists.game.world.pathfinding;
 
 import java.util.ArrayList;
 
@@ -29,14 +29,18 @@ public class Path {
 	}
 	
 	public int getX(int nodeNumber) {
-            return this.getNode(nodeNumber).x;
+            return this.getNode(nodeNumber).getX();
 	}
 
 	public int getY(int nodeNumber) {
-            return this.getNode(nodeNumber).y;
+            return this.getNode(nodeNumber).getY();
 	}
 	
 	//Adds a node to the end of the path
+        public void addStep(Node node) {
+            this.nodes.add(node);
+        }
+        
 	public void addStep(int xCoor, int yCoor) {
             this.nodes.add(new Node(xCoor,yCoor));
 	}
@@ -49,39 +53,15 @@ public class Path {
 	public boolean containsNode(int xCoor, int yCoor) {
             return this.nodes.contains(new Node(xCoor,yCoor));
 	}
-	
-	public class Node {
-		private int x;
-		private int y;
-		
-		public Node(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-	
-		public int getX() {
-			return x;
-		}
-
-		public int getY() {
-			return y;
-		}
-
-                @Override
-                public int hashCode() {
-                    int hash = 5;
-                    hash = 29 * hash + this.x;
-                    hash = 29 * hash + this.y;
-                    return hash;
-                }
-
-                @Override
-		public boolean equals(Object other) {
-			if (other instanceof Node) {
-				Node o = (Node) other;
-				return (o.x == x) && (o.y == y);
-			}		
-			return false;
-                }
+        
+        @Override
+        public String toString() {
+            String pathString = "";
+            for (Node n : this.nodes) {
+                pathString = pathString+("["+n.getX()+","+n.getY()+"] ");
+            }
+            
+            return pathString;
         }
+	
 }

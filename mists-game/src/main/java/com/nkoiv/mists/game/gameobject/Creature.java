@@ -201,7 +201,7 @@ public class Creature extends MapObject implements Combatant {
         (this.getLocation().getPathFinder().pathTowards
         (this.crossableTerrain, this.getxPos(), this.getyPos(),
                 this.getLocation().getPlayer().getxPos(), this.getLocation().getPlayer().getyPos()));
-        //Mists.logger.info("Trying to move towards " +directionToMoveTowards);
+        Mists.logger.info("Trying to move towards " +directionToMoveTowards);
         this.moveTowards(directionToMoveTowards);
     }
     
@@ -287,7 +287,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public boolean moveTowards (Direction direction) {
-        this.stopMovement();
+        //this.stopMovement();
         this.setFlag("moving", 1);
         switch(direction) {
             case UP: return moveUp();

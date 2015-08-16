@@ -12,6 +12,8 @@ import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
+import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +35,7 @@ public class Location implements Global {
     private final List<Effect> effects;
     private String name;
     private GameMap map;
+    private CollisionMap collisionMap;
     private PathFinder pathFinder;
     
     private MapObject screenFocus;
@@ -45,9 +48,10 @@ public class Location implements Global {
     
     
     public Location(String name) {
+        this.collisionMap = new CollisionMap(this, 32);
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
-        this.pathFinder = new PathFinder(this);
+        this.pathFinder = new PathFinder(this.collisionMap, 50, true);
     }
     
     public Location() {
@@ -58,7 +62,8 @@ public class Location implements Global {
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
         this.map = new BGMap(new Image("/images/pocmap.png"));
-        this.pathFinder = new PathFinder(this);
+        this.collisionMap = new CollisionMap(this, 32);
+        this.pathFinder = new PathFinder(this.collisionMap, 200, true);
         
         PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setCollisionAreaShape(2);
@@ -98,7 +103,7 @@ public class Location implements Global {
     }
     
     public PathFinder getPathFinder() {
-        if (this.pathFinder == null) this.pathFinder = new PathFinder(this);
+        if (this.pathFinder == null) this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         return this.pathFinder;
     }
     
@@ -189,7 +194,7 @@ public class Location implements Global {
         * Update is the main "tick" of the Location.
         * Movement, combat and triggers should all be handled here
         */
-        this.pathFinder.updateCollisionLevels();
+        this.collisionMap.updateCollisionLevels();
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
                 mob.update(time);
