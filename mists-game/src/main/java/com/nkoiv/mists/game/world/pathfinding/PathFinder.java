@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.logging.Level;
 
 /**
- * Based on http://www.cokeandcode.com/main/tutorials/path-finding/ (Kevin Glass)
+ * Original pathfinder based on http://www.cokeandcode.com/main/tutorials/path-finding/ (Kevin Glass)
  * Modified to use different heuristics for cost. Restructured to use same Nodes for map and Path.
- * Modified to use collision levels for movement.
+ * Modified to use collision levels for movement. Created clearance metrics for large objects.
+ * Added separate methods for checking neighbours.
  * @author nikok
  */
 public class PathFinder {
@@ -230,112 +231,208 @@ public class PathFinder {
         return path;
     }
 
-	private Node getFirstInOpen() {
-		return (Node) openNodes.first();
-	}
+    private Node getFirstInOpen() {
+            return (Node) openNodes.first();
+    }
 
-	private void addToOpen(Node node) {
-		this.openNodes.add(node);
-	}
-	
-	private boolean inOpenList(Node node) {
-		return this.openNodes.contains(node);
-	}
-	
+    private void addToOpen(Node node) {
+            this.openNodes.add(node);
+    }
 
-	private void removeFromOpen(Node node) {
-		this.openNodes.remove(node);
-	}
-	
-	private void addToClosed(Node node) {
-		this.closedNodes.add(node);
-	}
-	
-	private boolean inClosedList(Node node) {
-		return this.closedNodes.contains(node);
-	}
+    private boolean inOpenList(Node node) {
+            return this.openNodes.contains(node);
+    }
 
-	private void removeFromClosed(Node node) {
-		this.closedNodes.remove(node);
-	}
-	
-	private boolean isValidLocation(List<Integer> crossableTerrain, int currentX, int currentY, int goalX, int goalY) {
-		boolean invalid = (goalX < 0) || (goalY < 0) || (goalX >= map.getMapTileWidth()) || (goalY >= map.getMapTileWidth());
-		
-		if ((!invalid) && ((currentX != goalX) || (currentY != goalX))) {
-			invalid = map.isBlocked(crossableTerrain, goalX, goalY);
-		}
-		
-		return !invalid;
-	}
 
-	public double getMovementCost(List<Integer> movementAbilities, int currentX, int currentY, int goalX, int goalY) {
-		return this.calc.getCost(this.map, movementAbilities, currentX, currentY, goalX, goalY);
-	}
-	
-	/**
-	 * A simple sorted list
-	 *
-	 * @author kevin
-	 */
-	private class SortedList {
-		/** The list of elements */
-		private ArrayList list = new ArrayList();
-		
-		/**
-		 * Retrieve the first element from the list
-		 *  
-		 * @return The first element from the list
-		 */
-		public Object first() {
-			return list.get(0);
-		}
-		
-		/**
-		 * Empty the list
-		 */
-		public void clear() {
-			list.clear();
-		}
-		
-		/**
-		 * Add an element to the list - causes sorting
-		 * 
-		 * @param o The element to add
-		 */
-		public void add(Object o) {
-			list.add(o);
-			Collections.sort(list);
-		}
-		
-		/**
-		 * Remove an element from the list
-		 * 
-		 * @param o The element to remove
-		 */
-		public void remove(Object o) {
-			list.remove(o);
-		}
-	
-		/**
-		 * Get the number of elements in the list
-		 * 
-		 * @return The number of element in the list
- 		 */
-		public int size() {
-			return list.size();
-		}
-		
-		/**
-		 * Check if an element is in the list
-		 * 
-		 * @param o The element to search for
-		 * @return True if the element is in the list
-		 */
-		public boolean contains(Object o) {
-			return list.contains(o);
-		}
-	}
+    private void removeFromOpen(Node node) {
+            this.openNodes.remove(node);
+    }
+
+    private void addToClosed(Node node) {
+            this.closedNodes.add(node);
+    }
+
+    private boolean inClosedList(Node node) {
+            return this.closedNodes.contains(node);
+    }
+
+    private void removeFromClosed(Node node) {
+            this.closedNodes.remove(node);
+    }
+
+    private boolean isValidLocation(List<Integer> crossableTerrain, int currentX, int currentY, int goalX, int goalY) {
+            boolean invalid = (goalX < 0) || (goalY < 0) || (goalX >= map.getMapTileWidth()) || (goalY >= map.getMapTileWidth());
+
+            if ((!invalid) && ((currentX != goalX) || (currentY != goalX))) {
+                    invalid = map.isBlocked(crossableTerrain, goalX, goalY);
+            }
+
+            return !invalid;
+    }
+
+    public double getMovementCost(List<Integer> movementAbilities, int currentX, int currentY, int goalX, int goalY) {
+            return this.calc.getCost(this.map, movementAbilities, currentX, currentY, goalX, goalY);
+    }
+    
+    
+    /*
+    * ClearanceMap tells how large objects can fit in the given tile
+    * For example 2 means that a 2x2 tile sized object could fit here
+    * ClearanceMaps are generated per CrossableTerrain.
+    */   
+    public int[][] getClearanceMap (int crossableTerrain, CollisionMap collisionMap) {
+        int[][] clearanceMap = new int[collisionMap.getMapTileWidth()][collisionMap.getMapTileHeight()];        
+
+        int level;
+        Mists.logger.log(Level.INFO, "Clearance map generation started. Size of map: [{0},{1}]", new Object[]{collisionMap.getMapTileWidth(), collisionMap.getMapTileHeight()});
+        //Check through all the tiles on the collisionMap and calculate their clearanceLevels
+        for (int y=0;y<collisionMap.getMapTileHeight();y++) {  //collisionMap.getMapTileHeight()
+            for (int x=0;x<collisionMap.getMapTileWidth();x++) { // collisionMap.getMapTileWidth()
+                //Mists.logger.info("Starting work at ["+x+","+y+"]");
+                if (collisionMap.isBlocked(crossableTerrain, x, y)) { 
+                    clearanceMap[x][y] = 0; // Blocked tiles are given value of 0. Only sizeless things can past through.
+                } else { //Coordinates were not blocked, so we can start iterating clearance levels
+                    /* Edges-list:
+                    *  X00 -> 0X0 -> 00X
+                    *  000    XX0    00X
+                    *  000    000    XXX
+                    */
+                    ArrayList<int[]> edges = new ArrayList<>();    
+                    int[] start = new int[2]; //create node to start with
+                    start[0] = x; start[1] = y; //designate it to be the starting point
+                    boolean blocked = false;
+                    int lap = 0;
+                    while (!blocked) { //keep building the are until we hit an obstacle
+                        lap++;
+                        //Mists.logger.info("Doing lap "+lap+" at ["+x+","+y+"]");
+                        //update the Clearance levels on current box
+                        for (int row=0;row<lap;row++) {
+                            for (int column=0;column<lap;column++) {
+                               if (clearanceMap[x+column][y+row] < lap) {
+                                   if(clearanceMap[x+column][y+row]<(lap-row) && clearanceMap[x+column][y+row]<(lap-column))
+                                       clearanceMap[x+column][y+row]++; //increase the level (up to lap)
+                               }
+                            }
+                        }
+                        //add all the edges of this tile to the edges list
+                        edges.clear();
+                        for (int row=0;row<lap+1;row++) {
+                            if(row < lap) { //add a right side edge
+                                int[] edge = new int[]{start[0]+lap, start[1]+row};
+                                edges.add(edge);
+                                //System.out.println("Added right side edge");
+                            } else { //add the bottom edge
+                                for (int column=0;column<lap+1;column++) {
+                                    int[] edge = new int[]{start[0]+column, start[1]+lap};
+                                    edges.add(edge);
+                                    //System.out.println("Added bottom edge");
+                                }
+                            }
+                        }
+                        //Mists.logger.info(edges.size()+" edges to check in total");
+                        //Go through the current edges and see if we can expand
+                        while (edges.size() > 0 && !blocked) {
+                            //Mists.logger.info("Edges left to do: " +edges.size());
+                            //Check if this tile on the edge is blocked
+                            if (collisionMap.isBlocked(crossableTerrain, edges.get(0)[0], edges.get(0)[1])) {
+                                blocked = true;
+                            }
+                            //Remove it from the list 
+                            edges.remove(0); 
+                        }
+                        //if(blocked) Mists.logger.info("Hit a block with ["+x+","+y+"] on round "+lap);
+                        //System.out.println("Doing ["+x+","+y+"], lap "+lap);
+                        //this.printArrayMap(clearanceMap);
+                        //System.out.println("");
+                    }
+                }
+            }
+            
+        }
+        return clearanceMap;
+    }
+    
+    private void printArrayMap (int[][] arrayMap) {
+        System.out.println("-------");
+            for (int row = 0; row < this.map.getMapTileHeight();row++) {
+                System.out.println("");
+                for (int column = 0; column < this.map.getMapTileWidth(); column++) {
+                    System.out.print("["+arrayMap[column][row]+"]");
+                }
+            }
+    }
+    
+    //TODO: For testing purposes
+    public void printClearanceMapIntoConsole (int crossableTerrain) { 
+        System.out.println("Getting a new clearance map for crossing ["+crossableTerrain+"]");
+        int[][] clearanceMap = this.getClearanceMap(crossableTerrain, this.map);
+        this.printArrayMap(clearanceMap);
+             //System.out.println("-------");
+    }
+
+    /**
+     * A simple sorted list
+     * http://www.cokeandcode.com/main/tutorials/path-finding/ (Kevin Glass)
+     * @author kevin
+     */
+    private class SortedList {
+        /** The list of elements */
+        private ArrayList list = new ArrayList();
+
+        /**
+         * Retrieve the first element from the list
+         *  
+         * @return The first element from the list
+         */
+        public Object first() {
+                return list.get(0);
+        }
+
+        /**
+         * Empty the list
+         */
+        public void clear() {
+                list.clear();
+        }
+
+        /**
+         * Add an element to the list - causes sorting
+         * 
+         * @param o The element to add
+         */
+        public void add(Object o) {
+                list.add(o);
+                Collections.sort(list);
+        }
+
+        /**
+         * Remove an element from the list
+         * 
+         * @param o The element to remove
+         */
+        public void remove(Object o) {
+                list.remove(o);
+        }
+
+        /**
+         * Get the number of elements in the list
+         * 
+         * @return The number of element in the list
+         */
+        public int size() {
+                return list.size();
+        }
+
+        /**
+         * Check if an element is in the list
+         * 
+         * @param o The element to search for
+         * @return True if the element is in the list
+         */
+        public boolean contains(Object o) {
+                return list.contains(o);
+        }
+    }
 	
 
 }

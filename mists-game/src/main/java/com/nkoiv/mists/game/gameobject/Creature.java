@@ -189,6 +189,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public void update (double time) {
+        this.stopMovement(); //clear old movement
         this.moveTowardsPlayer(); //TODO: Temporary before actual AI and behaviours
         this.updateSprite();
         this.applyMovement(time);   
@@ -287,7 +288,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public boolean moveTowards (Direction direction) {
-        this.stopMovement(); //clear old movement (velocity)
+        //this.stopMovement(); //clear old movement (velocity)
         this.setFlag("moving", 1);
         switch(direction) {
             case UP: return moveUp();

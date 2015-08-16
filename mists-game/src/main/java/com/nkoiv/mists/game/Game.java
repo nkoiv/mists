@@ -95,7 +95,8 @@ public class Game {
         }
         
         if (releasedButtons.contains("ENTER")) {
-            currentLocation.getPathFinder().printCollisionMapIntoConsole();
+            //currentLocation.getPathFinder().printCollisionMapIntoConsole();
+            currentLocation.getPathFinder().printClearanceMapIntoConsole(0);
             
         }
         

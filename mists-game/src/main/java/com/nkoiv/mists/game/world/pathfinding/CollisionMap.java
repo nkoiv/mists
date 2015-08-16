@@ -86,8 +86,15 @@ public class CollisionMap {
      * returns False if tile is blocked, true if not. Every creature should be able to cross CL 0
     */
     public boolean isBlocked(List<Integer> crossableTerrain ,int x, int y) {
+        if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
         return ((nodeMap[x][y] == null) ||
 		(!crossableTerrain.contains(nodeMap[x][y].getCollisionLevel())));
+    }
+    
+    public boolean isBlocked(int crossableTerrain, int x, int y) {
+        if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
+        return ((nodeMap[x][y] == null) ||
+		!(crossableTerrain == nodeMap[x][y].getCollisionLevel()));
     }
 
     public void pfVisit(int xCoor, int yCoor) {

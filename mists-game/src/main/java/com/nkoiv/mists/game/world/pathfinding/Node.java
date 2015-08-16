@@ -14,7 +14,7 @@ import com.nkoiv.mists.game.Global;
 	public class Node implements Comparable {
 		private int xCoor;
 		private int yCoor;
-                private int collisionLevel;
+                private int collisionLevel; //this tells us if there's something blocking the node
                 private int size;
                 private double cost; //Node cost for when used by PathFinder
                 private int depth; //Depth in the path for when used by PathFinder
