@@ -53,15 +53,15 @@ public class MeleeAttack extends Action implements AttackAction {
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
             this.lastUsed = System.currentTimeMillis();
-            ArrayList<Double> attackPoint = actor.getSprite().getCorner(actor.getFacing());
+            Double[] attackPoint = actor.getSprite().getCorner(actor.getFacing());
             Effect attackEffect = new Effect(
                     this, "meleeattack",actor.getLocation(),
-                    (attackPoint.get(0)-(this.attackAnimation.getFrameWidth()/2)),
-                    (attackPoint.get(1)-(this.attackAnimation.getFrameHeight()/2)),
+                    (attackPoint[0]-(this.attackAnimation.getFrameWidth()/2)),
+                    (attackPoint[1]-(this.attackAnimation.getFrameHeight()/2)),
                     this.getSprite(actor),400);
             actor.getLocation().addEffect(attackEffect,
-                    (attackPoint.get(0)-(this.attackAnimation.getFrameWidth()/2)),
-                    (attackPoint.get(1)-(this.attackAnimation.getFrameHeight()/2)));
+                    (attackPoint[0]-(this.attackAnimation.getFrameWidth()/2)),
+                    (attackPoint[1]-(this.attackAnimation.getFrameHeight()/2)));
         }
     }
     

@@ -150,7 +150,7 @@ public class PathFinder {
             if (xChange<0) { // Moving left
                 if (yChange==0) return Direction.LEFT;
                 if (yChange<0) return Direction.UPLEFT;
-                if (yChange>0) return Direction.UPRIGHT;
+                if (yChange>0) return Direction.DOWNLEFT;
             }
             return Direction.STAY; //last resort
         }
@@ -226,7 +226,7 @@ public class PathFinder {
                 }
             }    
         }
-        Mists.logger.info("Returning path:" + path.toString());
+        Mists.logger.info("Goal was at ["+goalX+","+goalY+"] Returning path:" + path.toString());
         return path;
     }
 

@@ -67,11 +67,13 @@ public class CollisionMap {
             if (mob instanceof Structure) {
                 for (int row = mobYNodeStart; row < mobYNodeEnd;row++ ) {
                     for (int column = mobXNodeStart; column < mobXNodeEnd;column++) {
-                        this.nodeMap[column][row].setCollisionLevel(mobCL);
+                        if(this.isOnMap(column, row))
+                            this.nodeMap[column][row].setCollisionLevel(mobCL);
                     }
                 }
             } else { //Creatures block only their original spot
-                this.nodeMap[mobXNodeStart][mobYNodeStart].setCollisionLevel(mobCL);
+                if(this.isOnMap(mobXNodeStart, mobYNodeStart))
+                    this.nodeMap[mobXNodeStart][mobYNodeStart].setCollisionLevel(mobCL);
             }
             
             
@@ -95,6 +97,14 @@ public class CollisionMap {
     public boolean isVisited (int xCoor, int yCoor) {
         if (this.visited[xCoor][yCoor] == null) return false;
         return this.visited[xCoor][yCoor];
+    }
+    
+    private boolean isOnMap (int xCoor, int yCoor) {
+        if ((xCoor >= 0) && (xCoor <= this.mapTileWidth) && (yCoor >= 0) && (yCoor <= this.mapTileHeight))  {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public int getMapTileWidth() {

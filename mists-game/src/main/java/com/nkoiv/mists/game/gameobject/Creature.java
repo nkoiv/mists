@@ -287,7 +287,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public boolean moveTowards (Direction direction) {
-        //this.stopMovement();
+        this.stopMovement(); //clear old movement (velocity)
         this.setFlag("moving", 1);
         switch(direction) {
             case UP: return moveUp();
@@ -330,29 +330,25 @@ public class Creature extends MapObject implements Combatant {
     }
 
     private boolean moveUpRight() {
-        this.moveUp();
-        this.moveDown();
+        this.getSprite().addVelocity(this.getAttribute("Speed"), -this.getAttribute("Speed"));
         this.facing = Direction.UPRIGHT;
         return true;
     }
     
     private boolean moveUpLeft() {
-        this.moveUp();
-        this.moveLeft();
+        this.getSprite().addVelocity(-this.getAttribute("Speed"), -this.getAttribute("Speed"));
         this.facing = Direction.UPLEFT;
         return true;
     }
         
     private boolean moveDownRight() {
-        this.moveDown();
-        this.moveRight();
+        this.getSprite().addVelocity(this.getAttribute("Speed"), this.getAttribute("Speed"));
         this.facing = Direction.DOWNRIGHT;
         return true;
     }
     
     private boolean moveDownLeft() {
-        this.moveDown();
-        this.moveLeft();
+this.getSprite().addVelocity(-this.getAttribute("Speed"), this.getAttribute("Speed"));
         this.facing = Direction.DOWNLEFT;
         return true;
     }

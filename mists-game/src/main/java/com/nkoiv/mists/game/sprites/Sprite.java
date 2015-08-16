@@ -187,34 +187,43 @@ public class Sprite
 
     }
     
-    public ArrayList<Double> getCorner(Direction d) {
-        ArrayList<Double> corner = new ArrayList<>();
+    public Double[] getCenter() {
+        double xCenter = this.positionX + (this.width/2);
+        double yCenter = this.positionY + (this.height/2);
+        Double[] center = new Double[2];
+        center[0] = xCenter;
+        center[1] = yCenter;
+        return center;
+    }
+    
+    public Double[] getCorner(Direction d) {
+        Double[] corner = new Double[2];
          switch(d) {
-            case UP: corner.add(this.positionX+(this.width/2));
-                    corner.add(this.positionY);
+            case UP: corner[0] = (this.positionX+(this.width/2));
+                    corner[1] = (this.positionY);
                     break;
-            case DOWN: corner.add(this.positionX+(this.width/2));
-                    corner.add(this.positionY+this.height);
+            case DOWN: corner[0] = (this.positionX+(this.width/2));
+                    corner[1] = (this.positionY+this.height);
                     break;
-            case LEFT: corner.add(this.positionX);
-                    corner.add(this.positionY+(this.height/2));
+            case LEFT: corner[0] = (this.positionX);
+                    corner[1] = (this.positionY+(this.height/2));
                     break;
-            case RIGHT: corner.add(this.positionX+(this.width));
-                    corner.add(this.positionY+(this.height/2));
+            case RIGHT: corner[0] = (this.positionX+(this.width));
+                    corner[1] = (this.positionY+(this.height/2));
                     break;
-            case UPRIGHT: corner.add(this.positionX+(this.width));
-                    corner.add(this.positionY);
+            case UPRIGHT: corner[0] = (this.positionX+(this.width));
+                    corner[1] = (this.positionY);
                     break;
-            case UPLEFT: corner.add(this.positionX);
-                    corner.add(this.positionY);
+            case UPLEFT: corner[0] = (this.positionX);
+                    corner[1] = (this.positionY);
                     break;
-            case DOWNRIGHT: corner.add(this.positionX+(this.width));
-                    corner.add(this.positionY+this.height);
+            case DOWNRIGHT: corner[0] = (this.positionX+(this.width));
+                    corner[1] = (this.positionY+this.height);
                     break;
-            case DOWNLEFT: corner.add(this.positionX);
-                    corner.add(this.positionY+this.height);
+            case DOWNLEFT: corner[0] = (this.positionX);
+                    corner[1] = (this.positionY+this.height);
                     break;
-        default: corner.add(this.positionX);corner.add(this.positionY);break;
+        default: corner[0] = (this.positionX);corner[1] = (this.positionY);break;
          }
         
         return corner;
