@@ -14,7 +14,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 /**
  *
- * @author daedra
+ * @author nkoiv
  */
 public class Effect extends MapObject {
 

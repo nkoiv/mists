@@ -24,6 +24,7 @@ public class CollisionMap {
     private int mapTileWidth;
     private int mapTileHeight;
     private int nodeSize;
+    private boolean structuresOnly;
             
     public CollisionMap(Location l, int nodeSize) {
         this.location = l;
@@ -42,7 +43,7 @@ public class CollisionMap {
         }
     }
     
-        public void updateCollisionLevels() {
+    public void updateCollisionLevels() {
         //Clear the old map
         this.nodeMap = new Node[mapTileWidth][mapTileHeight];
         //Then populate a nodemap with empty (=passable) nodes
@@ -71,7 +72,7 @@ public class CollisionMap {
                             this.nodeMap[column][row].setCollisionLevel(mobCL);
                     }
                 }
-            } else { //Creatures block only their original spot
+            } else if (!this.structuresOnly) { //Creatures block only their original spot
                 if(this.isOnMap(mobXNodeStart, mobYNodeStart))
                     this.nodeMap[mobXNodeStart][mobYNodeStart].setCollisionLevel(mobCL);
             }
@@ -104,6 +105,14 @@ public class CollisionMap {
     public boolean isVisited (int xCoor, int yCoor) {
         if (this.visited[xCoor][yCoor] == null) return false;
         return this.visited[xCoor][yCoor];
+    }
+    
+    public void setStructuresOnly (boolean onlyStructures) {
+        this.structuresOnly = onlyStructures;
+    }
+    
+    public boolean isStructuresOnly() {
+        return this.structuresOnly;
     }
     
     private boolean isOnMap (int xCoor, int yCoor) {

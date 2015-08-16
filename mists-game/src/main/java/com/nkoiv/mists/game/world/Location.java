@@ -63,6 +63,7 @@ public class Location implements Global {
         this.effects = new ArrayList<>();
         this.map = new BGMap(new Image("/images/pocmap.png"));
         this.collisionMap = new CollisionMap(this, 32);
+        this.collisionMap.setStructuresOnly(true);
         this.pathFinder = new PathFinder(this.collisionMap, 200, true);
         
         PlayerCharacter himmu = new PlayerCharacter();

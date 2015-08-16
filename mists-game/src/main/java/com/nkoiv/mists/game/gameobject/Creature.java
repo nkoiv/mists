@@ -200,9 +200,9 @@ public class Creature extends MapObject implements Combatant {
         if (!this.isFlagged("testFlag")) return; //Dont my unless flagged
         Direction directionToMoveTowards =
         (this.getLocation().getPathFinder().pathTowards
-        (this.crossableTerrain, this.getxPos(), this.getyPos(),
+        (this.getSprite().getWidth(), this.crossableTerrain, this.getxPos(), this.getyPos(),
                 this.getLocation().getPlayer().getxPos(), this.getLocation().getPlayer().getyPos()));
-        Mists.logger.info("Trying to move towards " +directionToMoveTowards);
+        //Mists.logger.info("Trying to move towards " +directionToMoveTowards);
         this.moveTowards(directionToMoveTowards);
     }
     

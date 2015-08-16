@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author daedra
+ * @author nkoiv
  */
 public interface AttackAction {
     SpriteAnimation getSpriteAnimation();
