@@ -1,4 +1,20 @@
-#Viikko 3 (15h)
+#Viikko 4 (15h)
+
+##16.8
+* 3h [OHJELMOINTI] Lisätty PathFinderille Clearance-map -mahdollisuus
+* 1h [OPISKELU] Etsitty tapoja löytää polku suurille (yli ruudun kokoisille) asioille pathfinderilla
+
+##15.8
+* 2h [OHJELMOINTI] Palattu vanhaan PathFinderiin, mutta uuden opeilla
+* 3h [OHJELMOINTI] Korvattu PathFinder uudella versiolla
+* 1h [OPISKELU] Etsitty parasta tapaa löytää "lähin avoin ruutu" kun kohderuutu on suljettu
+* 1h [OHJELMOINTI] Korjattu PathFinderia
+
+##14.8
+* 3h [OHJELMOINTI] Rakennettu ensimmäinen PathFinder
+* 1h [OPISKELU] Tutkittu erilaisia Pathfinding-algoritmeja
+
+#Viikko 3 (14h)
 
 ##13.8
 * 3h [TESTAUS] Testien rakentaminen taistelulle ja MapObjecteille
