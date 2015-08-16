@@ -13,6 +13,23 @@ Unlike in most roguelikes, the player character in Mists is accompanied by a hel
 So far only the Location -level of the game has been developed.
 Further down the road, there should be a world map to travel from a location to another.
 
-***Location (POC)***
+***Location controls (POC)***
 * Moving around: Arrow keys
-* Using ability: Space
+* Using ability (Melee attack): Space
+* Activate/Deactivate creatures: Shift
+
+**Project plan**
+
+***Weekly plan***
+* Week 1: Create a window with sprites to move around
+* Weel 2: Generate the base structure for the codebase
+* Week 3: Actions, triggers, effects
+* Week 4: Pathfinding and random map generation
+* Week 5: UI
+* Week 6: Creature AI
+
+***Cut out for future***
+* World map
+* Inventory-system
+* Libraries for MOBs
+* Random game generation (beyond maps)
