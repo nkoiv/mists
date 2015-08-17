@@ -237,7 +237,7 @@ public class Sprite
         
     switch(collisionArea) {
         case 1: return new Rectangle(positionX+1,positionY+1,width-2,height-2);
-        case 2: return new Ellipse(positionX+(width/2),positionY+(height/2),(width)/2,(height)/2);
+        case 2: return new Ellipse((positionX+(width/2))+2,(positionY+(height/2))+2,((width)/2)-1,((height)/2)-1);
         default: break;
     }
    

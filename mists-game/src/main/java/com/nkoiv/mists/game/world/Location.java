@@ -51,6 +51,7 @@ public class Location implements Global {
     
     
     public Location(String name) {
+        this.loadMap(new BGMap(new Image("/images/pocmap.png")));
         this.collisionMap = new CollisionMap(this, 32);
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
@@ -71,33 +72,33 @@ public class Location implements Global {
         this.pathFinder = new PathFinder(this.collisionMap, 200, true);
         
         PlayerCharacter himmu = new PlayerCharacter();
-        himmu.getSprite().setCollisionAreaShape(2);
+        himmu.getSprite().setCollisionAreaShape(1);
         himmu.addAction(new MeleeAttack());
         this.setPlayer(himmu);
-        this.addCreature(himmu, 300, 200);
+        this.addCreature(himmu, 8*TILESIZE, 6*TILESIZE);
         this.screenFocus = himmu;
         
         //TODO: Create structures from structure library once its finished
-        Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 450, 350);
+        Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 10*TILESIZE, 7*TILESIZE);
         this.mapObjects.add(rock);
         
-        Structure tree1 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 400, 240);
+        Structure tree1 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 6*TILESIZE, 5*TILESIZE);
         tree1.addExtra(new Image("/images/tree.png"), -35, -96);
         this.mapObjects.add(tree1);
         
-        Structure tree2 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 230, 340);
+        Structure tree2 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 4*TILESIZE, 9*TILESIZE);
         tree2.addExtra(new Image("/images/tree.png"), -35, -96);
         this.mapObjects.add(tree2);
         
-        Creature monster1 = new Creature("Otus", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
-        monster1.getSprite().setCollisionAreaShape(2);
-        this.addCreature(monster1, 380, 400);   
+        Creature monster1 = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
+        monster1.getSprite().setCollisionAreaShape(1);
+        this.addCreature(monster1, 0*TILESIZE, 10*TILESIZE);   
     }
     
     private void loadMap(GameMap map) {
         this.map = map;
         // Add in all the static structures from the selected map
-        for (Structure s : map.getStaticStructures()) {
+        for (Structure s : map.getStaticStructures(this)) {
             this.mapObjects.add(s);
         }
     }
@@ -266,6 +267,20 @@ public class Location implements Global {
         double yOffset = getyOffset(gc, screenFocus.getSprite().getYPos());
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.map.render(-xOffset, -yOffset, gc); //First we draw the underlying map
+        
+        if (DRAW_GRID) {
+            gc.setStroke(Color.ANTIQUEWHITE);
+            double tileHeight = map.getHeight()/TILESIZE;
+            double tileWidth = map.getWidth()/TILESIZE;
+            for (int i=0; i<tileHeight;i++) {
+                gc.strokeLine(0, (i*TILESIZE)-yOffset, map.getWidth(), (i*TILESIZE)-yOffset);
+            }
+            for (int i=0; i<tileWidth;i++) {
+                gc.strokeLine((i*TILESIZE)-xOffset, 0, (i*TILESIZE)-xOffset, map.getHeight());
+            }
+            
+        }
+        
         /*
         * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
         */

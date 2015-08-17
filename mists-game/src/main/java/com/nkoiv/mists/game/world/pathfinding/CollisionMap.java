@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world.pathfinding;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
@@ -31,8 +32,8 @@ public class CollisionMap {
         this.nodeSize = nodeSize; //size of nodes in map pixels - usually same as tilesize
         
         //First we'll convert map to tiles, even if it's BGMap
-        this. mapTileWidth = (int)(l.getMap().getWidth() / nodeSize);
-        this. mapTileHeight = (int)(l.getMap().getHeight() / nodeSize); 
+        this.mapTileWidth = (int)(l.getMap().getWidth() / nodeSize)+1;
+        this.mapTileHeight = (int)(l.getMap().getHeight() / nodeSize)+1; 
         nodeMap = new Node[mapTileWidth][mapTileHeight];
         visited = new Boolean[mapTileWidth][mapTileHeight];
         //Then populate a nodemap with empty (=collisionLevel 0) nodes
@@ -56,6 +57,7 @@ public class CollisionMap {
         List<MapObject> mobs = this.location.getMOBList();
         //Mists.logger.info("Moblist has " +mobs.size()+" objects");
         for (MapObject mob : mobs) {
+            //Mists.logger.info("Doing collisionmapstuff for "+mob.getName());
             //Mob blocks nodes from its top left corner...
             int mobXNodeStart = ((int)mob.getxPos() / nodeSize);
             int mobYNodeStart = ((int)mob.getyPos() / nodeSize);
@@ -66,13 +68,17 @@ public class CollisionMap {
             
             //Structures mark all blocked nodes with collisionLevel
             if (mob instanceof Structure) {
-                for (int row = mobYNodeStart; row < mobYNodeEnd;row++ ) {
-                    for (int column = mobXNodeStart; column < mobXNodeEnd;column++) {
+                //Mists.logger.info("This is a structure at "+mobYNodeStart+","+mobXNodeStart);
+                for (int row = mobYNodeStart; row <= mobYNodeEnd;row++ ) {
+                    for (int column = mobXNodeStart; column <= mobXNodeEnd;column++) {
+                        //Mists.logger.info("Should be setting some CL at "+column+","+row);
                         if(this.isOnMap(column, row))
                             this.nodeMap[column][row].setCollisionLevel(mobCL);
+                            //Mists.logger.info("Added CL "+mobCL+" at "+column+","+row);
                     }
                 }
             } else if (!this.structuresOnly) { //Creatures block only their original spot
+                //Mists.logger.info("This is NOT structure");
                 if(this.isOnMap(mobXNodeStart, mobYNodeStart))
                     this.nodeMap[mobXNodeStart][mobYNodeStart].setCollisionLevel(mobCL);
             }

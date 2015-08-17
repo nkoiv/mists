@@ -94,8 +94,8 @@ public class GeneralLocationTest extends Application {
     }
     
     @Test
-    public void locationHasNoMapUntilItIsAssignedOne() {
-        assert(testLocation.getMap() == null);
+    public void locationAlwaysHasAMap() {
+        assert(testLocation.getMap() != null);
     }
     
    

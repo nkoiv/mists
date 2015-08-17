@@ -53,6 +53,8 @@ public class PathFinder {
         
         public Direction pathTowards (double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
             int clearanceNeed = (int)(unitSize/this.map.getNodeSize());
+            //clearanceNeed++; //Add one to clearanceNeed to avoid rounding problems
+            //Mists.logger.info("Clearance needed: "+clearanceNeed+" (unit size"+unitSize+", nodesize "+this.map.getNodeSize());
             int sX = ((int) startX / this.map.getNodeSize());
             int sY = ((int) startY / this.map.getNodeSize());
             int gX = ((int) goalX / this.map.getNodeSize());
@@ -210,6 +212,7 @@ public class PathFinder {
         * TODO: Implement some speed tips
         */
 	private Path findPath(int tileSize,List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
+        //Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
         Path path = new Path();
         Node start = nodes[startX][startY];
         Node goal = nodes[goalX][goalY];
@@ -237,7 +240,7 @@ public class PathFinder {
                 openNodes.clear();
                 break;
             } else if (currentNode.isNextTo(goalX, goalY) && map.isBlocked(crossableTerrain, goalX, goalY)) { //We're next to Goal, but it's unreachable
-                Mists.logger.info("Next to goal but cant go there");
+                //Mists.logger.info("Next to goal but cant go there");
                 openNodes.clear();
                 break;
             } else { //not at goal yet
@@ -354,9 +357,8 @@ public class PathFinder {
     */   
     public static int[][] getClearanceMap (int crossableTerrain, CollisionMap collisionMap) {
         int[][] clearanceMap = new int[collisionMap.getMapTileWidth()][collisionMap.getMapTileHeight()];        
-
         int level;
-        Mists.logger.log(Level.INFO, "Clearance map generation started. Size of map: [{0},{1}]", new Object[]{collisionMap.getMapTileWidth(), collisionMap.getMapTileHeight()});
+       // Mists.logger.log(Level.INFO, "Clearance map generation started. Size of map: [{0},{1}]", new Object[]{collisionMap.getMapTileWidth(), collisionMap.getMapTileHeight()});
         //Check through all the tiles on the collisionMap and calculate their clearanceLevels
         for (int y=0;y<collisionMap.getMapTileHeight();y++) {  //collisionMap.getMapTileHeight()
             for (int x=0;x<collisionMap.getMapTileWidth();x++) { // collisionMap.getMapTileWidth()

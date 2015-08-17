@@ -7,10 +7,14 @@ package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
+import static com.nkoiv.mists.game.Global.TILESIZE;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -27,9 +31,10 @@ public class TileMap implements GameMap {
     private Tile[][] tileMap;
     
     public TileMap (String filename) {
-        this.loadMap(filename);
         this.tilesize = Global.TILESIZE;
+        this.loadMap(filename);
         this.tileMap = new Tile[tileWidth][tileHeight];
+        this.generateTilesFromIntMap();
     }
     
     @Override
@@ -40,17 +45,39 @@ public class TileMap implements GameMap {
         for (int row=0;row<this.tileHeight;row++) {
             for (int column=0;column<this.tileWidth;column++) {
                 if (this.tileMap[column][row]!=null)
-                    this.tileMap[column][row].render(xOffset, yOffset, gc);
+                    this.tileMap[column][row].render(-xOffset, -yOffset, gc);
             }
         }
         
         
     }
+    
+    /*
+    * generateStructure takes a tileCode and generates the Structure from it
+    * TODO: Fix the class to use a StructureSheet (repository for the structureCodes)
+    * Note that generated maps should have separate arrays for structures and the tiles,
+    * because structures should have "floor" under them
+    */
+    private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
+        //TODO: For now, all structures are rocks.
+        //in future, should also take in a "HashMap<Integer,Structure> structureSheet"
+        if (tileCode == 0) return null;
+        return new Structure("Rock", new Image("/images/block.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
+    }
 
+    //TODO: Structures should have their own map, and not just intMap
     @Override
-    public ArrayList<Structure> getStaticStructures() {
+    public ArrayList<Structure> getStaticStructures(Location l) {
         //Generate structures and return them
         ArrayList<Structure> staticStructures = new ArrayList<>();
+        for (int x=0; x<this.tileWidth; x++) {
+            for (int y=0; y<this.tileHeight; y++) {
+                //TODO: Check the intMap value against tilesheet
+                //For now, everything is grass
+                Structure newStructure = this.generateStructure(this.intMap[x][y], l, x, y);
+                if(newStructure != null)staticStructures.add(newStructure); 
+            }
+        }  
         return staticStructures;
     }
 
@@ -77,7 +104,18 @@ public class TileMap implements GameMap {
         }	
     }
     
-    
+    //use the intMap to generate the tiles
+    private void generateTilesFromIntMap() {
+        for (int x=0; x<this.tileWidth; x++) {
+            for (int y=0; y<this.tileHeight; y++) {
+               //TODO: Check the intMap value against tilesheet
+               //For now, everything is grass
+               this.tileMap[x][y] = new Tile(0, "Grass", this.tilesize, 
+                    new Sprite(new Image("/images/grass_tile.png"),
+                    x*this.tilesize, y*this.tilesize)); 
+            }
+        }    
+    }
     
     /*
     * Maploader from files mainly for testing purposes

@@ -24,7 +24,7 @@ public class Structure extends MapObject {
 
     public Structure(String name, Image image, int collisionLevel) {
         super(name, image);
-        this.setFlag("collisionLevel", 1);
+        this.setFlag("collisionLevel", collisionLevel);
         this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
     }

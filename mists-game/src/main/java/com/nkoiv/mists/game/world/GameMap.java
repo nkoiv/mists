@@ -19,7 +19,7 @@ public interface GameMap {
     void render(double xOffset, double yOffset, GraphicsContext gc);
     
     //If the map has static stuctures (walls etc), get them for the location
-    ArrayList<Structure> getStaticStructures();
+    ArrayList<Structure> getStaticStructures(Location l);
     
     //Map size
     double getWidth();
