@@ -32,7 +32,7 @@ public interface Combatant {
 	
 	boolean moveTowards (Direction direction);
 
-	double getxPos();
+	double getXPos();
 
-	double getyPos();
+	double getYPos();
 }

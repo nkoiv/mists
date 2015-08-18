@@ -58,8 +58,8 @@ public class MovementTest extends Application {
     @Test
     public void thereIsNoPlayerMovementBeforeUpdate() {
         testPlayer.setSpeed(50); //Should move 50 per tick
-        double originalYPos = testPlayer.getyPos();
-        double originalXPos = testPlayer.getxPos();
+        double originalYPos = testPlayer.getYPos();
+        double originalXPos = testPlayer.getXPos();
         testPlayer.moveTowards(Direction.UPRIGHT);
         testPlayer.moveTowards(Direction.RIGHT);
         testPlayer.moveTowards(Direction.DOWNRIGHT);
@@ -69,8 +69,8 @@ public class MovementTest extends Application {
         testPlayer.moveTowards(Direction.UPLEFT);
         testPlayer.moveTowards(Direction.UP);
         //testPlayer.update(0.16f);
-        assert(testPlayer.getxPos()==originalXPos);
-        assert(testPlayer.getyPos()==originalYPos);
+        assert(testPlayer.getXPos()==originalXPos);
+        assert(testPlayer.getYPos()==originalYPos);
         
     }
     
@@ -79,22 +79,22 @@ public class MovementTest extends Application {
     public void movementShouldChangePlayerCoordinates() {
         testPlayer.setSpeed(50); //Should move 50 per tick
         
-        double originalYPos = testPlayer.getyPos();
+        double originalYPos = testPlayer.getXPos();
         testPlayer.moveTowards(Direction.DOWN);
         testPlayer.update(0.16f);
         
-        assert(originalYPos != testPlayer.getyPos());
+        assert(originalYPos != testPlayer.getXPos());
     }
     
     @Test
     public void zeroSpeedPlayerShouldNotMove() {
         testPlayer.setSpeed(0); //Movement set to zero
         
-        double originalYPos = testPlayer.getyPos();
+        double originalYPos = testPlayer.getXPos();
         testPlayer.moveTowards(Direction.UP);
         testPlayer.update(0.16f);
         
-        assert(originalYPos == testPlayer.getyPos()); //Should still be at original position
+        assert(originalYPos == testPlayer.getXPos()); //Should still be at original position
     }
     
     @Test
@@ -106,13 +106,13 @@ public class MovementTest extends Application {
         testPlayer.setPosition(300, 200); //Same Y as testRock, just 200 to the left
         testPlayer.setSpeed(50); //Should move 50 per tick
         for (int i=0;i<10;i++) {
-            System.out.println(testPlayer.getName()+ " currently at "+ testPlayer.getxPos() + " / "+testPlayer.getyPos());
+            System.out.println(testPlayer.getName()+ " currently at "+ testPlayer.getXPos() + " / "+testPlayer.getYPos());
             testPlayer.moveTowards(Direction.RIGHT);
             testPlayer.update(0.16f); //At 60 FPS, one tick is 0.16f
         }
         
         //testPlayer should still be on the left (smaller X) side of the rock, because collisions prevented it going past it:
-        assert(TestTools.CompareTools.isGreaterThan(testRock.getxPos(), testPlayer.getxPos()));
+        assert(TestTools.CompareTools.isGreaterThan(testRock.getXPos(), testPlayer.getXPos()));
         
     }
 

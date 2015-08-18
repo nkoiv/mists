@@ -40,12 +40,17 @@ public class TileMap implements GameMap {
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
         /*Render all the tiles
-        * TODO: Only the tiles on the visible area
+        * 
         */
-        for (int row=0;row<this.tileHeight;row++) {
-            for (int column=0;column<this.tileWidth;column++) {
+        double screenWidth = gc.getCanvas().getWidth();
+        double screenHeight = gc.getCanvas().getHeight();
+        for (int row=(int)(-yOffset/this.tilesize);row<(screenHeight/this.tilesize)+(-yOffset/this.tilesize)+1;row++) {
+            for (int column=(int)(-xOffset/this.tilesize);column<(screenWidth/this.tilesize)+(-xOffset/this.tilesize)+1;column++) {
                 if (this.tileMap[column][row]!=null)
                     this.tileMap[column][row].render(-xOffset, -yOffset, gc);
+                //Print tile coordinates on top of tile
+                //gc.strokeText(column+","+row, this.tileMap[column][row].getSprite().getXPos()-xOffset, this.tileMap[column][row].getSprite().getYPos()-yOffset);
+        
             }
         }
         

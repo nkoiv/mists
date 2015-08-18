@@ -16,7 +16,7 @@ import com.nkoiv.mists.game.Global;
 		private int yCoor;
                 private int collisionLevel; //this tells us if there's something blocking the node
                 private int size;
-                private double cost; //Node cost for when used by PathFinder
+                private double estimatedCost; //Node cost for when used by PathFinder
                 private int depth; //Depth in the path for when used by PathFinder
                 private Node previousNode; //for PathFinder
 		
@@ -71,16 +71,16 @@ import com.nkoiv.mists.game.Global;
                     
                 }
                 
-                public void setCost(double cost) {
-                    this.cost = cost;
+                public void setCostEstimate(double estimatedCost) {
+                    this.estimatedCost = estimatedCost;
                 }
                 
                 public void setDepth(int depth) {
                     this.depth = depth;
                 }
                 
-                public double getCost() {
-                    return this.cost;
+                public double getCostEstimate() {
+                    return this.estimatedCost;
                 }
                 
                 public int getDepth() {
@@ -112,8 +112,8 @@ import com.nkoiv.mists.game.Global;
                 public int compareTo(Object other) {
 			Node o = (Node) other;
 			
-			double d = cost;
-			double od =  o.cost;
+			double d = estimatedCost;
+			double od =  o.estimatedCost;
 			
 			if (d < od) {
 				return -1;

@@ -37,13 +37,13 @@ public class Structure extends MapObject {
     }
     
     public void addExtra (Sprite sprite, double xOffset, double yOffset) {
-        sprite.setPosition(this.getxPos()+xOffset, this.getyPos()+yOffset);
+        sprite.setPosition(this.getXPos()+xOffset, this.getYPos()+yOffset);
         this.extraSprites.add(sprite);
     }
     
     public void addExtra (Image image, double xOffset, double yOffset) {
         this.extraSprites.add(new Sprite(
-                image, this.getxPos()+xOffset, this.getyPos()+yOffset ));
+                image, this.getXPos()+xOffset, this.getYPos()+yOffset ));
     }
     
     public ArrayList<Sprite> getExtras() {

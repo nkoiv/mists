@@ -22,8 +22,8 @@ import java.util.logging.Level;
  */
 public class PathFinder {
 	
-	private ArrayList closedNodes = new ArrayList();
-	private SortedList openNodes = new SortedList();
+	private SortedNodeList closedNodes = new SortedNodeList();
+	private SortedNodeList openNodes = new SortedNodeList();
 	private CollisionMap map; //The collision map derived from the Locations MOBs
         private HashMap<Integer, int[][]> clearanceMaps;
 	private Node[][] nodes; //Nodemap used for pathfinding, filled with costs as we calculate them
@@ -35,6 +35,7 @@ public class PathFinder {
 
 	public PathFinder(CollisionMap map, int maxSearchDistance, boolean allowDiagonalMovement) {
             this.map = map;
+            double startTime = System.currentTimeMillis();
             /* TODO: Consider how often/when the clearance maps should be updated
             *  TODO: Should Creatures be on clearance maps, or just structures?
             */
@@ -49,12 +50,21 @@ public class PathFinder {
                     this.nodes[column][row] = new Node(column, row);
                 }
             }
+            Mists.logger.info("PathFinder with "+(this.nodes.length * this.nodes.length)+" nodes for "+map.getLocation().getName()+ " generated in "+(System.currentTimeMillis()-startTime)+"ms");
 	}
         
+        /*
+        * PathTowards gives the direction of the next node on the Path
+        * This method is the one units usually ask when they want to start heading towards a point on the map
+        */
         public Direction pathTowards (double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
             int clearanceNeed = (int)(unitSize/this.map.getNodeSize());
-            //clearanceNeed++; //Add one to clearanceNeed to avoid rounding problems
             //Mists.logger.info("Clearance needed: "+clearanceNeed+" (unit size"+unitSize+", nodesize "+this.map.getNodeSize());
+            
+            /*
+            * The units are in freely moving double -type coordinates on the game map
+            * First we need to convert these to rigid int -types that the PathFinder uses
+            */
             int sX = ((int) startX / this.map.getNodeSize());
             int sY = ((int) startY / this.map.getNodeSize());
             int gX = ((int) goalX / this.map.getNodeSize());
@@ -62,18 +72,20 @@ public class PathFinder {
             
             Path pathToGoal = this.findPath(clearanceNeed, crossableTerrain, sX, sY, gX, gY);
             
-            if (pathToGoal == null) {
-                //got an empty path - stay put!
-                return Direction.STAY;
+            if (pathToGoal == null || pathToGoal.getLength()==0) {
+                //Got an empty path. Probably means no route was found.
+                //Just head in the general direction of the target.
+                Mists.logger.info("No path find, heading in general direction of the target");
+                return getDirection (gX - sX, gY - sY) ;
             }
-            
+            Mists.logger.info("Goal was at ["+gX+","+gY+"] got the path:" + pathToGoal.toString());
             if (pathToGoal.getLength() < 2) {
-                //Mists.logger.info("Next to object, staying put");
+                Mists.logger.info("Next to object, staying put");
                 return Direction.STAY;
             } else {
-                int xChange = pathToGoal.getNode(1).getX() - sX;
-                int yChange = pathToGoal.getNode(1).getY() - sY;
-                //Mists.logger.log(Level.INFO, "Figuring direction from {0},{1} to {2},{3}", new Object[]{sX, sY, pathToGoal.getNode(1).getX(), pathToGoal.getNode(1).getY()});
+                int xChange = (pathToGoal.getNode(1).getX()) - sX;
+                int yChange = (pathToGoal.getNode(1).getY()) - sY;
+                Mists.logger.log(Level.INFO, "Figuring direction from {0},{1} to {2},{3}", new Object[]{sX, sY, pathToGoal.getNode(1).getX(), pathToGoal.getNode(1).getY()});
                 return getDirection(xChange, yChange);
             }
          }
@@ -170,7 +182,7 @@ public class PathFinder {
         return result;
     }
 
-        private Direction getDirection(int xChange, int yChange) {
+        public Direction getDirection(double xChange, double yChange) {
             if (xChange==0) { //Not moving left or right
                 if (yChange==0) return Direction.STAY;
                 if (yChange<0) return Direction.UP;
@@ -208,33 +220,42 @@ public class PathFinder {
         
         /*
         * THE MAIN PATHFINDING ROUTINE
-        * Check http://www.policyalmanac.org/games/aStarTutorial.htm 
+        * Based on A* tips from the book "Artificial Intelligence for games (2e)" by Millington and Funge
         * TODO: Implement some speed tips
         */
 	private Path findPath(int tileSize,List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
         //Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
         Path path = new Path();
-        Node start = nodes[startX][startY];
-        Node goal = nodes[goalX][goalY];
-        start.setCost(this.getMovementCost(crossableTerrain, start.getX(), start.getY(), goal.getX(), goal.getY()));
-       
+        
         //Check we have all the clearanceMaps we need.
         for (Integer terrainType : crossableTerrain) {
             if (!this.clearanceMaps.containsKey(terrainType)) { //if we dont already have the given map, we need to generate it
                 this.clearanceMaps.put(terrainType, getClearanceMap(terrainType, this.map));
             }
         }
+        
+        //Initialize the starting node
+        Node start = new Node(startX, startY);
+        start.setPreviousNode(null); //Start has no previous node
+        start.setDepth(0); //When we're at start, we havent moved yet
+        start.setCostEstimate(this.getMovementCost(crossableTerrain, start.getX(), start.getY(), goalX, goalY));
+        
+        Node goal = nodes[goalX][goalY];
+        
         closedNodes.clear(); //Reset the closed nodes
         openNodes.clear(); //Reset the open nodes
-        
         openNodes.add(start);
         Node currentNode = start;
-        //path.addStep(start.getX(), start.getY());
-        while (openNodes.size() > 0 && path.getLength() < this.maxSearchDistance) {
-            if(path.getLength() > this.maxSearchDistance) break; //stop if we've reached max depth 
-            //Iterate the list until all open nodes have been dealt with
+        //Mists.logger.log(Level.INFO,"Starting a new pathfinding: from {0},{1} to {2}, {3}",new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
+        //Iterate the list until all open nodes have been dealt with
+        while (openNodes.size() > 0) {
+            currentNode = (Node)openNodes.first();
             //Mists.logger.log(Level.INFO, "Currently at: {0},{1} - Goal at: {2}, {3}", new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
-            //Mists.logger.info("Path has "+path.getLength()+ " steps in it. Number of open points: "+openNodes.size() + ". Number of closed points: "+closedNodes.size());
+            //Mists.logger.log(Level.INFO, "Path has {0} steps in it. Number of open points: {1}. Number of closed points: {2}", new Object[]{path.getLength(), openNodes.size(), closedNodes.size()});
+            if (path.getLength() > this.maxSearchDistance) {
+                //Mists.logger.info("Ran to max search distance ("+maxSearchDistance+")");
+                break;
+            }
             if(currentNode.getX() == goal.getX() && currentNode.getY() == goal.getY()) { //we're at the goal
                 //Mists.logger.info("Found goal!");
                 openNodes.clear();
@@ -244,46 +265,81 @@ public class PathFinder {
                 openNodes.clear();
                 break;
             } else { //not at goal yet
-                currentNode = (Node)openNodes.first(); //First on the list has the lowest cost
-                openNodes.remove(currentNode);
-                closedNodes.add(currentNode); // this node doesnt need to be calculated again
                 //find open neighbours
                 List<Node> neighbours = new ArrayList<>(); //add in all traversable neighbours
                 neighbours.addAll(this.Neighbours(tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
                 neighbours.addAll(this.DiagonalNeighbours(tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
-                //Mists.logger.info("Neigbours before Closed trimming:" +neighbours.size());
-                neighbours.removeAll(closedNodes); //Close routes we know are bad
-                //Mists.logger.info("Neigbours after Closed trimming:" +neighbours.size());
                 //Mists.logger.log(Level.INFO, "{0} neighbouring tiles found for {1},{2}", new Object[]{neighbours.size(), currentNode.getX(), currentNode.getY()});
-                if (neighbours.size()<=1) { //if we can only go backwards
-                    currentNode = path.getNode((path.getLength()-1)); //Move to last good node
-                } else {
-                    List<Node> currentNeighbours = new ArrayList<>();
-                    for (Node n : neighbours) { //Make pathpoints to all availale nodes and tag them open
-                        if(!path.containsNode(n.getX(), n.getY())) { //dont go to direction we came from
-                            //Mists.logger.info("Adding a new node to openList");
-                            Node nn = nodes[n.getX()][n.getY()];
-                            nn.setPreviousNode(currentNode);
-                            nn.setDepth(path.getLength());
-                            nn.setCost(this.getMovementCost(crossableTerrain, nn.getX(), nn.getY(), goal.getX(), goal.getY()));
-                            if (!openNodes.contains(nn)) {
-                                openNodes.add(nn); //remember the node in case we need to go back to it
-                            }  
-                            //currentNeighbours.add(nn); // <- What was the point of this line again?
+                List<Node> currentNeighbours = new ArrayList<>();
+                /*
+                * Check through all the neighbouring tiles
+                */
+                for (Node n : neighbours) {
+                    Node nn = new Node(n.getX(), n.getY());
+                    //Estimate the total cost to get to end from this node
+                    nn.setCostEstimate(currentNode.getDepth()+
+                            this.getMovementCost(crossableTerrain, nn.getX(), nn.getY(), goal.getX(), goal.getY()));
+                    nn.setPreviousNode(currentNode);
+                    nn.setDepth(currentNode.getDepth()+1);
+                    //Mists.logger.info("Checking neihgbour at ["+n.getX()+","+n.getY()+"]");
+                    if (closedNodes.contains(n.getX(), n.getY())) {
+                        Node cN = closedNodes.get(n.getX(), n.getY());
+                        //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Closed list");
+                        if (cN.getCostEstimate() <= nn.getCostEstimate()) {
+                            //We ran to this node again, and we havent found a shorter route to it
+                            //Keep it in the closed list for now and nevermind
+                            //continue;
+                        } else {
+                            //We've got a new shorter route to this (closed) node
+                            //Remove the node from closed list
+                            closedNodes.remove(cN);
                         }
+                        
+                        
+                    } else if (openNodes.contains(n.getX(), n.getY())) {
+                        //This is already
+                        Node oN = openNodes.get(n.getX(), n.getY());
+                        //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Open list");
+                        if (oN.getCostEstimate() <= nn.getCostEstimate()) {
+                            //We ran to this node again, and we havent found a shorter route to it
+                            //Keep it in the open list for now and nevermind
+                            //continue;
+                        } else {
+                            //We've got a new shorter route to this (open) node
+                            //Update the cost to match that
+                            oN.setCostEstimate(nn.getCostEstimate());
+                            oN.setDepth(nn.getDepth());
+                        }
+                        
+                    }  else { 
+                        //We have a new node to visit. Add it to the open list
+                        //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was on neither list.");
+                        openNodes.add(nn);
+                        //Mists.logger.info("Adding a new node to openList");
                     }
-
-                    path.addStep(currentNode);
-                    //Mists.logger.info(currentNode.getX()+","+currentNode.getY()+" set as current node");
+                    
+                    //currentNeighbours.add(nn); // <- What was the point of this line again?
                 }
-            }    
+                openNodes.remove(currentNode);
+                closedNodes.add(currentNode);
+                //path.addStep(currentNode);
+                //Mists.logger.info(currentNode.getX()+","+currentNode.getY()+" set as current node");
+                
+            }
+            //Mists.logger.info("Checked the neighbours. Open nodes size is now "+openNodes.size());
         }
-        //Mists.logger.info("Goal was at ["+goalX+","+goalY+"] Returning path:" + path.toString());
+        //Build back the path
+        //Mists.logger.info("Building back the path from ["+currentNode.getX()+","+currentNode.getY()+"]...");
+        while (currentNode.getPreviousNode()!=null) {
+            path.prependNode(currentNode.getX(), currentNode.getY());
+            currentNode = currentNode.getPreviousNode();
+            Mists.logger.info("Added ["+currentNode.getX()+","+currentNode.getY()+"] to the path");
+        }
         return path;
     }
 
     private Node getFirstInOpen() {
-            return (Node) openNodes.first();
+            return openNodes.first();
     }
 
     private void addToOpen(Node node) {
@@ -445,23 +501,33 @@ public class PathFinder {
     }
 
     /**
-     * A simple sorted list
-     * http://www.cokeandcode.com/main/tutorials/path-finding/ (Kevin Glass)
-     * @author kevin
+     * A simple sorted list for Nodes
+     * based on the http://www.cokeandcode.com/main/tutorials/path-finding/ (Kevin Glass)
+     * @author nkoiv
      */
-    private class SortedList {
+    private class SortedNodeList {
         /** The list of elements */
-        private ArrayList list = new ArrayList();
-
+        private ArrayList<Node> list = new ArrayList();
         /**
          * Retrieve the first element from the list
          *  
          * @return The first element from the list
          */
-        public Object first() {
+        public Node first() {
                 return list.get(0);
         }
-
+        
+        /*
+        * Return the first node on the list that matches given X and Y
+        */
+        public Node get(int x, int y) {
+            for (Node n : this.list) {
+                if (n.getX() == x && n.getY() == y) {
+                    return n;
+                }
+            }
+            return null;
+        }
         /**
          * Empty the list
          */
@@ -474,8 +540,8 @@ public class PathFinder {
          * 
          * @param o The element to add
          */
-        public void add(Object o) {
-                list.add(o);
+        public void add(Node n) {
+                list.add(n);
                 Collections.sort(list);
         }
 
@@ -484,8 +550,8 @@ public class PathFinder {
          * 
          * @param o The element to remove
          */
-        public void remove(Object o) {
-                list.remove(o);
+        public void remove(Node n) {
+                list.remove(n);
         }
 
         /**
@@ -503,8 +569,18 @@ public class PathFinder {
          * @param o The element to search for
          * @return True if the element is in the list
          */
-        public boolean contains(Object o) {
-                return list.contains(o);
+        public boolean contains(Node n) {
+                return list.contains(n);
+        }
+        
+        /*
+        * Check if the list contains a node with the given coordinates
+        */
+        public boolean contains(int x, int y) {
+            for (Node n : this.list) {
+                if (n.getX()==x && n.getY() == y) return true;
+            } 
+            return false;   
         }
     }
 	

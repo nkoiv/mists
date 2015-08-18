@@ -100,15 +100,27 @@ public class MapObject implements Global {
         this.sprite.setPosition(xPos, yPos);
     }
     
+    public void setCenterPosition (double xPos, double yPos) {
+        this.sprite.setPosition(xPos+(this.getSprite().getWidth()/2), yPos+(this.getSprite().getHeight()/2));
+    }
+    
     public Location getLocation() {
         return this.location;
     }
     
-    public double getxPos(){
+    public double getCenterXPos() {
+        return this.sprite.getCenter()[0];
+    }
+    
+    public double getCenterYPos(){
+        return this.sprite.getCenter()[1];
+    }
+    
+    public double getXPos(){
         return this.sprite.getXPos();
     }
     
-    public double getyPos(){
+    public double getYPos(){
         return this.sprite.getYPos();
     }
     

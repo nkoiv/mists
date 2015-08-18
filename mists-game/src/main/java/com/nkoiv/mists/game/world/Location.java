@@ -72,7 +72,7 @@ public class Location implements Global {
         this.pathFinder = new PathFinder(this.collisionMap, 200, true);
         
         PlayerCharacter himmu = new PlayerCharacter();
-        himmu.getSprite().setCollisionAreaShape(1);
+        himmu.getSprite().setCollisionAreaShape(2);
         himmu.addAction(new MeleeAttack());
         this.setPlayer(himmu);
         this.addCreature(himmu, 8*TILESIZE, 6*TILESIZE);
@@ -91,8 +91,8 @@ public class Location implements Global {
         this.mapObjects.add(tree2);
         
         Creature monster1 = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
-        monster1.getSprite().setCollisionAreaShape(1);
-        this.addCreature(monster1, 0*TILESIZE, 10*TILESIZE);   
+        monster1.getSprite().setCollisionAreaShape(2);
+        this.addCreature(monster1, 2*TILESIZE, 10*TILESIZE);   
     }
     
     private void loadMap(GameMap map) {
@@ -255,6 +255,7 @@ public class Location implements Global {
                 }
             }
         }
+        
         return collidingObjects;
     }
     

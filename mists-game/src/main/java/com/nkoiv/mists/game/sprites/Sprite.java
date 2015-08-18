@@ -170,6 +170,20 @@ public class Sprite
         }
     }
 
+    public void update(double time, double targetX, double targetY) {
+        if ((positionX + velocityX * time) > targetX) {
+            positionX = targetX;
+        } else {
+            positionX += velocityX * time;
+        }           
+        if ((positionY + velocityY * time) > targetY) {
+            positionY = targetY;
+        } else {
+            positionY += velocityY * time;
+        }                   
+        
+    }
+    
     public void update(double time)
     {
         positionX += velocityX * time;

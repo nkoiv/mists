@@ -42,7 +42,7 @@ public class MeleeAttack extends Action implements AttackAction {
     public Sprite getSprite(Creature actor) {
         Sprite attackSprite = new Sprite(this.attackAnimation.getCurrentFrame());
         attackSprite.setAnimation(attackAnimation);
-        attackSprite.setPosition(actor.getxPos(), actor.getyPos());
+        attackSprite.setPosition(actor.getXPos(), actor.getYPos());
         return attackSprite;
     }
     @Override

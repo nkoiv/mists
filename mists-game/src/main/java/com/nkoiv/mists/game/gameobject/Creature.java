@@ -39,6 +39,10 @@ public class Creature extends MapObject implements Combatant {
     private HashMap<String, Action> availableActions;
     private ArrayList<Integer> crossableTerrain; //List of terrains we can go through;
     
+    //Old position to snap back to when colliding;
+    private double oldXPos;
+    private double oldYPos;
+    
     //Constructor for a creature template with one static image
     public Creature (String name, Image image) {
         super (name, image);
@@ -72,6 +76,8 @@ public class Creature extends MapObject implements Combatant {
         this.crossableTerrain.add(0);
     }
     
+    
+    //TODO: Make this load stats from creature library
     private void initializeAttributes() {
         this.attributes = new HashMap<>();
         this.setAttribute("Strength", 1);
@@ -200,9 +206,9 @@ public class Creature extends MapObject implements Combatant {
         if (!this.isFlagged("testFlag")) return; //Dont my unless flagged
         Direction directionToMoveTowards =
         (this.getLocation().getPathFinder().pathTowards
-        (this.getSprite().getWidth(), this.crossableTerrain, this.getxPos(), this.getyPos(),
-                this.getLocation().getPlayer().getxPos(), this.getLocation().getPlayer().getyPos()));
-        //Mists.logger.info("Trying to move towards " +directionToMoveTowards);
+        (this.getSprite().getWidth(), this.crossableTerrain, this.getCenterXPos(), this.getCenterYPos(),
+                this.getLocation().getPlayer().getCenterXPos(), this.getLocation().getPlayer().getCenterYPos()));
+        Mists.logger.info("Trying to move towards " +directionToMoveTowards);
         this.moveTowards(directionToMoveTowards);
     }
     
@@ -228,35 +234,51 @@ public class Creature extends MapObject implements Combatant {
         
     }
     
-    public void applyMovement(double time){
+    public boolean applyMovement(double time){
         /*
         * Check collisions before movement
         * TODO: Add in pixel-based collision detection (compare alphamaps?)
         * TODO: Make collisions respect collisionlevel -flag.
         */
+
+        
         if (this.getLocation().checkCollisions(this).isEmpty()) {
+            this.oldXPos = this.getSprite().getXPos();
+            this.oldYPos = this.getSprite().getYPos();
             this.getSprite().update(time); //Collided with nothing, free to move
-        } else {
-            
+            return true;
+        } else { 
+            //We've collided with something. Lets figure out what it was.
             ArrayList<MapObject> collidingObjects = this.getLocation().checkCollisions(this); //Get the colliding object
             
             MapObject collidingObject = collidingObjects.get(0);
-            //Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
-            double collidingX = collidingObject.getSprite().getXPos()+(collidingObject.getSprite().getWidth()/2);
-            double collidingY = collidingObject.getSprite().getYPos()+(collidingObject.getSprite().getHeight()/2);
-            double thisX = this.getSprite().getXPos()+(this.getSprite().getWidth()/2);
-            double thisY = this.getSprite().getYPos()+(this.getSprite().getHeight()/2);
+            Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
+            double collidingX = collidingObject.getXPos();//+(collidingObject.getSprite().getWidth()/2);
+            double collidingY = collidingObject.getYPos();//+(collidingObject.getSprite().getHeight()/2);
+            double thisX = this.getXPos();//+(this.getSprite().getWidth()/2);
+            double thisY = this.getYPos();//+(this.getSprite().getHeight()/2);
 
-            double xDistance = Math.abs(thisX - collidingX);
-            double yDistance = Math.abs(thisY - collidingY);
+            double xDistance = (thisX - collidingX);
+            double yDistance = (thisY - collidingY);
             //Mists.logger.log(Level.INFO, "At the distance of x: {0} y: {1}", new Object[]{xDistance, yDistance});
 
             /*
             * Prevent further going into colliding object
-            * Because every other directino is allowed "jittering" past two colliding objects might be possible
+            */
+            
+            /*
+            * NEW COLLISION CODE
+            * Stop movement and move directly away from the thing you collided into
+            * 
+            */
+            
+            
+            /* OLD COLLISION CODE
+             * Because every other direction is allowed "jittering" past two colliding objects might be possible
             * TODO: Test collisions on tiles and see if tweaking is needed
             */
-
+            
+            /*
             if(this.getSprite().getXVelocity() != 0 && (yDistance<xDistance)) {
                 if (thisX<collidingX) { //Colliding object is to the right
                     if (this.getSprite().getXVelocity()>0) { // Check if we're trying to move right
@@ -281,8 +303,10 @@ public class Creature extends MapObject implements Combatant {
                     }
                 }
            }
-           this.getSprite().update(time);
-
+           */
+           //this.getSprite().update(time);
+           this.getSprite().setPosition(this.oldXPos, this.oldYPos);
+           return false;
         }
     }
     

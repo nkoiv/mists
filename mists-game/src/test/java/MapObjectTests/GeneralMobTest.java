@@ -67,7 +67,7 @@ public class GeneralMobTest {
     @Test
     public void structuresCanBeMoved() {
         testStructure.setPosition(100, 100);
-        assert(testStructure.getxPos() == 100);
+        assert(testStructure.getXPos() == 100);
     }
     
     @Test

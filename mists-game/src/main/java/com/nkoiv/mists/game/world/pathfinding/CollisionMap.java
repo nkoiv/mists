@@ -30,7 +30,8 @@ public class CollisionMap {
     public CollisionMap(Location l, int nodeSize) {
         this.location = l;
         this.nodeSize = nodeSize; //size of nodes in map pixels - usually same as tilesize
-        
+        Mists.logger.info("Generating collisionmap for "+l.getName());
+        double startTime = System.currentTimeMillis();
         //First we'll convert map to tiles, even if it's BGMap
         this.mapTileWidth = (int)(l.getMap().getWidth() / nodeSize)+1;
         this.mapTileHeight = (int)(l.getMap().getHeight() / nodeSize)+1; 
@@ -41,10 +42,13 @@ public class CollisionMap {
             for (int column = 0; column < this.mapTileWidth; column++) {
                 this.nodeMap[column][row] = new Node(column, row, nodeSize, 0);
             }
-        }
+        }        
+        Mists.logger.info("Collisionmap generated in "+(System.currentTimeMillis()-startTime)+"ms");
     }
     
     public void updateCollisionLevels() {
+        //Mists.logger.info("Updating collisionmap for "+this.location.getName());
+        double startTime = System.currentTimeMillis();
         //Clear the old map
         this.nodeMap = new Node[mapTileWidth][mapTileHeight];
         //Then populate a nodemap with empty (=passable) nodes
@@ -59,11 +63,11 @@ public class CollisionMap {
         for (MapObject mob : mobs) {
             //Mists.logger.info("Doing collisionmapstuff for "+mob.getName());
             //Mob blocks nodes from its top left corner...
-            int mobXNodeStart = ((int)mob.getxPos() / nodeSize);
-            int mobYNodeStart = ((int)mob.getyPos() / nodeSize);
+            int mobXNodeStart = ((int)mob.getXPos() / nodeSize);
+            int mobYNodeStart = ((int)mob.getYPos() / nodeSize);
             //... to its bottom right corner
-            int mobXNodeEnd = ((int)(mob.getxPos()+mob.getSprite().getWidth())/ nodeSize); 
-            int mobYNodeEnd = ((int)(mob.getyPos()+mob.getSprite().getHeight())/ nodeSize); 
+            int mobXNodeEnd = ((int)(mob.getXPos()+mob.getSprite().getWidth()-1)/ nodeSize); 
+            int mobYNodeEnd = ((int)(mob.getYPos()+mob.getSprite().getHeight()-1)/ nodeSize); 
             int mobCL = mob.getFlag("collisionLevel");
             
             //Structures mark all blocked nodes with collisionLevel
@@ -86,6 +90,7 @@ public class CollisionMap {
             
             //Mists.logger.info("["+mobXNode+","+mobYNode+"] has a "+mob.getName()+ ": set to CL "+mobCL);
         }
+        //Mists.logger.info("Collisionmap updated in "+(System.currentTimeMillis()-startTime)+"ms");
     }
     
     
@@ -135,6 +140,10 @@ public class CollisionMap {
     
     public int getMapTileHeight() {
         return this.mapTileHeight;
+    }
+    
+    public Location getLocation() {
+        return this.location;
     }
     
     public int getNodeSize() {
