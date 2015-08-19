@@ -1,4 +1,5 @@
-#Viikko 4 (15h)
+#Viikko 4 (27h)
+(Reitinhaku ja karttojen generointi)
 
 ##19.8
 * 7h [OHJELMOINTI] Korjattu pathfinding VIHDOINKIN toimimaan. Ei enää jumitusta nurkissa.
@@ -24,6 +25,7 @@
 * 1h [OPISKELU] Tutkittu erilaisia Pathfinding-algoritmeja
 
 #Viikko 3 (14h)
+(Toiminnot ja efektit)
 
 ##13.8
 * 3h [TESTAUS] Testien rakentaminen taistelulle ja MapObjecteille
@@ -46,6 +48,7 @@
 * 1h [OHJELMOINTI] Muokattu PlayerCharacter peritytymään Creature -luokasta
 
 #Viikko 2 (7½h)
+(Luokkarakenne ja POC)
 
 ##6.8
 * 1h [TESTAUS] Tehty testit pelaajan liikkumiselle
@@ -59,6 +62,7 @@
 * 1h [PIIRTÄMINEN] Tehty alustavat spritet puuttuville pelaajan puuttuville suunnille (vasen-oikea)
 
 #Viikko 1 (24h)
+(Projektin alustus ja suunnittelu)
 
 ##30.7
 * 2h [OHJELMOINTI] Lisätty animimointi pelaajan liikkeeseen
