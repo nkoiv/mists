@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.world;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import static com.nkoiv.mists.game.Global.TILESIZE;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
@@ -28,12 +29,28 @@ public class TileMap implements GameMap {
     int tileHeight;
     
     private int[][] intMap;
+    
     private Tile[][] tileMap;
+    
+    private static final int CLEAR = 0;
+    private static final int FLOOR = 1;
+    private static final int WALL = 2;
+    private static final int DOOR = 4;
     
     public TileMap (String filename) {
         this.tilesize = Global.TILESIZE;
         this.loadMap(filename);
         this.tileMap = new Tile[tileWidth][tileHeight];
+        this.generateTilesFromIntMap();
+    }
+    
+    public TileMap (int tileWidth, int tileHeight, int[][] intMap) {
+        this.tilesize = Global.TILESIZE;
+        this.intMap = intMap;
+        this.tileWidth=intMap.length;
+        this.tileHeight=intMap[0].length;
+        this.tileMap = new Tile[tileWidth][tileHeight];
+        Mists.logger.info("Got a "+intMap.length+"x"+intMap[0].length+" intMap for mapgeneration. Generating tiles...");
         this.generateTilesFromIntMap();
     }
     
@@ -66,8 +83,11 @@ public class TileMap implements GameMap {
     private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
         //TODO: For now, all structures are rocks.
         //in future, should also take in a "HashMap<Integer,Structure> structureSheet"
-        if (tileCode == 0) return null;
-        return new Structure("Rock", new Image("/images/block.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
+        if (tileCode == CLEAR) return null;
+        if (tileCode == FLOOR) return null;
+        if (tileCode == WALL) return new Structure("Rock", new Image("/images/block.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
+        if (tileCode == DOOR) return null;
+        return null;
     }
 
     //TODO: Structures should have their own map, and not just intMap
@@ -107,6 +127,10 @@ public class TileMap implements GameMap {
             }
             System.out.println(row);
         }	
+    }
+    
+    private void setIntMap(int[][] intMap) {
+        this.intMap = intMap;
     }
     
     //use the intMap to generate the tiles

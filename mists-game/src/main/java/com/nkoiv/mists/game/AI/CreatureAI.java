@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package AI;
+package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -50,7 +52,7 @@ public class CreatureAI {
             (this.creep.getLocation().getPathFinder().directionTowards
             (this.creep.getSprite().getWidth(), this.creep.getCrossableTerrain(), this.creep.getCenterXPos(), this.creep.getCenterYPos(),
             this.creep.getLocation().getPlayer().getCenterXPos(), this.creep.getLocation().getPlayer().getCenterYPos()));
-        Mists.logger.log(Level.INFO, "Trying to move towards {0}", directionToMoveTowards);
+        //Mists.logger.log(Level.INFO, "Trying to move towards {0}", directionToMoveTowards);
         this.creep.moveTowards(directionToMoveTowards);
         //TODO: If applyMovement returns false, we didnt actually move anywhere.
         //In that case, head towards a better location!
@@ -77,20 +79,20 @@ public class CreatureAI {
             /* We're next to target
             *  Try to get even closer (TODO: Is this the right course of action?
             */
-            Mists.logger.info("Next to target");
+            //Mists.logger.info("Next to target");
             this.creep.moveTowards(mob.getCenterXPos(), mob.getCenterYPos());
         }
         if (pathToMob.getLength() > 2) {
             /* There's tiles between us and the target
             *  Try to move towards the next tile
             */
-            Mists.logger.info("Got a path: " +pathToMob.toString());
+            //Mists.logger.info("Got a path: " +pathToMob.toString());
             double nextTileX = pathToMob.getNode(1).getX()*this.creep.getLocation().getPathFinder().getTileSize();
             double nextTileY = pathToMob.getNode(1).getY()*this.creep.getLocation().getPathFinder().getTileSize();
             targetXCoordinate = nextTileX;
             targetYCoordinate = nextTileY;
-            Mists.logger.log(Level.INFO, "Pathfinder tile {0},{1} converted into {2},{3}",
-            new Object[]{pathToMob.getNode(1).getX(), pathToMob.getNode(1).getY(), targetXCoordinate, targetYCoordinate});
+            //Mists.logger.log(Level.INFO, "Pathfinder tile {0},{1} converted into {2},{3}",
+            //new Object[]{pathToMob.getNode(1).getX(), pathToMob.getNode(1).getY(), targetXCoordinate, targetYCoordinate});
             this.creep.moveTowards(nextTileX, nextTileY);
 
             this.creep.applyMovement(time);

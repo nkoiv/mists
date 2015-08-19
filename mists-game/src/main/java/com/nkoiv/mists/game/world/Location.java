@@ -37,12 +37,13 @@ public class Location implements Global {
     /*
     * TODO: Lists for various types of MapObjects, from creatures to frills.
     */
-    private final List<MapObject> mapObjects;
-    private final List<Effect> effects;
+    private List<MapObject> mapObjects;
+    private List<Effect> effects;
     private String name;
     private GameMap map;
     private CollisionMap collisionMap;
     private PathFinder pathFinder;
+    private MapGenerator mapGen;
     
     private MapObject screenFocus;
     private PlayerCharacter player;
@@ -55,10 +56,11 @@ public class Location implements Global {
     
     public Location(String name) {
         this.loadMap(new BGMap(new Image("/images/pocmap.png")));
-        this.collisionMap = new CollisionMap(this, 32);
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
+        this.collisionMap = new CollisionMap(this, 32);
         this.pathFinder = new PathFinder(this.collisionMap, 50, true);
+        this.mapGen = new MapGenerator();
     }
     
     public Location() {
@@ -68,11 +70,13 @@ public class Location implements Global {
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
+        this.mapGen = new MapGenerator();
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
-        this.loadMap(new TileMap("/mapdata/tilemaptest.map"));
+        //this.loadMap(new TileMap("/mapdata/tilemaptest.map"));
+        this.loadMap(MapGenerator.generateDungeon(this, 60, 40));
         this.collisionMap = new CollisionMap(this, 32);
+        this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         this.collisionMap.setStructuresOnly(true);
-        this.pathFinder = new PathFinder(this.collisionMap, 200, true);
         
         PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setCollisionAreaShape(2);
@@ -97,7 +101,7 @@ public class Location implements Global {
         monster1.getSprite().setCollisionAreaShape(2);
         this.addCreature(monster1, 2*TILESIZE, 10*TILESIZE);   
     }
-    
+
     private void loadMap(GameMap map) {
         this.map = map;
         // Add in all the static structures from the selected map
@@ -150,6 +154,14 @@ public class Location implements Global {
     
     public void setMap(GameMap m) {
         this.map = m;
+    }
+    
+    public void setMapGen (MapGenerator mg) {
+        this.mapGen = mg;
+    }
+    
+    public MapGenerator getMapGen() {
+        return this.mapGen;
     }
     
     public List<MapObject> getMOBList() {
@@ -267,7 +279,7 @@ public class Location implements Global {
         HashSet<Direction> collidedDirections = new HashSet<>();   
         
         for (MapObject collidingObject : collidingObjects) {
-            Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
+            //Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
             double collidingX = collidingObject.getCenterXPos();//+(collidingObject.getSprite().getWidth()/2);
             double collidingY = collidingObject.getCenterYPos();//+(collidingObject.getSprite().getHeight()/2);
             double thisX = mob.getCenterXPos();//+(this.getSprite().getWidth()/2);

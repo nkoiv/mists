@@ -5,7 +5,7 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
-import AI.CreatureAI;
+import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
@@ -244,7 +244,7 @@ public class Creature extends MapObject implements Combatant {
         */
         this.oldXPos = this.getSprite().getXPos();
         this.oldYPos = this.getSprite().getYPos();
-        Mists.logger.info("Old positions: "+this.oldXPos+","+this.oldYPos);
+        //Mists.logger.info("Old positions: "+this.oldXPos+","+this.oldYPos);
         
         if (this.getLocation().checkCollisions(this).isEmpty()) {
             //Collided with nothing, free to move
@@ -256,7 +256,7 @@ public class Creature extends MapObject implements Combatant {
         } else { 
             //Check which sides we collided on
             HashSet<Direction> collidedSides = this.getLocation().collidedSides(this);
-            Mists.logger.info("Checked collisions, found " +collidedSides.toString());
+            //Mists.logger.info("Checked collisions, found " +collidedSides.toString());
             if (collidedSides.contains(Direction.UP)) {
                 //Block movement up
                 if (this.getSprite().getYVelocity() < 0 ) this.getSprite().setYVelocity(0);
