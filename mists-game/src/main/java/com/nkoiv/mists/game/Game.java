@@ -73,7 +73,7 @@ public class Game {
             return;
         }
 
-        
+        //TODO: Current movement lets player move superspeed diagonal. should call moveTowards(Direction.UPRIGHT) etc.
         if (pressedButtons.contains("UP")) {
             //Mists.logger.log(Level.INFO, "Moving {0} UP", currentLocation.getPlayer().getName());
             currentLocation.getPlayer().moveTowards(Direction.UP);            

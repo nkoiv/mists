@@ -26,7 +26,7 @@ public class PathFinder {
 	private SortedNodeList openNodes = new SortedNodeList();
 	private CollisionMap map; //The collision map derived from the Locations MOBs
         private HashMap<Integer, int[][]> clearanceMaps;
-	private Node[][] nodes; //Nodemap used for pathfinding, filled with costs as we calculate them
+	//private Node[][] nodes; //Nodemap used for pathfinding, filled with costs as we calculate them
 	private int maxSearchDistance;
 	
 	private boolean allowDiagonalMovement;
@@ -43,21 +43,32 @@ public class PathFinder {
             this.clearanceMaps.put(0, getClearanceMap(0, map)); //Base clearanceMap for 0-type movement.
             this.maxSearchDistance = maxSearchDistance;
             this.allowDiagonalMovement = allowDiagonalMovement;
-            this.calc = new MoveCostCalculator(); //Defaults to Manhattan
-            this.nodes = new Node[map.getMapTileWidth()][map.getMapTileHeight()];
-            for (int row = 0; row < this.map.getMapTileHeight();row++) {
-                for (int column = 0; column < this.map.getMapTileWidth(); column++) {
-                    this.nodes[column][row] = new Node(column, row);
-                }
-            }
-            Mists.logger.info("PathFinder with "+(this.nodes.length * this.nodes.length)+" nodes for "+map.getLocation().getName()+ " generated in "+(System.currentTimeMillis()-startTime)+"ms");
+            this.calc = new MoveCostCalculator(0); //Defaults to Manhattan, 0 for Manhattan, 1 for Diagonal, 2 for Euclidean
 	}
         
         /*
         * PathTowards gives the direction of the next node on the Path
         * This method is the one units usually ask when they want to start heading towards a point on the map
         */
-        public Direction pathTowards (double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
+        public Direction directionTowards (double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
+            Node targetNode = nextTileOnPath(unitSize, crossableTerrain, startX, startY, goalX, goalY);
+            //Get the direction towards the center of the next tile on the path
+            double xChange = (targetNode.getX() * this.getTileSize())+(this.getTileSize()/2) - startX;
+            double yChange = (targetNode.getY() * this.getTileSize())+(this.getTileSize()/2) - startY;
+            Mists.logger.log(Level.INFO, "Path from {0},{1} ({2},{3}) to {4},{5}({6},{7})", new Object[]{startX, startY, (int)startX/this.getTileSize(), (int)startY/this.getTileSize(),targetNode.getX(),targetNode.getY(), (targetNode.getX() * this.getTileSize())+(this.getTileSize()/2), (targetNode.getY() * this.getTileSize())+(this.getTileSize()/2)});
+            return getDirection(xChange, yChange);
+         }
+        
+        public double[] coordinatesTowards (double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
+            Node targetNode = nextTileOnPath(unitSize, crossableTerrain, startX, startY, goalX, goalY);
+            //Return the (center) coordinates of the next tile on path
+            double xCoord = (targetNode.getX()*this.getTileSize()) + (this.getTileSize()/2);
+            double yCoord = (targetNode.getX()*this.getTileSize()) + (this.getTileSize()/2);
+            Mists.logger.log(Level.INFO, "Path from {0},{1} ({2},{3}) to {4},{5}", new Object[]{startX, startY, (int)startX/this.getTileSize(), (int)startY/this.getTileSize(), xCoord, yCoord});
+            return new double[]{xCoord, yCoord};
+        }
+        
+        private Node nextTileOnPath(double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
             int clearanceNeed = (int)(unitSize/this.map.getNodeSize());
             //Mists.logger.info("Clearance needed: "+clearanceNeed+" (unit size"+unitSize+", nodesize "+this.map.getNodeSize());
             
@@ -75,20 +86,41 @@ public class PathFinder {
             if (pathToGoal == null || pathToGoal.getLength()==0) {
                 //Got an empty path. Probably means no route was found.
                 //Just head in the general direction of the target.
-                Mists.logger.info("No path find, heading in general direction of the target");
-                return getDirection (gX - sX, gY - sY) ;
+                Mists.logger.info("No path found, giving the Node of the target");
+                return new Node(gX, gY);
             }
             Mists.logger.info("Goal was at ["+gX+","+gY+"] got the path:" + pathToGoal.toString());
             if (pathToGoal.getLength() < 2) {
-                Mists.logger.info("Next to object, staying put");
-                return Direction.STAY;
+                Mists.logger.info("Next to goal, returning node the goal is at ");
+                return pathToGoal.getNode(pathToGoal.getLength()-1);
             } else {
-                int xChange = (pathToGoal.getNode(1).getX()) - sX;
-                int yChange = (pathToGoal.getNode(1).getY()) - sY;
-                Mists.logger.log(Level.INFO, "Figuring direction from {0},{1} to {2},{3}", new Object[]{sX, sY, pathToGoal.getNode(1).getX(), pathToGoal.getNode(1).getY()});
-                return getDirection(xChange, yChange);
+                //Check if there's corners we might get stuck into:
+                List<Node> corners = this.DiagonalNeighbours(clearanceNeed, crossableTerrain, pathToGoal.getNode(0).getX(), pathToGoal.getNode(0).getY());
+                if (corners.size() == 4) {
+                    //All corners clear, move on
+                    return pathToGoal.getNode(1);
+                } else {
+                    //Something might be obstructing movement
+                    //We need to be at least past our current node center before we head towards new node.
+                    double xCoord = (pathToGoal.getNode(1).getX()*this.getTileSize()) + (this.getTileSize()/2);
+                    double yCoord = (pathToGoal.getNode(1).getX()*this.getTileSize()) + (this.getTileSize()/2);
+                    Direction currentDirection = getDirection(startX-xCoord, startY-yCoord);
+                    switch(currentDirection) {
+                    //Cardinal directions are fine
+                    case UP: return pathToGoal.getNode(1);
+                    case DOWN: return pathToGoal.getNode(1);
+                    case LEFT: return pathToGoal.getNode(1);
+                    case RIGHT: return pathToGoal.getNode(1);
+                    //Problems arise if we're moving diagonally without pathfinder knowing it
+                    case UPRIGHT: return pathToGoal.getNode(0);
+                    case UPLEFT: return pathToGoal.getNode(0);
+                    case DOWNRIGHT: return pathToGoal.getNode(0);
+                    case DOWNLEFT: return pathToGoal.getNode(0);
+                    default: return pathToGoal.getNode(0);
+                    }
+                }
             }
-         }
+        }
         
         private int[] findNearestOpenNode (List<Integer> crossableTerrain, int goalX, int goalY)  {
             int[] openNode = new int[2];
@@ -112,7 +144,7 @@ public class PathFinder {
             //if no size given, assume clearance need of 1
             return Neighbours(1,crossableTerrain, x, y);
         } 
-        private List<Node> Neighbours(int unitSize, List<Integer> crossableTerrain, int x, int y) {
+        private List<Node> Neighbours(int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
         /*Neighbours only lists cardinal directions
         * because being surrounded cardinally blocks movement
         * TODO: Consider if this is good
@@ -122,25 +154,25 @@ public class PathFinder {
             int E = x + 1;
             int W = x - 1;
             boolean myN = (N > -1 && !this.map.isBlocked(crossableTerrain, x, N) 
-                    && this.hasClearance(unitSize, crossableTerrain, x, N));
+                    && this.hasClearance(clearanceNeed, crossableTerrain, x, N));
             boolean myS = (S < this.map.getMapTileHeight() && !this.map.isBlocked(crossableTerrain, x, S)
-                    && this.hasClearance(unitSize, crossableTerrain, x, S));
+                    && this.hasClearance(clearanceNeed, crossableTerrain, x, S));
             boolean myE = (E < this.map.getMapTileWidth() && !this.map.isBlocked(crossableTerrain, E, y)
-                    && this.hasClearance(unitSize, crossableTerrain, E, y));
+                    && this.hasClearance(clearanceNeed, crossableTerrain, E, y));
             boolean myW = (W > -1 && !this.map.isBlocked(crossableTerrain, W, y)
-                    && this.hasClearance(unitSize, crossableTerrain, W, y));
+                    && this.hasClearance(clearanceNeed, crossableTerrain, W, y));
             ArrayList<Node> result = new ArrayList<>();
             if(myN) {
-                result.add(this.nodes[x][N]);
+                result.add(new Node(x,N));
             }
             if(myE) {
-                result.add(this.nodes[E][y]);
+                result.add(new Node(E,y));
             }
             if(myS) {
-                result.add(this.nodes[x][S]);
+                result.add(new Node(x,S));
             }
             if(myW) {
-                result.add(this.nodes[W][y]);
+                result.add(new Node(W,y));
             }
             return result;
     }
@@ -148,7 +180,7 @@ public class PathFinder {
         //if no size given, assume clearance need of 1
         return DiagonalNeighbours(1, crossableTerrain, x, y);
     }
-    private List<Node> DiagonalNeighbours(int unitSize, List<Integer> crossableTerrain, int x, int y) {
+    private List<Node> DiagonalNeighbours(int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
         //Return all NE, NW, SE and SW that are passable without squeezing through
         ArrayList<Node> result = new ArrayList<>();
         int N = y - 1;
@@ -156,33 +188,33 @@ public class PathFinder {
         int E = x + 1;
         int W = x - 1;
         boolean myN = (N > -1 && !this.map.isBlocked(crossableTerrain, x, N)
-                && this.hasClearance(unitSize, crossableTerrain, x, N));
+                && this.hasClearance(clearanceNeed, crossableTerrain, x, N));
         boolean myS = (S < this.map.getMapTileHeight() && !this.map.isBlocked(crossableTerrain, x, S)
-                && this.hasClearance(unitSize, crossableTerrain, x, S));
+                && this.hasClearance(clearanceNeed, crossableTerrain, x, S));
         boolean myE = (E < this.map.getMapTileWidth() && !this.map.isBlocked(crossableTerrain, E, y)
-                && this.hasClearance(unitSize, crossableTerrain, E, y));
+                && this.hasClearance(clearanceNeed, crossableTerrain, E, y));
         boolean myW = (W > -1 && !this.map.isBlocked(crossableTerrain, W, y)
-                && this.hasClearance(unitSize, crossableTerrain, W, y));        
+                && this.hasClearance(clearanceNeed, crossableTerrain, W, y));        
         if (myN) {
             if (myE && !this.map.isBlocked(crossableTerrain, E, N)
-                    && this.hasClearance(unitSize, crossableTerrain, E, N))
-                    result.add(nodes[E][N]);
+                    && this.hasClearance(clearanceNeed, crossableTerrain, E, N))
+                    result.add(new Node(E,N));
             if (myW && !this.map.isBlocked(crossableTerrain, W, N)
-                    && this.hasClearance(unitSize, crossableTerrain, W, N)) 
-                    result.add(nodes[W][N]);
+                    && this.hasClearance(clearanceNeed, crossableTerrain, W, N)) 
+                    result.add(new Node(W,N));
         }
         if (myS) {
             if (myE && !this.map.isBlocked(crossableTerrain, E, S)
-                    && this.hasClearance(unitSize, crossableTerrain, E, S))
-                result.add(nodes[E][S]);
+                    && this.hasClearance(clearanceNeed, crossableTerrain, E, S))
+                result.add(new Node(E,S));
             if (myW && !this.map.isBlocked(crossableTerrain, W, S)
-                    && this.hasClearance(unitSize, crossableTerrain, W, S)) 
-                    result.add(nodes[W][S]);
+                    && this.hasClearance(clearanceNeed, crossableTerrain, W, S)) 
+                    result.add(new Node(W,S));
         }      
         return result;
     }
 
-        public Direction getDirection(double xChange, double yChange) {
+        public static Direction getDirection(double xChange, double yChange) {
             if (xChange==0) { //Not moving left or right
                 if (yChange==0) return Direction.STAY;
                 if (yChange<0) return Direction.UP;
@@ -200,6 +232,18 @@ public class PathFinder {
             }
             return Direction.STAY; //last resort
         }
+        
+        private double[] getTileCoordinates(int tileXCoor, int tileYCoor, int tileSize){
+            /* When moving in tight spaces, it's imperative for
+            *  the mover to be fully inside the tile Pathfinder thinks its in.
+            *  Otherwise the mover might get stuck on corners
+            *  This method returns the center of the given tile in "real coordinates"
+            */
+            double[] realCoordinates = new double[2];
+            realCoordinates[0] = (tileXCoor * tileSize)+(tileSize/2);
+            realCoordinates[1] = (tileYCoor * tileSize)+(tileSize/2);
+            return realCoordinates;
+        }
 	
         public void printCollisionMapIntoConsole() { // for testing
             System.out.println("-------");
@@ -214,7 +258,7 @@ public class PathFinder {
         
         
         //If trying to find a path for an object of unspecified size, assume it's tilesize 1
-        private Path findPath (List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
+        public Path findPath (List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
             return findPath(1,crossableTerrain, startX, startY, goalX, goalY);
         }
         
@@ -240,7 +284,7 @@ public class PathFinder {
         start.setDepth(0); //When we're at start, we havent moved yet
         start.setCostEstimate(this.getMovementCost(crossableTerrain, start.getX(), start.getY(), goalX, goalY));
         
-        Node goal = nodes[goalX][goalY];
+        Node goal = new Node(goalX, goalY);
         
         closedNodes.clear(); //Reset the closed nodes
         openNodes.clear(); //Reset the open nodes
@@ -333,7 +377,7 @@ public class PathFinder {
         while (currentNode.getPreviousNode()!=null) {
             path.prependNode(currentNode.getX(), currentNode.getY());
             currentNode = currentNode.getPreviousNode();
-            Mists.logger.info("Added ["+currentNode.getX()+","+currentNode.getY()+"] to the path");
+            //Mists.logger.info("Added ["+currentNode.getX()+","+currentNode.getY()+"] to the path");
         }
         return path;
     }
@@ -480,6 +524,10 @@ public class PathFinder {
             
         }
         return clearanceMap;
+    }
+    
+    public int getTileSize() {
+        return this.map.getNodeSize();
     }
     
     private void printArrayMap (int[][] arrayMap) {

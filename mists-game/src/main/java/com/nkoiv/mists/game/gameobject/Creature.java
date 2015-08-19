@@ -5,14 +5,19 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import AI.CreatureAI;
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.pathfinding.Path;
+import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,6 +29,7 @@ import javafx.scene.image.ImageView;
  */
 public class Creature extends MapObject implements Combatant {
     
+    private CreatureAI ai;
     private Direction facing;
     private HashMap<String, SpriteAnimation> spriteAnimations;
     
@@ -49,6 +55,7 @@ public class Creature extends MapObject implements Combatant {
         this.setFacing(Direction.DOWN);
         this.initializeAttributes();
         this.initializeFlags();
+        this.ai = new CreatureAI(this);
     }
     
     //Constructing a creature template with sprite animations
@@ -59,9 +66,9 @@ public class Creature extends MapObject implements Combatant {
         this.setSprite(new Sprite(this.spriteAnimations.get("downMovement").getCurrentFrame()));
         this.initializeAttributes();
         this.initializeFlags();
+        this.ai = new CreatureAI(this);
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
-
     }
 
     /*Constructing a creature with only a still image
@@ -72,6 +79,7 @@ public class Creature extends MapObject implements Combatant {
         this.setFacing(Direction.DOWN);
         this.initializeAttributes();
         this.initializeFlags();
+        this.ai = new CreatureAI(this);
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
     }
@@ -196,22 +204,16 @@ public class Creature extends MapObject implements Combatant {
     @Override
     public void update (double time) {
         this.stopMovement(); //clear old movement
-        this.moveTowardsPlayer(); //TODO: Temporary before actual AI and behaviours
+        /* Call AI routines
+        *  TODO: Separate movements etc to the AI
+        */
+        //this.moveTowardsPlayer(time); //TODO: Temporary before actual AI and behaviours
+        this.ai.act(time);
         this.updateSprite();
-        this.applyMovement(time);   
+        //this.applyMovement(time);  //ApplyMovement moved to the actual movement routine
     }
     
-    public void moveTowardsPlayer() {
-        //TODO: Temporary for just following player
-        if (!this.isFlagged("testFlag")) return; //Dont my unless flagged
-        Direction directionToMoveTowards =
-        (this.getLocation().getPathFinder().pathTowards
-        (this.getSprite().getWidth(), this.crossableTerrain, this.getCenterXPos(), this.getCenterYPos(),
-                this.getLocation().getPlayer().getCenterXPos(), this.getLocation().getPlayer().getCenterYPos()));
-        Mists.logger.info("Trying to move towards " +directionToMoveTowards);
-        this.moveTowards(directionToMoveTowards);
-    }
-    
+
     /*
     * TODO: General sprite updates for general creatures
     * Is everything animated?
@@ -240,74 +242,103 @@ public class Creature extends MapObject implements Combatant {
         * TODO: Add in pixel-based collision detection (compare alphamaps?)
         * TODO: Make collisions respect collisionlevel -flag.
         */
-
+        this.oldXPos = this.getSprite().getXPos();
+        this.oldYPos = this.getSprite().getYPos();
+        Mists.logger.info("Old positions: "+this.oldXPos+","+this.oldYPos);
         
         if (this.getLocation().checkCollisions(this).isEmpty()) {
-            this.oldXPos = this.getSprite().getXPos();
-            this.oldYPos = this.getSprite().getYPos();
-            this.getSprite().update(time); //Collided with nothing, free to move
+            //Collided with nothing, free to move
+            if (this.isFlagged("movementBlocked")) {
+                this.setFlag("movementBlocked", 0); //movement went through fine   
+            }
+            this.getSprite().update(time);
             return true;
         } else { 
-            //We've collided with something. Lets figure out what it was.
-            ArrayList<MapObject> collidingObjects = this.getLocation().checkCollisions(this); //Get the colliding object
-            
-            MapObject collidingObject = collidingObjects.get(0);
-            Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
-            double collidingX = collidingObject.getXPos();//+(collidingObject.getSprite().getWidth()/2);
-            double collidingY = collidingObject.getYPos();//+(collidingObject.getSprite().getHeight()/2);
-            double thisX = this.getXPos();//+(this.getSprite().getWidth()/2);
-            double thisY = this.getYPos();//+(this.getSprite().getHeight()/2);
-
-            double xDistance = (thisX - collidingX);
-            double yDistance = (thisY - collidingY);
-            //Mists.logger.log(Level.INFO, "At the distance of x: {0} y: {1}", new Object[]{xDistance, yDistance});
-
-            /*
-            * Prevent further going into colliding object
-            */
-            
-            /*
-            * NEW COLLISION CODE
-            * Stop movement and move directly away from the thing you collided into
-            * 
-            */
-            
-            
-            /* OLD COLLISION CODE
-             * Because every other direction is allowed "jittering" past two colliding objects might be possible
-            * TODO: Test collisions on tiles and see if tweaking is needed
-            */
-            
-            /*
-            if(this.getSprite().getXVelocity() != 0 && (yDistance<xDistance)) {
-                if (thisX<collidingX) { //Colliding object is to the right
-                    if (this.getSprite().getXVelocity()>0) { // Check if we're trying to move right
-                        this.getSprite().setVelocity(0, this.getSprite().getYVelocity()); //Stop movement right
-                    }
-                } else if (thisX>collidingX) { //Colliding object is to the left 
-                    if (this.getSprite().getXVelocity()<0) { //We're trying to move left
-                        this.getSprite().setVelocity(0, this.getSprite().getYVelocity());
-                    }
-                }
+            //Check which sides we collided on
+            HashSet<Direction> collidedSides = this.getLocation().collidedSides(this);
+            Mists.logger.info("Checked collisions, found " +collidedSides.toString());
+            if (collidedSides.contains(Direction.UP)) {
+                //Block movement up
+                if (this.getSprite().getYVelocity() < 0 ) this.getSprite().setYVelocity(0);
+                this.getSprite().setYPosition(this.oldYPos);
             }
-
-           if(this.getSprite().getYVelocity() != 0 && (xDistance<yDistance)) {
-                if (thisY<collidingY) { //Colliding object is below
-                    if (this.getSprite().getYVelocity()>0) { //We're trying to move down
-                        this.getSprite().setVelocity(this.getSprite().getXVelocity(),0);
-                    }
-                } else if (thisY>collidingY) { //Colliding object is above
-
-                    if (this.getSprite().getYVelocity()<0) { //We're trying to move up
-                        this.getSprite().setVelocity(this.getSprite().getXVelocity(),0);
-                    }
-                }
-           }
-           */
-           //this.getSprite().update(time);
-           this.getSprite().setPosition(this.oldXPos, this.oldYPos);
-           return false;
+            if (collidedSides.contains(Direction.DOWN)) {
+                //Block movement down
+                if (this.getSprite().getYVelocity() > 0 ) this.getSprite().setYVelocity(0);
+                this.getSprite().setYPosition(this.oldYPos);
+            }
+            if (collidedSides.contains(Direction.RIGHT)) {
+                //Block movement right
+                if (this.getSprite().getXVelocity() < 0 ) this.getSprite().setXVelocity(0);
+                this.getSprite().setXPosition(this.oldXPos);
+            }
+            if (collidedSides.contains(Direction.LEFT)) {
+                //Block movement left
+                if (this.getSprite().getXVelocity() > 0 ) this.getSprite().setXVelocity(0);
+                this.getSprite().setXPosition(this.oldXPos);
+            }
+            this.getSprite().update(time);
+            this.setFlag("movementBlocked", 1); //remember this was a bad way to go to
+            return false;
         }
+    }
+    
+    public boolean moveTowards (double xCoor, double yCoor) {
+        //Stop moving if we're already in our target coordinates
+        if (xCoor == this.getXPos() && yCoor == this.getYPos()) return this.stopMovement();
+        //If X or Y target is same as where we're at, we can use normal diagonal movements
+        if (xCoor == this.getXPos()) {
+            if (this.getYPos() <= yCoor) {
+                return this.moveDown();
+            } else {
+                return this.moveUp();
+            }
+        }
+        if (yCoor == this.getYPos()) {
+            if (this.getXPos() <= xCoor) {
+                return this.moveRight();
+            } else {
+                return this.moveLeft();
+            }
+        }
+        
+        /*
+        * ((AC = sqrt(AB^2 + BC^2)))
+        */
+        double AB=Math.abs(xCoor-this.getXPos());
+        double BC=Math.abs(yCoor-this.getYPos());
+        double AC = Math.sqrt(Math.pow(AB, 2) + Math.pow(BC, 2));
+        double xSpeedMultiplier = AB/AC;
+        double ySpeedMultiplier = BC/AC;
+        
+        if (this.getXPos() <= xCoor) {
+            //Moving Right
+            if (this.getYPos() <= yCoor) {
+                //Moving Down(&Right)
+                this.getSprite().addVelocity(
+                this.getAttribute("Speed")*xSpeedMultiplier,
+                this.getAttribute("Speed")*ySpeedMultiplier);
+            } else {
+                //Moving Up(&Right)
+                this.getSprite().addVelocity(
+                this.getAttribute("Speed")*xSpeedMultiplier,
+                -this.getAttribute("Speed")*ySpeedMultiplier);
+            }
+        } else {
+            //Moving Left
+            if (this.getYPos() <= yCoor) {
+                //Moving Down(&Left)
+                this.getSprite().addVelocity(
+                -this.getAttribute("Speed")*xSpeedMultiplier,
+                this.getAttribute("Speed")*ySpeedMultiplier);
+            } else {
+                //Moving Up(&Left)
+                this.getSprite().addVelocity(
+                -this.getAttribute("Speed")*xSpeedMultiplier,
+                -this.getAttribute("Speed")*ySpeedMultiplier);
+            }
+        }
+        return true;
     }
     
     @Override
@@ -355,25 +386,25 @@ public class Creature extends MapObject implements Combatant {
     }
 
     private boolean moveUpRight() {
-        this.getSprite().addVelocity(this.getAttribute("Speed"), -this.getAttribute("Speed"));
+        this.getSprite().addVelocity(this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
         this.facing = Direction.UPRIGHT;
         return true;
     }
     
     private boolean moveUpLeft() {
-        this.getSprite().addVelocity(-this.getAttribute("Speed"), -this.getAttribute("Speed"));
+        this.getSprite().addVelocity(-this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
         this.facing = Direction.UPLEFT;
         return true;
     }
         
     private boolean moveDownRight() {
-        this.getSprite().addVelocity(this.getAttribute("Speed"), this.getAttribute("Speed"));
+        this.getSprite().addVelocity(this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
         this.facing = Direction.DOWNRIGHT;
         return true;
     }
     
     private boolean moveDownLeft() {
-this.getSprite().addVelocity(-this.getAttribute("Speed"), this.getAttribute("Speed"));
+this.getSprite().addVelocity(-this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
         this.facing = Direction.DOWNLEFT;
         return true;
     }
@@ -385,6 +416,10 @@ this.getSprite().addVelocity(-this.getAttribute("Speed"), this.getAttribute("Spe
         return true;
     }
 
+    public ArrayList<Integer> getCrossableTerrain() {
+        return this.crossableTerrain;
+    }
+    
     public Direction getFacing() {
         return this.facing;
     }

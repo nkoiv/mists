@@ -139,6 +139,20 @@ public class Sprite
         velocityX = x;
         velocityY = y;
     }
+    
+    public void setYVelocity (double y) {
+        this.velocityY = y;
+    }
+    public void setXVelocity (double x) {
+        this.velocityX = x;
+    }
+    
+    public void setXPosition (double x) {
+        this.positionX = x;
+    }
+    public void setYPosition (double y) {
+        this.positionY = y;
+    }
 
     public void addVelocity(double x, double y)
     {

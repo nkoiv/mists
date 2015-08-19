@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
@@ -16,8 +17,10 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -257,6 +260,41 @@ public class Location implements Global {
         }
         
         return collidingObjects;
+    }
+    
+    public HashSet<Direction> collidedSides (MapObject mob) {
+        ArrayList<MapObject> collidingObjects = this.checkCollisions(mob); //Get the colliding object(s)
+        HashSet<Direction> collidedDirections = new HashSet<>();   
+        
+        for (MapObject collidingObject : collidingObjects) {
+            Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
+            double collidingX = collidingObject.getCenterXPos();//+(collidingObject.getSprite().getWidth()/2);
+            double collidingY = collidingObject.getCenterYPos();//+(collidingObject.getSprite().getHeight()/2);
+            double thisX = mob.getCenterXPos();//+(this.getSprite().getWidth()/2);
+            double thisY = mob.getCenterYPos();//+(this.getSprite().getHeight()/2);
+            double xDistance = (thisX - collidingX);
+            double yDistance = (thisY - collidingY);
+            if (Math.abs(xDistance) >= Math.abs(yDistance)) {
+                //Collided primary on the X (Left<->Right)
+                if (mob.getCenterXPos() <= collidingObject.getCenterXPos()) {
+                    //CollidingObject is LEFT of the mob
+                    collidedDirections.add(Direction.LEFT);
+                } else {
+                    //CollidingObject is RIGHT of the mob
+                    collidedDirections.add(Direction.RIGHT);
+                }
+            } else {
+                //Collided primary on the Y (Up or Down)
+                if (mob.getCenterYPos() >= collidingObject.getCenterYPos()) {
+                    //CollidingObject is UP of the mob
+                    collidedDirections.add(Direction.UP);
+                } else {
+                    //CollidingObject is DOWN of the mob
+                    collidedDirections.add(Direction.DOWN);
+                }
+            }
+        } 
+        return collidedDirections;
     }
     
     public void render (GraphicsContext gc) {
