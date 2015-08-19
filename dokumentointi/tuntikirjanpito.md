@@ -1,5 +1,14 @@
 #Viikko 4 (15h)
 
+##19.8
+* 7h [OHJELMOINTI] Korjattu pathfinding VIHDOINKIN toimimaan. Ei enää jumitusta nurkissa.
+
+##18.8h
+* 3h [OHJELMOINTI] Taisteltu PathFinderin kanssa. Kirjoitettu se jälleen uusiksi
+
+##17.8
+* 2h [OHJELMOINTI] Lisätty tilemap
+
 ##16.8
 * 3h [OHJELMOINTI] Lisätty PathFinderille Clearance-map -mahdollisuus
 * 1h [OPISKELU] Etsitty tapoja löytää polku suurille (yli ruudun kokoisille) asioille pathfinderilla
