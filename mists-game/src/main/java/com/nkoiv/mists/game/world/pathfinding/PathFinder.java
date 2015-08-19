@@ -55,7 +55,7 @@ public class PathFinder {
             //Get the direction towards the center of the next tile on the path
             double xChange = (targetNode.getX() * this.getTileSize())+(this.getTileSize()/2) - startX;
             double yChange = (targetNode.getY() * this.getTileSize())+(this.getTileSize()/2) - startY;
-            Mists.logger.log(Level.INFO, "Path from {0},{1} ({2},{3}) to {4},{5}({6},{7})", new Object[]{startX, startY, (int)startX/this.getTileSize(), (int)startY/this.getTileSize(),targetNode.getX(),targetNode.getY(), (targetNode.getX() * this.getTileSize())+(this.getTileSize()/2), (targetNode.getY() * this.getTileSize())+(this.getTileSize()/2)});
+            //Mists.logger.log(Level.INFO, "Path from {0},{1} ({2},{3}) to {4},{5}({6},{7})", new Object[]{startX, startY, (int)startX/this.getTileSize(), (int)startY/this.getTileSize(),targetNode.getX(),targetNode.getY(), (targetNode.getX() * this.getTileSize())+(this.getTileSize()/2), (targetNode.getY() * this.getTileSize())+(this.getTileSize()/2)});
             return getDirection(xChange, yChange);
          }
         
@@ -64,7 +64,7 @@ public class PathFinder {
             //Return the (center) coordinates of the next tile on path
             double xCoord = (targetNode.getX()*this.getTileSize()) + (this.getTileSize()/2);
             double yCoord = (targetNode.getX()*this.getTileSize()) + (this.getTileSize()/2);
-            Mists.logger.log(Level.INFO, "Path from {0},{1} ({2},{3}) to {4},{5}", new Object[]{startX, startY, (int)startX/this.getTileSize(), (int)startY/this.getTileSize(), xCoord, yCoord});
+            //Mists.logger.log(Level.INFO, "Path from {0},{1} ({2},{3}) to {4},{5}", new Object[]{startX, startY, (int)startX/this.getTileSize(), (int)startY/this.getTileSize(), xCoord, yCoord});
             return new double[]{xCoord, yCoord};
         }
         

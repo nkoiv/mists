@@ -183,6 +183,13 @@ public class Sprite
             return this.height;
         }
     }
+    
+    public void setWidth(double width) {
+        this.width = width;
+    }
+    public void setHeight(double height) {
+        this.height = height;
+    }
 
     public void update(double time, double targetX, double targetY) {
         if ((positionX + velocityX * time) > targetX) {

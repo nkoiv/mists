@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -84,22 +85,26 @@ public class Location implements Global {
         this.setPlayer(himmu);
         this.addCreature(himmu, 8*TILESIZE, 6*TILESIZE);
         this.screenFocus = himmu;
-        
         //TODO: Create structures from structure library once its finished
+        
         Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 10*TILESIZE, 7*TILESIZE);
         this.mapObjects.add(rock);
-        
+        this.setMobInRandomOpenSpot(rock);
         Structure tree1 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 6*TILESIZE, 5*TILESIZE);
         tree1.addExtra(new Image("/images/tree.png"), -35, -96);
         this.mapObjects.add(tree1);
-        
+        this.setMobInRandomOpenSpot(tree1);
         Structure tree2 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 4*TILESIZE, 9*TILESIZE);
         tree2.addExtra(new Image("/images/tree.png"), -35, -96);
         this.mapObjects.add(tree2);
+        this.setMobInRandomOpenSpot(tree2);
         
         Creature monster1 = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
         monster1.getSprite().setCollisionAreaShape(2);
         this.addCreature(monster1, 2*TILESIZE, 10*TILESIZE);   
+        
+        this.setMobInRandomOpenSpot(himmu);
+        this.setMobInRandomOpenSpot(monster1);
     }
 
     private void loadMap(GameMap map) {
@@ -121,6 +126,29 @@ public class Location implements Global {
             }
         }
         return null;
+    }
+    
+    private void setMobInRandomOpenSpot (MapObject mob) {
+        double[] openSpot = this.getRandomOpenSpot(mob.getSprite().getWidth());
+        mob.setCenterPosition(openSpot[0], openSpot[1]);
+    }
+    
+    private double[] getRandomOpenSpot(double sizeRequirement) {
+        //Brute force until we find a an open spot
+        Creature collisionTester = new Creature("CollisionTester", new Image("/images/himmuToy.png"));
+        collisionTester.getSprite().setWidth(sizeRequirement);
+        collisionTester.getSprite().setHeight(sizeRequirement);
+        Random rnd = new Random();
+        boolean foundSpot = false;
+        int openX = 0;
+        int openY = 0;
+        while (!foundSpot) {
+            openX = rnd.nextInt(((int)map.getWidth()));
+            openY = rnd.nextInt(((int)map.getHeight()));
+            collisionTester.setCenterPosition(openX, openY);
+            if (this.checkCollisions(collisionTester).isEmpty()) foundSpot = true;
+        }
+        return new double[]{openX, openY};
     }
     
     public PathFinder getPathFinder() {

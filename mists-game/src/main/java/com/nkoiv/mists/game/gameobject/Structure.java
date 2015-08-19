@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class Structure extends MapObject {
     public void renderExtras (double xOffset, double yOffset, GraphicsContext gc) {
         if (!this.extraSprites.isEmpty()) {
             for (Sprite extraSprite : this.extraSprites) {
+                Mists.logger.info("Rendering extra for " +this.getName());
                 extraSprite.render(xOffset, yOffset, gc);
             }
         }

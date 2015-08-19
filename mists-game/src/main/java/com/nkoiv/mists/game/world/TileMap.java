@@ -61,8 +61,8 @@ public class TileMap implements GameMap {
         */
         double screenWidth = gc.getCanvas().getWidth();
         double screenHeight = gc.getCanvas().getHeight();
-        for (int row=(int)(-yOffset/this.tilesize);row<(screenHeight/this.tilesize)+(-yOffset/this.tilesize)+1;row++) {
-            for (int column=(int)(-xOffset/this.tilesize);column<(screenWidth/this.tilesize)+(-xOffset/this.tilesize)+1;column++) {
+        for (int row=(int)(-yOffset/this.tilesize);row<(screenHeight/this.tilesize)+(-yOffset/this.tilesize);row++) {
+            for (int column=(int)(-xOffset/this.tilesize);column<(screenWidth/this.tilesize)+(-xOffset/this.tilesize);column++) {
                 if (this.tileMap[column][row]!=null)
                     this.tileMap[column][row].render(-xOffset, -yOffset, gc);
                 //Print tile coordinates on top of tile
@@ -81,12 +81,11 @@ public class TileMap implements GameMap {
     * because structures should have "floor" under them
     */
     private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
-        //TODO: For now, all structures are rocks.
-        //in future, should also take in a "HashMap<Integer,Structure> structureSheet"
+        //TODO Should also take in a "HashMap<Integer,Structure> structureSheet"
         if (tileCode == CLEAR) return null;
         if (tileCode == FLOOR) return null;
-        if (tileCode == WALL) return new Structure("Rock", new Image("/images/block.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
-        if (tileCode == DOOR) return null;
+        if (tileCode == WALL) return new Structure("Wall", new Image("/images/dungeonwall.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
+        if (tileCode == DOOR) return new Structure("Door", new Image("/images/dungeondoor.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
         return null;
     }
 
@@ -98,7 +97,7 @@ public class TileMap implements GameMap {
         for (int x=0; x<this.tileWidth; x++) {
             for (int y=0; y<this.tileHeight; y++) {
                 //TODO: Check the intMap value against tilesheet
-                //For now, everything is grass
+                //For now, everything is floor
                 Structure newStructure = this.generateStructure(this.intMap[x][y], l, x, y);
                 if(newStructure != null)staticStructures.add(newStructure); 
             }
@@ -138,10 +137,17 @@ public class TileMap implements GameMap {
         for (int x=0; x<this.tileWidth; x++) {
             for (int y=0; y<this.tileHeight; y++) {
                //TODO: Check the intMap value against tilesheet
-               //For now, everything is grass
-               this.tileMap[x][y] = new Tile(0, "Grass", this.tilesize, 
-                    new Sprite(new Image("/images/grass_tile.png"),
+               //For now, everything is floor
+               if (this.intMap[x][y]==1) {
+                   this.tileMap[x][y] = new Tile(1, "Floor", this.tilesize, 
+                    new Sprite(new Image("/images/dungeonfloor.png"),
                     x*this.tilesize, y*this.tilesize)); 
+               } else {
+                   this.tileMap[x][y] = new Tile(0, "DarkFloor", this.tilesize, 
+                    new Sprite(new Image("/images/dungeondarkfloor.png"),
+                    x*this.tilesize, y*this.tilesize)); 
+               }
+               
             }
         }    
     }
