@@ -2,6 +2,8 @@
 (Reitinhaku ja karttojen generointi)
 
 ##20.8
+* 1½h [TESTAUS] Koitettu saada PITiä skippaamaan luokkia pom.xml:n kautta.
+* ½h [OPISKELU] Selvitetty PIT:ssä luokkien testaamatta jättämistä
 * 2h [DOKUMENTOINTI] Kirjoitettu JavaDoc'ia
 * 5h [OHJELMOINTI] Luotu MapGenerator
 
