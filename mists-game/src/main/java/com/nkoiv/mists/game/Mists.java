@@ -84,6 +84,9 @@ public class Mists extends Application implements Global {
         logger.info("Mists game ended");
     }
     
+    public Game getGame() {
+        return this.MistsGame;
+    }
     
     private void setupKeyHandlers(Stage primaryStage) {
         /** KeyPresses and releases are stored separately, so that holding down a button continues to execute commands **/

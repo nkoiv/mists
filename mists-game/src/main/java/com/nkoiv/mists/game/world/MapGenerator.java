@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import java.util.ArrayList;
@@ -27,11 +28,11 @@ public class MapGenerator implements Global{
 
     }
 
-    public static TileMap generateDungeon(Location location, int xSize, int ySize) {
+    public static TileMap generateDungeon(Location l, int xSize, int ySize) {
             int totalAreas  = 20; //TODO: Make these into parameters
             int minAreaSize = 6;
             boolean treeMode = true;
-            ArrayList<BSParea> BSPareas = BSPdungeon(location.getMapGen(), xSize, ySize, totalAreas, 0.3f, 0.7f, minAreaSize, treeMode);
+            ArrayList<BSParea> BSPareas = BSPdungeon(l.getMapGen(), xSize, ySize, totalAreas, 0.3f, 0.7f, minAreaSize, treeMode);
             int[][] randomStructures = dungeonStructures(BSPareas, xSize, ySize, minAreaSize);
             TileMap dungeon =  new TileMap (xSize, ySize, randomStructures);
             //TODO: make the floor uneven, use different tiles and that stuff

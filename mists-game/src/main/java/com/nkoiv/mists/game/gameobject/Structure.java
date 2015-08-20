@@ -58,7 +58,7 @@ public class Structure extends MapObject {
     public void renderExtras (double xOffset, double yOffset, GraphicsContext gc) {
         if (!this.extraSprites.isEmpty()) {
             for (Sprite extraSprite : this.extraSprites) {
-                Mists.logger.info("Rendering extra for " +this.getName());
+                //Mists.logger.info("Rendering extra for " +this.getName());
                 extraSprite.render(xOffset, yOffset, gc);
             }
         }
@@ -84,6 +84,11 @@ public class Structure extends MapObject {
             }
         }
         this.getSprite().setPosition(xPos, yPos);
+    }
+    
+    @Override
+    public void setCenterPosition (double xPos, double yPos) {
+        this.setPosition(xPos+(this.getSprite().getWidth()/2), yPos+(this.getSprite().getHeight()/2));
     }
     
 }

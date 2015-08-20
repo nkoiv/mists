@@ -7,6 +7,7 @@ package com.nkoiv.mists.game;
 
 import static com.nkoiv.mists.game.Mists.logger;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.MapGenerator;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.scene.Scene;
@@ -25,6 +26,7 @@ public class Game {
     public Scene currentScene;
     public double xOffset; //Offsets are used control which part of the map is drawn
     public double yOffset; //If/when a map is larger than display-area, it should be centered on player
+    public MapGenerator mapGen;
     
     boolean inMenu = false;
     

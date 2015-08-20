@@ -86,12 +86,12 @@ public class PathFinder {
             if (pathToGoal == null || pathToGoal.getLength()==0) {
                 //Got an empty path. Probably means no route was found.
                 //Just head in the general direction of the target.
-                Mists.logger.info("No path found, giving the Node of the target");
+                //Mists.logger.info("No path found, giving the Node of the target");
                 return new Node(gX, gY);
             }
-            Mists.logger.info("Goal was at ["+gX+","+gY+"] got the path:" + pathToGoal.toString());
+            //Mists.logger.info("Goal was at ["+gX+","+gY+"] got the path:" + pathToGoal.toString());
             if (pathToGoal.getLength() < 2) {
-                Mists.logger.info("Next to goal, returning node the goal is at ");
+                //Mists.logger.info("Next to goal, returning node the goal is at ");
                 return pathToGoal.getNode(pathToGoal.getLength()-1);
             } else {
                 //Check if there's corners we might get stuck into:

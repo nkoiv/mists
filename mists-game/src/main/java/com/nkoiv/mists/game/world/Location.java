@@ -90,14 +90,15 @@ public class Location implements Global {
         Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 10*TILESIZE, 7*TILESIZE);
         this.mapObjects.add(rock);
         this.setMobInRandomOpenSpot(rock);
-        Structure tree1 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 6*TILESIZE, 5*TILESIZE);
-        tree1.addExtra(new Image("/images/tree.png"), -35, -96);
-        this.mapObjects.add(tree1);
-        this.setMobInRandomOpenSpot(tree1);
-        Structure tree2 = new Structure("Tree", new Image("/images/tree_stump.png"), this, 4*TILESIZE, 9*TILESIZE);
-        tree2.addExtra(new Image("/images/tree.png"), -35, -96);
-        this.mapObjects.add(tree2);
-        this.setMobInRandomOpenSpot(tree2);
+        
+        for (int i = 0; i<10;i++) {
+            //Make a bunch of trees
+            Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), this, 6*TILESIZE, 5*TILESIZE);
+            tree.addExtra(new Image("/images/tree.png"), -35, -96);
+            this.mapObjects.add(tree);
+            this.setMobInRandomOpenSpot(tree);
+        
+        }
         
         Creature monster1 = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
         monster1.getSprite().setCollisionAreaShape(2);
@@ -143,8 +144,8 @@ public class Location implements Global {
         int openX = 0;
         int openY = 0;
         while (!foundSpot) {
-            openX = rnd.nextInt(((int)map.getWidth()));
-            openY = rnd.nextInt(((int)map.getHeight()));
+            openX = (int)sizeRequirement + rnd.nextInt(((int)(map.getWidth()-sizeRequirement)));
+            openY = (int)sizeRequirement + rnd.nextInt(((int)(map.getHeight()-sizeRequirement)));
             collisionTester.setCenterPosition(openX, openY);
             if (this.checkCollisions(collisionTester).isEmpty()) foundSpot = true;
         }
@@ -380,7 +381,8 @@ public class Location implements Global {
                 
             }
         }
-        
+        // Render extras should be called whenever the structure is rendered
+        // This paints them on top of everything again, creatures go "behind" trees
         if (!this.mapObjects.isEmpty()) {
             for (MapObject struct : this.mapObjects) {
                 if (struct instanceof Structure) {
@@ -388,6 +390,7 @@ public class Location implements Global {
                 }
             }
         }
+        
         //Draw extra effects (battle swings, projectiles, spells...) on the screen
         if (!this.effects.isEmpty()) {
             for (Effect e : this.effects) {
