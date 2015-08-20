@@ -62,8 +62,8 @@ public class Location implements Global {
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
         this.collisionMap = new CollisionMap(this, 32);
-        this.pathFinder = new PathFinder(this.collisionMap, 50, true);
-        this.mapGen = new MapGenerator();
+        //this.pathFinder = new PathFinder(this.collisionMap, 50, true);
+        //this.mapGen = new MapGenerator();
     }
     /**TODO: This general constructor is just for the Proof of Concept -map
     * and should be removed later to avoid misuse

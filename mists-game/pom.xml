@@ -36,7 +36,10 @@
                 <version>1.1.4</version>
                     <configuration>
                 <targetClasses>
-                    <param>com.nkoiv.mists.game*</param>
+                    <param>com.nkoiv.mists.game.AI.*</param>
+                    <param>com.nkoiv.mists.game.actions.*</param>
+                    <param>com.nkoiv.mists.game.gameobject.*</param>
+                    <param>com.nkoiv.mists.game.world.*</param>
                 </targetClasses>
                 <targetTests>
                     <param>*</param>
