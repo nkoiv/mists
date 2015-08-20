@@ -23,7 +23,7 @@ public class MapObject implements Global {
     private final String name;
     private Sprite sprite;
     
-    /*Flags are stored in integers for utility, 
+    /**Flags are stored in integers for utility, 
     * but can be manipulad as booleans (>0) by "isFlagged" & "addFlag" methods
     */
     private HashMap<String, Integer> flags;
@@ -52,7 +52,11 @@ public class MapObject implements Global {
         this.sprite.setPosition(xCoor, yCoor);
         this.setFlag("visible", 1);
     }
-    
+    /**
+    * Flags store any soft information for the object
+    * @param flag The name of the flag
+    * @param value Value for the flag (0 or less is not flagged)
+    */
     public void setFlag(String flag, int value) {
         if (this.flags.containsKey(flag)) {
             this.flags.replace(flag, value);
@@ -61,6 +65,11 @@ public class MapObject implements Global {
         }   
     }
     
+    /**
+    * Toggle flag on or off. If Flag was more than 0, it's now 0.
+    * If it was less or equal to 0 or didnt exist, it's now 1
+    * @param flag Flag to toggle
+    */
     public void toggleFlag(String flag) {
         if (this.isFlagged(flag)) {
             this.setFlag(flag, 0);
@@ -70,6 +79,11 @@ public class MapObject implements Global {
         
     }
     
+    /**
+    * Return the value for the given flag
+    * @param flag Desired flag
+    * @return Returns the value of the flag
+    */
     public int getFlag(String flag) {
         if (this.flags.containsKey(flag)) {
             return this.flags.get(flag);
@@ -78,6 +92,11 @@ public class MapObject implements Global {
         }
     }
     
+    /**
+    * Check if the MapObject has the given flag
+    * @param flag Flag to check
+    * @return returns true if MapObject has given flag at more than 0
+    */
     public boolean isFlagged (String flag) {
         if (this.flags.containsKey(flag)) {
             return this.flags.get(flag) > 0;
@@ -123,17 +142,30 @@ public class MapObject implements Global {
     public double getYPos(){
         return this.sprite.getYPos();
     }
-    
+    /**
+    * Render draws the Sprite of the MapObject on a given GraphicsContext
+    * @param gc GraphicsContext where the object is drawn
+    * @param xOffset Used to shift the objects xCoordinate so its drawn where the screen is
+    * @param yOffset Used to shift the objects yCoordinate so its drawn where the screen is
+    */
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.isFlagged("visible")) {
             this.sprite.render(xOffset, yOffset, gc);
         }
     }   
    
+    /**
+    * Set the MapObject a new Sprite (replacing the old old)
+    * @param sprite Sprite to be added
+    */
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }
     
+    /**
+    * Update the position of the MapObject
+    * @param time Amount of time passed since the last update
+    */
     public void update(double time) {
         this.sprite.update(time);
     }

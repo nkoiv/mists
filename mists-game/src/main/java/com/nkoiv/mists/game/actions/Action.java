@@ -16,7 +16,11 @@ import java.util.Map;
 import java.util.logging.Level;
 
 /**
- * All actions are stored in allById -map
+ * Action is something that triggers on a call.
+ * It might be an attack from a creature, or it might be a trap on the floor.
+ * TODO: Consider if the allById map gets bloated and if it should get cleaned
+ * TODO: Maybe only unique action templates should be stored in allById
+ * All actions are stored in the (static) allById -map
  * @author nkoiv
  */
 public class Action implements Serializable {
@@ -47,14 +51,29 @@ public class Action implements Serializable {
         return allById;
     }
     
+        /**
+    * Actions are owned by the user
+    * setOwner gives this action to the MapObject
+    * @param o MapObject to own the action
+    */
     public void setOwner(MapObject o) {
         this.owner = o;
     }
     
+    /**
+    * Actions are owned by the user
+    * getOwner returns the MapObject(creature?) using the action.
+    * @return The owner of the action
+    */
     public MapObject getOwner() {
         return this.owner;
     }
     
+    /**
+    * Use -call is used when the action lands on a target
+    * This should trigger the actual effects of the action (damage, slow, teleport...)
+    * @param actor The target of the action
+    */
     public void use(Creature actor) {
         //Override this to do things
         Mists.logger.log(Level.INFO, "{0} used by {1}", new Object[]{this.toString(), actor.getName()});

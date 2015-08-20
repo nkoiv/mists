@@ -10,7 +10,8 @@ import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
 
 /**
- *
+ * AttackActions are types of actions that are used for combat.
+ * All attacks have a cooldown and an animation.
  * @author nkoiv
  */
 public interface AttackAction {

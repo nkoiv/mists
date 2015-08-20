@@ -13,7 +13,9 @@ import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
- *
+ * Effects are more or less temporary MapObjects.
+ * They have start time and endtime.
+ * TODO: Will pauses mess up since we're using systemtime? Probably!
  * @author nkoiv
  */
 public class Effect extends MapObject {

@@ -8,8 +8,9 @@ package com.nkoiv.mists.game.world.pathfinding;
 import java.util.List;
 
 /**
- * 
- * 
+ * MoveCostCalculator calculates the distance between point A and point B
+ * This is done on a gridMap, with the calculation function being selectable between
+ * Manhattan, Diagonal and Euclidean.
  * @author nikok
  */
 public class MoveCostCalculator {

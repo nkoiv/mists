@@ -1,7 +1,12 @@
 #Viikko 4 (27h)
 (Reitinhaku ja karttojen generointi)
 
+##20.8
+* 2h [DOKUMENTOINTI] Kirjoitettu JavaDoc'ia
+* 5h [OHJELMOINTI] Luotu MapGenerator
+
 ##19.8
+* 2h [OPISKELU] Koluttu RogueBasinnia (http://roguebasin.roguelikedevelopment.org) ja tutkittu karttojen generoimista
 * 7h [OHJELMOINTI] Korjattu pathfinding VIHDOINKIN toimimaan. Ei enää jumitusta nurkissa.
 
 ##18.8h

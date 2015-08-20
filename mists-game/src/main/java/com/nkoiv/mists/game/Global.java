@@ -25,7 +25,7 @@ public interface Global {
 	
     //Config mode
     public static final boolean debug = true;
-    public static final boolean DRAW_COLLISIONS = true;
-    public static final boolean DRAW_GRID = true;
+    public static final boolean DRAW_COLLISIONS = false;
+    public static final boolean DRAW_GRID = false;
     
 }

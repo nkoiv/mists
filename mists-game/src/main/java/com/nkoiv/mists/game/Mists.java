@@ -13,15 +13,20 @@ import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
- * Mists Class is used to initialize the window and launch the game
- * This class is intended to be easily rewritten when porting game to other platforms
+ * Mists Class is used to initialize the window and launch the game.
+ * This class is intended to be easily rewritten when porting game to other platforms.
+ * Mists is the View of the game.
  * @author nkoiv
  */
 public class Mists extends Application implements Global {
@@ -35,15 +40,38 @@ public class Mists extends Application implements Global {
     public final ArrayList<String> releasedButtons = new ArrayList<>();
     public Scene currentScene;
     
+    private HBox addHBox() {
 
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setSpacing(10);   // Gap between nodes
+        hbox.setStyle("-fx-background-color: #808080;");
+
+        Button buttonCurrent = new Button("Test");
+        buttonCurrent.setPrefSize(100, 20);
+
+        Button buttonProjected = new Button("Button");
+        buttonProjected.setPrefSize(100, 20);
+        
+        hbox.getChildren().addAll(buttonCurrent, buttonProjected);
+        
+        return hbox;
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("The Mists");
         Group root = new Group();
         Scene launchScene = new Scene(root);
         final Canvas locationCanvas = new Canvas(WIDTH, HEIGHT);
-        root.getChildren().add( locationCanvas );
+        //root.getChildren().add( locationCanvas );
                 
+        BorderPane border = new BorderPane();
+        HBox hbox = addHBox();
+        border.setBottom(hbox);
+        border.setCenter(locationCanvas);
+
+        root.getChildren().add(border);
         
         logger.info("Scene initialized");
         

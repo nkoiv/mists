@@ -15,7 +15,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
- *
+ * Game hosts the main loop of the game.
+ * The Game class handles swapping between locations.
  * @author nkoiv
  */
 public class Game {
@@ -30,30 +31,44 @@ public class Game {
     
     boolean inMenu = false;
     
+    /**
+    * Initialize a new game
+    * Call in the character generator, set the location to start.
+    *
+    */
     public Game () {
         currentLocation = new Location();
     }
     
+    /**
+    * Move the player (and the game) to a new location
+    * @param l The location to be moved to
+    */
     public void moveToLocation (Location l) {
         currentLocation = l;
     }
- 
+
+    /**
+    * Tick checks keybuffer, initiates actions and does just about everything.
+    * Tick needs to know how much time has passed since the last tick, so it can
+    * even out actions and avoid rollercoaster game speed. 
+    * @param time Time passed since last time 
+    * @param pressedButtons Buttons currently pressed down
+    * @param releasedButtons Buttons recently released
+    */
     public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
-        /*
-        * Tick checks keybuffer, initiates actions and does just about everything.
-        * Tick needs to know how much time has passed since the last tick, so it can
-        * even out actions and avoid rollercoaster game speed. 
-        */
+
         handleKeyPress(pressedButtons, releasedButtons);
         currentLocation.update(time);
 
     }
     
+    /**
+    * Render handles updating the game window, and should be called every time something needs refreshed.
+    * By default render is called 60 times per second (or as close to as possible) by AnimationTimer -thread.
+    * @param canvas The Canvas to draw the game on
+    */
     public void render(Canvas canvas) {
-        /*
-        * Render handles updating the game window, and should be called every time something needs refreshed.
-        * By default render is called 60 times per second (or as close to as possible) by AnimationTimer -thread.
-        */
         GraphicsContext gc = canvas.getGraphicsContext2D();
         double screenWidth = canvas.getWidth();
         double screenHeight = canvas.getHeight();
@@ -64,10 +79,10 @@ public class Game {
     }
     
     private void handleKeyPress(ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
-        /*
-        * TODO: External loadable configfile for keybindings
-        * (probably via a class of its own)
-        */
+        
+        //TODO: External loadable configfile for keybindings
+        //(probably via a class of its own)
+        
         
         currentLocation.getPlayer().stopMovement();
         

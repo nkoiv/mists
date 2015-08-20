@@ -15,7 +15,9 @@ import com.nkoiv.mists.game.world.pathfinding.Path;
 import java.util.logging.Level;
 
 /**
- *
+ * CreatureAI is the main AI routine for creatures.
+ * Each acting creature should have its own CreatureAI, as it stores
+ * the creatures states and intentions
  * @author nikok
  */
 public class CreatureAI {
@@ -26,10 +28,12 @@ public class CreatureAI {
         this.creep = creep;
     }
     
-    /*
+    /**
     * act() is the main loop for AI
     * it's called whenever it's given creatures
     * turn to do things
+    * @param time Time passed since the last action
+    * @return Returns true if the creature was able to act
     */
     public boolean act(double time) {
         //TODO: For now all creatures just want to home in on player
@@ -39,7 +43,7 @@ public class CreatureAI {
     }
     
     
-        /*
+    /*
     **  TODO: Temporary for just following player
     */
     public void moveTowardsPlayer(double time) {        

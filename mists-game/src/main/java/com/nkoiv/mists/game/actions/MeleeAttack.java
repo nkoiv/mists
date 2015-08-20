@@ -17,7 +17,8 @@ import java.util.logging.Level;
 import javafx.scene.image.ImageView;
 
 /**
- *
+ * MeleeAttack is the first (POC) AttackAction
+ * TODO: Split this into more specific melees, as per creature perhaps
  * @author daedra
  */
 public class MeleeAttack extends Action implements AttackAction {

@@ -14,7 +14,11 @@ import java.util.List;
 import java.util.logging.Level;
 
 /**
- * Original pathfinder based on http://www.cokeandcode.com/main/tutorials/path-finding/ (Kevin Glass)
+ * PathFinder uses A* principles in finding the shortest working route between point A and pointB
+ * Many of the supporting functions are used to give Creatures ability to figure their next course of action.
+ * The original pathfinder was based on http://www.cokeandcode.com/main/tutorials/path-finding/ (Kevin Glass)
+ * After that it was rewritten with the help of the book Artificial Intelligence for Games (2e) by Millington and Funge
+ * SortedList is still mainly Kevin Glasses work.
  * Modified to use different heuristics for cost. Restructured to use same Nodes for map and Path.
  * Modified to use collision levels for movement. Created clearance metrics for large objects.
  * Added separate methods for checking neighbours.
@@ -46,9 +50,16 @@ public class PathFinder {
             this.calc = new MoveCostCalculator(0); //Defaults to Manhattan, 0 for Manhattan, 1 for Diagonal, 2 for Euclidean
 	}
         
-        /*
+        /**
         * PathTowards gives the direction of the next node on the Path
         * This method is the one units usually ask when they want to start heading towards a point on the map
+        * @param unitSize Size of the unit for collisions
+        * @param crossableTerrain List of terrain the unit can cross
+        * @param startX X coordinate of the starting position
+        * @param startY Y coordinate of the starting position
+        * @param goalX X coordinate of the goal
+        * @param goalY Y coordinate of the goal
+        * @return Direction to go to get towards goal
         */
         public Direction directionTowards (double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
             Node targetNode = nextTileOnPath(unitSize, crossableTerrain, startX, startY, goalX, goalY);
@@ -145,7 +156,7 @@ public class PathFinder {
             return Neighbours(1,crossableTerrain, x, y);
         } 
         private List<Node> Neighbours(int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
-        /*Neighbours only lists cardinal directions
+        /**Neighbours only lists cardinal directions
         * because being surrounded cardinally blocks movement
         * TODO: Consider if this is good
         */
@@ -233,12 +244,12 @@ public class PathFinder {
             return Direction.STAY; //last resort
         }
         
-        private double[] getTileCoordinates(int tileXCoor, int tileYCoor, int tileSize){
-            /* When moving in tight spaces, it's imperative for
+        /** When moving in tight spaces, it's imperative for
             *  the mover to be fully inside the tile Pathfinder thinks its in.
             *  Otherwise the mover might get stuck on corners
             *  This method returns the center of the given tile in "real coordinates"
             */
+        private double[] getTileCoordinates(int tileXCoor, int tileYCoor, int tileSize){    
             double[] realCoordinates = new double[2];
             realCoordinates[0] = (tileXCoor * tileSize)+(tileSize/2);
             realCoordinates[1] = (tileYCoor * tileSize)+(tileSize/2);

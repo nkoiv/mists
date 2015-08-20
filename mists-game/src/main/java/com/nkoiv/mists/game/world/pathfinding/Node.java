@@ -8,7 +8,8 @@ package com.nkoiv.mists.game.world.pathfinding;
 import com.nkoiv.mists.game.Global;
 
 /**
- *
+ * Node is a single map point in a gridmap.
+ * Used for CollisionMap and PathFinder
  * @author nikok
  */
 	public class Node implements Comparable {

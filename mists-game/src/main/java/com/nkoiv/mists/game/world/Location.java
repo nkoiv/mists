@@ -30,7 +30,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
 /**
- *
+ * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
+ * A Location stores the background data via the Map classes, and everything on top of it by MapObjects.
+ * 
  * @author nkoiv
  */
 public class Location implements Global {
@@ -63,11 +65,10 @@ public class Location implements Global {
         this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         this.mapGen = new MapGenerator();
     }
-    
+    /**TODO: This general constructor is just for the Proof of Concept -map
+    * and should be removed later to avoid misuse
+    */
     public Location() {
-        /*TODO: This general constructor is just for the Proof of Concept -map
-        * and should be removed later to avoid misuse
-        */
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
@@ -108,6 +109,10 @@ public class Location implements Global {
         this.setMobInRandomOpenSpot(monster1);
     }
 
+    /**
+    * MapLoader takes in a Map and initializes all the static structures from it for the Location
+    * @param map Map to load
+    */
     private void loadMap(GameMap map) {
         this.map = map;
         // Add in all the static structures from the selected map
@@ -116,6 +121,12 @@ public class Location implements Global {
         }
     }
     
+    /**
+    * Find the first (random) Creature on the map with the given name.
+    * Returns null if no creature is found with the name.
+    * @param name The name of the creature.
+    * @return The creature in question
+    */
     public Creature getCreatureByName(String name) {
         ArrayList<Creature> creatures = new ArrayList<>();
         for (MapObject mob : this.mapObjects) {
@@ -129,13 +140,23 @@ public class Location implements Global {
         return null;
     }
     
+    /**
+    * Find a random opening on the map via getRandomOpenSpot and set the given MapObject in it.
+    * @param input MapObject to be positioned
+    */
     private void setMobInRandomOpenSpot (MapObject mob) {
         double[] openSpot = this.getRandomOpenSpot(mob.getSprite().getWidth());
         mob.setCenterPosition(openSpot[0], openSpot[1]);
     }
     
+    /**
+    * Brute force setting a dummy around the map until we find a an open spot
+    * TODO: This could get stuck in infinite loop
+    * @param sizeRequirement Size of the item to be placed (in pixel width)
+    * @return An array with x and y coordinates for the (center) of the free spot
+    */
     private double[] getRandomOpenSpot(double sizeRequirement) {
-        //Brute force until we find a an open spot
+        //
         Creature collisionTester = new Creature("CollisionTester", new Image("/images/himmuToy.png"));
         collisionTester.getSprite().setWidth(sizeRequirement);
         collisionTester.getSprite().setHeight(sizeRequirement);
@@ -152,33 +173,57 @@ public class Location implements Global {
         return new double[]{openX, openY};
     }
     
+    /**
+    * Returns the PathFinder for this Location
+    * @return The PathFinder for this location
+    */
     public PathFinder getPathFinder() {
         if (this.pathFinder == null) this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         return this.pathFinder;
     }
-    
+    /**
+    * Adds a Structure to the location
+    * @param s The structure to be added
+    * @param xPos Position for the structure on the X-axis
+    * @param yPos Position for the structure on the Y-axis
+    */
     public void addStructure(Structure s, double xPos, double yPos) {
         this.mapObjects.add(s);
         s.setLocation(this);
         s.getSprite().setPosition(xPos, yPos);
     }
     
+    /** Adds a Creature to the location
+    * @param c The creature to be added
+    * @param xPos Position for the creature on the X-axis
+    * @param yPos Position for the creature on the Y-axis
+    */
     public void addCreature(Creature c, double xPos, double yPos) {
         this.mapObjects.add(c);
         c.setLocation(this);
         c.getSprite().setPosition(xPos, yPos);
     }
     
+    /** Adds an Effect to the location
+    * @param e The effect to be added
+    * @param xPos Position for the effect on the X-axis
+    * @param yPos Position for the effect on the Y-axis
+    */
     public void addEffect(Effect e, double xPos, double yPos) {
         this.effects.add(e);
         e.setLocation(this);
         e.getSprite().setPosition(xPos, yPos);
     }
     
-    public void addPlayerCharacter(PlayerCharacter p) {
+    /** Adds an Effect to the location
+    * @param p The effect to be added
+    * @param xPos Position for the effect on the X-axis
+    * @param yPos Position for the effect on the Y-axis
+    */
+    public void addPlayerCharacter(PlayerCharacter p, double xPos, double yPos) {
         this.mapObjects.add(p);
         p.setLocation(this);
-        
+        p.getSprite().setPosition(xPos, yPos);
     }
     
     public void setMap(GameMap m) {
@@ -247,13 +292,14 @@ public class Location implements Global {
         }
         
         return yOffset;
-	}
+    }
     
+    /**
+    * Update is the main "tick" of the Location.
+    * Movement, combat and triggers should all be handled here
+    * @param time Time since the last update
+    */
     public void update (double time) {
-        /*
-        * Update is the main "tick" of the Location.
-        * Movement, combat and triggers should all be handled here
-        */
         this.collisionMap.updateCollisionLevels();
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
@@ -282,10 +328,13 @@ public class Location implements Global {
         
     }
     
+    /** CheckCollisions for a given MapObjects
+    *  Returns a List with all the objects that collide with MapObject o
+    * TODO: Maybe only check collisions from nearby objects?
+    * @param o The MapObject to check collisions with
+    * @return a List with all the objects that collide with MapObject o
+    */
     public ArrayList<MapObject> checkCollisions (MapObject o) {
-        /*
-        * TODO: Maybe only check collisions from nearby objects?
-        */
         ArrayList<MapObject> collidingObjects = new ArrayList<>();
         
         Iterator<MapObject> mapObjectsIter = mapObjects.iterator();

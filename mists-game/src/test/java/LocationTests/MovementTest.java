@@ -51,8 +51,7 @@ public class MovementTest extends Application {
        testLocation = new Location("TestLocation");
        testPlayer = new PlayerCharacter();
        testPlayer.setLocation(testLocation);
-       testLocation.addPlayerCharacter(testPlayer);
-       testPlayer.setPosition(300, 200);
+       testLocation.addPlayerCharacter(testPlayer, 300, 200);
     }
     
     @Test
@@ -79,11 +78,11 @@ public class MovementTest extends Application {
     public void movementShouldChangePlayerCoordinates() {
         testPlayer.setSpeed(50); //Should move 50 per tick
         
-        double originalYPos = testPlayer.getXPos();
+        double originalYPos = testPlayer.getYPos();
         testPlayer.moveTowards(Direction.DOWN);
-        testPlayer.update(0.16f);
+        testPlayer.applyMovement(0.16f);
         
-        assert(originalYPos != testPlayer.getXPos());
+        assert(originalYPos != testPlayer.getYPos());
     }
     
     @Test
