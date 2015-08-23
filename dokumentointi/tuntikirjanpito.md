@@ -2,6 +2,7 @@
 (UI)
 
 ##23.8h
+* 2h [OHJELMOINTI] Tehty actionbuttonit ja menu locationiin
 * 3h [OHJELMOINTI] Käyty rakentamaan UI:ta ikkunoiden kautta
 * 1h [OHJELMOINTI] Rakennettu Controllerit pelin eri tiloille (GameState.class)
 * 3h [OPISKELU] Selvitetty erilaisia tapoja muodostaa UI pelille
