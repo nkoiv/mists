@@ -21,32 +21,35 @@ import javafx.scene.text.Text;
  */
 public class TextButton implements UIComponent{ 
     private Text text;
+    private double textXOffset;
+    private double textYOffset;
     private Rectangle background;
 
     public TextButton(String name, int width, int height) {
         text = new Text(name);
         text.setFont(Font.font(20));
-        text.setFill(Color.WHITE);
-        
+        text.setFill(Color.RED);
+        double textWidth = text.getLayoutBounds().getWidth();
+        double textHeight = text.getLayoutBounds().getHeight();
+        textXOffset = ((textWidth/2)  - (width/2));
+        textYOffset = ((textHeight/2) - (height/2));
         background = new Rectangle(width, height);
         background.setOpacity(0.6);
         background.setFill(Color.BLACK);
-        background.setEffect(new GaussianBlur(3.5));
     }
         
     @Override
     public void render (GraphicsContext gc, double xPosition, double yPosition) {
         gc.save();
-        gc.setStroke(background.getStroke());
+        
         gc.setGlobalAlpha(background.getOpacity());
         gc.setFill(background.getFill());
-        gc.setEffect(background.getEffect());
         gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
         gc.restore();
-        gc.setStroke(text.getStroke());
+        
         gc.setFont(text.getFont());
-        gc.setFill(text.getFill());
-        gc.strokeText(text.getText(), xPosition, yPosition);
+        gc.setStroke(text.getFill());
+        gc.strokeText(text.getText(), xPosition-textXOffset, yPosition+background.getHeight()+textYOffset);
         gc.restore();
     }
 

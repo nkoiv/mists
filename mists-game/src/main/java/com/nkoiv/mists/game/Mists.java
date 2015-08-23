@@ -81,13 +81,13 @@ public class Mists extends Application implements Global {
                    previousNanoTime = currentNanoTime;
                 return;
                 }
-            
+                
                 double elapsedNanoTime = (currentNanoTime - previousNanoTime) / 1000000000.0;
                 previousNanoTime = currentNanoTime;
                 //Do things:
                 MistsGame.tick(elapsedNanoTime, pressedButtons, releasedButtons); 
                 //Show things:
-                MistsGame.render(gameCanvas, uiCanvas); 
+                MistsGame.render(gameCanvas, uiCanvas);
             } 
          }.start();
     } 

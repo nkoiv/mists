@@ -7,8 +7,10 @@ package com.nkoiv.mists.game.gamestate;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
+import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
+import com.nkoiv.mists.game.ui.Window;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import javafx.scene.Group;
@@ -31,8 +33,23 @@ public class LocationState implements GameState {
     public LocationState (Game game) {
         this.game = game;
         uiComponents = new ArrayList<>();
-        TextButton testButton = new TextButton("Testbutton", 200, 50);
-        uiComponents.add(testButton);
+        this.loadDefaultUI();
+    }
+    
+    private void loadDefaultUI() {
+        Window actionBar = new Window(Global.WIDTH, 80, 0, (Global.HEIGHT - 80));
+        TextButton testButton1 = new TextButton("Test", 80, 60);
+        TextButton testButton2 = new TextButton("Button", 80, 60);
+        TextButton testButton3 = new TextButton("Foo", 80, 60);
+        TextButton testButton4 = new TextButton("Bar", 80, 60);
+        TextButton testButton5 = new TextButton("Himmu", 80, 60);
+        
+        actionBar.addMenuButton(testButton1);
+        actionBar.addMenuButton(testButton2);
+        actionBar.addMenuButton(testButton3);
+        actionBar.addMenuButton(testButton4);
+        actionBar.addMenuButton(testButton5);
+        uiComponents.add(actionBar);
     }
 
     @Override

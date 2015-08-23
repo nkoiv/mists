@@ -7,17 +7,10 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
 import java.util.ArrayList;
-import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
-import javafx.scene.effect.Glow;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 /**
  * Window is the basic UI component. It acts as a collection of other UI stuff.
@@ -29,10 +22,13 @@ public class Window implements UIComponent{
     private boolean interactive;
     private ArrayList<UIComponent> subComponents;
     private int currentButton;
+    private Color bgColor;
+    private double bgOpacity;
     private double xPosition;
     private double yPosition;
     private double width;
     private double height;
+    private double margin;
     
     public Window (double width, double height, double xPos, double yPos) {
         this.width = width;
@@ -40,6 +36,10 @@ public class Window implements UIComponent{
         this.xPosition = xPos;
         this.yPosition = yPos;
         this.subComponents = new ArrayList<>();
+        this.margin = 10;
+        this.bgOpacity = 0.2;
+        this.bgColor = Color.BLACK;
+                
     }
     
     public void addMenuButton(TextButton mb) {
@@ -64,6 +64,10 @@ public class Window implements UIComponent{
     
     public boolean isInteractive() {
         return this.interactive;
+    }
+    
+    public void setMargin(double margin) {
+        this.margin = margin;
     }
     
     public void setWidth(double width) {
@@ -109,24 +113,41 @@ public class Window implements UIComponent{
     * Render the window on the given graphics context
     * The Subcomponents are drawn in turn, tiled to new row whenever needed
     * @param  gc GraphicsContext to render the window on 
-    * @param xPos xPosition offset for the window
-    * @param yPos yPosition offset for the window
+    * @param xOffset xPosition offset for the window
+    * @param yOffset yPosition offset for the window
     */
     
     @Override
-    public void render(GraphicsContext gc, double xPos, double yPos) {
+    public void render(GraphicsContext gc, double xOffset, double yOffset) {
         //Optional resize
         this.resizeToFit(gc);
         
+        //Draw the background window
+        gc.save();
+        gc.setGlobalAlpha(this.bgOpacity);
+        gc.setFill(bgColor);
+        gc.fillRect(this.xPosition, this.yPosition,this.width, this.height);
+        gc.restore();
+        
         //Render all the subcomponents so that they are tiled in the window area
-        double currentXPos = this.xPosition + xPos;
-        double currentYPos = this.yPosition + yPos;
+        double currentXPos = this.xPosition + this.margin + xOffset;
+        double currentYPos = this.yPosition + this.margin + yOffset;
         double widthOfRow = 0;
-        double lastComponentHeight = 0;
+        double rowHeight = 0;
         for (UIComponent sc : this.subComponents) {
-            widthOfRow = widthOfRow + sc.getWidth();
-            lastComponentHeight = sc.getHeight();
-            sc.render(gc, currentXPos, currentYPos);            
+            if (widthOfRow > this.getWidth()) {
+                //Move a row down
+                currentYPos = currentYPos + rowHeight + this.margin;
+                //Start from the beginning of the row again
+                currentXPos = this.xPosition + this.margin + xOffset;
+                //Row width is now just this component
+                widthOfRow = 0;
+                rowHeight = sc.getHeight();
+            }
+            if (rowHeight < sc.getHeight()) rowHeight = sc.getHeight();
+            sc.render(gc, currentXPos+widthOfRow, currentYPos);
+            widthOfRow = widthOfRow + sc.getWidth() + this.margin;
+            
         }
         
     }
