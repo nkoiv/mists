@@ -8,11 +8,14 @@ package com.nkoiv.mists.game.gamestate;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.ui.Window;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -27,12 +30,13 @@ public class LocationState implements GameState {
     
     private final Game game;
     private boolean inMenu;
+    private boolean gameMenuOpen;
     
-    private ArrayList<UIComponent> uiComponents;
+    private HashMap<String, UIComponent> uiComponents;
     
     public LocationState (Game game) {
         this.game = game;
-        uiComponents = new ArrayList<>();
+        uiComponents = new HashMap<>();
         this.loadDefaultUI();
     }
     
@@ -49,7 +53,7 @@ public class LocationState implements GameState {
         actionBar.addMenuButton(testButton3);
         actionBar.addMenuButton(testButton4);
         actionBar.addMenuButton(testButton5);
-        uiComponents.add(actionBar);
+        uiComponents.put("Actionbar", actionBar);
     }
 
     @Override
@@ -66,9 +70,31 @@ public class LocationState implements GameState {
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
         if (uiComponents != null) {
-            for (UIComponent uc : uiComponents) {
-                uc.render(uigc, 0, 0);
+            for (Map.Entry<String, UIComponent> entry : uiComponents.entrySet()) {
+                entry.getValue().render(uigc, 0, 0);
+                //Mists.logger.info("Rendering UIC " + entry.getKey());
             }
+        }
+        
+    }
+    
+    private void toggleGameMenu() {
+        if (!gameMenuOpen) {
+            gameMenuOpen = true;
+            Window gameMenu = new Window(220, 220, (Global.WIDTH/2 - 110), 150);
+            TextButton testButton1 = new TextButton("Testbutton", 200, 60);
+            TextButton testButton2 = new TextButton("Options", 200, 60);
+            TextButton testButton3 = new TextButton("Quit game", 200, 60);
+            gameMenu.addMenuButton(testButton1);
+            gameMenu.addMenuButton(testButton2);
+            gameMenu.addMenuButton(testButton3);
+            uiComponents.put("GameMenu", gameMenu);
+            Mists.logger.info("GameMenu opened");
+        } else {
+            gameMenuOpen = false;
+            if (uiComponents.containsKey("GameMenu")) 
+                    uiComponents.remove("GameMenu");
+            Mists.logger.info("GameMenu closed");
         }
         
     }
@@ -124,6 +150,10 @@ public class LocationState implements GameState {
         if (releasedButtons.contains("SHIFT")) {
             game.currentLocation.getCreatureByName("Otus").toggleFlag("testFlag");
         
+        }
+        
+        if (releasedButtons.contains("ESCAPE")) {
+            this.toggleGameMenu();
         }
         
         releasedButtons.clear(); //Button releases are handled only once

@@ -7,10 +7,7 @@ package LocationTests;
  */
 
 import TestTools.JavaFXThreadingRule;
-import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.GameMap;

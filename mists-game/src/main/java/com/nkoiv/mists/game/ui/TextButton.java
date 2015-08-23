@@ -28,7 +28,7 @@ public class TextButton implements UIComponent{
     public TextButton(String name, int width, int height) {
         text = new Text(name);
         text.setFont(Font.font(20));
-        text.setFill(Color.RED);
+        text.setStroke(Color.WHITE);
         double textWidth = text.getLayoutBounds().getWidth();
         double textHeight = text.getLayoutBounds().getHeight();
         textXOffset = ((textWidth/2)  - (width/2));
@@ -47,12 +47,21 @@ public class TextButton implements UIComponent{
         gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
         gc.restore();
         
+        gc.setGlobalAlpha(1);
         gc.setFont(text.getFont());
-        gc.setStroke(text.getFill());
+        gc.setStroke(text.getStroke());
         gc.strokeText(text.getText(), xPosition-textXOffset, yPosition+background.getHeight()+textYOffset);
         gc.restore();
     }
 
+    public void gainFocus() {
+        this.background.setFill(Color.ORANGERED);
+    }
+    
+    public void loseFocus() {
+        this.background.setFill(Color.BLACK);
+    }
+    
     @Override
     public double getWidth() {
         return this.background.getWidth();
@@ -60,7 +69,7 @@ public class TextButton implements UIComponent{
     
     @Override
     public double getHeight() {
-        return this.background.getWidth();
+        return this.background.getHeight();
     }
     
     @Override

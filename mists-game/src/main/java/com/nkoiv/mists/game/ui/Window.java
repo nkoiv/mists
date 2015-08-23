@@ -37,7 +37,7 @@ public class Window implements UIComponent{
         this.yPosition = yPos;
         this.subComponents = new ArrayList<>();
         this.margin = 10;
-        this.bgOpacity = 0.2;
+        this.bgOpacity = 0.3;
         this.bgColor = Color.BLACK;
                 
     }
@@ -120,7 +120,7 @@ public class Window implements UIComponent{
     @Override
     public void render(GraphicsContext gc, double xOffset, double yOffset) {
         //Optional resize
-        this.resizeToFit(gc);
+        //this.resizeToFit(gc);
         
         //Draw the background window
         gc.save();
@@ -130,24 +130,23 @@ public class Window implements UIComponent{
         gc.restore();
         
         //Render all the subcomponents so that they are tiled in the window area
-        double currentXPos = this.xPosition + this.margin + xOffset;
+        double currentXPos = this.xPosition + xOffset;
         double currentYPos = this.yPosition + this.margin + yOffset;
         double widthOfRow = 0;
         double rowHeight = 0;
         for (UIComponent sc : this.subComponents) {
+            widthOfRow = widthOfRow + sc.getWidth() + this.margin;
+            rowHeight = sc.getHeight();
             if (widthOfRow > this.getWidth()) {
                 //Move a row down
-                currentYPos = currentYPos + rowHeight + this.margin;
+                currentYPos = currentYPos+rowHeight+this.margin;
                 //Start from the beginning of the row again
                 currentXPos = this.xPosition + this.margin + xOffset;
                 //Row width is now just this component
-                widthOfRow = 0;
-                rowHeight = sc.getHeight();
+                widthOfRow = sc.getWidth();
             }
-            if (rowHeight < sc.getHeight()) rowHeight = sc.getHeight();
-            sc.render(gc, currentXPos+widthOfRow, currentYPos);
-            widthOfRow = widthOfRow + sc.getWidth() + this.margin;
-            
+            //if (rowHeight < sc.getHeight()) rowHeight = sc.getHeight();
+            sc.render(gc, currentXPos+(widthOfRow-sc.getWidth()), currentYPos);
         }
         
     }
