@@ -68,7 +68,7 @@ public class Location implements Global {
     /**TODO: This general constructor is just for the Proof of Concept -map
     * and should be removed later to avoid misuse
     */
-    public Location() {
+    public Location(PlayerCharacter player) {
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
@@ -80,12 +80,9 @@ public class Location implements Global {
         this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         this.collisionMap.setStructuresOnly(true);
         
-        PlayerCharacter himmu = new PlayerCharacter();
-        himmu.getSprite().setCollisionAreaShape(2);
-        himmu.addAction(new MeleeAttack());
-        this.setPlayer(himmu);
-        this.addCreature(himmu, 8*TILESIZE, 6*TILESIZE);
-        this.screenFocus = himmu;
+        this.setPlayer(player);
+        this.addCreature(player, 8*TILESIZE, 6*TILESIZE);
+        this.screenFocus = player;
         //TODO: Create structures from structure library once its finished
         
         Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 10*TILESIZE, 7*TILESIZE);
@@ -105,7 +102,7 @@ public class Location implements Global {
         monster1.getSprite().setCollisionAreaShape(2);
         this.addCreature(monster1, 2*TILESIZE, 10*TILESIZE);   
         
-        this.setMobInRandomOpenSpot(himmu);
+        this.setMobInRandomOpenSpot(player);
         this.setMobInRandomOpenSpot(monster1);
     }
 

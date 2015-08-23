@@ -9,9 +9,11 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.ui.ActionButton;
+import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
-import com.nkoiv.mists.game.ui.Window;
+import com.nkoiv.mists.game.ui.TiledWindow;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import java.util.Map;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 /**
@@ -29,7 +32,7 @@ import javafx.scene.paint.Color;
 public class LocationState implements GameState {
     
     private final Game game;
-    private boolean inMenu;
+    private UIComponent currentMenu;
     private boolean gameMenuOpen;
     
     private HashMap<String, UIComponent> uiComponents;
@@ -41,19 +44,19 @@ public class LocationState implements GameState {
     }
     
     private void loadDefaultUI() {
-        Window actionBar = new Window(Global.WIDTH, 80, 0, (Global.HEIGHT - 80));
-        TextButton testButton1 = new TextButton("Test", 80, 60);
+        TiledWindow actionBar = new TiledWindow(this, "Actionbar", Global.WIDTH, 80, 0, (Global.HEIGHT - 80));
+        TextButton testButton1 = new ActionButton(game.player, "MeleeAttack",  80, 60);
         TextButton testButton2 = new TextButton("Button", 80, 60);
         TextButton testButton3 = new TextButton("Foo", 80, 60);
         TextButton testButton4 = new TextButton("Bar", 80, 60);
         TextButton testButton5 = new TextButton("Himmu", 80, 60);
         
-        actionBar.addMenuButton(testButton1);
-        actionBar.addMenuButton(testButton2);
-        actionBar.addMenuButton(testButton3);
-        actionBar.addMenuButton(testButton4);
-        actionBar.addMenuButton(testButton5);
-        uiComponents.put("Actionbar", actionBar);
+        actionBar.addSubComponent(testButton1);
+        actionBar.addSubComponent(testButton2);
+        actionBar.addSubComponent(testButton3);
+        actionBar.addSubComponent(testButton4);
+        actionBar.addSubComponent(testButton5);
+        uiComponents.put(actionBar.getName(), actionBar);
     }
 
     @Override
@@ -81,14 +84,14 @@ public class LocationState implements GameState {
     private void toggleGameMenu() {
         if (!gameMenuOpen) {
             gameMenuOpen = true;
-            Window gameMenu = new Window(220, 220, (Global.WIDTH/2 - 110), 150);
+            TiledWindow gameMenu = new TiledWindow(this, "GameMenu", 220, 220, (Global.WIDTH/2 - 110), 150);
             TextButton testButton1 = new TextButton("Testbutton", 200, 60);
             TextButton testButton2 = new TextButton("Options", 200, 60);
-            TextButton testButton3 = new TextButton("Quit game", 200, 60);
-            gameMenu.addMenuButton(testButton1);
-            gameMenu.addMenuButton(testButton2);
-            gameMenu.addMenuButton(testButton3);
-            uiComponents.put("GameMenu", gameMenu);
+            TextButton testButton3 = new QuitButton("Quit game", 200, 60);
+            gameMenu.addSubComponent(testButton1);
+            gameMenu.addSubComponent(testButton2);
+            gameMenu.addSubComponent(testButton3);
+            uiComponents.put(gameMenu.getName(), gameMenu);
             Mists.logger.info("GameMenu opened");
         } else {
             gameMenuOpen = false;
@@ -101,10 +104,46 @@ public class LocationState implements GameState {
 
     @Override
     public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
-        if(!inMenu) {
+        
+        if(currentMenu == null) {
             handleLocationKeyPress(pressedButtons, releasedButtons);
             game.currentLocation.update(time);
+        } 
+    }
+    
+    @Override
+    public void handleMouseEvent(MouseEvent me) {
+        //See if there's an UI component to click
+        if(!mouseClickOnUI(me)){
+            //If not, give the click to the underlying gameLocation
+            Mists.logger.info("Click didnt land on an UI button");
         }
+    }
+    
+    /**
+     * Check if there's any UI component at the mouse event location.
+     * If so, trigger that UI components "onClick". 
+     * @return True if UI component was clicked. False if there was no UI there
+     */
+    public boolean mouseClickOnUI(MouseEvent me) {
+        double clickX = me.getX();
+        double clickY = me.getY();
+        for (Map.Entry<String, UIComponent> entry : uiComponents.entrySet()) {
+            double uicHeight = entry.getValue().getHeight();
+            double uicWidth = entry.getValue().getWidth();
+            double uicX = entry.getValue().getXPosition();
+            double uicY = entry.getValue().getYPosition();
+            //Check if the click landed on the ui component
+            if (clickX >= uicX && clickX <= (uicX + uicWidth)) {
+                if (clickY >= uicY && clickY <= uicY + uicHeight) {
+                    entry.getValue().onClick(me);
+                    return true;
+                }
+            }
+            
+        }
+        
+        return false;
     }
 
     private void handleLocationKeyPress(ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
@@ -161,12 +200,17 @@ public class LocationState implements GameState {
     
     @Override
     public void exit() {
-        this.inMenu = false;
+        
     }
 
     @Override
     public void enter() {
-        this.inMenu = false;
+        
+    }
+
+    @Override
+    public HashMap<String, UIComponent> getUIComponents() {
+        return this.uiComponents;
     }
     
     

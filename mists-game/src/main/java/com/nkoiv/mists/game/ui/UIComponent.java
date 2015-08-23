@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.ui;
 
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -18,7 +19,13 @@ public interface UIComponent {
     
     public double getWidth();
     public double getHeight();
+    public double getXPosition();
+    public double getYPosition();
     
-    public void onClick();
+    public void setPosition(double xPos, double yPos);
+    
+    public void onClick(MouseEvent me);
+    
+    public String getName();
     
 }

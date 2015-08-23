@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -39,6 +40,7 @@ public class Mists extends Application implements Global {
     public boolean running = false;
     public final ArrayList<String> pressedButtons = new ArrayList<>();
     public final ArrayList<String> releasedButtons = new ArrayList<>();
+    public final double[] mouseClickCoordinates = new double[2];
     public Scene currentScene;
     
     /**
@@ -60,7 +62,7 @@ public class Mists extends Application implements Global {
         
         primaryStage.setScene(launchScene);
         setupKeyHandlers(primaryStage);
-        
+        setupMouseHandles(root);
         MistsGame = new Game();
         
         primaryStage.show();
@@ -101,6 +103,16 @@ public class Mists extends Application implements Global {
     
     public Game getGame() {
         return this.MistsGame;
+    }
+    
+    private void setupMouseHandles(Group root) {
+        //Pass the event over to the game
+        root.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent me) {
+                MistsGame.handleMouseEvent(me);
+            }
+        });
     }
     
     private void setupKeyHandlers(Stage primaryStage) {

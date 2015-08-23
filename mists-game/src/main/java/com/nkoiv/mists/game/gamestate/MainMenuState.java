@@ -5,10 +5,13 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
+import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 
 /**
  * MainMenuState controls and manages the main menu.
@@ -18,6 +21,8 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class MainMenuState implements GameState {
 
+    private HashMap<String, UIComponent> uiComponents;
+    
     @Override
     public void render(Canvas gameCanvas, Canvas uiCanvas) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
@@ -33,6 +38,11 @@ public class MainMenuState implements GameState {
     }
 
     @Override
+    public void handleMouseEvent(MouseEvent me) {
+        
+    }
+    
+    @Override
     public void exit() {
         
     }
@@ -40,6 +50,11 @@ public class MainMenuState implements GameState {
     @Override
     public void enter() {
         
+    }
+
+    @Override
+    public HashMap<String, UIComponent> getUIComponents() {
+        return this.uiComponents;
     }
     
 }

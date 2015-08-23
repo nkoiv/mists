@@ -5,9 +5,12 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
+import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.MouseEvent;
 
 /**
  * GameStates handle various parts of a game.
@@ -21,11 +24,16 @@ import javafx.scene.canvas.Canvas;
  */
 public interface GameState {
     
+    public HashMap<String, UIComponent> getUIComponents();
+    
     //Draw things
     public void render(Canvas gameCanvas, Canvas uiCanvas);
     
     //Do things
     public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons);
+    
+    //Handle mouse events
+    public void handleMouseEvent(MouseEvent me);
     
     //TODO:
     //Cleanup the stage

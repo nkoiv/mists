@@ -8,6 +8,8 @@ package com.nkoiv.mists.game;
 import static com.nkoiv.mists.game.Global.HEIGHT;
 import static com.nkoiv.mists.game.Global.WIDTH;
 import static com.nkoiv.mists.game.Mists.logger;
+import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.MapGenerator;
@@ -17,6 +19,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 
 /**
  * Game handles the main loop of the game. The View of the game (Mists-class)
@@ -25,7 +28,7 @@ import javafx.scene.canvas.GraphicsContext;
  * @author nkoiv
  */
 public class Game {
-    
+    public PlayerCharacter player;
     public Location currentLocation;
     public boolean running = false;
     public final ArrayList<String> inputLog = new ArrayList<>();
@@ -43,12 +46,17 @@ public class Game {
     * TODO: Game states
     */
     public Game () {
+        //POC player:
+        PlayerCharacter himmu = new PlayerCharacter();
+        himmu.getSprite().setCollisionAreaShape(2);
+        himmu.addAction(new MeleeAttack());
+        this.player = himmu;
         //Initialize GameStates
         this.gameStates = new ArrayList<>();
         gameStates.add(new LocationState(this));
         currentState = gameStates.get(0);
         //Temp TODO:
-        currentLocation = new Location();
+        currentLocation = new Location(player);
         
     }
     
@@ -84,5 +92,9 @@ public class Game {
         //Mists.logger.info("Rendered current state on canvas");
     }
     
+    public void handleMouseEvent(MouseEvent me) {
+        //Pass the mouse event to the current gamestate
+        currentState.handleMouseEvent(me);
+    }
     
 }

@@ -5,10 +5,13 @@
  */
 package com.nkoiv.mists.game.ui;
 
+import com.nkoiv.mists.game.Mists;
+import java.util.logging.Level;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -24,8 +27,14 @@ public class TextButton implements UIComponent{
     private double textXOffset;
     private double textYOffset;
     private Rectangle background;
+    private double xPosition;
+    private double yPosition;
 
-    public TextButton(String name, int width, int height) {
+    public TextButton(String name, double width, double height) {
+        this(name, width, height, 0, 0);
+    }
+    
+    public TextButton(String name, double width, double height, double xPosition, double yPosition) {
         text = new Text(name);
         text.setFont(Font.font(20));
         text.setStroke(Color.WHITE);
@@ -73,8 +82,29 @@ public class TextButton implements UIComponent{
     }
     
     @Override
-    public void onClick() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getName() {
+        return this.text.getText();
+    }
+    
+    @Override
+    public void setPosition(double xPos, double yPos) {
+        this.xPosition = xPos;
+        this.yPosition = yPos;
+    }
+    
+    @Override
+    public double getXPosition() {
+        return this.xPosition;
+    }
+
+    @Override
+    public double getYPosition() {
+        return this.yPosition;
+    }
+    
+    @Override
+    public void onClick(MouseEvent me) {
+        Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
     }
     
     @Override

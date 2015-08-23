@@ -6,9 +6,12 @@
 package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gamestate.GameState;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -17,8 +20,10 @@ import javafx.scene.shape.Rectangle;
  * Windows can be interactive (reserving input) or simply static.
  * @author nikok
  */
-public class Window implements UIComponent{
+public class TiledWindow implements UIComponent{
     
+    private GameState parent;
+    private String name;
     private boolean interactive;
     private ArrayList<UIComponent> subComponents;
     private int currentButton;
@@ -30,7 +35,9 @@ public class Window implements UIComponent{
     private double height;
     private double margin;
     
-    public Window (double width, double height, double xPos, double yPos) {
+    public TiledWindow (GameState parent, String name, double width, double height, double xPos, double yPos) {
+        this.parent = parent;
+        this.name = name;
         this.width = width;
         this.height = height;
         this.xPosition = xPos;
@@ -42,12 +49,8 @@ public class Window implements UIComponent{
                 
     }
     
-    public void addMenuButton(TextButton mb) {
-        if (mb.getWidth() <= this.getWidth()) {
-            this.subComponents.add(mb);
-        } else {
-            Mists.logger.warning("Tried to add button ["+mb.toString()+"] to Window, but it wouldnt fit");
-        }
+    private void close() {
+        this.parent.getUIComponents().remove(this.name);
     }
     
     public void addSubComponent(UIComponent uiComp) {
@@ -109,6 +112,25 @@ public class Window implements UIComponent{
         
     }
     
+    private void tileSubComponentPositions (double xOffset, double yOffset) {
+        double currentXPos = this.xPosition + xOffset;
+        double currentYPos = this.yPosition + this.margin + yOffset;
+        double widthOfRow = 0;
+        double rowHeight = 0;
+        for (UIComponent sc : this.subComponents) {
+            widthOfRow = widthOfRow + sc.getWidth() + this.margin;
+            rowHeight = sc.getHeight();
+            if (widthOfRow > this.getWidth()) {
+                //Move a row down
+                currentYPos = currentYPos+rowHeight+this.margin;
+                //Start from the beginning of the row again
+                currentXPos = this.xPosition + this.margin + xOffset;
+                //Row width is now just this component
+                widthOfRow = sc.getWidth();
+                }
+            sc.setPosition(currentXPos+(widthOfRow-sc.getWidth()), currentYPos);
+        }
+    }
     /**
     * Render the window on the given graphics context
     * The Subcomponents are drawn in turn, tiled to new row whenever needed
@@ -130,25 +152,16 @@ public class Window implements UIComponent{
         gc.restore();
         
         //Render all the subcomponents so that they are tiled in the window area
-        double currentXPos = this.xPosition + xOffset;
-        double currentYPos = this.yPosition + this.margin + yOffset;
-        double widthOfRow = 0;
-        double rowHeight = 0;
+        tileSubComponentPositions(xOffset, yOffset);
         for (UIComponent sc : this.subComponents) {
-            widthOfRow = widthOfRow + sc.getWidth() + this.margin;
-            rowHeight = sc.getHeight();
-            if (widthOfRow > this.getWidth()) {
-                //Move a row down
-                currentYPos = currentYPos+rowHeight+this.margin;
-                //Start from the beginning of the row again
-                currentXPos = this.xPosition + this.margin + xOffset;
-                //Row width is now just this component
-                widthOfRow = sc.getWidth();
-            }
-            //if (rowHeight < sc.getHeight()) rowHeight = sc.getHeight();
-            sc.render(gc, currentXPos+(widthOfRow-sc.getWidth()), currentYPos);
+            sc.render(gc, sc.getXPosition(), sc.getYPosition());
         }
         
+    }
+    
+    @Override
+    public String getName() {
+        return this.name;
     }
     
     /**
@@ -164,11 +177,39 @@ public class Window implements UIComponent{
     }
     
     @Override
-    public void onClick() {
-        
+    public void onClick(MouseEvent me) {
+        Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+        double clickX = me.getX();
+        double clickY = me.getY();
+        for (UIComponent uic : subComponents) {
+            double uicHeight = uic.getHeight();
+            double uicWidth = uic.getWidth();
+            double uicX = uic.getXPosition();
+            double uicY = uic.getYPosition();
+            //Check if the click landed on the ui component
+            if (clickX >= uicX && clickX <= (uicX + uicWidth)) {
+                if (clickY >= uicY && clickY <= uicY + uicHeight) {
+                    uic.onClick(me);
+                }
+            }
+            
+        }
     }
 
+    @Override
+    public double getXPosition() {
+        return this.xPosition;
+    }
 
+    @Override
+    public double getYPosition() {
+        return this.yPosition;
+    }
+
+    @Override
+    public void setPosition(double xPos, double yPos) {
+        this.xPosition = xPos;
+        this.yPosition = yPos;
+    }
     
-  
 }
