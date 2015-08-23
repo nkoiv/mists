@@ -5,18 +5,23 @@
  */
 package com.nkoiv.mists.game;
 
+import static com.nkoiv.mists.game.Global.HEIGHT;
+import static com.nkoiv.mists.game.Global.WIDTH;
 import static com.nkoiv.mists.game.Mists.logger;
+import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.MapGenerator;
 import java.util.ArrayList;
 import java.util.logging.Level;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
- * Game hosts the main loop of the game.
- * The Game class handles swapping between locations.
+ * Game handles the main loop of the game. The View of the game (Mists-class)
+ * Tick and Render from Game, without knowing anything. Game.class knows everything.
+ * The Game class handles swapping between locations etc.
  * @author nkoiv
  */
 public class Game {
@@ -28,16 +33,23 @@ public class Game {
     public double xOffset; //Offsets are used control which part of the map is drawn
     public double yOffset; //If/when a map is larger than display-area, it should be centered on player
     public MapGenerator mapGen;
-    
-    boolean inMenu = false;
+
+    private ArrayList<GameState> gameStates;
+    private GameState currentState;
     
     /**
     * Initialize a new game
     * Call in the character generator, set the location to start.
-    *
+    * TODO: Game states
     */
     public Game () {
+        //Initialize GameStates
+        this.gameStates = new ArrayList<>();
+        gameStates.add(new LocationState(this));
+        currentState = gameStates.get(0);
+        //Temp TODO:
         currentLocation = new Location();
+        
     }
     
     /**
@@ -57,74 +69,20 @@ public class Game {
     * @param releasedButtons Buttons recently released
     */
     public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
-
-        handleKeyPress(pressedButtons, releasedButtons);
-        currentLocation.update(time);
-
+        currentState.tick(time, pressedButtons, releasedButtons);
     }
     
     /**
     * Render handles updating the game window, and should be called every time something needs refreshed.
     * By default render is called 60 times per second (or as close to as possible) by AnimationTimer -thread.
-    * @param canvas The Canvas to draw the game on
+    * @param centerCanvas The Canvas to draw the game on
+   
     */
-    public void render(Canvas canvas) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        double screenWidth = canvas.getWidth();
-        double screenHeight = canvas.getHeight();
-        //Clear old stuff from the screen
-        gc.clearRect(0, 0, screenWidth, screenHeight);
-        currentLocation.render(gc);
-        //logger.info("Rendered on canvas");
+    public void render(Canvas centerCanvas, Canvas uiCanvas) {
+        //TODO: Consider sorting out UI here instead of handing it all to currentState
+        currentState.render(centerCanvas, uiCanvas);
+        //Mists.logger.info("Rendered current state on canvas");
     }
     
-    private void handleKeyPress(ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
-        
-        //TODO: External loadable configfile for keybindings
-        //(probably via a class of its own)
-        
-        
-        currentLocation.getPlayer().stopMovement();
-        
-        if (pressedButtons.isEmpty() && releasedButtons.isEmpty()) {
-            return;
-        }
-
-        //TODO: Current movement lets player move superspeed diagonal. should call moveTowards(Direction.UPRIGHT) etc.
-        if (pressedButtons.contains("UP")) {
-            //Mists.logger.log(Level.INFO, "Moving {0} UP", currentLocation.getPlayer().getName());
-            currentLocation.getPlayer().moveTowards(Direction.UP);            
-        }
-        if (pressedButtons.contains("DOWN")) {
-            //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
-            currentLocation.getPlayer().moveTowards(Direction.DOWN);
-        }
-        if (pressedButtons.contains("LEFT")) {
-            //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
-            currentLocation.getPlayer().moveTowards(Direction.LEFT);
-        }
-        if (pressedButtons.contains("RIGHT")) {
-            //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
-            currentLocation.getPlayer().moveTowards(Direction.RIGHT);
-        }
-        
-        //TODO: These should be directed to the UI-layer, which knows which abilities player has bound where
-        if (pressedButtons.contains("SPACE")) {
-            //Mists.logger.log(Level.INFO, "{0} TRIED USING ABILITY 0", currentLocation.getPlayer().getName());
-            currentLocation.getPlayer().useAction("MeleeAttack");
-        }
-        
-        if (releasedButtons.contains("ENTER")) {
-            currentLocation.getPathFinder().printCollisionMapIntoConsole();
-            currentLocation.getPathFinder().printClearanceMapIntoConsole(0);
-            
-        }
-        
-        if (releasedButtons.contains("SHIFT")) {
-            currentLocation.getCreatureByName("Otus").toggleFlag("testFlag");
-        
-        }
-        
-        releasedButtons.clear(); //Button releases are handled only once
-    }
+    
 }

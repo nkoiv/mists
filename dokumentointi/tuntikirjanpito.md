@@ -1,4 +1,12 @@
-#Viikko 4 (27h)
+#Viikko 5 (7h)
+(UI)
+
+##23.8h
+* 3h [OHJELMOINTI] Käyty rakentamaan UI:ta ikkunoiden kautta
+* 1h [OHJELMOINTI] Rakennettu Controllerit pelin eri tiloille (GameState.class)
+* 3h [OPISKELU] Selvitetty erilaisia tapoja muodostaa UI pelille
+
+#Viikko 4 (38h)
 (Reitinhaku ja karttojen generointi)
 
 ##20.8

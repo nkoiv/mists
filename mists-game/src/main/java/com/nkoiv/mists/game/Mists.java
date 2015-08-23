@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -40,39 +41,21 @@ public class Mists extends Application implements Global {
     public final ArrayList<String> releasedButtons = new ArrayList<>();
     public Scene currentScene;
     
-    private HBox addHBox() {
-
-        HBox hbox = new HBox();
-        hbox.setPadding(new Insets(15, 12, 15, 12));
-        hbox.setSpacing(10);   // Gap between nodes
-        hbox.setStyle("-fx-background-color: #808080;");
-
-        Button buttonCurrent = new Button("Test");
-        buttonCurrent.setPrefSize(100, 20);
-
-        Button buttonProjected = new Button("Button");
-        buttonProjected.setPrefSize(100, 20);
-        
-        hbox.getChildren().addAll(buttonCurrent, buttonProjected);
-        
-        return hbox;
-    }
-    
+    /**
+    * start(), coming from the Application that Mists extends, is the call to launch the game.
+    * The main loop of the game is executed inside the start, with an AnimationTimer();
+    * Everything shown on the screen is displayed via the priamaryStage, given to start by the Application.launch();
+    * @param primaryStage Comes from the Application class, as called for in the main(): Application.launch();
+    */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("The Mists");
         Group root = new Group();
         Scene launchScene = new Scene(root);
-        final Canvas locationCanvas = new Canvas(WIDTH, HEIGHT);
-        //root.getChildren().add( locationCanvas );
-                
-        BorderPane border = new BorderPane();
-        HBox hbox = addHBox();
-        border.setBottom(hbox);
-        border.setCenter(locationCanvas);
-
-        root.getChildren().add(border);
-        
+        final Canvas gameCanvas = new Canvas(WIDTH, HEIGHT);
+        final Canvas uiCanvas = new Canvas(WIDTH, HEIGHT);
+        root.getChildren().add(gameCanvas);
+        root.getChildren().add(uiCanvas);
         logger.info("Scene initialized");
         
         primaryStage.setScene(launchScene);
@@ -84,7 +67,9 @@ public class Mists extends Application implements Global {
         running = true;
         logger.info("Mists game started");
         
-       
+       /*
+        * Game main loop
+        */
         new AnimationTimer()
         {
             final double startNanoTime = System.nanoTime();
@@ -99,8 +84,10 @@ public class Mists extends Application implements Global {
             
                 double elapsedNanoTime = (currentNanoTime - previousNanoTime) / 1000000000.0;
                 previousNanoTime = currentNanoTime;
-                MistsGame.tick(elapsedNanoTime, pressedButtons, releasedButtons);
-                MistsGame.render(locationCanvas);          
+                //Do things:
+                MistsGame.tick(elapsedNanoTime, pressedButtons, releasedButtons); 
+                //Show things:
+                MistsGame.render(gameCanvas, uiCanvas); 
             } 
          }.start();
     } 
