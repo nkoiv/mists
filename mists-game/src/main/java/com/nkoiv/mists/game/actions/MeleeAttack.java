@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.Combatant;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class MeleeAttack extends Action implements AttackAction {
                     (attackPoint[1]-(this.attackAnimation.getFrameHeight()/2)));
         }
     }
-    
+       
     @Override
     public void hitOn(ArrayList<MapObject> mobs) {
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
@@ -76,6 +77,9 @@ public class MeleeAttack extends Action implements AttackAction {
                     if (mob instanceof Combatant) {
                         Mists.logger.info("Hit "+mob.getName()+" for 50 damage");
                         ((Combatant)mob).takeDamage(50);
+                    } else if (mob instanceof Structure) {
+                        //TODO: Temp: DESTROY THE STRUCTURES!
+                        this.getOwner().getLocation().removeMapObject(mob);
                     }
                 }
             }

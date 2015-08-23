@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
