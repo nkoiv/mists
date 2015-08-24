@@ -17,6 +17,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -50,7 +51,7 @@ public class Location implements Global {
     
     private MapObject screenFocus;
     private PlayerCharacter player;
-    
+    private final HashMap<Integer, double[]> entryPoints = new HashMap<>();
     /*
     * Constructor for demofield
     * TODO: load this from some XML or somesuch
@@ -147,6 +148,13 @@ public class Location implements Global {
         mob.setCenterPosition(openSpot[0], openSpot[1]);
     }
     
+    private double[] getEntryPoint() {
+        /*TODO: use the HashMap entryPoints to select
+        * where the player lands when he first enters the location
+        */
+        return this.getRandomOpenSpot(this.getPlayer().getSprite().getWidth());
+    }
+            
     /**
     * Brute force setting a dummy around the map until we find a an open spot
     * TODO: This could get stuck in infinite loop
@@ -186,7 +194,9 @@ public class Location implements Global {
     * @param yPos Position for the structure on the Y-axis
     */
     public void addStructure(Structure s, double xPos, double yPos) {
-        this.mapObjects.add(s);
+        if (!this.mapObjects.contains(s)) {
+            this.mapObjects.add(s);    
+        }
         s.setLocation(this);
         s.getSprite().setPosition(xPos, yPos);
     }
@@ -197,7 +207,9 @@ public class Location implements Global {
     * @param yPos Position for the creature on the Y-axis
     */
     public void addCreature(Creature c, double xPos, double yPos) {
-        this.mapObjects.add(c);
+        if (!this.mapObjects.contains(c)) {
+            this.mapObjects.add(c);
+        }
         c.setLocation(this);
         c.getSprite().setPosition(xPos, yPos);
     }
@@ -208,7 +220,9 @@ public class Location implements Global {
     * @param yPos Position for the effect on the Y-axis
     */
     public void addEffect(Effect e, double xPos, double yPos) {
-        this.effects.add(e);
+        if (!this.mapObjects.contains(e)) {
+            this.effects.add(e);
+        }
         e.setLocation(this);
         e.getSprite().setPosition(xPos, yPos);
     }
@@ -219,7 +233,9 @@ public class Location implements Global {
     * @param yPos Position for the effect on the Y-axis
     */
     public void addPlayerCharacter(PlayerCharacter p, double xPos, double yPos) {
-        this.mapObjects.add(p);
+        if (!this.mapObjects.contains(p)) {
+            this.mapObjects.add(p);
+        }
         p.setLocation(this);
         p.getSprite().setPosition(xPos, yPos);
     }
@@ -479,6 +495,24 @@ public class Location implements Global {
         String s;
         s = this.name+", a "+this.map.getWidth()+"x"+this.map.getHeight()+" area with "+this.mapObjects.size()+" mobs";
         return s;
+    }
+
+    /**
+     *  ExitLocation should clean up the location for re-entry later on
+     */
+    public void exitLocation() {
+        Mists.logger.info("Location "+this.getName()+" exited, cleaning up...");
+    }
+
+    /**
+     *  EnterLocation should prepare the location for player
+     */
+    public void enterLocation(PlayerCharacter p) {
+        Mists.logger.info("Location "+this.getName()+" entered. Preparing area...");
+        this.setPlayer(p);
+        double[] entryPoint = this.getEntryPoint();
+        this.addPlayerCharacter(p, entryPoint[0], entryPoint[1]);
+        
     }
     
 }

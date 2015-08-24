@@ -224,6 +224,11 @@ public class LocationState implements GameState {
     }
     
     @Override
+    public Game getGame() {
+        return this.game;
+    }
+    
+    @Override
     public void exit() {
         
     }

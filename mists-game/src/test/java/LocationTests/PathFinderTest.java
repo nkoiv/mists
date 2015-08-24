@@ -6,12 +6,10 @@
 package LocationTests;
 
 import TestTools.JavaFXThreadingRule;
-import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -58,7 +56,7 @@ public class PathFinderTest {
     }
 
     @Test
-    public void goingTowardsDirectlyLeftShouldGiveLeftDirection() {
+    public void goingTowardsDirectlyLeftShouldGiveCoordinatesAtLeft() {
         double startPositionX = 32;
         double startPositionY = 32;
         double goalPositionX = 64;

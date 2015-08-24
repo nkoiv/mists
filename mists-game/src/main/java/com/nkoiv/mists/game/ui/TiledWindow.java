@@ -10,10 +10,8 @@ import com.nkoiv.mists.game.gamestate.GameState;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 /**
  * Window is the basic UI component. It acts as a collection of other UI stuff.
@@ -78,6 +76,10 @@ public class TiledWindow implements UIComponent{
     }
     public void setHeight(double height) {
         this.height = height;
+    }
+    
+    public GameState getParent() {
+        return this.parent;
     }
     
     @Override

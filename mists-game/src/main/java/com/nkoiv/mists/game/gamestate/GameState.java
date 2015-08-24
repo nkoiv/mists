@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
+import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import javafx.scene.input.MouseEvent;
 public interface GameState {
     
     public HashMap<String, UIComponent> getUIComponents();
+    public Game getGame();
     
     //Draw things
     public void render(Canvas gameCanvas, Canvas uiCanvas);

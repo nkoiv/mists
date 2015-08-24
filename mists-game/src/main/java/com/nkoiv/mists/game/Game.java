@@ -39,6 +39,9 @@ public class Game {
 
     private ArrayList<GameState> gameStates;
     private GameState currentState;
+    public static final int MAINMENU = 0;
+    public static final int LOCATION = 1;
+    public static final int WORLDMAP = 2;
     
     /**
     * Initialize a new game
@@ -53,20 +56,31 @@ public class Game {
         this.player = himmu;
         //Initialize GameStates
         this.gameStates = new ArrayList<>();
+        gameStates.add(new MainMenuState(this));
         gameStates.add(new LocationState(this));
-        currentState = gameStates.get(0);
+        currentState = gameStates.get(MAINMENU);
         //Temp TODO:
         currentLocation = new Location(player);
         
+    }
+    
+    public void moveToState(int gameStateNumber) {
+        //TODO: Do some fancy transition?
+        currentState = gameStates.get(gameStateNumber);
     }
     
     /**
     * Move the player (and the game) to a new location
     * @param l The location to be moved to
     */
-    public void moveToLocation (Location l) {
+
+    public void moveToLocation(Location l) {
+        currentLocation.exitLocation();
+        l.enterLocation(player);
         currentLocation = l;
     }
+    
+
 
     /**
     * Tick checks keybuffer, initiates actions and does just about everything.

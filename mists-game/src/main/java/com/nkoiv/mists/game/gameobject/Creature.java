@@ -7,14 +7,11 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.pathfinding.Path;
-import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
