@@ -8,7 +8,6 @@ package com.nkoiv.mists.game.world;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -22,13 +21,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 
 /**
  * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
@@ -98,15 +94,15 @@ public class Location implements Global {
             this.setMobInRandomOpenSpot(tree);
         
         }
-        /*
-        for (int i = 0; i < 5 ; i++) {
+        
+        for (int i = 0; i < 15 ; i++) {
             //Make a bunch of monsters
             Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
             monster.getSprite().setCollisionAreaShape(2);
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);
         }
-        */
+        
         Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
         monster.getSprite().setCollisionAreaShape(2);
         this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
@@ -385,12 +381,21 @@ public class Location implements Global {
         while ( mapObjectsIter.hasNext() )
         {
             MapObject collidingObject = mapObjectsIter.next();
-            if (!collidingObject.equals(o)) { // Colliding with yourself is not really a collision
+            //If the objects are further away than their combined width/height, they cant collide
+            if ((Math.abs(collidingObject.getCenterXPos() - o.getCenterXPos())
+                 > (collidingObject.getSprite().getWidth() + o.getSprite().getWidth()))
+                || (Math.abs(collidingObject.getCenterYPos() - o.getCenterYPos())
+                 > (collidingObject.getSprite().getHeight() + o.getSprite().getHeight()))) {
+                //Objects are far enough from oneanother
+            } else {
+                if (!collidingObject.equals(o)) { // Colliding with yourself is not really a collision
                 if ( o.instersects(collidingObject) ) 
                  {
                     collidingObjects.add(collidingObject);
                 }
             }
+            }
+            
         }
         
         return collidingObjects;
