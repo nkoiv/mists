@@ -212,7 +212,7 @@ public class LocationState implements GameState {
         }
         
         if (releasedButtons.contains("SHIFT")) {
-            game.currentLocation.getCreatureByName("Otus").toggleFlag("testFlag");
+            game.currentLocation.toggleFlag("testFlag");
         
         }
         

@@ -43,6 +43,7 @@ public class CreatureAI {
         //TODO: For now all creatures just want to home in on player
         if (this.timeSinceAction > 0.5) { //Acting twice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
+            this.creep.stopMovement(); //clear old movement
             this.moveTowardsPlayer(time);
             this.timeSinceAction = 0;
         } else {
@@ -58,7 +59,7 @@ public class CreatureAI {
     **  TODO: Temporary for just following player
     */
     public void moveTowardsPlayer(double time) {        
-        if (!this.creep.isFlagged("testFlag")) return; //Dont my unless flagged
+        if (!this.creep.getLocation().isFlagged("testFlag")) return; //Dont my unless flagged
         /*
         * Since pathfinding moves in full tiles, it's possible for units
         * to get stuck on the corners. We alleviate this with the following

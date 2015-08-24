@@ -47,6 +47,7 @@ public class Location implements Global {
     
     private MapObject screenFocus;
     private PlayerCharacter player;
+    private final HashMap<String, Integer> flags = new HashMap<>();
     private final HashMap<Integer, double[]> entryPoints = new HashMap<>();
     /*
     * Constructor for demofield
@@ -95,7 +96,7 @@ public class Location implements Global {
         
         }
         
-        for (int i = 0; i < 15 ; i++) {
+        for (int i = 0; i < 10 ; i++) {
             //Make a bunch of monsters
             Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
             monster.getSprite().setCollisionAreaShape(2);
@@ -505,6 +506,59 @@ public class Location implements Global {
         }
         
         
+    }
+    
+    /**
+    * Flags store any soft information for the location
+    * @param flag The name of the flag
+    * @param value Value for the flag (0 or less is not flagged)
+    */
+    public void setFlag(String flag, int value) {
+        if (this.flags.containsKey(flag)) {
+            this.flags.replace(flag, value);
+        } else {
+            this.flags.put(flag, value);
+        }   
+    }
+    
+    /**
+    * Toggle flag on or off. If Flag was more than 0, it's now 0.
+    * If it was less or equal to 0 or didnt exist, it's now 1
+    * @param flag Flag to toggle
+    */
+    public void toggleFlag(String flag) {
+        if (this.isFlagged(flag)) {
+            this.setFlag(flag, 0);
+        } else {
+            this.setFlag(flag, 1);
+        }
+        
+    }
+    
+    /**
+    * Return the value for the given flag
+    * @param flag Desired flag
+    * @return Returns the value of the flag
+    */
+    public int getFlag(String flag) {
+        if (this.flags.containsKey(flag)) {
+            return this.flags.get(flag);
+        } else {
+            return 0;
+        }
+    }
+    
+    /**
+    * Check if the Location has the given flag
+    * @param flag Flag to check
+    * @return returns true if Location has given flag at more than 0
+    */
+    public boolean isFlagged (String flag) {
+        if (this.flags.containsKey(flag)) {
+            return this.flags.get(flag) > 0;
+        } else {
+            return false;
+        }
     }
     
     public String getName() {

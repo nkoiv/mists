@@ -200,7 +200,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public void update (double time) {
-        this.stopMovement(); //clear old movement
+        
         /* Call AI routines
         *  TODO: Separate movements etc to the AI
         */
