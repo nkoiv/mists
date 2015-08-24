@@ -464,19 +464,27 @@ public class Location implements Global {
         */
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) {
-                mob.render(xOffset, yOffset, gc); //Draw objects on the ground
-                if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
-                    gc.setStroke(Color.RED);
-                    if (mob.getSprite().getCollisionAreaType() == 1) {
-                        gc.strokeRect(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
-                        mob.getSprite().getWidth(), mob.getSprite().getHeight());
-                    } else if (mob.getSprite().getCollisionAreaType() == 2) {
-                        gc.strokeOval(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
-                        mob.getSprite().getWidth(), mob.getSprite().getHeight());
+                if (mob.getXPos()-xOffset < -mob.getSprite().getWidth() ||
+                    mob.getXPos()-xOffset > gc.getCanvas().getWidth()) {
+                    //Mob is not in window
+                } else if (mob.getYPos()-yOffset < -mob.getSprite().getHeight() ||
+                    mob.getYPos()-yOffset > gc.getCanvas().getHeight()) {
+                    //Mob is not in window
+                } else {
+                    //Mob is in window
+                    mob.render(xOffset, yOffset, gc); //Draw objects on the ground
+                    if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
+                        gc.setStroke(Color.RED);
+                        if (mob.getSprite().getCollisionAreaType() == 1) {
+                            gc.strokeRect(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
+                            mob.getSprite().getWidth(), mob.getSprite().getHeight());
+                        } else if (mob.getSprite().getCollisionAreaType() == 2) {
+                            gc.strokeOval(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
+                            mob.getSprite().getWidth(), mob.getSprite().getHeight());
+                        }
+
                     }
-                    
                 }
-                
             }
         }
         // Render extras should be called whenever the structure is rendered
