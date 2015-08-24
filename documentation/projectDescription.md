@@ -6,6 +6,9 @@ Unlike in most roguelikes, the player character in Mists is accompanied by a hel
 **Users:** Mists is a single player game. On the broad spectrum, the player should be able to:
 * Start a new game
 * Play the game
+** Move around
+** Attack enemies
+** Toggle objects
 * Save a game to pause progress
 * Resume a saved game
 
@@ -14,6 +17,7 @@ So far only the Location -level of the game has been developed.
 Further down the road, there should be a world map to travel from a location to another.
 
 ***Location controls (POC)***
+* Open game menu: Escape
 * Moving around: Arrow keys
 * Using ability (Melee attack): Space
 * Activate/Deactivate creatures: Shift
