@@ -6,9 +6,9 @@ Unlike in most roguelikes, the player character in Mists is accompanied by a hel
 **Users:** Mists is a single player game. On the broad spectrum, the player should be able to:
 * Start a new game
 * Play the game
-** Move around
-** Attack enemies
-** Toggle objects
+ (Move around)
+ (Attack enemies)
+ (Toggle objects)
 * Save a game to pause progress
 * Resume a saved game
 
@@ -29,11 +29,11 @@ while also calling for renders back into the main stage. Various gamestates gove
 and the principle is that a new gamestate is only added when desired gameplay differs wildly from what
 existing gamestates can provide.
 The accompanied UML Class diagram is good reference for this, but the rought structure is as follows:
-* Game
-** Gamestate for MainMenu
-** Gamestate for Locations 
-** GameState for WorldMap
-** GameState for Town
+(Game)
+* Gamestate for MainMenu
+* Gamestate for Locations 
+* GameState for WorldMap
+* GameState for Town
 
 Bulk of the gameplay resides at Locations. These are top down areas where the player can move around, exploring
 and combating adversaries. WorldMap is used for traveling between Locations, but it's a lot more limited as far
