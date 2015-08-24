@@ -98,7 +98,15 @@ public class Location implements Global {
             this.setMobInRandomOpenSpot(tree);
         
         }
-
+        /*
+        for (int i = 0; i < 5 ; i++) {
+            //Make a bunch of monsters
+            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
+            monster.getSprite().setCollisionAreaShape(2);
+            this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
+            this.setMobInRandomOpenSpot(monster);
+        }
+        */
         Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
         monster.getSprite().setCollisionAreaShape(2);
         this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   

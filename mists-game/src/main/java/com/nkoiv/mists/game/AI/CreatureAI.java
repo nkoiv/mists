@@ -23,21 +23,32 @@ import java.util.logging.Level;
 public class CreatureAI {
     
     private Creature creep;
+    private double timeSinceAction;
     
     public CreatureAI (Creature creep) {
         this.creep = creep;
+        this.timeSinceAction = 0;
     }
     
     /**
     * act() is the main loop for AI
     * it's called whenever it's given creatures
     * turn to do things
+    * TimeSinceAction governs creature decisionmaking
+    * No creature needs to act on every tick!
     * @param time Time passed since the last action
     * @return Returns true if the creature was able to act
     */
     public boolean act(double time) {
         //TODO: For now all creatures just want to home in on player
-        this.moveTowardsPlayer(time);
+        if (this.timeSinceAction > 0.5) { //Acting twice per second
+            Mists.logger.info(this.getCreature().getName()+" decided to act!");
+            this.moveTowardsPlayer(time);
+            this.timeSinceAction = 0;
+        } else {
+            this.getCreature().applyMovement(time);
+            this.timeSinceAction = this.timeSinceAction+time;
+        }
         //this.moveTowardsMob(this.creep.getLocation().getPlayer(), time);
         return true;
     }

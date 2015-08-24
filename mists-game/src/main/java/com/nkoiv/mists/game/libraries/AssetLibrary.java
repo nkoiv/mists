@@ -20,7 +20,7 @@ import java.util.*;
  * 
  * @author nkoiv
  */
-public class Library extends Object implements Serializable, Cloneable {
+public class AssetLibrary extends Object implements Serializable, Cloneable {
 /*    
     // all library objects, indexed by Name
     private HashMap<String, Object> library = new HashMap<>();

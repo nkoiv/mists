@@ -7,7 +7,6 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +42,7 @@ public class PlayerCharacter extends Creature implements Combatant {
     */
     
     private HashMap<String, SpriteAnimation> spriteAnimations;
-    
+    private ArrayList<PlayerCharacter> companions;
     
     public PlayerCharacter() {
         //Dummy player for testing
@@ -68,6 +67,14 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setMaxHealth(100);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
+    }
+    
+    public void addCompanion (PlayerCharacter comp) {
+        this.companions.add(comp);
+    }
+    
+    public ArrayList<PlayerCharacter> getCompanions() {
+        return this.companions;
     }
     
     @Override
