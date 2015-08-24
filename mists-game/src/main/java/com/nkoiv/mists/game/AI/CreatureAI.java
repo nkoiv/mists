@@ -42,7 +42,7 @@ public class CreatureAI {
     public boolean act(double time) {
         //TODO: For now all creatures just want to home in on player
         if (this.timeSinceAction > 0.5) { //Acting twice per second
-            Mists.logger.info(this.getCreature().getName()+" decided to act!");
+            //Mists.logger.info(this.getCreature().getName()+" decided to act!");
             this.moveTowardsPlayer(time);
             this.timeSinceAction = 0;
         } else {
