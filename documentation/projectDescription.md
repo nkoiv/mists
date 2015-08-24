@@ -29,7 +29,7 @@ while also calling for renders back into the main stage. Various gamestates gove
 and the principle is that a new gamestate is only added when desired gameplay differs wildly from what
 existing gamestates can provide.
 The accompanied UML Class diagram is good reference for this, but the rought structure is as follows:
-(Game)
+
 * Gamestate for MainMenu
 * Gamestate for Locations 
 * GameState for WorldMap
