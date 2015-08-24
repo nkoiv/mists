@@ -1,7 +1,12 @@
-#Viikko 5 (9h)
+#Viikko 5 (11h)
 (UI)
 
-##23.8h
+##24.8
+* 1h [DOKUMENTOINTI] Päivitetty JavaDoc'ia
+* 1h [DOKUMENTOINTI] Piirretty lisää sekvenssikaavioita
+
+##23.8
+* 1h [DOKUMENTOINTI] Piirretty sekvenssikaavioita
 * 2h [OHJELMOINTI] Tehty actionbuttonit ja menu locationiin
 * 3h [OHJELMOINTI] Käyty rakentamaan UI:ta ikkunoiden kautta
 * 1h [OHJELMOINTI] Rakennettu Controllerit pelin eri tiloille (GameState.class)

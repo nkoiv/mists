@@ -8,11 +8,12 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import java.util.logging.Level;
-import javafx.application.Platform;
 import javafx.scene.input.MouseEvent;
 
 /**
- *
+ * ActionButtons (currently) extend the Test button,
+ * with the addition of being mapped to an action of a player.
+ * When the button is pressed, the action is used via PlayerCharacter.useAction() -method
  * @author nikok
  */
 public class ActionButton extends TextButton {

@@ -11,7 +11,8 @@ import javafx.application.Platform;
 import javafx.scene.input.MouseEvent;
 
 /**
- *
+ * QuitButton extends the TextButton, and simply calls
+ * Platform.exit() and System.exit(0) when clicked, closing the game.
  * @author nikok
  */
 public class QuitButton extends TextButton {

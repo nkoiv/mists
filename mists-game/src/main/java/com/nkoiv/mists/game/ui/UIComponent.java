@@ -10,7 +10,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
 /**
- *
+ * UIComponent is the interface for anything drawn on the UI layer
+ * Everything visible on the UI should implement this.
  * @author nikok
  */
 public interface UIComponent {

@@ -97,13 +97,14 @@ public class Location implements Global {
             this.setMobInRandomOpenSpot(tree);
         
         }
-        
-        Creature monster1 = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
-        monster1.getSprite().setCollisionAreaShape(2);
-        this.addCreature(monster1, 2*TILESIZE, 10*TILESIZE);   
+
+        Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
+        monster.getSprite().setCollisionAreaShape(2);
+        this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
+        this.setMobInRandomOpenSpot(monster);
         
         this.setMobInRandomOpenSpot(player);
-        this.setMobInRandomOpenSpot(monster1);
+        
     }
 
     /**
@@ -259,10 +260,23 @@ public class Location implements Global {
         return this.player;
     }
     
+    /**
+     * The target of the screen focus is what the camera follows.
+     * The view of the location is centered on this target (normally the player)
+     * @param focus MapObject to focus on
+     */
     public void setScreenFocus(MapObject focus) {
         this.screenFocus = focus;
     }
     
+    /**
+     * xOffset is calculated from the position of the target in
+     * regards to the current window width. If the target would be
+     * outside viewable area, it's given offset to keep it inside the bounds
+     * @param gc
+     * @param xPos
+     * @return 
+     */
     public double getxOffset(GraphicsContext gc, double xPos){
         double windowWidth = gc.getCanvas().getWidth();
 	//Calculate Offset to ensure Player is centered on the screen
@@ -276,7 +290,15 @@ public class Location implements Global {
         
         return xOffset;
 	}
-	
+
+     /**
+     * yOffset is calculated from the position of the target in
+     * regards to the current window width. If the target would be
+     * outside viewable area, it's given offset to keep it inside the bounds
+     * @param gc
+     * @param yPos
+     * @return 
+     */
     public double getyOffset(GraphicsContext gc, double yPos){
         double windowHeight = gc.getCanvas().getHeight();
 	//Calculate Offset to ensure Player is centered on the screen
@@ -294,6 +316,7 @@ public class Location implements Global {
     /**
     * Update is the main "tick" of the Location.
     * Movement, combat and triggers should all be handled here
+    * TODO: Not everything needs to happen on every tick. Mobs should make new decisions only ever so often
     * @param time Time since the last update
     */
     public void update (double time) {

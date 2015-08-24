@@ -14,19 +14,17 @@ import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.ui.TiledWindow;
-import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 
 /**
  * LocationState handles the core of the game: being in Locations.
- * 
+ * As a GameState it takes in Input from the user via the Game -class,
+ * and provides the Game the output of the Location (graphics, etc)
  * @author nikok
  */
 public class LocationState implements GameState {
@@ -59,6 +57,14 @@ public class LocationState implements GameState {
         uiComponents.put(actionBar.getName(), actionBar);
     }
 
+    /**
+     * The LocationState renderer does things in two layers: Game and UI.
+     * Both of these layers are handled with via Canvases. First the Game is rendered on
+     * the gameCanvas, then the UI is rendered on the uiCanvas on top of it
+     * TODO: Consider separating gameplay into several layers (ground, structures, creatures, (structure)frill, overhead?)
+     * @param gameCanvas Canvas to draw the actual gameplay on
+     * @param uiCanvas Canvas to draw the UI on
+     */
     @Override
     public void render(Canvas gameCanvas, Canvas uiCanvas) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
@@ -80,7 +86,10 @@ public class LocationState implements GameState {
         }
         
     }
-    
+    /**
+     * Toggles open/close the gameMenu, displayed at the middle of the screen.
+     * TODO: Consider making a separate class for this, in case other GameStates utilize the same
+     */
     private void toggleGameMenu() {
         if (!gameMenuOpen) {
             gameMenuOpen = true;
@@ -102,6 +111,14 @@ public class LocationState implements GameState {
         
     }
 
+    /**
+     * The Tick command parses user input and sends an update(time) command to the
+     * location game is currently at. These are both done only if game is not inside a menu.
+     * In other words, the Location is paused while in a menu (that goes in the menu-stack).
+     * @param time
+     * @param pressedButtons
+     * @param releasedButtons 
+     */
     @Override
     public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
         
@@ -146,6 +163,14 @@ public class LocationState implements GameState {
         return false;
     }
 
+    /**
+     * HandleLocationKeyPresses takes in the arraylists of keypresses and releases from the Game,
+     * and does location-appropriate things with them.
+     * TODO: Load these keybindings from an external file.
+     * @param pressedButtons
+     * @param releasedButtons 
+     */
+    
     private void handleLocationKeyPress(ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
         
         //TODO: External loadable configfile for keybindings

@@ -19,7 +19,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
- *
+ * TextButton is a simple UI component with only a box and a text.
+ * It's going to be phased out mainly by some form of icon-buttons,
+ * but it remains a simple button for testing.
  * @author nikok
  */
 public class TextButton implements UIComponent{ 

@@ -84,10 +84,11 @@ public class Mists extends Application implements Global {
                 return;
                 }
                 
-                double elapsedNanoTime = (currentNanoTime - previousNanoTime) / 1000000000.0;
+                double elapsedSeconds = (currentNanoTime - previousNanoTime) / 1000000000.0;
+                //System.out.println("FPS : " + (int)(1/elapsedSeconds));
                 previousNanoTime = currentNanoTime;
                 //Do things:
-                MistsGame.tick(elapsedNanoTime, pressedButtons, releasedButtons); 
+                MistsGame.tick(elapsedSeconds, pressedButtons, releasedButtons); 
                 //Show things:
                 MistsGame.render(gameCanvas, uiCanvas);
             } 

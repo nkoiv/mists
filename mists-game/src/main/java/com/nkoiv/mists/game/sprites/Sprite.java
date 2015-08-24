@@ -191,6 +191,14 @@ public class Sprite
         this.height = height;
     }
 
+    /**
+     * Update() with targetX and targetY moves the sprite towards the target
+     * with the velocity it has, but never past the target. This can be used
+     * for fine manoeuvring.
+     * @param time
+     * @param targetX
+     * @param targetY 
+     */
     public void update(double time, double targetX, double targetY) {
         if ((positionX + velocityX * time) > targetX) {
             positionX = targetX;
@@ -204,6 +212,12 @@ public class Sprite
         }                   
         
     }
+    /**
+     * Update uses the velocity it has and the time given,
+     * moving the sprite towards the velocity according to the
+     * time it has (velocity * time).     
+     * @param time 
+     */
     
     public void update(double time)
     {

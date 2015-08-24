@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 /**
  * GameStates handle various parts of a game.
  * A state handles both the input and the output, coordinating via Game.class.
+ * GameState can be considered as the Controller in an MVC model.
  * Planned states include stuff such as:
  * MainMenu
  * WorldMap

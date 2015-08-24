@@ -119,6 +119,12 @@ public class MapObject implements Global {
         this.sprite.setPosition(xPos, yPos);
     }
     
+    /**
+     * Sets the (sprite) position so that the center of the sprite
+     * (instead of top left corner) is at the given coordinates.
+     * @param xPos
+     * @param yPos 
+     */
     public void setCenterPosition (double xPos, double yPos) {
         this.sprite.setPosition(xPos+(this.getSprite().getWidth()/2), yPos+(this.getSprite().getHeight()/2));
     }
