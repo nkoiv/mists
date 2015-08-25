@@ -738,4 +738,27 @@ m2=1
 &lt; generates</panel_attributes>
     <additional_attributes>10.0;10.0;40.0;70.0</additional_attributes>
   </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>100</x>
+      <y>120</y>
+      <w>100</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>SoundManager
+Package:audio</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>170</x>
+      <y>90</y>
+      <w>60</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;30.0</additional_attributes>
+  </element>
 </diagram>
