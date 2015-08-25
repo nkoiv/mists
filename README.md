@@ -1,5 +1,6 @@
 # mists
 A realtime Roguelike adventure for cs.hel.fi javalab
+
 Project description can be found at documents/projectDescription.md
 
 
