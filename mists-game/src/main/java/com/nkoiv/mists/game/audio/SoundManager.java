@@ -39,7 +39,12 @@ public class SoundManager {
     }
     
     private void initializeMediaPlayer() {
-        mediaPlayer = new MediaPlayer(musicPlaylist.get("menu")); 
+        try {
+            mediaPlayer = new MediaPlayer(musicPlaylist.get("menu")); 
+        } catch (Exception e) {
+            Mists.logger.warning("Unable to create mediaplayer - media missing?");
+            return;
+        }
         mediaPlayer.setVolume(0.3);
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             public void run() {
@@ -77,6 +82,7 @@ public class SoundManager {
             this.mediaPlayer = newPlayer;
         } else {
             Mists.logger.log(Level.WARNING, "Tried to play music with id <{0}>, but it was not in the playlist", id);
+            return;
         }
         this.mediaPlayer.play();
     }
@@ -103,6 +109,7 @@ public class SoundManager {
             this.loadSoundEffects("weapon_blow", "audio/sounds/weapon_blow.wav");
         } catch (Exception e) {
             Mists.logger.warning("Tried to load audio/sounds/weapon_blow.wav but failed");
+            return;
         }   
     }
     
