@@ -61,6 +61,25 @@ public class TextButton implements UIComponent{
         gc.restore();
     }
 
+    public void setText(Text newText) {
+        this.text = newText;
+        double textWidth = text.getLayoutBounds().getWidth();
+        double textHeight = text.getLayoutBounds().getHeight();
+        textXOffset = ((textWidth/2)  - (this.getWidth()/2));
+        textYOffset = ((textHeight/2) - (this.getHeight()/2));
+    }
+    
+    public void setText(String newTextString) {
+        Text newText = new Text(newTextString);
+        newText.setFont(this.text.getFont());
+        newText.setStroke(this.text.getStroke());
+        this.text = newText;
+        double textWidth = text.getLayoutBounds().getWidth();
+        double textHeight = text.getLayoutBounds().getHeight();
+        textXOffset = ((textWidth/2)  - (this.getWidth()/2));
+        textYOffset = ((textHeight/2) - (this.getHeight()/2));
+    }
+    
     public void gainFocus() {
         this.background.setFill(Color.ORANGERED);
     }

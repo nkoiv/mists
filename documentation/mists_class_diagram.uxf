@@ -473,8 +473,8 @@ constructs &gt;</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
-      <y>30</y>
+      <x>1100</x>
+      <y>40</y>
       <w>100</w>
       <h>70</h>
     </coordinates>
@@ -486,7 +486,7 @@ Package:UI</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
+      <x>1090</x>
       <y>130</y>
       <w>100</w>
       <h>70</h>
@@ -498,33 +498,33 @@ Package:UI</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>760</x>
-      <y>0</y>
-      <w>300</w>
-      <h>100</h>
+      <x>960</x>
+      <y>70</y>
+      <w>160</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=0..n
 &lt; house and control</panel_attributes>
-    <additional_attributes>10.0;40.0;70.0;20.0;230.0;20.0;270.0;80.0</additional_attributes>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1070</x>
-      <y>90</y>
-      <w>30</w>
-      <h>60</h>
+      <x>1130</x>
+      <y>100</y>
+      <w>40</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+    <additional_attributes>20.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1180</x>
-      <y>30</y>
+      <x>1230</x>
+      <y>40</y>
       <w>100</w>
       <h>70</h>
     </coordinates>
@@ -535,18 +535,18 @@ Package:UI</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1120</x>
-      <y>50</y>
-      <w>80</w>
+      <x>1190</x>
+      <y>60</y>
+      <w>60</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1170</x>
+      <x>1200</x>
       <y>130</y>
       <w>100</w>
       <h>70</h>
@@ -558,18 +558,18 @@ Package:UI</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1210</x>
-      <y>90</y>
-      <w>40</w>
-      <h>60</h>
+      <x>1240</x>
+      <y>100</y>
+      <w>60</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>20.0;10.0;10.0;40.0</additional_attributes>
+    <additional_attributes>40.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1280</x>
+      <x>1310</x>
       <y>130</y>
       <w>100</w>
       <h>70</h>
@@ -581,13 +581,13 @@ Package:UI</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1260</x>
-      <y>90</y>
+      <x>1300</x>
+      <y>100</y>
       <w>40</w>
-      <h>60</h>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;20.0;40.0</additional_attributes>
+    <additional_attributes>20.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -760,5 +760,17 @@ Package:audio</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>40.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>50</y>
+      <w>50</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;80.0;30.0;40.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

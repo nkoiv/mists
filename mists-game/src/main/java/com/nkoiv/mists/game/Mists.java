@@ -55,7 +55,8 @@ public class Mists extends Application implements Global {
         root.getChildren().add(gameCanvas);
         root.getChildren().add(uiCanvas);
         logger.info("Scene initialized");
-        
+        setupSoundManager();
+        logger.info("SoundManager initialized");
         primaryStage.setScene(launchScene);
         setupKeyHandlers(primaryStage);
         setupMouseHandles(root);
@@ -63,8 +64,6 @@ public class Mists extends Application implements Global {
         logger.info("Game set up");
         primaryStage.show();
         running = true;
-        setupSoundManager();
-        logger.info("SoundManager initialized");
         logger.info("Mists game started");
         
        /*

@@ -36,7 +36,7 @@ public class MainMenuState implements GameState {
     private final Game game;
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
-    private MediaPlayer mediaPlayer;
+    
     
     public MainMenuState (Game game) {
         this.game = game;
@@ -44,15 +44,7 @@ public class MainMenuState implements GameState {
         MainMenuWindow mainMenuWindow = new MainMenuWindow(this);
         this.uiComponents.put(mainMenuWindow.getName(), mainMenuWindow);
         this.currentMenu = uiComponents.get(mainMenuWindow.getName());
-        String musicPath = "src/main/resources/audio/music/JDB_Innocence.mp3";
-        Media music = new Media(Paths.get(musicPath).toUri().toString());
-        mediaPlayer = new MediaPlayer(music); 
-        mediaPlayer.setVolume(0.3);
-        mediaPlayer.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                mediaPlayer.seek(Duration.ZERO);
-            }
-        });
+        
     }
     
     @Override
@@ -135,12 +127,12 @@ public class MainMenuState implements GameState {
     
     @Override
     public void exit() {
-        mediaPlayer.stop();
+        Mists.soundManager.stopMusic();
     }
 
     @Override
     public void enter() {
-        mediaPlayer.play();
+        Mists.soundManager.playMusic("menu");
     }
 
     @Override

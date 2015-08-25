@@ -11,6 +11,8 @@ import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.audio.SoundManager;
 import com.nkoiv.mists.game.ui.ActionButton;
+import com.nkoiv.mists.game.ui.AudioControls;
+import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
@@ -37,24 +39,14 @@ public class LocationState implements GameState {
     private final Game game;
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
+    private AudioControls audioControls = new AudioControls();
     
     private HashMap<String, UIComponent> uiComponents;
-    private MediaPlayer mediaPlayer;
     
     public LocationState (Game game) {
         this.game = game;
         uiComponents = new HashMap<>();
         this.loadDefaultUI();
-        
-        String musicPath = "src/main/resources/audio/music/Dungeon_-_Dungeon_Delvers_(CS).mp3";
-        Media music = new Media(Paths.get(musicPath).toUri().toString());
-        mediaPlayer = new MediaPlayer(music);
-        mediaPlayer.setVolume(0.3);
-        mediaPlayer.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                 mediaPlayer.seek(Duration.ZERO);
-            }
-        });
     }
     
     private void loadDefaultUI() {
@@ -63,13 +55,14 @@ public class LocationState implements GameState {
         TextButton testButton2 = new TextButton("Button", 80, 60);
         TextButton testButton3 = new TextButton("Foo", 80, 60);
         TextButton testButton4 = new TextButton("Bar", 80, 60);
-        TextButton testButton5 = new TextButton("Himmu", 80, 60);
+        MuteMusicButton muteMusicButton;
+        muteMusicButton = new AudioControls.MuteMusicButton("Mute music", 80, 60);
         
         actionBar.addSubComponent(testButton1);
         actionBar.addSubComponent(testButton2);
         actionBar.addSubComponent(testButton3);
         actionBar.addSubComponent(testButton4);
-        actionBar.addSubComponent(testButton5);
+        actionBar.addSubComponent(muteMusicButton);
         uiComponents.put(actionBar.getName(), actionBar);
     }
 
@@ -248,12 +241,12 @@ public class LocationState implements GameState {
     
     @Override
     public void exit() {
-        mediaPlayer.stop();
+        Mists.soundManager.stopMusic();
     }
 
     @Override
     public void enter() {
-        mediaPlayer.play();
+        Mists.soundManager.playMusic("dungeon");
     }
 
     @Override
