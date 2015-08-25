@@ -1,7 +1,14 @@
-#Viikko 5 (11h)
+#Viikko 5 (17½h)
 (UI)
 
+##25.8
+* ½h [OHJELMOINTI] Luotu ensimmäinen asetuspainike (muteMusic) ja lisätty se alapalkkiin
+* 1h [OHJELMOINTI] Muokattu äänentoisto hieman fiksummaksi (myös musiikki nyt soundManagerin alla)
+
 ##24.8
+* 1h [DOKUMENTOINTI] Päivitetty Project Descriptioniin kohta käytössä olevista lisenssoiduista resursseista
+* 2h [OHJELMOINTI] Luotu soundManager-luokka ja otettu se käyttöön
+* 1h [OPISKELU] Selvitetty äänentoistoa JavaFX:llä
 * 1h [DOKUMENTOINTI] Päivitetty JavaDoc'ia
 * 1h [DOKUMENTOINTI] Piirretty lisää sekvenssikaavioita
 
