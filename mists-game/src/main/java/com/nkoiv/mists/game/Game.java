@@ -59,6 +59,7 @@ public class Game {
         gameStates.add(new MainMenuState(this));
         gameStates.add(new LocationState(this));
         currentState = gameStates.get(MAINMENU);
+        currentState.enter();
         //Temp TODO:
         currentLocation = new Location(player);
         
@@ -66,7 +67,9 @@ public class Game {
     
     public void moveToState(int gameStateNumber) {
         //TODO: Do some fancy transition?
+        currentState.exit();
         currentState = gameStates.get(gameStateNumber);
+        currentState.enter();
     }
     
     /**

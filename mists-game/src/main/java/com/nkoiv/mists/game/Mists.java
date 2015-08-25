@@ -7,22 +7,17 @@ package com.nkoiv.mists.game;
 
 
 import static com.nkoiv.mists.game.Mists.logger;
+import com.nkoiv.mists.game.audio.SoundManager;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -42,6 +37,7 @@ public class Mists extends Application implements Global {
     public final ArrayList<String> releasedButtons = new ArrayList<>();
     public final double[] mouseClickCoordinates = new double[2];
     public Scene currentScene;
+    public static SoundManager soundManager;
     
     /**
     * start(), coming from the Application that Mists extends, is the call to launch the game.
@@ -64,9 +60,11 @@ public class Mists extends Application implements Global {
         setupKeyHandlers(primaryStage);
         setupMouseHandles(root);
         MistsGame = new Game();
-        
+        logger.info("Game set up");
         primaryStage.show();
         running = true;
+        setupSoundManager();
+        logger.info("SoundManager initialized");
         logger.info("Mists game started");
         
        /*
@@ -104,6 +102,11 @@ public class Mists extends Application implements Global {
     
     public Game getGame() {
         return this.MistsGame;
+    }
+    
+    private void setupSoundManager() {
+                    
+        this.soundManager = new SoundManager(5);
     }
     
     private void setupMouseHandles(Group root) {

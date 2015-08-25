@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.ui.MainMenuWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayerBuilder;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 /**
  * MainMenuState controls and manages the main menu.
@@ -31,6 +36,7 @@ public class MainMenuState implements GameState {
     private final Game game;
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
+    private MediaPlayer mediaPlayer;
     
     public MainMenuState (Game game) {
         this.game = game;
@@ -38,6 +44,15 @@ public class MainMenuState implements GameState {
         MainMenuWindow mainMenuWindow = new MainMenuWindow(this);
         this.uiComponents.put(mainMenuWindow.getName(), mainMenuWindow);
         this.currentMenu = uiComponents.get(mainMenuWindow.getName());
+        String musicPath = "src/main/resources/audio/music/JDB_Innocence.mp3";
+        Media music = new Media(Paths.get(musicPath).toUri().toString());
+        mediaPlayer = new MediaPlayer(music); 
+        mediaPlayer.setVolume(0.3);
+        mediaPlayer.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                mediaPlayer.seek(Duration.ZERO);
+            }
+        });
     }
     
     @Override
@@ -120,12 +135,12 @@ public class MainMenuState implements GameState {
     
     @Override
     public void exit() {
-        
+        mediaPlayer.stop();
     }
 
     @Override
     public void enter() {
-        
+        mediaPlayer.play();
     }
 
     @Override

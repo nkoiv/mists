@@ -9,17 +9,22 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.audio.SoundManager;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.ui.TiledWindow;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 /**
  * LocationState handles the core of the game: being in Locations.
@@ -34,11 +39,22 @@ public class LocationState implements GameState {
     private boolean gameMenuOpen;
     
     private HashMap<String, UIComponent> uiComponents;
+    private MediaPlayer mediaPlayer;
     
     public LocationState (Game game) {
         this.game = game;
         uiComponents = new HashMap<>();
         this.loadDefaultUI();
+        
+        String musicPath = "src/main/resources/audio/music/Dungeon_-_Dungeon_Delvers_(CS).mp3";
+        Media music = new Media(Paths.get(musicPath).toUri().toString());
+        mediaPlayer = new MediaPlayer(music);
+        mediaPlayer.setVolume(0.3);
+        mediaPlayer.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                 mediaPlayer.seek(Duration.ZERO);
+            }
+        });
     }
     
     private void loadDefaultUI() {
@@ -223,6 +239,8 @@ public class LocationState implements GameState {
         releasedButtons.clear(); //Button releases are handled only once
     }
     
+
+    
     @Override
     public Game getGame() {
         return this.game;
@@ -230,12 +248,12 @@ public class LocationState implements GameState {
     
     @Override
     public void exit() {
-        
+        mediaPlayer.stop();
     }
 
     @Override
     public void enter() {
-        
+        mediaPlayer.play();
     }
 
     @Override

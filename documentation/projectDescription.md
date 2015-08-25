@@ -78,3 +78,31 @@ TODO, probably cut out
 * Inventory-system
 * Libraries for MOBs
 * Random game generation (beyond maps)
+
+**Licenced assets in use**
+
+Some game sprites are from:
+Humble Bundle pack:
+Old School Modern 2
+[Copyright](C) Jason Perry
+
+Some game tiles are from
+Humble Bundle -pack:
+Adventure Tile Starter - Celianna
+[Copyright](C) Celianna
+
+Game sounds are from OpenGameArt.org
+Weapon blow, (c) spookymodem
+
+The Game music is from:
+JDB Artists Humble Bundle -pack:
+MADNESS - ROYALTY FREE MUSIC BY JDB ARTIST
+www.jdbartist.net
+[Copyright](C) JDB Artist
+
+And:
+Joe Steudler Music Sampler Humble Bundle:
+[Copyright](C) 2014 DEGICA Co., LTD; Enterbrain, INC;
+Artist: Joel Steudler
+
+
