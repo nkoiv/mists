@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
+import com.nkoiv.mists.game.world.pathfinding.MoveCostCalculator;
 import com.nkoiv.mists.game.world.pathfinding.Path;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
@@ -129,4 +130,55 @@ public class PathFinderTest {
             && Math.abs(testPath.getNode(i).getY() - testPath.getNode(i+1).getY()) <= 1);
         }
     }
+    
+    @Test
+    public void manhattanCostForMovementIsXCostPlusZCost() {
+        Random rnd = new Random();
+        List<Integer> crossableTerrain = new ArrayList<>();
+        crossableTerrain.add(0);
+        MoveCostCalculator testCalc = new MoveCostCalculator(0);
+        int startX = rnd.nextInt(50);
+        int startY = rnd.nextInt(50);
+        int goalX = rnd.nextInt(50);
+        int goalY = rnd.nextInt(50);
+        int xDistance = Math.abs(startX-goalX);
+        int yDistance = Math.abs(startY-goalY);
+        assert(testCalc.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY) == xDistance+yDistance);
+    }
+    
+    @Test
+    public void euclideanCostForMovementIsPythagorans() {
+        Random rnd = new Random();
+        List<Integer> crossableTerrain = new ArrayList<>();
+        crossableTerrain.add(0);
+        MoveCostCalculator testCalc = new MoveCostCalculator(2);
+        int startX = rnd.nextInt(50);
+        int startY = rnd.nextInt(50);
+        int goalX = rnd.nextInt(50);
+        int goalY = rnd.nextInt(50);
+        int AB = Math.abs(startX-goalX);
+        int BC = Math.abs(startY-goalY);
+        //AC = sqrt(AB^2 + BC^2
+        double AC = Math.sqrt(Math.pow(AB, 2)
+                            + Math.pow(BC, 2));
+        
+        assert(testCalc.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY) == AC);
+    }
+    
+    @Test
+    public void diagonalCostForMovementIsSameAsManhattan() {
+        Random rnd = new Random();
+        List<Integer> crossableTerrain = new ArrayList<>();
+        crossableTerrain.add(0);
+        int startX = rnd.nextInt(50);
+        int startY = rnd.nextInt(50);
+        int goalX = rnd.nextInt(50);
+        int goalY = rnd.nextInt(50);
+        MoveCostCalculator testCalcManhattan = new MoveCostCalculator(1);
+        MoveCostCalculator testCalcDiagonal = new MoveCostCalculator(1);
+        assert(testCalcManhattan.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY)
+                == testCalcDiagonal.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY));
+        
+    }
+    
 }
