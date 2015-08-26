@@ -266,12 +266,12 @@ public class Creature extends MapObject implements Combatant {
             }
             if (collidedSides.contains(Direction.RIGHT)) {
                 //Block movement right
-                if (this.getSprite().getXVelocity() < 0 ) this.getSprite().setXVelocity(0);
+                if (this.getSprite().getXVelocity() > 0 ) this.getSprite().setXVelocity(0);
                 this.getSprite().setXPosition(this.oldXPos);
             }
             if (collidedSides.contains(Direction.LEFT)) {
                 //Block movement left
-                if (this.getSprite().getXVelocity() > 0 ) this.getSprite().setXVelocity(0);
+                if (this.getSprite().getXVelocity() < 0 ) this.getSprite().setXVelocity(0);
                 this.getSprite().setXPosition(this.oldXPos);
             }
             this.getSprite().update(time);

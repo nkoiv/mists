@@ -154,7 +154,7 @@ public class Location implements Global {
     * Find a random opening on the map via getRandomOpenSpot and set the given MapObject in it.
     * @param input MapObject to be positioned
     */
-    private void setMobInRandomOpenSpot (MapObject mob) {
+    public void setMobInRandomOpenSpot (MapObject mob) {
         double[] openSpot = this.getRandomOpenSpot(mob.getSprite().getWidth());
         mob.setCenterPosition(openSpot[0], openSpot[1]);
     }
@@ -251,7 +251,7 @@ public class Location implements Global {
         p.getSprite().setPosition(xPos, yPos);
     }
     
-    public void setMap(GameMap m) {
+    private void setMap(GameMap m) {
         this.map = m;
     }
     
@@ -423,11 +423,11 @@ public class Location implements Global {
             if (Math.abs(xDistance) >= Math.abs(yDistance)) {
                 //Collided primary on the X (Left<->Right)
                 if (mob.getCenterXPos() <= collidingObject.getCenterXPos()) {
-                    //CollidingObject is LEFT of the mob
-                    collidedDirections.add(Direction.LEFT);
-                } else {
                     //CollidingObject is RIGHT of the mob
                     collidedDirections.add(Direction.RIGHT);
+                } else {
+                    //CollidingObject is LEFT of the mob
+                    collidedDirections.add(Direction.LEFT);
                 }
             } else {
                 //Collided primary on the Y (Up or Down)
