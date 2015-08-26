@@ -101,7 +101,7 @@ public class Game {
     * Render handles updating the game window, and should be called every time something needs refreshed.
     * By default render is called 60 times per second (or as close to as possible) by AnimationTimer -thread.
     * @param centerCanvas The Canvas to draw the game on
-   
+    * @param uiCanvas the Canvas to draw UI on 
     */
     public void render(Canvas centerCanvas, Canvas uiCanvas) {
         //TODO: Consider sorting out UI here instead of handing it all to currentState

@@ -66,6 +66,7 @@ public class Location implements Global {
     }
     /**TODO: This general constructor is just for the Proof of Concept -map
     * and should be removed later to avoid misuse
+    * @param player Player to construct the (TEST)location around
     */
     public Location(PlayerCharacter player) {
         this.name = "POCmap";
@@ -152,7 +153,7 @@ public class Location implements Global {
     
     /**
     * Find a random opening on the map via getRandomOpenSpot and set the given MapObject in it.
-    * @param input MapObject to be positioned
+    * @param mob MapObject to be positioned
     */
     public void setMobInRandomOpenSpot (MapObject mob) {
         double[] openSpot = this.getRandomOpenSpot(mob.getSprite().getWidth());
@@ -302,7 +303,7 @@ public class Location implements Global {
      * outside viewable area, it's given offset to keep it inside the bounds
      * @param gc GraphicsContext for window bounds
      * @param xPos the xCoordinate of the target we're following
-     * @return 
+     * @return xOffset for the current screen position
      */
     public double getxOffset(GraphicsContext gc, double xPos){
         double windowWidth = gc.getCanvas().getWidth();
@@ -324,7 +325,7 @@ public class Location implements Global {
      * outside viewable area, it's given offset to keep it inside the bounds
      * @param gc GraphicsContext for window bounds
      * @param yPos the yCoordinate of the target we're following
-     * @return 
+     * @return yOffset for the current screen position
      */
     public double getyOffset(GraphicsContext gc, double yPos){
         double windowHeight = gc.getCanvas().getHeight();
@@ -587,6 +588,7 @@ public class Location implements Global {
 
     /**
      *  EnterLocation should prepare the location for player
+     * @param p PlayerCharacter entering the location
      */
     public void enterLocation(PlayerCharacter p) {
         Mists.logger.info("Location "+this.getName()+" entered. Preparing area...");

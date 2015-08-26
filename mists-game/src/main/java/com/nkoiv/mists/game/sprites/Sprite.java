@@ -195,9 +195,9 @@ public class Sprite
      * Update() with targetX and targetY moves the sprite towards the target
      * with the velocity it has, but never past the target. This can be used
      * for fine manoeuvring.
-     * @param time
-     * @param targetX
-     * @param targetY 
+     * @param time Time since last update
+     * @param targetX X coordinates to move towards
+     * @param targetY  Y coordinates to move towards
      */
     public void update(double time, double targetX, double targetY) {
         if ((positionX + velocityX * time) > targetX) {

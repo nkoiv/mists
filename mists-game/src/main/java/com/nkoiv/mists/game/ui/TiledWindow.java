@@ -169,8 +169,8 @@ public class TiledWindow implements UIComponent{
     /**
      * handleKeyPress is called if the window is interactive.
      * The keyboard input is directed to this frame, and possibly away from elsewhere.
-     * @param pressedButtons
-     * @param releasedButtons 
+     * @param pressedButtons Buttons the user has pressed
+     * @param releasedButtons Buttons the user has released
      */
     public void handleKeyPress(ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
         if(this.interactive) {

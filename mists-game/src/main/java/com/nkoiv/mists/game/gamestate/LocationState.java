@@ -127,9 +127,9 @@ public class LocationState implements GameState {
      * The Tick command parses user input and sends an update(time) command to the
      * location game is currently at. These are both done only if game is not inside a menu.
      * In other words, the Location is paused while in a menu (that goes in the menu-stack).
-     * @param time
-     * @param pressedButtons
-     * @param releasedButtons 
+     * @param time Time since last update
+     * @param pressedButtons List of buttons pressed down by the user
+     * @param releasedButtons  List of buttons released by the user
      */
     @Override
     public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
@@ -152,6 +152,7 @@ public class LocationState implements GameState {
     /**
      * Check if there's any UI component at the mouse event location.
      * If so, trigger that UI components "onClick". 
+     * @param me MouseEvent got from the game user (via Game)
      * @return True if UI component was clicked. False if there was no UI there
      */
     public boolean mouseClickOnUI(MouseEvent me) {
