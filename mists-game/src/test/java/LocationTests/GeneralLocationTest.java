@@ -7,11 +7,15 @@ package LocationTests;
  */
 
 import TestTools.JavaFXThreadingRule;
+import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.TileMap;
+import java.util.ArrayList;
+import java.util.HashSet;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -75,6 +79,80 @@ public class GeneralLocationTest extends Application {
         testLocation.addStructure(testRock, 500 , 200);
         testLocation.update(1);
         assert(testLocation.getMOBList().isEmpty());
+    }
+    
+    @Test
+    public void mobCollidingOnSomethingThatHasBiggerXCoordHasCollidedOnRightHandSide() {
+        Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        
+        testLocation.addCreature(testCreature1, 250, 250);
+        testLocation.addCreature(testCreature2, 280, 250);
+        HashSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
+        System.out.println(collidedDirections);
+        assert(testLocation.collidedSides(testCreature1).contains(Direction.RIGHT) == true);
+    }
+    
+    @Test
+    public void mobCollidingOnSomethingThatHasSmallerXCoordHasCollidedOnLeftHandSide() {
+        Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        
+        testLocation.addCreature(testCreature1, 250, 250);
+        testLocation.addCreature(testCreature2, 230, 250);
+        HashSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
+        System.out.println(collidedDirections);
+        assert(testLocation.collidedSides(testCreature1).contains(Direction.LEFT) == true);
+    }
+    
+    @Test
+    public void mobCollidingOnSomethingThatHasBiggeryCoordHasCollidedOnUpperHandSide() {
+        Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        
+        testLocation.addCreature(testCreature1, 250, 250);
+        testLocation.addCreature(testCreature2, 250, 230);
+        HashSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
+        System.out.println(collidedDirections);
+        assert(testLocation.collidedSides(testCreature1).contains(Direction.UP) == true);
+    }
+    
+    @Test
+    public void mobCollidingOnSomethingThatHasSmallerYCoordHasCollidedOnLowerHandSide() {
+        Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        
+        testLocation.addCreature(testCreature1, 250, 250);
+        testLocation.addCreature(testCreature2, 250, 270);
+        HashSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
+        System.out.println(collidedDirections);
+        assert(testLocation.collidedSides(testCreature1).contains(Direction.DOWN) == true);
+    }
+    
+    @Test
+    public void callingUpdateOnLocationUpdatesMobs() {
+        Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature3 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature4 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        testLocation.addCreature(testCreature1, 50, 50);
+        testLocation.addCreature(testCreature2, 50, 50);
+        testLocation.addCreature(testCreature3, 150, 50);
+        testLocation.addCreature(testCreature4, 250, 50);
+        int mobsAtLocation = testLocation.getMOBList().size();
+        testCreature1.setFlag("removable", 1);
+        testCreature2.setFlag("removable", 1);
+        testLocation.update(0.15f);
+        assert(testLocation.getMOBList().size() == mobsAtLocation-2);
+    }
+    
+    @Test
+    public void randomOpenSpotsHaveNothingInThem() {
+        //Load the pathfinding map, because it has a lot of obstacles
+        testLocation.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
+        testLocation.setMobInRandomOpenSpot(testCreature);
+        //Only testCreature itself should be at this random open spot
+        assert(testLocation.checkCollisions(testCreature).size() <= 1);
     }
     
     @Test

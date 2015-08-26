@@ -45,6 +45,9 @@
                     <param>com.nkoiv.mists.game.audio.*</param>
                     <param>com.nkoiv.mists.game.ui.*</param>
                 </excludedClasses>
+                <exludedMethods>
+                    <param>render*</param>
+                </exludedMethods>
                 <targetTests>
                     <param>*</param>
                 </targetTests>

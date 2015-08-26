@@ -105,6 +105,10 @@ public class TileMap implements GameMap {
         return staticStructures;
     }
 
+    public int getTileSize() {
+        return this.tilesize;
+    }
+    
     @Override
     public double getWidth() {
         return (this.tileWidth * this.tilesize);

@@ -484,7 +484,7 @@ public class MapGenerator implements Global{
     }
 
 
-    private class BSParea {
+    public class BSParea {
         //http://roguebasin.roguelikedevelopment.org/index.php?title=Basic_BSP_Dungeon_generation
         public int width, height;
         public int xPos, yPos;
@@ -531,9 +531,9 @@ public class MapGenerator implements Global{
             }
 
         public void generateRoom(int minSize) {
-            //Arvotaan alueen huonnelle koko
+            //Give the room a random size
             float roomSize = rnd.nextFloat();
-            //Huone on yleensä 80% alueesta, eikä koskaan vähemmän
+            //Room size should never be less than 80% of the area
             if (roomSize<0.8f) roomSize=0.8f;
             if (width<=minSize|height<=minSize) roomSize=1.0f;
 

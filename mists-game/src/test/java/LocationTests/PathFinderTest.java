@@ -178,7 +178,6 @@ public class PathFinderTest {
         MoveCostCalculator testCalcDiagonal = new MoveCostCalculator(1);
         assert(testCalcManhattan.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY)
                 == testCalcDiagonal.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY));
-        
     }
     
 }
