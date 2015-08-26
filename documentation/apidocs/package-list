@@ -1,0 +1,11 @@
+com.nkoiv.mists.game
+com.nkoiv.mists.game.AI
+com.nkoiv.mists.game.actions
+com.nkoiv.mists.game.audio
+com.nkoiv.mists.game.gameobject
+com.nkoiv.mists.game.gamestate
+com.nkoiv.mists.game.libraries
+com.nkoiv.mists.game.sprites
+com.nkoiv.mists.game.ui
+com.nkoiv.mists.game.world
+com.nkoiv.mists.game.world.pathfinding
