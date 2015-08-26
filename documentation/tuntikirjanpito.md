@@ -1,5 +1,9 @@
-#Viikko 5 (17½h)
+#Viikko 5 (21h)
 (UI)
+
+##26.8
+* 1h [DOKUMENTOINTI] Päivitetty javadocia
+* 2½h [TESTAUS] Conffattu PIT:iä ja kirjoitettu uusia testejä (Pathfinding, MapGen)
 
 ##25.8
 * ½h [OHJELMOINTI] Luotu ensimmäinen asetuspainike (muteMusic) ja lisätty se alapalkkiin
