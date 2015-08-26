@@ -41,6 +41,10 @@
                     <param>com.nkoiv.mists.game.gameobject.*</param>
                     <param>com.nkoiv.mists.game.world.*</param>
                 </targetClasses>
+                <excludedClasses>
+                    <param>com.nkoiv.mists.game.audio.*</param>
+                    <param>com.nkoiv.mists.game.ui.*</param>
+                </excludedClasses>
                 <targetTests>
                     <param>*</param>
                 </targetTests>

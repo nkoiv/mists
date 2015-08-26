@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
+import static java.lang.Math.random;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -98,7 +99,12 @@ public class Location implements Global {
         
         for (int i = 0; i < 10 ; i++) {
             //Make a bunch of monsters
-            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
+            //Random graphic from sprite sheet
+            Random rnd = new Random();
+            int startX = rnd.nextInt(4);
+            int startY = rnd.nextInt(2);
+            Mists.logger.info("Creating monster from sprite sheet position "+startX+","+startY);
+            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 32, 32);
             monster.getSprite().setCollisionAreaShape(2);
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);

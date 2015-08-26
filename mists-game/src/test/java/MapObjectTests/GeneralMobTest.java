@@ -6,6 +6,7 @@
 package MapObjectTests;
 
 import TestTools.JavaFXThreadingRule;
+import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -15,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -70,6 +72,13 @@ public class GeneralMobTest {
     }
     
     @Test
+    public void mobsAtSamePositionIntersect() {
+        testStructure.setPosition(100,100);
+        testCreature.setPosition(100, 100);
+        assertTrue(testCreature.instersects(testStructure));
+    }
+    
+    @Test
     public void creatureFlagValuesAreSaved() {
         testCreature.setFlag("Testflag", 500);
         assert(testCreature.getFlag("Testflag") == 500);
@@ -97,6 +106,26 @@ public class GeneralMobTest {
     @Test
     public void creatureAttributesAlwaysReturnAtleastZero() {
         assert(testCreature.getAttribute("Testattribute") >= 0);
+    }
+    
+    @Test
+    public void creatureFacingMatchesMovement() {
+        testCreature.moveTowards(Direction.UP);
+        assert(testCreature.getFacing() == Direction.UP);
+    }
+    
+    @Test
+    public void mobCenterXPositionIsPositionPlusHalfWidth() {
+        testCreature.setPosition(100,100);
+        double centerX = testCreature.getCenterXPos();
+        assert(centerX == 100+(testCreature.getSprite().getWidth()/2));
+    }
+    
+    @Test
+    public void mobCenterYPositionIsPositionPlusHalfHeight() {
+        testCreature.setPosition(200,200);
+        double centerY = testCreature.getCenterYPos();
+        assert(centerY == 200+(testCreature.getSprite().getHeight()/2));
     }
     
     @After
