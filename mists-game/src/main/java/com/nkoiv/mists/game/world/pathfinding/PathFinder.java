@@ -11,13 +11,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * PathFinder uses A* principles in finding the shortest working route between point A and pointB
  * Many of the supporting functions are used to give Creatures ability to figure their next course of action.
  * The original pathfinder was based on http://www.cokeandcode.com/main/tutorials/path-finding/ (Kevin Glass)
- * After that it was rewritten with the help of the book Artificial Intelligence for Games (2e) by Millington and Funge
+ * After that it was rewritten with the help of the book "Artificial Intelligence for Games" (2e) by Millington and Funge
  * SortedList is still mainly Kevin Glasses work.
  * Modified to use different heuristics for cost. Restructured to use same Nodes for map and Path.
  * Modified to use collision levels for movement. Created clearance metrics for large objects.
@@ -133,6 +132,15 @@ public class PathFinder {
             }
         }
         
+        /**
+         * finNearesOpenNode tries to find an open node adjacent to the target node.
+         * This is useful when trying to move as close to as possible on a blocked
+         * target (a structure etc)
+         * @param crossableTerrain Terrainwalking ability of the mover
+         * @param goalX Node to search around
+         * @param goalY Node to search around
+         * @return 
+         */
         private int[] findNearestOpenNode (List<Integer> crossableTerrain, int goalX, int goalY)  {
             int[] openNode = new int[2];
             if (!map.isBlocked(crossableTerrain, goalX, goalY)) {
@@ -151,10 +159,30 @@ public class PathFinder {
             }
         }
         
+        /**
+         * Neighbours with the default clearance need of 1
+         * @param crossableTerrain Tilewalking ability
+         * @param x Target nodes X coordinate
+         * @param y Target nodes Y coordinate
+         * @return 
+         */
+        
         private List<Node> Neighbours(List<Integer> crossableTerrain, int x, int y) {
             //if no size given, assume clearance need of 1
             return Neighbours(1,crossableTerrain, x, y);
         } 
+        
+        /**
+         * Neighbours returns all the cardinal direction (Up, Down, Left, Right)
+         * neighbours of a given X,Y tile that can be crossed with the given parameters.
+         * In other words, it returns available paths.
+         * @param clearanceNeed Size of the unit doing the moving
+         * @param crossableTerrain Tilewalking ability
+         * @param x Target nodes X coordinate
+         * @param y Target nodes Y coordinate
+         * @return 
+         */
+        
         private List<Node> Neighbours(int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
         /**Neighbours only lists cardinal directions
         * because being surrounded cardinally blocks movement
@@ -187,10 +215,28 @@ public class PathFinder {
             }
             return result;
     }
+        
+        
+    /**
+     * DiagonalNeighbours with default clearance need of 1.
+     * @param crossableTerrain Tilewalking ability
+     * @param x Target nodes X coordinate
+     * @param y Target nodes Y coordinate
+     * @return 
+     */    
     private List<Node> DiagonalNeighbours(List<Integer> crossableTerrain, int x, int y) {
         //if no size given, assume clearance need of 1
         return DiagonalNeighbours(1, crossableTerrain, x, y);
     }
+    /** DiagonalNeighbours returns all the diagonal direction (UpRight, RightDown, UpLeft, LeftDown)
+    * neighbours of a given X,Y tile that can be crossed with the given parameters.
+    * In other words, it returns available paths.
+    * @param clearanceNeed Size of the unit doing the moving
+    * @param crossableTerrain Tilewalking ability
+    * @param x Target nodes X coordinate
+    * @param y Target nodes Y coordinate
+    * @return 
+    */  
     private List<Node> DiagonalNeighbours(int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
         //Return all NE, NW, SE and SW that are passable without squeezing through
         ArrayList<Node> result = new ArrayList<>();
@@ -273,10 +319,11 @@ public class PathFinder {
             return findPath(1,crossableTerrain, startX, startY, goalX, goalY);
         }
         
-        /*
+        /**
         * THE MAIN PATHFINDING ROUTINE
         * Based on A* tips from the book "Artificial Intelligence for games (2e)" by Millington and Funge
         * TODO: Implement some speed tips
+        * 
         */
 	private Path findPath(int tileSize,List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
         //Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});

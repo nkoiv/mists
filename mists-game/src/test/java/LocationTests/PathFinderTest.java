@@ -11,8 +11,10 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
+import com.nkoiv.mists.game.world.pathfinding.Path;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -84,5 +86,47 @@ public class PathFinderTest {
         
         double[] coordinates = testPathFinder.coordinatesTowards(32,crossableTerrain, startPositionX, startPositionY, goalPositionX, goalPositionY);
         assertTrue(coordinates[0] > 32);
+    }
+    
+    @Test
+    public void lastStepOnPathIsTheGoal() {
+        //NOTE: Because we're doing random locations for pathfinding
+        //It is possible to random start and goal that cant be matched
+        //Consider tweaking this test further to avoid (rare) random fails
+        Random rnd = new Random();
+        List<Integer> crossableTerrain = new ArrayList<>();
+        crossableTerrain.add(0);
+        int randomStartX = rnd.nextInt(testCollisionMap.getMapTileWidth()-1);
+        int randomStartY = rnd.nextInt(testCollisionMap.getMapTileHeight()-1);
+        int randomGoalX = rnd.nextInt(testCollisionMap.getMapTileWidth()-1);
+        int randomGoalY = rnd.nextInt(testCollisionMap.getMapTileHeight()-1);
+        Path testPath = testPathFinder.findPath(crossableTerrain, randomStartX, randomStartY, randomGoalX, randomGoalY);
+        System.out.println(randomStartX + ","+randomStartY+"  ->  "+randomGoalX+","+randomGoalY);
+        System.out.println(testPath.toString());
+        assertTrue(testPath.getNode(testPath.getLength()-1).getX() == randomGoalX && testPath.getNode(testPath.getLength()-1).getY() == randomGoalY);
+    }
+    
+    @Test
+    public void pathFinderNeverLeapsOverANode() {
+        //NOTE: Because we're doing random locations for pathfinding
+        //It is possible to random start and goal that cant be matched
+        //Consider tweaking this test further to avoid (rare) random fails
+        Random rnd = new Random();
+        List<Integer> crossableTerrain = new ArrayList<>();
+        crossableTerrain.add(0);
+        int randomStartX = rnd.nextInt(testCollisionMap.getMapTileWidth()-1);
+        int randomStartY = rnd.nextInt(testCollisionMap.getMapTileHeight()-1);
+        int randomGoalX = rnd.nextInt(testCollisionMap.getMapTileWidth()-1);
+        int randomGoalY = rnd.nextInt(testCollisionMap.getMapTileHeight()-1);
+        Path testPath = testPathFinder.findPath(crossableTerrain, randomStartX, randomStartY, randomGoalX, randomGoalY);
+        System.out.println(randomStartX + ","+randomStartY+"  ->  "+randomGoalX+","+randomGoalY);
+        System.out.println(testPath.toString());
+        
+        //Check that none of the steps is more than 1 away 
+        //from the next one on X or Y
+        for (int i=0; i < testPath.getLength()-2; i++) {
+            assertTrue(Math.abs(testPath.getNode(i).getX() - testPath.getNode(i+1).getX()) <= 1
+            && Math.abs(testPath.getNode(i).getY() - testPath.getNode(i+1).getY()) <= 1);
+        }
     }
 }
