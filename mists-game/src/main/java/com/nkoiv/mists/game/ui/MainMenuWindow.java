@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
+import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.scene.input.MouseEvent;
@@ -21,18 +22,20 @@ import javafx.scene.input.MouseEvent;
 public class MainMenuWindow extends TiledWindow {
 
     public MainMenuWindow(GameState parent) {
-        super(parent, "MainMenu", 220, 220, (Global.WIDTH/2 - 110), 250);
+        super(parent, "MainMenu", 220, 300, (Global.WIDTH/2 - 110), 250);
         initializeMenuButtons();
         super.setInteractive(true);
     }
     
     private void initializeMenuButtons() {
         NewGameButton menubutton1 = new NewGameButton(super.getParent().getGame());
-        OptionsButton menubutton2 = new OptionsButton();
-        QuitButton menubutton3 = new QuitButton("Quit game", 200, 60);
+        ResumeGameButton menubutton2 = new ResumeGameButton(super.getParent().getGame());
+        OptionsButton menubutton3 = new OptionsButton();
+        QuitButton menubutton4 = new QuitButton("Quit game", 200, 60);
         super.addSubComponent(menubutton1);
         super.addSubComponent(menubutton2);
         super.addSubComponent(menubutton3);
+        super.addSubComponent(menubutton4);
     }
     
     private class NewGameButton extends TextButton {
@@ -47,8 +50,30 @@ public class MainMenuWindow extends TiledWindow {
         public void onClick(MouseEvent me) {
             //TODO: Move the gamestate to character creator
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+            //For now just generate a new location
+            this.game.currentLocation = new Location(this.game.player);
             this.game.moveToState(Game.LOCATION);
             
+        }
+        
+    }
+    
+    private class ResumeGameButton extends TextButton {
+        private final Game game;
+        
+        public ResumeGameButton(Game game) {
+            super("Resume game", 200, 60);
+            this.game = game;
+        }
+        
+        @Override
+        public void onClick(MouseEvent me) {
+            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+            if (this.game.currentLocation == null) {
+                //No game to resume
+            } else {
+                this.game.moveToState(Game.LOCATION);
+            }
         }
         
     }

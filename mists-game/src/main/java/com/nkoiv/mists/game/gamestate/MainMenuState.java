@@ -9,20 +9,14 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.ui.MainMenuWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaPlayerBuilder;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 /**
  * MainMenuState controls and manages the main menu.

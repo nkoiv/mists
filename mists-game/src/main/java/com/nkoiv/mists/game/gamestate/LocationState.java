@@ -13,6 +13,7 @@ import com.nkoiv.mists.game.audio.SoundManager;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
+import com.nkoiv.mists.game.ui.GoMainMenuButton;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
@@ -39,9 +40,9 @@ public class LocationState implements GameState {
     private final Game game;
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
-    private AudioControls audioControls = new AudioControls();
+    private final AudioControls audioControls = new AudioControls();
     
-    private HashMap<String, UIComponent> uiComponents;
+    private final HashMap<String, UIComponent> uiComponents;
     
     public LocationState (Game game) {
         this.game = game;
@@ -102,13 +103,15 @@ public class LocationState implements GameState {
     private void toggleGameMenu() {
         if (!gameMenuOpen) {
             gameMenuOpen = true;
-            TiledWindow gameMenu = new TiledWindow(this, "GameMenu", 220, 220, (Global.WIDTH/2 - 110), 150);
+            TiledWindow gameMenu = new TiledWindow(this, "GameMenu", 220, 300, (Global.WIDTH/2 - 110), 150);
             TextButton testButton1 = new TextButton("Testbutton", 200, 60);
             TextButton testButton2 = new TextButton("Options", 200, 60);
-            TextButton testButton3 = new QuitButton("Quit game", 200, 60);
+            GoMainMenuButton testButton3 = new GoMainMenuButton(this.game, 200, 60);
+            QuitButton testButton4 = new QuitButton("Quit game", 200, 60);
             gameMenu.addSubComponent(testButton1);
             gameMenu.addSubComponent(testButton2);
             gameMenu.addSubComponent(testButton3);
+            gameMenu.addSubComponent(testButton4);
             uiComponents.put(gameMenu.getName(), gameMenu);
             Mists.logger.info("GameMenu opened");
         } else {
@@ -168,7 +171,9 @@ public class LocationState implements GameState {
             }
             
         }
+        //Click landed on area without UI component
         
+        this.game.currentLocation.getPlayer().setCenterPosition(clickY, clickY);
         return false;
     }
 

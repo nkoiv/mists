@@ -72,7 +72,7 @@ public class Location implements Global {
         this.effects = new ArrayList<>();
         this.mapGen = new MapGenerator();
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
-        //this.loadMap(new TileMap("/mapdata/tilemaptest.map"));
+        //this.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
         this.loadMap(MapGenerator.generateDungeon(this, 60, 40));
         this.collisionMap = new CollisionMap(this, 32);
         this.pathFinder = new PathFinder(this.collisionMap, 50, true);
@@ -117,7 +117,7 @@ public class Location implements Global {
     * MapLoader takes in a Map and initializes all the static structures from it for the Location
     * @param map Map to load
     */
-    private void loadMap(GameMap map) {
+    public void loadMap(GameMap map) {
         this.map = map;
         // Add in all the static structures from the selected map
         for (Structure s : map.getStaticStructures(this)) {
@@ -294,8 +294,8 @@ public class Location implements Global {
      * xOffset is calculated from the position of the target in
      * regards to the current window width. If the target would be
      * outside viewable area, it's given offset to keep it inside the bounds
-     * @param gc
-     * @param xPos
+     * @param gc GraphicsContext for window bounds
+     * @param xPos the xCoordinate of the target we're following
      * @return 
      */
     public double getxOffset(GraphicsContext gc, double xPos){
@@ -316,8 +316,8 @@ public class Location implements Global {
      * yOffset is calculated from the position of the target in
      * regards to the current window width. If the target would be
      * outside viewable area, it's given offset to keep it inside the bounds
-     * @param gc
-     * @param yPos
+     * @param gc GraphicsContext for window bounds
+     * @param yPos the yCoordinate of the target we're following
      * @return 
      */
     public double getyOffset(GraphicsContext gc, double yPos){

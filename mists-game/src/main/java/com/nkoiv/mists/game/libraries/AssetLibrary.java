@@ -11,9 +11,10 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
+ * Currently AssetLibrary is on dev hold and totally unused.
+ * 
  * A library is a collection of map objects templates.
  * Monsters are stored in a monlibrary, structures in a struclibrary, etc
- * 
  * The concept was inspired (read: stolen) from Mikeras' Tyrant (github.com/mikera/tyrant/)
  * 
  * TODO: Saving and loading of libraries
