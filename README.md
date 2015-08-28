@@ -1,5 +1,6 @@
 # mists
-A realtime Roguelike adventure for cs.hel.fi javalab
+A realtime Roguelike adventure for cs.hel.fi javalab.
+
 So far you can move around in a procedurally generated dungeon, dodging monsters and burrowing through walls. Move around with arrow keys and use space to attack (walls or creatures). Shift-button toggles monsters to life, esc brings up the main menu.
 
 
