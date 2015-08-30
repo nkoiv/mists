@@ -15,7 +15,6 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
-import static java.lang.Math.random;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -452,22 +451,14 @@ public class Location implements Global {
         double xOffset = getxOffset(gc, screenFocus.getSprite().getXPos());
         double yOffset = getyOffset(gc, screenFocus.getSprite().getYPos());
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
-        this.map.render(-xOffset, -yOffset, gc); //First we draw the underlying map
-        
-        if (DRAW_GRID) {
-            gc.setStroke(Color.ANTIQUEWHITE);
-            double tileHeight = map.getHeight()/TILESIZE;
-            double tileWidth = map.getWidth()/TILESIZE;
-            for (int i=0; i<tileHeight;i++) {
-                gc.strokeLine(0, (i*TILESIZE)-yOffset, map.getWidth(), (i*TILESIZE)-yOffset);
-            }
-            for (int i=0; i<tileWidth;i++) {
-                gc.strokeLine((i*TILESIZE)-xOffset, 0, (i*TILESIZE)-xOffset, map.getHeight());
-            }
-            
-        }
-        
-        /*
+        this.renderMap(gc, xOffset, yOffset);
+        this.renderMobs(gc, xOffset, yOffset);
+        this.renderStructureExtras(gc, xOffset, yOffset);
+        this.renderExtras(gc, xOffset, yOffset);
+    }
+    
+    private void renderMobs(GraphicsContext gc, double xOffset, double yOffset) {
+         /*
         * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
         */
         if (!this.mapObjects.isEmpty()) {
@@ -495,7 +486,10 @@ public class Location implements Global {
                 }
             }
         }
-        // Render extras should be called whenever the structure is rendered
+    }
+    
+    private void renderStructureExtras(GraphicsContext gc, double xOffset, double yOffset) {
+         // Render extras should be called whenever the structure is rendered
         // This paints them on top of everything again, creatures go "behind" trees
         if (!this.mapObjects.isEmpty()) {
             for (MapObject struct : this.mapObjects) {
@@ -504,15 +498,32 @@ public class Location implements Global {
                 }
             }
         }
-        
+    }
+    
+    private void renderExtras(GraphicsContext gc, double xOffset, double yOffset) {
         //Draw extra effects (battle swings, projectiles, spells...) on the screen
         if (!this.effects.isEmpty()) {
             for (Effect e : this.effects) {
                 e.render(xOffset, yOffset, gc);
             }
         }
+    }
+    
+    private void renderMap(GraphicsContext gc, double xOffset, double yOffset) {
+        this.map.render(-xOffset, -yOffset, gc); //First we draw the underlying map
         
-        
+        if (DRAW_GRID) {
+            gc.setStroke(Color.ANTIQUEWHITE);
+            double tileHeight = map.getHeight()/TILESIZE;
+            double tileWidth = map.getWidth()/TILESIZE;
+            for (int i=0; i<tileHeight;i++) {
+                gc.strokeLine(0, (i*TILESIZE)-yOffset, map.getWidth(), (i*TILESIZE)-yOffset);
+            }
+            for (int i=0; i<tileWidth;i++) {
+                gc.strokeLine((i*TILESIZE)-xOffset, 0, (i*TILESIZE)-xOffset, map.getHeight());
+            }
+            
+        }
     }
     
     /**
