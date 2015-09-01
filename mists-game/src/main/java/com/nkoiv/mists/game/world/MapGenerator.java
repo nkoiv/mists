@@ -466,10 +466,20 @@ public class MapGenerator implements Global{
                             //Make sure there's a door in a doorway
                             //if there's wall to the Left AND Right of it
                             if (intMap[xPos-1][yPos]==WALL && intMap[xPos+1][yPos]==WALL) {
+                                if(cleanMap[xPos][yPos-1]==DOOR || cleanMap[xPos][yPos+1]==DOOR) {
+                                    //Dont put a door here if there's already a door next to this
+                                    cleanMap[xPos][yPos] = FLOOR;
+                                } else {
                                     cleanMap[xPos][yPos] = intMap[xPos][yPos];
+                                }
                             //Or if there's wall to Above it AND Below it
                             } else if (intMap[xPos][yPos-1]==WALL && intMap[xPos][yPos+1]==WALL) {
+                                if(cleanMap[xPos-1][yPos]==DOOR || cleanMap[xPos+1][yPos]==DOOR) {
+                                    //Dont put a door here if there's already a door next to this
+                                    cleanMap[xPos][yPos] = FLOOR;
+                                } else {
                                     cleanMap[xPos][yPos] = intMap[xPos][yPos];
+                                }
                             } else {
                                     //If the door is unneeded, replace it with corridor
                                     cleanMap[xPos][yPos] = FLOOR;
