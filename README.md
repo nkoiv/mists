@@ -8,6 +8,7 @@ Project description can be found at documents/projectDescription.md
 
 
 ***Licence***
+
 Please see the LICENCE.md
 
 ***Licenced assets in use:***
