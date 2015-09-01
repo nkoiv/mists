@@ -7,6 +7,9 @@ So far you can move around in a procedurally generated dungeon, dodging monsters
 Project description can be found at documents/projectDescription.md
 
 
+***Licence***
+Please see the LICENCE.md
+
 ***Licenced assets in use:***
 
 Some game sprites are from: Humble Bundle pack: Old School Modern 2 Copyright Jason Perry
