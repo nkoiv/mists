@@ -17,7 +17,7 @@ In general the tests were performed by forcing the game to the desired situation
 ###Test case: Move around clearing structures
 * **Last testing:** 1.9.2015
 * **Setup** Create a new game on a random map. Move around and use space to destroy walls
-* **Results:** The attack only destroys things that the graphic clips. Sometimes this means one wall destroyed, sometimes two.
+* **Results:** The attack only destroys things that clip with the graphic. Sometimes this means one wall destroyed, sometimes two.
 * **Actions needed:** No actions needed.
 
 #Combat
@@ -26,7 +26,7 @@ In general the tests were performed by forcing the game to the desired situation
 * **Last testing:** 2.9.2015
 * **Setup:** Create a game on a random map. Find creatures to slay and hit them.
 * **Results:** Mobs die fine when hit, their HP going down and all. Moving mobs die fine too. No unusual behaviour encountered.
-* Actions needed:** No actions needed.
+* **Actions needed:** No actions needed.
 
 #Pathfinding
 ![](https://github.com/nkoiv/mists/blob/master/documentation/pathfinding_testing1.png "Pathfinding testmap")
@@ -60,4 +60,16 @@ In general the tests were performed by forcing the game to the desired situation
 * **Results:** 50 nodes is a really SHORT default search distance when its node by node. The Manhattan distance can be really short (just across the wall), and the pathfinding still cant find the right path (because it has to go around).
 * **Actions needed** Consider having different sort of pathfindings for different map? Could it be decided on by parsing the collisionmap?
 
+#Audio
+###Test case: Changing audio output midgame
+* **Last testing:** 2.9.2015
+* **Setup:** Start a game with default audio set to headphones. Change default audio from windows to speakers midgame.
+* **Results:** Music and sounds swap to speakers as intended
+* **Actions needed:** Make options to choose the audio output for the game session
 
+###Test case: Unmute game sounds when system sounds are set to 0
+* **Last testing:** 2.9.2015
+* **Setup:** Start game, mute sounds. Set windows sound volume to 0. Unmute game sounds.
+* **Results:** Sounds stay silent as per expected.
+* **Actions needed:** No actions needed.
+* 
