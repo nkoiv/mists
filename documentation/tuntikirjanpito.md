@@ -1,3 +1,14 @@
+#Viikko 6 ()
+(AI & dokumentointi)
+
+##1.9
+* ½h [TESTAUS] Testattu käyttöliittymää
+* 1h [TESTAUS] Tehty uusi testikartta pathfindingia varten
+
+##30.8
+* 1h [TESTAUS] Alotoitettu testidokumentti
+* 2h [TESTAUS] Testattu pathfindingia käyttöliittymän kautta
+
 #Viikko 5 (21h)
 (UI)
 
