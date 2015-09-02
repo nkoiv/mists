@@ -1,8 +1,10 @@
 #Regarding the testing
 
-Due to the nature of the game, doing extensive testing with JUnit was difficult.
-In order to test the game during the development, before actual content was made, some special assets were needed. These assets exist both within the code ("TODO: Test asset") and out of it (pathfinder_test.map, tilemaptest.map...).
+Due to the nature of the game, doing extensive testing with JUnit was difficult. Further testing was therefore needed (and done) by actually playing the game. These tests should be repeated whenever the game is about to reach a stable version.
+
 In general the tests were performed by forcing the game to the desired situation, and playing it through repeatedly. For example monster pathfinding past tight corners revolved around a special map (made out of tight corners) and letting monsters with randomized positions path their way through it
+
+In order to test the game during the development, before actual content was made, some special assets were needed. These assets exist both within the code ("TODO: Test asset") and out of it (pathfinder_test.map, tilemaptest.map...).
 
 #Movement
 
