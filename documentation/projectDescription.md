@@ -65,8 +65,8 @@ TODO, probably cut out
 
 ##Testing
 Testing the game is done from two directions: Unit tests inside the Maven project, performing GUI testing by playing the game.
-* Unit tests are enhanced by PIT mutation, documentation for which can be found under the mists/documentation/pit-reports/ -folder.
-* GUI testing is documented in the /mists/documentation/game_testing.md
+* Unit tests are enhanced by PIT mutation, documentation for which can be found under the [mists/documentation/pit-reports/ -folder](https://github.com/nkoiv/mists/tree/master/documentation/pit-reports).
+* GUI testing is documented in [/mists/documentation/game_testing.md](https://github.com/nkoiv/mists/blob/master/documentation/game_testing.md)
 
 ##Project plan
 
