@@ -76,5 +76,15 @@ public class MapGeneratorTest {
             assert(CompareTools.isGreaterThan(a.width * a.height, absMinSize));
         } 
     }
+       
+    @Test
+    public void bspAreasCanBeGeneratedOutOfTree() {
+        Random rng = new Random();
+        int randomXSize = rng.nextInt(30)+30;
+        int randomYSize = rng.nextInt(30)+30;
+        int absMinSize = 5;
+        ArrayList<MapGenerator.BSParea> testBSP = MapGenerator.BSPdungeon(testMapGen, randomXSize, randomYSize, 20, 0.3f, 0.7f, absMinSize, false);
+        assert(testBSP.size() > 1);
+    }
     
 }

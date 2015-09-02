@@ -8,11 +8,13 @@ package LocationTests;
 
 import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import javafx.application.Application;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,6 +33,7 @@ public class MovementTest extends Application {
     
     Location testLocation;
     PlayerCharacter testPlayer;
+    Creature testCreature;
     
     public MovementTest() {
     }
@@ -52,6 +55,8 @@ public class MovementTest extends Application {
        testPlayer = new PlayerCharacter();
        testPlayer.setLocation(testLocation);
        testLocation.addPlayerCharacter(testPlayer, 300, 200);
+       testCreature = new Creature("MovementTester", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+       testLocation.addCreature(testCreature, 500, 500);
     }
     
     @Test
@@ -73,6 +78,24 @@ public class MovementTest extends Application {
         
     }
     
+    @Test
+    public void thereIsNoCreatureMovementBeforeUpdate() {
+        testCreature.setSpeed(50); //Should move 50 per tick
+        double originalYPos = testCreature.getYPos();
+        double originalXPos = testCreature.getXPos();
+        testCreature.moveTowards(Direction.UPRIGHT);
+        testCreature.moveTowards(Direction.RIGHT);
+        testCreature.moveTowards(Direction.DOWNRIGHT);
+        testCreature.moveTowards(Direction.DOWN);
+        testCreature.moveTowards(Direction.DOWNLEFT);
+        testCreature.moveTowards(Direction.LEFT);
+        testCreature.moveTowards(Direction.UPLEFT);
+        testCreature.moveTowards(Direction.UP);
+        //testPlayer.update(0.16f);
+        assert(testCreature.getXPos()==originalXPos);
+        assert(testCreature.getYPos()==originalYPos);
+        
+    }
     
     @Test
     public void movementShouldChangePlayerCoordinates() {
@@ -84,6 +107,18 @@ public class MovementTest extends Application {
         
         assert(originalYPos != testPlayer.getYPos());
     }
+    
+    @Test
+    public void movementShouldChangeCreatureCoordinates() {
+        testCreature.setSpeed(50); //Should move 50 per tick
+        
+        double originalYPos = testCreature.getYPos();
+        testCreature.moveTowards(Direction.DOWN);
+        testCreature.applyMovement(0.16f);
+        
+        assert(originalYPos != testCreature.getYPos());
+    }
+    
     
     @Test
     public void zeroSpeedPlayerShouldNotMove() {

@@ -126,7 +126,11 @@ public class MainMenuState implements GameState {
 
     @Override
     public void enter() {
-        Mists.soundManager.playMusic("menu");
+        try {
+            Mists.soundManager.playMusic("menu");
+        }catch (Exception e) {
+            
+        }
     }
 
     @Override

@@ -8,7 +8,12 @@ package LocationTests;
 
 import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Game;
+import static com.nkoiv.mists.game.Global.TILESIZE;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.GameMap;
@@ -72,6 +77,59 @@ public class GeneralLocationTest extends Application {
         assert(testLocation.getMOBList().contains(testRock));
     }
     
+    @Test
+    public void locationsCanBeChanged(){
+        Game testGame = new Game();
+        PlayerCharacter testPlayer = new PlayerCharacter();
+        Location testLocation2 = new Location(testPlayer);
+        testGame.moveToLocation(testLocation2);
+        assert(testGame.currentLocation == testLocation2);
+    }
+    
+    @Test
+    public void locationFlagsAreSetRight(){
+        testLocation.setFlag("swamp",1);
+        assert(testLocation.isFlagged("swamp"));
+    }
+    
+    @Test
+    public void updatingLocationCleansDeadMobs() {
+        Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
+        testLocation.addStructure(testRock, 500 , 200);
+        PlayerCharacter testPlayer = new PlayerCharacter();
+        testLocation.addPlayerCharacter(testPlayer, 500, 500);
+        testLocation.addCreature(testCreature, 300, 300);
+        testCreature.setFlag("removable",1);
+        testLocation.update(0.15f);
+        assert(testLocation.getMOBList().contains(testCreature) == false);
+    }
+    
+    @Test
+    public void movingIntoLocationUpdatesCurrentPlayer() {
+        PlayerCharacter testPlayer = new PlayerCharacter();
+        testLocation.enterLocation(testPlayer);
+        assert(testLocation.getPlayer()==testPlayer);
+    }
+    
+    @Test
+    public void creaturesCanBeFoundByName() {
+        Creature rotta = new Creature("Rotta", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        testLocation.addCreature(rotta, 500, 500);
+        assert(testLocation.getCreatureByName("Rotta").getName().equals("Rotta"));  
+    }
+    
+    @Test
+    public void structureExtrasMoveWithStructure() {
+        Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), testLocation, 6*TILESIZE, 5*TILESIZE);
+        tree.addExtra(new Image("/images/tree.png"), -35, -96);
+        testLocation.addStructure(tree, 200 , 200);
+        double startX = tree.getExtras().get(0).getXPos();
+        tree.setPosition(500, 500);
+        
+        assert(tree.getExtras().get(0).getXPos() != startX);
+        
+    }
+        
     @Test
     public void removableFlaggedMobsShouldBeRemovedOnUpdate() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);

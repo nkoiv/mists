@@ -70,6 +70,13 @@ public class GeneralCombatTest {
     }
     
     @Test
+    public void usingAttackCreatesAnEffecT() {
+        Action testAttack = combatant1.getAvailableActions().get("MeleeAttack");
+        combatant1.useAction("MeleeAttack");
+        
+    }
+    
+    @Test
     public void meleeAttackDoesNotDamageUser() {
         Action testAttack = combatant1.getAvailableActions().get("MeleeAttack");
         ArrayList<MapObject> targets = new ArrayList<>();

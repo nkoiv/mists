@@ -52,7 +52,11 @@ public class MeleeAttack extends Action implements AttackAction {
         if (this.isOnCooldown()) {
             //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {
-            Mists.soundManager.playSound("weapon_blow");
+            try {
+                Mists.soundManager.playSound("weapon_blow");
+            } catch (Exception e){
+                Mists.logger.warning("Sounds not available");
+            }
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
             this.lastUsed = System.currentTimeMillis();
