@@ -1,5 +1,9 @@
-#Viikko 6 (6h)
+#Viikko 6 (7½h)
 (AI & dokumentointi)
+
+##3.9
+* 1h [DOKUMENTOINTI] Laajennettu yleiskuvausta
+* ½h [OHJELMOINTI] Lisätty mahdollisuus liikkua hiirellä
 
 ##2.9
 * ½h [DOKUMENTOINTI] Päivitetty testidokumentaatiota

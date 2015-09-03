@@ -44,7 +44,7 @@ public class Location implements Global {
     private CollisionMap collisionMap;
     private PathFinder pathFinder;
     private MapGenerator mapGen;
-    
+    private final double[] lastOffsets = new double[2];
     private MapObject screenFocus;
     private PlayerCharacter player;
     private final HashMap<String, Integer> flags = new HashMap<>();
@@ -315,6 +315,7 @@ public class Location implements Global {
             xOffset = map.getWidth() - (windowWidth);
         }
         
+        this.lastOffsets[0] = xOffset;
         return xOffset;
 	}
 
@@ -336,8 +337,15 @@ public class Location implements Global {
         } else if (yOffset > map.getHeight() -(windowHeight)) {
             yOffset = map.getHeight() - (windowHeight);
         }
-        
+        this.lastOffsets[1] = yOffset;
         return yOffset;
+    }
+    
+    public double getLastxOffset () {
+        return this.lastOffsets[0];
+    }
+    public double getLastyOffset () {
+        return this.lastOffsets[1];
     }
     
     /**

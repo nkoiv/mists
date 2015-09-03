@@ -173,8 +173,10 @@ public class LocationState implements GameState {
             
         }
         //Click landed on area without UI component
-        
-        this.game.currentLocation.getPlayer().setCenterPosition(clickY, clickY);
+        Mists.logger.info("Clicked "+clickX+","+clickY+" - moving player there");
+        double xOffset = this.game.currentLocation.getLastxOffset();
+        double yOffset = this.game.currentLocation.getLastyOffset();
+        this.game.currentLocation.getPlayer().setCenterPosition(clickX+xOffset, clickY+yOffset);
         return false;
     }
 
