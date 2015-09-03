@@ -78,6 +78,7 @@ TODO, probably cut out
 ##Combat
 
 ![](https://github.com/nkoiv/mists/blob/master/documentation/combat_action.png "Actions in combat")
+
 Combat happens by invoking (combat)actions. Creatures use these actions to do combat with oneanother. Triggering an action generally spawns an effect on the map. This effect then passes the actions trigger on whatever it touches. This chain of effects is modeled in the [actions and effects sequence diagram](https://github.com/nkoiv/mists/blob/master/documentation/sequence_diagrams/actions_and_effects.jpg).
 Everything involved in the combat should implement the "Combant" interface. As combat Actions only affect classes implementing the Combatant, this ensures that everything in the combat is capable of dealing with damage, death, etc.
 
