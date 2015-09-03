@@ -52,7 +52,7 @@ as action is considered.
 Towns are mainly composed of menus (taverns, shops, etc). MainMenu is selfexplanatory.
 
 ###MainMenu
-Game starts at the main menu. From the main menu a player can either start a new game, load an existing one,
+From the main menu a player can either start a new game, load an existing one,
 edit game options, or close the game.
 
 ###Location
