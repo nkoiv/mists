@@ -24,26 +24,38 @@ Further down the road, there should be a world map to travel from a location to 
 
 ##Program structure
 The game is built loosely on MVC principles, where everything the user sees and does is passed
-through a controller. In practice this means that the game uses "gamestates" to relay commands into the game
-while also calling for renders back into the main stage. Various gamestates govern the main areas of the game,
-and the principle is that a new gamestate is only added when desired gameplay differs wildly from what
+through a controller. Various gamestates govern the main areas of the game, and the principle is that a new gamestate is only added when desired gameplay differs wildly from what
 existing gamestates can provide.
-The accompanied UML Class diagram is good reference for this, but the rought structure is as follows:
+The accompanied [UML Class diagram](https://github.com/nkoiv/mists/blob/master/documentation/mists_classchart.jpg) is good reference for this.
 
-* Gamestate for MainMenu
-* Gamestate for Locations 
+###Main loop
+
+Game main loop is done by the [Mists.java](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/Mists.java). The loop is separate from the actual game, so that its easier to port to different platforms. Loop calls Tick() and Render() functions, asking the game to update whats happenig (tick) and show it the the player(render). As describe above, the game itself is divided into GameStates that answer to these tick() and render() -calls. In practice this means that the game uses "gamestates" to relay commands into the game while also calling for renders back into the main stage.
+
+The main loop can be summed rougly into the following:
+1. (Optional) User does input via keyboard/mouse 
+2. Game relays the input to the current GameState
+3. GameState parses the input and does things (a "tick" in the code)
+4. GameState renders all its components (UI, map, creatures...) and passes it back to the game
+5. Game updates view for player
+6. Back to 1.
+
+Current list gamestates, ticking and rendering:
+* GameState for MainMenu
+Selfexplanatory, displayed at launch.
+* GameState for Locations 
+Contains the bulk of the gameplay. These are top down areas where the player can move around, exploring and combating adversaries.
 * GameState for WorldMap
+WorldMap is used for traveling between Locations, but it's a lot more limited as far
+as action is considered.
 * GameState for Town
-
-Bulk of the gameplay resides at Locations. These are top down areas where the player can move around, exploring
-and combating adversaries. WorldMap is used for traveling between Locations, but it's a lot more limited as far
-as action is considered. Towns are mainly composed of menus (taverns, shops, etc). MainMenu is selfexplanatory.
+Towns are mainly composed of menus (taverns, shops, etc). MainMenu is selfexplanatory.
 
 ###MainMenu
 Game starts at the main menu. From the main menu a player can either start a new game, load an existing one,
 edit game options, or close the game.
 
-###Locations
+###Location
 Locations house the bulk of the adventure. They're built on a map, have structures blocking players path, and
 contain various monsters and puzzles to face. The maps come in two main variations: BGMaps and TileMaps. The former
 are based on a single image (hence the "BG", background), wheras the latter (TileMaps) are built from small tiles.
@@ -62,6 +74,15 @@ TODO, probably cut out
 
 ###Town
 TODO, probably cut out
+
+##Combat
+
+![](https://github.com/nkoiv/mists/blob/master/documentation/combat_action.png "Actions in combat")
+Combat happens by invoking (combat)actions. Creatures use these actions to do combat with oneanother. Triggering an action generally spawns an effect on the map. This effect then passes the actions trigger on whatever it touches. This chain of effects is modeled in the [actions and effects sequence diagram](https://github.com/nkoiv/mists/blob/master/documentation/sequence_diagrams/actions_and_effects.jpg).
+Everything involved in the combat should implement the "Combant" interface. As combat Actions only affect classes implementing the Combatant, this ensures that everything in the combat is capable of dealing with damage, death, etc.
+
+###Combat mechanics
+TODO: Plan and implement mechanics for how damage is calculated. Is there armour? Can mobs dodge/parry attacks?
 
 ##Testing
 Testing the game is done from two directions: Unit tests inside the Maven project, performing GUI testing by playing the game.
