@@ -4,12 +4,12 @@ A realtime Roguelike adventure for cs.hel.fi javalab.
 So far you can move around in a procedurally generated dungeon, dodging monsters and burrowing through walls. Move around with arrow keys and use space to attack (walls or creatures). Shift-button toggles monsters to life, esc brings up the main menu.
 
 
-***Project description
-Please see [/mists/documentation/projectDescription.md](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md)
+***Project description***
+Please see [projectDescription.md](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md)
 
 ***Licence***
 
-Please see the [/mists/LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.md)
+Please see the [LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.md)
 
 ***Licenced assets in use:***
 
