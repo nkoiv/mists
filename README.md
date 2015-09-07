@@ -6,6 +6,7 @@ So far you can move around in a procedurally generated dungeon, dodging monsters
 **NOTE:** The project has been updated to be ontinued on TiraLab. [Project description](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md) has been updated with new workplan.
 
 ***Project description***
+
 Please see [projectDescription.md](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md)
 
 ***Licence***
