@@ -91,7 +91,13 @@ import com.nkoiv.mists.game.Global;
                 public Node getPreviousNode() {
                     return this.previousNode;
                 }
-
+                
+                @Override
+                public String toString() {
+                    return "Node: "+this.getX()+","+this.getY()+" estimated cost "+this.getCostEstimate();
+                } 
+                        
+                
                 @Override
                 public int hashCode() {
                     int hash = 5;
