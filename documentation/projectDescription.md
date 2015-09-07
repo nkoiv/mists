@@ -92,7 +92,15 @@ Testing the game is done from two directions: Unit tests inside the Maven projec
 
 ##Project plan
 
-###Weekly plan
+###Weekly plan (TiraLab)
+* Week 1: Plan the tiralab angle to the project (Pathfinding)
+* Week 2: Modify the UI to better suit pathfinding optimization and testing
+* Week 3: Clean the original pathfinding to use no Collections and optimize the lists
+* Week 4: Create alternative pathfinding systems
+* Week 5: Create alternative pathfinding systems
+* Week 6: Build an algorithm to decide which pathfinder to use and when
+
+###Weekly plan (JavaLab)
 * Week 1: Create a window with sprites to move around
 * Weel 2: Generate the base structure for the codebase
 * Week 3: Actions, triggers, effects

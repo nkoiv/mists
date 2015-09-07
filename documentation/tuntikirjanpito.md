@@ -1,3 +1,12 @@
+#TiraLab (3h)
+#Viikko 1 (3h)
+
+##5.9
+* 2h [OPISKELU] Tutkittu muita (A* lisäksi) reitihakuja
+##4.9
+* 1h [MÄÄRITTELY] Päätetty jatkaa projektia TiraLabin puolelle. Kohteena reitinhaku ja sen parantaminen
+
+#JavaLab (111½h)
 #Viikko 6 (7½h)
 (AI & dokumentointi)
 

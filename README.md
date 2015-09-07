@@ -1,8 +1,9 @@
 # mists
-A realtime Roguelike adventure for cs.hel.fi javalab.
+A realtime Roguelike adventure for cs.hel.fi javalab & tiralab.
 
-So far you can move around in a procedurally generated dungeon, dodging monsters and burrowing through walls. Move around with arrow keys and use space to attack (walls or creatures). Shift-button toggles monsters to life, esc brings up the main menu.
+So far you can move around in a procedurally generated dungeon, dodging monsters and burrowing through walls. Move around with arrow keys and use space to attack (walls or creatures). Clicking a location teleports player there. Shift-button toggles monsters to life, esc brings up the main menu. 
 
+**NOTE:** The project has been updated to be ontinued on TiraLab. [Project description](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md) has been updated with new workplan.
 
 ***Project description***
 Please see [projectDescription.md](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md)
