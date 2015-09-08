@@ -42,13 +42,7 @@ package com.nkoiv.mists.game.world.pathfinding;
             this(def_cap);
         }
         
-        /**
-         * Adds a node to the end of the list (position num)
-         * and moves the position on the list by one
-         * If the array would go over its capacity, the array is extended by def_cap(50)
-         * @param n The Node to add to the list
-         */
-        public void add(Node n) {
+        public void addWithoutSorting(Node n) {
             if (num >= capacity) { //We're over our capacity!
                 //Make a new array with the capacity+def_cap;
                 Node[] newNodeArray = new Node[capacity+def_cap];
@@ -64,7 +58,18 @@ package com.nkoiv.mists.game.world.pathfinding;
             this.data[num] = n;
             this.num++;
             //System.out.println("Added node, size is now "+num);
-            //this.quickSort(this.data, 0, num-1);
+            
+        }
+        
+        /**
+         * Adds a node to the end of the list (position num)
+         * and moves the position on the list by one
+         * If the array would go over its capacity, the array is extended by def_cap(50)
+         * @param n The Node to add to the list
+         */
+        public void add(Node n) {
+            this.addWithoutSorting(n);
+            this.quickSort(this.data, 0, num-1);
         }
         /**
          * Retrieve a node from the list from the specified position
