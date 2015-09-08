@@ -6,7 +6,7 @@
 package LocationTests;
 
 import com.nkoiv.mists.game.world.pathfinding.Node;
-import com.nkoiv.mists.game.world.pathfinding.SortedNodeList;
+import com.nkoiv.mists.game.world.pathfinding.SortedList;
 import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -42,7 +42,7 @@ public class SortedNodeListTest {
 
     @Test
     public void bechmarkNodeListSortSpeed(){
-        SortedNodeList testList = new SortedNodeList();
+        SortedList testList = new SortedList();
         Random rnd = new Random();
         for (int i = 0; i < 1000; i++) {
             Node testNode = new Node(i,i);

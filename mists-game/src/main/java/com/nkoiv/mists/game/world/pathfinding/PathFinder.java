@@ -439,7 +439,7 @@ public class PathFinder {
     }
 
     private Node getFirstInOpen() {
-            return openNodes.first();
+            return (Node)openNodes.first();
     }
 
     private void addToOpen(Node node) {
