@@ -1,4 +1,10 @@
 #TiraLab (3h)
+
+#Viikko 2 (4h)
+
+##7.9
+* 4h [OHJELMOINTI] Käyty uudelleenrakentamaan Pathfinderin apuluokkia irti Collectionssista
+
 #Viikko 1 (3h)
 
 ##5.9
