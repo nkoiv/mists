@@ -3,6 +3,7 @@
 #Viikko 2 (4h)
 
 ##7.9
+* 1h [DOKUMENTOINTI] Päivitetty viikkoraportti
 * 4h [OHJELMOINTI] Käyty uudelleenrakentamaan Pathfinderin apuluokkia irti Collectionssista
 
 #Viikko 1 (3h)

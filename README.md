@@ -9,6 +9,11 @@ So far you can move around in a procedurally generated dungeon, dodging monsters
 
 Please see [projectDescription.md](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md)
 
+***Worklog (in finnish)***
+* Used hours can be found at [tuntikirjanpito.md](https://github.com/nkoiv/mists/blob/master/documentation/tuntikirjanpito.md)
+* Weekly reports for TiraLab at [tiralab_viikkoraportti.md](https://github.com/nkoiv/mists/blob/master/documentation/tiralab_viikkoraportti.md)
+
+
 ***Licence***
 
 Please see the [LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.md)
