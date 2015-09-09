@@ -22,6 +22,8 @@ if (index<=num) {
 </pre>
 Tuloksena taulukkoon jäi aina tyhjä kolo (kohtaan i), jonka referoiminen aiheutti nullpointereita. Päädyin lisäsäämään looppiin lisäyksissä kasvavan muuttujan(j), jonka mukaan uuteen taulukkoon tavarat laitetaan. 
 
+Lopuksi vielä irroitin Nodet tästä SortedNodeLististä ohjaajan suosituksesta. Nyt SortedList on oma luokkansa, jota SortedNodeList perii ahkerasti. Kattoluokka on näin paljon yleistettävämpi ja sitä voidaan hyödyntää myös reitinhaun ulkopuolella.
+
 Kaikenkaikkiaan kiva ja opettavainen viikko. Ensi viikolla loput Collectionssit hiiteen ja sitten visualisointia tekemään.
 Koitan vielä ehtiä tässä tällä viikolla väsätä vähän testejä.
 

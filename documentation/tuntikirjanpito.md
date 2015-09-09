@@ -1,6 +1,10 @@
-#TiraLab (3h)
+#TiraLab (12h)
 
-#Viikko 2 (4h)
+#Viikko 2 (8h)
+
+##8.9
+* 1h [OHJELMOINTI] Uudelleenrakennettu SortedList irti nodesta ja geneeriseksi SortedList<E>:ksi
+* 2h [OHJELMOINTI] Korjattu SortedNodeList toimimaan QuickSortilla
 
 ##7.9
 * 1h [DOKUMENTOINTI] Päivitetty viikkoraportti
