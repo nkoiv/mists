@@ -5,16 +5,20 @@ So far you can move around in a procedurally generated dungeon, dodging monsters
 
 **NOTE:** The project has been updated to be ontinued on TiraLab. [Project description](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md) has been updated with new workplan.
 
-***Project description***
+##Latest stable
+
+Ready to run stable version can be found at the [packed_jar folder](https://github.com/nkoiv/mists/tree/master/packed_jar).
+
+##Project description
 
 Please see [projectDescription.md](https://github.com/nkoiv/mists/blob/master/documentation/projectDescription.md)
 
-***Worklog (in finnish)***
+##Worklog (in finnish)
 * Used hours can be found at [tuntikirjanpito.md](https://github.com/nkoiv/mists/blob/master/documentation/tuntikirjanpito.md)
 * Weekly reports for TiraLab at [tiralab_viikkoraportti.md](https://github.com/nkoiv/mists/blob/master/documentation/tiralab_viikkoraportti.md)
 
 
-***Licence***
+##Licence
 
 Please see the [LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.md)
 
