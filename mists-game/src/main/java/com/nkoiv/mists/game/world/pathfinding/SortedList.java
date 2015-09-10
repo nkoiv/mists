@@ -6,11 +6,11 @@
 package com.nkoiv.mists.game.world.pathfinding;
 
 /**
-     * A simple sorted list for Comparable elements
-     * rewritten to skip the use of java collections and to use QuickSort
-     * @author nkoiv
- * @param <E> Only Comparable objects can be placed on the list, else Sort wouldnt work
-     */
+    * A simple sorted list for Comparable elements
+    * rewritten to skip the use of java collections and to use QuickSort
+    * @author nkoiv
+    * @param <E> Only Comparable objects can be placed on the list, else Sort wouldnt work
+    */
     public class SortedList<E extends Comparable> {
         /** The list of elements */
         protected E[] data; //the elements stored in the SortedList 
