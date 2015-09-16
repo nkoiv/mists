@@ -31,7 +31,8 @@ public class TestBench {
         cq.add(testnode2);
         cq.add(testnode3);
         cq.add(testnode4);
-        
+        System.out.println(cq.toString());
+        cq.remove(3);
         System.out.println(cq.toString());
     }
     

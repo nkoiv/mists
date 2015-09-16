@@ -15,10 +15,10 @@ package com.nkoiv.mists.game.world.pathfinding.util;
 //Comparing queueu
 
 public class ComparingQueue<E extends Comparable> {
-	private Comparable[] queue;
-	private static final int def_cap = 10;
+	protected Comparable[] data;
+	protected static final int def_cap = 10;
 	
-	private int size = 0;
+	protected int size = 0;
 	
 	public ComparingQueue() {
 		this(def_cap);
@@ -26,7 +26,7 @@ public class ComparingQueue<E extends Comparable> {
 	}
 	
 	public ComparingQueue(int startCap) {
-		this.queue = new Comparable[def_cap];
+		this.data = new Comparable[def_cap];
 		
 	}
 	/**
@@ -37,10 +37,10 @@ public class ComparingQueue<E extends Comparable> {
 	*/
 	public boolean add(E e) {
 		int i = this.size;
-		if (i >= queue.length) {
+		if (i >= data.length) {
 			enlargeArray();
 		}
-		if (size == 0) queue[0] = e;
+		if (size == 0) data[0] = e;
 		else findSpot(i,e);
 		this.size++;
 		return true;
@@ -56,26 +56,26 @@ public class ComparingQueue<E extends Comparable> {
 		Comparable<? super E> key = (Comparable<? super E>) e;
 		while (position > 0 ) {
 			int parentPos = (position -1) >>> 1;
-			Comparable p = queue[parentPos];
+			Comparable p = data[parentPos];
 			  if (key.compareTo((E) p) >= 0)
 				break;
-				queue[position] = p;
+				data[position] = p;
 				position = parentPos;
 		}
 		//If this wasnt better than anyone else, it goes to last
-		queue[position] = e;
+		data[position] = e;
 	}
 	
 	/*
 	* Enlarge the size of the array by the default cap
 	*/
 	private void enlargeArray() {
-		int newSize = queue.length + def_cap;
+		int newSize = data.length + def_cap;
 		Comparable[] newElementArray = (E[]) new Comparable[newSize];
 		for (int i = 0; i < size; i++) {
-                    newElementArray[i] = queue[i];
+                    newElementArray[i] = data[i];
 		}
-		this.queue = newElementArray;
+		this.data = newElementArray;
 	}
 	
 	private int size() {
@@ -84,14 +84,14 @@ public class ComparingQueue<E extends Comparable> {
 
 	public void remove(int position) {
             int s = --size;
-            if (s == position) queue[position] = null; //last spot is safe to null
+            if (s == position) data[position] = null; //last spot is safe to null
             else {
                 //look at what we're removing - shift everything after it down one step.
                 //reduce the size of the queue by one (to s)
                 for (int i = (position); i < s; i++) {
-                    queue[i] = i+1;
+                    data[i] = i+1;
                 }
-                queue[s] = null; //not doing this would result last record being duplicate
+                data[s] = null; //not doing this would result last record being duplicate
             }
             size = s;
 	}
@@ -100,7 +100,7 @@ public class ComparingQueue<E extends Comparable> {
     public String toString() {
         String result = "CQ size "+size+": ";
         for (int i = 0; i < this.size; i++) {
-            result = result + "["+queue[i].toString()+"],";
+            result = result + "["+data[i].toString()+"],";
         }
         return result;
     }
