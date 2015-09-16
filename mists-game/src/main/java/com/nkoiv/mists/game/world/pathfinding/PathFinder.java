@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world.pathfinding;
 
+import com.nkoiv.mists.game.world.pathfinding.util.SortedNodeList;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import java.util.ArrayList;

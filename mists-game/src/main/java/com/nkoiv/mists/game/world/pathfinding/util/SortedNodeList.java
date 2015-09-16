@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game.world.pathfinding;
+package com.nkoiv.mists.game.world.pathfinding.util;
+
+import com.nkoiv.mists.game.world.pathfinding.Node;
 
 /**
  * SortedNodeList for the Pathfinder.
@@ -41,6 +43,6 @@ public class SortedNodeList extends SortedList {
         }
         return false;   
     }
-
+    
 
 }

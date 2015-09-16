@@ -1,4 +1,15 @@
-#TiraLab (12h)
+#TiraLab (20h)
+
+#Viikko 3 (9h)
+
+##13.6 (3h)
+* 1h [OHJELMOINTI] Aloitettu testipöydän rakentaminen peliin
+* ½h [TESTAUS] Ajettu benchmarkkeja pelissä SortedListillä
+* 1½h [OPISKELU] Kerrattu läpi min- ja maxheapin toimintaa
+
+##11.9 (6h)
+* 4h [OHJELMOINTI] Tehty priorityqueuesta oma simppeli variantti (comparing queue), jota pitäisi testata sortedlistiä vastaan
+* 2h [OPISKELU] Tutkittu priorityqueueta
 
 #Viikko 2 (8h)
 
