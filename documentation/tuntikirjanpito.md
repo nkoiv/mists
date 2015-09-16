@@ -2,6 +2,9 @@
 
 #Viikko 3 (9h)
 
+##16.9 (1h)
+* 1h [OHJELMOINTI] Fiksattu CompargQueue toimimaan priorityqueuen periaatteilla
+
 ##13.6 (3h)
 * 1h [OHJELMOINTI] Aloitettu testipöydän rakentaminen peliin
 * ½h [TESTAUS] Ajettu benchmarkkeja pelissä SortedListillä
