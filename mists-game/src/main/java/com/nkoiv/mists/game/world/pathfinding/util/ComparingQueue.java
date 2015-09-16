@@ -6,7 +6,10 @@
 package com.nkoiv.mists.game.world.pathfinding.util;
 
 /**
- *
+ * Using the concept of PriorityQueue, but simplified
+ * ComparingQueue looks for the correct spot of the given
+ *(Comparable) element when it's added to the queue.
+ * There's no need to additional sorting of the list.
  * @author daedra
  */
 //Comparing queueu
@@ -37,7 +40,6 @@ public class ComparingQueue<E extends Comparable> {
 		if (i >= queue.length) {
 			enlargeArray();
 		}
-		size = i +1;
 		if (size == 0) queue[0] = e;
 		else findSpot(i,e);
 		this.size++;
@@ -69,7 +71,7 @@ public class ComparingQueue<E extends Comparable> {
 	*/
 	private void enlargeArray() {
 		int newSize = queue.length + def_cap;
-		E[] newElementArray = (E[]) new Comparable[newSize];
+		Comparable[] newElementArray = (E[]) new Comparable[newSize];
 		for (int i = 0; i < size; i++) {
                     newElementArray[i] = queue[i];
 		}
@@ -81,13 +83,27 @@ public class ComparingQueue<E extends Comparable> {
 	}
 
 	public void remove(int position) {
-		int s = --size;
-		if (s == position) queue[position] = null; //last spot is safe to null
-		else {
-			//look at what we're removing - shift everything after it down one step.
-			//reduce the size of the queue by one (to s)
-		}
+            int s = --size;
+            if (s == position) queue[position] = null; //last spot is safe to null
+            else {
+                //look at what we're removing - shift everything after it down one step.
+                //reduce the size of the queue by one (to s)
+                for (int i = (position); i < s; i++) {
+                    queue[i] = i+1;
+                }
+                queue[s] = null; //not doing this would result last record being duplicate
+            }
+            size = s;
 	}
+    
+    @Override
+    public String toString() {
+        String result = "CQ size "+size+": ";
+        for (int i = 0; i < this.size; i++) {
+            result = result + "["+queue[i].toString()+"],";
+        }
+        return result;
+    }
 	
 }
 
