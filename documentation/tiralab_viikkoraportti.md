@@ -43,7 +43,7 @@ CQ ran 100 times with 5000 nodes. Meantime: 4726.22676µs
 </pre>
 
 ####SortedList
-Kuten ComparingQueuessa, myös SortedListissa add() itsessään käy hyvinkin nopeasti. Elementin lisääminen listan loppuun menee aina O(1) ajassa. Sen oikean paikan löytäminen on hieman toinen juttu. QuickSort, jonka add() aina ajaa, perustuu koko listan läpi käymiseen ja paikkojen vaihteluun sen sisällä. Datan partitioiminen mahdollistaa sen, ettei kaikkia alkioita tarvitse verrata toisiinsa (O(n*n)), vaan pystymme pysymään O(n * log n):ssä. Vaikka suoritusajan kulmakerroin pysyykin logaritmin ansiosta kohtuullisena, nousee se jatkuvasti. Testaus vahvistaa tämän:
+Kuten ComparingQueuessa, myös SortedListissa add() itsessään käy hyvinkin nopeasti. Elementin lisääminen listan loppuun menee aina O(1) ajassa. Sen oikean paikan löytäminen on hieman toinen juttu. QuickSort, jonka add() aina ajaa, perustuu koko listan läpi käymiseen ja paikkojen vaihteluun sen sisällä. Datan partitioiminen mahdollistaa sen, ettei kaikkia alkioita tarvitse verrata toisiinsa (O(n*n)), vaan pystymme pysymään O(n * log n):ssä. Vaikka suoritusajan kasvuvauhti pysyykin logaritmin ansiosta kohtuullisena, kasvaa se jatkuvasti. Testaus vahvistaa tämän:
 <pre>
 SL ran 100 times with 100 nodes. Meantime: 177.88354999999999µs
 SL ran 100 times with 200 nodes. Meantime: 728.40019µs
