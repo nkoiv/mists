@@ -16,7 +16,7 @@ package com.nkoiv.mists.game.world.pathfinding.util;
         protected E[] data; //the elements stored in the SortedList 
         protected int capacity; //Max capacity of the list
         static final int def_cap = 50; //default capacity for a new list
-        protected int num; //Current size of the list
+        protected int num; //ID of the next element to add to the list
         
         /**
          * Constructor with specified capacity creates a list with that (max) size
@@ -174,7 +174,7 @@ package com.nkoiv.mists.game.world.pathfinding.util;
          */
         public void remove(int index) {
             //System.out.println("Starting removal of "+index+". Num at "+num);
-            if (index<=num) {
+            if (index<num) {
                 //Make a new array with the same capacity
                 E[] newElementArray = (E[])new Comparable[capacity];
                 //copy the old array over with the exception of the selected index
@@ -199,7 +199,7 @@ package com.nkoiv.mists.game.world.pathfinding.util;
          * @return The number of element in the list
          */
         public int size() {
-                return (num-1);
+                return (num);
         }
         /**
          * Get the capacity of the list
@@ -227,9 +227,9 @@ package com.nkoiv.mists.game.world.pathfinding.util;
 
         @Override
         public String toString() {
-            String description = "SortedList: Num:"+num+", Capacity:"+capacity+" Elements: ";
+            String description = "SL: size:"+num+", Capacity:"+capacity+" E's: ";
             for (int i = 0; i < (this.num-1);i++) {
-                description = description + " "+this.data[i].toString()+" |";
+                description = description + "["+this.data[i].toString()+"],";
             }
             return description;
         }

@@ -99,6 +99,7 @@ public class TestBench {
             System.out.println("CQ ran "+runtimes+" times with "+(nodeAmount*i)+" nodes. Meantime: "+(meantimeCQ/1000)+"µs");
         }
         */
+        /*
         double meantimeSL = meanNsAddTimeSL(nodes, runtimes);
         //System.out.println("CQ ran "+runtimes+" times with "+nodeAmount+" nodes. Meantime: "+(meantimeCQ/1000)+"µs");
         for (int i = 1; i < 100; i++) {
@@ -106,7 +107,33 @@ public class TestBench {
             meantimeSL = meanNsAddTimeSL(nodes, runtimes);
             System.out.println("SL ran "+runtimes+" times with "+(nodeAmount*i)+" nodes. Meantime: "+(meantimeSL/1000)+"µs");
         }
+        */
         
+        ComparingNodeQueue cqn = new ComparingNodeQueue();
+        nodes = createNodes(10);
+        addIntoComparingQueue(cqn, nodes);
+        System.out.println(cqn.toString());
+        cqn.remove(1);
+        System.out.println(cqn.toString());
+        cqn.clear();
+        System.out.println(cqn.toString());
+        addIntoComparingQueue(cqn, nodes);
+        System.out.println(cqn.toString());
+        cqn.remove(0);
+        System.out.println(cqn.toString());
+        
+        SortedNodeList snl = new SortedNodeList();
+        nodes = createNodes(10);
+        addIntoSortedList(snl, nodes);
+        System.out.println(snl.toString());
+        snl.remove(1);
+        System.out.println(snl.toString());
+        snl.clear();
+        System.out.println(snl.toString());
+        addIntoSortedList(snl, nodes);
+        System.out.println(snl.toString());
+        snl.remove(0);
+        System.out.println(snl.toString());
     }
     
 }

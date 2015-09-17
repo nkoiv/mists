@@ -78,9 +78,27 @@ public class ComparingQueue<E extends Comparable> {
 		data = newElementArray;
 	}
 	
-	private int size() {
+	public int size() {
 		return size;
 	}
+        
+        /**
+         * Return the index of the selected element
+         * if the element can't be found, return -1
+         * @param n The element to look for
+         * @return index of the element, -1 if it's not found
+         */
+        private int getIndex(E e) {
+            for (int i = 0; i < size -1; i++) {
+                if (data[i].equals(e)) return i;
+            }
+            return -1;
+        }
+        
+        public void remove(E e) {
+            int eIndex = this.getIndex(e);
+            if (eIndex>=0) this.remove(eIndex);
+        }
 
 	public void remove(int position) {
             int s = --size;
@@ -97,6 +115,15 @@ public class ComparingQueue<E extends Comparable> {
 	}
         
         /**
+         * Empty the list
+         */
+        public void clear() {
+            int oldLength = data.length;
+            data = (E[])new Comparable[oldLength];
+            this.size = 0;
+        }
+        
+        /**
          * Retrieve the selected element from the queue
          * @param n order-ID of the element to get
          * @return desired element
@@ -108,13 +135,32 @@ public class ComparingQueue<E extends Comparable> {
             return null;
         }
         
+                /**
+         * Check if an Element is in the list
+         * 
+         * @param n The element to search for
+         * @return True if the element is in the list
+         */
+        public boolean contains(E e) {
+            int eIndex = this.getIndex(e);
+            if (eIndex >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
         /**
          * Retrieve the first element from the queue
          *  
          * @return The first element from the queue
          */
         public E first() {
-            return data[0];
+            if (this.size>=1) {
+                return data[0];
+            } else {
+                return null;
+            }
         }
     
     @Override

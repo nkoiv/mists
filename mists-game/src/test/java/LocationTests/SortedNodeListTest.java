@@ -39,6 +39,34 @@ public class SortedNodeListTest {
     @After
     public void tearDown() {
     }
+    
+    @Test
+    public void nodesCanBeFoundFromTheList() {
+        SortedList testList = new SortedList();
+        Node testNode = new Node(1, 1);
+        testList.add(testNode);
+        assert(testList.contains(testNode));
+    }
+    
+    @Test
+    public void nodesCanBeAddedOnTheList() {
+        SortedList testList = new SortedList();
+        Node testNode = new Node(1, 1);
+        System.out.println("Adding node to list");
+        testList.add(testNode);
+        System.out.println("List size: " +testList.size());
+        assert(testList.size() == 1);
+    }
+    
+    @Test
+    public void nodesCanBeRemovedFromTheList() {
+        SortedList testList = new SortedList();
+        Node testNode = new Node(1, 1);
+        testList.add(testNode);
+        testList.remove(testNode);
+        assert(testList.size() == 0);
+        
+    }
 
     @Test
     public void bechmarkNodeListSortSpeed(){

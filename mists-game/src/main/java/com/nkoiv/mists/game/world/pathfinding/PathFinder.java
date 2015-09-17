@@ -8,9 +8,11 @@ package com.nkoiv.mists.game.world.pathfinding;
 import com.nkoiv.mists.game.world.pathfinding.util.SortedNodeList;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.world.pathfinding.util.ComparingNodeQueue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * PathFinder uses A* principles in finding the shortest working route between point A and pointB
@@ -24,8 +26,8 @@ import java.util.List;
  */
 public class PathFinder {
 	
-	private SortedNodeList closedNodes = new SortedNodeList();
-	private SortedNodeList openNodes = new SortedNodeList();
+	private ComparingNodeQueue closedNodes = new ComparingNodeQueue();
+	private ComparingNodeQueue openNodes = new ComparingNodeQueue();
 	private CollisionMap map; //The collision map derived from the Locations MOBs
         private HashMap<Integer, int[][]> clearanceMaps;
 	//private Node[][] nodes; //Nodemap used for pathfinding, filled with costs as we calculate them
@@ -348,12 +350,11 @@ public class PathFinder {
         openNodes.add(start);
         Node currentNode = start;
         //Mists.logger.log(Level.INFO,"Starting a new pathfinding: from {0},{1} to {2}, {3}",new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
-        //Iterate the list until all open nodes have been dealt with
-        while (openNodes.size() > 0) {
+        while (openNodes.size() >0) {  //Iterate the list until all open nodes have been dealt with
             currentNode = (Node)openNodes.first();
             //Mists.logger.log(Level.INFO, "Currently at: {0},{1} - Goal at: {2}, {3}", new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
-            //Mists.logger.log(Level.INFO, "Path has {0} steps in it. Number of open points: {1}. Number of closed points: {2}", new Object[]{path.getLength(), openNodes.size(), closedNodes.size()});
-            if (path.getLength() > this.maxSearchDistance) {
+            //Mists.logger.log(Level.INFO, "Number of open points: {0}. Number of closed points: {1}", new Object[]{openNodes.size(), closedNodes.size()});
+            if (path.getLength() > this.maxSearchDistance) { //currently unused
                 //Mists.logger.info("Ran to max search distance ("+maxSearchDistance+")");
                 break;
             }
@@ -365,16 +366,13 @@ public class PathFinder {
                 //Mists.logger.info("Next to goal but cant go there");
                 openNodes.clear();
                 break;
-            } else { //not at goal yet
-                //find open neighbours
+            } else { //not at goal yet, find open neighbours
                 List<Node> neighbours = new ArrayList<>(); //add in all traversable neighbours
                 neighbours.addAll(this.Neighbours(tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
                 neighbours.addAll(this.DiagonalNeighbours(tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
                 //Mists.logger.log(Level.INFO, "{0} neighbouring tiles found for {1},{2}", new Object[]{neighbours.size(), currentNode.getX(), currentNode.getY()});
                 List<Node> currentNeighbours = new ArrayList<>();
-                /*
-                * Check through all the neighbouring tiles
-                */
+                // Check through all the neighbouring tiles
                 for (Node n : neighbours) {
                     Node nn = new Node(n.getX(), n.getY());
                     //Estimate the total cost to get to end from this node
@@ -382,56 +380,45 @@ public class PathFinder {
                             this.getMovementCost(crossableTerrain, nn.getX(), nn.getY(), goal.getX(), goal.getY()));
                     nn.setPreviousNode(currentNode);
                     nn.setDepth(currentNode.getDepth()+1);
-                    //Mists.logger.info("Checking neihgbour at ["+n.getX()+","+n.getY()+"]");
+                    //Mists.logger.log(Level.INFO, "Checking neighbour at [{0},{1}]", new Object[]{n.getX(), n.getY()});
                     if (closedNodes.contains(n.getX(), n.getY())) {
                         Node cN = closedNodes.get(n.getX(), n.getY());
                         //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Closed list");
-                        if (cN.getCostEstimate() <= nn.getCostEstimate()) {
-                            //We ran to this node again, and we havent found a shorter route to it
+                        if (cN.getCostEstimate() <= nn.getCostEstimate()) { //We ran to this node again, and we havent found a shorter route to it
                             //Keep it in the closed list for now and nevermind
                             //continue;
-                        } else {
-                            //We've got a new shorter route to this (closed) node
-                            //Remove the node from closed list
+                        } else { //We've got a new shorter route to this (closed) node
                             closedNodes.remove(cN);
                         }
                         
                         
-                    } else if (openNodes.contains(n.getX(), n.getY())) {
-                        //This is already
+                    } else if (openNodes.contains(n.getX(), n.getY())) { //This is already on the open lists
                         Node oN = openNodes.get(n.getX(), n.getY());
                         //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Open list");
                         if (oN.getCostEstimate() <= nn.getCostEstimate()) {
                             //We ran to this node again, and we havent found a shorter route to it
                             //Keep it in the open list for now and nevermind
                             //continue;
-                        } else {
-                            //We've got a new shorter route to this (open) node
-                            //Update the cost to match that
+                        } else { //We've got a new shorter route to this (open) node
                             oN.setCostEstimate(nn.getCostEstimate());
                             oN.setDepth(nn.getDepth());
                         }
                         
-                    }  else { 
-                        //We have a new node to visit. Add it to the open list
-                        //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was on neither list.");
+                    }  else { //We have a new node to visit. Add it to the open list 
+                        //Mists.logger.log(Level.INFO, "Node [{0},{1}] was on neither list. Adding to open.", new Object[]{n.getX(), n.getY()});
                         openNodes.add(nn);
-                        //Mists.logger.info("Adding a new node to openList");
                     }
-                    
-                    //currentNeighbours.add(nn); // <- What was the point of this line again?
                 }
-                openNodes.remove(currentNode);
+                openNodes.remove(currentNode); //Move the current node to closed
                 closedNodes.add(currentNode);
-                //path.addStep(currentNode);
+                path.addStep(currentNode);
                 //Mists.logger.info(currentNode.getX()+","+currentNode.getY()+" set as current node");
                 
             }
             //Mists.logger.info("Checked the neighbours. Open nodes size is now "+openNodes.size());
         }
-        //Build back the path
         //Mists.logger.info("Building back the path from ["+currentNode.getX()+","+currentNode.getY()+"]...");
-        while (currentNode.getPreviousNode()!=null) {
+        while (currentNode.getPreviousNode()!=null) { //Build back the path
             path.prependNode(currentNode.getX(), currentNode.getY());
             currentNode = currentNode.getPreviousNode();
             //Mists.logger.info("Added ["+currentNode.getX()+","+currentNode.getY()+"] to the path");
