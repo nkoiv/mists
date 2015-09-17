@@ -1,6 +1,6 @@
 #TiraLab viikkoraportit
 
-##Viikkoraportti #2
+##Viikkoraportti #3
 (Solmuverkon hoitaminen)
 
 Implementoituani oman versioni PriorityQueuesta (pathfinding.util.ComparingNodeQueue.java) päätin keskittyä hieman suorityskyvyn mittaamiseen. Loin tätä varten testipenkin (pathfinding.util.TestBench.java) jossa mittailla käytännön suoritusaikojen osumista teoreettisiin. Tulokset eivät juurikaan yllättäneet, mutta olivat mielenkiinoisia varmentaa.
