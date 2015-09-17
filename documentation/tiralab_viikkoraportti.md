@@ -64,7 +64,7 @@ SL ran 100 times with 1400 nodes. Meantime: 45236.80932µs
 22 millisekunttia 1000 noden sorttaukselle alkaa olla jo melkoisesti kun se ajetaan jokaisen add():n yhteydessä.
 
 ###Poistot
-Poistot toimivat molemmissa listoissa aikavaatimukseltaan identtisesti lisäysten kanssa. ComparingQueue:n aika kuluu siirtäessä häntää poistetun ruudun kohdalle: tehtyjä operaatiota muodostuu 1-N operaatiota, 1 jos poistetaan viimeinen, N jos poistetaan ensimmäinen. SortedList puolestaan ajaa QuickSortin. Eli CQ O(n), SL(n * log n).
+Poistot toimivat molemmissa listoissa aikavaatimukseltaan identtisesti lisäysten kanssa. ComparingQueue:n aika kuluu siirtäessä häntää poistetun ruudun kohdalle: tehtyjä operaatiota muodostuu 1-N operaatiota, 1 jos poistetaan viimeinen, N jos poistetaan ensimmäinen. SortedList puolestaan ajaa QuickSortin. Eli CQ O(n), SL O(n * log n).
 
 ###Päätelmät
 Uusi ComparingQueue toimii *huomattavasti* SortedListiäni nopeammin tässä käyttötarkoituksessa. Listan järjestäminen jokaisen lisäyksen yhteydessä on aivan mielipuolista. Voisi olla testaamisen arvoista antaa SortedListille boolean muuttuja "sorted", joka asetetaan epätodeksi aina lisäyksen ja poiston yhdeydessä. Sorttaus, joka tehdään vain katsomisen yhteydessä (jos ja vain jos sorted=false), asettaisi sen todeksi. Tämä siitä syystä, että QuickSort ei ole merkittävästi nopeampi jo sortatulla aineistolla.
