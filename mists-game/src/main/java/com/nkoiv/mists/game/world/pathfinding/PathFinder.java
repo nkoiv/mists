@@ -354,7 +354,7 @@ public class PathFinder {
             currentNode = (Node)openNodes.first();
             //Mists.logger.log(Level.INFO, "Currently at: {0},{1} - Goal at: {2}, {3}", new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
             //Mists.logger.log(Level.INFO, "Number of open points: {0}. Number of closed points: {1}", new Object[]{openNodes.size(), closedNodes.size()});
-            if (path.getLength() > this.maxSearchDistance) { //currently unused
+            if (path.getLength() > this.maxSearchDistance) {
                 //Mists.logger.info("Ran to max search distance ("+maxSearchDistance+")");
                 break;
             }
