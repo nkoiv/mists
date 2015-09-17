@@ -15,7 +15,7 @@ package com.nkoiv.mists.game.world.pathfinding.util;
 //Comparing queueu
 
 public class ComparingQueue<E extends Comparable> {
-	protected Comparable[] data;
+	protected E[] data;
 	protected static final int def_cap = 10;
 	
 	protected int size = 0;
@@ -26,7 +26,7 @@ public class ComparingQueue<E extends Comparable> {
 	}
 	
 	public ComparingQueue(int startCap) {
-		this.data = new Comparable[def_cap];
+		data = (E[])new Comparable[def_cap];
 		
 	}
 	/**
@@ -56,7 +56,7 @@ public class ComparingQueue<E extends Comparable> {
 		Comparable<? super E> key = (Comparable<? super E>) e;
 		while (position > 0 ) {
 			int parentPos = (position -1) >>> 1;
-			Comparable p = data[parentPos];
+			E p = data[parentPos];
 			  if (key.compareTo((E) p) >= 0)
 				break;
 				data[position] = p;
@@ -71,11 +71,11 @@ public class ComparingQueue<E extends Comparable> {
 	*/
 	private void enlargeArray() {
 		int newSize = data.length + def_cap;
-		Comparable[] newElementArray = (E[]) new Comparable[newSize];
+		E[] newElementArray = (E[]) new Comparable[newSize];
 		for (int i = 0; i < size; i++) {
                     newElementArray[i] = data[i];
 		}
-		this.data = newElementArray;
+		data = newElementArray;
 	}
 	
 	private int size() {
@@ -89,12 +89,33 @@ public class ComparingQueue<E extends Comparable> {
                 //look at what we're removing - shift everything after it down one step.
                 //reduce the size of the queue by one (to s)
                 for (int i = (position); i < s; i++) {
-                    data[i] = i+1;
+                    data[i] = data[i+1];
                 }
                 data[s] = null; //not doing this would result last record being duplicate
             }
             size = s;
 	}
+        
+        /**
+         * Retrieve the selected element from the queue
+         * @param n order-ID of the element to get
+         * @return desired element
+         */
+        public E get(int n) {
+            if (n>=0 && n <size) {
+                return data[n];
+            }
+            return null;
+        }
+        
+        /**
+         * Retrieve the first element from the queue
+         *  
+         * @return The first element from the queue
+         */
+        public E first() {
+            return data[0];
+        }
     
     @Override
     public String toString() {

@@ -1,6 +1,76 @@
 #TiraLab viikkoraportit
 
 ##Viikkoraportti #2
+(Solmuverkon hoitaminen)
+Implementoituani oman versioni PriorityQueuesta (pathfinding.util.ComparingNodeQueue.java) päätin keskittyä hieman suorityskyvyn mittaamiseen. Loin tätä varten testipenkin (pathfinding.util.TestBench.java) jossa mittailla käytännön suoritusaikojen osumista teoreettisiin.
+
+###Lisäykset
+####ComparingQueue
+add() suorituisi O(1) kaikissa tapauksissa, joissa lisätään 0 kokoiseen listaan sen ensimmäinen elementti, mutta koska näin ei kovin usein tapahdu, periytyy add-funktion aikavaatimus melko suoraan findSpot-funktiolta. Tieteen nimissä ajoin kuitenkin 1 kpl lisäyksen 0 -listaan 10 000 kertaa: suoritusajan keskiarvo ~1.25µs.
+findSpot(), joka tunkee annetun noden oikeaan paikkaan, toimii karkeasti selitettynä jotakuinkin näin:
+<pre>
+kohta = solmut.pituus
+solmut[kohta] = annettu_solmu; //asetetaan solmu rivin viimeiseksi
+while (kohta>0) { //lopetetaan toisto jos päädytään rivin alkuun
+	if (solmut[kohta].arvo > solmut[kohta-1].arvo) { //Jos solmu on arvokkaampi kuin edempänä oleva
+		solmut[kohta] = solmut[kohta-1] //siirretään se edeltäjä yhdellä taaksepäin
+		kohta--; //liikutaan eteenpäin listalla
+	} else {
+		break; //Koska seuraava on tätä arvokkaampi, olemme nyt oikeassa kolossa - poistutaan siis loopista
+	}
+	solmut[kohta] = annettu_solmu //Asetetaan solmu tähän oikeaan paikkaansa;
+}
+</pre>
+Käytännössä aikaa kuluu siis 1:sta N:ään toistoa, jossa N on listan pituus. 1 toisto jos annettu solmu on listan huonoin, N toistoa jos annettu solmu päätyy ensimmäiseksi asti. Aikavaatimuksen findSpotille() - ja täten add():lle - pitäisi siis olla O(N). Testipenkki vahvistaa asian:
+<pre>
+--- exec-maven-plugin:1.2.1:exec (default-cli) @ mists-game ---
+CQ ran 100 times with 100 nodes. Meantime: 15.43833µs
+CQ ran 100 times with 200 nodes. Meantime: 24.37965µs
+CQ ran 100 times with 300 nodes. Meantime: 31.057689999999997µs
+CQ ran 100 times with 400 nodes. Meantime: 45.92405µs
+CQ ran 100 times with 500 nodes. Meantime: 63.19072µs
+CQ ran 100 times with 600 nodes. Meantime: 100.55975µs
+CQ ran 100 times with 700 nodes. Meantime: 118.6673µs
+CQ ran 100 times with 800 nodes. Meantime: 149.06004000000001µs
+CQ ran 100 times with 900 nodes. Meantime: 166.0286µs
+CQ ran 100 times with 1000 nodes. Meantime: 168.44367000000003µs
+CQ ran 100 times with 2000 nodes. Meantime: 855.2265600000001µs
+CQ ran 100 times with 3000 nodes. Meantime: 1537.8591299999998µs
+CQ ran 100 times with 4000 nodes. Meantime: 2947.74302µs
+CQ ran 100 times with 5000 nodes. Meantime: 4726.22676µs
+</pre>
+
+####SortedList
+Kuten ComparingQueuessa, myös SortedListissa add() itsessään käy hyvinkin nopeasti. Elementin lisääminen listan loppuun menee aina O(1) ajassa. Sen oikean paikan löytäminen on hieman toinen juttu. QuickSort, jonka add() aina ajaa, perustuu koko listan läpi käymiseen ja paikkojen vaihteluun sen sisällä. Datan partitioiminen mahdollistaa sen, ettei kaikkia alkioita tarvitse verrata toisiinsa (O(n*n)), vaan pystymme pysymään O(n * log n):ssä. Vaikka suoritusajan kulmakerroin pysyykin logaritmin ansiosta kohtuullisena, nousee se jatkuvasti. Testaus vahvistaa tämän:
+<pre>
+SL ran 100 times with 100 nodes. Meantime: 177.88354999999999µs
+SL ran 100 times with 200 nodes. Meantime: 728.40019µs
+SL ran 100 times with 300 nodes. Meantime: 1751.9384599999998µs
+SL ran 100 times with 400 nodes. Meantime: 3029.90667µs
+SL ran 100 times with 500 nodes. Meantime: 4996.36425µs
+SL ran 100 times with 600 nodes. Meantime: 7139.7765µs
+SL ran 100 times with 700 nodes. Meantime: 9874.43763µs
+SL ran 100 times with 800 nodes. Meantime: 13279.98385µs
+SL ran 100 times with 900 nodes. Meantime: 17070.27231µs
+SL ran 100 times with 1000 nodes. Meantime: 21765.90101µs
+SL ran 100 times with 1100 nodes. Meantime: 26258.77761µs
+SL ran 100 times with 1200 nodes. Meantime: 31836.11479µs
+SL ran 100 times with 1300 nodes. Meantime: 37465.6481µs
+SL ran 100 times with 1400 nodes. Meantime: 45236.80932µs
+</pre>
+
+22 millisekunttia 1000 noden sorttaukselle alkaa olla jo melkoisesti kun se ajetaan jokaisen add():n yhteydessä.
+
+###Poistot
+Poistot toimivat molemmissa listoissa aikavaatimukseltaan identtisesti lisäysten kanssa. ComparingQueue:n aika kuluu siirtäessä häntää poistetun ruudun kohdalle: tehtyjä operaatiota muodostuu 1-N operaatiota, 1 jos poistetaan viimeinen, N jos poistetaan ensimmäinen. SortedList puolestaan ajaa QuickSortin. Eli CQ O(n), SL(n * log n).
+
+###Päätelmät
+Uusi ComparingQueue toimii *huomattavasti* SortedListiäni nopeammin tässä käyttötarkoituksessa. Listan järjestäminen jokaisen lisäyksen yhteydessä on aivan mielipuolista. Voisi olla testaamisen arvoista antaa SortedListille boolean muuttuja "sorted", joka asetetaan epätodeksi aina lisäyksen ja poiston yhdeydessä. Sorttaus, joka tehdään vain katsomisen yhteydessä (jos ja vain jos sorted=false), asettaisi sen todeksi. Tämä siitä syystä, että QuickSort ei ole merkittävästi nopeampi jo sortatulla aineistolla.
+Niin tai näin, vaikuttaisi siltä, että CQ on jokatapauksessa parempi työkalu tähän tarkoitukseen.
+
+
+
+##Viikkoraportti #2
 (Koodin siivous)
 Huomasin A* hakuni nojaavan pahasti Collections.ArrayList:iin, erityisesti solmujen hallinnan osalta. Tähän oli saatava muutos.
 

@@ -1,9 +1,13 @@
-#TiraLab (20h)
+#TiraLab (24h)
 
-#Viikko 3 (9h)
+#Viikko 3 (13h)
+
+##17.9 (4h)
+* 1½h [DOKUMENTOINTI] Kirjattu havainnot tiralab_viikkoraporttiin
+* 2½h [TESTAUS] Ajettu aikavaatimustestejä ComparingQueuelle ja SortedListille
 
 ##16.9 (1h)
-* 1h [OHJELMOINTI] Fiksattu CompargQueue toimimaan priorityqueuen periaatteilla
+* 1h [OHJELMOINTI] Fiksattu ComparingQueue toimimaan priorityqueuen periaatteilla
 
 ##13.6 (3h)
 * 1h [OHJELMOINTI] Aloitettu testipöydän rakentaminen peliin
