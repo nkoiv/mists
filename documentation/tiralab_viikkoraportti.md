@@ -71,7 +71,7 @@ Uusi ComparingQueue toimii *huomattavasti* SortedListiäni nopeammin tässä kä
 Niin tai näin, vaikuttaisi siltä, että CQ on jokatapauksessa parempi työkalu tähän tarkoitukseen.
 
 ###Ongelmista
-Viikon kohokohta oli kun metsästin PathFinderin bugia. Jostain ihmeen syystä SortedNodeListin siirto omaksi luokakseen johti siihen, että otukset eivät enää osanneet väistää esteitä. Kaivoin läpi koodia tuntitolkulla, kunnes ongelmaksi paljastui se, että olin kommentoinut pois rivin
+Viikon kohokohta oli kun metsästin PathFinderin bugia. Jostain ihmeen syystä SortedNodeListin siirto omaksi luokakseen johti siihen, että otukset eivät enää osanneet väistää esteitä. Kaivoin läpi koodia pitkään, kunnes ongelmaksi paljastui se, että olin kommentoinut pois rivin
 <pre>
 path.addStep(currentNode); //mihin tätä tarvitaan
 </pre>
