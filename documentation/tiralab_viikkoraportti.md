@@ -2,7 +2,8 @@
 
 ##Viikkoraportti #2
 (Solmuverkon hoitaminen)
-Implementoituani oman versioni PriorityQueuesta (pathfinding.util.ComparingNodeQueue.java) päätin keskittyä hieman suorityskyvyn mittaamiseen. Loin tätä varten testipenkin (pathfinding.util.TestBench.java) jossa mittailla käytännön suoritusaikojen osumista teoreettisiin.
+
+Implementoituani oman versioni PriorityQueuesta (pathfinding.util.ComparingNodeQueue.java) päätin keskittyä hieman suorityskyvyn mittaamiseen. Loin tätä varten testipenkin (pathfinding.util.TestBench.java) jossa mittailla käytännön suoritusaikojen osumista teoreettisiin. Tulokset eivät juurikaan yllättäneet, mutta olivat mielenkiinoisia varmentaa.
 
 ###Lisäykset
 ####ComparingQueue
