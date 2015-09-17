@@ -1,6 +1,6 @@
 #TiraLab viikkoraportit
 
-##Viikkoraportti #2
+##Viikkoraportti #3
 (Solmuverkon hoitaminen)
 
 Implementoituani oman versioni PriorityQueuesta (pathfinding.util.ComparingNodeQueue.java) päätin keskittyä hieman suorityskyvyn mittaamiseen. Loin tätä varten testipenkin (pathfinding.util.TestBench.java) jossa mittailla käytännön suoritusaikojen osumista teoreettisiin. Tulokset eivät juurikaan yllättäneet, mutta olivat mielenkiinoisia varmentaa.
@@ -8,6 +8,7 @@ Implementoituani oman versioni PriorityQueuesta (pathfinding.util.ComparingNodeQ
 ###Lisäykset
 ####ComparingQueue
 add() suorituisi O(1) kaikissa tapauksissa, joissa lisätään 0 kokoiseen listaan sen ensimmäinen elementti, mutta koska näin ei kovin usein tapahdu, periytyy add-funktion aikavaatimus melko suoraan findSpot-funktiolta. Tieteen nimissä ajoin kuitenkin 1 kpl lisäyksen 0 -listaan 10 000 kertaa: suoritusajan keskiarvo ~1.25µs.
+
 findSpot(), joka tunkee annetun noden oikeaan paikkaan, toimii karkeasti selitettynä jotakuinkin näin:
 <pre>
 kohta = solmut.pituus
@@ -42,7 +43,7 @@ CQ ran 100 times with 5000 nodes. Meantime: 4726.22676µs
 </pre>
 
 ####SortedList
-Kuten ComparingQueuessa, myös SortedListissa add() itsessään käy hyvinkin nopeasti. Elementin lisääminen listan loppuun menee aina O(1) ajassa. Sen oikean paikan löytäminen on hieman toinen juttu. QuickSort, jonka add() aina ajaa, perustuu koko listan läpi käymiseen ja paikkojen vaihteluun sen sisällä. Datan partitioiminen mahdollistaa sen, ettei kaikkia alkioita tarvitse verrata toisiinsa (O(n*n)), vaan pystymme pysymään O(n * log n):ssä. Vaikka suoritusajan kulmakerroin pysyykin logaritmin ansiosta kohtuullisena, nousee se jatkuvasti. Testaus vahvistaa tämän:
+Kuten ComparingQueuessa, myös SortedListissa add() itsessään käy hyvinkin nopeasti. Elementin lisääminen listan loppuun menee aina O(1) ajassa. Sen oikean paikan löytäminen on hieman toinen juttu. QuickSort, jonka add() aina ajaa, perustuu koko listan läpi käymiseen ja paikkojen vaihteluun sen sisällä. Datan partitioiminen mahdollistaa sen, ettei kaikkia alkioita tarvitse verrata toisiinsa (O(n*n)), vaan pystymme pysymään O(n * log n):ssä. Vaikka suoritusajan kasvuvauhti pysyykin logaritmin ansiosta kohtuullisena, kasvaa se jatkuvasti. Testaus vahvistaa tämän:
 <pre>
 SL ran 100 times with 100 nodes. Meantime: 177.88354999999999µs
 SL ran 100 times with 200 nodes. Meantime: 728.40019µs
@@ -63,7 +64,7 @@ SL ran 100 times with 1400 nodes. Meantime: 45236.80932µs
 22 millisekunttia 1000 noden sorttaukselle alkaa olla jo melkoisesti kun se ajetaan jokaisen add():n yhteydessä.
 
 ###Poistot
-Poistot toimivat molemmissa listoissa aikavaatimukseltaan identtisesti lisäysten kanssa. ComparingQueue:n aika kuluu siirtäessä häntää poistetun ruudun kohdalle: tehtyjä operaatiota muodostuu 1-N operaatiota, 1 jos poistetaan viimeinen, N jos poistetaan ensimmäinen. SortedList puolestaan ajaa QuickSortin. Eli CQ O(n), SL(n * log n).
+Poistot toimivat molemmissa listoissa aikavaatimukseltaan identtisesti lisäysten kanssa. ComparingQueue:n aika kuluu siirtäessä häntää poistetun ruudun kohdalle: tehtyjä operaatiota muodostuu 1-N operaatiota, 1 jos poistetaan viimeinen, N jos poistetaan ensimmäinen. SortedList puolestaan ajaa QuickSortin. Eli CQ O(n), SL O(n * log n).
 
 ###Päätelmät
 Uusi ComparingQueue toimii *huomattavasti* SortedListiäni nopeammin tässä käyttötarkoituksessa. Listan järjestäminen jokaisen lisäyksen yhteydessä on aivan mielipuolista. Voisi olla testaamisen arvoista antaa SortedListille boolean muuttuja "sorted", joka asetetaan epätodeksi aina lisäyksen ja poiston yhdeydessä. Sorttaus, joka tehdään vain katsomisen yhteydessä (jos ja vain jos sorted=false), asettaisi sen todeksi. Tämä siitä syystä, että QuickSort ei ole merkittävästi nopeampi jo sortatulla aineistolla.
