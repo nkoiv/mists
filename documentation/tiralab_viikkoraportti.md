@@ -8,6 +8,7 @@ Implementoituani oman versioni PriorityQueuesta (pathfinding.util.ComparingNodeQ
 ###Lisäykset
 ####ComparingQueue
 add() suorituisi O(1) kaikissa tapauksissa, joissa lisätään 0 kokoiseen listaan sen ensimmäinen elementti, mutta koska näin ei kovin usein tapahdu, periytyy add-funktion aikavaatimus melko suoraan findSpot-funktiolta. Tieteen nimissä ajoin kuitenkin 1 kpl lisäyksen 0 -listaan 10 000 kertaa: suoritusajan keskiarvo ~1.25µs.
+
 findSpot(), joka tunkee annetun noden oikeaan paikkaan, toimii karkeasti selitettynä jotakuinkin näin:
 <pre>
 kohta = solmut.pituus
