@@ -6,13 +6,10 @@
 package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.pathfinding.Path;
-import java.util.logging.Level;
 
 /**
  * CreatureAI is the main AI routine for creatures.

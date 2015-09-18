@@ -97,7 +97,7 @@ public class Location implements Global {
         
         }
         
-        for (int i = 0; i < 1 ; i++) {
+        for (int i = 0; i < 0 ; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();

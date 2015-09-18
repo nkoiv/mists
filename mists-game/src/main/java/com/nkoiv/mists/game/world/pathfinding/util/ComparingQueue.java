@@ -89,7 +89,7 @@ public class ComparingQueue<E extends Comparable> {
          * @return index of the element, -1 if it's not found
          */
         private int getIndex(E e) {
-            for (int i = 0; i < size -1; i++) {
+            for (int i = 0; i < size; i++) {
                 if (data[i].equals(e)) return i;
             }
             return -1;

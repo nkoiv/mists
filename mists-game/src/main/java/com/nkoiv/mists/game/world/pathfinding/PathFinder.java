@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.world.pathfinding;
 
-import com.nkoiv.mists.game.world.pathfinding.util.SortedNodeList;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.world.pathfinding.util.ComparingNodeQueue;
@@ -351,10 +350,10 @@ public class PathFinder {
         Node currentNode = start;
         //Mists.logger.log(Level.INFO,"Starting a new pathfinding: from {0},{1} to {2}, {3}",new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
         while (openNodes.size() >0) {  //Iterate the list until all open nodes have been dealt with
-            currentNode = (Node)openNodes.first();
+            currentNode = getFirstInOpen();
             //Mists.logger.log(Level.INFO, "Currently at: {0},{1} - Goal at: {2}, {3}", new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
             //Mists.logger.log(Level.INFO, "Number of open points: {0}. Number of closed points: {1}", new Object[]{openNodes.size(), closedNodes.size()});
-            if (path.getLength() > this.maxSearchDistance) {
+            if (currentNode.getDepth() > this.maxSearchDistance) {
                 //Mists.logger.info("Ran to max search distance ("+maxSearchDistance+")");
                 break;
             }
@@ -369,9 +368,8 @@ public class PathFinder {
             } else { //not at goal yet, find open neighbours
                 List<Node> neighbours = new ArrayList<>(); //add in all traversable neighbours
                 neighbours.addAll(this.Neighbours(tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
-                neighbours.addAll(this.DiagonalNeighbours(tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
+                if (allowDiagonalMovement) neighbours.addAll(this.DiagonalNeighbours(tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
                 //Mists.logger.log(Level.INFO, "{0} neighbouring tiles found for {1},{2}", new Object[]{neighbours.size(), currentNode.getX(), currentNode.getY()});
-                List<Node> currentNeighbours = new ArrayList<>();
                 // Check through all the neighbouring tiles
                 for (Node n : neighbours) {
                     Node nn = new Node(n.getX(), n.getY());
@@ -388,7 +386,7 @@ public class PathFinder {
                             //Keep it in the closed list for now and nevermind
                             //continue;
                         } else { //We've got a new shorter route to this (closed) node
-                            closedNodes.remove(cN);
+                            removeFromClosed(cN);
                         }
                         
                         
@@ -406,12 +404,12 @@ public class PathFinder {
                         
                     }  else { //We have a new node to visit. Add it to the open list 
                         //Mists.logger.log(Level.INFO, "Node [{0},{1}] was on neither list. Adding to open.", new Object[]{n.getX(), n.getY()});
-                        openNodes.add(nn);
+                        addToOpen(nn);
                     }
                 }
-                openNodes.remove(currentNode); //Move the current node to closed
-                closedNodes.add(currentNode);
-                path.addStep(currentNode);
+                removeFromOpen(currentNode); //Move the current node to closed
+                addToClosed(currentNode);
+                //path.addStep(currentNode);
                 //Mists.logger.info(currentNode.getX()+","+currentNode.getY()+" set as current node");
                 
             }
@@ -427,7 +425,8 @@ public class PathFinder {
     }
 
     private Node getFirstInOpen() {
-            return (Node)openNodes.first();
+        //System.out.println("Getting first in open nodes (size"+openNodes.size()+"), "+openNodes.first().toString());
+        return (Node)openNodes.first();
     }
 
     private void addToOpen(Node node) {
@@ -440,7 +439,7 @@ public class PathFinder {
 
 
     private void removeFromOpen(Node node) {
-            this.openNodes.remove(node);
+            this.openNodes.remove(openNodes.get(node.getX(), node.getY()));
     }
 
     private void addToClosed(Node node) {
@@ -452,7 +451,7 @@ public class PathFinder {
     }
 
     private void removeFromClosed(Node node) {
-            this.closedNodes.remove(node);
+            this.closedNodes.remove(openNodes.get(node.getX(), node.getY()));
     }
 
     private boolean isValidLocation(List<Integer> crossableTerrain, int currentX, int currentY, int goalX, int goalY) {
