@@ -1,0 +1,322 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.nkoiv.mists.game.world.pathfinding;
+
+import com.nkoiv.mists.game.Mists;
+import static com.nkoiv.mists.game.world.pathfinding.PathFinder.getClearanceMap;
+import com.nkoiv.mists.game.world.pathfinding.util.ComparingNodeQueue;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+
+/**
+ * AStarPathfinder with clearance maps for different sized objects
+ * @author nikok
+ */
+public class AStarPathfinder implements PathfinderAlgorithm {
+    private PathFinder pathfinder; //Pathfinder keeps the collisionmap up to date, we just refer to it.
+    private ComparingNodeQueue closedNodes = new ComparingNodeQueue();
+    private ComparingNodeQueue openNodes = new ComparingNodeQueue();
+    private int maxSearchDistance;
+    private boolean allowDiagonalMovement;
+   
+    private HashMap<Integer, int[][]> clearanceMaps;
+    
+    public AStarPathfinder(PathFinder pathfinder, int maxSearchDistance, boolean allowDiagonalMovement) {
+        this.pathfinder = pathfinder;
+        this.maxSearchDistance = maxSearchDistance;
+        this.allowDiagonalMovement = allowDiagonalMovement;
+        this.clearanceMaps = new HashMap<>(); 
+        this.clearanceMaps.put(0, pathfinder.getClearanceMap(0)); //Base clearanceMap for 0-type movement. 
+    }
+    
+    
+    /**
+    * THE MAIN PATHFINDING ROUTINE
+    * Based on A* tips from the book "Artificial Intelligence for games (2e)" by Millington and Funge
+    * TODO: Implement some speed tips
+    * 
+     * @param map The map we're moving on
+     * @param tileSize Size of the object we're finding a path for
+     * @param crossableTerrain terrains this object can path through
+     * @param startX starting position of the object
+     * @param startY starting position of the object
+     * @param goalX pathfinding goal of the object
+     * @param goalY pathfinding goal of the object
+    */
+    @Override
+    public Path findPath(CollisionMap map, int tileSize,List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
+        //Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
+        Path path = new Path();
+
+        //Check we have all the clearanceMaps we need.
+        for (Integer terrainType : crossableTerrain) {
+            if (!this.clearanceMaps.containsKey(terrainType)) { //if we dont already have the given map, we need to generate it
+                this.clearanceMaps.put(terrainType, pathfinder.getClearanceMap(terrainType));
+            }
+        }
+
+        //Initialize the starting node
+        Node start = new Node(startX, startY);
+        start.setPreviousNode(null); //Start has no previous node
+        start.setDepth(0); //When we're at start, we havent moved yet
+        start.setCostEstimate(this.getMovementCost(crossableTerrain, start.getX(), start.getY(), goalX, goalY));
+
+        Node goal = new Node(goalX, goalY);
+
+        closedNodes.clear(); //Reset the closed nodes
+        openNodes.clear(); //Reset the open nodes
+        openNodes.add(start);
+        Node currentNode = start;
+        //Mists.logger.log(Level.INFO,"Starting a new pathfinding: from {0},{1} to {2}, {3}",new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
+        while (openNodes.size() >0) {  //Iterate the list until all open nodes have been dealt with
+            currentNode = getFirstInOpen();
+            //Mists.logger.log(Level.INFO, "Currently at: {0},{1} - Goal at: {2}, {3}", new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
+            //Mists.logger.log(Level.INFO, "Number of open points: {0}. Number of closed points: {1}", new Object[]{openNodes.size(), closedNodes.size()});
+            if (currentNode.getDepth() > this.maxSearchDistance) {
+                //Mists.logger.info("Ran to max search distance ("+maxSearchDistance+")");
+                break;
+            }
+            if(currentNode.getX() == goal.getX() && currentNode.getY() == goal.getY()) { //we're at the goal
+                //Mists.logger.info("Found goal!");
+                openNodes.clear();
+                break;
+            } else if (currentNode.isNextTo(goalX, goalY) && map.isBlocked(crossableTerrain, goalX, goalY)) { //We're next to Goal, but it's unreachable
+                //Mists.logger.info("Next to goal but cant go there");
+                openNodes.clear();
+                break;
+            } else { //not at goal yet, find open neighbours
+                List<Node> neighbours = new ArrayList<>(); //add in all traversable neighbours
+                neighbours.addAll(this.Neighbours(map, tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
+                if (allowDiagonalMovement) neighbours.addAll(this.DiagonalNeighbours(map, tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
+                //Mists.logger.log(Level.INFO, "{0} neighbouring tiles found for {1},{2}", new Object[]{neighbours.size(), currentNode.getX(), currentNode.getY()});
+                // Check through all the neighbouring tiles
+                for (Node n : neighbours) {
+                    Node nn = new Node(n.getX(), n.getY());
+                    //Estimate the total cost to get to end from this node
+                    nn.setCostEstimate(currentNode.getDepth()+
+                            this.getMovementCost(crossableTerrain, nn.getX(), nn.getY(), goal.getX(), goal.getY()));
+                    nn.setPreviousNode(currentNode);
+                    nn.setDepth(currentNode.getDepth()+1);
+                    //Mists.logger.log(Level.INFO, "Checking neighbour at [{0},{1}]", new Object[]{n.getX(), n.getY()});
+                    if (closedNodes.contains(n.getX(), n.getY())) {
+                        Node cN = closedNodes.get(n.getX(), n.getY());
+                        //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Closed list");
+                        if (cN.getCostEstimate() <= nn.getCostEstimate()) { //We ran to this node again, and we havent found a shorter route to it
+                            //Keep it in the closed list for now and nevermind
+                            //continue;
+                        } else { //We've got a new shorter route to this (closed) node
+                            removeFromClosed(cN);
+                        }
+
+
+                    } else if (openNodes.contains(n.getX(), n.getY())) { //This is already on the open lists
+                        Node oN = openNodes.get(n.getX(), n.getY());
+                        //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Open list");
+                        if (oN.getCostEstimate() <= nn.getCostEstimate()) {
+                            //We ran to this node again, and we havent found a shorter route to it
+                            //Keep it in the open list for now and nevermind
+                            //continue;
+                        } else { //We've got a new shorter route to this (open) node
+                            oN.setCostEstimate(nn.getCostEstimate());
+                            oN.setDepth(nn.getDepth());
+                        }
+
+                    }  else { //We have a new node to visit. Add it to the open list 
+                        //Mists.logger.log(Level.INFO, "Node [{0},{1}] was on neither list. Adding to open.", new Object[]{n.getX(), n.getY()});
+                        addToOpen(nn);
+                    }
+                }
+                removeFromOpen(currentNode); //Move the current node to closed
+                addToClosed(currentNode);
+                //path.addStep(currentNode);
+                //Mists.logger.info(currentNode.getX()+","+currentNode.getY()+" set as current node");
+
+            }
+            //Mists.logger.info("Checked the neighbours. Open nodes size is now "+openNodes.size());
+        }
+        //Mists.logger.info("Building back the path from ["+currentNode.getX()+","+currentNode.getY()+"]...");
+        while (currentNode.getPreviousNode()!=null) { //Build back the path
+            path.prependNode(currentNode.getX(), currentNode.getY());
+            currentNode = currentNode.getPreviousNode();
+            //Mists.logger.info("Added ["+currentNode.getX()+","+currentNode.getY()+"] to the path");
+        }
+        return path;
+    }
+    
+    private Node getFirstInOpen() {
+        //System.out.println("Getting first in open nodes (size"+openNodes.size()+"), "+openNodes.first().toString());
+        return (Node)openNodes.first();
+    }
+
+    private void addToOpen(Node node) {
+            this.openNodes.add(node);
+    }
+
+    private boolean inOpenList(Node node) {
+            return this.openNodes.contains(node);
+    }
+
+
+    private void removeFromOpen(Node node) {
+            this.openNodes.remove(openNodes.get(node.getX(), node.getY()));
+    }
+
+    private void addToClosed(Node node) {
+            this.closedNodes.add(node);
+    }
+
+    private boolean inClosedList(Node node) {
+            return this.closedNodes.contains(node);
+    }
+
+    private void removeFromClosed(Node node) {
+            this.closedNodes.remove(openNodes.get(node.getX(), node.getY()));
+    }
+    
+    /**
+     * Neighbours with the default clearance need of 1
+     * @param crossableTerrain Tilewalking ability
+     * @param x Target nodes X coordinate
+     * @param y Target nodes Y coordinate
+     * @return 
+     */
+
+    public List<Node> Neighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y) {
+        //if no size given, assume clearance need of 1
+        return Neighbours(map, 1,crossableTerrain, x, y);
+    } 
+
+    /**
+     * Neighbours returns all the cardinal direction (Up, Down, Left, Right)
+     * neighbours of a given X,Y tile that can be crossed with the given parameters.
+     * In other words, it returns available paths.
+     * @param clearanceNeed Size of the unit doing the moving
+     * @param crossableTerrain Tilewalking ability
+     * @param x Target nodes X coordinate
+     * @param y Target nodes Y coordinate
+     * @return 
+     */
+
+    public List<Node> Neighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
+    /**Neighbours only lists cardinal directions
+    * because being surrounded cardinally blocks movement
+    * TODO: Consider if this is good
+    */
+        int N = y - 1;
+        int S = y + 1;
+        int E = x + 1;
+        int W = x - 1;
+        boolean myN = (N > -1 && !map.isBlocked(crossableTerrain, x, N) 
+                && this.hasClearance(clearanceNeed, crossableTerrain, x, N));
+        boolean myS = (S < map.getMapTileHeight() && !map.isBlocked(crossableTerrain, x, S)
+                && this.hasClearance(clearanceNeed, crossableTerrain, x, S));
+        boolean myE = (E < map.getMapTileWidth() && !map.isBlocked(crossableTerrain, E, y)
+                && this.hasClearance(clearanceNeed, crossableTerrain, E, y));
+        boolean myW = (W > -1 && !map.isBlocked(crossableTerrain, W, y)
+                && this.hasClearance(clearanceNeed, crossableTerrain, W, y));
+        ArrayList<Node> result = new ArrayList<>();
+        if(myN) {
+            result.add(new Node(x,N));
+        }
+        if(myE) {
+            result.add(new Node(E,y));
+        }
+        if(myS) {
+            result.add(new Node(x,S));
+        }
+        if(myW) {
+            result.add(new Node(W,y));
+        }
+        return result;
+    }
+        
+        
+    /**
+     * DiagonalNeighbours with default clearance need of 1.
+     * @param crossableTerrain Tilewalking ability
+     * @param x Target nodes X coordinate
+     * @param y Target nodes Y coordinate
+     * @return 
+     */    
+    public List<Node> DiagonalNeighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y) {
+        //if no size given, assume clearance need of 1
+        return DiagonalNeighbours(map, 1, crossableTerrain, x, y);
+    }
+    /** DiagonalNeighbours returns all the diagonal direction (UpRight, RightDown, UpLeft, LeftDown)
+    * neighbours of a given X,Y tile that can be crossed with the given parameters.
+    * In other words, it returns available paths.
+    * @param clearanceNeed Size of the unit doing the moving
+    * @param crossableTerrain Tilewalking ability
+    * @param x Target nodes X coordinate
+    * @param y Target nodes Y coordinate
+    * @return 
+    */  
+    public List<Node> DiagonalNeighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
+        //Return all NE, NW, SE and SW that are passable without squeezing through
+        ArrayList<Node> result = new ArrayList<>();
+        int N = y - 1;
+        int S = y + 1;
+        int E = x + 1;
+        int W = x - 1;
+        boolean myN = (N > -1 && !map.isBlocked(crossableTerrain, x, N)
+                && this.hasClearance(clearanceNeed, crossableTerrain, x, N));
+        boolean myS = (S < map.getMapTileHeight() && !map.isBlocked(crossableTerrain, x, S)
+                && this.hasClearance(clearanceNeed, crossableTerrain, x, S));
+        boolean myE = (E < map.getMapTileWidth() && !map.isBlocked(crossableTerrain, E, y)
+                && this.hasClearance(clearanceNeed, crossableTerrain, E, y));
+        boolean myW = (W > -1 && !map.isBlocked(crossableTerrain, W, y)
+                && this.hasClearance(clearanceNeed, crossableTerrain, W, y));        
+        if (myN) {
+            if (myE && !map.isBlocked(crossableTerrain, E, N)
+                    && this.hasClearance(clearanceNeed, crossableTerrain, E, N))
+                    result.add(new Node(E,N));
+            if (myW && !map.isBlocked(crossableTerrain, W, N)
+                    && this.hasClearance(clearanceNeed, crossableTerrain, W, N)) 
+                    result.add(new Node(W,N));
+        }
+        if (myS) {
+            if (myE && !map.isBlocked(crossableTerrain, E, S)
+                    && this.hasClearance(clearanceNeed, crossableTerrain, E, S))
+                result.add(new Node(E,S));
+            if (myW && !map.isBlocked(crossableTerrain, W, S)
+                    && this.hasClearance(clearanceNeed, crossableTerrain, W, S)) 
+                    result.add(new Node(W,S));
+        }      
+        return result;
+    }
+
+    
+    /*
+    * Check if unit of given size can fit in the given tile with given movement type
+    */
+    private boolean hasClearance (int unitSize, int terrainNumber, int x, int y) {
+        if (!this.clearanceMaps.containsKey(terrainNumber)) { //If we dont have the map for this type of terrain, generate it
+            Mists.logger.log(Level.INFO, "Tried to check clearance but no clearance map - generating a new one ({0})", terrainNumber);
+            this.clearanceMaps.put(terrainNumber, pathfinder.getClearanceMap(terrainNumber));
+        }
+        //Check if the unit can fit in the square
+        return this.clearanceMaps.get(terrainNumber)[x][y] >= unitSize;
+    }
+
+        /*
+    * Checking unit with multiple terrain movements fitting in a mapnode
+    */
+    private boolean hasClearance (int unitSize, List<Integer> crossableTerrain, int x, int y) {
+        for (Integer terrainType : crossableTerrain) {
+                if (this.hasClearance(unitSize, terrainType,x, y)) {
+                    return true;
+                }
+            }
+        return false;
+    }
+    
+    public double getMovementCost(List<Integer> movementAbilities, int currentX, int currentY, int goalX, int goalY) {
+            return pathfinder.getMovementCost(movementAbilities, currentX, currentY, goalX, goalY);
+    }
+    
+}
