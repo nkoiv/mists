@@ -70,7 +70,14 @@ Poistot toimivat molemmissa listoissa aikavaatimukseltaan identtisesti lisäyste
 Uusi ComparingQueue toimii *huomattavasti* SortedListiäni nopeammin tässä käyttötarkoituksessa. Listan järjestäminen jokaisen lisäyksen yhteydessä on aivan mielipuolista. Voisi olla testaamisen arvoista antaa SortedListille boolean muuttuja "sorted", joka asetetaan epätodeksi aina lisäyksen ja poiston yhdeydessä. Sorttaus, joka tehdään vain katsomisen yhteydessä (jos ja vain jos sorted=false), asettaisi sen todeksi. Tämä siitä syystä, että QuickSort ei ole merkittävästi nopeampi jo sortatulla aineistolla.
 Niin tai näin, vaikuttaisi siltä, että CQ on jokatapauksessa parempi työkalu tähän tarkoitukseen.
 
+###Ongelmista
+Viikon kohokohta oli kun metsästin PathFinderin bugia. Jostain ihmeen syystä SortedNodeListin siirto omaksi luokakseen johti siihen, että otukset eivät enää osanneet väistää esteitä. Kaivoin läpi koodia pitkään, kunnes ongelmaksi paljastui se, että olin kommentoinut pois rivin
+<pre>
+path.addStep(currentNode); //mihin tätä tarvitaan
+</pre>
+Luotu reitti ei siis saanut ollenkaan askelia sisäänsä, ja otuksille palautui aina (aikakatkaisuun päätyneen reitinhaun jälkeen) tyhjä reitti. Fallsafena toimiva "jos et saa reittiä, mene suoraan kohti kohdetta" toteutui aina.
 
+En vieläkään tiedä miksi olin kommentoinut pois tuon rivin...
 
 ##Viikkoraportti #2
 (Koodin siivous)
