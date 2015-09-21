@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -19,6 +20,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Mists Class is used to initialize the window and launch the game.
@@ -64,6 +66,15 @@ public class Mists extends Application implements Global {
         logger.info("Game set up");
         primaryStage.show();
         running = true;
+        
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+        
         logger.info("Mists game started");
         
        /*
