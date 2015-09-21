@@ -69,8 +69,13 @@ public class SoundManager {
     }
     
     public void loadMusicIntoPlaylist(String id, String filename) {
-        Media music = new Media(Paths.get(filename).toUri().toString());
-        musicPlaylist.put(id, music);
+        try {
+            Media music = new Media(Paths.get(filename).toUri().toString());
+            musicPlaylist.put(id, music);
+        } catch (Exception e) {
+            Mists.logger.log(Level.WARNING, "Tried to [{0}] but failed", filename);
+        }
+        
     }
     
     public void playMusic (String id) {
@@ -87,15 +92,25 @@ public class SoundManager {
     }
     
     public void stopMusic() {
-        this.mediaPlayer.stop();
+        try {
+            this.mediaPlayer.stop();
+        } catch (Exception e) {
+            Mists.logger.warning("Stopping mediaplayer failed - player missing?");
+        }
+        
     }
     
     public void toggleMusicMute() {
-        if (this.mediaPlayer.isMute()) {
-            this.mediaPlayer.setMute(false);
-        } else {
-           this.mediaPlayer.setMute(true);
+        try {
+            if (this.mediaPlayer.isMute()) {
+              this.mediaPlayer.setMute(false);
+            } else {
+                this.mediaPlayer.setMute(true);
+            } 
+        } catch (Exception e) {
+            Mists.logger.warning("Tried to toggle media player mute-status, but failed. Player missing?");
         }
+        
     }
     
     public boolean isMusicMuted() {
@@ -108,14 +123,16 @@ public class SoundManager {
             this.loadSoundEffects("weapon_blow", "audio/sounds/weapon_blow.wav");
         } catch (Exception e) {
             Mists.logger.warning("Tried to load audio/sounds/weapon_blow.wav but failed");
-            return;
         }   
     }
     
     public void loadSoundEffects(String id, String filename) {
-        
-        AudioClip sound = new AudioClip(Paths.get(filename).toUri().toString());
-        soundEffects.put(id, sound);
+        try {
+            AudioClip sound = new AudioClip(Paths.get(filename).toUri().toString());
+            soundEffects.put(id, sound);
+        } catch (Exception e) {
+            Mists.logger.log(Level.WARNING, "Failed to load {0} - file missing?", filename);
+        }
     }
     
     public void playSound(final String id) {
