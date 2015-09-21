@@ -6,8 +6,7 @@
 package com.nkoiv.mists.game.world.pathfinding;
 
 import com.nkoiv.mists.game.Mists;
-import static com.nkoiv.mists.game.world.pathfinding.PathFinder.getClearanceMap;
-import com.nkoiv.mists.game.world.pathfinding.util.ComparingNodeQueue;
+import com.nkoiv.mists.game.world.pathfinding.util.ComparingQueue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +17,17 @@ import java.util.logging.Level;
  * @author nikok
  */
 public class AStarPathfinder implements PathfinderAlgorithm {
+    
     private PathFinder pathfinder; //Pathfinder keeps the collisionmap up to date, we just refer to it.
-    private ComparingNodeQueue closedNodes = new ComparingNodeQueue();
-    private ComparingNodeQueue openNodes = new ComparingNodeQueue();
+    
+    private ComparingQueue closedNodes = new ComparingQueue();
+    private ComparingQueue openNodes = new ComparingQueue();
+    private Node[][] nodeMap;
+    private int[][] nodeStatus;
+    private static final int CLEAR = 0;
+    private static final int OPEN = 1;
+    private static final int CLOSED = 2;
+    
     private int maxSearchDistance;
     private boolean allowDiagonalMovement;
    
@@ -52,7 +59,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     public Path findPath(CollisionMap map, int tileSize,List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
         //Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
         Path path = new Path();
-
+        
         //Check we have all the clearanceMaps we need.
         for (Integer terrainType : crossableTerrain) {
             if (!this.clearanceMaps.containsKey(terrainType)) { //if we dont already have the given map, we need to generate it
@@ -67,10 +74,11 @@ public class AStarPathfinder implements PathfinderAlgorithm {
         start.setCostEstimate(this.getMovementCost(crossableTerrain, start.getX(), start.getY(), goalX, goalY));
 
         Node goal = new Node(goalX, goalY);
-
+        nodeMap = new Node[map.getMapTileWidth()][map.getMapTileHeight()]; //Reset nodemap
+        nodeStatus = new int[map.getMapTileWidth()][map.getMapTileHeight()]; //Reset node statuses
         closedNodes.clear(); //Reset the closed nodes
         openNodes.clear(); //Reset the open nodes
-        openNodes.add(start);
+        addToOpen(start);
         Node currentNode = start;
         //Mists.logger.log(Level.INFO,"Starting a new pathfinding: from {0},{1} to {2}, {3}",new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
         while (openNodes.size() >0) {  //Iterate the list until all open nodes have been dealt with
@@ -103,8 +111,8 @@ public class AStarPathfinder implements PathfinderAlgorithm {
                     nn.setPreviousNode(currentNode);
                     nn.setDepth(currentNode.getDepth()+1);
                     //Mists.logger.log(Level.INFO, "Checking neighbour at [{0},{1}]", new Object[]{n.getX(), n.getY()});
-                    if (closedNodes.contains(n.getX(), n.getY())) {
-                        Node cN = closedNodes.get(n.getX(), n.getY());
+                    if (inClosedList(n)) {
+                        Node cN = nodeMap[n.getX()][n.getY()];
                         //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Closed list");
                         if (cN.getCostEstimate() <= nn.getCostEstimate()) { //We ran to this node again, and we havent found a shorter route to it
                             //Keep it in the closed list for now and nevermind
@@ -114,8 +122,8 @@ public class AStarPathfinder implements PathfinderAlgorithm {
                         }
 
 
-                    } else if (openNodes.contains(n.getX(), n.getY())) { //This is already on the open lists
-                        Node oN = openNodes.get(n.getX(), n.getY());
+                    } else if (inOpenList(n)) { //This is already on the open lists
+                        Node oN = nodeMap[n.getX()][n.getY()];
                         //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Open list");
                         if (oN.getCostEstimate() <= nn.getCostEstimate()) {
                             //We ran to this node again, and we havent found a shorter route to it
@@ -155,27 +163,37 @@ public class AStarPathfinder implements PathfinderAlgorithm {
 
     private void addToOpen(Node node) {
             this.openNodes.add(node);
+            this.nodeMap[node.getX()][node.getY()] = node;
+            this.nodeStatus[node.getX()][node.getY()] = OPEN;
     }
 
     private boolean inOpenList(Node node) {
-            return this.openNodes.contains(node);
+        return this.nodeStatus[node.getX()][node.getY()] == OPEN;
     }
 
 
     private void removeFromOpen(Node node) {
-            this.openNodes.remove(openNodes.get(node.getX(), node.getY()));
+        Node n = this.nodeMap[node.getX()][node.getY()];
+        this.openNodes.remove(n);
+        this.nodeMap[node.getX()][node.getY()] = null;
+        this.nodeStatus[node.getX()][node.getY()] = CLEAR;
     }
 
     private void addToClosed(Node node) {
-            this.closedNodes.add(node);
+        this.closedNodes.add(node);
+        this.nodeMap[node.getX()][node.getY()] = node;
+        this.nodeStatus[node.getX()][node.getY()] = CLOSED;
     }
 
     private boolean inClosedList(Node node) {
-            return this.closedNodes.contains(node);
+        return this.nodeStatus[node.getX()][node.getY()] == CLOSED;
     }
 
     private void removeFromClosed(Node node) {
-            this.closedNodes.remove(openNodes.get(node.getX(), node.getY()));
+        Node n = this.nodeMap[node.getX()][node.getY()];
+        this.closedNodes.remove(n);
+        this.nodeMap[node.getX()][node.getY()] = null;
+        this.nodeStatus[node.getX()][node.getY()] = CLEAR;
     }
     
     /**

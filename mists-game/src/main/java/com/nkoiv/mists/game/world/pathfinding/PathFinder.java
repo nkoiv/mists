@@ -7,11 +7,8 @@ package com.nkoiv.mists.game.world.pathfinding;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.world.pathfinding.util.ComparingNodeQueue;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * PathFinder uses A* principles in finding the shortest working route between point A and pointB

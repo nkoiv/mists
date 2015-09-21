@@ -109,7 +109,7 @@ public class TestBench {
         }
         */
         
-        ComparingNodeQueue cqn = new ComparingNodeQueue();
+        ComparingQueue cqn = new ComparingQueue();
         nodes = createNodes(10);
         addIntoComparingQueue(cqn, nodes);
         System.out.println(cqn.toString());
@@ -122,7 +122,7 @@ public class TestBench {
         cqn.remove(0);
         System.out.println(cqn.toString());
         
-        SortedNodeList snl = new SortedNodeList();
+        SortedList snl = new SortedList();
         nodes = createNodes(10);
         addIntoSortedList(snl, nodes);
         System.out.println(snl.toString());
