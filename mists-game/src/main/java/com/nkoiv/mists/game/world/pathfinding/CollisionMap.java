@@ -23,7 +23,7 @@ public class CollisionMap {
     /* Nodes that make up the map */
     private Node[][] nodeMap; 
     /* Visited is used for pathfinding to determine which nodes have already been visited */
-    private Boolean[][] visited;
+    //private Boolean[][] visited;
     private int mapTileWidth;
     private int mapTileHeight;
     private int nodeSize;
@@ -38,7 +38,7 @@ public class CollisionMap {
         this.mapTileWidth = (int)(l.getMap().getWidth() / nodeSize)+1;
         this.mapTileHeight = (int)(l.getMap().getHeight() / nodeSize)+1; 
         nodeMap = new Node[mapTileWidth][mapTileHeight];
-        visited = new Boolean[mapTileWidth][mapTileHeight];
+        //visited = new Boolean[mapTileWidth][mapTileHeight];
         //Then populate a nodemap with empty (=collisionLevel 0) nodes
         for (int row = 0; row < this.mapTileHeight;row++) {
             for (int column = 0; column < this.mapTileWidth; column++) {
@@ -51,7 +51,26 @@ public class CollisionMap {
     public void updateCollisionLevels() {
         //Mists.logger.info("Updating collisionmap for "+this.location.getName());
         double startTime = System.currentTimeMillis();
-        //Clear the old map
+        //Clear the map
+        clearNodeMap();
+        //Go through all the nodes and check the location if it has something at them
+        updateMobsOnNodeMap();
+        //Mists.logger.log(Level.INFO, "Collision update done in {0}ms", (System.currentTimeMillis()-startTime));
+    }
+    
+    
+    /** isBlocked checks if the given unit can pass through the given node 
+     * returns False if tile is blocked, true if not. Every creature should be able to cross CL 0
+     * @param crossableTerrain List of terrains the mover can cross
+     * @param x xCoordinate of the checked node
+     * @param y yCoordinate of the checked node
+     * @return True if the unit cannot pass to this terrain with given crossableTerrainList
+    */
+    
+        /**
+     *  Generate a clear nodemap with 0-node at each spot
+     */
+    private void clearNodeMap() {
         this.nodeMap = new Node[mapTileWidth][mapTileHeight];
         //Then populate a nodemap with empty (=passable) nodes
         for (int row = 0; row < this.mapTileHeight;row++) {
@@ -59,7 +78,16 @@ public class CollisionMap {
                 this.nodeMap[column][row] = new Node(column, row, nodeSize, 0);
             }
         }
-        //Go through all the nodes and check the location if it has something at them
+    }
+    
+    /**
+     * Scan this.location for MOBs and
+     * populate the nodemap with them.
+     * Note: This should be called AFTER clearNodeMap
+     * when refreshing the nodemap, otherwise old
+     * MOBs linger on the collisionmap.
+     */
+    private void updateMobsOnNodeMap() {
         List<MapObject> mobs = this.location.getMOBList();
         //Mists.logger.info("Moblist has " +mobs.size()+" objects");
         for (MapObject mob : mobs) {
@@ -95,14 +123,6 @@ public class CollisionMap {
         //Mists.logger.info("Collisionmap updated in "+(System.currentTimeMillis()-startTime)+"ms");
     }
     
-    
-    /** isBlocked checks if the given unit can pass through the given node 
-     * returns False if tile is blocked, true if not. Every creature should be able to cross CL 0
-     * @param crossableTerrain List of terrains the mover can cross
-     * @param x xCoordinate of the checked node
-     * @param y yCoordinate of the checked node
-     * @return True if the unit cannot pass to this terrain with given crossableTerrainList
-    */
     public boolean isBlocked(List<Integer> crossableTerrain ,int x, int y) {
         if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
         return ((nodeMap[x][y] == null) ||
@@ -115,15 +135,18 @@ public class CollisionMap {
 		!(crossableTerrain == nodeMap[x][y].getCollisionLevel()));
     }
 
+    //The Visited -thing is not currently in use by pathfinding.
+    //This because it's essentially done by pathfinder-classes themselves,
+    //and does not belong in the collisionmap.
+    /*
     public void pfVisit(int xCoor, int yCoor) {
         this.visited[xCoor][yCoor] = true;
     }
     
     public boolean isVisited (int xCoor, int yCoor) {
-        if (this.visited[xCoor][yCoor] == null) return false;
         return this.visited[xCoor][yCoor];
     }
-    
+    */
     public void setStructuresOnly (boolean onlyStructures) {
         this.structuresOnly = onlyStructures;
     }

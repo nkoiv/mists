@@ -67,10 +67,10 @@ public class ComparingQueue<E extends Comparable> {
 	}
 	
 	/*
-	* Enlarge the size of the array by the default cap
+	* Enlarge the size of the array by doubling the size
 	*/
 	private void enlargeArray() {
-		int newSize = data.length + def_cap;
+		int newSize = (data.length+1) *2;
 		E[] newElementArray = (E[]) new Comparable[newSize];
 		for (int i = 0; i < size; i++) {
                     newElementArray[i] = data[i];

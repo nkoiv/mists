@@ -59,26 +59,11 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     public Path findPath(CollisionMap map, int tileSize,List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
         //Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
         Path path = new Path();
-        
-        //Check we have all the clearanceMaps we need.
-        for (Integer terrainType : crossableTerrain) {
-            if (!this.clearanceMaps.containsKey(terrainType)) { //if we dont already have the given map, we need to generate it
-                this.clearanceMaps.put(terrainType, pathfinder.getClearanceMap(terrainType));
-            }
-        }
-
-        //Initialize the starting node
-        Node start = new Node(startX, startY);
-        start.setPreviousNode(null); //Start has no previous node
-        start.setDepth(0); //When we're at start, we havent moved yet
-        start.setCostEstimate(this.getMovementCost(crossableTerrain, start.getX(), start.getY(), goalX, goalY));
-
+        //If the goal is blocked, return empty path
+        if (map.isBlocked(crossableTerrain, goalX, goalY)) return path;
+        Node start = initializePathfinding(map, crossableTerrain, startX, startY, goalX, goalY);
         Node goal = new Node(goalX, goalY);
-        nodeMap = new Node[map.getMapTileWidth()][map.getMapTileHeight()]; //Reset nodemap
-        nodeStatus = new int[map.getMapTileWidth()][map.getMapTileHeight()]; //Reset node statuses
-        closedNodes.clear(); //Reset the closed nodes
-        openNodes.clear(); //Reset the open nodes
-        addToOpen(start);
+        
         Node currentNode = start;
         //Mists.logger.log(Level.INFO,"Starting a new pathfinding: from {0},{1} to {2}, {3}",new Object[]{currentNode.getX(), currentNode.getY(), goal.getX(), goal.getY()});
         while (openNodes.size() >0) {  //Iterate the list until all open nodes have been dealt with
@@ -91,10 +76,6 @@ public class AStarPathfinder implements PathfinderAlgorithm {
             }
             if(currentNode.getX() == goal.getX() && currentNode.getY() == goal.getY()) { //we're at the goal
                 //Mists.logger.info("Found goal!");
-                openNodes.clear();
-                break;
-            } else if (currentNode.isNextTo(goalX, goalY) && map.isBlocked(crossableTerrain, goalX, goalY)) { //We're next to Goal, but it's unreachable
-                //Mists.logger.info("Next to goal but cant go there");
                 openNodes.clear();
                 break;
             } else { //not at goal yet, find open neighbours
@@ -120,8 +101,6 @@ public class AStarPathfinder implements PathfinderAlgorithm {
                         } else { //We've got a new shorter route to this (closed) node
                             removeFromClosed(cN);
                         }
-
-
                     } else if (inOpenList(n)) { //This is already on the open lists
                         Node oN = nodeMap[n.getX()][n.getY()];
                         //Mists.logger.info("Node ["+n.getX()+","+n.getY()+"] was found on the Open list");
@@ -133,7 +112,6 @@ public class AStarPathfinder implements PathfinderAlgorithm {
                             oN.setCostEstimate(nn.getCostEstimate());
                             oN.setDepth(nn.getDepth());
                         }
-
                     }  else { //We have a new node to visit. Add it to the open list 
                         //Mists.logger.log(Level.INFO, "Node [{0},{1}] was on neither list. Adding to open.", new Object[]{n.getX(), n.getY()});
                         addToOpen(nn);
@@ -156,8 +134,37 @@ public class AStarPathfinder implements PathfinderAlgorithm {
         return path;
     }
     
+    /**
+    * Initialize the pathfinding by clearing all the
+    * lists and making sure we have required clearance maps.
+    * @return starting node
+    */
+    private Node initializePathfinding(CollisionMap map, List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
+        //Mists.logger.log(Level.INFO, "Initializing the path"
+        //Check we have all the clearanceMaps we need.
+        for (Integer terrainType : crossableTerrain) {
+            if (!this.clearanceMaps.containsKey(terrainType)) { //if we dont already have the given map, we need to generate it
+                this.clearanceMaps.put(terrainType, pathfinder.getClearanceMap(terrainType));
+            }
+        }
+
+        //Initialize the starting node
+        Node start = new Node(startX, startY);
+        start.setPreviousNode(null); //Start has no previous node
+        start.setDepth(0); //When we're at start, we havent moved yet
+        start.setCostEstimate(this.getMovementCost(crossableTerrain, start.getX(), start.getY(), goalX, goalY));
+
+        //Clear the nodemap and nodelists
+        nodeMap = new Node[map.getMapTileWidth()][map.getMapTileHeight()]; //Reset nodemap
+        nodeStatus = new int[map.getMapTileWidth()][map.getMapTileHeight()]; //Reset node statuses
+        closedNodes.clear(); //Reset the closed nodes
+        openNodes.clear(); //Reset the open nodes
+        addToOpen(start);
+        
+        return start;
+    }
+    
     private Node getFirstInOpen() {
-        //System.out.println("Getting first in open nodes (size"+openNodes.size()+"), "+openNodes.first().toString());
         return (Node)openNodes.first();
     }
 
