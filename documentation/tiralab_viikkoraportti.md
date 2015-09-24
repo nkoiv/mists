@@ -1,5 +1,16 @@
 #TiraLab viikkoraportit
 
+##Viikkoraportti #4
+(Siivouksia ja parannuksia)
+
+Kävin erittäin hyvän palautteen innostamana perkaamaan läpi koodia, johon en ollut koskenut toviin. Erotin varsinasen reitinhaun pelin PathFinder -luokasta toteuttamaan uutta PathFindingAlgorithm -interfacea, järjestelin hieman metodeja siistimmiksi ja korjasin pari typerää lapsustani. Node-keskeiset lisäluokat util-paketissa lensivät hiiteen.
+
+Tärkein tekemistäni korjauksista oli (palautteessa huomattu) parin lineaarisen aikavuuden syövän metodin poisto. ComparingNodeQueue ja SortedNodeQueue molemmat kävivät läpi koko helkutin listan aina kun niiltä kysyttiin josko tietyn x ja y -koordinaatin solmu löytyy jo taulusta. Nyt homma hoituu node[][] nodeMap ja int[][] nodeStatus -taulukoilla. Pelkkä nodeMap riittäisi jos node tietäisi onko se auki vai kiinni reitille (boolean open?), mutta jotenkin se ei tunnu solmun itsensä asialta. Homma toimikoon kahden taulun kautta. 
+
+Toinen erittäin osuva palaute koski solmujen (Node.java) depth-parametria: Solmun syvyys kuvaa sitä, kuinka pitkä ketju on kyseisestä nodesta ensimmäiseen. Sitä käytetään suoraan toistaiseksi käytetyn liikkumisen pituuden mittaamiseen. En oikein tiedä mitä olen ajatellut taannoin tuota tehdessäni. Jatkossa depth kertoo toistaiseksi kuljetun matkan hinnan, joka saattaa muuttua kulkijan kykyjen mukaan. Näin eri reittien vertaaminen käy hieman nopeammin ja kevyemmin.
+
+Viikko kului pitkälti koodin siivoamiseen ja lapsusten korjaamiseen uuden tekemisen sijaan. Käyn vielä seuraavaksi läpi minulle asetetun vertaisarvioinnin, jonka jälkeen voin palata uuden koodin kirjoittamiseen.
+
 ##Viikkoraportti #3
 (Solmuverkon hoitaminen)
 

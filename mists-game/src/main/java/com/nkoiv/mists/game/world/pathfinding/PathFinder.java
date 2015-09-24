@@ -232,7 +232,6 @@ public class PathFinder {
     */ 
     public static int[][] getClearanceMap (int crossableTerrain, CollisionMap collisionMap) {
         int[][] clearanceMap = new int[collisionMap.getMapTileWidth()][collisionMap.getMapTileHeight()];        
-        int level;
        // Mists.logger.log(Level.INFO, "Clearance map generation started. Size of map: [{0},{1}]", new Object[]{collisionMap.getMapTileWidth(), collisionMap.getMapTileHeight()});
         //Check through all the tiles on the collisionMap and calculate their clearanceLevels
         for (int y=0;y<collisionMap.getMapTileHeight();y++) {  //collisionMap.getMapTileHeight()

@@ -1,4 +1,20 @@
-#TiraLab (24h)
+#TiraLab (35h)
+
+#Viikko 4 (11h)
+
+##24.9 (4h)
+* 3h [OPISKELU] Luettu Artificial Intelligence for Games'ia ajatuksella. Kerrattu Djikstra ja AStar
+* 1h [DOKUMENTOINTI] Päivitetty viikkoraportti
+
+##22.9 (5h)
+* 1h [OHJELMOINTI] Solmutaulukot ja muuta pientä parannusta AStarPathfinderiin
+* 1h [OHJELMOINTI] AStarPathfinderin ja CollisionMapin isojen metodien halkominen pienemmiksi
+* 2h [OHJELMOINTI] PathfindingAlgorithmin erottaminen PathFinderista
+* 1h [OPISKELU] Saadun palautteen läpikäynti ajatuksella koodi kädessä
+
+##21.9 (2h)
+* 1h [TESTAUS] Testien päivittämistä
+* 1h [DOKUMENTOINTI] Javadocin kirjoittelua
 
 #Viikko 3 (13h)
 
