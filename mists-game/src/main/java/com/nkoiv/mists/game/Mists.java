@@ -9,10 +9,13 @@ package com.nkoiv.mists.game;
 import static com.nkoiv.mists.game.Mists.logger;
 import com.nkoiv.mists.game.audio.SoundManager;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -53,6 +56,8 @@ public class Mists extends Application implements Global {
         Group root = new Group();
         Scene launchScene = new Scene(root);
         final Canvas gameCanvas = new Canvas(WIDTH, HEIGHT);
+        gameCanvas.widthProperty().bind(primaryStage.widthProperty());
+        gameCanvas.heightProperty().bind(primaryStage.heightProperty());
         final Canvas uiCanvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(gameCanvas);
         root.getChildren().add(uiCanvas);
@@ -62,6 +67,7 @@ public class Mists extends Application implements Global {
         primaryStage.setScene(launchScene);
         setupKeyHandlers(primaryStage);
         setupMouseHandles(root);
+        setupWindowResizeListeners(launchScene);
         MistsGame = new Game();
         logger.info("Game set up");
         primaryStage.show();
@@ -112,6 +118,25 @@ public class Mists extends Application implements Global {
     
     public Game getGame() {
         return this.MistsGame;
+    }
+    
+    
+    private void setupWindowResizeListeners(Scene launchScene) {
+                
+        launchScene.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+                Mists.logger.log(Level.INFO, "Width: {0}", newSceneWidth);
+                MistsGame.WIDTH = (Double)newSceneWidth;
+                MistsGame.updateUI();
+            }
+        });
+        launchScene.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+                Mists.logger.log(Level.INFO, "Height: {0}", newSceneHeight);
+                MistsGame.WIDTH = (Double)newSceneHeight;
+                MistsGame.updateUI();
+            }
+        });
     }
     
     private void setupSoundManager() {

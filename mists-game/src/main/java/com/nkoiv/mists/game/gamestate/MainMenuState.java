@@ -137,5 +137,10 @@ public class MainMenuState implements GameState {
     public HashMap<String, UIComponent> getUIComponents() {
         return this.uiComponents;
     }
+
+    @Override
+    public void updateUI() {
+        
+    }
     
 }

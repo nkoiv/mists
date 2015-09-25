@@ -5,20 +5,14 @@
  */
 package com.nkoiv.mists.game;
 
-import static com.nkoiv.mists.game.Global.HEIGHT;
-import static com.nkoiv.mists.game.Global.WIDTH;
-import static com.nkoiv.mists.game.Mists.logger;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.MapGenerator;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -33,6 +27,9 @@ public class Game {
     public boolean running = false;
     public final ArrayList<String> inputLog = new ArrayList<>();
     public Scene currentScene;
+    
+    public double WIDTH; //Dimensions of the screen (render area)
+    public double HEIGHT; //Dimensions of the screen (render area)
     public double xOffset; //Offsets are used control which part of the map is drawn
     public double yOffset; //If/when a map is larger than display-area, it should be centered on player
     public MapGenerator mapGen;
@@ -49,6 +46,9 @@ public class Game {
     * TODO: Game states
     */
     public Game () {
+        //Initialize the screen size
+        WIDTH = Global.WIDTH;
+        HEIGHT = Global.HEIGHT;
         //POC player:
         PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setCollisionAreaShape(2);
@@ -83,7 +83,9 @@ public class Game {
         currentLocation = l;
     }
     
-
+    public void updateUI() {
+        currentState.updateUI();
+    }
 
     /**
     * Tick checks keybuffer, initiates actions and does just about everything.

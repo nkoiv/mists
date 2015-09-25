@@ -190,15 +190,11 @@ public class PathFinder {
         }
          //System.out.println("-------");
      }
-        
-        
+           
     //If trying to find a path for an object of unspecified size, assume it's tilesize 1
     public Path findPath (List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
         return this.algo.findPath(map, 1,crossableTerrain, startX, startY, goalX, goalY);
-    }
-        
-        
-
+    }        
     
     private boolean isValidLocation(List<Integer> crossableTerrain, int currentX, int currentY, int goalX, int goalY) {
             boolean invalid = (goalX < 0) || (goalY < 0) || (goalX >= map.getMapTileWidth()) || (goalY >= map.getMapTileWidth());

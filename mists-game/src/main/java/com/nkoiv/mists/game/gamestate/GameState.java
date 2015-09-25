@@ -38,6 +38,9 @@ public interface GameState {
     //Handle mouse events
     public void handleMouseEvent(MouseEvent me);
     
+    //Update UI (screen resize etC)
+    public void updateUI();
+    
     //TODO:
     //Cleanup the stage
     public void exit();

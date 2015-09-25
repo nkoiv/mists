@@ -50,8 +50,14 @@ public class LocationState implements GameState {
         this.loadDefaultUI();
     }
     
+    @Override
+    public void updateUI() {
+        //Move the actionbar to where it should be
+        uiComponents.get("Actionbar").setPosition(0, (game.HEIGHT - 80));
+    }
+    
     private void loadDefaultUI() {
-        TiledWindow actionBar = new TiledWindow(this, "Actionbar", Global.WIDTH, 80, 0, (Global.HEIGHT - 80));
+        TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
         TextButton testButton1 = new ActionButton(game.player, "MeleeAttack",  80, 60);
         TextButton testButton2 = new TextButton("Button", 80, 60);
         TextButton testButton3 = new TextButton("Foo", 80, 60);
@@ -103,7 +109,7 @@ public class LocationState implements GameState {
     private void toggleGameMenu() {
         if (!gameMenuOpen) {
             gameMenuOpen = true;
-            TiledWindow gameMenu = new TiledWindow(this, "GameMenu", 220, 300, (Global.WIDTH/2 - 110), 150);
+            TiledWindow gameMenu = new TiledWindow(this, "GameMenu", 220, 300, (game.WIDTH/2 - 110), 150);
             TextButton testButton1 = new TextButton("Testbutton", 200, 60);
             TextButton testButton2 = new TextButton("Options", 200, 60);
             GoMainMenuButton testButton3 = new GoMainMenuButton(this.game, 200, 60);

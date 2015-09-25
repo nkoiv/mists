@@ -17,7 +17,7 @@ import com.nkoiv.mists.game.Global;
 		private int yCoor;
                 private int collisionLevel; //this tells us if there's something blocking the node
                 private int size;
-                private double estimatedCost; //Node cost for when used by PathFinder
+                private double estimatedCost; //Node cost for when used by PathFinder (from here to goal)
                 private int depth; //Depth in the path for when used by PathFinder
                 private Node previousNode; //for PathFinder
 		

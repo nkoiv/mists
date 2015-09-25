@@ -22,7 +22,7 @@ import javafx.scene.input.MouseEvent;
 public class MainMenuWindow extends TiledWindow {
 
     public MainMenuWindow(GameState parent) {
-        super(parent, "MainMenu", 220, 300, (Global.WIDTH/2 - 110), 250);
+        super(parent, "MainMenu", 220, 300, (parent.getGame().WIDTH/2 - 110), 250);
         initializeMenuButtons();
         super.setInteractive(true);
     }
