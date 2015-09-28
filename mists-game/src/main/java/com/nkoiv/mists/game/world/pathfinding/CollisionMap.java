@@ -156,7 +156,7 @@ public class CollisionMap {
     }
     
     private boolean isOnMap (int xCoor, int yCoor) {
-        if ((xCoor >= 0) && (xCoor <= this.mapTileWidth-1) && (yCoor >= 0) && (yCoor <= this.mapTileHeight-1))  {
+        if ((xCoor >= 0) && (xCoor < this.mapTileWidth) && (yCoor >= 0) && (yCoor < this.mapTileHeight))  {
             return true;
         } else {
             return false;
@@ -180,17 +180,23 @@ public class CollisionMap {
     }
     
     public Node getNode( int x, int y) {
-        if (x< this.nodeMap[0].length && y < this.nodeMap[1].length
-            && x >= 0 && y >= 0) {
-            return this.nodeMap[x][y];
-        } else {
-            return null;
-        }
+        return this.nodeMap[x][y];
     }
     
     //TODO: Make it so that different terrain can slow or speed up movers
     public float getMovementCost(List<Integer> movementModifiers, int startX, int startY, int targetX, int targetY) {
 		return 1; // For now all cost 1;
-	}
+    }
+    
+    public void printMapToConsole() {
+        for (int row = 0; row < this.mapTileHeight; row++) {
+            for (int column = 0; column < this.mapTileWidth; column++) {
+                if (this.nodeMap[column][row].getCollisionLevel() >0)
+                System.out.print("X");
+                else System.out.print(".");
+            }
+            System.out.println();
+        }
+    }
     
 }

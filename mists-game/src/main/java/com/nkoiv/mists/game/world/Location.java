@@ -83,6 +83,8 @@ public class Location implements Global {
         this.collisionMap = new CollisionMap(this, 32);
         this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         this.collisionMap.setStructuresOnly(true);
+        this.collisionMap.updateCollisionLevels();
+        this.collisionMap.printMapToConsole();
         this.lights = new LightsRenderer(this);
         this.setPlayer(player);
         this.addCreature(player, 8*TILESIZE, 6*TILESIZE);

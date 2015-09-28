@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.world;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
+import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -31,6 +32,7 @@ public class LightsRenderer {
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
         int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
         this.lightmap = new double[tileWidth][tileHeight];
+        Mists.logger.log(Level.INFO, "Generated Lightmap ({0}x{1})", new Object[]{tileWidth, tileHeight});
     }
     
     public void renderLightMap(GraphicsContext gc, double xOffset, double yOffset) {
@@ -39,12 +41,11 @@ public class LightsRenderer {
         double xEnd = xOffset + gc.getCanvas().getWidth();
         double yStart = yOffset;
         double yEnd = yOffset + gc.getCanvas().getHeight();
-        
         for (int row = (int)(yStart/Mists.TILESIZE); row <= (int)(yEnd/Mists.TILESIZE); row++) {
             for (int column = (int)(xStart/Mists.TILESIZE); column <= (int)(xEnd/Mists.TILESIZE); column++) {
                 gc.setFill(Color.BLACK);
                 //gc.setStroke(Color.BLACK);
-                if(column< lightmap[1].length && row < lightmap[0].length)gc.setGlobalAlpha(0.9 - lightmap[column][row]);
+                if(column< lightmap[0].length && row < lightmap[1].length)gc.setGlobalAlpha(0.9 - lightmap[column][row]);
                 gc.fillRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE+1, Mists.TILESIZE+1);
                 //gc.strokeRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE, Mists.TILESIZE);
             }
@@ -66,9 +67,9 @@ public class LightsRenderer {
                     int x = (int)(xCoor/Mists.TILESIZE) + tile[0];
                     int y = (int)(yCoor/Mists.TILESIZE) - tile[1];
                     if(x<lightmap[0].length &&
-                       y < lightmap[1].length &&
-                       x>=0 && y >= 0) {
-                        lightmap[x][y] = 0.9;
+                       y <lightmap[1].length &&
+                       x>=0 && y>= 0) {
+                        lightmap[x][y] = Math.max(0.9 - (row * 0.1), 0);
                         if (loc.getCollisionMap().getNode(x, y).getCollisionLevel()>0) {
                             shadows[col] = 1;
                             if (col==row) {
