@@ -24,7 +24,7 @@ public class PathFinder {
 	
     private PathfinderAlgorithm algo;
     //private Node[][] nodes; //Nodemap used for pathfinding, filled with costs as we calculate them
-     private CollisionMap map; //The collision map derived from the Locations MOBs
+    private CollisionMap map; //The collision map derived from the Locations MOBs
     /** The the calculator we're applying to determine which nodes to search first */
     private MoveCostCalculator calc;
 

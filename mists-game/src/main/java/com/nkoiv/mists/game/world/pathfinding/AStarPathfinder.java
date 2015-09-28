@@ -6,7 +6,7 @@
 package com.nkoiv.mists.game.world.pathfinding;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.world.pathfinding.util.ComparingQueue;
+import com.nkoiv.mists.game.world.util.ComparingQueue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -25,6 +25,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
@@ -44,6 +47,7 @@ public class Location implements Global {
     private CollisionMap collisionMap;
     private PathFinder pathFinder;
     private MapGenerator mapGen;
+    private LightsRenderer lights;
     private final double[] lastOffsets = new double[2];
     private MapObject screenFocus;
     private PlayerCharacter player;
@@ -60,6 +64,7 @@ public class Location implements Global {
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
         this.collisionMap = new CollisionMap(this, 32);
+        this.lights = new LightsRenderer(this);
         //this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         //this.mapGen = new MapGenerator();
     }
@@ -78,7 +83,7 @@ public class Location implements Global {
         this.collisionMap = new CollisionMap(this, 32);
         this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         this.collisionMap.setStructuresOnly(true);
-        
+        this.lights = new LightsRenderer(this);
         this.setPlayer(player);
         this.addCreature(player, 8*TILESIZE, 6*TILESIZE);
         this.screenFocus = player;
@@ -97,7 +102,7 @@ public class Location implements Global {
         
         }
         
-        for (int i = 0; i < 0 ; i++) {
+        for (int i = 0; i < 10 ; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
@@ -452,7 +457,6 @@ public class Location implements Global {
     }
     
     public void render (GraphicsContext gc) {
-        
         /*
         * Update Offsets first to know which parts of the location are drawn
         */
@@ -460,15 +464,49 @@ public class Location implements Global {
         double yOffset = getyOffset(gc, screenFocus.getSprite().getYPos());
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.renderMap(gc, xOffset, yOffset);
-        this.renderMobs(gc, xOffset, yOffset);
+        List<MapObject> renderedMOBs = this.renderMobs(gc, xOffset, yOffset);
         this.renderStructureExtras(gc, xOffset, yOffset);
         this.renderExtras(gc, xOffset, yOffset);
+        this.renderLights(gc, renderedMOBs, xOffset, yOffset);
     }
     
-    private void renderMobs(GraphicsContext gc, double xOffset, double yOffset) {
+
+    
+    
+    //TODO: Move this to a separate class
+    private void renderLights(GraphicsContext gc, List<MapObject> MOBsOnScreen, double xOffset, double yOffset) {
+        //Raycast from player to all screen corners and to corners of all visible structures
+        List<Structure> StructuresOnScreen = new ArrayList<>();
+        List<Creature> CreaturesOnScreen = new ArrayList<>();
+        for (MapObject mob : MOBsOnScreen) {
+            if (mob instanceof Structure) StructuresOnScreen.add((Structure)mob);
+            if (mob instanceof Creature) CreaturesOnScreen.add((Creature)mob);
+        }
+        MapObject[] structures = new MapObject[StructuresOnScreen.size()];
+        for (int i = 0; i < StructuresOnScreen.size(); i++) {
+            structures[i] = StructuresOnScreen.get(i);
+        }
+        lights.updateObstacles(structures, xOffset, yOffset);
+        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), 8);
+        lights.renderLightMap(gc, xOffset, yOffset);
+        //lights.renderLight(gc, player.getXPos()-xOffset, player.getYPos()-yOffset, 1, 1);
+        
+    }
+    
+    /**
+     * Render all the MOBs (creature, structure... anything derived from MapObject)
+     * on the location that is visible. Returns the list of objects that were rendered
+     * @param gc Graphics context to render on
+     * @param xOffset Offset for rendering (centered on player usually)
+     * @param yOffset Offset for rendering (centered on player usually)
+     */
+    
+    private List<MapObject> renderMobs(GraphicsContext gc, double xOffset, double yOffset) {
          /*
         * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
         */
+        List<MapObject> renderedMOBs = new ArrayList<>();
+        
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) {
                 if (mob.getXPos()-xOffset < -mob.getSprite().getWidth() ||
@@ -480,6 +518,7 @@ public class Location implements Global {
                 } else {
                     //Mob is in window
                     mob.render(xOffset, yOffset, gc); //Draw objects on the ground
+                    renderedMOBs.add(mob);
                     if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
                         gc.setStroke(Color.RED);
                         if (mob.getSprite().getCollisionAreaType() == 1) {
@@ -494,6 +533,7 @@ public class Location implements Global {
                 }
             }
         }
+        return renderedMOBs;
     }
     
     private void renderStructureExtras(GraphicsContext gc, double xOffset, double yOffset) {
@@ -585,6 +625,10 @@ public class Location implements Global {
         } else {
             return false;
         }
+    }
+    
+    public CollisionMap getCollisionMap() {
+        return this.collisionMap;
     }
     
     public String getName() {

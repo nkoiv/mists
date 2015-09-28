@@ -6,14 +6,13 @@
 package LocationTests;
 
 import com.nkoiv.mists.game.world.pathfinding.Node;
-import com.nkoiv.mists.game.world.pathfinding.util.SortedList;
+import com.nkoiv.mists.game.world.util.SortedList;
 import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

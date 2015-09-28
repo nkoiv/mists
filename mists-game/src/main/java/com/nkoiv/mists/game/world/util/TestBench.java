@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game.world.pathfinding.util;
+package com.nkoiv.mists.game.world.util;
 
 import com.nkoiv.mists.game.world.pathfinding.Node;
 import java.util.Random;

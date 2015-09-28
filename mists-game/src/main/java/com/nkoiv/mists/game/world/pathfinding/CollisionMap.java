@@ -180,7 +180,12 @@ public class CollisionMap {
     }
     
     public Node getNode( int x, int y) {
-        return this.nodeMap[x][y];
+        if (x< this.nodeMap[0].length && y < this.nodeMap[1].length
+            && x >= 0 && y >= 0) {
+            return this.nodeMap[x][y];
+        } else {
+            return null;
+        }
     }
     
     //TODO: Make it so that different terrain can slow or speed up movers
