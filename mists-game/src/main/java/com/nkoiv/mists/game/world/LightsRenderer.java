@@ -31,7 +31,7 @@ public class LightsRenderer {
         this.obstacles = new Polygon[0];
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
         int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
-        this.lightmap = new double[tileWidth][tileHeight];
+        clearLightmap();
         Mists.logger.log(Level.INFO, "Generated Lightmap ({0}x{1})", new Object[]{tileWidth, tileHeight});
     }
     
@@ -45,18 +45,32 @@ public class LightsRenderer {
             for (int column = (int)(xStart/Mists.TILESIZE); column <= (int)(xEnd/Mists.TILESIZE); column++) {
                 gc.setFill(Color.BLACK);
                 //gc.setStroke(Color.BLACK);
-                if(column< lightmap[0].length && row < lightmap[1].length)gc.setGlobalAlpha(0.9 - lightmap[column][row]);
+                if(column< lightmap.length && row < lightmap[0].length)gc.setGlobalAlpha(0.9 - lightmap[column][row]);
                 gc.fillRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE+1, Mists.TILESIZE+1);
                 //gc.strokeRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE, Mists.TILESIZE);
             }
         }
+        //Mists.logger.log(Level.INFO, "Drawing shadows around{0}-{1}/{2}-{3}", new Object[]{xStart, xEnd, yStart, yEnd});
         gc.restore();
     }
     
     
+    private void clearLightmap() {
+        int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
+        int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
+        this.lightmap = new double[tileWidth][tileHeight];
+    }
+    
+    /**
+    * paintVision clears shadows from the lightmap, flooding
+    * light from given coordinates, octant at a time.
+    * Whenever paintVision encounters a wall, it stops giving
+    * light towards that direction - the wall itself is lit up though.
+    */
     public void paintVision(double xCoor, double yCoor, int visionRange) {
         //clear lightmap
-        this.lightmap = new double[lightmap[0].length][lightmap[1].length];
+        clearLightmap();
+        //Mists.logger.log(Level.INFO, "Cleared new lightmap: {0}x{1}", new Object[]{lightmap.length, lightmap[0].length});
         //do all eight octants
         for (int octant = 0; octant <8; octant++) {
         int[] shadows = new int[visionRange+1];
@@ -66,8 +80,8 @@ public class LightsRenderer {
                     int[] tile = transformOctant(col, row, octant);
                     int x = (int)(xCoor/Mists.TILESIZE) + tile[0];
                     int y = (int)(yCoor/Mists.TILESIZE) - tile[1];
-                    if(x<lightmap[0].length &&
-                       y <lightmap[1].length &&
+                    if(x<lightmap.length &&
+                       y <lightmap[0].length &&
                        x>=0 && y>= 0) {
                         lightmap[x][y] = Math.max(0.9 - (row * 0.1), 0);
                         if (loc.getCollisionMap().getNode(x, y).getCollisionLevel()>0) {
@@ -95,7 +109,7 @@ public class LightsRenderer {
           case 5: return new int[]{-row, col};
           case 6: return new int[]{-row, -col};
           case 7: return new int[]{-col, -row};
-          default: return new int[]{col, row};
+          default: return new int[]{row, -col};
         }
     }
     
