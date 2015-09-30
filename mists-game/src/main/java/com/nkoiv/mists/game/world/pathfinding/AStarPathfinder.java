@@ -20,8 +20,8 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     
     private PathFinder pathfinder; //Pathfinder keeps the collisionmap up to date, we just refer to it.
     
-    private MinHeap closedNodes = new MinHeap();
-    private MinHeap openNodes = new MinHeap();
+    private MinHeap<Node> closedNodes = new MinHeap();
+    private MinHeap<Node> openNodes = new MinHeap();
     private Node[][] nodeMap;
     private int[][] nodeStatus;
     private static final int CLEAR = 0;
@@ -165,7 +165,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     }
     
     private Node getFirstInOpen() {
-        return (Node)openNodes.first();
+        return openNodes.first();
     }
 
     private void addToOpen(Node node) {
