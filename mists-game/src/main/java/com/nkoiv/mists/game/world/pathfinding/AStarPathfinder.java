@@ -6,7 +6,7 @@
 package com.nkoiv.mists.game.world.pathfinding;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.world.util.ComparingQueue;
+import com.nkoiv.mists.game.world.util.MinHeap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +20,8 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     
     private PathFinder pathfinder; //Pathfinder keeps the collisionmap up to date, we just refer to it.
     
-    private ComparingQueue closedNodes = new ComparingQueue();
-    private ComparingQueue openNodes = new ComparingQueue();
+    private MinHeap closedNodes = new MinHeap();
+    private MinHeap openNodes = new MinHeap();
     private Node[][] nodeMap;
     private int[][] nodeStatus;
     private static final int CLEAR = 0;

@@ -35,6 +35,14 @@ public class LightsRenderer {
         Mists.logger.log(Level.INFO, "Generated Lightmap ({0}x{1})", new Object[]{tileWidth, tileHeight});
     }
     
+    
+    /**
+     * RenderLightmap draws (black) opaque shadowboxes on
+     * all the tiles, based on their light level.
+     * @param gc GraphicsContext to draw on
+     * @param xOffset position of the screen on the map
+     * @param yOffset position of the screen on the map
+     */
     public void renderLightMap(GraphicsContext gc, double xOffset, double yOffset) {
         gc.save();
         double xStart = xOffset;

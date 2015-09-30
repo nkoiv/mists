@@ -26,6 +26,7 @@ import com.nkoiv.mists.game.Global;
 			this.yCoor = y;
                         this.size = Global.TILESIZE;
                         this.collisionLevel = 0;
+                        this.estimatedCost = 0;
 		}
                 
                 public Node(int x, int y, int size, int collisionLevel) {

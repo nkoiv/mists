@@ -35,6 +35,16 @@ public class TestBench {
         return nodeArray;
     }
     
+    private static double addIntoMinHeap(MinHeap heap, Node[] nodeArray) {
+        double starttime = System.nanoTime();
+        for (Node node : nodeArray) {
+            heap.add(node);
+        }
+        double exectime = (System.nanoTime() - starttime);
+        //System.out.println(nodeArray.length + " added into MH in "+exectime+"nanosecs");
+        return exectime;
+    }
+    
     private static double addIntoComparingQueue(ComparingQueue queue, Node[] nodeArray) {
         double starttime = System.nanoTime();
         for (Node node : nodeArray) {
@@ -90,50 +100,34 @@ public class TestBench {
         int nodeAmount = 100;
         int runtimes = 100;
         Node[] nodes = createNodes(nodeAmount);
-        /*
-        double meantimeCQ = meanNsAddTimeCQ(nodes, runtimes);
-        //System.out.println("CQ ran "+runtimes+" times with "+nodeAmount+" nodes. Meantime: "+(meantimeCQ/1000)+"µs");
-        for (int i = 1; i < 100; i++) {
-            nodes = createNodes(nodeAmount*i);
-            meantimeCQ = meanNsAddTimeCQ(nodes, runtimes);
-            System.out.println("CQ ran "+runtimes+" times with "+(nodeAmount*i)+" nodes. Meantime: "+(meantimeCQ/1000)+"µs");
-        }
-        */
-        /*
-        double meantimeSL = meanNsAddTimeSL(nodes, runtimes);
-        //System.out.println("CQ ran "+runtimes+" times with "+nodeAmount+" nodes. Meantime: "+(meantimeCQ/1000)+"µs");
-        for (int i = 1; i < 100; i++) {
-            nodes = createNodes(nodeAmount*i);
-            meantimeSL = meanNsAddTimeSL(nodes, runtimes);
-            System.out.println("SL ran "+runtimes+" times with "+(nodeAmount*i)+" nodes. Meantime: "+(meantimeSL/1000)+"µs");
-        }
-        */
+        MinHeap testHeap = new MinHeap();
         
-        ComparingQueue cqn = new ComparingQueue();
-        nodes = createNodes(10);
-        addIntoComparingQueue(cqn, nodes);
-        System.out.println(cqn.toString());
-        cqn.remove(1);
-        System.out.println(cqn.toString());
-        cqn.clear();
-        System.out.println(cqn.toString());
-        addIntoComparingQueue(cqn, nodes);
-        System.out.println(cqn.toString());
-        cqn.remove(0);
-        System.out.println(cqn.toString());
+        Node tn1 = new Node(5, 3);
+        tn1.setCostEstimate(50);
+        Node tn2 = new Node(4, 1);
+        tn2.setCostEstimate(90);
+        Node tn3 = new Node(2, 5);
+        tn3.setCostEstimate(15);
+        Node tn4 = new Node(4, 9);
+        tn4.setCostEstimate(26);
         
-        SortedList snl = new SortedList();
-        nodes = createNodes(10);
-        addIntoSortedList(snl, nodes);
-        System.out.println(snl.toString());
-        snl.remove(1);
-        System.out.println(snl.toString());
-        snl.clear();
-        System.out.println(snl.toString());
-        addIntoSortedList(snl, nodes);
-        System.out.println(snl.toString());
-        snl.remove(0);
-        System.out.println(snl.toString());
+        testHeap.add(tn1);
+        System.out.println("Heap: "+testHeap.toString());
+        testHeap.add(tn2);
+        testHeap.add(tn3);
+        testHeap.add(tn4);
+        System.out.println("Heap: "+testHeap.toString());
+        testHeap.remove(tn3);
+        System.out.println("Heap: "+testHeap.toString());
+        addIntoMinHeap(testHeap, nodes);
+        System.out.println("Heap: "+testHeap.toString());
+        addIntoMinHeap(testHeap, nodes);
+        addIntoMinHeap(testHeap, nodes);
+        addIntoMinHeap(testHeap, nodes);
+        System.out.println("Heap: "+testHeap.toString());
+        testHeap.remove(tn4);
+        testHeap.add(tn2);
+        System.out.println("Heap: "+testHeap.toString());
     }
     
 }
