@@ -44,7 +44,7 @@ package com.nkoiv.mists.game.world.util;
         public void addWithoutSorting(E e) {
             if (num >= capacity) { //We're over our capacity!
                 //Make a new array with the capacity+def_cap;
-                E[] newElementArray = (E[]) new Comparable[capacity+def_cap];
+                E[] newElementArray = (E[]) new Comparable[capacity*2];
                 //copy the old array over
                 //TODO: consider using System.Arraycopy (is it okay on tiralab)
                 for (int i = 0; i < capacity; i++) {
@@ -56,7 +56,7 @@ package com.nkoiv.mists.game.world.util;
             }
             this.data[num] = e;
             this.num++;
-            //System.out.println("Added element, size is now "+num);
+            System.out.println("Added element, size is now "+num);
             
         }
         
@@ -142,7 +142,7 @@ package com.nkoiv.mists.game.world.util;
          * @return index of the element, -1 if it's not found
          */
         private int getIndex(E e) {
-            for (int i = 0; i < num -1; i++) {
+            for (int i = 0; i < num; i++) {
                 if (data[i].equals(e)) return i;
             }
             return -1;
@@ -170,6 +170,7 @@ package com.nkoiv.mists.game.world.util;
         
         /**
          * Remove the selected Element from the array by recreating it
+         * TODO: This is a VERY ridiculous way of doing this.
          * @param index The index of the Element to remove
          */
         public void remove(int index) {
@@ -180,7 +181,9 @@ package com.nkoiv.mists.game.world.util;
                 //copy the old array over with the exception of the selected index
                 int j = 0;
                 for (int i = 0; i < num; i++) {
+                    //System.out.println("About to copy "+i+" deleted index was"+index);
                     if (i!=index) {//Dont copy over the element we're removing
+                        //System.out.println("Copying "+i);
                         newElementArray[j] = data[i];
                         //System.out.println("Copied over element at "+i+" ("+newElementArray[j].toString()+")");
                         j++;
@@ -209,6 +212,10 @@ package com.nkoiv.mists.game.world.util;
             return capacity;
         }
 
+        public boolean isEmpty() {
+            return (this.num==0);
+        }
+        
         /**
          * Check if an Element is in the list
          * 

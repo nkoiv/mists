@@ -55,12 +55,11 @@ public class ComparingQueue<E extends Comparable> {
     public void findSpot(int position, E e) {
             Comparable<? super E> key = (Comparable<? super E>) e;
             while (position > 0 ) {
-                    int parentPos = (position -1) >>> 1;
-                    E p = data[parentPos];
-                      if (key.compareTo((E) p) >= 0)
-                            break;
-                            data[position] = p;
-                            position = parentPos;
+                int parentPos = (position -1);
+                E parent = data[parentPos];
+                if (key.compareTo(parent) >= 0) break;
+                data[position] = parent;
+                position = parentPos;
             }
             //If this wasnt better than anyone else, it goes to last
             data[position] = e;
@@ -171,6 +170,11 @@ public class ComparingQueue<E extends Comparable> {
         this.remove(e);
         return e;
     }
+    
+    public boolean isEmpty() {
+        return (this.size==0);
+    }
+    
     
     @Override
     public String toString() {
