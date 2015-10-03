@@ -4,7 +4,7 @@
 (MinHeap ja testejä)
 Rakensin vielä QuickSortin ja järjestestyn sarjan kaveriksi heappiin perustuvan MinHeapin. Testaussessioiden jälkeen paljastui, että kuten oletettavaa, tämä kolmas vaihtoehto toimii parhaiten solmujen hallinnoimisessa. Jäin vielä miettimään, josko voisin optimoida ComparingQueueta pointterilla, jota siirtämällä hoitaisin solmujen poiston - OpenNodes käyttötapauksessa kun poisto on poikkeuksetta aina jonon ensimmäinen solmu. Voi olla, että sen valmistuttua jää tehokkaimmaksi vaihtoehdoksi käyttää heapin swim/sink tyyliä ClosedNodes käytössä ja ComparingQueuen pointterin liikuttelua OpenNodesilla.
 
-Kattava testaus osoittautuu hankalaksi. Päivitin util-luokan yksikkötestit käymään läpi kaikki nämä apuluokat, mutta vaikuttaa siltä, että todellista suorituskykyä on kannattavinta mitata [käyttöliittymätestauksen] (https://github.com/nkoiv/mists/blob/master/documentation/game_testing.md) kautta.
+Kattava testaus osoittautuu hankalaksi. Päivitin util-luokan yksikkötestit käymään läpi kaikki nämä apuluokat, mutta vaikuttaa siltä, että todellista suorituskykyä on kannattavinta mitata [käyttöliittymätestauksen] (https://github.com/nkoiv/mists/blob/master/documentation/game_testing.md) kautta. Niin tai näin, [PIT raportit](https://github.com/nkoiv/mists/tree/master/documentation/pit-reports/) on nyt ajettu ja taas hetken ajan tasalla. Rivikattavuus on util-luokissa 80-90%:sta, mutaatiokattavuuden jäädessä ~40:neen. Hieman vielä tehtävää siellä.
 
 ##Viikkoraportti #4
 (Siivouksia ja parannuksia)
