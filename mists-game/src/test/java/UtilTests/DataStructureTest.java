@@ -42,6 +42,7 @@ public class DataStructureTest {
     public void tearDown() {
     }
 
+    //---MinHeapTests
     @Test
     public void minHeapStartsEmpty() {
         MinHeap testHeap = new MinHeap();
@@ -126,6 +127,8 @@ public class DataStructureTest {
         assert(testHeap.size() > 50);
     }
     
+    
+    //---ComparingQueueTests
     @Test
     public void comparingQueueStartsEmpty() {
         ComparingQueue testQueue = new ComparingQueue();
@@ -212,6 +215,8 @@ public class DataStructureTest {
         assert(testQueue.size() > 50);
     }
     
+    
+    //---SortedListTests
     @Test
     public void sortedListStartsEmpty() {
         SortedList testList = new SortedList();
