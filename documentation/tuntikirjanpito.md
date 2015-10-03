@@ -1,5 +1,16 @@
 #TiraLab (35h)
 
+#Viikko 5 (8h)
+* 2h [TESTAUS] Jatkettu util-testejä, ajettu PIT
+
+##30.9 (2h)
+* 2h [TESTAUS] Kirjoitettu testejä util-luokille
+
+##29.9 (2h)
+
+##28.9 (4h)
+* 4h [OHJELMOINTI] Rakennettu MinHeap vaihtoehdoksi pathfindingiin
+
 #Viikko 4 (11h)
 
 ##24.9 (4h)
