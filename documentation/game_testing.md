@@ -36,13 +36,13 @@ In order to test the game during the development, before actual content was made
 ##General pathfinding
 
 ###Test case: Make sure creatures that have no path to target dont break the game.
-* **Last testing:** 30.8.2015
+* **Last testing:** 08.10.2015
 * **Setup:** Use the testmap /mists/src/main/resources/pathfinder_test.map. Spawn creatures in random locations. Place player in a fully obstructed area. Use the "creatureAI().pathToPlayer()" to have creatures path to player.
 * **Results:** Creatures try to move in the general diretion of the player when no path is found. This results them hugging walls. Creatures do NOT pathfind to a spot as close as possible before just going towards in a straight line, but rather just abandon pathfinding altogether.
 * **Actions needed:** Consider if creatures should try to use proper pathfinding to get as close to as possible to target when path is obstructed.
 
 ###Test case: Check if creatures get stuck on corners when closing in on target.
-* **Last testing:** 30.8.2015
+* **Last testing:** 08.10.2015
 * **Setup:** Use the testmap /mists/src/main/resources/pathfinder_test.map. Place the player inside a labyrinth of walls. Spawn creatures outside the spiral. See how creatures pathfind to get to the player.
 * **Results:** Creatures manouver past walls without problems. Bumping into other creatures occasionally causes creatures to get stuck on tight spots. At least at a T-junction when players arrive from different directions, they can get stuck not realizing one should give way to another.
 <pre>
@@ -57,7 +57,7 @@ In order to test the game during the development, before actual content was made
 * **Actions needed:** The collisionmap currently uses "StructuresOnly" boolean that removes all the moving creatures from PathFinding. Perhaps they it should be set to false in some situations?
 
 ###Test case: Test pathfinding on unusually long paths
-* **Last testing:** 30.8.2015
+* **Last testing:** 08.10.2015
 * **Setup:** Created a zig-zag map sized 200*40 (/mists/src/main/resources/longpath_test.map). Place target (player) on other end and the moving creature on the other. Time the pathfinding.
 * **Results:** 50 nodes is a really SHORT default search distance when its node by node. The Manhattan distance can be really short (just across the wall), and the pathfinding still cant find the right path (because it has to go around).
 * **Actions needed** Consider having different sort of pathfindings for different map? Could it be decided on by parsing the collisionmap?
