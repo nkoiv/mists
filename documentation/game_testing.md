@@ -11,13 +11,13 @@ In order to test the game during the development, before actual content was made
 ##Moving in Location
 
 ###Test case: Move around a location
-* **Last testing:** 1.9.2015
+* **Last testing:** 8.10.2015
 * **Setup:** Create a new game on a random map, moving around with arrow keys
 * **Results:** Walls and creatures stop movement as they should. Diagonal movement works. No unusual behaviour observed.
 * **Actions needed:** No actions needed.
 
 ###Test case: Move around clearing structures
-* **Last testing:** 1.9.2015
+* **Last testing:** 8.10.2015
 * **Setup** Create a new game on a random map. Move around and use space to destroy walls
 * **Results:** The attack only destroys things that clip with the graphic. Sometimes this means one wall destroyed, sometimes two.
 * **Actions needed:** No actions needed.
@@ -25,7 +25,7 @@ In order to test the game during the development, before actual content was made
 #Combat
 
 ###Test case: Find and kill a creature
-* **Last testing:** 2.9.2015
+* **Last testing:** 8.10.2015
 * **Setup:** Create a game on a random map. Find creatures to slay and hit them.
 * **Results:** Mobs die fine when hit, their HP going down and all. Moving mobs die fine too. No unusual behaviour encountered.
 * **Actions needed:** No actions needed.
