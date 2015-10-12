@@ -63,11 +63,12 @@ public class TileMap implements GameMap {
         double screenHeight = gc.getCanvas().getHeight();
         for (int row=(int)(-yOffset/this.tilesize);row<(screenHeight/this.tilesize)+(-yOffset/this.tilesize);row++) {
             for (int column=(int)(-xOffset/this.tilesize);column<(screenWidth/this.tilesize)+(-xOffset/this.tilesize);column++) {
+                if (column<this.tileMap.length && row<this.tileMap[0].length) {
                 if (this.tileMap[column][row]!=null)
                     this.tileMap[column][row].render(-xOffset, -yOffset, gc);
                 //Print tile coordinates on top of tile
                 //gc.strokeText(column+","+row, this.tileMap[column][row].getSprite().getXPos()-xOffset, this.tileMap[column][row].getSprite().getYPos()-yOffset);
-        
+                }
             }
         }
         

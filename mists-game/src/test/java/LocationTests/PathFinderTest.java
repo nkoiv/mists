@@ -119,7 +119,7 @@ public class PathFinderTest {
         int randomStartY = rnd.nextInt(testCollisionMap.getMapTileHeight()-1);
         int randomGoalX = rnd.nextInt(testCollisionMap.getMapTileWidth()-1);
         int randomGoalY = rnd.nextInt(testCollisionMap.getMapTileHeight()-1);
-        Path testPath = testPathFinder.findPath(crossableTerrain, randomStartX, randomStartY, randomGoalX, randomGoalY);
+        Path testPath = testPathFinder.findPath(32, crossableTerrain, randomStartX, randomStartY, randomGoalX, randomGoalY);
         System.out.println(randomStartX + ","+randomStartY+"  ->  "+randomGoalX+","+randomGoalY);
         System.out.println(testPath.toString());
         

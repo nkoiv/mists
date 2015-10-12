@@ -20,8 +20,8 @@ import javafx.scene.image.Image;
  */
 public class MapObject implements Global {
     
-    private final String name;
-    private Sprite sprite;
+    protected final String name;
+    protected Sprite sprite;
     
     /**Flags are stored in integers for utility, 
     * but can be manipulad as booleans (>0) by "isFlagged" & "addFlag" methods

@@ -21,6 +21,7 @@ public class CreatureAI {
     
     private Creature creep;
     private double timeSinceAction;
+    Path pathToMoveOn;
     
     public CreatureAI (Creature creep) {
         this.creep = creep;
@@ -47,6 +48,7 @@ public class CreatureAI {
             this.getCreature().applyMovement(time);
             this.timeSinceAction = this.timeSinceAction+time;
         }
+        
         //this.moveTowardsMob(this.creep.getLocation().getPlayer(), time);
         return true;
     }
@@ -61,6 +63,9 @@ public class CreatureAI {
         * Since pathfinding moves in full tiles, it's possible for units
         * to get stuck on the corners. We alleviate this with the following
         */
+        Path pathToPlayer = this.creep.getLocation().getPathFinder().findPath(this.creep.getSprite().getWidth(), this.creep.getCrossableTerrain(), this.creep.getCenterXPos(), this.creep.getCenterYPos(), this.creep.getLocation().getPlayer().getCenterXPos(), this.creep.getLocation().getPlayer().getCenterYPos());
+        this.pathToMoveOn = pathToPlayer;
+        
         Direction directionToMoveTowards =
             (this.creep.getLocation().getPathFinder().directionTowards
             (this.creep.getSprite().getWidth(), this.creep.getCrossableTerrain(), this.creep.getCenterXPos(), this.creep.getCenterYPos(),
@@ -80,7 +85,7 @@ public class CreatureAI {
         int targetY = (int)targetYCoordinate / this.creep.getLocation().getPathFinder().getTileSize();
         int currentX = (int)this.creep.getCenterXPos() / this.creep.getLocation().getPathFinder().getTileSize();
         int currentY = (int)this.creep.getCenterYPos() / this.creep.getLocation().getPathFinder().getTileSize();
-        Path pathToMob = this.creep.getLocation().getPathFinder().findPath(this.creep.getCrossableTerrain(),currentX, currentY, targetX, targetY);
+        Path pathToMob = this.creep.getLocation().getPathFinder().findPath(this.creep.getSprite().getWidth(),this.creep.getCrossableTerrain(),currentX, currentY, targetX, targetY);
         if (pathToMob.getLength() <= 1) {
             /* No path was found to target 
             *  just move in the general direction of target
@@ -129,6 +134,11 @@ public class CreatureAI {
            this.moveTowards(directionToMoveTowards);
     }
     */
+    
+    public Path getPath() {
+        if (this.pathToMoveOn != null) return this.pathToMoveOn;
+        else return null;
+    }
     
     public Creature getCreature() {
         return this.creep;

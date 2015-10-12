@@ -5,7 +5,10 @@
  */
 package com.nkoiv.mists.game.world.pathfinding;
 
+import com.nkoiv.mists.game.Mists;
 import java.util.ArrayList;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * Path is a supporting class for PathFinder.
@@ -53,6 +56,52 @@ public class Path {
 	public boolean containsNode(int xCoor, int yCoor) {
             return this.nodes.contains(new Node(xCoor,yCoor));
 	}
+        
+        /**
+         * Draw the path on a given graphics context
+         * Mainly used for testing and evaluating the pathfinder
+         * algorithm in use
+         * @param gc GraphicContext from the game
+         * @param tilesize Size of tiles the game is rendered on, to position the path
+         * @param xOffset Offset for displayed screen position on the map
+         * @param yOffset Offset for displayed screen position on the map
+         */
+        public void drawPath (GraphicsContext gc, int tilesize, double xOffset, double yOffset) {
+            Mists.logger.info("Trying to draw a path!");
+            gc.save();
+            //First tile to go to
+            if (!this.nodes.isEmpty()) {
+                Node startNode = this.nodes.get(0);
+                double xTile = ((startNode.getX()*tilesize)+tilesize/4) - xOffset;
+                double yTile = ((startNode.getY()*tilesize)+tilesize/4) - yOffset;
+                
+                gc.setStroke(Color.ORANGERED);
+                gc.strokeOval(xTile, yTile, tilesize/4, tilesize/4);
+                
+            }
+            //Lines to sequencal tiles
+            if (this.nodes.size()>1) {
+                for (int i = 1; i < this.nodes.size()-1; i++) {
+                    Node node = this.nodes.get(i);
+                    double xTile = ((node.getX()*tilesize)+tilesize/4) - xOffset;
+                    double yTile = ((node.getY()*tilesize)+tilesize/4) - yOffset;
+                    gc.setStroke(Color.ORANGERED);
+                    gc.strokeOval(xTile, yTile, tilesize/4, tilesize/4);
+                }
+                
+            }
+            
+            //Goaltile
+            if (this.nodes.size()>1) {
+                Node endNode = this.nodes.get(this.nodes.size()-1);
+                double xTile = ((endNode.getX()*tilesize)+tilesize/4) - xOffset;
+                double yTile = ((endNode.getY()*tilesize)+tilesize/4) - yOffset;
+                gc.setStroke(Color.TEAL);
+                gc.strokeOval(xTile, yTile, tilesize/4, tilesize/4);
+                
+            }
+            gc.restore();
+        }
         
         @Override
         public String toString() {

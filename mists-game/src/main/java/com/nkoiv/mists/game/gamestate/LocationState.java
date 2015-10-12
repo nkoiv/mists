@@ -7,27 +7,22 @@ package com.nkoiv.mists.game.gamestate;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
-import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.audio.SoundManager;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
 import com.nkoiv.mists.game.ui.GoMainMenuButton;
+import com.nkoiv.mists.game.ui.LocationControls;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.ui.TiledWindow;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 /**
  * LocationState handles the core of the game: being in Locations.
@@ -41,6 +36,7 @@ public class LocationState implements GameState {
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
     private final AudioControls audioControls = new AudioControls();
+    private final LocationControls locationControls = new LocationControls();
     
     private final HashMap<String, UIComponent> uiComponents;
     
@@ -58,8 +54,8 @@ public class LocationState implements GameState {
     
     private void loadDefaultUI() {
         TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
-        TextButton testButton1 = new ActionButton(game.player, "MeleeAttack",  80, 60);
-        TextButton testButton2 = new TextButton("Button", 80, 60);
+        TextButton testButton1 = new ActionButton(game.player, "Smash!",  80, 60);
+        TextButton testButton2 = new LocationControls.DrawPathsButton("Paths Off", 80, 60, this.game);
         TextButton testButton3 = new TextButton("Foo", 80, 60);
         TextButton testButton4 = new TextButton("Bar", 80, 60);
         MuteMusicButton muteMusicButton;

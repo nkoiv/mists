@@ -25,8 +25,10 @@ public class LightsRenderer {
     Location loc;
     Polygon[] obstacles;
     double[][] lightmap;
+    double minLightLevel;
     
     public LightsRenderer(Location loc) {
+        this.minLightLevel=0;
         this.loc = loc;
         this.obstacles = new Polygon[0];
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
@@ -67,6 +69,13 @@ public class LightsRenderer {
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
         int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
         this.lightmap = new double[tileWidth][tileHeight];
+        
+        for (double[] lightmap1 : this.lightmap) {
+            for (int row = 0; row < this.lightmap[0].length; row ++) {
+                lightmap1[row] = this.getMinLightLevel();
+            }
+        }
+        
     }
     
     /**
@@ -91,7 +100,17 @@ public class LightsRenderer {
                     if(x<lightmap.length &&
                        y <lightmap[0].length &&
                        x>=0 && y>= 0) {
-                        lightmap[x][y] = Math.max(0.9 - (row * 0.1), 0);
+                        if (visionRange>8) { //A lot of fully lit up blocks
+                            if (row<(visionRange-8))lightmap[x][y] = 0.9;
+                            else {
+                                double lightlevel = Math.max(0.9 - ((row-(visionRange-8)) * 0.1), 0);
+                                lightmap[x][y] = Math.max(this.minLightLevel, lightlevel);
+                            }
+                        } else { //Lightlevel starts to fall of immediately
+                            double lightlevel = Math.max(0.9 - (row * 0.1), 0);
+                            lightmap[x][y] = Math.max(this.minLightLevel, lightlevel);
+                        }
+                        
                         if (loc.getCollisionMap().getNode(x, y).getCollisionLevel()>0) {
                             shadows[col] = 1;
                             if (col==row) {
@@ -196,5 +215,13 @@ public class LightsRenderer {
             }
         }
         return mobPolygons;
+    }
+    
+    public void setMinLightLevel(double lightlevel) {
+        this.minLightLevel = lightlevel;
+    }
+    
+    public double getMinLightLevel() {
+        return this.minLightLevel;
     }
 }

@@ -124,6 +124,8 @@ public class Location implements Global {
         
         this.setMobInRandomOpenSpot(player);
         
+        this.lights.setMinLightLevel(0.3);
+        
     }
 
     /**
@@ -489,7 +491,7 @@ public class Location implements Global {
             structures[i] = StructuresOnScreen.get(i);
         }
         lights.updateObstacles(structures, xOffset, yOffset);
-        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), 8);
+        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), 12);
         lights.renderLightMap(gc, xOffset, yOffset);
         //lights.renderLight(gc, player.getXPos()-xOffset, player.getYPos()-yOffset, 1, 1);
         

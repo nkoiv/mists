@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Level;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -357,6 +358,27 @@ public class Creature extends MapObject implements Combatant {
         
         return false;
     }
+    
+        /**
+    * Render draws the Sprite of the Creature on a given GraphicsContext
+    * This overrides the normal MapObject render, because Creatures might have some
+    * extra stuff to draw (like pathfinding path for demo/testing purposes)
+    * @param gc GraphicsContext where the object is drawn
+    * @param xOffset Used to shift the objects xCoordinate so its drawn where the screen is
+    * @param yOffset Used to shift the objects yCoordinate so its drawn where the screen is
+    */
+    @Override
+    public void render(double xOffset, double yOffset, GraphicsContext gc) {
+        if (this.isFlagged("visible")) {
+            this.sprite.render(xOffset, yOffset, gc);
+            
+            if (this.ai.getPath()!=null && this.getLocation().isFlagged("drawPaths")) {
+                this.ai.getPath().drawPath(gc, TILESIZE, xOffset, yOffset);
+            }
+            
+            
+        }
+    } 
     
     private boolean moveUp() {
         this.facing = Direction.UP;
