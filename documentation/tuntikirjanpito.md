@@ -1,4 +1,4 @@
-#TiraLab (35h)
+#TiraLab (44h)
 
 #Viikko 6 (9h)
 
