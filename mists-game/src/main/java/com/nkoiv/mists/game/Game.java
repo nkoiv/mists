@@ -84,6 +84,7 @@ public class Game {
     }
     
     public void updateUI() {
+        Mists.logger.info("Updating UI");
         currentState.updateUI();
     }
 

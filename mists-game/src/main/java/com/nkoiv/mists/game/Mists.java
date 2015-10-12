@@ -59,6 +59,8 @@ public class Mists extends Application implements Global {
         gameCanvas.widthProperty().bind(primaryStage.widthProperty());
         gameCanvas.heightProperty().bind(primaryStage.heightProperty());
         final Canvas uiCanvas = new Canvas(WIDTH, HEIGHT);
+        uiCanvas.widthProperty().bind(primaryStage.widthProperty());
+        uiCanvas.heightProperty().bind(primaryStage.heightProperty());
         root.getChildren().add(gameCanvas);
         root.getChildren().add(uiCanvas);
         logger.info("Scene initialized");
@@ -133,7 +135,7 @@ public class Mists extends Application implements Global {
         launchScene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
                 Mists.logger.log(Level.INFO, "Height: {0}", newSceneHeight);
-                MistsGame.WIDTH = (Double)newSceneHeight;
+                MistsGame.HEIGHT = (Double)newSceneHeight;
                 MistsGame.updateUI();
             }
         });

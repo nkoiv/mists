@@ -67,7 +67,7 @@ public class Path {
          * @param yOffset Offset for displayed screen position on the map
          */
         public void drawPath (GraphicsContext gc, int tilesize, double xOffset, double yOffset) {
-            Mists.logger.info("Trying to draw a path!");
+            //Mists.logger.info("Trying to draw a path!");
             gc.save();
             //First tile to go to
             if (!this.nodes.isEmpty()) {

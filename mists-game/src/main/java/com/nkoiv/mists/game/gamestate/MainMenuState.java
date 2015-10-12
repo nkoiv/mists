@@ -62,8 +62,8 @@ public class MainMenuState implements GameState {
     
     private void drawLogo(Canvas canvas) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        double screenWidth = canvas.getWidth();
-        double screenHeight = canvas.getHeight();
+        double screenWidth = game.WIDTH;
+        double screenHeight = game.HEIGHT;
         Image logo = new Image("/images/mists_logo.png");
         gc.drawImage(logo, (screenWidth/2)-(logo.getWidth()/2), 50);
         
@@ -71,11 +71,9 @@ public class MainMenuState implements GameState {
     
     private void drawVersion(Canvas canvas) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        double screenWidth = canvas.getWidth();
-        double screenHeight = canvas.getHeight();
         gc.save();
         gc.setStroke(Color.ORANGERED);
-        gc.strokeText("Version 0.1-Pandarin_Orange", screenWidth-270, screenHeight-20);
+        gc.strokeText("Version 0.1-Pandarin_Orange", game.WIDTH-270, game.HEIGHT-20);
         gc.restore();
     }
 
@@ -140,7 +138,7 @@ public class MainMenuState implements GameState {
 
     @Override
     public void updateUI() {
-        
+        this.uiComponents.get("MainMenu").setPosition((game.WIDTH/2 - 110), 250);
     }
     
 }

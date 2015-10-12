@@ -9,7 +9,6 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
 

@@ -49,6 +49,7 @@ public class LocationState implements GameState {
     @Override
     public void updateUI() {
         //Move the actionbar to where it should be
+        Mists.logger.info("Updating UI. Game dimensions: "+game.WIDTH+"x"+game.HEIGHT);
         uiComponents.get("Actionbar").setPosition(0, (game.HEIGHT - 80));
     }
     
