@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +21,24 @@ public class LocationControls {
     
     
     public LocationControls() {
+        
+    }
+    
+    
+    public  static class ResumeButton extends TextButton {
+        private Game game;
+        
+        public ResumeButton(String name, double width, double height, Game game) {
+            super(name, width, height);
+            this.game = game;
+        }
+        
+        @Override
+        public void onClick(MouseEvent me) {
+            //Mists.logger.info("Trying to toggle game menu");
+            LocationState LS = (LocationState)this.game.currentState;
+            LS.toggleGameMenu();
+        }
         
     }
     

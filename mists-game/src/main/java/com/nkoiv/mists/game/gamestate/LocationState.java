@@ -55,17 +55,17 @@ public class LocationState implements GameState {
     
     private void loadDefaultUI() {
         TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
-        TextButton testButton1 = new ActionButton(game.player, "Smash!",  80, 60);
-        TextButton testButton2 = new LocationControls.DrawPathsButton("Paths Off", 80, 60, this.game);
-        TextButton testButton3 = new LocationControls.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
-        TextButton testButton4 = new LocationControls.ReduceLightlevelButton("Darken", 80, 60, this.game);
+        TextButton attackButton = new ActionButton(game.player, "Smash!",  80, 60);
+        TextButton pathsButton = new LocationControls.DrawPathsButton("Paths Off", 80, 60, this.game);
+        TextButton lightenButton = new LocationControls.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
+        TextButton darkenButton = new LocationControls.ReduceLightlevelButton("Darken", 80, 60, this.game);
         MuteMusicButton muteMusicButton;
         muteMusicButton = new AudioControls.MuteMusicButton("Mute music", 80, 60);
         
-        actionBar.addSubComponent(testButton1);
-        actionBar.addSubComponent(testButton2);
-        actionBar.addSubComponent(testButton3);
-        actionBar.addSubComponent(testButton4);
+        actionBar.addSubComponent(attackButton);
+        actionBar.addSubComponent(pathsButton);
+        actionBar.addSubComponent(lightenButton);
+        actionBar.addSubComponent(darkenButton);
         actionBar.addSubComponent(muteMusicButton);
         uiComponents.put(actionBar.getName(), actionBar);
     }
@@ -99,22 +99,27 @@ public class LocationState implements GameState {
         }
         
     }
+    
+    
+    
+    
     /**
      * Toggles open/close the gameMenu, displayed at the middle of the screen.
      * TODO: Consider making a separate class for this, in case other GameStates utilize the same
      */
-    private void toggleGameMenu() {
+    public void toggleGameMenu() {
+        Mists.logger.info("Game menu toggled");
         if (!gameMenuOpen) {
             gameMenuOpen = true;
             TiledWindow gameMenu = new TiledWindow(this, "GameMenu", 220, 300, (game.WIDTH/2 - 110), 150);
-            TextButton testButton1 = new TextButton("Testbutton", 200, 60);
-            TextButton testButton2 = new TextButton("Options", 200, 60);
-            GoMainMenuButton testButton3 = new GoMainMenuButton(this.game, 200, 60);
-            QuitButton testButton4 = new QuitButton("Quit game", 200, 60);
-            gameMenu.addSubComponent(testButton1);
-            gameMenu.addSubComponent(testButton2);
-            gameMenu.addSubComponent(testButton3);
-            gameMenu.addSubComponent(testButton4);
+            TextButton resumeButton = new LocationControls.ResumeButton("Resume", 200, 60, this.game);
+            TextButton optionsButton = new TextButton("Options", 200, 60);
+            GoMainMenuButton mainMenuButton = new GoMainMenuButton(this.game, 200, 60);
+            QuitButton quitButton = new QuitButton("Quit game", 200, 60);
+            gameMenu.addSubComponent(resumeButton);
+            gameMenu.addSubComponent(optionsButton);
+            gameMenu.addSubComponent(mainMenuButton);
+            gameMenu.addSubComponent(quitButton);
             uiComponents.put(gameMenu.getName(), gameMenu);
             Mists.logger.info("GameMenu opened");
         } else {

@@ -35,7 +35,7 @@ public class Game {
     public MapGenerator mapGen;
 
     private ArrayList<GameState> gameStates;
-    private GameState currentState;
+    public GameState currentState;
     public static final int MAINMENU = 0;
     public static final int LOCATION = 1;
     public static final int WORLDMAP = 2;
