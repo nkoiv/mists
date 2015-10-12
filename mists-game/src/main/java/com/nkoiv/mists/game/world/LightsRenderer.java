@@ -55,7 +55,7 @@ public class LightsRenderer {
             for (int column = (int)(xStart/Mists.TILESIZE); column <= (int)(xEnd/Mists.TILESIZE); column++) {
                 gc.setFill(Color.BLACK);
                 //gc.setStroke(Color.BLACK);
-                if(column< lightmap.length && row < lightmap[0].length)gc.setGlobalAlpha(0.9 - lightmap[column][row]);
+                if(column< lightmap.length && row < lightmap[0].length)gc.setGlobalAlpha(1 - lightmap[column][row]);
                 gc.fillRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE+1, Mists.TILESIZE+1);
                 //gc.strokeRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE, Mists.TILESIZE);
             }

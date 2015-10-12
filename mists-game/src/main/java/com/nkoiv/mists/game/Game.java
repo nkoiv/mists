@@ -70,6 +70,7 @@ public class Game {
         currentState.exit();
         currentState = gameStates.get(gameStateNumber);
         currentState.enter();
+        updateUI();
     }
     
     /**

@@ -491,7 +491,7 @@ public class Location implements Global {
             structures[i] = StructuresOnScreen.get(i);
         }
         lights.updateObstacles(structures, xOffset, yOffset);
-        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), 12);
+        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), 8);
         lights.renderLightMap(gc, xOffset, yOffset);
         //lights.renderLight(gc, player.getXPos()-xOffset, player.getYPos()-yOffset, 1, 1);
         
@@ -629,6 +629,17 @@ public class Location implements Global {
         } else {
             return false;
         }
+    }
+    
+    public void setMinLightLevel(double lightlevel) {
+        double ll = lightlevel;
+        if (ll>1.0) ll=1.0;
+        if (ll<0.0) ll=0.0;
+        this.lights.setMinLightLevel(ll);
+    }
+    
+    public double getMinLightLevel() {
+        return this.lights.getMinLightLevel();
     }
     
     public CollisionMap getCollisionMap() {

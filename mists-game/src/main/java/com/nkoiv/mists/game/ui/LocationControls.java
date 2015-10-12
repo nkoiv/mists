@@ -43,4 +43,35 @@ public class LocationControls {
         }
         
     }
+    
+    public static class IncreaseLightlevelButton extends TextButton {
+        private Game game;
+        
+        public IncreaseLightlevelButton(String name, double width, double height, Game game) {
+            super(name, width, height);
+            this.game = game;
+        }
+        
+        @Override
+        public void onClick(MouseEvent me) {
+            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+            this.game.currentLocation.setMinLightLevel(this.game.currentLocation.getMinLightLevel()+0.1);
+        }
+        
+    }
+    public static class ReduceLightlevelButton extends TextButton {
+        private Game game;
+        
+        public ReduceLightlevelButton(String name, double width, double height, Game game) {
+            super(name, width, height);
+            this.game = game;
+        }
+        
+        @Override
+        public void onClick(MouseEvent me) {
+            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+            this.game.currentLocation.setMinLightLevel(this.game.currentLocation.getMinLightLevel()-0.1);
+        }
+        
+    }
 }

@@ -57,8 +57,8 @@ public class LocationState implements GameState {
         TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
         TextButton testButton1 = new ActionButton(game.player, "Smash!",  80, 60);
         TextButton testButton2 = new LocationControls.DrawPathsButton("Paths Off", 80, 60, this.game);
-        TextButton testButton3 = new TextButton("Foo", 80, 60);
-        TextButton testButton4 = new TextButton("Bar", 80, 60);
+        TextButton testButton3 = new LocationControls.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
+        TextButton testButton4 = new LocationControls.ReduceLightlevelButton("Darken", 80, 60, this.game);
         MuteMusicButton muteMusicButton;
         muteMusicButton = new AudioControls.MuteMusicButton("Mute music", 80, 60);
         
