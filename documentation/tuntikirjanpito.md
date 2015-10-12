@@ -1,5 +1,18 @@
 #TiraLab (35h)
 
+#Viikko 6 (9h)
+
+##12.10 (4h)
+* 3h [OHJELMOINTI] Rakennettu tapa piirtää Pathfinderin reitit kartalle
+* 1h [DOKUMENTOINTI] Päivitetty luokkakaaviot ajantasalle
+
+##9.10
+* 2h [OHJELMIONTI] Käyty läpi palaute (koodikatselmointi) ja hiottu peliä
+
+##5.10
+* 2h [TESTAUS] Tehty käyttöliittymätestaus olemassaolevilla ohjeille
+* 1h [TESTAUS] Korjattu yksikkötestejä
+
 #Viikko 5 (8h)
 * 2h [TESTAUS] Jatkettu util-testejä, ajettu PIT
 
