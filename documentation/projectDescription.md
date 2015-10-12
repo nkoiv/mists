@@ -96,9 +96,9 @@ Testing the game is done from two directions: Unit tests inside the Maven projec
 * Week 1: Plan the tiralab angle to the project (Pathfinding)
 * Week 2: Modify the UI to better suit pathfinding optimization and testing
 * Week 3: Clean the original pathfinding to use no Collections and optimize the lists
-* Week 4: Create alternative pathfinding systems
-* Week 5: Create alternative pathfinding systems
-* Week 6: Build an algorithm to decide which pathfinder to use and when
+* Week 4: Create a minHeap to use with the nodes
+* Week 5: Unit tests and PIT
+* Week 6: Prepare the project for presentation
 
 ###Weekly plan (JavaLab)
 * Week 1: Create a window with sprites to move around
