@@ -806,7 +806,8 @@ calls for paths &gt;</panel_attributes>
       <w>130</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>PathfinderAlgorithm
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+PathfinderAlgorithm
 Package::pathfinding</panel_attributes>
     <additional_attributes/>
   </element>
@@ -818,8 +819,8 @@ Package::pathfinding</panel_attributes>
       <w>150</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-
-&lt;&lt;instanceOf&gt;&gt;</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;.
+</panel_attributes>
     <additional_attributes>10.0;30.0;130.0;20.0</additional_attributes>
   </element>
 </diagram>
