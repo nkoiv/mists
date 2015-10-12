@@ -1,6 +1,15 @@
 #TiraLab viikkoraportit
 
 ##Viikkoraportti #5
+(Esittelykuntoon laitto)
+
+Työstin käyttöliittymää lisäämällä peliin nappulan, joka piirtää kaikki otusten käyttämät reitit näytölle. Tämä paitsi helpotti melkoisesti käyttöliittymätestausta, myös mahdollistaa hieman paremman demotuksen perjantain esittelytilaisuudessa.
+
+Yleisellä tasolla TiraLab-projekti on nyt valmis. Olen siivonnut pois javan valmisluokat reitinhausta, tehnyt ja testannut pohjalle toimivan minimikeon solmuille ja palastellut pääreitinhaun ymmärrettävämpään muotoon. Sivussa tuli tehtyä myös oma versio quicksorttaavasta jonosta ja hashitön priorityque, joille ehkä keksin vielä käyttöä projektin tiimoilta.
+
+Oli mukavan silmiäavartavaa testata näiden eri tietorakenteiden suorituskykyaikoja käytännön tilanteissa. Erityisen hyvän pohjan tekemiselle antoi Mikon toisen viikon palaute, jossa loistava lista muutostarpeita ja suuntia joita ottaa. Sen tukemana työn tahdittaminen kävi helposti, eikä missään vaiheessa ehtinyt tulla sellainen "mitäs nyt sitten" -olo.
+
+##Viikkoraportti #5
 (MinHeap ja testejä)
 
 Rakensin vielä QuickSortin ja järjestestyn sarjan kaveriksi heappiin perustuvan MinHeapin. Testaussessioiden jälkeen paljastui että, kuten oletettavaa, tämä kolmas vaihtoehto toimii parhaiten solmujen hallinnoimisessa. Jäin vielä miettimään, josko voisin optimoida ComparingQueueta pointterilla, jota siirtämällä hoitaisin solmujen poiston - OpenNodes käyttötapauksessa kun poisto on poikkeuksetta aina jonon ensimmäinen solmu. Voi olla, että sen valmistuttua jää tehokkaimmaksi vaihtoehdoksi käyttää heapin swim/sink tyyliä ClosedNodes käytössä ja ComparingQueuen pointterin liikuttelua OpenNodesilla.
