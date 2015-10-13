@@ -8,6 +8,7 @@ package com.nkoiv.mists.game;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
+import com.nkoiv.mists.game.controls.LocationControls;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.MapGenerator;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class Game {
     public static final int LOCATION = 1;
     public static final int WORLDMAP = 2;
     
+    public LocationControls locControls;
+    
     /**
     * Initialize a new game
     * Call in the character generator, set the location to start.
@@ -49,6 +52,10 @@ public class Game {
         //Initialize the screen size
         WIDTH = Global.WIDTH;
         HEIGHT = Global.HEIGHT;
+        
+        //Setup controls
+        this.locControls = new LocationControls(this);
+        
         //POC player:
         PlayerCharacter himmu = new PlayerCharacter();
         himmu.getSprite().setCollisionAreaShape(2);

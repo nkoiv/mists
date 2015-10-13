@@ -7,8 +7,6 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gamestate.LocationState;
-import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
 import javafx.scene.input.MouseEvent;
 
@@ -16,17 +14,17 @@ import javafx.scene.input.MouseEvent;
  *
  * @author nikok
  */
-public class LocationControls {
+public class LocationButtons {
     public static int DISPLAY_PATHS = 1;
     
     
-    public LocationControls() {
+    public LocationButtons() {
         
     }
     
     
     public  static class ResumeButton extends TextButton {
-        private Game game;
+        private final Game game;
         
         public ResumeButton(String name, double width, double height, Game game) {
             super(name, width, height);
@@ -36,14 +34,13 @@ public class LocationControls {
         @Override
         public void onClick(MouseEvent me) {
             //Mists.logger.info("Trying to toggle game menu");
-            LocationState LS = (LocationState)this.game.currentState;
-            LS.toggleGameMenu();
+            this.game.locControls.toggleLocationMenu();
         }
         
     }
     
     public static class DrawPathsButton extends TextButton {
-        private Game game;
+        private final Game game;
         
         public DrawPathsButton(String name, double width, double height, Game game) {
             super(name, width, height);
@@ -53,7 +50,7 @@ public class LocationControls {
         @Override
         public void onClick(MouseEvent me) {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            this.game.currentLocation.toggleFlag("drawPaths");
+            this.game.locControls.toggleFlag("drawPaths");
             if (this.game.currentLocation.isFlagged("drawPaths")) {
                 this.setText("Paths On");
             } else {
@@ -64,7 +61,7 @@ public class LocationControls {
     }
     
     public static class IncreaseLightlevelButton extends TextButton {
-        private Game game;
+        private final Game game;
         
         public IncreaseLightlevelButton(String name, double width, double height, Game game) {
             super(name, width, height);
@@ -74,12 +71,12 @@ public class LocationControls {
         @Override
         public void onClick(MouseEvent me) {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            this.game.currentLocation.setMinLightLevel(this.game.currentLocation.getMinLightLevel()+0.1);
+            this.game.locControls.increseLightLevel();
         }
         
     }
     public static class ReduceLightlevelButton extends TextButton {
-        private Game game;
+        private final Game game;
         
         public ReduceLightlevelButton(String name, double width, double height, Game game) {
             super(name, width, height);
@@ -89,7 +86,7 @@ public class LocationControls {
         @Override
         public void onClick(MouseEvent me) {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            this.game.currentLocation.setMinLightLevel(this.game.currentLocation.getMinLightLevel()-0.1);
+            this.game.locControls.reduceLightLevel();
         }
         
     }

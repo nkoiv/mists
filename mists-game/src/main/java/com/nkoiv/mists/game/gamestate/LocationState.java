@@ -12,7 +12,7 @@ import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
 import com.nkoiv.mists.game.ui.GoMainMenuButton;
-import com.nkoiv.mists.game.ui.LocationControls;
+import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
@@ -36,7 +36,7 @@ public class LocationState implements GameState {
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
     private final AudioControls audioControls = new AudioControls();
-    private final LocationControls locationControls = new LocationControls();
+    private final LocationButtons locationControls = new LocationButtons();
     
     private final HashMap<String, UIComponent> uiComponents;
     
@@ -56,9 +56,9 @@ public class LocationState implements GameState {
     private void loadDefaultUI() {
         TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
         TextButton attackButton = new ActionButton(game.player, "Smash!",  80, 60);
-        TextButton pathsButton = new LocationControls.DrawPathsButton("Paths Off", 80, 60, this.game);
-        TextButton lightenButton = new LocationControls.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
-        TextButton darkenButton = new LocationControls.ReduceLightlevelButton("Darken", 80, 60, this.game);
+        TextButton pathsButton = new LocationButtons.DrawPathsButton("Paths Off", 80, 60, this.game);
+        TextButton lightenButton = new LocationButtons.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
+        TextButton darkenButton = new LocationButtons.ReduceLightlevelButton("Darken", 80, 60, this.game);
         MuteMusicButton muteMusicButton;
         muteMusicButton = new AudioControls.MuteMusicButton("Mute music", 80, 60);
         
@@ -112,7 +112,7 @@ public class LocationState implements GameState {
         if (!gameMenuOpen) {
             gameMenuOpen = true;
             TiledWindow gameMenu = new TiledWindow(this, "GameMenu", 220, 300, (game.WIDTH/2 - 110), 150);
-            TextButton resumeButton = new LocationControls.ResumeButton("Resume", 200, 60, this.game);
+            TextButton resumeButton = new LocationButtons.ResumeButton("Resume", 200, 60, this.game);
             TextButton optionsButton = new TextButton("Options", 200, 60);
             GoMainMenuButton mainMenuButton = new GoMainMenuButton(this.game, 200, 60);
             QuitButton quitButton = new QuitButton("Quit game", 200, 60);
@@ -208,41 +208,40 @@ public class LocationState implements GameState {
 
         //TODO: Current movement lets player move superspeed diagonal. should call moveTowards(Direction.UPRIGHT) etc.
         if (pressedButtons.contains("UP")) {
-            //Mists.logger.log(Level.INFO, "Moving {0} UP", currentLocation.getPlayer().getName());
-            game.currentLocation.getPlayer().moveTowards(Direction.UP);            
+            game.locControls.playerMove(Direction.UP);            
         }
         if (pressedButtons.contains("DOWN")) {
             //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
-            game.currentLocation.getPlayer().moveTowards(Direction.DOWN);
+            game.locControls.playerMove(Direction.DOWN);
         }
         if (pressedButtons.contains("LEFT")) {
             //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
-            game.currentLocation.getPlayer().moveTowards(Direction.LEFT);
+            game.locControls.playerMove(Direction.LEFT);
         }
         if (pressedButtons.contains("RIGHT")) {
             //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
-            game.currentLocation.getPlayer().moveTowards(Direction.RIGHT);
+            game.locControls.playerMove(Direction.RIGHT);
         }
         
         //TODO: These should be directed to the UI-layer, which knows which abilities player has bound where
         if (pressedButtons.contains("SPACE")) {
             //Mists.logger.log(Level.INFO, "{0} TRIED USING ABILITY 0", currentLocation.getPlayer().getName());
-            game.currentLocation.getPlayer().useAction("MeleeAttack");
+            game.locControls.playerAttack();
         }
         
         if (releasedButtons.contains("ENTER")) {
-            game.currentLocation.getPathFinder().printCollisionMapIntoConsole();
-            game.currentLocation.getPathFinder().printClearanceMapIntoConsole(0);
+            game.locControls.printClearanceMapIntoConsole();
+            game.locControls.printCollisionMapIntoConsole();
             
         }
         
         if (releasedButtons.contains("SHIFT")) {
-            game.currentLocation.toggleFlag("testFlag");
+            game.locControls.toggleFlag("testFlag");
         
         }
         
         if (releasedButtons.contains("ESCAPE")) {
-            this.toggleGameMenu();
+            game.locControls.toggleLocationMenu();
         }
         
         releasedButtons.clear(); //Button releases are handled only once
