@@ -1,6 +1,6 @@
 #TiraLab viikkoraportit
 
-##Viikkoraportti #5
+##Viikkoraportti #6
 (Esittelykuntoon laitto)
 
 Työstin käyttöliittymää lisäämällä peliin nappulan, joka piirtää kaikki otusten käyttämät reitit näytölle. Tämä paitsi helpotti melkoisesti käyttöliittymätestausta, myös mahdollistaa hieman paremman demotuksen perjantain esittelytilaisuudessa.
