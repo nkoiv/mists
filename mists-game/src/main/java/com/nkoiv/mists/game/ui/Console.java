@@ -29,6 +29,14 @@ public class Console extends TextWindow{
         
     }
     
+    /**
+     * Input takes in raw button presses from keyevents by keycode,
+     * and stores them in the "current" string. This string is then
+     * handed over to "parseCommmand()" on Enter.
+     * @param pressedButtons Buttons the user has pressed in the console
+     * @param releasedButtons Buttons the user has released in the console
+     */
+
     public void input(ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons)  {
         for (KeyCode k : releasedButtons) {
             if (k.isLetterKey() || k.isDigitKey()) {
@@ -63,7 +71,12 @@ public class Console extends TextWindow{
         this.setText(text);
     }
     
-    
+    /**
+     * ParseCommand uses simple Switch structure to pick out
+     * valid commands from what's been typed in the console.
+     * Anything not dictated here wont do a thing
+     * 
+     */
     private void parseCommand() {
         System.out.println(current +" (console input)");
         String command;
@@ -85,12 +98,20 @@ public class Console extends TextWindow{
         clearRow();
     }
     
+    /**
+     * Takes previously typed command at puts it on the commandline
+     * (used when user presses UP on keyboard)
+     */
     private void previousRow() {
         if (this.textlog[0] != null) this.current = this.textlog[0];
         if (this.textlog[1] != null) this.textlog[0] = this.textlog[1];
         if (this.textlog[2] != null) this.textlog[1] = this.textlog[2];
     }
     
+    /**
+     * Clears console input (when command is parsed)
+     * and saves the line to textlog
+     */
     private void clearRow() {
         if(this.textlog[1] != null) this.textlog[2] = this.textlog[1];
         if(this.textlog[0] != null) this.textlog[1] = this.textlog[0];
