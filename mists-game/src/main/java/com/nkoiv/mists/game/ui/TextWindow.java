@@ -21,7 +21,7 @@ public class TextWindow implements UIComponent {
 
     private GameState parent;
     private String name;
-    private Color bgColor;
+    protected Color bgColor;
     private double bgOpacity;
     private double xPosition;
     private double yPosition;
@@ -58,7 +58,7 @@ public class TextWindow implements UIComponent {
 
     private void renderText(GraphicsContext gc, double xPosition, double yPosition) {
         gc.save();
-        gc.setFont(Font.font("Verdana",15));
+        gc.setFont(Font.font("Verdana"));
         gc.setFill(Color.WHITE);
         gc.strokeText(this.text, xPosition+this.margin, yPosition+this.margin+15);
         gc.restore();

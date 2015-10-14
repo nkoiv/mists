@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gamestate;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
@@ -23,7 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -53,6 +56,7 @@ public class LocationState implements GameState {
         //Move the actionbar to where it should be
         Mists.logger.info("Updating UI. Game dimensions: "+game.WIDTH+"x"+game.HEIGHT);
         uiComponents.get("Actionbar").setPosition(0, (game.HEIGHT - 80));
+        if(gameMenuOpen) uiComponents.get("GameMenu").setPosition((game.WIDTH/2 - 110), 150);
     }
     
     private void loadDefaultUI() {
@@ -94,6 +98,12 @@ public class LocationState implements GameState {
         }
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
+        
+        if (gameMenuOpen){
+            Image controls = new Image("/images/controls.png");
+            gc.drawImage(controls, screenWidth-controls.getWidth(), 50);
+        }
+        
         if (uiComponents != null) {
             for (Map.Entry<String, UIComponent> entry : uiComponents.entrySet()) {
                 entry.getValue().render(uigc, 0, 0);
@@ -189,10 +199,21 @@ public class LocationState implements GameState {
             
         }
         //Click landed on area without UI component
-        Mists.logger.info("Clicked "+clickX+","+clickY+" - moving player there");
-        double xOffset = this.game.currentLocation.getLastxOffset();
-        double yOffset = this.game.currentLocation.getLastyOffset();
-        this.game.currentLocation.getPlayer().setCenterPosition(clickX+xOffset, clickY+yOffset);
+        if (me.getButton() == MouseButton.SECONDARY) {
+            Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
+            double xOffset = this.game.currentLocation.getLastxOffset();
+            double yOffset = this.game.currentLocation.getLastyOffset();
+            this.game.currentLocation.getPlayer().setCenterPosition(clickX+xOffset, clickY+yOffset);
+        }
+        if (me.getButton() == MouseButton.PRIMARY) {
+            MapObject targetMob = game.currentLocation.getMobAtLocation(clickX+game.currentLocation.getLastxOffset(), clickY+game.currentLocation.getLastyOffset());
+            if (targetMob!=null) { 
+                Mists.logger.info("Targetted "+targetMob.toString());
+                game.currentLocation.setScreenFocus(targetMob);
+            }
+        }
+        
+        
         return false;
     }
 
@@ -233,18 +254,18 @@ public class LocationState implements GameState {
         
 
         //TODO: Current movement lets player move superspeed diagonal. should call moveTowards(Direction.UPRIGHT) etc.
-        if (pressedButtons.contains(KeyCode.UP)) {
+        if (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W)) {
             game.locControls.playerMove(Direction.UP);            
         }
-        if (pressedButtons.contains(KeyCode.DOWN)) {
+        if (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S)) {
             //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
             game.locControls.playerMove(Direction.DOWN);
         }
-        if (pressedButtons.contains(KeyCode.LEFT)) {
+        if (pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) {
             //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
             game.locControls.playerMove(Direction.LEFT);
         }
-        if (pressedButtons.contains(KeyCode.RIGHT)) {
+        if (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D)) {
             //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
             game.locControls.playerMove(Direction.RIGHT);
         }

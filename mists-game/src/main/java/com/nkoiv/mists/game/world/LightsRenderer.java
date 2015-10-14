@@ -51,12 +51,17 @@ public class LightsRenderer {
         double xEnd = xOffset + gc.getCanvas().getWidth();
         double yStart = yOffset;
         double yEnd = yOffset + gc.getCanvas().getHeight();
+        double xFraction = 0;
+        double yFraction = 0;
+        xFraction = (xStart/Mists.TILESIZE - (int)(xStart/Mists.TILESIZE));
+        yFraction = (yStart/Mists.TILESIZE - (int)(yStart/Mists.TILESIZE));
+        //Mists.logger.info(xFraction+"x"+yFraction);
         for (int row = (int)(yStart/Mists.TILESIZE); row <= (int)(yEnd/Mists.TILESIZE); row++) {
             for (int column = (int)(xStart/Mists.TILESIZE); column <= (int)(xEnd/Mists.TILESIZE); column++) {
                 gc.setFill(Color.BLACK);
                 //gc.setStroke(Color.BLACK);
                 if(column< lightmap.length && row < lightmap[0].length)gc.setGlobalAlpha(1 - lightmap[column][row]);
-                gc.fillRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE+1, Mists.TILESIZE+1);
+                gc.fillRect((column*Mists.TILESIZE)-(int)xOffset, (row*Mists.TILESIZE)-(int)yOffset, Mists.TILESIZE, Mists.TILESIZE);
                 //gc.strokeRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE, Mists.TILESIZE);
             }
         }

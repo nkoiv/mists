@@ -95,4 +95,12 @@ public class LocationControls {
             default: break;
         } 
     }
+    
+    //-------- Mob creation ------
+    
+    public void addCreature(String mobTemplate) {
+        
+    }
+    
+    
 }

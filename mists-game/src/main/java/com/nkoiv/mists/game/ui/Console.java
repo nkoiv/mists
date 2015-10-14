@@ -5,10 +5,12 @@
  */
 package com.nkoiv.mists.game.ui;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
 import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -22,6 +24,7 @@ public class Console extends TextWindow{
         super(parent, "Console", parent.getGame().WIDTH, 150, 0, 0);
         this.textlog = new String[4];
         this.current = "";
+        super.bgColor = Color.TEAL;
         this.setText("> ");
         
     }
@@ -53,7 +56,11 @@ public class Console extends TextWindow{
             
         }
         
-        this.setText("> "+current);
+        String text ="> "+current;
+        if (textlog[0]!=null) text = text+"\n"+textlog[0];
+        if (textlog[1]!=null) text = text+"\n"+textlog[1];
+        if (textlog[2]!=null) text = text+"\n"+textlog[2];
+        this.setText(text);
     }
     
     
@@ -89,7 +96,12 @@ public class Console extends TextWindow{
         if(this.textlog[0] != null) this.textlog[1] = this.textlog[0];
         this.textlog[0] = current;
         current = "";
-        this.setText("> ");
+        String text ="> ";
+        if (textlog[0]!=null) text = text+"\n"+textlog[0];
+        if (textlog[1]!=null) text = text+"\n"+textlog[1];
+        if (textlog[2]!=null) text = text+"\n"+textlog[2];
+        Mists.logger.info(text);
+        this.setText(text);
     }
     
 }
