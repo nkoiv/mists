@@ -20,6 +20,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -38,8 +39,8 @@ public class Mists extends Application implements Global {
     public Game MistsGame;
     
     public boolean running = false;
-    public final ArrayList<String> pressedButtons = new ArrayList<>();
-    public final ArrayList<String> releasedButtons = new ArrayList<>();
+    public final ArrayList<KeyCode> pressedButtons = new ArrayList<>();
+    public final ArrayList<KeyCode> releasedButtons = new ArrayList<>();
     public final double[] mouseClickCoordinates = new double[2];
     public Scene currentScene;
     public static SoundManager soundManager;
@@ -71,6 +72,8 @@ public class Mists extends Application implements Global {
         setupMouseHandles(root);
         setupWindowResizeListeners(launchScene);
         MistsGame = new Game();
+        MistsGame.WIDTH = primaryStage.getWidth();
+        MistsGame.HEIGHT = primaryStage.getHeight();
         logger.info("Game set up");
         primaryStage.show();
         running = true;
@@ -163,7 +166,7 @@ public class Mists extends Application implements Global {
                 @Override
                 public void handle(KeyEvent e)
                 {
-                    String code = e.getCode().toString();
+                    KeyCode code = e.getCode();
                     if ( !pressedButtons.contains(code) )
                         pressedButtons.add( code );
                         //logger.log(Level.INFO, "{0} pressed", code);
@@ -175,7 +178,7 @@ public class Mists extends Application implements Global {
                 @Override
                 public void handle(KeyEvent e)
                 {
-                    String code = e.getCode().toString();
+                    KeyCode code = e.getCode();
                     pressedButtons.remove( code );
                     if (!releasedButtons.contains(code)) 
                         releasedButtons.add( code );

@@ -21,12 +21,13 @@ import javafx.scene.text.Text;
  * @author nikok
  */
 public class TextButton implements UIComponent{ 
-    private Text text;
+    protected Text text;
     private double textXOffset;
     private double textYOffset;
     private Rectangle background;
     private double xPosition;
     private double yPosition;
+    protected Color textColor;
 
     public TextButton(String name, double width, double height) {
         this(name, width, height, 0, 0);
@@ -60,7 +61,7 @@ public class TextButton implements UIComponent{
         gc.strokeText(text.getText(), xPosition-textXOffset, yPosition+background.getHeight()+textYOffset);
         gc.restore();
     }
-
+    
     public void setText(Text newText) {
         this.text = newText;
         double textWidth = text.getLayoutBounds().getWidth();

@@ -7,8 +7,12 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.sun.prism.paint.Color;
 import java.util.logging.Level;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 
 /**
  *
@@ -51,11 +55,19 @@ public class LocationButtons {
         public void onClick(MouseEvent me) {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
             this.game.locControls.toggleFlag("drawPaths");
+        }
+        
+        @Override
+        public void render(GraphicsContext gc, double xPosition, double yPosition) {
             if (this.game.currentLocation.isFlagged("drawPaths")) {
                 this.setText("Paths On");
+                this.gainFocus();
             } else {
                 this.setText("Paths Off");
+                this.loseFocus();
             }
+            
+            super.render(gc, xPosition, yPosition);
         }
         
     }

@@ -33,6 +33,24 @@ public class LocationControls {
     }
     
     
+    /**
+     * Trigger is used for interpreting a command,
+     * either via console or by some external script
+     * @param command the supplied command to execute
+     * @param arguments for the command
+     * @return returns true if command was executed
+     */
+    
+    public boolean trigger(String command, String ...arguments) {
+        switch (command) {
+            case "toggleFlag": if (arguments!=null) this.toggleFlag(arguments[0]); return true;
+            
+                
+            default: return false;
+        }
+        
+    }
+    
     //------------Individual triggers for controlling a location----
     
     public void toggleFlag(String flag) {

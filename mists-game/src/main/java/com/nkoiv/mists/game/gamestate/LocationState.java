@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
+import com.nkoiv.mists.game.ui.Console;
 import com.nkoiv.mists.game.ui.GoMainMenuButton;
 import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.QuitButton;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -37,7 +39,7 @@ public class LocationState implements GameState {
     private boolean gameMenuOpen;
     private final AudioControls audioControls = new AudioControls();
     private final LocationButtons locationControls = new LocationButtons();
-    
+    private boolean inConsole;
     private final HashMap<String, UIComponent> uiComponents;
     
     public LocationState (Game game) {
@@ -68,6 +70,7 @@ public class LocationState implements GameState {
         actionBar.addSubComponent(darkenButton);
         actionBar.addSubComponent(muteMusicButton);
         uiComponents.put(actionBar.getName(), actionBar);
+        
     }
 
     /**
@@ -130,6 +133,11 @@ public class LocationState implements GameState {
         }
         
     }
+    
+    public void openConsole() {
+        uiComponents.put("Console", new Console(this));
+        this.inConsole = true;
+    }
 
     /**
      * The Tick command parses user input and sends an update(time) command to the
@@ -140,7 +148,7 @@ public class LocationState implements GameState {
      * @param releasedButtons  List of buttons released by the user
      */
     @Override
-    public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
+    public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         
         if(currentMenu == null) {
             handleLocationKeyPress(pressedButtons, releasedButtons);
@@ -196,8 +204,7 @@ public class LocationState implements GameState {
      * @param releasedButtons 
      */
     
-    private void handleLocationKeyPress(ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
-        
+    private void handleLocationKeyPress(ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         //TODO: External loadable configfile for keybindings
         //(probably via a class of its own)     
         game.currentLocation.getPlayer().stopMovement();
@@ -205,42 +212,61 @@ public class LocationState implements GameState {
         if (pressedButtons.isEmpty() && releasedButtons.isEmpty()) {
             return;
         }
+        
+        if (!inConsole && releasedButtons.contains(KeyCode.F1)) {
+            this.openConsole();
+            releasedButtons.clear();
+            return;
+        }
+        
+        if (inConsole) {
+            if (releasedButtons.contains(KeyCode.F1)) {
+               this.uiComponents.remove("Console");
+               this.inConsole = false;
+            } else {
+                Console c = (Console)this.uiComponents.get("Console");
+                c.input(pressedButtons, releasedButtons);
+            }
+            releasedButtons.clear();
+            return;
+        }
+        
 
         //TODO: Current movement lets player move superspeed diagonal. should call moveTowards(Direction.UPRIGHT) etc.
-        if (pressedButtons.contains("UP")) {
+        if (pressedButtons.contains(KeyCode.UP)) {
             game.locControls.playerMove(Direction.UP);            
         }
-        if (pressedButtons.contains("DOWN")) {
+        if (pressedButtons.contains(KeyCode.DOWN)) {
             //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
             game.locControls.playerMove(Direction.DOWN);
         }
-        if (pressedButtons.contains("LEFT")) {
+        if (pressedButtons.contains(KeyCode.LEFT)) {
             //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
             game.locControls.playerMove(Direction.LEFT);
         }
-        if (pressedButtons.contains("RIGHT")) {
+        if (pressedButtons.contains(KeyCode.RIGHT)) {
             //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
             game.locControls.playerMove(Direction.RIGHT);
         }
         
         //TODO: These should be directed to the UI-layer, which knows which abilities player has bound where
-        if (pressedButtons.contains("SPACE")) {
+        if (pressedButtons.contains(KeyCode.SPACE)) {
             //Mists.logger.log(Level.INFO, "{0} TRIED USING ABILITY 0", currentLocation.getPlayer().getName());
             game.locControls.playerAttack();
         }
         
-        if (releasedButtons.contains("ENTER")) {
+        if (releasedButtons.contains(KeyCode.ENTER)) {
             game.locControls.printClearanceMapIntoConsole();
             game.locControls.printCollisionMapIntoConsole();
             
         }
         
-        if (releasedButtons.contains("SHIFT")) {
+        if (releasedButtons.contains(KeyCode.SHIFT)) {
             game.locControls.toggleFlag("testFlag");
         
         }
         
-        if (releasedButtons.contains("ESCAPE")) {
+        if (releasedButtons.contains(KeyCode.ESCAPE)) {
             game.locControls.toggleLocationMenu();
         }
         

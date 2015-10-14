@@ -15,6 +15,7 @@ import java.util.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
@@ -78,7 +79,7 @@ public class MainMenuState implements GameState {
     }
 
     @Override
-    public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
+    public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         
     }
 

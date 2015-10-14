@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -32,7 +33,7 @@ public interface GameState {
     public void render(Canvas gameCanvas, Canvas uiCanvas);
     
     //Do things
-    public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons);
+    public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons);
     
     //Handle mouse events
     public void handleMouseEvent(MouseEvent me);

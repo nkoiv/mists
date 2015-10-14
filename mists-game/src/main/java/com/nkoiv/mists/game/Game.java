@@ -14,6 +14,7 @@ import com.nkoiv.mists.game.world.MapGenerator;
 import java.util.ArrayList;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -104,7 +105,7 @@ public class Game {
     * @param pressedButtons Buttons currently pressed down
     * @param releasedButtons Buttons recently released
     */
-    public void tick(double time, ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
+    public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         currentState.tick(time, pressedButtons, releasedButtons);
     }
     
