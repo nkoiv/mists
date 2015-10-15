@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
 import java.util.Random;
 import javafx.scene.image.Image;
@@ -48,7 +49,7 @@ public class GeneralMobTest {
     
     @Before
     public void setUp() {
-        testLocation = new Location("TestLocation");
+        testLocation = new Location("TestLocation",new BGMap(new Image("/images/pocmap.png")));
         testCreature = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         testStructure = new Structure("Rock", new Image("/images/block.png"), 100);
     }

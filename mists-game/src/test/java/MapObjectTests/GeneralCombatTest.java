@@ -10,8 +10,10 @@ import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -45,7 +47,7 @@ public class GeneralCombatTest {
     
     @Before
     public void setUp() {
-        testLocation = new Location("TestLocation");
+        testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
         
         combatant1 = new Creature("Combatant 1", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         combatant1.addAction(new MeleeAttack());

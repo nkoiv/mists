@@ -88,11 +88,12 @@ public class Console extends TextWindow{
         String attributes = "";
         if (current.contains(" ")) attributes = attributes+current.substring(current.indexOf(" ")+1, current.length());
         switch (command) {
+            case "quit": Platform.exit(); System.exit(0); break;
             case "toggleFlag": super.getGame().locControls.toggleFlag(attributes); break;
             case "clearanceMap": super.getGame().locControls.printClearanceMapIntoConsole(); break;
             case "collisionMap": super.getGame().locControls.printCollisionMapIntoConsole(); break;
             case "addCreature" : super.getGame().locControls.addCreature(attributes); break;
-            case "quit": Platform.exit(); System.exit(0);
+            case "createLoc":super.getGame().locControls.createLoc(attributes); break;
             default: break;
         }
         

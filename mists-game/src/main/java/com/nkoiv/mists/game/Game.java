@@ -41,6 +41,7 @@ public class Game {
     public static final int MAINMENU = 0;
     public static final int LOCATION = 1;
     public static final int WORLDMAP = 2;
+    public static final int LOADSCREEN = 9;
     
     public LocationControls locControls;
     

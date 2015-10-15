@@ -56,15 +56,24 @@ public class Location implements Global {
     */
     
     
-    public Location(String name) {
-        this.loadMap(new BGMap(new Image("/images/pocmap.png")));
+    public Location(String name, String mapPath, int maptype) {
+        this.name = name;
         this.mapObjects = new ArrayList<>();
         this.effects = new ArrayList<>();
-        this.collisionMap = new CollisionMap(this, 32);
-        this.lights = new LightsRenderer(this);
-        //this.pathFinder = new PathFinder(this.collisionMap, 50, true);
-        //this.mapGen = new MapGenerator();
+        if (maptype == 0) this.loadMap(new BGMap(new Image(mapPath)));
+        if (maptype == 1) this.loadMap(new TileMap(mapPath));
+        this.localizeMap();
     }
+    
+    public Location(String name, GameMap map) {
+        this.name = name;
+        this.mapObjects = new ArrayList<>();
+        this.effects = new ArrayList<>();
+        this.loadMap(map);
+        this.localizeMap();
+    }
+    
+    
     /**TODO: This general constructor is just for the Proof of Concept -map
     * and should be removed later to avoid misuse
     * @param player Player to construct the (TEST)location around
@@ -77,14 +86,9 @@ public class Location implements Global {
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
         //this.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
         this.loadMap(MapGenerator.generateDungeon(this, 60, 40));
-        this.collisionMap = new CollisionMap(this, 32);
-        this.pathFinder = new PathFinder(this.collisionMap, 50, true);
-        this.collisionMap.setStructuresOnly(true);
-        this.collisionMap.updateCollisionLevels();
-        this.collisionMap.printMapToConsole();
-        this.lights = new LightsRenderer(this);
+        this.localizeMap();
         this.setPlayer(player);
-        this.addCreature(player, 8*TILESIZE, 6*TILESIZE);
+        this.addCreature(player, 8*TILESIZE, 6*TILESIZE); // <-TODO: Replace with putting player to start
         this.screenFocus = player;
         //TODO: Create structures from structure library once its finished
         
@@ -122,6 +126,20 @@ public class Location implements Global {
         this.setMobInRandomOpenSpot(player);
         
         this.lights.setMinLightLevel(0.3);
+        
+    }
+    
+    /**
+     * Construct the little things needed to make
+     * the map playable (collisionmaps, lights...)
+     */
+    private void localizeMap() {
+        this.collisionMap = new CollisionMap(this, 32);
+        this.pathFinder = new PathFinder(this.collisionMap, 50, true);
+        this.collisionMap.setStructuresOnly(true);
+        this.collisionMap.updateCollisionLevels();
+        this.collisionMap.printMapToConsole();
+        this.lights = new LightsRenderer(this);
         
     }
 
@@ -694,6 +712,7 @@ public class Location implements Global {
         this.setPlayer(p);
         double[] entryPoint = this.getEntryPoint();
         this.addPlayerCharacter(p, entryPoint[0], entryPoint[1]);
+        this.screenFocus = p;
         
     }
     

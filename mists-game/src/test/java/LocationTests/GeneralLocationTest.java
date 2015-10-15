@@ -10,16 +10,13 @@ import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import static com.nkoiv.mists.game.Global.TILESIZE;
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
-import java.util.ArrayList;
 import java.util.HashSet;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -60,7 +57,7 @@ public class GeneralLocationTest extends Application {
     
     @Before
     public void setUp() {
-       testLocation = new Location("TestLocation");
+       testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
        testCreature = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
        testMap = new BGMap(new Image("/images/pocmap.png"));
     }

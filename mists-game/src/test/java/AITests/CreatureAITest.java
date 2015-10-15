@@ -8,7 +8,9 @@ package AITests;
 import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,7 +46,7 @@ public class CreatureAITest {
     
     @Before
     public void setUp() {
-       testLocation = new Location("TestLocation");
+       testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
        testPlayer = new PlayerCharacter();
        testPlayer.setLocation(testLocation);
        testLocation.addPlayerCharacter(testPlayer, 200, 200);

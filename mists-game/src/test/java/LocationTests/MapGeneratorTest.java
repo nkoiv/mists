@@ -7,11 +7,13 @@ package LocationTests;
 
 import TestTools.CompareTools;
 import TestTools.JavaFXThreadingRule;
+import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.MapGenerator;
 import com.nkoiv.mists.game.world.TileMap;
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.scene.image.Image;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -45,7 +47,7 @@ public class MapGeneratorTest {
     
     @Before
     public void setUp() {
-        testLocation = new Location("TestLocation");
+        testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
         testMapGen = new MapGenerator();
         testLocation.setMapGen(testMapGen);
     }
