@@ -7,8 +7,20 @@ package com.nkoiv.mists.game.controls;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.world.Location;
+import java.awt.Frame;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Window;
+import java.awt.event.MouseEvent;
+import java.util.Random;
+import java.util.logging.Level;
+import javafx.scene.image.ImageView;
+import javafx.stage.Screen;
+
 
 /**
  * LocationControls are a layer that relays commands to the location
@@ -99,7 +111,27 @@ public class LocationControls {
     //-------- Mob creation ------
     
     public void addCreature(String mobTemplate) {
+        if ("".equals(mobTemplate)) addCreature(); 
+        else {
+            
+        }
         
+    }
+    
+    /**
+     * Create a random mob at spot mouse cursor is at
+     */
+    public void addCreature() {
+        Point p = MouseInfo.getPointerInfo().getLocation();
+        double x = p.x - Mists.primaryStage.getX();
+        double y = p.y - Mists.primaryStage.getY();
+        Random rnd = new Random();
+        int startX = rnd.nextInt(1);
+        int startY = rnd.nextInt(1);
+        Mists.logger.log(Level.INFO, "Creating monster from sprite sheet position {0},{1} at coordinates {2}+{3}x{4}+{5}", new Object[]{startX, startY, x, game.currentLocation.getLastxOffset(), y, game.currentLocation.getLastyOffset()});
+        Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 32, 32);
+        monster.getSprite().setCollisionAreaShape(2);
+        game.currentLocation.addCreature(monster, x+game.currentLocation.getLastxOffset(), y+game.currentLocation.getLastyOffset());   
     }
     
     

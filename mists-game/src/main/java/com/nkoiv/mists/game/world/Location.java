@@ -25,9 +25,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 
 /**
  * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
@@ -108,10 +105,10 @@ public class Location implements Global {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
-            int startX = rnd.nextInt(4);
+            int startX = rnd.nextInt(1);
             int startY = rnd.nextInt(2);
             Mists.logger.info("Creating monster from sprite sheet position "+startX+","+startY);
-            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 32, 32);
+            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 0, 0, 32, 32);
             monster.getSprite().setCollisionAreaShape(2);
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);
@@ -255,7 +252,7 @@ public class Location implements Global {
             this.mapObjects.add(c);
         }
         c.setLocation(this);
-        c.getSprite().setPosition(xPos, yPos);
+        c.setCenterPosition(xPos, yPos);
     }
     
     /** Adds an Effect to the location

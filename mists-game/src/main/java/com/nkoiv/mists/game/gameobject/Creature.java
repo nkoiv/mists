@@ -55,9 +55,9 @@ public class Creature extends MapObject implements Combatant {
         this.initializeFlags();
         this.ai = new CreatureAI(this);
     }
-    
+       
     //Constructing a creature template with sprite animations
-    public Creature (String name, ImageView imageView, int frameCount, int startingXTile, int startingYTile, int frameWidth, int frameHeight) {
+    public Creature (String name, ImageView imageView, int frameCount, int startingXTile, int startingYTile, int xOffset, int yOffset, int frameWidth, int frameHeight) {
         super(name);
         this.setFacing(Direction.DOWN);
         this.setAnimations(imageView, frameCount, startingXTile, startingYTile, frameWidth, frameHeight);
@@ -67,6 +67,10 @@ public class Creature extends MapObject implements Combatant {
         this.ai = new CreatureAI(this);
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
+    }
+    
+    public Creature (String name, ImageView imageView, int frameCount, int startingXTile, int startingYTile, int frameWidth, int frameHeight) {
+        this(name, imageView, frameCount, startingXTile, startingYTile, 0,0, frameWidth, frameHeight);
     }
 
     /*Constructing a creature with only a still image
@@ -173,20 +177,25 @@ public class Creature extends MapObject implements Combatant {
     *  and that offset between individual frames is 0
     */
     public void setAnimations(ImageView imageview, int frameCount, int startingXTile, int startingYTile, int frameWidth, int frameHeight) {
-        this.spriteAnimations = new HashMap<>();
+        this.setAnimations(imageview, frameCount, startingXTile, startingYTile, 0, 0, frameWidth, frameHeight);
+    }
+    
+    public void setAnimations(ImageView imageview, int frameCount, int startingXTile, int startingYTile, int xOffset, int yOffset, int frameWidth, int frameHeight) {
+                this.spriteAnimations = new HashMap<>();
         this.setAnimation("downMovement",
-          imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+0, 0, 0, frameWidth, frameHeight      
+          imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+0, xOffset, yOffset, frameWidth, frameHeight      
         );
         this.setAnimation("leftMovement",
-          imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+(frameHeight), 0, 0, frameWidth, frameHeight      
+          imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+(frameHeight), xOffset, yOffset, frameWidth, frameHeight      
         );
         this.setAnimation("rightMovement",
-          imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+(frameHeight*2), 0, 0, frameWidth, frameHeight      
+          imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+(frameHeight*2), xOffset, yOffset, frameWidth, frameHeight      
         );
         this.setAnimation("upMovement",
-          imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+(frameHeight*3), 0, 0, frameWidth, frameHeight      
-        );    
+          imageview, frameCount, (startingXTile*frameWidth)+0, (startingYTile*frameHeight)+(frameHeight*3), xOffset, yOffset, frameWidth, frameHeight      
+        );  
     }
+    
     
     public void setAnimation(String animationName, ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
         if (this.spriteAnimations == null) {

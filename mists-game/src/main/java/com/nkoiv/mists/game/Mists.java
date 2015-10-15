@@ -44,7 +44,7 @@ public class Mists extends Application implements Global {
     public final double[] mouseClickCoordinates = new double[2];
     public Scene currentScene;
     public static SoundManager soundManager;
-    
+    public static Stage primaryStage;
     /**
     * start(), coming from the Application that Mists extends, is the call to launch the game.
     * The main loop of the game is executed inside the start, with an AnimationTimer();
@@ -53,13 +53,18 @@ public class Mists extends Application implements Global {
     */
     @Override
     public void start(Stage primaryStage) {
+        Mists.primaryStage = primaryStage;
         primaryStage.setTitle("The Mists");
+        primaryStage.setMinHeight(Global.HEIGHT);
+        primaryStage.setMinWidth(Global.WIDTH);
+        primaryStage.setWidth(Global.WIDTH);
+        primaryStage.setHeight(Global.HEIGHT);
         Group root = new Group();
         Scene launchScene = new Scene(root);
-        final Canvas gameCanvas = new Canvas(WIDTH, HEIGHT);
+        final Canvas gameCanvas = new Canvas(Global.WIDTH, Global.HEIGHT);
         gameCanvas.widthProperty().bind(primaryStage.widthProperty());
         gameCanvas.heightProperty().bind(primaryStage.heightProperty());
-        final Canvas uiCanvas = new Canvas(WIDTH, HEIGHT);
+        final Canvas uiCanvas = new Canvas(Global.WIDTH, Global.HEIGHT);
         uiCanvas.widthProperty().bind(primaryStage.widthProperty());
         uiCanvas.heightProperty().bind(primaryStage.heightProperty());
         root.getChildren().add(gameCanvas);
@@ -143,7 +148,7 @@ public class Mists extends Application implements Global {
             }
         });
     }
-    
+       
     private void setupSoundManager() {
                     
         this.soundManager = new SoundManager(5);
