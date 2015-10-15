@@ -100,8 +100,13 @@ public class LocationState implements GameState {
         uigc.clearRect(0, 0, screenWidth, screenHeight);
         
         if (gameMenuOpen){
-            Image controls = new Image("/images/controls.png");
-            gc.drawImage(controls, screenWidth-controls.getWidth(), 50);
+            try {
+                Image controls = new Image("/images/controls.png");
+                gc.drawImage(controls, screenWidth-controls.getWidth(), 50);
+            } catch (Exception e){
+                Mists.logger.info("controls.png not found");
+            }
+            
         }
         
         if (uiComponents != null) {
