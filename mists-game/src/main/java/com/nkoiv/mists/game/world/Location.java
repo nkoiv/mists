@@ -50,6 +50,9 @@ public class Location implements Global {
     private PlayerCharacter player;
     private final HashMap<String, Integer> flags = new HashMap<>();
     private final HashMap<Integer, double[]> entryPoints = new HashMap<>();
+    
+    public boolean mobsChanged;
+    
     /*
     * Constructor for demofield
     * TODO: load this from some XML or somesuch
@@ -403,7 +406,7 @@ public class Location implements Global {
     * @param time Time since the last update
     */
     public void update (double time) {
-        boolean removedStuff=false;
+        
         this.collisionMap.updateCollisionLevels();
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
@@ -413,7 +416,7 @@ public class Location implements Global {
             while (mobIterator.hasNext()) {
                 if (mobIterator.next().isFlagged("removable")) {
                     mobIterator.remove();
-                    removedStuff=true;
+                    this.mobsChanged=true;
                 }
             }
         }
