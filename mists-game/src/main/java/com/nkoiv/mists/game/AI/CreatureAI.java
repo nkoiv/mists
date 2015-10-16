@@ -78,6 +78,8 @@ public class CreatureAI {
     }
     
     public void moveTowardsMob(MapObject mob, double time) {
+        int collisionSize = 0;
+        if (this.creep.getName().equals("Blob")) collisionSize = 4;
         if (!this.creep.isFlagged("testFlag")) return; //Dont my unless flagged TODO: This is for testing
         double targetXCoordinate = mob.getCenterXPos();
         double targetYCoordinate = mob.getCenterYPos();
@@ -85,7 +87,7 @@ public class CreatureAI {
         int targetY = (int)targetYCoordinate / this.creep.getLocation().getPathFinder().getTileSize();
         int currentX = (int)this.creep.getCenterXPos() / this.creep.getLocation().getPathFinder().getTileSize();
         int currentY = (int)this.creep.getCenterYPos() / this.creep.getLocation().getPathFinder().getTileSize();
-        Path pathToMob = this.creep.getLocation().getPathFinder().findPath(this.creep.getSprite().getWidth(),this.creep.getCrossableTerrain(),currentX, currentY, targetX, targetY);
+        Path pathToMob = this.creep.getLocation().getPathFinder().findPath(collisionSize*32,this.creep.getCrossableTerrain(),currentX, currentY, targetX, targetY);
         if (pathToMob.getLength() <= 1) {
             /* No path was found to target 
             *  just move in the general direction of target

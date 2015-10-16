@@ -403,6 +403,7 @@ public class Location implements Global {
     * @param time Time since the last update
     */
     public void update (double time) {
+        boolean removedStuff=false;
         this.collisionMap.updateCollisionLevels();
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
@@ -412,9 +413,11 @@ public class Location implements Global {
             while (mobIterator.hasNext()) {
                 if (mobIterator.next().isFlagged("removable")) {
                     mobIterator.remove();
+                    removedStuff=true;
                 }
             }
         }
+        
         if (!this.effects.isEmpty()) {
             for (Effect e : this.effects) { //Handle effects landing on something
                 if (!this.checkCollisions(e).isEmpty()) {

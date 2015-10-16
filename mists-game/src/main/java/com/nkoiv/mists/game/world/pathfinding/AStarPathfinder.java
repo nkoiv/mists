@@ -57,7 +57,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     */
     @Override
     public Path findPath(CollisionMap map, int tileSize,List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
-        Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
+        //Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
         Path path = new Path();
         //If the goal is blocked, return empty path
         if (map.isBlocked(crossableTerrain, goalX, goalY)) return path;
@@ -145,10 +145,10 @@ public class AStarPathfinder implements PathfinderAlgorithm {
         for (Integer terrainType : crossableTerrain) {
             //Mists.logger.info("Checking we have clearance for terrain : "+terrainType);
             if (!this.clearanceMaps.containsKey(terrainType)) { //if we dont already have the given map, we need to generate it
-                Mists.logger.info("Clearance generated");
+                //Mists.logger.info("Clearance generated");
                 this.clearanceMaps.put(terrainType, pathfinder.getClearanceMap(terrainType));
             } else {
-                //Mists.logger.info("Clearance found");
+                Mists.logger.info("Clearance found");
             }
         }
 
@@ -329,7 +329,8 @@ public class AStarPathfinder implements PathfinderAlgorithm {
             this.clearanceMaps.put(terrainNumber, pathfinder.getClearanceMap(terrainNumber));
         }
         //Check if the unit can fit in the square
-        return this.clearanceMaps.get(terrainNumber)[x][y] >= unitSize;
+        return true;
+        //return this.clearanceMaps.get(terrainNumber)[x][y] >= unitSize;
     }
 
         /*
