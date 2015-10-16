@@ -141,9 +141,8 @@ public class Location implements Global {
         this.collisionMap.setStructuresOnly(true);
         this.collisionMap.updateCollisionLevels();
         this.collisionMap.printMapToConsole();
-        this.pathFinder = new PathFinder(this.collisionMap, 50, true);
+        this.pathFinder = new PathFinder(this.collisionMap, 100, true);
         this.lights = new LightsRenderer(this);
-        
     }
 
     /**

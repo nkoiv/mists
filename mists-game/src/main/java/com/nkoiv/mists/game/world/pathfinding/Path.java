@@ -14,6 +14,14 @@ import javafx.scene.paint.Color;
  * Path is a supporting class for PathFinder.
  * It has a beginning and an end, and
  * every step on the path can be backtraced to the previous one.
+ * 
+ * TODO: Consider removing Path and just using linked nodes
+ * Nodes themselves can be naturally linked (Node.previousNode()),
+ * and in a way the Path is redundant.
+ * The Path however is easier and more convenient to access (first, last)
+ * by creatures than digging through the chain of nodes every time(?)
+
+ * 
  * @author nkoiv
  */
 public class Path {

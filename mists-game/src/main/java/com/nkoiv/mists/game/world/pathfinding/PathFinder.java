@@ -67,6 +67,34 @@ public class PathFinder {
         //Mists.logger.log(Level.INFO, "Path from {0},{1} ({2},{3}) to {4},{5}", new Object[]{startX, startY, (int)startX/this.getTileSize(), (int)startY/this.getTileSize(), xCoord, yCoord});
         return new double[]{xCoord, yCoord};
     }
+    
+    //If trying to find a path for an object of given size
+    public Path findPath (double size, List<Integer> crossableTerrain, double startX, double startY, double goalX, double goalY) {
+        int clearanceNeed = (int)(size/this.map.getNodeSize());
+        if (size%this.map.getNodeSize() > 0) clearanceNeed++;
+        //if (size%this.getTileSize() > 0) ts++;
+        
+        int sX = ((int) startX / this.map.getNodeSize());
+        int sY = ((int) startY / this.map.getNodeSize());
+        int gX = ((int) goalX / this.map.getNodeSize());
+        int gY = ((int) goalY / this.map.getNodeSize());
+        Path pathToGoal = this.algo.findPath(map, clearanceNeed,crossableTerrain, sX, sY, gX, gY);
+        
+        return pathToGoal;
+        /*
+        if (pathToGoal == null || pathToGoal.getLength()==0) {
+            //Got an empty path. Probably means no route was found.
+            //Just head in the general direction of the target.
+            //Mists.logger.info("No path found, giving the Node of the target");
+            pathToGoal.addStep(new Node(gX, gY));
+            return pathToGoal;
+        } else {
+            return pathToGoal;
+        }
+        */
+        
+    }        
+    
 
     private Node nextTileOnPath(double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
         int clearanceNeed = (int)(unitSize/this.map.getNodeSize());
@@ -193,19 +221,7 @@ public class PathFinder {
          //System.out.println("-------");
      }
            
-    //If trying to find a path for an object of given size
-    public Path findPath (double size, List<Integer> crossableTerrain, double startX, double startY, double goalX, double goalY) {
-        int ts = (int)size/this.getTileSize();
-        //if (size%this.getTileSize() > 0) ts++;
-        
-        int sX = (int)startX/this.getTileSize();
-        int sY = (int)startY/this.getTileSize();
-        int gX = (int)goalX/this.getTileSize();
-        int gY = (int)goalY/this.getTileSize();
- 
-        return this.algo.findPath(map, ts,crossableTerrain, sX, sY, gX, gY);
-    }        
-    
+
     private boolean isValidLocation(List<Integer> crossableTerrain, int currentX, int currentY, int goalX, int goalY) {
             boolean invalid = (goalX < 0) || (goalY < 0) || (goalX >= map.getMapTileWidth()) || (goalY >= map.getMapTileWidth());
 

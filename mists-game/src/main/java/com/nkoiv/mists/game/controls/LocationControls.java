@@ -145,7 +145,7 @@ public class LocationControls {
         Point p = MouseInfo.getPointerInfo().getLocation();
         double x = p.x - Mists.primaryStage.getX();
         double y = p.y - Mists.primaryStage.getY();
-        Creature monster = new Creature("Blob", new ImageView("/images/blob.png"), 3, 0, 0, 92, 84);
+        Creature monster = new Creature("Blob", new ImageView("/images/blob.png"), 3, 0, 0, 84, 84);
         monster.getSprite().setCollisionAreaShape(2);
         game.currentLocation.addCreature(monster, x+game.currentLocation.getLastxOffset(), y+game.currentLocation.getLastyOffset());   
     }

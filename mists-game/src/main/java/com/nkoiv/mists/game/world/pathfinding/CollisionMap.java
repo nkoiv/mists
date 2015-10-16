@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * CollisionMap is a location turned simple
@@ -48,9 +49,18 @@ public class CollisionMap {
         Mists.logger.info("Collisionmap generated in "+(System.currentTimeMillis()-startTime)+"ms");
     }
     
+    /**
+     * UpdateCollisionLevels clears the old collisionmap and
+     * updated the collision levels on per node basis, based
+     * on the mobs at the location.
+     * 
+     * TODO: Add in the movement cost from cost inducing mobs (swampland, whatever).
+     * It goes into Node.movementCost and Pathfinder is ready for it.
+     */
+    
     public void updateCollisionLevels() {
         //Mists.logger.info("Updating collisionmap for "+this.location.getName());
-        double startTime = System.currentTimeMillis();
+        //double startTime = System.currentTimeMillis();
         //Clear the map
         clearNodeMap();
         //Go through all the nodes and check the location if it has something at them
@@ -86,6 +96,7 @@ public class CollisionMap {
      * Note: This should be called AFTER clearNodeMap
      * when refreshing the nodemap, otherwise old
      * MOBs linger on the collisionmap.
+     * 
      */
     private void updateMobsOnNodeMap() {
         List<MapObject> mobs = this.location.getMOBList();

@@ -256,7 +256,8 @@ public class Creature extends MapObject implements Combatant {
         if (this.getLocation().checkCollisions(this).isEmpty()) {
             //Collided with nothing, free to move
             if (this.isFlagged("movementBlocked")) {
-                this.setFlag("movementBlocked", 0); //movement went through fine   
+                this.setFlag("movementBlocked", 0); //movement went through fine 
+                Mists.logger.info("Movement blocked!");
             }
             this.getSprite().update(time);
             return true;
@@ -291,6 +292,10 @@ public class Creature extends MapObject implements Combatant {
     }
     
     public boolean moveTowards (double xCoor, double yCoor) {
+        double xDifference = xCoor - this.getCenterXPos();
+        double yDifference = yCoor - this.getCenterYPos();
+        if (xDifference < 1) xDifference = 0;
+        if (yDifference < 1) yDifference = 0;
         //Stop moving if we're already in our target coordinates
         if (xCoor == this.getXPos() && yCoor == this.getYPos()) return this.stopMovement();
         //If X or Y target is same as where we're at, we can use normal diagonal movements
@@ -310,6 +315,7 @@ public class Creature extends MapObject implements Combatant {
         }
         
         /*
+        * Pythagoras lets us calculate diagonal speed:
         * ((AC = sqrt(AB^2 + BC^2)))
         */
         double AB=Math.abs(xCoor-this.getXPos());

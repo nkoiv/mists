@@ -42,7 +42,8 @@ public class CreatureAI {
         if (this.timeSinceAction > 0.5) { //Acting twice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
             this.creep.stopMovement(); //clear old movement
-            this.moveTowardsPlayer(time);
+            //this.moveTowardsPlayer(time);
+            this.moveTowardsMob(creep.getLocation().getPlayer(), time);
             this.timeSinceAction = 0;
         } else {
             this.getCreature().applyMovement(time);
@@ -78,22 +79,19 @@ public class CreatureAI {
     }
     
     public void moveTowardsMob(MapObject mob, double time) {
-        int collisionSize = 0;
-        if (this.creep.getName().equals("Blob")) collisionSize = 4;
-        if (!this.creep.isFlagged("testFlag")) return; //Dont my unless flagged TODO: This is for testing
+        double collisionSize = creep.getSprite().getWidth();
+        if (!this.creep.getLocation().isFlagged("testFlag")) return; //Dont my unless flagged TODO: This is for testing
         double targetXCoordinate = mob.getCenterXPos();
         double targetYCoordinate = mob.getCenterYPos();
-        int targetX = (int)targetXCoordinate / this.creep.getLocation().getPathFinder().getTileSize();
-        int targetY = (int)targetYCoordinate / this.creep.getLocation().getPathFinder().getTileSize();
-        int currentX = (int)this.creep.getCenterXPos() / this.creep.getLocation().getPathFinder().getTileSize();
-        int currentY = (int)this.creep.getCenterYPos() / this.creep.getLocation().getPathFinder().getTileSize();
-        Path pathToMob = this.creep.getLocation().getPathFinder().findPath(collisionSize*32,this.creep.getCrossableTerrain(),currentX, currentY, targetX, targetY);
+        Path pathToMob = this.creep.getLocation().getPathFinder().findPath(collisionSize,this.creep.getCrossableTerrain(),creep.getCenterXPos(), creep.getCenterYPos(), targetXCoordinate, targetYCoordinate);
+        this.pathToMoveOn = pathToMob;
         if (pathToMob.getLength() <= 1) {
             /* No path was found to target 
             *  just move in the general direction of target
             */
-            Mists.logger.info("Got a short path or no path");
+            //Mists.logger.info("Got a short path or no path");
             this.creep.moveTowards(mob.getCenterXPos(), mob.getCenterYPos());
+            this.pathToMoveOn = null;
         }
         if (pathToMob.getLength() == 2) {
             /* We're next to target
@@ -107,8 +105,8 @@ public class CreatureAI {
             *  Try to move towards the next tile
             */
             //Mists.logger.info("Got a path: " +pathToMob.toString());
-            double nextTileX = pathToMob.getNode(1).getX()*this.creep.getLocation().getPathFinder().getTileSize();
-            double nextTileY = pathToMob.getNode(1).getY()*this.creep.getLocation().getPathFinder().getTileSize();
+            double nextTileX = pathToMob.getNode(1).getX()*pathToMob.getNode(0).getSize();
+            double nextTileY = pathToMob.getNode(1).getY()*pathToMob.getNode(0).getSize();
             targetXCoordinate = nextTileX;
             targetYCoordinate = nextTileY;
             //Mists.logger.log(Level.INFO, "Pathfinder tile {0},{1} converted into {2},{3}",

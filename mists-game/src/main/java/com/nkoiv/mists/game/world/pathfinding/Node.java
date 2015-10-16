@@ -16,9 +16,11 @@ import com.nkoiv.mists.game.Global;
 		private int xCoor;
 		private int yCoor;
                 private int collisionLevel; //this tells us if there's something blocking the node
-                private int size;
+                private double movementCost; //how "fast" is it to move in this node. 1 if nothing is slowing movement here
+                private int size; //Node size is the size of tiles. TODO: Not really relevant for node nor needed. Remove?
                 private double estimatedCost; //Node cost for when used by PathFinder (from here to goal)
-                private int depth; //Depth in the path for when used by PathFinder
+                private double cumulativeCost; //Cost to get from start to this node
+                private int depth; //Depth in the path for when used by PathFinder - used to see when we've gone "too deep"
                 private Node previousNode; //for PathFinder
 		
 		public Node(int x, int y) {
@@ -26,7 +28,9 @@ import com.nkoiv.mists.game.Global;
 			this.yCoor = y;
                         this.size = Global.TILESIZE;
                         this.collisionLevel = 0;
+                        this.cumulativeCost = 0;
                         this.estimatedCost = 0;
+                        this.movementCost = 1;
 		}
                 
                 public Node(int x, int y, int size, int collisionLevel) {
@@ -73,12 +77,28 @@ import com.nkoiv.mists.game.Global;
                     
                 }
                 
+                public void setMovementCost(double cost) {
+                    this.movementCost = cost;
+                }
+                
                 public void setCostEstimate(double estimatedCost) {
                     this.estimatedCost = estimatedCost;
                 }
                 
+                public void setCumulativeCost(double cumulativeCost) {
+                    this.cumulativeCost = cumulativeCost;
+                }
+                
                 public void setDepth(int depth) {
                     this.depth = depth;
+                }
+                
+                public double getMovementCost() {
+                    return this.movementCost;
+                }
+                
+                public double getCumulativeCost() {
+                    return this.cumulativeCost;
                 }
                 
                 public double getCostEstimate() {
