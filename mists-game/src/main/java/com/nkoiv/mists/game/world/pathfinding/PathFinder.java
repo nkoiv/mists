@@ -68,6 +68,7 @@ public class PathFinder {
 
     private Node nextTileOnPath(double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
         int clearanceNeed = (int)(unitSize/this.map.getNodeSize());
+        if (unitSize%this.map.getNodeSize() > 0) clearanceNeed++;
         //Mists.logger.info("Clearance needed: "+clearanceNeed+" (unit size"+unitSize+", nodesize "+this.map.getNodeSize());
 
         /*
@@ -320,7 +321,8 @@ public class PathFinder {
     //TODO: For testing purposes
     public void printClearanceMapIntoConsole (int crossableTerrain) { 
         System.out.println("Getting a new clearance map for crossing ["+crossableTerrain+"]");
-        int[][] clearanceMap = this.getClearanceMap(crossableTerrain, this.map);
+        //int[][] clearanceMap = this.getClearanceMap(crossableTerrain, this.map);
+        int[][] clearanceMap = this.algo.getClearanceMaps().get(0);
         this.printArrayMap(clearanceMap);
              //System.out.println("-------");
     }

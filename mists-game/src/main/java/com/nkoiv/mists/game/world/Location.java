@@ -135,10 +135,10 @@ public class Location implements Global {
      */
     private void localizeMap() {
         this.collisionMap = new CollisionMap(this, 32);
-        this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         this.collisionMap.setStructuresOnly(true);
         this.collisionMap.updateCollisionLevels();
         this.collisionMap.printMapToConsole();
+        this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         this.lights = new LightsRenderer(this);
         
     }

@@ -57,7 +57,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     */
     @Override
     public Path findPath(CollisionMap map, int tileSize,List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
-        //Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
+        Mists.logger.log(Level.INFO, "Finding path for size {0} unit from [{1},{2}] to [{3},{4}}", new Object[]{tileSize, startX, startY, goalX, goalY});
         Path path = new Path();
         //If the goal is blocked, return empty path
         if (map.isBlocked(crossableTerrain, goalX, goalY)) return path;
@@ -140,11 +140,15 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     * @return starting node
     */
     private Node initializePathfinding(CollisionMap map, List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
-        //Mists.logger.log(Level.INFO, "Initializing the path"
+        //Mists.logger.log(Level.INFO, "Initializing the path");
         //Check we have all the clearanceMaps we need.
         for (Integer terrainType : crossableTerrain) {
+            //Mists.logger.info("Checking we have clearance for terrain : "+terrainType);
             if (!this.clearanceMaps.containsKey(terrainType)) { //if we dont already have the given map, we need to generate it
+                Mists.logger.info("Clearance generated");
                 this.clearanceMaps.put(terrainType, pathfinder.getClearanceMap(terrainType));
+            } else {
+                //Mists.logger.info("Clearance found");
             }
         }
 
@@ -338,6 +342,10 @@ public class AStarPathfinder implements PathfinderAlgorithm {
                 }
             }
         return false;
+    }
+    
+    public HashMap<Integer, int[][]> getClearanceMaps() {
+        return this.clearanceMaps;
     }
     
     public double getMovementCost(List<Integer> movementAbilities, int currentX, int currentY, int goalX, int goalY) {

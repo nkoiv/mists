@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world.pathfinding;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,4 +21,5 @@ public interface PathfinderAlgorithm {
     public List<Node> DiagonalNeighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y);
     public List<Node> DiagonalNeighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y);
     
+    public HashMap<Integer, int[][]> getClearanceMaps();
 }
