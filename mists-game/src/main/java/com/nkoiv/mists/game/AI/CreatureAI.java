@@ -80,10 +80,16 @@ public class CreatureAI {
     
     public void moveTowardsMob(MapObject mob, double time) {
         double collisionSize = creep.getSprite().getWidth();
+        double offset;
+        if (collisionSize > creep.getLocation().getPathFinder().getTileSize()) {
+            offset = creep.getLocation().getPathFinder().getTileSize()/2;
+        } else {
+            offset = collisionSize/2;
+        }
         if (!this.creep.getLocation().isFlagged("testFlag")) return; //Dont my unless flagged TODO: This is for testing
         double targetXCoordinate = mob.getCenterXPos();
         double targetYCoordinate = mob.getCenterYPos();
-        Path pathToMob = this.creep.getLocation().getPathFinder().findPath(collisionSize,this.creep.getCrossableTerrain(),creep.getCenterXPos(), creep.getCenterYPos(), targetXCoordinate, targetYCoordinate);
+        Path pathToMob = this.creep.getLocation().getPathFinder().findPath(collisionSize,this.creep.getCrossableTerrain(),creep.getXPos()+offset, creep.getYPos()+offset, targetXCoordinate, targetYCoordinate);
         this.pathToMoveOn = pathToMob;
         if (pathToMob.getLength() <= 1) {
             /* No path was found to target 

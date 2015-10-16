@@ -257,7 +257,7 @@ public class Creature extends MapObject implements Combatant {
             //Collided with nothing, free to move
             if (this.isFlagged("movementBlocked")) {
                 this.setFlag("movementBlocked", 0); //movement went through fine 
-                Mists.logger.info("Movement blocked!");
+                //Mists.logger.info("Movement blocked!");
             }
             this.getSprite().update(time);
             return true;
