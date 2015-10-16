@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world.pathfinding;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class PathFinder {
     private PathfinderAlgorithm algo;
     //private Node[][] nodes; //Nodemap used for pathfinding, filled with costs as we calculate them
     private CollisionMap map; //The collision map derived from the Locations MOBs
+    private boolean mapOutOfDate;
     /** The the calculator we're applying to determine which nodes to search first */
     private MoveCostCalculator calc;
 
@@ -68,7 +70,7 @@ public class PathFinder {
 
     private Node nextTileOnPath(double unitSize, List<Integer> crossableTerrain,double startX, double startY, double goalX, double goalY) {
         int clearanceNeed = (int)(unitSize/this.map.getNodeSize());
-        if (unitSize%this.map.getNodeSize() > 0) clearanceNeed++;
+        //if (unitSize%this.map.getNodeSize() > 0) clearanceNeed++;
         //Mists.logger.info("Clearance needed: "+clearanceNeed+" (unit size"+unitSize+", nodesize "+this.map.getNodeSize());
 
         /*
@@ -302,6 +304,16 @@ public class PathFinder {
             
         }
         return clearanceMap;
+    }
+    
+    public void setMapOutOfDate(boolean ood) {
+        Mists.logger.info("Map toggled out of date");
+        this.mapOutOfDate = ood;
+    }
+    
+    
+    public boolean mapIsOutOfDate() {
+        return this.mapOutOfDate;
     }
     
     public int getTileSize() {

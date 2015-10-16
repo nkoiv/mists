@@ -416,7 +416,7 @@ public class Location implements Global {
             while (mobIterator.hasNext()) {
                 if (mobIterator.next().isFlagged("removable")) {
                     mobIterator.remove();
-                    this.mobsChanged=true;
+                    this.pathFinder.setMapOutOfDate(true);
                 }
             }
         }

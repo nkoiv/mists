@@ -84,7 +84,8 @@ public class MeleeAttack extends Action implements AttackAction {
                         ((Combatant)mob).takeDamage(50);
                     } else if (mob instanceof Structure) {
                         //TODO: Temp: DESTROY THE STRUCTURES!
-                        this.getOwner().getLocation().removeMapObject(mob);
+                        //this.getOwner().getLocation().removeMapObject(mob);
+                        mob.setFlag("removable", 1);
                     }
                 }
             }

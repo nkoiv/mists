@@ -148,7 +148,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
                 //Mists.logger.info("Clearance generated");
                 this.clearanceMaps.put(terrainType, pathfinder.getClearanceMap(terrainType));
             } else {
-                Mists.logger.info("Clearance found");
+                //Mists.logger.info("Clearance found");
             }
         }
 
@@ -324,13 +324,14 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     * Check if unit of given size can fit in the given tile with given movement type
     */
     private boolean hasClearance (int unitSize, int terrainNumber, int x, int y) {
-        if (!this.clearanceMaps.containsKey(terrainNumber)) { //If we dont have the map for this type of terrain, generate it
+        if (!this.clearanceMaps.containsKey(terrainNumber) || this.pathfinder.mapIsOutOfDate()) { //If we dont have the map for this type of terrain, generate it
             Mists.logger.log(Level.INFO, "Tried to check clearance but no clearance map - generating a new one ({0})", terrainNumber);
             this.clearanceMaps.put(terrainNumber, pathfinder.getClearanceMap(terrainNumber));
+            this.pathfinder.setMapOutOfDate(false); //TODO: Consider giving maps timestamps, and comparing different clearancelevel-maps to those
         }
         //Check if the unit can fit in the square
-        return true;
-        //return this.clearanceMaps.get(terrainNumber)[x][y] >= unitSize;
+        //return true;
+        return this.clearanceMaps.get(terrainNumber)[x][y] >= unitSize;
     }
 
         /*
