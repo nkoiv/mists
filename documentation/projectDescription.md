@@ -85,15 +85,16 @@ used, and the targets of the ability are picked based on what the effect manages
 first target it hits, etc.
 
 ###Pathfinding
-![](https://github.com/nkoiv/mists/blob/master/documentation/pathfinding_chart.png "Pathfinding in the project structure")
 
 PathFinder.java is the class governing the general pathfinding.
 The Constructor takes in a [CollisionMap] (https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/world/pathfinding/CollisionMap.java), an integer specifying the MaxSearchDistance for paths and a boolean dictating whether or not diagonal movement is allowed when searching paths. Since pathfinder ties itself to a collisionmap (the map it routes paths on), it's effectively hardlinked to a location. While a pathfinder could exist without a location, there would be no point in it.
 
+![](https://github.com/nkoiv/mists/blob/master/documentation/pathfinding_chart.png "Pathfinding in the project structure")
+
 ####Collisionmaps
 Accessed and updated via the location the pathfinder is tied to, the collisionmap is a 2d grid of nodes ([Node.java](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/world/pathfinding/Node.java)). What CollisionMap does is that it takes all the map objects (mobs) from its location and converts them to simple collision values. Effectively any node a mob touches gets the collision value of the mob. This map is updated every time Location ticks (as mobs can move), and it's done by updateCollisionLevels(). The update completes in O(n), n being the number of mobs on a map.
 
-![](https://github.com/nkoiv/mists/blob/master/documentation/collision_grid.png "Collision grid derived from objects")
+![](https://github.com/nkoiv/mists/blob/master/documentation/collisiongrid.png "Collision grid derived from objects")
 <pre>
 [ ][ ][ ][ ][ ][ ]
 [ ][ ][ ][ ][ ][ ]
