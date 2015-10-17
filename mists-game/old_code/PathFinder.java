@@ -199,7 +199,7 @@ public class PathFinder {
             //... to its bottom right corner
             int mobXNodeEnd = ((int)(mob.getxPos()+mob.getSprite().getWidth())/ nodeSize); 
             int mobYNodeEnd = ((int)(mob.getyPos()+mob.getSprite().getHeight())/ nodeSize); 
-            int mobCL = mob.getFlag("collisionLevel");
+            int mobCL = mob.getCollisionLevel();
             //Mark all blocked nodes with collisionLevel
             for (int row = mobYNodeStart; row < mobYNodeEnd;row++ ) {
                 for (int column = mobXNodeStart; column < mobXNodeEnd;column++) {

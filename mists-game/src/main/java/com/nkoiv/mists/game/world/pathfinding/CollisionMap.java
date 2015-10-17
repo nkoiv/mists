@@ -109,8 +109,7 @@ public class CollisionMap {
             //... to its bottom right corner
             int mobXNodeEnd = ((int)(mob.getXPos()+mob.getSprite().getWidth()-1)/ nodeSize); 
             int mobYNodeEnd = ((int)(mob.getYPos()+mob.getSprite().getHeight()-1)/ nodeSize); 
-            int mobCL = mob.getFlag("collisionLevel");
-            
+            int mobCL = mob.getCollisionLevel();          
             //Structures mark all blocked nodes with collisionLevel
             if (mob instanceof Structure) {
                 //Mists.logger.info("This is a structure at "+mobYNodeStart+","+mobXNodeStart);

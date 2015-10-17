@@ -100,7 +100,7 @@ public class Creature extends MapObject implements Combatant {
     
     private void initializeFlags() {
         this.setFlag("visible", 1);
-        this.setFlag("collisionLevel", 5);
+        this.setCollisionLevel(5);
     }
     
     public void setAttribute (String attribute, int value) {
@@ -247,7 +247,7 @@ public class Creature extends MapObject implements Combatant {
         /*
         * Check collisions before movement
         * TODO: Add in pixel-based collision detection (compare alphamaps?)
-        * TODO: Make collisions respect collisionlevel -flag.
+        * TODO: Make collisions respect collisionlevel.
         */
         this.oldXPos = this.getSprite().getXPos();
         this.oldYPos = this.getSprite().getYPos();

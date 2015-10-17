@@ -87,6 +87,8 @@ public class AStarPathfinder implements PathfinderAlgorithm {
                             this.getMovementCost(crossableTerrain, nn.getX(), nn.getY(), goal.getX(), goal.getY()));
                     nn.setPreviousNode(currentNode);
                     nn.setDepth(currentNode.getDepth()+1);
+                    //TODO: Consider setting the cost to 1.41 nn.getMovementCost() when moving diagonally
+                    //Because pythagoran
                     nn.setCumulativeCost(currentNode.getCumulativeCost()+nn.getMovementCost());
                     //Mists.logger.log(Level.INFO, "Checking neighbour at [{0},{1}]", new Object[]{n.getX(), n.getY()});
                     if (inClosedList(n)) {

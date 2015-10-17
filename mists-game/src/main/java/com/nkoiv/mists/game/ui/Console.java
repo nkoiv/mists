@@ -13,7 +13,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 /**
- *
+ * Console is command prompt mainly for debugging the game
+ * TODO: Consider making commands objects, and inserting 
+ * them in a command array or list.
  * @author nikok
  */
 public class Console extends TextWindow{

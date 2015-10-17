@@ -27,6 +27,7 @@ public class MapObject implements Global {
     * but can be manipulad as booleans (>0) by "isFlagged" & "addFlag" methods
     */
     private HashMap<String, Integer> flags;
+    private int collisionLevel;
     
     private Location location;
     
@@ -127,6 +128,14 @@ public class MapObject implements Global {
      */
     public void setCenterPosition (double xPos, double yPos) {
         this.sprite.setPosition(xPos-(this.getSprite().getWidth()/2), yPos-(this.getSprite().getHeight()/2));
+    }
+    
+    public int getCollisionLevel() {
+        return this.collisionLevel;
+    }
+    
+    public void setCollisionLevel(int cl) {
+        this.collisionLevel = cl;
     }
     
     public Location getLocation() {

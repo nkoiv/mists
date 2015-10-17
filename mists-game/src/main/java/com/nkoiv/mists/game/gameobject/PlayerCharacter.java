@@ -61,7 +61,7 @@ public class PlayerCharacter extends Creature implements Combatant {
 
     public PlayerCharacter(String name, Image image) {
         super(name, image);
-        this.setFlag("collisionLevel", 9);
+        this.setCollisionLevel(9);
         this.setFacing(Direction.DOWN);
         this.setFlag("alive", 1);
         this.setMaxHealth(100);

@@ -16,7 +16,7 @@ import com.nkoiv.mists.game.Global;
 		private int xCoor;
 		private int yCoor;
                 private int collisionLevel; //this tells us if there's something blocking the node
-                private double movementCost; //how "fast" is it to move in this node. 1 if nothing is slowing movement here
+                private double[] movementCosts; //how "fast" is it to move in this node. if 0, it takes normal unit of speed (1) to pass this node
                 private int size; //Node size is the size of tiles. TODO: Not really relevant for node nor needed. Remove?
                 private double estimatedCost; //Node cost for when used by PathFinder (from here to goal)
                 private double cumulativeCost; //Cost to get from start to this node
@@ -30,7 +30,7 @@ import com.nkoiv.mists.game.Global;
                         this.collisionLevel = 0;
                         this.cumulativeCost = 0;
                         this.estimatedCost = 0;
-                        this.movementCost = 1;
+                        this.movementCosts = new double[10];
 		}
                 
                 public Node(int x, int y, int size, int collisionLevel) {
@@ -76,11 +76,7 @@ import com.nkoiv.mists.game.Global;
 			return depth;
                     
                 }
-                
-                public void setMovementCost(double cost) {
-                    this.movementCost = cost;
-                }
-                
+   
                 public void setCostEstimate(double estimatedCost) {
                     this.estimatedCost = estimatedCost;
                 }
@@ -93,9 +89,57 @@ import com.nkoiv.mists.game.Global;
                     this.depth = depth;
                 }
                 
+                /*
+                * Return the movementCost for the default movement type (type 0)
+                */
                 public double getMovementCost() {
-                    return this.movementCost;
+                    if (this.movementCosts[0] == 0) return 1;
+                    return this.movementCosts[0];
                 }
+                
+                /**
+                 * Return the movement cost for traversing this node
+                 * with the given movement type. Defaults to 99 if given
+                 * movement type isn't on the list of the node.
+                 * @param movementType
+                 * @return movement cost
+                 */
+                
+                public double getMovementCost(int movementType) {
+                    if (movementType >= 0 && movementType < this.movementCosts.length) {
+                        if (this.movementCosts[movementType] != 0) return this.movementCosts[movementType];
+                        else return 1;
+                    }
+                    return 99;
+                }
+                
+                /**
+                 * Return the fastest speed unit can move through the node
+                 * with the given movementTypes.
+                 * Returns 99 if unit doesn't have any ability to cross the zone
+                 * @param movementTypes list of movement abilities the unit has
+                 * @return fastest (smallest) speed it can cross the node
+                 */
+                public double getMovementCost(boolean[] movementTypes) {
+                    double cost = 99;
+                    for (int i = 0; i < this.movementCosts.length; i++) {
+                        if (movementTypes[i] == true && getMovementCost(i) < cost) cost = getMovementCost(i);
+                    }
+                    return cost;
+                }
+                
+                             
+                public void setMovementCost(int costType, double cost) {
+                    if (costType >=0 && costType < this.movementCosts.length)
+                        this.movementCosts[costType] = cost;
+                }
+                
+                
+                public void setMovementCosts(double[] costs) {
+                    if (costs.length == 10)
+                        System.arraycopy(costs, 0, this.movementCosts, 0, costs.length);
+                }
+                
                 
                 public double getCumulativeCost() {
                     return this.cumulativeCost;
