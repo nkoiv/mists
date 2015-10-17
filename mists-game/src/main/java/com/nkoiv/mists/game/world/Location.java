@@ -260,6 +260,7 @@ public class Location implements Global {
         }
         s.setLocation(this);
         s.getSprite().setPosition(xPos, yPos);
+        this.pathFinder.setMapOutOfDate(true);
     }
     
     /** Adds a Creature to the location
