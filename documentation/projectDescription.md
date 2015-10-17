@@ -85,6 +85,7 @@ used, and the targets of the ability are picked based on what the effect manages
 first target it hits, etc.
 
 ###Pathfinding
+![](https://github.com/nkoiv/mists/blob/master/documentation/pathfinding_chart.png "Pathfinding in the project structure")
 
 PathFinder.java is the class governing the general pathfinding.
 The Constructor takes in a [CollisionMap] (https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/world/pathfinding/CollisionMap.java), an integer specifying the MaxSearchDistance for paths and a boolean dictating whether or not diagonal movement is allowed when searching paths. Since pathfinder ties itself to a collisionmap (the map it routes paths on), it's effectively hardlinked to a location. While a pathfinder could exist without a location, there would be no point in it.
