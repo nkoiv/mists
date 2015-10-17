@@ -17,6 +17,7 @@ So far only the Location -level of the game has been developed.
 Further down the road, there should be a world map to travel from a location to another.
 
 ***Location controls (POC)***
+
 Controls are displayed in game menu (Esc in a Location)
 * Open game menu: Escape
 * Open console: F1
@@ -86,10 +87,10 @@ first target it hits, etc.
 ###Pathfinding
 
 PathFinder.java is the class governing the general pathfinding.
-The Constructor takes in a CollisionMap (CollisionMap.java), an integer specifying the MaxSearchDistance for paths and a boolean dictating whether or not diagonal movement is allowed when searching paths. Since pathfinder ties itself to a collisionmap (the map it routes paths on), it's effectively hardlinked to a location. While a pathfinder could exist without a location, there would be no point in it.
+The Constructor takes in a [CollisionMap] (https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/world/pathfinding/CollisionMap.java), an integer specifying the MaxSearchDistance for paths and a boolean dictating whether or not diagonal movement is allowed when searching paths. Since pathfinder ties itself to a collisionmap (the map it routes paths on), it's effectively hardlinked to a location. While a pathfinder could exist without a location, there would be no point in it.
 
 ####Collisionmaps
-Accessed and updated via the location the pathfinder is tied to, the collisionmap is a 2d grid of nodes (Node.java). What CollisionMap does is that it takes all the map objects (mobs) from its location and converts them to simple collision values. Effectively any node a mob touches gets the collision value of the mob. This map is updated every time Location ticks (as mobs can move), and it's done by updateCollisionLevels(). The update completes in O(n), n being the number of mobs on a map.
+Accessed and updated via the location the pathfinder is tied to, the collisionmap is a 2d grid of nodes ([Node.java](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/world/pathfinding/Node.java)). What CollisionMap does is that it takes all the map objects (mobs) from its location and converts them to simple collision values. Effectively any node a mob touches gets the collision value of the mob. This map is updated every time Location ticks (as mobs can move), and it's done by updateCollisionLevels(). The update completes in O(n), n being the number of mobs on a map.
 
 ![](https://github.com/nkoiv/mists/blob/master/documentation/collision_grid.png "Collision grid derived from objects")
 <pre>
@@ -107,7 +108,7 @@ Accessed and updated via the location the pathfinder is tied to, the collisionma
 Movement costs are used when calculating the value of the path. They're stored per node, in an 10-spot array of "cost types". By default the array is empty, meaning that all all movement types cost default multiplier of 1 when crossing the node.
 If a mover has movement speedups in some cost types, the Nodes can be supplied with the list of those types (movement capabilities, boolean[] with True for each ability the mob has), and the node returns the "fastest" way the creature can move through it.
 
-When estimating a cost from A to B, before actually checking the nodes in between, the PathFinder has the help of a MoveCostCalculator. Every PathFinder has one of its own, so that it consistently uses the set cost type (Manhattan, Diagonal or Euclidean.)
+When estimating a cost from A to B, before actually checking the nodes in between, the PathFinder has the help of a [MoveCostCalculator](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/world/pathfinding/MoveCostCalculator.java). Every PathFinder has one of its own, so that it consistently uses the set cost type (Manhattan, Diagonal or Euclidean.)
 
 * Manhattan: Sum up X and Y diffence from Start to Goal to get the cost
 * Diagonal: Diagonal movement is allowed, so cost is Math.max(X difference, Y difference)
