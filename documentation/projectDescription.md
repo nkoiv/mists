@@ -17,10 +17,24 @@ So far only the Location -level of the game has been developed.
 Further down the road, there should be a world map to travel from a location to another.
 
 ***Location controls (POC)***
+Controls are displayed in game menu (Esc in a Location)
 * Open game menu: Escape
-* Moving around: Arrow keys
+* Open console: F1
+* Moving around: Arrow keys / WASD
 * Using ability (Melee attack): Space
 * Activate/Deactivate creatures: Shift
+* Teleport to a location: Right mousebutton
+* Set camera focus on a creature: Left mousebutton
+
+
+***Some useful console commands (POC)***
+* "createLoc testmap" //Creates and moves the game to testmap
+* "addCreature" //Creates a random small critter
+* "addCreature blob" //creates a large blob
+* "toggleFlag <flag>" //toggles a flag on the location ("testFlag" and "drawPaths" being good examples)
+* "clearanceMap" //Print clearance map in console
+* "collisionMap" //Print collision map in console
+
 
 #Program structure
 The game is built loosely on MVC principles, where everything the user sees and does is passed
