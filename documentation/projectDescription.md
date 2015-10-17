@@ -22,13 +22,13 @@ Further down the road, there should be a world map to travel from a location to 
 * Using ability (Melee attack): Space
 * Activate/Deactivate creatures: Shift
 
-##Program structure
+#Program structure
 The game is built loosely on MVC principles, where everything the user sees and does is passed
 through a controller. Various gamestates govern the main areas of the game, and the principle is that a new gamestate is only added when desired gameplay differs wildly from what
 existing gamestates can provide.
 The accompanied [UML Class diagram](https://github.com/nkoiv/mists/blob/master/documentation/mists_classchart.jpg) is good reference for this.
 
-###Main loop
+##Main loop
 
 Game main loop is done by the [Mists.java](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/Mists.java). The loop is separate from the actual game, so that its easier to port to different platforms. Loop calls Tick() and Render() functions, asking the game to update whats happenig (tick) and show it the the player(render). As describe above, the game itself is divided into GameStates that answer to these tick() and render() -calls. In practice this means that the game uses "gamestates" to relay commands into the game while also calling for renders back into the main stage.
 
@@ -51,11 +51,11 @@ as action is considered.
 * GameState for Town
 Towns are mainly composed of menus (taverns, shops, etc). MainMenu is selfexplanatory.
 
-###MainMenu
+##MainMenu
 From the main menu a player can either start a new game, load an existing one,
 edit game options, or close the game.
 
-###Location
+##Location
 Locations house the bulk of the adventure. They're built on a map, have structures blocking players path, and
 contain various monsters and puzzles to face. The maps come in two main variations: BGMaps and TileMaps. The former
 are based on a single image (hence the "BG", background), wheras the latter (TileMaps) are built from small tiles.
@@ -69,10 +69,77 @@ Doing things (Actions) in the game is generally done with the aid of Effects. An
 used, and the targets of the ability are picked based on what the effect manages to intersect. An arrow lands on the
 first target it hits, etc.
 
-###WorldMap
+###Pathfinding
+
+PathFinder.java is the class governing the general pathfinding.
+The Constructor takes in a CollisionMap (CollisionMap.java), an integer specifying the MaxSearchDistance for paths and a boolean dictating whether or not diagonal movement is allowed when searching paths. Since pathfinder ties itself to a collisionmap (the map it routes paths on), it's effectively hardlinked to a location. While a pathfinder could exist without a location, there would be no point in it.
+
+####Collisionmaps
+Accessed and updated via the location the pathfinder is tied to, the collisionmap is a 2d grid of nodes (Node.java). What CollisionMap does is that it takes all the map objects (mobs) from its location and converts them to simple collision values. Effectively any node a mob touches gets the collision value of the mob. This map is updated every time Location ticks (as mobs can move), and it's done by updateCollisionLevels(). The update completes in O(n), n being the number of mobs on a map.
+
+![](https://github.com/nkoiv/mists/blob/master/documentation/collision_grid.png "Collision grid derived from objects")
+<pre>
+[ ][ ][ ][ ][ ][ ]
+[ ][ ][ ][ ][ ][ ]
+[ ][9][9][ ][ ][ ]
+[ ][9][9][ ][ ][ ]
+[ ][9][9][ ][ ][ ]
+[ ][ ][ ][ ][7][7]
+[ ][ ][ ][ ][ ][ ]
+[ ][ ][ ][ ][ ][ ]
+</pre>
+
+####Movement cost
+Movement costs are used when calculating the value of the path. They're stored per node, in an 10-spot array of "cost types". By default the array is empty, meaning that all all movement types cost default multiplier of 1 when crossing the node.
+If a mover has movement speedups in some cost types, the Nodes can be supplied with the list of those types (movement capabilities, boolean[] with True for each ability the mob has), and the node returns the "fastest" way the creature can move through it.
+
+When estimating a cost from A to B, before actually checking the nodes in between, the PathFinder has the help of a MoveCostCalculator. Every PathFinder has one of its own, so that it consistently uses the set cost type (Manhattan, Diagonal or Euclidean.)
+
+* Manhattan: Sum up X and Y diffence from Start to Goal to get the cost
+* Diagonal: Diagonal movement is allowed, so cost is Math.max(X difference, Y difference)
+* Euclidean: Moving diagonally is calculated with ((AC = sqrt(AB^2 + BC^2))), where AB = x2 - x1 and BC = y2 - y1 and AC will be [x3, y3]. In practice this means that diagonal movement costs ~1.41 times the vertical movement.
+
+Currently Locations default to allowDiagonal = false, so the MoveCostCalculator is also set on Manhattan by default.
+
+####Clearance map
+
+Clearance Maps are used for seeing what size creatures can pass through which openings. If walls surround a doorway, only the creatures that can fit in through the door should path through it - otherwise they'll get stuck when actually trying to navigate the given path.
+
+Assume the following map (X means wall, G is goal, S is Start and .'s are path)
+<pre>
+[ ][ ][G][.][ ][ ][X][ ]
+[ ][ ][ ][.][ ][ ][X][ ]
+[ ][ ][X][.][X][X][X][ ]
+[ ][ ][X][.][ ][ ][ ][ ]
+[ ][ ][ ][.][.][S][ ][ ]
+[ ][ ][ ][ ][ ][ ][ ][ ]
+</pre>
+
+If the creature going from S to G is the size of a node or smaller. everything is fine. However if the mob is larger than a node, it should circle around the small doorway, and take the following path:
+<pre>
+[.][.][G][G][ ][ ][X][ ]
+[.][ ][G][G][ ][ ][X][ ]
+[.][ ][X][ ][X][X][X][ ]
+[.][ ][X][ ][ ][ ][ ][ ]
+[.][.][.][.][.][S][S][ ]
+[ ][ ][ ][ ][ ][S][S][ ]
+</pre>
+
+This is implemented by ClearanceMaps, calculated from the Collision Map. In effect "Clearance" means "how many free slots are there below and beside this one". If a creature of size N moves in the node so that it's Top Left corner is at the node, it should fit - assuming it's the Clearance Size or smaller. Clearance map for the area above would be:
+<pre>
+[2][2][2][2][2][1][X][1]
+[2][2][2][2][2][1][X][1]
+[2][1][X][1][X][X][X][1]
+[2][1][X][3][3][3][2][1]
+[2][2][2][2][2][2][2][1]
+[2][2][2][2][2][2][2][1]
+</pre>
+
+
+##WorldMap
 TODO, probably cut out
 
-###Town
+##Town
 TODO, probably cut out
 
 ##Combat
