@@ -1,4 +1,12 @@
 #TiraLab viikkoraportit
+##Viikkoraportti #7
+(Viimeiset hionnat)
+
+Demotilaisuuden QuadTree -projekti sai minut miettimään tietorakenteen hyödyntämisestä törmäysten tarkastamisessa. Quad tree paloittelee asiat segmentteihin ja pitää huolen siitä, ettei millään segmentillä ole koskaan liikaa väkeä. Se voisi olla täydellinen tapa selvittää mihin muihin oloihin tulee verrata kun tarkistellaan yhteentörmäyksiä. Pienen googlettelun jälkeen rakensinkin Util -pakettiin QuadTree -luokan MapObjecteja varten. Alustavat testaukset ovat hyvin lupaavia.
+
+Edelleen suurin tehosyöppö törmäyksissä oli NetBeanssin monitorin mukaan muotojen intersecs(), joka jo [javadocsinkin](http://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html) mukaan on raskas operaatio. Sovelsin hommaa hieman ja loin uuden CollisionBox -luokan, joka on spriten mukana liikkuvat minX, minY, maxX ja maxY. Näiden neljän pisteen avulla selvitetään alustava törmäys ennen tarkempaa tarkistelua. Näiden neljän parametrin päivittäminen aina spriten liikkuessa maksaa hieman suorituskykyä, mutta säästö törmäystarkistelupäässä on siihen verrattuna moninkertainen.
+
+Törmäysten jäätyä pienemmäksi ongelmaksi alkoi reitinhaku taas nostaa päätään suhteellisessa tehonkulutuksessa. Sinällään tehokas ja toimiva algoritmi ajetaan nyt pahimmassa tapauksessa 60 (FPS) kertaa sekunnissa per liikkuva olio. Korjaan tuon ongelman pian tallentamalla reitin ja tarkistamalla sen vain tietyissä tapauksissa...
 
 ##Viikkoraportti #6
 (Esittelykuntoon laitto)
