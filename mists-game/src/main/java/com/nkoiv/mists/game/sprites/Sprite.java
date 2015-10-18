@@ -6,12 +6,11 @@
 package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
-import java.util.ArrayList;
-import javafx.geometry.Rectangle2D;
+import com.nkoiv.mists.game.Mists;
+import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -48,6 +47,7 @@ public class Sprite
     private boolean animated;
     
     private int collisionArea = 1; // 1=Rectangle, 2=Ellipse
+    private CollisionBox collisionBox;
 
     public Sprite()
     {
@@ -56,6 +56,7 @@ public class Sprite
         velocityX = 0;
         velocityY = 0;
         animated = false;
+        collisionBox = new CollisionBox(positionX, positionY, 0, 0);
     }
     
     public Sprite(Image i) {
@@ -67,6 +68,7 @@ public class Sprite
         width = i.getWidth();
         height = i.getHeight();
         animated = false;
+        collisionBox = new CollisionBox(positionX, positionY, width, height);
     }
     
     public Sprite (Image i, double xPosition, double yPosition) {
@@ -78,6 +80,7 @@ public class Sprite
         width = i.getWidth();
         height = i.getHeight();
         animated = false;
+        collisionBox = new CollisionBox(positionX, positionY, width, height);
     }
 
     public void setCollisionAreaShape (int ShapeNumber) {
@@ -87,6 +90,18 @@ public class Sprite
     
     public int getCollisionAreaType () {
         return this.collisionArea;
+    }
+    
+    public void refreshCollisionBox() {
+        this.collisionBox = new CollisionBox(positionX, positionY, width, height);
+        //Mists.logger.log(Level.INFO, "{0}Refreshed new collisionbox with values {1}x{2}:{3}x{4}", new Object[]{height, positionX, positionY, width, height});
+    }
+    
+    public CollisionBox getCollisionBox() {
+        if (this.collisionBox.GetWidth()<=1 || this.collisionBox.GetHeight() <=1) {
+            this.collisionBox = new CollisionBox(positionX, positionY, width, height);
+        }
+        return this.collisionBox;
     }
     
     public void setImage(Image i)
@@ -210,7 +225,7 @@ public class Sprite
         } else {
             positionY += velocityY * time;
         }                   
-        
+        this.collisionBox.SetPosition(positionX, positionY);
     }
     /**
      * Update uses the velocity it has and the time given,
@@ -223,6 +238,7 @@ public class Sprite
     {
         positionX += velocityX * time;
         positionY += velocityY * time;
+        this.collisionBox.SetPosition(positionX, positionY);
     }
 
     public void render(double xOffset, double yOffset, GraphicsContext gc)
@@ -303,16 +319,39 @@ public class Sprite
         return true;
     }
     
-    public boolean intersects(Sprite s)
+    /**
+     * TODO: Javas intersects() from Shapes is really effin slow
+     * New way: just check corners
+     * @param s Sprite to check collisions with
+     * @return True if they overlap somewhere
+     */
+    
+    public boolean intersects(Sprite s) {
+        if(this.getCollisionBox().Intersect(s.getCollisionBox())) {
+            //System.out.println("Intersection with the colBox - testing shape");
+            return this.intersectsWithShape(s);
+        } else {
+            return false;
+        }
+    }
+
+    
+    
+    //Old intersects, with Java shape.intersect
+    public boolean intersectsWithShape(Sprite s)
     {
-        Shape shape = Shape.intersect(s.getBoundary(), this.getBoundary());
+        //Shape shape = Shape.intersect(s.getBoundary(), this.getBoundary());
+        return this.getBoundary().intersects(s.getBoundary().getBoundsInLocal());
+        /*
         if (shape.getBoundsInLocal().getWidth() != -1) {
             return pixelCollision(s.getImage());
         } else {
             return false;
         }
-  
+        */
     }
+    
+    
     
     public double getXPos() {
         return this.positionX;

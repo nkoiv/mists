@@ -45,6 +45,7 @@ public class MeleeAttack extends Action implements AttackAction {
         Sprite attackSprite = new Sprite(this.attackAnimation.getCurrentFrame());
         attackSprite.setAnimation(attackAnimation);
         attackSprite.setPosition(actor.getXPos(), actor.getYPos());
+        attackSprite.refreshCollisionBox();
         return attackSprite;
     }
     @Override
@@ -75,7 +76,7 @@ public class MeleeAttack extends Action implements AttackAction {
     @Override
     public void hitOn(ArrayList<MapObject> mobs) {
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
-            //Mists.logger.info(this.toString() + " landed on " + mobs.toString());
+            Mists.logger.info(this.toString() + " landed on " + mobs.toString());
             this.setFlag("triggered", 1);
             for (MapObject mob : mobs) {
                 if (!mob.equals(this.getOwner())) {
