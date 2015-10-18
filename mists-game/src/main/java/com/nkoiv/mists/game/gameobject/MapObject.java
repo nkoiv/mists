@@ -157,6 +157,15 @@ public class MapObject implements Global {
     public double getYPos(){
         return this.sprite.getYPos();
     }
+    
+    public double getWidth() {
+        return this.sprite.getWidth();
+    }
+    
+    public double getHeight() {
+        return this.sprite.getHeight();
+    }
+    
     /**
     * Render draws the Sprite of the MapObject on a given GraphicsContext
     * @param gc GraphicsContext where the object is drawn

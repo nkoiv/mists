@@ -15,16 +15,19 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
+import com.nkoiv.mists.game.world.util.QuadTree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
@@ -37,7 +40,9 @@ public class Location implements Global {
     /*
     * TODO: Lists for various types of MapObjects, from creatures to frills.
     */
-    private List<MapObject> mapObjects;
+    private QuadTree mobQuadTree; //Used for collision detection
+    private ArrayList<MapObject> mapObjects;
+    //private List<MapObject> mapObjects;
     private List<Effect> effects;
     private String name;
     private GameMap map;
@@ -62,6 +67,7 @@ public class Location implements Global {
     public Location(String name, String mapPath, int maptype) {
         this.name = name;
         this.mapObjects = new ArrayList<>();
+        this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
         this.effects = new ArrayList<>();
         if (maptype == 0) this.loadMap(new BGMap(new Image(mapPath)));
         if (maptype == 1) this.loadMap(new TileMap(mapPath));
@@ -71,6 +77,7 @@ public class Location implements Global {
     public Location(String name, GameMap map) {
         this.name = name;
         this.mapObjects = new ArrayList<>();
+        this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
         this.effects = new ArrayList<>();
         this.loadMap(map);
         this.localizeMap();
@@ -84,6 +91,7 @@ public class Location implements Global {
     public Location(PlayerCharacter player) {
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
+        this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
         this.effects = new ArrayList<>();
         this.mapGen = new MapGenerator();
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
@@ -143,6 +151,8 @@ public class Location implements Global {
         this.collisionMap.printMapToConsole();
         this.pathFinder = new PathFinder(this.collisionMap, 100, true);
         this.lights = new LightsRenderer(this);
+        this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
+        Mists.logger.log(Level.INFO, "Map ({0}x{1}) localized", new Object[]{map.getWidth(), map.getHeight()});
     }
 
     /**
@@ -406,7 +416,7 @@ public class Location implements Global {
     * @param time Time since the last update
     */
     public void update (double time) {
-        
+        //this.updateQuadTree();
         this.collisionMap.updateCollisionLevels();
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
@@ -437,15 +447,46 @@ public class Location implements Global {
         
     }
     
+    /**
+     * Update the QuadTree by clearing it and adding
+     * all mobs in the mapObjects.
+     * TODO: Consider keeping structures and creatures separate as creatures are updated more often(?)
+     */
+    private void updateQuadTree() {
+        mobQuadTree.clear();
+        for (MapObject mapObject : mapObjects) {
+            mobQuadTree.insert(mapObject);
+        }
+    }
+    
     /** CheckCollisions for a given MapObjects
     *  Returns a List with all the objects that collide with MapObject o
-    * TODO: Maybe only check collisions from nearby objects?
+    * Now with quad tree to check only objects nearby
     * @param o The MapObject to check collisions with
     * @return a List with all the objects that collide with MapObject o
     */
     public ArrayList<MapObject> checkCollisions (MapObject o) {
-        ArrayList<MapObject> collidingObjects = new ArrayList<>();
+
+        /* New QuadTree based collision detection
+        ArrayList<MapObject> nearbyObjects = new ArrayList<>();
+        mobQuadTree.retrieve(nearbyObjects, o);
+        //System.out.println("nearby objects: "+nearbyObjects.size());
+        Iterator<MapObject> nearbyObjectsIter = nearbyObjects.iterator();
         
+        while (nearbyObjectsIter.hasNext()) {
+            MapObject collidingObject = nearbyObjectsIter.next();
+            if (!collidingObject.instersects(o) || collidingObject.equals(o)) {
+               nearbyObjectsIter.remove();
+            }
+        }
+        
+        
+        //System.out.println("colliding objects: "+nearbyObjects.size());
+        return nearbyObjects;
+        */
+        
+        //Old collision code (pre QuadTree)
+        ArrayList<MapObject> collidingObjects = new ArrayList<>();
         Iterator<MapObject> mapObjectsIter = mapObjects.iterator();
         while ( mapObjectsIter.hasNext() )
         {
@@ -466,8 +507,9 @@ public class Location implements Global {
             }
             
         }
-        
         return collidingObjects;
+        
+        
     }
     
     public HashSet<Direction> collidedSides (MapObject mob) {
