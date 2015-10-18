@@ -6,7 +6,9 @@ Demotilaisuuden QuadTree -projekti sai minut miettimään tietorakenteen hyödyn
 
 Edelleen suurin tehosyöppö törmäyksissä oli NetBeanssin monitorin mukaan muotojen intersecs(), joka jo [javadocsinkin](http://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html) mukaan on raskas operaatio. Sovelsin hommaa hieman ja loin uuden CollisionBox -luokan, joka on spriten mukana liikkuvat minX, minY, maxX ja maxY. Näiden neljän pisteen avulla selvitetään alustava törmäys ennen tarkempaa tarkistelua. Näiden neljän parametrin päivittäminen aina spriten liikkuessa maksaa hieman suorituskykyä, mutta säästö törmäystarkistelupäässä on siihen verrattuna moninkertainen.
 
-Törmäysten jäätyä pienemmäksi ongelmaksi alkoi reitinhaku taas nostaa päätään suhteellisessa tehonkulutuksessa. Sinällään tehokas ja toimiva algoritmi ajetaan nyt pahimmassa tapauksessa 60 (FPS) kertaa sekunnissa per liikkuva olio. Korjaan tuon ongelman pian tallentamalla reitin ja tarkistamalla sen vain tietyissä tapauksissa...
+Harkittava vaihtoehto on myös testata olemassaolevan CollisionMapin käyttöä, ja tarkistaa vain sen mukaan ympäröivät ruudut. Sitä varten pitäisi tosin generoida myös efektit ja otukset sisältävä CollisionMap, sillä PathFinder käyttää tällä hetkellä structuresOnly -parametria.
+
+Törmäysten jäätyä pienemmäksi ongelmaksi alkoi reitinhaku taas nostaa päätään suhteellisessa tehonkulutuksessa. Sinällään tehokas ja toimiva algoritmi ajetaan nyt pahimmassa tapauksessa 60 (FPS) kertaa sekunnissa per liikkuva olio. Korjaan tuon ongelman pian tallentamalla reitin ja tarkistamalla sen vain tietyissä tapauksissa.
 
 ##Viikkoraportti #6
 (Esittelykuntoon laitto)
