@@ -8,11 +8,17 @@ package com.nkoiv.mists.game.world.util;
 /**
  * Using the concept of PriorityQueue, but simplified
  * ComparingQueue looks for the correct spot of the given
- *(Comparable) element when it's added to the queue.
+ * (Comparable) element when it's added to the queue.
  * There's no need to additional sorting of the list.
+ * 
+ * Lacking heapify, this tool is somewhat slow in adding and
+ * removing data. It does provide O(1) speed in returning the
+ * position N data though, so it does have its uses in lists
+ * that rarely change.
+ * 
  * @author daedra
  */
-//Comparing queueu
+//Comparing queueueue
 
 public class ComparingQueue<E extends Comparable> {
     protected E[] data;

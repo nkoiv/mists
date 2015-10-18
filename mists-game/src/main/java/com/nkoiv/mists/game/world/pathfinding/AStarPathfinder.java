@@ -147,6 +147,12 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     /**
     * Initialize the pathfinding by clearing all the
     * lists and making sure we have required clearance maps.
+    * @param map CollisionMap for the pathfinding
+    * @param crossableTerrain the terrainwalking of the unit we're finding path for
+    * @param startX Where we're coming from
+    * @param startY Where we're coming from
+    * @param goalX Where we're going to
+    * @param goalY Where we're going to
     * @return starting node
     */
     private Node initializePathfinding(CollisionMap map, List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY) {
@@ -330,8 +336,13 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     }
 
     
-    /*
+    /**
     * Check if unit of given size can fit in the given tile with given movement type
+    * @param unitSize the size of the unit doing the moving
+    * @param terrainNumber the type of terrain we're moving on
+    * @param x X coordinate of the node
+    * @param y Y coordinate of the node
+    * @return true if the unit can fit in the node
     */
     private boolean hasClearance (int unitSize, int terrainNumber, int x, int y) {
         if (!this.clearanceMaps.containsKey(terrainNumber) || this.pathfinder.mapIsOutOfDate()) { //If we dont have the map for this type of terrain, generate it
@@ -344,8 +355,13 @@ public class AStarPathfinder implements PathfinderAlgorithm {
         return this.clearanceMaps.get(terrainNumber)[x][y] >= unitSize;
     }
 
-        /*
+    /**
     * Checking unit with multiple terrain movements fitting in a mapnode
+    * @param unitSize size of the unit doing the moving
+    * @param crossableTerrain the types of terrainwalking ability the unit has
+    * @param x X coordinate of the node
+    * @param y Y coordinate of the node
+    * @return true if the unit can fit in the node with at least one of its terrainwalkings
     */
     private boolean hasClearance (int unitSize, List<Integer> crossableTerrain, int x, int y) {
         for (Integer terrainType : crossableTerrain) {
