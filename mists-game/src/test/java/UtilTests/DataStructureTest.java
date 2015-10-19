@@ -127,6 +127,67 @@ public class DataStructureTest {
         assert(testHeap.size() > 50);
     }
     
+    @Test
+    public void minHeapSizeReturnsCorrectSize() {
+        MinHeap testHeap = new MinHeap();
+        Node[] testNodes = createNodes(12);
+        addIntoMinHeap(testHeap, testNodes);
+        int counter = 0;
+        while (testHeap.first() != null) {
+            counter++;
+            Node first = (Node)testHeap.first();
+            testHeap.remove(first);
+        }
+        assertTrue(counter == 12);
+    }
+    
+    @Test
+    public void minHeapDataSurvivesGrowth() {
+        MinHeap testHeap = new MinHeap();
+        Node testNode = new Node(0,0);
+        testNode.setCostEstimate(-10);
+        testHeap.add(testNode);
+        Node[] testNodes = createNodes(500);
+        addIntoMinHeap(testHeap, testNodes);
+        assert(testHeap.first().equals(testNode));
+    }
+    
+    @Test
+    public void minHeapFirstNodeCanBeRemoved() {
+        MinHeap testHeap = new MinHeap();
+        Node[] testNodes = createNodes(100);
+        addIntoMinHeap(testHeap, testNodes);
+        Node testNode = new Node(0,0);
+        testNode.setCostEstimate(-10);
+        testHeap.add(testNode);
+        testHeap.remove(testNode);
+        assertTrue(testHeap.size()==100);
+    }
+    
+    @Test
+    public void minHeapLastNodeCanBeRemoved() {
+        MinHeap testHeap = new MinHeap();
+        Node[] testNodes = createNodes(100);
+        addIntoMinHeap(testHeap, testNodes);
+        Node testNode = new Node(0,0);
+        testNode.setCostEstimate(9999);
+        testHeap.add(testNode);
+        testHeap.remove(testNode);
+        assertTrue(testHeap.size()==100);
+    }
+    
+    @Test
+    public void minHeapRandomDeletionWorks() {
+        MinHeap testHeap = new MinHeap();
+        Node[] testNodes = createNodes(100);
+        addIntoMinHeap(testHeap, testNodes);
+        Node testNode = new Node(0,0);
+        Random rnd = new Random();
+        testNode.setCostEstimate(rnd.nextInt(200));
+        testHeap.add(testNode);
+        testHeap.remove(testNode);
+        assertTrue(testHeap.size()==100);
+    }
     
     //---ComparingQueueTests
     @Test

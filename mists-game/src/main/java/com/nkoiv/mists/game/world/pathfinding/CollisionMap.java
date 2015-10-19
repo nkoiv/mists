@@ -10,7 +10,6 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * CollisionMap is a location turned simple
