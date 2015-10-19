@@ -118,6 +118,7 @@ public class MapObject implements Global {
     
     public void setPosition (double xPos, double yPos) {
         this.sprite.setPosition(xPos, yPos);
+        this.sprite.refreshCollisionBox();
     }
     
     /**
@@ -128,6 +129,7 @@ public class MapObject implements Global {
      */
     public void setCenterPosition (double xPos, double yPos) {
         this.sprite.setPosition(xPos-(this.getSprite().getWidth()/2), yPos-(this.getSprite().getHeight()/2));
+        this.sprite.refreshCollisionBox();
     }
     
     public int getCollisionLevel() {

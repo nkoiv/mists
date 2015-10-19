@@ -42,6 +42,7 @@
                     <param>com.nkoiv.mists.game.world.*</param>
                 </targetClasses>
                 <excludedClasses>
+                    <param>com.nkoiv.mists.game.util.TestBench.java</param>
                     <param>com.nkoiv.mists.game.audio.*</param>
                     <param>com.nkoiv.mists.game.ui.*</param>
                 </excludedClasses>

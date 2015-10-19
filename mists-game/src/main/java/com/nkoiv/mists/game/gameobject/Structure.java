@@ -27,6 +27,7 @@ public class Structure extends MapObject {
         this.setCollisionLevel(collisionLevel);
         this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
+        this.sprite.refreshCollisionBox();
     }
     
     public Structure(String name, Image image, Location location, int xCoor, int yCoor) {
@@ -34,6 +35,7 @@ public class Structure extends MapObject {
         this.setCollisionLevel(1);
         this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
+        this.sprite.refreshCollisionBox();
     }
     
     public void addExtra (Sprite sprite, double xOffset, double yOffset) {
@@ -83,11 +85,13 @@ public class Structure extends MapObject {
             }
         }
         this.getSprite().setPosition(xPos, yPos);
+        this.sprite.refreshCollisionBox();
     }
     
     @Override
     public void setCenterPosition (double xPos, double yPos) {
         this.setPosition(xPos+(this.getSprite().getWidth()/2), yPos+(this.getSprite().getHeight()/2));
+        this.sprite.refreshCollisionBox();
     }
     
 }

@@ -140,6 +140,8 @@ public class MovementTest extends Application {
         testLocation.addStructure(testRock, 500 , 200);
         testPlayer.setPosition(300, 200); //Same Y as testRock, just 200 to the left
         testPlayer.setSpeed(50); //Should move 50 per tick
+        testRock.getSprite().refreshCollisionBox();
+        testPlayer.getSprite().refreshCollisionBox();
         for (int i=0;i<10;i++) {
             System.out.println(testPlayer.getName()+ " currently at "+ testPlayer.getXPos() + " / "+testPlayer.getYPos());
             testPlayer.moveTowards(Direction.RIGHT);
