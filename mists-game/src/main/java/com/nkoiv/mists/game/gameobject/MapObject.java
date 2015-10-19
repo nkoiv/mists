@@ -186,6 +186,7 @@ public class MapObject implements Global {
     */
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
+        this.sprite.refreshCollisionBox();
     }
     
     /**

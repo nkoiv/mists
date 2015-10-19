@@ -36,6 +36,7 @@ public class Effect extends MapObject {
         this.setFlag("startdurationMS", durationMS);
         this.startTime = System.currentTimeMillis();
         this.endTime = startTime + (durationMS);
+        this.sprite.refreshCollisionBox();
     }
     
     public Action getOwner() {

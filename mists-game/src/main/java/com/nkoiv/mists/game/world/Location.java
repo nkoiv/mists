@@ -435,7 +435,7 @@ public class Location implements Global {
             //Mists.logger.info("Effects NOT empty");
             for (Effect e : this.effects) { //Handle effects landing on something
                 if (!this.checkCollisions(e).isEmpty()) {
-                    Mists.logger.info("BANG");
+                    
                     e.getOwner().hitOn(this.checkCollisions((e)));
                 }
             }
