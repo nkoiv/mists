@@ -25,6 +25,7 @@ public class LightsRenderer {
     Location loc;
     Polygon[] obstacles;
     double[][] lightmap;
+    boolean[][] explored;
     double minLightLevel;
     
     public LightsRenderer(Location loc) {
@@ -33,6 +34,7 @@ public class LightsRenderer {
         this.obstacles = new Polygon[0];
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
         int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
+        this.explored = new boolean[tileWidth][tileHeight];
         clearLightmap();
         Mists.logger.log(Level.INFO, "Generated Lightmap ({0}x{1})", new Object[]{tileWidth, tileHeight});
     }
@@ -75,9 +77,10 @@ public class LightsRenderer {
         int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
         this.lightmap = new double[tileWidth][tileHeight];
         
-        for (double[] lightmap1 : this.lightmap) {
+        for (int column = 0; column < this.lightmap.length; column ++) {
             for (int row = 0; row < this.lightmap[0].length; row ++) {
-                lightmap1[row] = this.getMinLightLevel();
+                if (explored[column][row]) lightmap[column][row] = Math.max(0.1, minLightLevel);
+                else lightmap[column][row] = this.getMinLightLevel();
             }
         }
         
@@ -110,10 +113,12 @@ public class LightsRenderer {
                             else {
                                 double lightlevel = Math.max(0.9 - ((row-(visionRange-8)) * 0.1), 0);
                                 lightmap[x][y] = Math.max(this.minLightLevel, lightlevel);
+                                explored[x][y] = true;
                             }
                         } else { //Lightlevel starts to fall of immediately
                             double lightlevel = Math.max(0.9 - (row * 0.1), 0);
                             lightmap[x][y] = Math.max(this.minLightLevel, lightlevel);
+                            if (lightlevel > this.minLightLevel) explored[x][y] = true;
                         }
                         
                         if (loc.getCollisionMap().getNode(x, y).getCollisionLevel()>0) {

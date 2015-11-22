@@ -147,6 +147,7 @@ public class Sprite
     {
         positionX = x;
         positionY = y;
+        this.refreshCollisionBox();
     }
 
     public void setVelocity(double x, double y)

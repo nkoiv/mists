@@ -136,7 +136,7 @@ public class Location implements Global {
         
         this.setMobInRandomOpenSpot(player);
         
-        this.lights.setMinLightLevel(0.3);
+        this.lights.setMinLightLevel(0);
         
     }
     
@@ -243,7 +243,9 @@ public class Location implements Global {
         int openY = 0;
         while (!foundSpot) {
             openX = (int)sizeRequirement + rnd.nextInt(((int)(map.getWidth()-sizeRequirement)));
+            openX = (openX / Global.TILESIZE) * Global.TILESIZE;
             openY = (int)sizeRequirement + rnd.nextInt(((int)(map.getHeight()-sizeRequirement)));
+            openY = (openY / Global.TILESIZE) * Global.TILESIZE;
             collisionTester.setCenterPosition(openX, openY);
             if (this.checkCollisions(collisionTester).isEmpty()) foundSpot = true;
         }

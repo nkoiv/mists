@@ -83,7 +83,9 @@ public class TileMap implements GameMap {
     */
     private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
         //TODO Should also take in a "HashMap<Integer,Structure> structureSheet"
-        if (tileCode == CLEAR) return null;
+        //if (tileCode == CLEAR) return null;
+        //Lets make Clear into Wall, for testing
+        if (tileCode == CLEAR) return new Structure("Wall", new Image("/images/dungeonwall.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
         if (tileCode == FLOOR) return null;
         if (tileCode == WALL) return new Structure("Wall", new Image("/images/dungeonwall.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
         if (tileCode == DOOR) return new Structure("Door", new Image("/images/dungeondoor.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
