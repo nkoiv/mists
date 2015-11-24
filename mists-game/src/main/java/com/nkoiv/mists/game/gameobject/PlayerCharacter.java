@@ -46,6 +46,7 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     public PlayerCharacter() {
         //Dummy player for testing
+        /* Himmu
         super ("Himmu",new Image("/images/himmu.png"));
         this.spriteAnimations = new HashMap<>();
         this.setAnimation("downMovement", new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 0, 0, 64, 64 );
@@ -56,8 +57,21 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setMaxHealth(100);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
+        */
+        super ("Lini",new Image("/images/himmutoy.png"));
+        this.spriteAnimations = new HashMap<>();
+        this.setAnimation("downMovement", new ImageView("/images/lini.png"), 3, 0, 0, 0, 0, 32, 32 );
+        this.setAnimation("leftMovement", new ImageView("/images/lini.png"), 3, 0, 32, 0, 0, 32, 32 );
+        this.setAnimation("rightMovement", new ImageView("/images/lini.png"), 3, 0, 64, 0, 0, 32, 32 );
+        this.setAnimation("upMovement", new ImageView("/images/lini.png"), 3, 0, 96, 0, 0, 32, 32 );       
+        this.setFlag("alive", 1);
+        this.setMaxHealth(100);
+        this.setHealth(this.getMaxHealth());
+        this.setSpeed(50);
+        
+        
     }
-    
+       
 
     public PlayerCharacter(String name, Image image) {
         super(name, image);

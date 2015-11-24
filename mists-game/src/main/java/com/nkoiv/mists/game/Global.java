@@ -27,8 +27,8 @@ public interface Global {
     public static final float MAXIMUM_STEP = 0.5f;
 	
     //Config mode
-    public static final boolean debug = true;
-    public static final boolean DRAW_COLLISIONS = false;
-    public static final boolean DRAW_GRID = false;
+    public static boolean debug = true;
+    public static boolean DRAW_COLLISIONS = true;
+    public static boolean DRAW_GRID = false;
     
 }

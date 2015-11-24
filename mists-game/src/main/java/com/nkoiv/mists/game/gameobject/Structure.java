@@ -45,7 +45,7 @@ public class Structure extends MapObject {
     
     public void addExtra (Image image, double xOffset, double yOffset) {
         this.extraSprites.add(new Sprite(
-                image, this.getXPos()+xOffset, this.getYPos()+yOffset ));
+        image, this.getXPos()+xOffset, this.getYPos()+yOffset ));
     }
     
     public ArrayList<Sprite> getExtras() {

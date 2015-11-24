@@ -139,7 +139,7 @@ public class MapObject implements Global {
     public void setCollisionLevel(int cl) {
         this.collisionLevel = cl;
     }
-    
+       
     public Location getLocation() {
         return this.location;
     }

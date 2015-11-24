@@ -246,7 +246,9 @@ public class Sprite
     {
         if (this.animated) {
             gc.drawImage( this.animation.getCurrentFrame(), positionX-xOffset, positionY-yOffset );
-        } else {
+            this.width = this.animation.getCurrentFrame().getWidth();
+            this.height = this.animation.getCurrentFrame().getHeight();
+        } else if (this.image != null) {
             gc.drawImage( image, positionX-xOffset, positionY-yOffset );
         }
         
@@ -328,12 +330,15 @@ public class Sprite
      */
     
     public boolean intersects(Sprite s) {
+        return this.intersectsWithShape(s);
+        /*
         if(this.getCollisionBox().Intersect(s.getCollisionBox())) {
             //System.out.println("Intersection with the colBox - testing shape");
             return this.intersectsWithShape(s);
         } else {
             return false;
         }
+        */
     }
 
     

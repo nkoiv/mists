@@ -7,15 +7,16 @@ package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
-import static com.nkoiv.mists.game.Global.TILESIZE;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
+import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -50,7 +51,7 @@ public class TileMap implements GameMap {
         this.tileWidth=intMap.length;
         this.tileHeight=intMap[0].length;
         this.tileMap = new Tile[tileWidth][tileHeight];
-        Mists.logger.info("Got a "+intMap.length+"x"+intMap[0].length+" intMap for mapgeneration. Generating tiles...");
+        Mists.logger.log(Level.INFO, "Got a {0}x{1} intMap for mapgeneration. Generating tiles...", new Object[]{intMap.length, intMap[0].length});
         this.generateTilesFromIntMap();
     }
     
@@ -85,13 +86,58 @@ public class TileMap implements GameMap {
         //TODO Should also take in a "HashMap<Integer,Structure> structureSheet"
         //if (tileCode == CLEAR) return null;
         //Lets make Clear into Wall, for testing
-        if (tileCode == CLEAR) return new Structure("Wall", new Image("/images/dungeonwall.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
+        if (tileCode == CLEAR) return new Wall("Wall", new Image("/images/structures/blank.png"), 1, l, xCoor*this.tilesize, yCoor*this.tilesize,new ImageView("/images/structures/dwall.png"));
         if (tileCode == FLOOR) return null;
-        if (tileCode == WALL) return new Structure("Wall", new Image("/images/dungeonwall.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
+        if (tileCode == WALL) return new Wall("Wall", new Image("/images/structures/blank.png"), 1, l, xCoor*this.tilesize, yCoor*this.tilesize,new ImageView("/images/structures/dwall.png"));
         if (tileCode == DOOR) return new Structure("Door", new Image("/images/dungeondoor.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
         return null;
     }
 
+    public void clearTile(int tileX, int tileY) {
+        if (tileX>=0 && tileX < this.tileWidth && tileY >=0 && tileY < this.tileHeight) {
+            this.intMap[tileX][tileY] = 0;
+            //TODO: Tilemap already has only Floor or Dark Floor so clearing it is pointless
+        }
+    }
+    
+    /**
+     * Update structures fixes context dependant structures
+     * For example walls might need to change their sprite
+     * if adjacent wall is destroyed or built
+     * @param tileX xCoordinate for the change in structures
+     * @param tileY yCoordinate for the change in structures
+     */
+    public boolean[] getNeighbouringWalls(int tileX, int tileY) {
+        //All the structures in 3x3 area (around the target) need to be checked and updated
+        boolean[] neighbours = new boolean[8];
+        if (tileX>0) {
+            if (this.intMap[tileX-1][tileY]==WALL || this.intMap[tileX-1][tileY]==CLEAR) neighbours[3] = true; //Left
+            if (tileY>0) {
+                if (this.intMap[tileX-1][tileY-1]==WALL || this.intMap[tileX-1][tileY-1]==CLEAR) neighbours[0] = true; //UpLeft
+            }
+            if (tileY<this.tileHeight-1) {
+                if (this.intMap[tileX-1][tileY+1]==WALL || this.intMap[tileX-1][tileY+1]==CLEAR) neighbours[5] = true; //DownLeft
+            }
+        }
+        if (tileX<this.tileWidth-1) {
+            if (this.intMap[tileX+1][tileY]==WALL || this.intMap[tileX+1][tileY]==CLEAR) neighbours[4] = true; //Right
+            if (tileY>0) {
+                if (this.intMap[tileX+1][tileY-1]==WALL || this.intMap[tileX+1][tileY-1]==CLEAR) neighbours[2] = true; //UpRight
+            }
+            if (tileY<this.tileHeight-1) {
+                if (this.intMap[tileX+1][tileY+1]==WALL || this.intMap[tileX+1][tileY+1]==CLEAR) neighbours[7] = true; //DownRight
+            }
+        }
+        if (tileY>0) {
+            if (this.intMap[tileX][tileY-1]==WALL ||this.intMap[tileX][tileY-1]==CLEAR) neighbours[1] = true; //Up
+        }
+        if (tileY<this.tileHeight-1) {
+            if (this.intMap[tileX][tileY+1]==WALL||this.intMap[tileX][tileY+1]==CLEAR) neighbours[6] = true; //Down
+        }
+        
+        return neighbours;
+    }
+    
     //TODO: Structures should have their own map, and not just intMap
     @Override
     public ArrayList<Structure> getStaticStructures(Location l) {
@@ -104,7 +150,16 @@ public class TileMap implements GameMap {
                 Structure newStructure = this.generateStructure(this.intMap[x][y], l, x, y);
                 if(newStructure != null)staticStructures.add(newStructure); 
             }
-        }  
+        }
+        //update walls
+        for (Structure s : staticStructures) {
+            if (s instanceof Wall) {
+                boolean[] wallneighbours = getNeighbouringWalls((int)s.getXPos()/this.tilesize, (int)s.getYPos()/this.tilesize);
+                Wall w = (Wall)s;
+                w.setNeighbours(wallneighbours);
+                w.updateNeighbours();
+            }
+        }
         return staticStructures;
     }
 

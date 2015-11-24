@@ -243,6 +243,14 @@ public class Creature extends MapObject implements Combatant {
         
     }
     
+    /**
+     * Apply movement to the creature.
+     * The movement is done by creature sprites x and y velocity,
+     * multiplied by time spent moving.
+     * @param time Time spent moving
+     * @return Return true if movement was possible, false if movement was blocked
+     */
+    
     public boolean applyMovement(double time){
         /*
         * Check collisions before movement

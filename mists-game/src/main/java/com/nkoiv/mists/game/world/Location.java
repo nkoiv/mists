@@ -13,6 +13,7 @@ import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import com.nkoiv.mists.game.world.util.QuadTree;
@@ -426,7 +427,13 @@ public class Location implements Global {
             }
             Iterator<MapObject> mobIterator = mapObjects.iterator(); //Cleanup of mobs
             while (mobIterator.hasNext()) {
-                if (mobIterator.next().isFlagged("removable")) {
+                MapObject mob = mobIterator.next();
+                if (mob.isFlagged("removable")) {
+                    if (mob instanceof Wall) {
+                        //Update the surrounding walls as per needed
+                        //this.updateWallsAt(mob.getCenterXPos(), mob.getCenterYPos());
+                        
+                    }
                     mobIterator.remove();
                     this.pathFinder.setMapOutOfDate(true);
                 }
@@ -461,6 +468,46 @@ public class Location implements Global {
         for (MapObject mapObject : mapObjects) {
             mobQuadTree.insert(mapObject);
         }
+    }
+    
+    
+    /**
+     * If a wall gets added or removed, the walls around it
+     * need to be updated accordingly
+     * TODO: This is probably pointless stuff
+     * @param xCenterPos xCenter of the happening
+     * @param yCenterPos yCenter of the happening
+     */
+    private void updateWallsAt(double xCenterPos, double yCenterPos) {
+        ArrayList<MapObject> surroundingWalls = new ArrayList();
+        boolean[] boolwalls = new boolean[8];
+        /*
+         [0][1][2]
+         [3]   [4]   
+         [5][6][7]
+        */
+        
+        //Note: It's okay to add Nulls here (most will be). Instanceof will take care of that
+        //Cardinal directions
+        MapObject mob;
+        mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos)); //Left
+        if (mob instanceof Wall) {boolwalls[3] = true; surroundingWalls.add(mob);}
+        mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos)); //Right
+        if (mob instanceof Wall) {boolwalls[4] = true; surroundingWalls.add(mob);}
+        mob = (this.getMobAtLocation(xCenterPos, yCenterPos-Mists.TILESIZE)); //Up
+        if (mob instanceof Wall) {boolwalls[1] = true; surroundingWalls.add(mob);}
+        mob = (this.getMobAtLocation(xCenterPos, yCenterPos+Mists.TILESIZE)); //Down
+        if (mob instanceof Wall) {boolwalls[6] = true; surroundingWalls.add(mob);}
+        //Diagonal directions
+        mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpLeft
+        if (mob instanceof Wall) {boolwalls[0] = true; surroundingWalls.add(mob);}
+        mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpRight
+        if (mob instanceof Wall) {boolwalls[2] = true; surroundingWalls.add(mob);}
+        mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //DownLeft
+        if (mob instanceof Wall) {boolwalls[5] = true; surroundingWalls.add(mob);}
+        mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownRight
+        if (mob instanceof Wall) {boolwalls[7] = true; surroundingWalls.add(mob);}
+
     }
     
     /** CheckCollisions for a given MapObjects
@@ -563,6 +610,7 @@ public class Location implements Global {
         this.renderStructureExtras(gc, xOffset, yOffset);
         this.renderExtras(gc, xOffset, yOffset);
         this.renderLights(gc, renderedMOBs, xOffset, yOffset);
+        
     }
     
 

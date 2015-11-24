@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.ui;
 
+import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
 import java.util.ArrayList;
@@ -92,6 +93,7 @@ public class Console extends TextWindow{
         switch (command) {
             case "quit": Platform.exit(); System.exit(0); break;
             case "toggleFlag": super.getGame().locControls.toggleFlag(attributes); break;
+            case "drawCollisions": ; break;
             case "clearanceMap": super.getGame().locControls.printClearanceMapIntoConsole(); break;
             case "collisionMap": super.getGame().locControls.printCollisionMapIntoConsole(); break;
             case "addCreature" : super.getGame().locControls.addCreature(attributes); break;

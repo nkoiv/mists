@@ -59,10 +59,10 @@ public class Game {
         this.locControls = new LocationControls(this);
         
         //POC player:
-        PlayerCharacter himmu = new PlayerCharacter();
-        himmu.getSprite().setCollisionAreaShape(2);
-        himmu.addAction(new MeleeAttack());
-        this.player = himmu;
+        PlayerCharacter player = new PlayerCharacter();
+        player.getSprite().setCollisionAreaShape(2);
+        player.addAction(new MeleeAttack());
+        this.player = player;
         //Initialize GameStates
         this.gameStates = new ArrayList<>();
         gameStates.add(new MainMenuState(this));
