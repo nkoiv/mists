@@ -10,6 +10,7 @@ import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import static com.nkoiv.mists.game.Global.TILESIZE;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -40,6 +41,7 @@ public class GeneralLocationTest extends Application {
     Location testLocation;
     Creature testCreature;
     GameMap testMap; 
+    Mists mists;
     
     public GeneralLocationTest() {
     }
@@ -73,7 +75,7 @@ public class GeneralLocationTest extends Application {
         testLocation.addStructure(testRock, 500 , 200);
         assert(testLocation.getMOBList().contains(testRock));
     }
-    
+    /*
     @Test
     public void locationsCanBeChanged(){
         Game testGame = new Game();
@@ -82,7 +84,7 @@ public class GeneralLocationTest extends Application {
         testGame.moveToLocation(testLocation2);
         assert(testGame.currentLocation == testLocation2);
     }
-    
+    */
     @Test
     public void locationFlagsAreSetRight(){
         testLocation.setFlag("swamp",1);

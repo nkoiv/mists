@@ -93,6 +93,7 @@ public class TileMap implements GameMap {
     * because structures should have "floor" under them
     */
     private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
+        if (xCoor < 0 || xCoor > tileWidth-1 || yCoor < 0 || yCoor > tileHeight-1) return null;
         //TODO Should also take in a "HashMap<Integer,String> structureSheet"
         //if (tileCode == CLEAR) return null;
         //Lets make Clear into Wall, for testing

@@ -64,6 +64,7 @@ public class PathFinderTest {
     public void tearDown() {
     }
     
+    /*
     @Test
     public void mobsOnLocationAreDisplayedOnCollisionMap() {
         Random rnd = new Random();
@@ -78,7 +79,7 @@ public class PathFinderTest {
         //Make sure the tile looks blocked on collisionMap
         assertTrue(testCollisionMap.isBlocked(0, testMobCollisionX, testMobCollisionY));
     }
-    
+    */
     @Test
     public void goingTowardsDirectlyLeftShouldGiveCoordinatesAtLeft() {
         double startPositionX = 32;
