@@ -247,7 +247,7 @@ public class Location implements Global {
     */
     private double[] getRandomOpenSpot(double sizeRequirement) {
         //
-        Creature collisionTester = new Creature("CollisionTester", new Image("/images/himmuToy.png"));
+        Creature collisionTester = new Creature("CollisionTester", new Image("/images/himmutoy.png"));
         collisionTester.getSprite().setWidth(sizeRequirement);
         collisionTester.getSprite().setHeight(sizeRequirement);
         Random rnd = new Random();
