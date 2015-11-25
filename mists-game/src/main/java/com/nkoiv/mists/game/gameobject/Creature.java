@@ -233,10 +233,10 @@ public class Creature extends MapObject implements Combatant {
                 case DOWN: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
                 case LEFT: this.getSprite().setAnimation(this.spriteAnimations.get("leftMovement")); break;
                 case RIGHT: this.getSprite().setAnimation(this.spriteAnimations.get("rightMovement")); break;
-                case UPRIGHT:;
-                case UPLEFT: ;
-                case DOWNRIGHT: ;
-                case DOWNLEFT: ;
+                case UPRIGHT: this.getSprite().setAnimation(this.spriteAnimations.get("upMovement")); break;
+                case UPLEFT: this.getSprite().setAnimation(this.spriteAnimations.get("upMovement")); break;
+                case DOWNRIGHT: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
+                case DOWNLEFT: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
                 default: break;
             }
         }
@@ -405,48 +405,48 @@ public class Creature extends MapObject implements Combatant {
     
     private boolean moveUp() {
         this.facing = Direction.UP;
-        this.getSprite().addVelocity(0, -this.getAttribute("Speed"));
+        this.getSprite().setVelocity(0, -this.getAttribute("Speed"));
         return true;
     }
     
     private boolean moveDown() {
         this.facing = Direction.DOWN;
-        this.getSprite().addVelocity(0, this.getAttribute("Speed"));
+        this.getSprite().setVelocity(0, this.getAttribute("Speed"));
         return true;
     }
         
     private boolean moveLeft() {
         this.facing = Direction.LEFT;
-        this.getSprite().addVelocity(-this.getAttribute("Speed"), 0);
+        this.getSprite().setVelocity(-this.getAttribute("Speed"), 0);
         return true;
     }
     
     private boolean moveRight() {
         this.facing = Direction.RIGHT;
-        this.getSprite().addVelocity(this.getAttribute("Speed"), 0);
+        this.getSprite().setVelocity(this.getAttribute("Speed"), 0);
         return true;
     }
 
     private boolean moveUpRight() {
-        this.getSprite().addVelocity(this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
+        this.getSprite().setVelocity(this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
         this.facing = Direction.UPRIGHT;
         return true;
     }
     
     private boolean moveUpLeft() {
-        this.getSprite().addVelocity(-this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
+        this.getSprite().setVelocity(-this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
         this.facing = Direction.UPLEFT;
         return true;
     }
         
     private boolean moveDownRight() {
-        this.getSprite().addVelocity(this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
+        this.getSprite().setVelocity(this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
         this.facing = Direction.DOWNRIGHT;
         return true;
     }
     
     private boolean moveDownLeft() {
-this.getSprite().addVelocity(-this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
+        this.getSprite().setVelocity(-this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
         this.facing = Direction.DOWNLEFT;
         return true;
     }

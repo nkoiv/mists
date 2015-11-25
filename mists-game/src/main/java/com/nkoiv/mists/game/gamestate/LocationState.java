@@ -274,6 +274,26 @@ public class LocationState implements GameState {
             //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
             game.locControls.playerMove(Direction.RIGHT);
         }
+        if ((pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))
+            && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
+            game.locControls.playerMove(Direction.UPRIGHT);            
+        }
+        if ((pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))
+            && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
+            //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
+            game.locControls.playerMove(Direction.DOWNRIGHT);
+        }
+        if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A))
+                && (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))) {
+            //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
+            game.locControls.playerMove(Direction.UPLEFT);
+        }
+        if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) 
+                && (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))) {
+            //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
+            game.locControls.playerMove(Direction.DOWNLEFT);
+        }
+        
         
         //TODO: These should be directed to the UI-layer, which knows which abilities player has bound where
         if (pressedButtons.contains(KeyCode.SPACE)) {

@@ -105,12 +105,15 @@ public class LocationControls {
     }
     
     public void playerMove(Direction direction) {
-        //TODO: Current movement lets player move superspeed diagonal. should call moveTowards(Direction.UPRIGHT) etc.
         switch (direction) {
             case UP: game.currentLocation.getPlayer().moveTowards(Direction.UP); break;         
             case DOWN: game.currentLocation.getPlayer().moveTowards(Direction.DOWN); break;
             case LEFT: game.currentLocation.getPlayer().moveTowards(Direction.LEFT); break;
             case RIGHT: game.currentLocation.getPlayer().moveTowards(Direction.RIGHT);break;
+            case UPRIGHT: game.currentLocation.getPlayer().moveTowards(Direction.UPRIGHT);break;
+            case UPLEFT: game.currentLocation.getPlayer().moveTowards(Direction.UPLEFT);break;
+            case DOWNRIGHT: game.currentLocation.getPlayer().moveTowards(Direction.DOWNRIGHT);break;
+            case DOWNLEFT: game.currentLocation.getPlayer().moveTowards(Direction.DOWNLEFT);break;
             default: break;
         } 
     }

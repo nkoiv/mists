@@ -92,7 +92,7 @@ public class Wall extends Structure {
                 WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
                 s = new Sprite(leftWall);
             }
-            this.addExtra(s, 0, 0);
+            this.addExtra(s, 0, -8);
         }
         if (neighbours[4] ==false) {
             Sprite s;
@@ -103,7 +103,7 @@ public class Wall extends Structure {
                 WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
                 s = new Sprite(rightWall);
             }
-            this.addExtra(s, 0, 0);
+            this.addExtra(s, 0, -8);
         }
         if (neighbours[6] ==false) {
             Sprite s;
