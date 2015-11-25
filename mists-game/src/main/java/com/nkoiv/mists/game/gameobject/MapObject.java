@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
  *  Unlike a mere Sprite (which it heavily utilizes), MapObject is tied to a certain Location.
  * @author nkoiv
  */
-public class MapObject implements Global {
+public class MapObject implements Global, Templatable {
     
     protected final String name;
     protected Sprite sprite;
@@ -26,10 +26,10 @@ public class MapObject implements Global {
     /**Flags are stored in integers for utility, 
     * but can be manipulad as booleans (>0) by "isFlagged" & "addFlag" methods
     */
-    private HashMap<String, Integer> flags;
-    private int collisionLevel;
+    protected HashMap<String, Integer> flags;
+    protected int collisionLevel;
     
-    private Location location;
+    protected Location location;
     
     public MapObject (String name) {
         this.flags = new HashMap<>();
@@ -210,6 +210,11 @@ public class MapObject implements Global {
         String s;
         s = this.name + " at " + this.location.getName() + ":" + this.sprite.getXPos()+","+this.sprite.getYPos();
         return s;
+    }
+
+    @Override
+    public Object createFromTemplate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

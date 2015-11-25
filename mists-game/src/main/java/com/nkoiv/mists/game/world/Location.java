@@ -90,6 +90,7 @@ public class Location implements Global {
     * @param player Player to construct the (TEST)location around
     */
     public Location(PlayerCharacter player) {
+        Mists.logger.info("Generating POC location...");
         this.name = "POCmap";
         this.mapObjects = new ArrayList<>();
         this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
@@ -97,13 +98,17 @@ public class Location implements Global {
         this.mapGen = new MapGenerator();
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
         //this.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
+        Mists.logger.info("Generating new BSP dungeon...");
         this.loadMap(MapGenerator.generateDungeon(this, 60, 40));
+        Mists.logger.info("Dungeon generated");
+        Mists.logger.info("Localizing map...");
         this.localizeMap();
+        Mists.logger.info("Map localized");
         this.setPlayer(player);
         this.addCreature(player, 8*TILESIZE, 6*TILESIZE); // <-TODO: Replace with putting player to start
         this.screenFocus = player;
         //TODO: Create structures from structure library once its finished
-        
+        Mists.logger.info("Generating random structures and creatures");
         Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 10*TILESIZE, 7*TILESIZE);
         this.mapObjects.add(rock);
         this.setMobInRandomOpenSpot(rock);
@@ -135,6 +140,8 @@ public class Location implements Global {
         this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
         this.setMobInRandomOpenSpot(monster);
         
+        Mists.logger.info("Location generation complete");
+        
         this.setMobInRandomOpenSpot(player);
         
         this.lights.setMinLightLevel(0);
@@ -163,9 +170,13 @@ public class Location implements Global {
     public void loadMap(GameMap map) {
         this.map = map;
         // Add in all the static structures from the selected map
-        for (Structure s : map.getStaticStructures(this)) {
+        int addedStructures = 0;
+        ArrayList<Structure> staticStructures = map.getStaticStructures(this);
+        for (Structure s : staticStructures) {
             this.mapObjects.add(s);
+            addedStructures++;
         }
+        Mists.logger.log(Level.INFO, "{0} structures generated", addedStructures);
     }
     
     /**
@@ -420,6 +431,7 @@ public class Location implements Global {
     */
     public void update (double time) {
         //this.updateQuadTree();
+        ArrayList<Wall> removedWalls = new ArrayList();
         this.collisionMap.updateCollisionLevels();
         if (!this.mapObjects.isEmpty()) {
             for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
@@ -430,15 +442,16 @@ public class Location implements Global {
                 MapObject mob = mobIterator.next();
                 if (mob.isFlagged("removable")) {
                     if (mob instanceof Wall) {
+                        removedWalls.add((Wall)mob);
                         //Update the surrounding walls as per needed
-                        //this.updateWallsAt(mob.getCenterXPos(), mob.getCenterYPos());
-                        
+                        //this.updateWallsAt(mob.getCenterXPos(), mob.getCenterYPos());   
                     }
                     mobIterator.remove();
                     this.pathFinder.setMapOutOfDate(true);
                 }
-            }
+            }   
         }
+        this.restructureWalls(removedWalls);
         
         if (!this.effects.isEmpty()) {
             //Mists.logger.info("Effects NOT empty");
@@ -471,6 +484,13 @@ public class Location implements Global {
     }
     
     
+    private void restructureWalls (ArrayList<Wall> removedWalls) {
+        if (removedWalls.isEmpty()) return;
+        for (Wall w : removedWalls) {
+            updateWallsAt(w.getCenterXPos(), w.getCenterYPos());
+        }
+    }
+    
     /**
      * If a wall gets added or removed, the walls around it
      * need to be updated accordingly
@@ -491,22 +511,22 @@ public class Location implements Global {
         //Cardinal directions
         MapObject mob;
         mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos)); //Left
-        if (mob instanceof Wall) {boolwalls[3] = true; surroundingWalls.add(mob);}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(4); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos)); //Right
-        if (mob instanceof Wall) {boolwalls[4] = true; surroundingWalls.add(mob);}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(3); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos, yCenterPos-Mists.TILESIZE)); //Up
-        if (mob instanceof Wall) {boolwalls[1] = true; surroundingWalls.add(mob);}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(6); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos, yCenterPos+Mists.TILESIZE)); //Down
-        if (mob instanceof Wall) {boolwalls[6] = true; surroundingWalls.add(mob);}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(1); w.updateNeighbours();}
         //Diagonal directions
         mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpLeft
-        if (mob instanceof Wall) {boolwalls[0] = true; surroundingWalls.add(mob);}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(7); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpRight
-        if (mob instanceof Wall) {boolwalls[2] = true; surroundingWalls.add(mob);}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(5); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //DownLeft
-        if (mob instanceof Wall) {boolwalls[5] = true; surroundingWalls.add(mob);}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(2); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownRight
-        if (mob instanceof Wall) {boolwalls[7] = true; surroundingWalls.add(mob);}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(0); w.updateNeighbours();}
 
     }
     

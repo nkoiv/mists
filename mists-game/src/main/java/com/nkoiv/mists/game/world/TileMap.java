@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
@@ -32,6 +33,7 @@ public class TileMap implements GameMap {
     private int[][] intMap;
     
     private Tile[][] tileMap;
+    private HashMap<Integer, String> tilecodes;
     
     private static final int CLEAR = 0;
     private static final int FLOOR = 1;
@@ -52,7 +54,10 @@ public class TileMap implements GameMap {
         this.tileHeight=intMap[0].length;
         this.tileMap = new Tile[tileWidth][tileHeight];
         Mists.logger.log(Level.INFO, "Got a {0}x{1} intMap for mapgeneration. Generating tiles...", new Object[]{intMap.length, intMap[0].length});
+        initializeTileGraphics();
+        Mists.logger.info("Tile graphics initialized");
         this.generateTilesFromIntMap();
+        Mists.logger.info("Tiles generated");
     }
     
     @Override
@@ -76,6 +81,12 @@ public class TileMap implements GameMap {
         
     }
     
+    private void initializeTileGraphics() {
+        //TODO: Check the tilecodes to make sure we have all the images we need
+        
+        
+    }
+    
     /*
     * generateStructure takes a tileCode and generates the Structure from it
     * TODO: Fix the class to use a StructureSheet (repository for the structureCodes)
@@ -83,19 +94,23 @@ public class TileMap implements GameMap {
     * because structures should have "floor" under them
     */
     private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
-        //TODO Should also take in a "HashMap<Integer,Structure> structureSheet"
+        //TODO Should also take in a "HashMap<Integer,String> structureSheet"
         //if (tileCode == CLEAR) return null;
         //Lets make Clear into Wall, for testing
-        if (tileCode == CLEAR) return new Wall("Wall", new Image("/images/structures/blank.png"), 1, l, xCoor*this.tilesize, yCoor*this.tilesize,new ImageView("/images/structures/dwall.png"));
+        Wall dungeonwall = (Wall)Mists.structLibrary.create("dungeonwall");
+        dungeonwall.setPosition(xCoor*this.tilesize, yCoor*this.tilesize);
+        dungeonwall.setLocation(l);
+        
+        if (tileCode == CLEAR) return dungeonwall;
         if (tileCode == FLOOR) return null;
-        if (tileCode == WALL) return new Wall("Wall", new Image("/images/structures/blank.png"), 1, l, xCoor*this.tilesize, yCoor*this.tilesize,new ImageView("/images/structures/dwall.png"));
+        if (tileCode == WALL) return dungeonwall;
         if (tileCode == DOOR) return new Structure("Door", new Image("/images/dungeondoor.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
         return null;
     }
 
     public void clearTile(int tileX, int tileY) {
         if (tileX>=0 && tileX < this.tileWidth && tileY >=0 && tileY < this.tileHeight) {
-            this.intMap[tileX][tileY] = 0;
+            this.intMap[tileX][tileY] = '0';
             //TODO: Tilemap already has only Floor or Dark Floor so clearing it is pointless
         }
     }
@@ -142,6 +157,7 @@ public class TileMap implements GameMap {
     @Override
     public ArrayList<Structure> getStaticStructures(Location l) {
         //Generate structures and return them
+        Mists.logger.info("Generating structures");
         ArrayList<Structure> staticStructures = new ArrayList<>();
         for (int x=0; x<this.tileWidth; x++) {
             for (int y=0; y<this.tileHeight; y++) {
@@ -152,6 +168,7 @@ public class TileMap implements GameMap {
             }
         }
         //update walls
+        Mists.logger.info("Updating walls");
         for (Structure s : staticStructures) {
             if (s instanceof Wall) {
                 boolean[] wallneighbours = getNeighbouringWalls((int)s.getXPos()/this.tilesize, (int)s.getYPos()/this.tilesize);
@@ -160,6 +177,7 @@ public class TileMap implements GameMap {
                 w.updateNeighbours();
             }
         }
+        Mists.logger.info("Done generating static structures");
         return staticStructures;
     }
 
@@ -232,7 +250,7 @@ public class TileMap implements GameMap {
             for (int y=0; y<this.tileHeight; y++) {
                 line = scanner.nextLine();
                 for (int x=0; x<this.tileWidth; x++) {
-                    int tilecode = Integer.parseInt(line.charAt(x)+"");
+                    char tilecode = line.charAt(x);
                     this.intMap[x][y] = tilecode;
                 }
             }

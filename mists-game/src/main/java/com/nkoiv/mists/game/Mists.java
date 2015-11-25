@@ -8,6 +8,10 @@ package com.nkoiv.mists.game;
 
 import static com.nkoiv.mists.game.Mists.logger;
 import com.nkoiv.mists.game.audio.SoundManager;
+import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.libraries.GraphLibrary;
+import com.nkoiv.mists.game.libraries.LibLoader;
+import com.nkoiv.mists.game.libraries.MobLibrary;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +48,8 @@ public class Mists extends Application implements Global {
     public final double[] mouseClickCoordinates = new double[2];
     public Scene currentScene;
     public static SoundManager soundManager;
+    public static GraphLibrary graphLibrary;
+    public static MobLibrary<Structure> structLibrary;
     public static Stage primaryStage;
     /**
     * start(), coming from the Application that Mists extends, is the call to launch the game.
@@ -72,6 +78,11 @@ public class Mists extends Application implements Global {
         logger.info("Scene initialized");
         setupSoundManager();
         logger.info("SoundManager initialized");
+        setupGraphLibrary();
+        logger.info("Graphics library initialized");
+        setupStructLibrary();
+        logger.info("Structure library initialized");
+        
         primaryStage.setScene(launchScene);
         setupKeyHandlers(primaryStage);
         setupMouseHandles(root);
@@ -150,8 +161,16 @@ public class Mists extends Application implements Global {
     }
        
     private void setupSoundManager() {
-                    
-        this.soundManager = new SoundManager(5);
+        Mists.soundManager = new SoundManager(5);
+    }
+    
+    private void setupGraphLibrary() {
+        Mists.graphLibrary = new GraphLibrary();
+    }
+    
+    private void setupStructLibrary() {
+        Mists.structLibrary = new MobLibrary<>();
+        LibLoader.initializeStructLibrary(structLibrary);
     }
     
     private void setupMouseHandles(Group root) {

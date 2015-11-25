@@ -720,4 +720,3 @@ public class MapGenerator implements Global{
 
 }
 
-
