@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.libraries;
 
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;

@@ -6,11 +6,12 @@
 package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Mists;
-import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -60,26 +61,17 @@ public class Sprite
     }
     
     public Sprite(Image i) {
-        positionX = 0;
-        positionY = 0;    
-        velocityX = 0;
-        velocityY = 0;
+        this();
         image = i;
         width = i.getWidth();
         height = i.getHeight();
-        animated = false;
         collisionBox = new CollisionBox(positionX, positionY, width, height);
     }
     
     public Sprite (Image i, double xPosition, double yPosition) {
+        this(i);
         positionX = xPosition;
         positionY = yPosition;    
-        velocityX = 0;
-        velocityY = 0;
-        image = i;
-        width = i.getWidth();
-        height = i.getHeight();
-        animated = false;
         collisionBox = new CollisionBox(positionX, positionY, width, height);
     }
 
@@ -251,8 +243,16 @@ public class Sprite
         } else if (this.image != null) {
             gc.drawImage( image, positionX-xOffset, positionY-yOffset );
         }
+    }
+    
+    public void render(double xOffset, double yOffset, GraphicsContext gc, Float lightlevel) {
         
-
+        ColorAdjust lightmap = new ColorAdjust();
+        lightmap.setBrightness(lightlevel);
+        
+        gc.drawImage( image, positionX-xOffset, positionY-yOffset );
+        
+        
     }
     
     public Double[] getCenter() {

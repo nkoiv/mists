@@ -24,8 +24,8 @@ import javafx.scene.shape.Polygon;
 public class LightsRenderer {
     Location loc;
     Polygon[] obstacles;
-    double[][] lightmap;
-    boolean[][] explored;
+    public double[][] lightmap;
+    public boolean[][] explored;
     double minLightLevel;
     
     public LightsRenderer(Location loc) {
@@ -53,8 +53,8 @@ public class LightsRenderer {
         double xEnd = xOffset + gc.getCanvas().getWidth();
         double yStart = yOffset;
         double yEnd = yOffset + gc.getCanvas().getHeight();
-        double xFraction = 0;
-        double yFraction = 0;
+        double xFraction;
+        double yFraction;
         xFraction = (xStart/Mists.TILESIZE - (int)(xStart/Mists.TILESIZE));
         yFraction = (yStart/Mists.TILESIZE - (int)(yStart/Mists.TILESIZE));
         //Mists.logger.info(xFraction+"x"+yFraction);
@@ -225,6 +225,10 @@ public class LightsRenderer {
             }
         }
         return mobPolygons;
+    }
+    
+    public double getLightLevel(int x, int y) {
+        return this.lightmap[x][y];
     }
     
     public void setMinLightLevel(double lightlevel) {

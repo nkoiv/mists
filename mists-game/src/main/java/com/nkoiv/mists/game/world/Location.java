@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -228,7 +229,7 @@ public class Location implements Global {
     */
     public void setMobInRandomOpenSpot (MapObject mob) {
         double[] openSpot = this.getRandomOpenSpot(mob.getSprite().getWidth());
-        mob.setCenterPosition(openSpot[0], openSpot[1]);
+        mob.setPosition(openSpot[0], openSpot[1]);
     }
     
     private double[] getEntryPoint() {
@@ -626,10 +627,12 @@ public class Location implements Global {
         double yOffset = getyOffset(gc, screenFocus.getSprite().getYPos());
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.renderMap(gc, xOffset, yOffset);
+        
         List<MapObject> renderedMOBs = this.renderMobs(gc, xOffset, yOffset);
-        this.renderStructureExtras(gc, xOffset, yOffset);
-        this.renderExtras(gc, xOffset, yOffset);
         this.renderLights(gc, renderedMOBs, xOffset, yOffset);
+        this.renderStructureExtras(gc, renderedMOBs, xOffset, yOffset);
+        this.renderExtras(gc, xOffset, yOffset);
+        
         
     }
     
@@ -640,10 +643,10 @@ public class Location implements Global {
     private void renderLights(GraphicsContext gc, List<MapObject> MOBsOnScreen, double xOffset, double yOffset) {
         //Raycast from player to all screen corners and to corners of all visible structures
         List<Structure> StructuresOnScreen = new ArrayList<>();
-        List<Creature> CreaturesOnScreen = new ArrayList<>();
+        //List<Creature> CreaturesOnScreen = new ArrayList<>();
         for (MapObject mob : MOBsOnScreen) {
             if (mob instanceof Structure) StructuresOnScreen.add((Structure)mob);
-            if (mob instanceof Creature) CreaturesOnScreen.add((Creature)mob);
+            //if (mob instanceof Creature) CreaturesOnScreen.add((Creature)mob);
         }
         MapObject[] structures = new MapObject[StructuresOnScreen.size()];
         for (int i = 0; i < StructuresOnScreen.size(); i++) {
@@ -699,16 +702,26 @@ public class Location implements Global {
         return renderedMOBs;
     }
     
-    private void renderStructureExtras(GraphicsContext gc, double xOffset, double yOffset) {
+    private void renderStructureExtras(GraphicsContext gc, List<MapObject> renderedMOBs, double xOffset, double yOffset) {
          // Render extras should be called whenever the structure is rendered
         // This paints them on top of everything again, creatures go "behind" trees
-        if (!this.mapObjects.isEmpty()) {
-            for (MapObject struct : this.mapObjects) {
+        gc.save();
+        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), 8);
+        double lightlevel;
+        ColorAdjust lightmap = new ColorAdjust();
+        if (!renderedMOBs.isEmpty()) {
+            for (MapObject struct : renderedMOBs) {
                 if (struct instanceof Structure) {
+                    //lightlevel = this.lights.getLightLevel((int)struct.getXPos()/Mists.TILESIZE, (int)struct.getYPos()/Mists.TILESIZE);
+                    lightlevel = lights.lightmap[(int)struct.getXPos()/Mists.TILESIZE][(int)struct.getCenterYPos()/Mists.TILESIZE];
+                    lightlevel = lightlevel-1;
+                    lightmap.setBrightness(lightlevel); gc.setEffect(lightmap);
                     ((Structure)struct).renderExtras(xOffset, yOffset, gc); //Draw extra frill (leaves on trees etc)
+                    
                 }
             }
         }
+        gc.restore();
     }
     
     private void renderExtras(GraphicsContext gc, double xOffset, double yOffset) {
