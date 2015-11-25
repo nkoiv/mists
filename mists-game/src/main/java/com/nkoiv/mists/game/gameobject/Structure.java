@@ -94,4 +94,17 @@ public class Structure extends MapObject {
         this.sprite.refreshCollisionBox();
     }
     
+    @Override
+    public Structure createFromTemplate() {
+        Structure ns = new Structure(this.name, this.getSprite().getImage(), this.collisionLevel);
+        if (!this.extraSprites.isEmpty()) {
+            for (Sprite s : this.extraSprites) {
+                double xOffset = s.getXPos() - this.getSprite().getXPos();
+                double yOffset = s.getYPos() - this.getSprite().getYPos();
+                ns.addExtra(s.getImage(), xOffset, yOffset);
+            }
+        }
+        return ns;
+    }
+    
 }

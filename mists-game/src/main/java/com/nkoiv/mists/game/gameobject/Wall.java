@@ -237,7 +237,6 @@ public class Wall extends Structure {
     public Wall createFromTemplate() {
         if (this.wallimages == null) this.generateWallImages(this.wallparts);
         Wall newWall = new Wall(this.name, this.getSprite().getImage(), this.getCollisionLevel(), null, 0, 0, this.wallparts);
-        
         return newWall;
     }
 }

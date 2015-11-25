@@ -28,5 +28,8 @@ public class LibLoader {
         ImageView wallimages = new ImageView("/images/structures/dwall.png");
         Wall dungeonwall = new Wall("DungeonWall", new Image("/images/structures/blank.png"), 1, null, 0, 0, wallimages);
         lib.addTemplate(dungeonwall);
+        //Dungeon stuff
+        Structure dungeondoor = new Structure("DungeonDoor", new Image("/images/structures/ddoor.png"), null, 0, 0);
+        lib.addTemplate(dungeondoor);
     }
 }

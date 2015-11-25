@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.world.Location;
 import java.io.Serializable;
 import java.util.*;
 
@@ -35,8 +36,17 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     }
     
     public E create(String name) {
-        E template = getTemplate(name);
+        String lowercasename = name.toLowerCase();
+        E template = getTemplate(lowercasename);
         return (E)template.createFromTemplate();
+    }
+    
+    public E create(String name, Location l, int xCoor, int yCoor) {
+        E template = create(name);
+        E thing = (E)template.createFromTemplate();
+        thing.setLocation(l);
+        thing.setPosition(xCoor, yCoor);
+        return thing;
     }
     
     public void addTemplate(E e) {

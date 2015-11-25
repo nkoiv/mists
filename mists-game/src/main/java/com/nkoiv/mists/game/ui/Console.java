@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.ui;
 
-import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
 import java.util.ArrayList;
@@ -98,10 +97,15 @@ public class Console extends TextWindow{
             case "collisionMap": super.getGame().locControls.printCollisionMapIntoConsole(); break;
             case "addCreature" : super.getGame().locControls.addCreature(attributes); break;
             case "createLoc":super.getGame().locControls.createLoc(attributes); break;
+            case "help": printHelp(); ;break;
             default: break;
         }
         
         clearRow();
+    }
+    
+    private void printHelp() {
+        //??
     }
     
     /**

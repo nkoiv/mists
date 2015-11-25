@@ -96,14 +96,15 @@ public class TileMap implements GameMap {
         //TODO Should also take in a "HashMap<Integer,String> structureSheet"
         //if (tileCode == CLEAR) return null;
         //Lets make Clear into Wall, for testing
-        Wall dungeonwall = (Wall)Mists.structLibrary.create("dungeonwall");
-        dungeonwall.setPosition(xCoor*this.tilesize, yCoor*this.tilesize);
-        dungeonwall.setLocation(l);
-        
-        if (tileCode == CLEAR) return dungeonwall;
+        if (tileCode == CLEAR || tileCode == WALL) {
+            Wall dungeonwall = (Wall)Mists.structLibrary.create("dungeonwall", l, xCoor*tilesize, yCoor*tilesize);
+            return dungeonwall;
+        }
         if (tileCode == FLOOR) return null;
-        if (tileCode == WALL) return dungeonwall;
-        if (tileCode == DOOR) return new Structure("Door", new Image("/images/dungeondoor.png"), l, xCoor*this.tilesize, yCoor*this.tilesize);
+        if (tileCode == DOOR) {
+            Structure dungeondoor = (Structure)Mists.structLibrary.create("dungeondoor", l, xCoor*tilesize, yCoor*tilesize);
+            return dungeondoor;
+        }
         return null;
     }
 
