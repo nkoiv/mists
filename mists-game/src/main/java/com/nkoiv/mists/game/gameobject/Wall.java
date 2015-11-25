@@ -114,9 +114,11 @@ public class Wall extends Structure {
                 WritableImage downWall = wallparts.snapshot(parameters, snapshot);
                 s = new Sprite(downWall);
             }
-            this.addExtra(s, 0, 0);
+            //this.addExtra(s, 0, 0);
+            this.sprite.setImage(s.getImage());
         }
         //Diagonals
+        /*
         if (neighbours[0] ==false) {
             Sprite s;
             if (this.wallimages[0]!=null) {
@@ -161,7 +163,7 @@ public class Wall extends Structure {
             }
             this.addExtra(s, 0, -8);
         }
-        
+        */
     }
     
     public void setWallImages(Image[] wallimages) {

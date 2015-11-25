@@ -500,8 +500,8 @@ public class Location implements Global {
      * @param yCenterPos yCenter of the happening
      */
     private void updateWallsAt(double xCenterPos, double yCenterPos) {
-        ArrayList<MapObject> surroundingWalls = new ArrayList();
-        boolean[] boolwalls = new boolean[8];
+        //ArrayList<MapObject> surroundingWalls = new ArrayList();
+        //boolean[] boolwalls = new boolean[8];
         /*
          [0][1][2]
          [3]   [4]   
@@ -524,7 +524,7 @@ public class Location implements Global {
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(7); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpRight
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(5); w.updateNeighbours();}
-        mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //DownLeft
+        mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownLeft
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(2); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownRight
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(0); w.updateNeighbours();}
