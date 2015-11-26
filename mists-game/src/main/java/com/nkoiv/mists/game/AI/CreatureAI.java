@@ -6,7 +6,6 @@
 package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.pathfinding.Path;
@@ -58,12 +57,13 @@ public class CreatureAI {
     /*
     **  TODO: Temporary for just following player
     */
+    /*
     public void moveTowardsPlayer(double time) {        
         if (!this.creep.getLocation().isFlagged("testFlag")) return; //Dont my unless flagged
-        /*
-        * Since pathfinding moves in full tiles, it's possible for units
-        * to get stuck on the corners. We alleviate this with the following
-        */
+        
+        //Since pathfinding moves in full tiles, it's possible for units
+        //to get stuck on the corners. We alleviate this with the following
+        
         Path pathToPlayer = this.creep.getLocation().getPathFinder().findPath(this.creep.getSprite().getWidth(), this.creep.getCrossableTerrain(), this.creep.getCenterXPos(), this.creep.getCenterYPos(), this.creep.getLocation().getPlayer().getCenterXPos(), this.creep.getLocation().getPlayer().getCenterYPos());
         this.pathToMoveOn = pathToPlayer;
         
@@ -77,9 +77,13 @@ public class CreatureAI {
         //In that case, head towards a better location!
         this.creep.applyMovement(time);
     }
-    
+    */
+
     public void moveTowardsMob(MapObject mob, double time) {
-        double collisionSize = creep.getSprite().getWidth();
+        //double collisionSize = creep.getSprite().getWidth();
+        double collisionSize = 32; 
+        //TODO: CollisionSize should be based on creep size, but sprites are a mess right now
+        //Using default tilesize atm to make pathing work
         double offset;
         if (collisionSize > creep.getLocation().getPathFinder().getTileSize()) {
             offset = creep.getLocation().getPathFinder().getTileSize()/2;

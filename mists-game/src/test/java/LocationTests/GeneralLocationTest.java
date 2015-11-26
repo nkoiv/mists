@@ -138,10 +138,12 @@ public class GeneralLocationTest extends Application {
         assert(testLocation.getMOBList().isEmpty());
     }
     
+    
+    //TODO: Rewrite these to take in account pixel based collision
     @Test
     public void mobCollidingOnSomethingThatHasBiggerXCoordHasCollidedOnRightHandSide() {
-        Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
-        Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature1 = new Creature("TestCreature", new Image("/images/himmu.png"));
+        Creature testCreature2 = new Creature("TestCreature", new Image("/images/himmu.png"));
         
         testLocation.addCreature(testCreature1, 250, 250);
         testLocation.addCreature(testCreature2, 280, 250);
@@ -152,8 +154,8 @@ public class GeneralLocationTest extends Application {
     
     @Test
     public void mobCollidingOnSomethingThatHasSmallerXCoordHasCollidedOnLeftHandSide() {
-        Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
-        Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature1 = new Creature("TestCreature", new Image("/images/himmu.png"));
+        Creature testCreature2 = new Creature("TestCreature", new Image("/images/himmu.png"));
         
         testLocation.addCreature(testCreature1, 250, 250);
         testLocation.addCreature(testCreature2, 230, 250);
@@ -164,8 +166,8 @@ public class GeneralLocationTest extends Application {
     
     @Test
     public void mobCollidingOnSomethingThatHasBiggeryCoordHasCollidedOnUpperHandSide() {
-        Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
-        Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
+        Creature testCreature1 = new Creature("TestCreature", new Image("/images/himmu.png"));
+        Creature testCreature2 = new Creature("TestCreature", new Image("/images/himmu.png"));
         
         testLocation.addCreature(testCreature1, 250, 250);
         testLocation.addCreature(testCreature2, 250, 230);
