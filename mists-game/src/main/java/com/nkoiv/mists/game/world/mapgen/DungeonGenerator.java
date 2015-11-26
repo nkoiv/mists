@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game.world;
+package com.nkoiv.mists.game.world.mapgen;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.TileMap;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,14 +22,14 @@ import java.util.Random;
  * populated by rooms that are joined by corridors.
  * @author nikok
  */
-public class MapGenerator implements Global{
+public class DungeonGenerator implements Global{
     private static final int CLEAR = 0;
     private static final int FLOOR = 1;
     private static final int WALL = 2;
     private static final int DOOR = 4;
     private static final Random rnd = new Random();
 
-    public MapGenerator() {
+    public DungeonGenerator() {
 
 
     }
@@ -46,24 +47,10 @@ public class MapGenerator implements Global{
 
     public static int[][] dungeonStructures (ArrayList<BSParea> BSPareas, int xSize, int ySize, int roomMinSize) {
             int[][] intMap;
-            //int areaNo = 0;
-            //Create the map by colouring area with its number
-            /*
-            for (BSParea area : BSPareas) {
-                areaNo++;
-                System.out.println("Filling area "+areaNo);
-                for (int row = 0;row<area.height;row++){
-                    for (int position=0;position<area.width;position++) {
-                            //Fill area with number
-                            intMap[area.xPos+position][area.yPos+row] = areaNo;
-                    }
-                }	
-            }
-            */
             intMap = drawAreasOnMap (xSize, ySize, BSPareas, roomMinSize);
             intMap = generateCorridorsToAdjacentRooms (intMap, BSPareas, 1.0f);
             Mists.logger.info("IntMap size: "+intMap.length+"x"+intMap[0].length);
-            //intMap = generateRandomCorridors (intMap, xSize, ySize, BSPareas);
+
             //Clean out the unneeded doors
             int[][] cleanedMap = doorwayCleaner(intMap);
             //Print the map for testing
@@ -74,16 +61,8 @@ public class MapGenerator implements Global{
     }
 
 
-    public static ArrayList<BSParea> BSPdungeon (MapGenerator mapGen, int xSize, int ySize, int totalAreas, float minSize, float maxSize, int absMin, boolean tree) {
-            /*
-            int xSize; //Area size
-            int ySize; //
-            int totalAreas = 10; // Amount of areas desired
-            float minSize = 0.3f; // Min relative size of the child (split) from the parent
-            float maxSize = 0.7f; // Max relative size 
-            int absMin = 5; //Area max size in tiles
-            boolean tree //Treemap or random splitting
-            */
+    public static ArrayList<BSParea> BSPdungeon (DungeonGenerator mapGen, int xSize, int ySize, int totalAreas, float minSize, float maxSize, int absMin, boolean tree) {
+
             float absMax = 0.5f; //Max size for any given area
             ArrayList<BSParea> BSPareas = new ArrayList<BSParea>();
             BSParea mainArea = mapGen.new BSParea(0, 0, xSize, ySize, null);
@@ -250,12 +229,10 @@ public class MapGenerator implements Global{
                 int tilesDug = 0;
                 while (digging && tilesDug <= (Math.abs(distanceX)+Math.abs(distanceY)+2)) {
                     if (rnd.nextFloat()<doorChance) makeDoor=true;
-                    //System.out.println("Direction: "+direction);
                     //Move corridor by one to the desired direction
                     //Check how much distance we have left to cover
                     distanceX = destinationX - corridorXPosOnMap;
                     distanceY = destinationY - corridorYPosOnMap;
-                    //System.out.println("Distance "+distanceX+", "+distanceY);
 
                     if(direction==Direction.UP && corridorYPosOnMap>0) {
                         if (distanceY!=0) corridorYPosOnMap=corridorYPosOnMap-1;
@@ -303,7 +280,6 @@ public class MapGenerator implements Global{
                         digging=false;
                     } else {
                         currentTile = intMap[corridorXPosOnMap][corridorYPosOnMap];
-                        //System.out.println("At tile "+currentTile);
                     }
                     //Draw corridor at the current tile
                     if (digging) {
@@ -390,7 +366,7 @@ public class MapGenerator implements Global{
             int corridorYPosOnMap=doorwayYPosOnMap;
             while (nextTile == 0) {
                 if(debug)Mists.logger.info("Direction: "+direction);
-                //siirretään käytävää yhdellä haluttuun suuntaan
+                //Move the corridor by one towards the desired direction
 
                 if(direction==0) corridorYPosOnMap=corridorYPosOnMap-1;
                 if(direction==1) corridorXPosOnMap=corridorXPosOnMap+1;
@@ -398,7 +374,7 @@ public class MapGenerator implements Global{
                 if(direction==3) corridorXPosOnMap=corridorXPosOnMap-1;
 
                 if(debug)Mists.logger.info("Corridoring at "+corridorXPosOnMap+", "+corridorYPosOnMap);
-                //Poistutaan loopista jos käytävä tulis kartan reunalle
+                //Exit loop if we've reached the map edges
                 if (corridorXPosOnMap<1 || corridorYPosOnMap<1 || corridorXPosOnMap==mapWidth-1 || corridorYPosOnMap==mapHeight-1) {
                         if(debug)Mists.logger.info("Out of map, interrupt the corridor");
                         nextTile=-1;
@@ -406,19 +382,19 @@ public class MapGenerator implements Global{
                         nextTile = intMap[corridorXPosOnMap][corridorYPosOnMap];
                         if(debug)Mists.logger.info("In the tile "+nextTile);
                 }
-                //Jos käytävän kohdalla on tyhjää, piirretään siihen käytävä
+                //If tile is clear, draw corridor on it
                 if (nextTile==0) {
                         intMap[corridorXPosOnMap][corridorYPosOnMap]=FLOOR;
                         if(debug)Mists.logger.info("Drawing corridor");
-                        //Piirretään käytävän vierille seinää
+                        //Draw walls along the corridor
                         if (direction==0 || direction==2) {
-                            //Jos menossa ylös tai alas
+                            //If we're going up or down...
                             intMap[corridorXPosOnMap+1][corridorYPosOnMap]=WALL;
                             intMap[corridorXPosOnMap-1][corridorYPosOnMap]=WALL;
                         }
 
                         if (direction==1 || direction==3) {
-                            //jos menossa oikealle tai vasemmalle
+                            //Left or right...
                             intMap[corridorXPosOnMap][corridorYPosOnMap+1]=WALL;
                             intMap[corridorXPosOnMap][corridorYPosOnMap-1]=WALL;
                         }

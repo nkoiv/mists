@@ -8,6 +8,7 @@ package com.nkoiv.mists.game;
 
 import static com.nkoiv.mists.game.Mists.logger;
 import com.nkoiv.mists.game.audio.SoundManager;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.libraries.GraphLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
@@ -51,7 +52,8 @@ public class Mists extends Application implements Global {
     public Scene currentScene;
     public static SoundManager soundManager;
     public static GraphLibrary graphLibrary;
-    public static MobLibrary<Structure> structLibrary;
+    public static MobLibrary<Structure> structureLibrary;
+    public static MobLibrary<Creature> creatureLibrary;
     public static Stage primaryStage;
     /**
     * start(), coming from the Application that Mists extends, is the call to launch the game.
@@ -82,8 +84,10 @@ public class Mists extends Application implements Global {
         logger.info("SoundManager initialized");
         setupGraphLibrary();
         logger.info("Graphics library initialized");
-        setupStructLibrary();
+        setupStructureLibrary();
         logger.info("Structure library initialized");
+        setupCreatureLibrary();
+        logger.info("Creature library initialized");
         
         primaryStage.setScene(launchScene);
         setupKeyHandlers(primaryStage);
@@ -170,9 +174,14 @@ public class Mists extends Application implements Global {
         Mists.graphLibrary = new GraphLibrary();
     }
     
-    private void setupStructLibrary() {
-        Mists.structLibrary = new MobLibrary();
-        LibLoader.initializeStructLibrary(structLibrary);
+    private void setupStructureLibrary() {
+        Mists.structureLibrary = new MobLibrary<>();
+        LibLoader.initializeStructureLibrary(structureLibrary);
+    }
+    
+    private void setupCreatureLibrary() {
+        Mists.creatureLibrary = new MobLibrary<>();
+        LibLoader.initializeCreatureLibrary(creatureLibrary);
     }
     
     private void setupMouseHandles(Group root) {

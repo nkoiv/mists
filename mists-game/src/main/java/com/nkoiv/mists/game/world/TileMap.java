@@ -98,12 +98,12 @@ public class TileMap implements GameMap {
         //if (tileCode == CLEAR) return null;
         //Lets make Clear into Wall, for testing
         if (tileCode == CLEAR || tileCode == WALL) {
-            Wall dungeonwall = (Wall)Mists.structLibrary.create("dungeonwall", l, xCoor*tilesize, yCoor*tilesize);
+            Wall dungeonwall = (Wall)Mists.structureLibrary.create("dungeonwall", l, xCoor*tilesize, yCoor*tilesize);
             return dungeonwall;
         }
         if (tileCode == FLOOR) return null;
         if (tileCode == DOOR) {
-            Structure dungeondoor = (Structure)Mists.structLibrary.create("dungeondoor", l, xCoor*tilesize, yCoor*tilesize);
+            Structure dungeondoor = (Structure)Mists.structureLibrary.create("dungeondoor", l, xCoor*tilesize, yCoor*tilesize);
             return dungeondoor;
         }
         return null;

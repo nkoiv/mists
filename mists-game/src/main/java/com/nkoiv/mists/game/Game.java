@@ -10,7 +10,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.controls.LocationControls;
 import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.MapGenerator;
+import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import java.util.ArrayList;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -36,7 +36,7 @@ public class Game {
     public double yOffset; //If/when a map is larger than display-area, it should be centered on player
     public boolean toggleScale = true;
     
-    public MapGenerator mapGen;
+    public DungeonGenerator mapGen;
 
     private ArrayList<GameState> gameStates;
     public GameState currentState;

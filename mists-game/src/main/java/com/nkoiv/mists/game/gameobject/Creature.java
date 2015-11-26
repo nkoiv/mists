@@ -524,4 +524,27 @@ public class Creature extends MapObject implements Combatant {
         if(this.getHealth()>this.getMaxHealth()){this.setHealth(this.getMaxHealth());} 
     }
     
+    @Override
+    public Creature createFromTemplate() {
+        Creature nc = new Creature(this.name, this.getSprite().getImage());
+        //Link to same animation frames (no need to make a copy)
+        nc.spriteAnimations = this.spriteAnimations;
+        //Copy over attributes
+        for (String a : this.attributes.keySet()) {
+            nc.attributes.put(a, this.attributes.get(a));
+        }
+        //Flags
+        for (String f : this.flags.keySet()) {
+            nc.flags.put(f, this.flags.get(f));
+        }
+        //Crossable terrain
+        ArrayList<Integer> newCrossable = new ArrayList<>();
+        for (int t : this.crossableTerrain) {
+            newCrossable.add(t);
+        }
+        nc.crossableTerrain = newCrossable;
+        
+        return nc;
+    }
+    
 }

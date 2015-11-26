@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
@@ -50,7 +51,7 @@ public class Location implements Global {
     private GameMap map;
     private CollisionMap collisionMap;
     private PathFinder pathFinder;
-    private MapGenerator mapGen;
+    private DungeonGenerator mapGen;
     private LightsRenderer lights;
     private final double[] lastOffsets = new double[2];
     private MapObject screenFocus;
@@ -96,11 +97,11 @@ public class Location implements Global {
         this.mapObjects = new ArrayList<>();
         this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
         this.effects = new ArrayList<>();
-        this.mapGen = new MapGenerator();
+        this.mapGen = new DungeonGenerator();
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
         //this.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
         Mists.logger.info("Generating new BSP dungeon...");
-        this.loadMap(MapGenerator.generateDungeon(this, 60, 40));
+        this.loadMap(DungeonGenerator.generateDungeon(this, 60, 40));
         Mists.logger.info("Dungeon generated");
         Mists.logger.info("Localizing map...");
         this.localizeMap();
@@ -110,14 +111,13 @@ public class Location implements Global {
         this.screenFocus = player;
         //TODO: Create structures from structure library once its finished
         Mists.logger.info("Generating random structures and creatures");
-        Structure rock = new Structure("Rock", new Image("/images/block.png"), this, 10*TILESIZE, 7*TILESIZE);
+        Structure rock = Mists.structureLibrary.create("Rock", this, 0, 0);
         this.mapObjects.add(rock);
         this.setMobInRandomOpenSpot(rock);
         
         for (int i = 0; i<10;i++) {
             //Make a bunch of trees
-            Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), this, 6*TILESIZE, 5*TILESIZE);
-            tree.addExtra(new Image("/images/tree.png"), -35, -96);
+            Structure tree = Mists.structureLibrary.create("Tree", this, 0, 0);
             this.mapObjects.add(tree);
             this.setMobInRandomOpenSpot(tree);
         
@@ -127,11 +127,11 @@ public class Location implements Global {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
-            int startX = rnd.nextInt(1);
+            int startX = rnd.nextInt(4);
             int startY = rnd.nextInt(2);
             Mists.logger.info("Creating monster from sprite sheet position "+startX+","+startY);
-            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 4, 0, 32, 32);
-            monster.getSprite().setCollisionAreaShape(2);
+            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 4, 0, 36, 32);
+            monster.getSprite().setCollisionAreaShape(1);
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);
         }
@@ -332,11 +332,11 @@ public class Location implements Global {
         this.map = m;
     }
     
-    public void setMapGen (MapGenerator mg) {
+    public void setMapGen (DungeonGenerator mg) {
         this.mapGen = mg;
     }
     
-    public MapGenerator getMapGen() {
+    public DungeonGenerator getMapGen() {
         return this.mapGen;
     }
     

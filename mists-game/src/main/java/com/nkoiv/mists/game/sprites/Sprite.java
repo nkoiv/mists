@@ -6,10 +6,13 @@
 package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
@@ -304,33 +307,25 @@ public class Sprite
         //return new Rectangle2D(positionX+1,positionY+1,width-2,height-2);
     }
 
-    private boolean pixelCollision (Image i) {
-        
-        /*TODO: Pixel based collisions
-        * This is checked if the collision boxes intersect
-        * For now returns always true
-        */
-        return true;
-    }
     
     /**
      * TODO: Javas intersects() from Shapes is really effin slow
      * New way: just check corners
      * @param s Sprite to check collisions with
      * @return True if they overlap somewhere
-     */
-    
+     */    
     public boolean intersects(Sprite s) {
-        return this.intersectsWithShape(s);
-        /*
-        if(this.getCollisionBox().Intersect(s.getCollisionBox())) {
-            //System.out.println("Intersection with the colBox - testing shape");
-            return this.intersectsWithShape(s);
-        } else {
-            return false;
+
+        if (this.intersectsWithShape(s)) {
+            //Check pixel collsion
+            return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), s.getXPos(), s.getYPos(), s.getImage());
+            
         }
-        */
+        else return false;
+
     }
+    
+ 
 
     
     
@@ -356,6 +351,62 @@ public class Sprite
     
     public double getYPos() {
         return this.positionY;
+    }
+    
+    /**
+     * Take the pixelreaders from two images,
+     * and compare them pixel by pixel to see if a collision
+     * happens
+     * @param x1 x position of the first image
+     * @param y1 y position of the first image
+     * @param image1 the first image
+     * @param x2 x position of the second image
+     * @param y2 y position of the second image
+     * @param image2 the second image
+     * @return true if the images overlap in pixels
+     */
+    
+    public boolean pixelCollision(double x1, double y1, Image image1,
+                               double x2, double y2, Image image2) {
+
+        PixelReader pr1 = image1.getPixelReader();
+        PixelReader pr2 = image2.getPixelReader();
+
+        // initialization
+        double width1 = x1 + image1.getWidth() -1,
+               height1 = y1 + image1.getHeight() -1,
+               width2 = x2 + image2.getWidth() -1,
+               height2 = y2 + image2.getHeight() -1;
+
+        int xstart = (int) Math.max(x1, x2),
+            ystart = (int) Math.max(y1, y2),
+            xend   = (int) Math.min(width1, width2),
+            yend   = (int) Math.min(height1, height2);
+
+        // intersection rect
+        int toty = Math.abs(yend - ystart);
+        int totx = Math.abs(xend - xstart);
+
+        for (int y=1;y < toty-1;y++){
+          int ny = Math.abs(ystart - (int) y1) + y;
+          int ny1 = Math.abs(ystart - (int) y2) + y;
+
+          for (int x=1;x < totx-1;x++) {
+            int nx = Math.abs(xstart - (int) x1) + x;
+            int nx1 = Math.abs(xstart - (int) x2) + x;
+            try {
+              if (((pr1.getArgb(nx,ny) & 0xFF000000) != 0x00) &&
+                  ((pr2.getArgb(nx1,ny1) & 0xFF000000) != 0x00)) {
+                 // collide!!
+                 return true;
+              }
+            } catch (Exception e) {
+            //System.out.println("s1 = "+nx+","+ny+"  -  s2 = "+nx1+","+ny1);
+            }
+          }
+        }
+
+        return false;
     }
     
     @Override

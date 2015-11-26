@@ -9,7 +9,7 @@ import TestTools.CompareTools;
 import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.MapGenerator;
+import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.world.TileMap;
 import java.util.ArrayList;
 import java.util.Random;
@@ -28,7 +28,7 @@ import org.junit.Rule;
  */
 public class MapGeneratorTest {
     static Location testLocation;
-    static MapGenerator testMapGen;
+    static DungeonGenerator testMapGen;
     
     public MapGeneratorTest() {
     }
@@ -48,7 +48,7 @@ public class MapGeneratorTest {
     @Before
     public void setUp() {
         testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
-        testMapGen = new MapGenerator();
+        testMapGen = new DungeonGenerator();
         testLocation.setMapGen(testMapGen);
     }
     
@@ -61,7 +61,7 @@ public class MapGeneratorTest {
         Random rng = new Random();
         int randomXSize = rng.nextInt(30)+30;
         int randomYSize = rng.nextInt(30)+30;
-        TileMap generatedTilemap = MapGenerator.generateDungeon(testLocation, randomXSize, randomYSize);
+        TileMap generatedTilemap = DungeonGenerator.generateDungeon(testLocation, randomXSize, randomYSize);
         System.out.println("Randomed size was "+randomXSize+","+randomYSize);
         
         assert(generatedTilemap.getWidth() == randomXSize*generatedTilemap.getTileSize() && generatedTilemap.getHeight()==randomYSize*generatedTilemap.getTileSize()); 
@@ -73,8 +73,8 @@ public class MapGeneratorTest {
         int randomXSize = rng.nextInt(30)+30;
         int randomYSize = rng.nextInt(30)+30;
         int absMinSize = 5;
-        ArrayList<MapGenerator.BSParea> testBSP = MapGenerator.BSPdungeon(testMapGen, randomXSize, randomYSize, 20, 0.3f, 0.7f, absMinSize, true);
-        for (MapGenerator.BSParea a : testBSP) {
+        ArrayList<DungeonGenerator.BSParea> testBSP = DungeonGenerator.BSPdungeon(testMapGen, randomXSize, randomYSize, 20, 0.3f, 0.7f, absMinSize, true);
+        for (DungeonGenerator.BSParea a : testBSP) {
             assert(CompareTools.isGreaterThan(a.width * a.height, absMinSize));
         } 
     }
@@ -85,7 +85,7 @@ public class MapGeneratorTest {
         int randomXSize = rng.nextInt(30)+30;
         int randomYSize = rng.nextInt(30)+30;
         int absMinSize = 5;
-        ArrayList<MapGenerator.BSParea> testBSP = MapGenerator.BSPdungeon(testMapGen, randomXSize, randomYSize, 20, 0.3f, 0.7f, absMinSize, false);
+        ArrayList<DungeonGenerator.BSParea> testBSP = DungeonGenerator.BSPdungeon(testMapGen, randomXSize, randomYSize, 20, 0.3f, 0.7f, absMinSize, false);
         assert(testBSP.size() > 1);
     }
     
