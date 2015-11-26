@@ -23,8 +23,9 @@ public class MapObject implements Global, Templatable {
     protected final String name;
     protected Sprite sprite;
     
-    /**Flags are stored in integers for utility, 
-    * but can be manipulad as booleans (>0) by "isFlagged" & "addFlag" methods
+    /*
+    * Flags are stored in integers for utility, 
+    * but can be manipulated as booleans (larger than 0) by "isFlagged" & "addFlag" methods
     */
     protected HashMap<String, Integer> flags;
     protected int collisionLevel;

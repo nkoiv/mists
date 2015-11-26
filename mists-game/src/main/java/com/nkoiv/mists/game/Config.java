@@ -70,6 +70,7 @@ public class Config {
      * Load config from external config file
      * (parse stuff)
      * @param path The location of the config file to use
+     * @throws java.io.IOException
      */
     public void loadConfig(String path) throws IOException {
         try 

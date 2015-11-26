@@ -238,7 +238,7 @@ public class PathFinder {
     
     /**
      * Generate a clearance map with the map this pathfinder is tied to
-     * @param crossableTerrain
+     * @param crossableTerrain the type of terrain we're crossing
      * @return clearance map
      */
     public int[][] getClearanceMap (int crossableTerrain) {

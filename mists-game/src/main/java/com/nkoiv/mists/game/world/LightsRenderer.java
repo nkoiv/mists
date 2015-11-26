@@ -91,6 +91,9 @@ public class LightsRenderer {
     * light from given coordinates, octant at a time.
     * Whenever paintVision encounters a wall, it stops giving
     * light towards that direction - the wall itself is lit up though.
+     * @param xCoor xCoordinate of the player
+     * @param yCoor yCoordinate of the player
+     * @param visionRange How far the player can see
     */
     public void paintVision(double xCoor, double yCoor, int visionRange) {
         //clear lightmap

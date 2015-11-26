@@ -64,7 +64,7 @@ package com.nkoiv.mists.game.world.util;
          * Adds a element to the end of the list (position num)
          * and moves the position on the list by one
          * If the array would go over its capacity, the array is extended by def_cap(50)
-         * @param n The element to add to the list
+         * @param e The element to add to the list
          */
         public void add(E e) {
             this.addWithoutSorting(e);
@@ -161,7 +161,7 @@ package com.nkoiv.mists.game.world.util;
          * Remove an Element from the list
          * Calls the remove(int index) -method after looking up the element with
          * the private getIndex -method
-         * @param n The element to remove
+         * @param e The element to remove
          */
         public void remove(E e) {
             int eIndex = this.getIndex(e);
@@ -219,7 +219,7 @@ package com.nkoiv.mists.game.world.util;
         /**
          * Check if an Element is in the list
          * 
-         * @param n The element to search for
+         * @param e The element to search for
          * @return True if the element is in the list
          */
         public boolean contains(E e) {

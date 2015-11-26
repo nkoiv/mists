@@ -101,8 +101,8 @@ import com.nkoiv.mists.game.Global;
                  * Return the movement cost for traversing this node
                  * with the given movement type. Defaults to 99 if given
                  * movement type isn't on the list of the node.
-                 * @param movementType
-                 * @return movement cost
+                 * @param movementType The type of movement the traveller has
+                 * @return movement cost for crossing the node
                  */
                 
                 public double getMovementCost(int movementType) {

@@ -13,7 +13,7 @@ import java.util.Arrays;
  * the lowest value object in the list (thanks to nodemap),
  * minheap should suffice.
  * @author nikok
- * @param <E>
+ * @param <E> Element to be stored in the heap
  */
 public class MinHeap<E extends Comparable> {
     private E[] data;

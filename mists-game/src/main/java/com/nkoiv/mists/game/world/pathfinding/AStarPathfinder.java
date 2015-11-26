@@ -228,9 +228,8 @@ public class AStarPathfinder implements PathfinderAlgorithm {
      * @param crossableTerrain Tilewalking ability
      * @param x Target nodes X coordinate
      * @param y Target nodes Y coordinate
-     * @return 
+     * @return List of available neighbours
      */
-
     public List<Node> Neighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y) {
         //if no size given, assume clearance need of 1
         return Neighbours(map, 1,crossableTerrain, x, y);
@@ -244,7 +243,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
      * @param crossableTerrain Tilewalking ability
      * @param x Target nodes X coordinate
      * @param y Target nodes Y coordinate
-     * @return 
+     * @return List of available neighbours
      */
 
     public List<Node> Neighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
@@ -286,7 +285,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
      * @param crossableTerrain Tilewalking ability
      * @param x Target nodes X coordinate
      * @param y Target nodes Y coordinate
-     * @return 
+     * @return List of available diagonally neighbouring spots
      */    
     public List<Node> DiagonalNeighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y) {
         //if no size given, assume clearance need of 1
@@ -299,7 +298,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     * @param crossableTerrain Tilewalking ability
     * @param x Target nodes X coordinate
     * @param y Target nodes Y coordinate
-    * @return 
+    * @return List of available diagonally neighbouring spots
     */  
     public List<Node> DiagonalNeighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
         //Return all NE, NW, SE and SW that are passable without squeezing through

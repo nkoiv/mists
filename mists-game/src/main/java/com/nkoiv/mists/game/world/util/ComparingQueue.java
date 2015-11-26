@@ -40,6 +40,7 @@ public class ComparingQueue<E extends Comparable> {
     * to place the Element after it's ensured the
     * array can fit it.
     * @param e The element to add to the queue
+    * @return true if the add worked
     */
     public boolean add(E e) {
             int i = this.size;
@@ -140,10 +141,10 @@ public class ComparingQueue<E extends Comparable> {
         return null;
     }
 
-            /**
+    /**
      * Check if an Element is in the list
      * 
-     * @param n The element to search for
+     * @param e The element to search for
      * @return True if the element is in the list
      */
     public boolean contains(E e) {

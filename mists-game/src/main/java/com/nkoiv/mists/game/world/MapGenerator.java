@@ -678,7 +678,7 @@ public class MapGenerator implements Global{
      * distance. Used in pathing corridors
      * @param xDist Distance towards the target
      * @param yDist Distance towards the target
-     * @return 
+     * @return Direction towards the target
      */
     public static Direction getDirection (int xDist, int yDist) {
         Direction direction = Direction.STAY;

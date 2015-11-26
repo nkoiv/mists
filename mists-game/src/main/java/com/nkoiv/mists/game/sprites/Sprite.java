@@ -224,7 +224,7 @@ public class Sprite
      * Update uses the velocity it has and the time given,
      * moving the sprite towards the velocity according to the
      * time it has (velocity * time).     
-     * @param time 
+     * @param time Time spent since last update
      */
     
     public void update(double time)

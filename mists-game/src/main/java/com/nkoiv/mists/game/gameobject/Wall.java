@@ -196,8 +196,8 @@ public class Wall extends Structure {
      * [5][6][7]
      * 
      * In imagefile:
-     * [6][1][3][4] <-Cardinal walls
-     * [0][5][7][2] <-Optional diagonal walls
+     * [6][1][3][4] Cardinal walls
+     * [0][5][7][2] Optional diagonal walls
      * @param n The number of the neighbour to remove
      */
     public void removeNeighbour(int n) {

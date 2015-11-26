@@ -122,6 +122,7 @@ public class TileMap implements GameMap {
      * if adjacent wall is destroyed or built
      * @param tileX xCoordinate for the change in structures
      * @param tileY yCoordinate for the change in structures
+     * @return boolean array of the walls surrounding the selected tile
      */
     public boolean[] getNeighbouringWalls(int tileX, int tileY) {
         //All the structures in 3x3 area (around the target) need to be checked and updated

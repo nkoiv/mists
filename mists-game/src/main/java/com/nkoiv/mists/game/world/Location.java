@@ -202,10 +202,10 @@ public class Location implements Global {
     /**
      * When getting a MapObject by coordinates with mouseclick
      * or something, it's often needed to substract xOffset and yOffset
-     * from coords.
+     * from coords. Returns the FIRST creature found at the spot
      * 
-     * @param xCoor
-     * @param yCoor
+     * @param xCoor xCoordinate of the search spot
+     * @param yCoor yCoordinate of the search spot
      * @return Creature found at the coordinates
      */
     public MapObject getMobAtLocation(double xCoor, double yCoor) {
@@ -215,6 +215,7 @@ public class Location implements Global {
                 if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getSprite().getWidth()) {
                     if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getSprite().getHeight()) {
                         mobAtLocation = mob;
+                        break;
                     }
                 }
                 
