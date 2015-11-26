@@ -131,7 +131,7 @@ public class Location implements Global {
             int startY = rnd.nextInt(2);
             Mists.logger.info("Creating monster from sprite sheet position "+startX+","+startY);
             Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 4, 0, 32, 32);
-            monster.getSprite().setCollisionAreaShape(1);
+            monster.getSprite().setCollisionAreaShape(2);
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);
         }

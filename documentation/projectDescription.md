@@ -71,18 +71,17 @@ From the main menu a player can either start a new game, load an existing one,
 edit game options, or close the game.
 
 ##Location
-Locations house the bulk of the adventure. They're built on a map, have structures blocking players path, and
-contain various monsters and puzzles to face. The maps come in two main variations: BGMaps and TileMaps. The former
-are based on a single image (hence the "BG", background), wheras the latter (TileMaps) are built from small tiles.
-TileMaps can also be randomly generated via the MapGenerator-class.
+Locations house the bulk of the adventure. They're built on a map, have structures blocking players path, and contain various monsters and puzzles to face. The maps come in two main variations: BGMaps and TileMaps. The former are based on a single image (hence the "BG", background), wheras the latter (TileMaps) are built from small tiles. TileMaps can also be randomly generated via the MapGenerator-class.
 
-On top of the maps we have MapObjects. Anything that can block, hurt or affect the player or other creatures in any
-way is a MapObject. They can be either Creatures, Structures or Effects. Creatures have behaviours via AIs, Structures
-tend to be more static. Effects are temporary by definition, though their duration could obviously be infinite.
+On top of the maps we have MapObjects. Anything that can block, hurt or affect the player or other creatures in any way is a MapObject. They can be either Creatures, Structures or Effects. Creatures have behaviours via AIs, Structures tend to be more static. Effects are temporary by definition, though their duration could obviously be infinite.
 
-Doing things (Actions) in the game is generally done with the aid of Effects. An effect is generated when an ability is
-used, and the targets of the ability are picked based on what the effect manages to intersect. An arrow lands on the
-first target it hits, etc.
+Doing things (Actions) in the game is generally done with the aid of Effects. An effect is generated when an ability is used, and the targets of the ability are picked based on what the effect manages to intersect. An arrow lands on the first target it hits, etc.
+
+###MapObjects and Sprites
+
+![](https://github.com/nkoiv/mists/blob/master/documentation/mapobjects.png "MapObjects and their relation to Sprites")
+MapObjects, or MOBs for short, are a myriad bunch. However when it comes to representing them on the screen, they all default to Sprites. A MapObject itself has no position or appearance, as that's all for the Sprite to handle. If a mapobject has no sprite, it can't be seen or directly interacted with. All movement and render calls pass through the MOB to its Sprite.
+
 
 ###Pathfinding
 
