@@ -7,26 +7,16 @@ package com.nkoiv.mists.game.controls;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
-import static com.nkoiv.mists.game.Global.TILESIZE;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gamestate.LocationState;
-import com.nkoiv.mists.game.world.LightsRenderer;
 import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.MapGenerator;
 import com.nkoiv.mists.game.world.TileMap;
-import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
-import com.nkoiv.mists.game.world.pathfinding.PathFinder;
-import java.awt.Frame;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Window;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import javafx.scene.image.ImageView;
-import javafx.stage.Screen;
 
 
 /**

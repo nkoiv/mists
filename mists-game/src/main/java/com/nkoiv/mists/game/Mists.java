@@ -42,6 +42,8 @@ public class Mists extends Application implements Global {
     
     public Game MistsGame;
     
+    public static int graphicScale = 1;
+    
     public boolean running = false;
     public final ArrayList<KeyCode> pressedButtons = new ArrayList<>();
     public final ArrayList<KeyCode> releasedButtons = new ArrayList<>();
@@ -169,7 +171,7 @@ public class Mists extends Application implements Global {
     }
     
     private void setupStructLibrary() {
-        Mists.structLibrary = new MobLibrary<>();
+        Mists.structLibrary = new MobLibrary();
         LibLoader.initializeStructLibrary(structLibrary);
     }
     

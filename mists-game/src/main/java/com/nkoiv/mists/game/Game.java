@@ -34,6 +34,8 @@ public class Game {
     public double HEIGHT; //Dimensions of the screen (render area)
     public double xOffset; //Offsets are used control which part of the map is drawn
     public double yOffset; //If/when a map is larger than display-area, it should be centered on player
+    public boolean toggleScale = true;
+    
     public MapGenerator mapGen;
 
     private ArrayList<GameState> gameStates;
@@ -97,7 +99,19 @@ public class Game {
         Mists.logger.info("Updating UI");
         currentState.updateUI();
     }
-
+    
+    /*
+    public void toggleScale(GraphicsContext gc) {
+        if (Mists.scale == 1) {
+            gc.scale(2, 2);
+            Mists.scale = 2;
+        } else {
+            gc.scale(0.5, 0.5);
+            Mists.scale = 1;
+        }
+        
+    }
+    */
     /**
     * Tick checks keybuffer, initiates actions and does just about everything.
     * Tick needs to know how much time has passed since the last tick, so it can
@@ -120,6 +134,11 @@ public class Game {
         //TODO: Consider sorting out UI here instead of handing it all to currentState
         currentState.render(centerCanvas, uiCanvas);
         //Mists.logger.info("Rendered current state on canvas");
+        if (toggleScale) {
+            //toggleScale(centerCanvas.getGraphicsContext2D());
+            //toggleScale(uiCanvas.getGraphicsContext2D());
+            toggleScale=false;
+        }
     }
     
     public void handleMouseEvent(MouseEvent me) {

@@ -123,15 +123,15 @@ public class Location implements Global {
         
         }
         
-        for (int i = 0; i < 10 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
             int startX = rnd.nextInt(1);
             int startY = rnd.nextInt(2);
             Mists.logger.info("Creating monster from sprite sheet position "+startX+","+startY);
-            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 0, 0, 32, 32);
-            monster.getSprite().setCollisionAreaShape(2);
+            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 4, 0, 32, 32);
+            monster.getSprite().setCollisionAreaShape(1);
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);
         }
@@ -382,6 +382,7 @@ public class Location implements Global {
      */
     public double getxOffset(GraphicsContext gc, double xPos){
         double windowWidth = gc.getCanvas().getWidth();
+        windowWidth = windowWidth / Mists.graphicScale;
 	//Calculate Offset to ensure Player is centered on the screen
         double xOffset = xPos - (windowWidth / 2);
         //Prevent leaving the screen
@@ -405,7 +406,8 @@ public class Location implements Global {
      */
     public double getyOffset(GraphicsContext gc, double yPos){
         double windowHeight = gc.getCanvas().getHeight();
-	//Calculate Offset to ensure Player is centered on the screen
+        windowHeight = windowHeight / Mists.graphicScale;
+        //Calculate Offset to ensure Player is centered on the screen
         double yOffset = yPos - (windowHeight / 2);
         //Prevent leaving the screen
         if (yOffset < 0) {
@@ -702,22 +704,32 @@ public class Location implements Global {
         return renderedMOBs;
     }
     
+    /**
+     * Structure extras are rendered separately for two main reasons:
+     * Firstly, they need to be on top of everything else, hence draw
+     * them after Structs and Creatures.
+     * Secondly, they're painted with the same lightlevel as the tile
+     * they're standing on, even if they are larger than the tile 
+     * (fex a tree and its leaves, arching over to several blocks radius)
+     * @param gc Graphics Context used for rendering
+     * @param renderedMOBs List of MapObjects we rendered on the screen. Only those need extras visible
+     * @param xOffset Offset for rendering (centered on player usually)
+     * @param yOffset Offset for rendering (centered on player usually)
+     */
+    
     private void renderStructureExtras(GraphicsContext gc, List<MapObject> renderedMOBs, double xOffset, double yOffset) {
          // Render extras should be called whenever the structure is rendered
         // This paints them on top of everything again, creatures go "behind" trees
         gc.save();
-        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), 8);
         double lightlevel;
         ColorAdjust lightmap = new ColorAdjust();
         if (!renderedMOBs.isEmpty()) {
             for (MapObject struct : renderedMOBs) {
                 if (struct instanceof Structure) {
-                    //lightlevel = this.lights.getLightLevel((int)struct.getXPos()/Mists.TILESIZE, (int)struct.getYPos()/Mists.TILESIZE);
                     lightlevel = lights.lightmap[(int)struct.getXPos()/Mists.TILESIZE][(int)struct.getCenterYPos()/Mists.TILESIZE];
                     lightlevel = lightlevel-1;
                     lightmap.setBrightness(lightlevel); gc.setEffect(lightmap);
                     ((Structure)struct).renderExtras(xOffset, yOffset, gc); //Draw extra frill (leaves on trees etc)
-                    
                 }
             }
         }

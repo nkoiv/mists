@@ -59,6 +59,17 @@ public class LocationState implements GameState {
         if(gameMenuOpen) uiComponents.get("GameMenu").setPosition((game.WIDTH/2 - 110), 150);
     }
     
+    public void toggleScale(GraphicsContext gc) {
+        if (Mists.graphicScale == 1) {
+            gc.scale(2, 2);
+            Mists.graphicScale = 2;
+        } else {
+            gc.scale(0.5, 0.5);
+            Mists.graphicScale = 1;
+        }
+        
+    }
+    
     private void loadDefaultUI() {
         TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
         TextButton attackButton = new ActionButton(game.player, "Smash!",  80, 60);
@@ -91,6 +102,12 @@ public class LocationState implements GameState {
         GraphicsContext uigc = uiCanvas.getGraphicsContext2D();
         double screenWidth = gameCanvas.getWidth();
         double screenHeight = gameCanvas.getHeight();
+        
+        if (this.game.toggleScale == true) {
+            toggleScale(gameCanvas.getGraphicsContext2D());
+            this.game.toggleScale = false;
+        }
+        
         //Render the current Location
         gc.clearRect(0, 0, screenWidth, screenHeight);
         if (game.currentLocation != null) {

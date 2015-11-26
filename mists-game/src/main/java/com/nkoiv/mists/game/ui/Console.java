@@ -97,6 +97,7 @@ public class Console extends TextWindow{
             case "collisionMap": super.getGame().locControls.printCollisionMapIntoConsole(); break;
             case "addCreature" : super.getGame().locControls.addCreature(attributes); break;
             case "createLoc":super.getGame().locControls.createLoc(attributes); break;
+            case "toggleScale":super.getGame().toggleScale =true;
             case "help": printHelp(); ;break;
             default: break;
         }

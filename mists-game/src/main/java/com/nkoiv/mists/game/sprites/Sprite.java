@@ -245,15 +245,6 @@ public class Sprite
         }
     }
     
-    public void render(double xOffset, double yOffset, GraphicsContext gc, Float lightlevel) {
-        
-        ColorAdjust lightmap = new ColorAdjust();
-        lightmap.setBrightness(lightlevel);
-        
-        gc.drawImage( image, positionX-xOffset, positionY-yOffset );
-        
-        
-    }
     
     public Double[] getCenter() {
         double xCenter = this.positionX + (this.width/2);

@@ -29,6 +29,7 @@ public class Creature extends MapObject implements Combatant {
     
     private CreatureAI ai;
     private Direction facing;
+    private Direction lastFacing = null;
     private HashMap<String, SpriteAnimation> spriteAnimations;
     
     /*Attributes are stored in a separate HashMap
@@ -227,6 +228,8 @@ public class Creature extends MapObject implements Combatant {
     */
     void updateSprite() {
         if (this.isFlagged("visible") && !this.spriteAnimations.isEmpty()) {
+            if (this.facing != this.lastFacing) {
+            this.lastFacing = this.facing;
             //Mists.logger.log(Level.INFO, "{0} is facing {1}", new Object[]{this.getName(), this.facing});
             switch(this.facing) {
                 case UP: this.getSprite().setAnimation(this.spriteAnimations.get("upMovement")); break;
@@ -238,6 +241,7 @@ public class Creature extends MapObject implements Combatant {
                 case DOWNRIGHT: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
                 case DOWNLEFT: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
                 default: break;
+            }
             }
         }
         
@@ -454,7 +458,7 @@ public class Creature extends MapObject implements Combatant {
     public boolean stopMovement() {
         this.setFlag("moving", 0);
         this.getSprite().setVelocity(0, 0);
-        this.getSprite().setImage(this.getSprite().getImage());
+        //this.getSprite().setImage(this.getSprite().getImage());
         return true;
     }
 
