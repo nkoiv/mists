@@ -7,7 +7,9 @@ package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.Random;
+import java.util.logging.Level;
 
 /**
  * CompanionAI is used for the friendly companions
@@ -45,18 +47,10 @@ public class CompanionAI extends CreatureAI {
     }
     
     private void pickNewAction(double time) {
-        creep.stopMovement(); //clear old movement
-        Random rnd = new Random();
-        if (this.distanceToMob(creep.getLocation().getPlayer()) > 3 * Mists.TILESIZE) {
-            this.moveTowardsMob(creep.getLocation().getPlayer(), time);
-            Mists.logger.info(creep.getName()+" moving towards "+creep.getLocation().getPlayer().getName());
-        } else {
-            int r = rnd.nextInt(10); //50% chance to move around
-            if (r < 5) this.moveRandomly(time);
-        }
-        
-        
+        distanceBasedFollow(time, creep.getLocation().getPlayer());
     }
+    
+
     
     
 }

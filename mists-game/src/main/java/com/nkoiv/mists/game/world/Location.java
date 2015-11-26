@@ -43,9 +43,9 @@ public class Location implements Global {
     /*
     * TODO: Lists for various types of MapObjects, from creatures to frills.
     */
-    private QuadTree mobQuadTree; //Used for collision detection
-    private ArrayList<MapObject> mapObjects;
-    //private List<MapObject> mapObjects;
+    //private QuadTree mobQuadTree; //Used for collision detection
+    private ArrayList<Creature> creatures;
+    private ArrayList<Structure> structures;
     private List<Effect> effects;
     private String name;
     private GameMap map;
@@ -69,8 +69,9 @@ public class Location implements Global {
     
     public Location(String name, String mapPath, int maptype) {
         this.name = name;
-        this.mapObjects = new ArrayList<>();
-        this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
+        this.creatures = new ArrayList<>();
+        this.structures = new ArrayList<>();
+        //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
         this.effects = new ArrayList<>();
         if (maptype == 0) this.loadMap(new BGMap(new Image(mapPath)));
         if (maptype == 1) this.loadMap(new TileMap(mapPath));
@@ -79,8 +80,9 @@ public class Location implements Global {
     
     public Location(String name, GameMap map) {
         this.name = name;
-        this.mapObjects = new ArrayList<>();
-        this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
+        this.creatures = new ArrayList<>();
+        this.structures = new ArrayList<>();
+        //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
         this.effects = new ArrayList<>();
         this.loadMap(map);
         this.localizeMap();
@@ -94,8 +96,10 @@ public class Location implements Global {
     public Location(PlayerCharacter player) {
         Mists.logger.info("Generating POC location...");
         this.name = "POCmap";
-        this.mapObjects = new ArrayList<>();
-        this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
+        //this.mapObjects = new ArrayList<>();
+        this.creatures = new ArrayList<>();
+        this.structures = new ArrayList<>();
+        //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
         this.effects = new ArrayList<>();
         this.mapGen = new DungeonGenerator();
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
@@ -112,13 +116,12 @@ public class Location implements Global {
         //TODO: Create structures from structure library once its finished
         Mists.logger.info("Generating random structures and creatures");
         Structure rock = Mists.structureLibrary.create("Rock", this, 0, 0);
-        this.mapObjects.add(rock);
+
         this.setMobInRandomOpenSpot(rock);
         
         for (int i = 0; i<10;i++) {
             //Make a bunch of trees
             Structure tree = Mists.structureLibrary.create("Tree", this, 0, 0);
-            this.mapObjects.add(tree);
             this.setMobInRandomOpenSpot(tree);
         
         }
@@ -160,7 +163,7 @@ public class Location implements Global {
         this.collisionMap.printMapToConsole();
         this.pathFinder = new PathFinder(this.collisionMap, 100, true);
         this.lights = new LightsRenderer(this);
-        this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
+        //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
         Mists.logger.log(Level.INFO, "Map ({0}x{1}) localized", new Object[]{map.getWidth(), map.getHeight()});
     }
 
@@ -174,7 +177,7 @@ public class Location implements Global {
         int addedStructures = 0;
         ArrayList<Structure> staticStructures = map.getStaticStructures(this);
         for (Structure s : staticStructures) {
-            this.mapObjects.add(s);
+            this.addStructure(s, s.getXPos(), s.getYPos());
             addedStructures++;
         }
         Mists.logger.log(Level.INFO, "{0} structures generated", addedStructures);
@@ -187,11 +190,7 @@ public class Location implements Global {
     * @return The creature in question
     */
     public Creature getCreatureByName(String name) {
-        ArrayList<Creature> creatures = new ArrayList<>();
-        for (MapObject mob : this.mapObjects) {
-            if (mob instanceof Creature) creatures.add((Creature)mob);
-        }
-        for (Creature c : creatures) {
+        for (Creature c : this.creatures) {
             if (c.getName().equals(name)) {
                 return c;
             }
@@ -202,7 +201,8 @@ public class Location implements Global {
     /**
      * When getting a MapObject by coordinates with mouseclick
      * or something, it's often needed to substract xOffset and yOffset
-     * from coords. Returns the FIRST creature found at the spot
+     * from coords. Returns the FIRST creature found at the spot.
+     * If no creature is found, returns the first Structure at location.
      * 
      * @param xCoor xCoordinate of the search spot
      * @param yCoor yCoordinate of the search spot
@@ -210,12 +210,21 @@ public class Location implements Global {
      */
     public MapObject getMobAtLocation(double xCoor, double yCoor) {
         MapObject mobAtLocation = null;
-        if (!this.mapObjects.isEmpty()) {
-            for (MapObject mob : this.mapObjects) {
+        if (!this.creatures.isEmpty()) {
+            for (Creature mob : this.creatures) {
                 if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getSprite().getWidth()) {
                     if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getSprite().getHeight()) {
-                        mobAtLocation = mob;
-                        break;
+                        return mob;
+                    }
+                }
+                
+            }
+        }
+        if (!this.structures.isEmpty()) {
+            for (Structure mob : this.structures) {
+                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getSprite().getWidth()) {
+                    if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getSprite().getHeight()) {
+                        return mob;
                     }
                 }
                 
@@ -281,12 +290,12 @@ public class Location implements Global {
     * @param yPos Position for the structure on the Y-axis
     */
     public void addStructure(Structure s, double xPos, double yPos) {
-        if (!this.mapObjects.contains(s)) {
-            this.mapObjects.add(s);    
+        if (!this.structures.contains(s)) {
+            this.structures.add(s);    
         }
         s.setLocation(this);
         s.getSprite().setPosition(xPos, yPos);
-        this.pathFinder.setMapOutOfDate(true);
+        if (this.pathFinder != null) this.pathFinder.setMapOutOfDate(true);
     }
     
     /** Adds a Creature to the location
@@ -295,8 +304,8 @@ public class Location implements Global {
     * @param yPos Position for the creature on the Y-axis
     */
     public void addCreature(Creature c, double xPos, double yPos) {
-        if (!this.mapObjects.contains(c)) {
-            this.mapObjects.add(c);
+        if (!this.creatures.contains(c)) {
+            this.creatures.add(c);
         }
         c.setLocation(this);
         c.setCenterPosition(xPos, yPos);
@@ -308,7 +317,7 @@ public class Location implements Global {
     * @param yPos Position for the effect on the Y-axis
     */
     public void addEffect(Effect e, double xPos, double yPos) {
-        if (!this.mapObjects.contains(e)) {
+        if (!this.effects.contains(e)) {
             this.effects.add(e);
         }
         e.setLocation(this);
@@ -321,8 +330,8 @@ public class Location implements Global {
     * @param yPos Position for the effect on the Y-axis
     */
     public void addPlayerCharacter(PlayerCharacter p, double xPos, double yPos) {
-        if (!this.mapObjects.contains(p)) {
-            this.mapObjects.add(p);
+        if (!this.creatures.contains(p)) {
+            this.creatures.add(p);
         }
         p.setLocation(this);
         p.getSprite().setPosition(xPos, yPos);
@@ -340,12 +349,22 @@ public class Location implements Global {
         return this.mapGen;
     }
     
-    public List<MapObject> getMOBList() {
-        return this.mapObjects;
+    public List<Creature> getCreatures() {
+        return this.creatures;
+    }
+    
+    public List<Structure> getStructures() {
+        return this.structures;
     }
     
     public void removeMapObject (MapObject o) {
-        if(this.mapObjects.contains(o)) this.mapObjects.remove(o);
+        if (o instanceof Creature) {
+            if(this.creatures.contains((Creature)o)) this.creatures.remove(o);
+        } else if (o instanceof Structure) {
+            if(this.structures.contains((Structure)o)) this.structures.remove(o);
+        } else if (o instanceof Effect) {
+            if(this.effects.contains((Effect)o)) this.effects.remove(o);
+        }
     }
     
     public void removeEffect (Effect e) {
@@ -434,36 +453,76 @@ public class Location implements Global {
     */
     public void update (double time) {
         //this.updateQuadTree();
-        ArrayList<Wall> removedWalls = new ArrayList();
         this.collisionMap.updateCollisionLevels();
-        if (!this.mapObjects.isEmpty()) {
-            for (MapObject mob : this.mapObjects) { //Mobs do whatever mobs do
+        structureCleanup();
+        if (!this.creatures.isEmpty()) {
+            for (Creature mob : this.creatures) { //Mobs do whatever mobs do
                 mob.update(time);
             }
-            Iterator<MapObject> mobIterator = mapObjects.iterator(); //Cleanup of mobs
-            while (mobIterator.hasNext()) {
-                MapObject mob = mobIterator.next();
+        }
+        creatureCleanup();
+        //Check collisions
+        if (!this.effects.isEmpty()) {
+            //Mists.logger.info("Effects NOT empty");
+            for (Effect e : this.effects) { //Handle effects landing on something
+                if (!this.checkCollisions(e).isEmpty()) {       
+                    e.getOwner().hitOn(this.checkCollisions((e)));
+                }
+            }
+        }
+        effectCleanup();
+    }
+    
+    /**
+     * structureCleanup cleans all the "removable"
+     * flagged structures.
+     */
+    private void structureCleanup() {
+        //Structure cleanup
+        if (!this.structures.isEmpty()) {
+            ArrayList<Wall> removedWalls = new ArrayList();
+            Iterator<Structure> structureIterator = structures.iterator(); //Cleanup of mobs
+            while (structureIterator.hasNext()) {
+                MapObject mob = structureIterator.next();
                 if (mob.isFlagged("removable")) {
                     if (mob instanceof Wall) {
                         removedWalls.add((Wall)mob);
                         //Update the surrounding walls as per needed
                         //this.updateWallsAt(mob.getCenterXPos(), mob.getCenterYPos());   
                     }
-                    mobIterator.remove();
+                    structureIterator.remove();
                     this.pathFinder.setMapOutOfDate(true);
                 }
-            }   
+            }  
+            this.restructureWalls(removedWalls);
         }
-        this.restructureWalls(removedWalls);
-        
-        if (!this.effects.isEmpty()) {
-            //Mists.logger.info("Effects NOT empty");
-            for (Effect e : this.effects) { //Handle effects landing on something
-                if (!this.checkCollisions(e).isEmpty()) {
-                    
-                    e.getOwner().hitOn(this.checkCollisions((e)));
+    }
+    
+     /**
+     * creatureCleanup cleans all the "removable"
+     * flagged creatures.
+     */
+    private void creatureCleanup() {
+        //Creature cleanup
+        if (!this.creatures.isEmpty()) {
+            Iterator<Creature> creatureIterator = creatures.iterator(); //Cleanup of mobs
+            while (creatureIterator.hasNext()) {
+                MapObject mob = creatureIterator.next();
+                if (mob.isFlagged("removable")) {
+                    creatureIterator.remove();
+                    //this.pathFinder.setMapOutOfDate(true); //Creatures are not on pathFindermap atm
                 }
-            }
+            }     
+        }
+    }
+    
+     /**
+     * effectCleanup cleans all the "removable"
+     * flagged Effects.
+     */
+    private void effectCleanup() {
+        //Effects cleanup
+        if (!this.effects.isEmpty()) {
             Iterator<Effect> effectsIterator = effects.iterator(); //Cleanup of effects
             while (effectsIterator.hasNext()) {
                 if (effectsIterator.next().isFlagged("removable")) {
@@ -479,13 +538,17 @@ public class Location implements Global {
      * all mobs in the mapObjects.
      * TODO: Consider keeping structures and creatures separate as creatures are updated more often(?)
      */
+    /*
     private void updateQuadTree() {
         mobQuadTree.clear();
-        for (MapObject mapObject : mapObjects) {
-            mobQuadTree.insert(mapObject);
+        for (Creature creature : creatures) {
+            mobQuadTree.insert(creature);
+        }
+        for (Structure structure : structures) {
+            mobQuadTree.insert(structure);
         }
     }
-    
+    */
     
     private void restructureWalls (ArrayList<Wall> removedWalls) {
         if (removedWalls.isEmpty()) return;
@@ -561,10 +624,30 @@ public class Location implements Global {
         
         //Old collision code (pre QuadTree)
         ArrayList<MapObject> collidingObjects = new ArrayList<>();
-        Iterator<MapObject> mapObjectsIter = mapObjects.iterator();
-        while ( mapObjectsIter.hasNext() )
+        Iterator<Creature> creaturesIter = creatures.iterator();
+        while ( creaturesIter.hasNext() )
         {
-            MapObject collidingObject = mapObjectsIter.next();
+            MapObject collidingObject = creaturesIter.next();
+            //If the objects are further away than their combined width/height, they cant collide
+            if ((Math.abs(collidingObject.getCenterXPos() - o.getCenterXPos())
+                 > (collidingObject.getSprite().getWidth() + o.getSprite().getWidth()))
+                || (Math.abs(collidingObject.getCenterYPos() - o.getCenterYPos())
+                 > (collidingObject.getSprite().getHeight() + o.getSprite().getHeight()))) {
+                //Objects are far enough from oneanother
+            } else {
+                if (!collidingObject.equals(o)) { // Colliding with yourself is not really a collision
+                if ( o.instersects(collidingObject) ) 
+                 {
+                    collidingObjects.add(collidingObject);
+                }
+            }
+            }
+            
+        }
+        Iterator<Structure> structuresIter = structures.iterator();
+        while ( structuresIter.hasNext() )
+        {
+            MapObject collidingObject = structuresIter.next();
             //If the objects are further away than their combined width/height, they cant collide
             if ((Math.abs(collidingObject.getCenterXPos() - o.getCenterXPos())
                  > (collidingObject.getSprite().getWidth() + o.getSprite().getWidth()))
@@ -662,21 +745,63 @@ public class Location implements Global {
     }
     
     /**
-     * Render all the MOBs (creature, structure... anything derived from MapObject)
+     * Render all the MOBs (creature & structure, Effects are separate (TODO: Why?)
      * on the location that is visible. Returns the list of objects that were rendered
      * @param gc Graphics context to render on
      * @param xOffset Offset for rendering (centered on player usually)
      * @param yOffset Offset for rendering (centered on player usually)
      */
-    
     private List<MapObject> renderMobs(GraphicsContext gc, double xOffset, double yOffset) {
+        List<MapObject> renderedMOBs = new ArrayList<>();
+        renderedMOBs.addAll(renderStructures(gc, xOffset, yOffset));
+        renderedMOBs.addAll(renderCreatures(gc, xOffset, yOffset));
+        return renderedMOBs;
+    }
+    
+    
+    private List<MapObject> renderCreatures(GraphicsContext gc, double xOffset, double yOffset) {
          /*
         * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
         */
         List<MapObject> renderedMOBs = new ArrayList<>();
         
-        if (!this.mapObjects.isEmpty()) {
-            for (MapObject mob : this.mapObjects) {
+        if (!this.creatures.isEmpty()) {
+            for (Creature mob : this.creatures) {
+                if (mob.getXPos()-xOffset < -mob.getSprite().getWidth() ||
+                    mob.getXPos()-xOffset > gc.getCanvas().getWidth()) {
+                    //Mob is not in window
+                } else if (mob.getYPos()-yOffset < -mob.getSprite().getHeight() ||
+                    mob.getYPos()-yOffset > gc.getCanvas().getHeight()) {
+                    //Mob is not in window
+                } else {
+                    //Mob is in window
+                    mob.render(xOffset, yOffset, gc); //Draw objects on the ground
+                    renderedMOBs.add(mob);
+                    if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
+                        gc.setStroke(Color.RED);
+                        if (mob.getSprite().getCollisionAreaType() == 1) {
+                            gc.strokeRect(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
+                            mob.getSprite().getWidth(), mob.getSprite().getHeight());
+                        } else if (mob.getSprite().getCollisionAreaType() == 2) {
+                            gc.strokeOval(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
+                            mob.getSprite().getWidth(), mob.getSprite().getHeight());
+                        }
+
+                    }
+                }
+            }
+        }
+        return renderedMOBs;
+    }
+    
+    private List<MapObject> renderStructures(GraphicsContext gc, double xOffset, double yOffset) {
+         /*
+        * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
+        */
+        List<MapObject> renderedMOBs = new ArrayList<>();
+        
+        if (!this.structures.isEmpty()) {
+            for (Structure mob : this.structures) {
                 if (mob.getXPos()-xOffset < -mob.getSprite().getWidth() ||
                     mob.getXPos()-xOffset > gc.getCanvas().getWidth()) {
                     //Mob is not in window
@@ -837,7 +962,8 @@ public class Location implements Global {
     @Override
     public String toString() {
         String s;
-        s = this.name+", a "+this.map.getWidth()+"x"+this.map.getHeight()+" area with "+this.mapObjects.size()+" mobs";
+        s = this.name+", a "+this.map.getWidth()+"x"+this.map.getHeight()+" area with "
+                +this.creatures.size()+" creatures and "+this.structures.size()+" structures";
         return s;
     }
 
@@ -845,7 +971,7 @@ public class Location implements Global {
      *  ExitLocation should clean up the location for re-entry later on
      */
     public void exitLocation() {
-        Mists.logger.info("Location "+this.getName()+" exited, cleaning up...");
+        Mists.logger.log(Level.INFO, "Location {0} exited, cleaning up...", this.getName());
     }
 
     /**

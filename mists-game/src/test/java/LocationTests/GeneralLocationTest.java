@@ -65,14 +65,14 @@ public class GeneralLocationTest extends Application {
     
     @Test
     public void testLocationStartsWithEmptyMOBList() {
-        assert(testLocation.getMOBList().isEmpty());
+        assert(testLocation.getCreatures().isEmpty());
     }
     
     @Test
     public void addedStructuresShouldBeInMOBList() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
         testLocation.addStructure(testRock, 500 , 200);
-        assert(testLocation.getMOBList().contains(testRock));
+        assert(testLocation.getStructures().contains(testRock));
     }
     /*
     @Test
@@ -99,7 +99,7 @@ public class GeneralLocationTest extends Application {
         testLocation.addCreature(testCreature, 300, 300);
         testCreature.setFlag("removable",1);
         testLocation.update(0.15f);
-        assert(testLocation.getMOBList().contains(testCreature) == false);
+        assert(testLocation.getCreatures().contains(testCreature) == false);
     }
     
     @Test
@@ -134,7 +134,7 @@ public class GeneralLocationTest extends Application {
         testRock.setFlag("removable", 1);
         testLocation.addStructure(testRock, 500 , 200);
         testLocation.update(1);
-        assert(testLocation.getMOBList().isEmpty());
+        assert(testLocation.getStructures().isEmpty());
     }
     
     
@@ -197,11 +197,11 @@ public class GeneralLocationTest extends Application {
         testLocation.addCreature(testCreature2, 50, 50);
         testLocation.addCreature(testCreature3, 150, 50);
         testLocation.addCreature(testCreature4, 250, 50);
-        int mobsAtLocation = testLocation.getMOBList().size();
+        int mobsAtLocation = testLocation.getCreatures().size();
         testCreature1.setFlag("removable", 1);
         testCreature2.setFlag("removable", 1);
         testLocation.update(0.15f);
-        assert(testLocation.getMOBList().size() == mobsAtLocation-2);
+        assert(testLocation.getCreatures().size() == mobsAtLocation-2);
     }
     
     @Test
@@ -237,7 +237,7 @@ public class GeneralLocationTest extends Application {
         testLocation.addCreature(testCreature, 50, 70);
         testCreature.setFlag("removable", 1);
         testLocation.update(1);
-        assert(testLocation.getMOBList().isEmpty());
+        assert(testLocation.getCreatures().isEmpty());
     }
     
     @After

@@ -6,15 +6,19 @@
 package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.pathfinding.Path;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * CreatureAI is the main AI routine for creatures.
  * Each acting creature should have its own CreatureAI, as it stores
- * the creatures states and intentions
+ * the creatures states and intentions.
+ * Most general AI functions are stored here, while more
+ * specific ones are located in the classes that extend this one
  * @author nikok
  */
 public class CreatureAI {
@@ -104,6 +108,11 @@ public class CreatureAI {
         
     }
     
+    /**
+     * Choose a random direction (can be STAY)
+     * and move towards it
+     * @param time time spent moving
+     */
     protected void moveRandomly(double time) {
         Random rnd = new Random();
         int randomint = rnd.nextInt(9);
@@ -122,7 +131,43 @@ public class CreatureAI {
         this.creep.applyMovement(time);     
         
     }
- 
+    
+    /**
+     * Surrounding creatures gets all the creatures that are within
+     * range of a position
+     * @param xCoor xCoordinate of the center of the search
+     * @param yCoor yCoordinate of the center of the search
+     * @param range range to perform the search on (radius)
+     * @return List of creatures within range
+     */
+    protected ArrayList<Creature> surroundingCreatures(double xCoor, double yCoor, double range) {
+        ArrayList<Creature> nearbyCreatures = new ArrayList<>();
+        
+        
+        
+        return nearbyCreatures;
+    }
+    
+    /**
+     * Distance based follow sets the creep to follow the target,
+     * unless it's too far (over 10 tiles) away. If target is close
+     * (two or less tiles), then the creep just wanders around randomly
+     * @param time time spent for moving
+     * @param target target to follow
+     */
+    protected void distanceBasedFollow(double time, MapObject target) {
+        creep.stopMovement(); //clear old movement
+        Random rnd = new Random();
+        if (this.distanceToMob(target) > 10 * Mists.TILESIZE) {
+            //Mists.logger.log(Level.INFO, "{0} too far to follow {1}", new Object[]{creep.getName(), creep.getLocation().getPlayer().getName()});
+        } else if (this.distanceToMob(target) > 2 * Mists.TILESIZE) {
+            this.moveTowardsMob(target, time);
+            //Mists.logger.log(Level.INFO, "{0} moving towards {1}", new Object[]{creep.getName(), creep.getLocation().getPlayer().getName()});
+        } else {
+            int r = rnd.nextInt(10); //50% chance to move around
+            if (r < 5) this.moveRandomly(time);
+        }
+    }
     
     public Path getPath() {
         if (this.pathToMoveOn != null) return this.pathToMoveOn;

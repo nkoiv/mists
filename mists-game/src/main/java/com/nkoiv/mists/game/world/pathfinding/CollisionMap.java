@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,7 +99,7 @@ public class CollisionMap {
      * 
      */
     private void updateMobsOnNodeMap() {
-        List<MapObject> mobs = this.location.getMOBList();
+        List<Structure> mobs = this.location.getStructures();
         //Mists.logger.info("Moblist has " +mobs.size()+" objects");
         for (MapObject mob : mobs) {
             //Mists.logger.info("Doing collisionmapstuff for "+mob.getName());
@@ -122,8 +123,11 @@ public class CollisionMap {
                 }
             } else if (!this.structuresOnly) { //Creatures block only their original spot
                 //Mists.logger.info("This is NOT structure");
+                //TODO: This is redundant old code that can never be reached
+                //If creatures are wanted on collisionmap, they need to be
+                //called in via location.getCreatures();
                 if(this.isOnMap(mobXNodeStart, mobYNodeStart))
-                    this.nodeMap[mobXNodeStart][mobYNodeStart].setCollisionLevel(mobCL);
+                this.nodeMap[mobXNodeStart][mobYNodeStart].setCollisionLevel(mobCL);
             }
             
             
