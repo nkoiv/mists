@@ -80,6 +80,7 @@ Doing things (Actions) in the game is generally done with the aid of Effects. An
 ###MapObjects and Sprites
 
 ![](https://github.com/nkoiv/mists/blob/master/documentation/mapobjects.png "MapObjects and their relation to Sprites")
+
 MapObjects, or MOBs for short, are a myriad bunch. However when it comes to representing them on the screen, they all default to Sprites. A MapObject itself has no position or appearance, as that's all for the Sprite to handle. If a mapobject has no sprite, it can't be seen or directly interacted with. All movement and render calls pass through the MOB to its Sprite.
 
 
