@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.Combatant;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
@@ -75,14 +76,25 @@ public class MeleeAttack extends Action implements AttackAction {
        
     @Override
     public void hitOn(ArrayList<MapObject> mobs) {
+        int damage = 50;
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
             Mists.logger.info(this.toString() + " landed on " + mobs.toString());
             this.setFlag("triggered", 1);
             for (MapObject mob : mobs) {
                 if (!mob.equals(this.getOwner())) {
                     if (mob instanceof Combatant) {
-                        Mists.logger.info("Hit "+mob.getName()+" for 50 damage");
-                        ((Combatant)mob).takeDamage(50);
+                        if (this.getOwner() instanceof PlayerCharacter && mob instanceof Creature) {
+                            //Disallow friendly fire
+                            //TODO: build this into flags somehow (if mob.faction == getOwner.faction...)
+                            PlayerCharacter pc =(PlayerCharacter)this.getOwner();
+                            if (!pc.getCompanions().contains((Creature)mob)) {
+                                Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
+                                ((Combatant)mob).takeDamage(50);
+                            }
+                        } else {
+                            Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
+                            ((Combatant)mob).takeDamage(50);
+                        }
                     } else if (mob instanceof Structure) {
                         //TODO: Temp: DESTROY THE STRUCTURES!
                         //this.getOwner().getLocation().removeMapObject(mob);

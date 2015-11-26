@@ -8,14 +8,13 @@ package com.nkoiv.mists.game.AI;
 import com.nkoiv.mists.game.gameobject.Creature;
 
 /**
- * CompanionAI is used for the friendly companions
- * player might have.
+ *
  * @author nikok
  */
-public class CompanionAI extends CreatureAI {
+public class MonsterAI extends CreatureAI{
 
-    public CompanionAI(Creature companion) {
-        super(companion);
+    public MonsterAI(Creature monster) {
+        super(monster);
     }
     
     /**
@@ -43,10 +42,15 @@ public class CompanionAI extends CreatureAI {
     }
     
     private void pickNewAction(double time) {
-        distanceBasedFollow(time, creep.getLocation().getPlayer());
+        if (!this.active) {
+            if (this.isInLineOfSight(creep.getLocation().getPlayer())) {
+                this.active = true;
+            }
+        }
+        else {
+            this.creep.stopMovement(); //clear old movement
+            this.moveTowardsMob(creep.getLocation().getPlayer(), time);
+        }
     }
-    
-
-    
     
 }

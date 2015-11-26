@@ -9,9 +9,11 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.pathfinding.Path;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
 
 /**
  * CreatureAI is the main AI routine for creatures.
@@ -26,6 +28,7 @@ public class CreatureAI {
     protected Creature creep;
     protected double timeSinceAction;
     protected Path pathToMoveOn;
+    protected boolean active;
     
     public CreatureAI (Creature creep) {
         this.creep = creep;
@@ -135,17 +138,42 @@ public class CreatureAI {
     /**
      * Surrounding creatures gets all the creatures that are within
      * range of a position
-     * @param xCoor xCoordinate of the center of the search
-     * @param yCoor yCoordinate of the center of the search
+     * @param xCoor xCoordinate of the centre of the search
+     * @param yCoor yCoordinate of the centre of the search
      * @param range range to perform the search on (radius)
      * @return List of creatures within range
      */
     protected ArrayList<Creature> surroundingCreatures(double xCoor, double yCoor, double range) {
         ArrayList<Creature> nearbyCreatures = new ArrayList<>();
-        
-        
-        
+        for (Creature mob : creep.getLocation().getCreatures()) {
+            double euclideanDistance = Math.sqrt(Math.pow(this.getCreature().getXPos() - mob.getXPos(), 2)
+                            + Math.pow(this.getCreature().getYPos() - mob.getYPos(), 2));
+            if (euclideanDistance <= range) nearbyCreatures.add(mob);
+        }
         return nearbyCreatures;
+    }
+    
+    /**
+     * line of sight checks if there's structures between target
+     * and given coordinates
+     * @param xCoor start point for line
+     * @param yCoor start point for line
+     * @param target end point for line
+     * @return True if no Structures block the line of sight
+     */
+    protected boolean isInLineOfSight(double xCoor, double yCoor, MapObject target) {
+        ArrayList<MapObject> mobsInBetween = creep.getLocation().checkCollisions(xCoor, yCoor, target.getCenterXPos(), target.getCenterYPos());
+        for (MapObject mob : mobsInBetween) {
+           if (mob != creep && mob != target && mob instanceof Structure) {
+               Mists.logger.log(Level.INFO, "Line of sight between {0},{1} and {2} blocked by {3}", new Object[]{(int)xCoor, (int)yCoor, target.getName(), mob.getName()});
+               return false;
+           }
+        }
+        return true;
+    }
+    
+    protected boolean isInLineOfSight(MapObject target) {
+        return this.isInLineOfSight(creep.getCenterXPos(), creep.getCenterYPos(), target);
     }
     
     /**

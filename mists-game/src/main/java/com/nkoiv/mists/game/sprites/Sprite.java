@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.ColorAdjust;
@@ -292,18 +293,14 @@ public class Sprite
     }
 
     public Shape getBoundary()
-    {
-        //Consider:
-        //Collision boxes should be slightly smaller than the Sprite itself
-        //Otherwise it will be really hard to move between tiles
-        
+    {   
     switch(collisionArea) {
-        case 1: return new Rectangle(positionX+1,positionY+1,width-2,height-2);
-        case 2: return new Ellipse((positionX+(width/2))+2,(positionY+(height/2))+2,((width)/2)-1,((height)/2)-1);
+        case 1: return new Rectangle(positionX,positionY,width,height);
+        case 2: return new Ellipse((positionX+(width/2)),(positionY+(height/2)),((width)/2),((height)/2));
         default: break;
     }
    
-        return new Rectangle(positionX+1,positionY+1,width-2,height-2);
+        return new Rectangle(positionX,positionY,width,height);
         //return new Rectangle2D(positionX+1,positionY+1,width-2,height-2);
     }
 
@@ -315,8 +312,7 @@ public class Sprite
      * @return True if they overlap somewhere
      */    
     public boolean intersects(Sprite s) {
-
-        if (this.intersectsWithShape(s)) {
+        if (this.intersectsWithShape(s.getBoundary())) {
             //Check pixel collsion
             return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), s.getXPos(), s.getYPos(), s.getImage());
             
@@ -325,15 +321,12 @@ public class Sprite
 
     }
     
- 
-
-    
-    
     //Old intersects, with Java shape.intersect
-    public boolean intersectsWithShape(Sprite s)
+    public boolean intersectsWithShape(Shape s)
     {
         //Shape shape = Shape.intersect(s.getBoundary(), this.getBoundary());
-        return this.getBoundary().intersects(s.getBoundary().getBoundsInLocal());
+        return this.getBoundary().intersects(s.getBoundsInLocal());
+        
         /*
         if (shape.getBoundsInLocal().getWidth() != -1) {
             return pixelCollision(s.getImage());
@@ -352,7 +345,7 @@ public class Sprite
     public double getYPos() {
         return this.positionY;
     }
-    
+       
     /**
      * Take the pixelreaders from two images,
      * and compare them pixel by pixel to see if a collision
@@ -366,7 +359,7 @@ public class Sprite
      * @return true if the images overlap in pixels
      */
     
-    public boolean pixelCollision(double x1, double y1, Image image1,
+    public static boolean pixelCollision(double x1, double y1, Image image1,
                                double x2, double y2, Image image2) {
 
         PixelReader pr1 = image1.getPixelReader();

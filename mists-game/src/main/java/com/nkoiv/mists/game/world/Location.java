@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
@@ -30,6 +31,7 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -135,6 +137,7 @@ public class Location implements Global {
             Mists.logger.info("Creating monster from sprite sheet position "+startX+","+startY);
             Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 4, 0, 36, 32);
             monster.getSprite().setCollisionAreaShape(1);
+            monster.setAI(new MonsterAI(monster));
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);
         }
@@ -665,8 +668,61 @@ public class Location implements Global {
             
         }
         return collidingObjects;
+    }
+    
+    /**
+     * Check Collisions for a line drawn between two points.
+     * This is useful for determining for example line of sight
+     * @param xStart x Coordinate of the starting point
+     * @param yStart y Coordinate of the starting point
+     * @param xGoal x Coordinate of the far end
+     * @param yGoal y Coordinate of the far end
+     * @return list with all the colliding mapObjects(Creatures and Structures)
+     */
+    public ArrayList<MapObject> checkCollisions(double xStart, double yStart, double xGoal, double yGoal) {
+        ArrayList<MapObject> collidingObjects = new ArrayList<>();
+        double xDistance = xGoal - xStart;
+        double yDistance = yGoal - yStart;
+        Line line = new Line(xStart, yStart, xGoal, yGoal);
+        Iterator<Creature> creaturesIter = creatures.iterator();
+        while ( creaturesIter.hasNext() )
+        {
+            MapObject collidingObject = creaturesIter.next();
+            //If the objects are further away than their combined width/height, they cant collide
+            if ((Math.abs(collidingObject.getCenterXPos() - xStart)
+                 > (collidingObject.getSprite().getWidth() + Math.abs(xDistance)))
+                || (Math.abs(collidingObject.getCenterYPos() - yStart)
+                 > (collidingObject.getSprite().getHeight() + Math.abs(yDistance)))) {
+                //Objects are far enough from oneanother
+            } else {
+                if (collidingObject.getSprite().intersectsWithShape(line) ) 
+                 {
+                    collidingObjects.add(collidingObject);
+                }
+            }
+            
+        }
+        Iterator<Structure> structuresIter = structures.iterator();
+        while ( structuresIter.hasNext() )
+        {
+            MapObject collidingObject = structuresIter.next();
+            //If the objects are further away than their combined width/height, they cant collide
+            if ((Math.abs(collidingObject.getCenterXPos() - xStart)
+                 > (collidingObject.getSprite().getWidth() + Math.abs(xDistance)))
+                || (Math.abs(collidingObject.getCenterYPos() - yStart)
+                 > (collidingObject.getSprite().getHeight() + Math.abs(yDistance)))) {
+                //Objects are far enough from oneanother
+            } else {
+                if (collidingObject.getSprite().intersectsWithShape(line)) 
+                 {
+                    collidingObjects.add(collidingObject);
+                }
+            }
+            
+        }
         
         
+        return collidingObjects;
     }
     
     public HashSet<Direction> collidedSides (MapObject mob) {
