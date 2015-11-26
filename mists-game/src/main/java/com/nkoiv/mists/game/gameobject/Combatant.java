@@ -9,7 +9,8 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.world.Location;
 
 /**
- *
+ * Combatant interface makes sure the MapObject
+ * is capable of dealing with attacks
  * @author nkoiv
  */
 public interface Combatant {

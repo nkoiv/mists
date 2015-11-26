@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 /**
- *
+ * Global configuration that can be modified via Options
+ * Loaded and stored from external file
  * @author nikok
  */
 public class Config {
