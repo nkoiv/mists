@@ -392,7 +392,6 @@ public class Location implements Global {
         } else if (xOffset > map.getWidth() -(windowWidth)) {
             xOffset = map.getWidth() - (windowWidth);
         }
-        
         this.lastOffsets[0] = xOffset;
         return xOffset;
 	}

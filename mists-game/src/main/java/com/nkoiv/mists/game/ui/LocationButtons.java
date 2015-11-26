@@ -40,6 +40,21 @@ public class LocationButtons {
         
     }
     
+    public static class ToggleScaleButton extends TextButton {
+        private final Game game;
+        public ToggleScaleButton(String name, double width, double height, Game game) {
+            super(name, width, height);
+            this.game = game;
+        }
+        
+        @Override
+        public void onClick(MouseEvent me) {
+            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+            this.game.toggleScale = true;
+        }
+        
+    }
+    
     public static class DrawPathsButton extends TextButton {
         private final Game game;
         

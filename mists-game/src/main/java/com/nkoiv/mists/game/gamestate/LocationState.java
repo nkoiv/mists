@@ -76,6 +76,7 @@ public class LocationState implements GameState {
         TextButton pathsButton = new LocationButtons.DrawPathsButton("Paths Off", 80, 60, this.game);
         TextButton lightenButton = new LocationButtons.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
         TextButton darkenButton = new LocationButtons.ReduceLightlevelButton("Darken", 80, 60, this.game);
+        TextButton toggleScaleButton = new LocationButtons.ToggleScaleButton("Resize", 80, 60, this.game);
         MuteMusicButton muteMusicButton;
         muteMusicButton = new AudioControls.MuteMusicButton("Mute music", 80, 60);
         
@@ -84,6 +85,7 @@ public class LocationState implements GameState {
         actionBar.addSubComponent(lightenButton);
         actionBar.addSubComponent(darkenButton);
         actionBar.addSubComponent(muteMusicButton);
+        actionBar.addSubComponent(toggleScaleButton);
         uiComponents.put(actionBar.getName(), actionBar);
         
     }
