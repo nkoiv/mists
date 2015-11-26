@@ -5,11 +5,14 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import com.nkoiv.mists.game.AI.CompanionAI;
 import static com.nkoiv.mists.game.Global.TILESIZE;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import java.util.HashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -46,7 +49,18 @@ public class LibLoader {
         Mists.logger.info("Loading up creature data");
         //TODO: Load the data from a file
         
+        //Companions
+        
+        Creature himmu = new Creature("Himmu",new Image("/images/himmu.png"));
+        himmu.setAnimation("downMovement", new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 0, 0, 64, 64 );
+        himmu.setAnimation("upMovement", new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 0, 0, 64, 64 );       
+        himmu.setAnimation("leftMovement", new ImageView("/images/himmu_walk_left.png"), 4, 0, 0, 0, 0, 64, 64 );
+        himmu.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
+        himmu.setAI(new CompanionAI(himmu));
+        lib.addTemplate(himmu);
+        
         //Monsters
+        
         
         
     }

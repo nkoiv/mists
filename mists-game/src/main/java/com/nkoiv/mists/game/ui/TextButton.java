@@ -11,7 +11,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -35,8 +34,10 @@ public class TextButton implements UIComponent{
     
     public TextButton(String name, double width, double height, double xPosition, double yPosition) {
         text = new Text(name);
-        text.setFont(Font.font(20));
+        text.setFont(Mists.fonts.get("alagard"));
+        //text.setFont(Font.font(20));
         text.setStroke(Color.WHITE);
+        text.setFill(Color.WHITE);
         double textWidth = text.getLayoutBounds().getWidth();
         double textHeight = text.getLayoutBounds().getHeight();
         textXOffset = ((textWidth/2)  - (width/2));
@@ -57,8 +58,8 @@ public class TextButton implements UIComponent{
         
         gc.setGlobalAlpha(1);
         gc.setFont(text.getFont());
-        gc.setStroke(text.getStroke());
-        gc.strokeText(text.getText(), xPosition-textXOffset, yPosition+background.getHeight()+textYOffset);
+        gc.setFill(text.getFill());
+        gc.fillText(text.getText(), xPosition-textXOffset, yPosition+background.getHeight()+textYOffset);
         gc.restore();
     }
     
@@ -74,6 +75,7 @@ public class TextButton implements UIComponent{
         Text newText = new Text(newTextString);
         newText.setFont(this.text.getFont());
         newText.setStroke(this.text.getStroke());
+        newText.setFill(this.text.getFill());
         this.text = newText;
         double textWidth = text.getLayoutBounds().getWidth();
         double textHeight = text.getLayoutBounds().getHeight();

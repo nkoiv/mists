@@ -8,7 +8,6 @@ package LocationTests;
 
 import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Game;
 import static com.nkoiv.mists.game.Global.TILESIZE;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;

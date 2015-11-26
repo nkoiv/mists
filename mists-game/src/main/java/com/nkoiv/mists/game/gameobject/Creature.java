@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
@@ -54,6 +55,8 @@ public class Creature extends MapObject implements Combatant {
         this.setFacing(Direction.DOWN);
         this.initializeAttributes();
         this.initializeFlags();
+        this.crossableTerrain = new ArrayList<>();
+        this.crossableTerrain.add(0);
         this.ai = new CreatureAI(this);
     }
        
@@ -363,6 +366,14 @@ public class Creature extends MapObject implements Combatant {
                 -this.getAttribute("Speed")*ySpeedMultiplier);
             }
         }
+        //Update facing
+        if (this.getSprite().getYVelocity() > 0) this.setFacing(Direction.DOWN);
+        else this.setFacing(Direction.UP);
+        if (Math.abs(this.getSprite().getYVelocity()) < Math.abs(this.getSprite().getXVelocity())) {
+            if (this.sprite.getXVelocity() > 0) this.setFacing(Direction.RIGHT);
+            else this.setFacing(Direction.LEFT);
+        }
+        
         return true;
     }
     
@@ -508,6 +519,10 @@ public class Creature extends MapObject implements Combatant {
         this.setAttribute("Speed", s);
     }
 
+    public void setAI(CreatureAI ai) {
+        this.ai = ai;
+    }
+    
     @Override
     public void takeDamage(int damage) {
         this.setHealth(this.getHealth()-damage);
@@ -527,8 +542,11 @@ public class Creature extends MapObject implements Combatant {
     @Override
     public Creature createFromTemplate() {
         Creature nc = new Creature(this.name, this.getSprite().getImage());
-        //Link to same animation frames (no need to make a copy)
-        nc.spriteAnimations = this.spriteAnimations;
+        HashMap<String, SpriteAnimation> nanimations = new HashMap<>();
+        for (String s : this.spriteAnimations.keySet()) {
+            nanimations.put(s, this.spriteAnimations.get(s));
+        }
+        nc.spriteAnimations = nanimations;
         //Copy over attributes
         for (String a : this.attributes.keySet()) {
             nc.attributes.put(a, this.attributes.get(a));
@@ -544,6 +562,10 @@ public class Creature extends MapObject implements Combatant {
         }
         nc.crossableTerrain = newCrossable;
         
+        //AI should be the same type as Template
+        if (ai instanceof CompanionAI) {
+            nc.ai = new CompanionAI(nc);
+        }  
         return nc;
     }
     

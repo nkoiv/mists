@@ -45,6 +45,7 @@ public class MainMenuState implements GameState {
     @Override
     public void render(Canvas gameCanvas, Canvas uiCanvas) {
         GraphicsContext uigc = uiCanvas.getGraphicsContext2D();
+        uigc.setFont(Mists.fonts.get("alagard"));
         double screenWidth = uiCanvas.getWidth();
         double screenHeight = uiCanvas.getHeight();
         //TODO: Add a background to render

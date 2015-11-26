@@ -287,4 +287,4 @@ Joe Steudler Music Sampler Humble Bundle:
 [Copyright](C) 2014 DEGICA Co., LTD; Enterbrain, INC;
 Artist: Joel Steudler
 
-
+Fonts (Alagard and Romulus) are by Pix3M from OpenGameArt.Org

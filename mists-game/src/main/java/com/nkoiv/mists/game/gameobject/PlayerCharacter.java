@@ -7,9 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,8 +39,8 @@ public class PlayerCharacter extends Creature implements Combatant {
     private SpriteAnimation walkRight;
     */
     
-    private HashMap<String, SpriteAnimation> spriteAnimations;
-    private ArrayList<PlayerCharacter> companions;
+
+    private ArrayList<Creature> companions;
     
     public PlayerCharacter() {
         //Dummy player for testing
@@ -59,7 +57,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setSpeed(50);
         */
         super ("Lini",new Image("/images/himmutoy.png"));
-        this.spriteAnimations = new HashMap<>();
+        
         this.setAnimation("downMovement", new ImageView("/images/lini.png"), 3, 0, 0, 0, 0, 32, 32 );
         this.setAnimation("leftMovement", new ImageView("/images/lini.png"), 3, 0, 32, 0, 0, 32, 32 );
         this.setAnimation("rightMovement", new ImageView("/images/lini.png"), 3, 0, 64, 0, 0, 32, 32 );
@@ -68,7 +66,6 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setMaxHealth(100);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
-        
         
     }
        
@@ -83,11 +80,12 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setSpeed(50);
     }
     
-    public void addCompanion (PlayerCharacter comp) {
+    public void addCompanion (Creature comp) {
+        if (this.companions == null) this.companions = new ArrayList<>();
         this.companions.add(comp);
     }
     
-    public ArrayList<PlayerCharacter> getCompanions() {
+    public ArrayList<Creature> getCompanions() {
         return this.companions;
     }
     

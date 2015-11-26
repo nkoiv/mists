@@ -33,3 +33,5 @@ Game sounds are from OpenGameArt.org Weapon blow, (c) spookymodem
 The Game music is from: JDB Artists Humble Bundle -pack: MADNESS - ROYALTY FREE MUSIC BY JDB ARTIST www.jdbartist.net Copyright JDB Artist
 
 And: Joe Steudler Music Sampler Humble Bundle: Copyright 2014 DEGICA Co., LTD; Enterbrain, INC; Artist: Joel Steudler
+
+Fonts (Alagard and Romulus) are by Pix3M from OpenGameArt.Org

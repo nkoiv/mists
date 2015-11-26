@@ -857,6 +857,12 @@ public class Location implements Global {
         this.setPlayer(p);
         double[] entryPoint = this.getEntryPoint();
         this.addPlayerCharacter(p, entryPoint[0], entryPoint[1]);
+        //Add companions)
+        if (p.getCompanions() != null) {
+            for (Creature c : p.getCompanions()) {
+                this.addCreature(c, entryPoint[0], entryPoint[1]);
+            }
+        }
         this.screenFocus = p;
         
     }

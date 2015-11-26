@@ -6,12 +6,10 @@
 package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Game;
-import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
-import javafx.application.Platform;
 import javafx.scene.input.MouseEvent;
 
 /**

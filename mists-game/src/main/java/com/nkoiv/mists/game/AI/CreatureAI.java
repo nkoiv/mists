@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.pathfinding.Path;
+import java.util.Random;
 
 /**
  * CreatureAI is the main AI routine for creatures.
@@ -18,9 +19,9 @@ import com.nkoiv.mists.game.world.pathfinding.Path;
  */
 public class CreatureAI {
     
-    private Creature creep;
-    private double timeSinceAction;
-    Path pathToMoveOn;
+    protected Creature creep;
+    protected double timeSinceAction;
+    protected Path pathToMoveOn;
     
     public CreatureAI (Creature creep) {
         this.creep = creep;
@@ -37,6 +38,7 @@ public class CreatureAI {
     * @return Returns true if the creature was able to act
     */
     public boolean act(double time) {
+        if (!this.creep.getLocation().isFlagged("testFlag")) return false; //Dont my unless flagged TODO: This is for testing
         //TODO: For now all creatures just want to home in on player
         if (this.timeSinceAction > 0.5) { //Acting twice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
@@ -53,33 +55,8 @@ public class CreatureAI {
         return true;
     }
     
-    
-    /*
-    **  TODO: Temporary for just following player
-    */
-    /*
-    public void moveTowardsPlayer(double time) {        
-        if (!this.creep.getLocation().isFlagged("testFlag")) return; //Dont my unless flagged
-        
-        //Since pathfinding moves in full tiles, it's possible for units
-        //to get stuck on the corners. We alleviate this with the following
-        
-        Path pathToPlayer = this.creep.getLocation().getPathFinder().findPath(this.creep.getSprite().getWidth(), this.creep.getCrossableTerrain(), this.creep.getCenterXPos(), this.creep.getCenterYPos(), this.creep.getLocation().getPlayer().getCenterXPos(), this.creep.getLocation().getPlayer().getCenterYPos());
-        this.pathToMoveOn = pathToPlayer;
-        
-        Direction directionToMoveTowards =
-            (this.creep.getLocation().getPathFinder().directionTowards
-            (this.creep.getSprite().getWidth(), this.creep.getCrossableTerrain(), this.creep.getCenterXPos(), this.creep.getCenterYPos(),
-            this.creep.getLocation().getPlayer().getCenterXPos(), this.creep.getLocation().getPlayer().getCenterYPos()));
-        //Mists.logger.log(Level.INFO, "Trying to move towards {0}", directionToMoveTowards);
-        this.creep.moveTowards(directionToMoveTowards);
-        //TODO: If applyMovement returns false, we didnt actually move anywhere.
-        //In that case, head towards a better location!
-        this.creep.applyMovement(time);
-    }
-    */
 
-    public void moveTowardsMob(MapObject mob, double time) {
+    protected void moveTowardsMob(MapObject mob, double time) {
         //double collisionSize = creep.getSprite().getWidth();
         double collisionSize = 32; 
         //TODO: CollisionSize should be based on creep size, but sprites are a mess right now
@@ -90,7 +67,6 @@ public class CreatureAI {
         } else {
             offset = collisionSize/2;
         }
-        if (!this.creep.getLocation().isFlagged("testFlag")) return; //Dont my unless flagged TODO: This is for testing
         double targetXCoordinate = mob.getCenterXPos();
         double targetYCoordinate = mob.getCenterYPos();
         Path pathToMob = this.creep.getLocation().getPathFinder().findPath(collisionSize,this.creep.getCrossableTerrain(),creep.getXPos()+offset, creep.getYPos()+offset, targetXCoordinate, targetYCoordinate);
@@ -127,23 +103,26 @@ public class CreatureAI {
         }
         
     }
-    /*
-    private void moveTowardsCenterOfTheTile() {
-        double xTargetTile = Math.round(this.getCenterXPos()/Global.TILESIZE);
-           double yTargetTile = Math.round(this.getCenterYPos()/Global.TILESIZE);
-           double xTarget = (xTargetTile*Global.TILESIZE);
-           double yTarget = (yTargetTile*Global.TILESIZE);
-           this.setFlag("xTarget", (int)xTarget);
-           this.setFlag("yTarget", (int)yTarget);
-           Mists.logger.info("Movement was blocked. Going from "
-                   +this.getCenterXPos()+","+this.getCenterYPos()+ " to "+
-                   xTarget+","+yTarget);
-           Direction directionToMoveTowards =
-           PathFinder.getDirection(this.getFlag("xTarget") - this.getCenterXPos(),
-                    this.getFlag("yTarget") - this.getCenterYPos());
-           this.moveTowards(directionToMoveTowards);
+    
+    protected void moveRandomly(double time) {
+        Random rnd = new Random();
+        int randomint = rnd.nextInt(9);
+        switch (randomint) {
+            case 0: this.creep.moveTowards(Direction.UP); break;
+            case 1: this.creep.moveTowards(Direction.UPRIGHT); break;
+            case 2: this.creep.moveTowards(Direction.RIGHT); break;
+            case 3: this.creep.moveTowards(Direction.DOWNRIGHT); break;
+            case 4: this.creep.moveTowards(Direction.DOWN); break;
+            case 5: this.creep.moveTowards(Direction.DOWNLEFT); break;
+            case 6: this.creep.moveTowards(Direction.LEFT); break;
+            case 7: this.creep.moveTowards(Direction.UPLEFT); break;
+            case 8: this.creep.moveTowards(Direction.STAY); break;
+            default: this.creep.moveTowards(Direction.STAY); break;
+        }
+        this.creep.applyMovement(time);     
+        
     }
-    */
+ 
     
     public Path getPath() {
         if (this.pathToMoveOn != null) return this.pathToMoveOn;
@@ -153,6 +132,14 @@ public class CreatureAI {
     public Creature getCreature() {
         return this.creep;
     }
+    
+    protected double distanceToMob(MapObject mob) {
+        //returns euclidean distance to target mob
+        double euclideanDistance = Math.sqrt(Math.pow(this.getCreature().getXPos() - mob.getXPos(), 2)
+                            + Math.pow(this.getCreature().getYPos() - mob.getYPos(), 2));
+        return euclideanDistance;
+    }
+    
     //TODO: Is set-function really needed? Should AI be hardlinked to a creature?
     public void setCreature(Creature creep) {
         this.creep = creep;

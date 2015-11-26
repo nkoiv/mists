@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.controls.LocationControls;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import java.util.ArrayList;
@@ -61,10 +62,13 @@ public class Game {
         this.locControls = new LocationControls(this);
         
         //POC player:
-        PlayerCharacter player = new PlayerCharacter();
-        player.getSprite().setCollisionAreaShape(2);
-        player.addAction(new MeleeAttack());
-        this.player = player;
+        PlayerCharacter pocplayer = new PlayerCharacter();
+        Creature companion = Mists.creatureLibrary.create("Himmu");
+        System.out.println(companion.toString());
+        pocplayer.addCompanion(companion);
+        pocplayer.getSprite().setCollisionAreaShape(2);
+        pocplayer.addAction(new MeleeAttack());
+        this.player = pocplayer;
         //Initialize GameStates
         this.gameStates = new ArrayList<>();
         gameStates.add(new MainMenuState(this));
@@ -72,8 +76,8 @@ public class Game {
         currentState = gameStates.get(MAINMENU);
         currentState.enter();
         //Temp TODO:
-        currentLocation = new Location(player);
-        
+        currentLocation = new Location(pocplayer);
+        currentLocation.enterLocation(player);
     }
     
     public void moveToState(int gameStateNumber) {

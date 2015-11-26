@@ -209,7 +209,8 @@ public class MapObject implements Global, Templatable {
     @Override
     public String toString(){
         String s;
-        s = this.name + " at " + this.location.getName() + ":" + this.sprite.getXPos()+","+this.sprite.getYPos();
+        if (this.location == null) s = this.name+" at Limbo";
+        else s = this.name + " at " + this.location.getName() + ":" + this.sprite.getXPos()+","+this.sprite.getYPos();
         return s;
     }
 

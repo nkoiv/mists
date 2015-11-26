@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -12,6 +13,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * A library is a collection of map objects templates.
@@ -53,6 +55,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         prepareAdd(e);
         String lowercasename = e.getName().toLowerCase();
         this.lib.put(lowercasename, e);
+        Mists.logger.log(Level.INFO, "{0} added into library", e.getName());
     }
     
     /**
@@ -97,6 +100,11 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return this.lib.get(lowercasename);
     }
     
-    
+    @Override
+    public String toString() {
+        String s = "MobLibrary containing:\n";
+        s = s + this.lib.keySet().toString();
+        return s;
+    }
     
 }

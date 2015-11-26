@@ -13,7 +13,11 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.libraries.GraphLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.libraries.MobLibrary;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
@@ -28,6 +32,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -52,6 +57,7 @@ public class Mists extends Application implements Global {
     public Scene currentScene;
     public static SoundManager soundManager;
     public static GraphLibrary graphLibrary;
+    public static HashMap<String, Font> fonts;
     public static MobLibrary<Structure> structureLibrary;
     public static MobLibrary<Creature> creatureLibrary;
     public static Stage primaryStage;
@@ -84,6 +90,8 @@ public class Mists extends Application implements Global {
         logger.info("SoundManager initialized");
         setupGraphLibrary();
         logger.info("Graphics library initialized");
+        loadFonts();
+        logger.info("Fonts loaded");
         setupStructureLibrary();
         logger.info("Structure library initialized");
         setupCreatureLibrary();
@@ -182,6 +190,14 @@ public class Mists extends Application implements Global {
     private void setupCreatureLibrary() {
         Mists.creatureLibrary = new MobLibrary<>();
         LibLoader.initializeCreatureLibrary(creatureLibrary);
+    }
+    
+    private void loadFonts() {
+        fonts = new HashMap<>();
+        Font alagard = Font.loadFont(getClass().getResourceAsStream("/fonts/alagard.ttf"), 20);
+        fonts.put("alagard", alagard);
+        Font romulus = Font.loadFont(getClass().getResourceAsStream("/fonts/romulus.ttf"), 20);
+        fonts.put("romulus", romulus);   
     }
     
     private void setupMouseHandles(Group root) {
