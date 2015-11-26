@@ -1,1 +1,1 @@
-java -jar mists-game-0.1-PANDARIN_ORANGE.jar
+java -jar mists-game-0.2-PANDARIN_MANDARIN.jar

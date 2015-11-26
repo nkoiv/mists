@@ -123,7 +123,7 @@ public class Location implements Global {
         
         }
         
-        for (int i = 0; i < 100 ; i++) {
+        for (int i = 0; i < 20 ; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
