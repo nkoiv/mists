@@ -282,23 +282,36 @@ public class Creature extends MapObject implements Combatant {
             //Mists.logger.info("Checked collisions, found " +collidedSides.toString());
             if (collidedSides.contains(Direction.UP)) {
                 //Block movement up
-                if (this.getSprite().getYVelocity() < 0 ) this.getSprite().setYVelocity(0);
+                if (this.getSprite().getYVelocity() < 0 ) { 
+                    //this.getSprite().setYVelocity(0);
+                    this.getSprite().setYVelocity(-this.getSprite().getYVelocity());
+                }
                 this.getSprite().setYPosition(this.oldYPos);
             }
             if (collidedSides.contains(Direction.DOWN)) {
                 //Block movement down
-                if (this.getSprite().getYVelocity() > 0 ) this.getSprite().setYVelocity(0);
+                if (this.getSprite().getYVelocity() > 0 ) {
+                    //this.getSprite().setYVelocity(0);
+                    this.getSprite().setYVelocity(-this.getSprite().getYVelocity());
+                }
                 this.getSprite().setYPosition(this.oldYPos);
             }
             if (collidedSides.contains(Direction.RIGHT)) {
                 //Block movement right
-                if (this.getSprite().getXVelocity() > 0 ) this.getSprite().setXVelocity(0);
+                if (this.getSprite().getXVelocity() > 0 ) {
+                    //this.getSprite().setXVelocity(0);
+                    this.getSprite().setXVelocity(-this.getSprite().getXVelocity());
+                }
                 this.getSprite().setXPosition(this.oldXPos);
             }
             if (collidedSides.contains(Direction.LEFT)) {
                 //Block movement left
-                if (this.getSprite().getXVelocity() < 0 ) this.getSprite().setXVelocity(0);
+                if (this.getSprite().getXVelocity() < 0 ) {
+                    //this.getSprite().setXVelocity(0);
+                    this.getSprite().setXVelocity(-this.getSprite().getXVelocity());
+                }
                 this.getSprite().setXPosition(this.oldXPos);
+                
             }
             this.getSprite().update(time);
             this.setFlag("movementBlocked", 1); //remember this was a bad way to go to

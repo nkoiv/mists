@@ -22,7 +22,7 @@ public class MonsterAI extends CreatureAI{
     * act() is the main loop for AI
     * it's called whenever it's given creatures
     * turn to do things
-    * TimeSinceAction governs creature decisionmaking
+    * TimeSinceAction governs creature decision making
     * No creature needs to act on every tick!
     * @param time Time passed since the last action
     * @return Returns true if the creature was able to act
@@ -36,7 +36,9 @@ public class MonsterAI extends CreatureAI{
             this.pickNewAction(time);
             this.timeSinceAction = 0;
         } else {
-            boolean moveOK = this.getCreature().applyMovement(time);
+            //TODO: Continue current chosen action. Atm this means just movement
+            if(this.getCreature().applyMovement(time)) this.setFlag("movementBlocked", 0);
+            else this.setFlag("movementBlocked", 1);
             this.timeSinceAction = this.timeSinceAction+time;
         }
         

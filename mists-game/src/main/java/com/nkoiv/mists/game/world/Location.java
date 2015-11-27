@@ -728,8 +728,7 @@ public class Location extends Flags implements Global {
     
     public EnumSet<Direction> collidedSides (MapObject mob) {
         ArrayList<MapObject> collidingObjects = this.checkCollisions(mob); //Get the colliding object(s)
-        EnumSet<Direction> collidedDirections = EnumSet.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
-        collidedDirections.clear();
+        EnumSet<Direction> collidedDirections = EnumSet.of(Direction.STAY);
         for (MapObject collidingObject : collidingObjects) {
             //Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
             double collidingX = collidingObject.getCenterXPos();//+(collidingObject.getSprite().getWidth()/2);
