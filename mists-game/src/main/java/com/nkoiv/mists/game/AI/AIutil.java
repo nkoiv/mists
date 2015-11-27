@@ -6,11 +6,13 @@
 package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * AIUtil contains miscellaneous static functions
@@ -47,14 +49,14 @@ public class AIutil {
     protected static boolean isInLineOfSight(MapObject start, MapObject target) {
         Location l = start.getLocation();
         if (l == null) return true;
-        ArrayList<MapObject> mobsInBetween = l.checkCollisions(start.getCenterXPos(), start.getCenterXPos(), target.getCenterXPos(), target.getCenterYPos());
+        ArrayList<MapObject> mobsInBetween = l.checkCollisions(start.getCenterXPos(), start.getCenterYPos(), target.getCenterXPos(), target.getCenterYPos());
         for (MapObject mob : mobsInBetween) {
            if (mob != start && mob != target && mob instanceof Structure) {
-               //Mists.logger.log(Level.INFO, "Line of sight between {0},{1} and {2} blocked by {3}", new Object[]{(int)xCoor, (int)yCoor, target.getName(), mob.getName()});
+               //Mists.logger.log(Level.INFO, "Line of sight between {0}x{1} and {2} blocked by {3}", new Object[]{(int)start.getCenterXPos(), (int)start.getCenterYPos(), target.getName(), mob.toString()});
                return false;
            }
         }
         return true;
     }
-     
+    
 }

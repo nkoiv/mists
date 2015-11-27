@@ -18,9 +18,9 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class Effect extends MapObject {
 
-    private Action owner;
-    private long startTime;
-    private long endTime;
+    protected Action owner;
+    protected long startTime;
+    protected long endTime;
     
     public Effect(String name) {
         super(name);
@@ -47,6 +47,11 @@ public class Effect extends MapObject {
      */
     public Action getOwner() {
         return this.owner;
+    }
+    
+    @Override
+    public void update(double time) {
+        this.sprite.update(time);
     }
     
     @Override
