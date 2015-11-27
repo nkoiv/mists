@@ -7,14 +7,11 @@ package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.pathfinding.Path;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
 import javafx.scene.shape.Circle;
 
 /**
@@ -155,35 +152,18 @@ public class CreatureAI {
         return nearbyCreatures;
     }
     
-    protected void turnTowardsPosition(MapObject mob) {
-        this.turnTowardsPosition(mob.getCenterXPos(), mob.getCenterYPos());
+    
+    protected void turnTowardsMapObject(MapObject mob) {
+        Direction d = AIutil.getDirectionTowards(creep.getCenterXPos(), creep.getCenterYPos(),mob.getCenterXPos(), mob.getCenterYPos());
+        creep.setFacing(d);
     }
     
-    protected void turnTowardsPosition(double xCoor, double yCoor) {
-        double xDistance = (xCoor - creep.getCenterXPos());
-        double yDistance = (yCoor - creep.getCenterYPos());
-        double radius = (creep.getSprite().getHeight()+creep.getSprite().getWidth())/4;
-        Direction directionToTurn = Direction.STAY;
-        if (xDistance > radius && yDistance > radius) directionToTurn = Direction.DOWNRIGHT;
-        if (xDistance > radius && yDistance <= radius) directionToTurn = Direction.UPRIGHT;
-        if (xDistance <= radius && yDistance > radius) directionToTurn = Direction.DOWNLEFT;
-        if (xDistance <= radius && yDistance <= radius) directionToTurn = Direction.UPLEFT;
-        if (Math.abs(xDistance) > Math.abs(yDistance)*2) {
-            if (xDistance > 0 ) directionToTurn = Direction.RIGHT;
-            if (xDistance <= 0 ) directionToTurn = Direction.LEFT;
-        } else if (Math.abs(yDistance) > Math.abs(xDistance)*2) {
-            if (yDistance > 0 ) directionToTurn = Direction.DOWN;
-            if (yDistance <= 0 ) directionToTurn = Direction.UP;
-        }
-        
-
-        this.creep.setFacing(directionToTurn);
-    }
+   
     
     protected void useMeleeTowards(MapObject target) {
         if (creep.getAvailableActions() == null) return;
         if (!creep.getAvailableActions().isEmpty()) {
-            this.turnTowardsPosition(target);
+            this.turnTowardsMapObject(target);
             if (creep.getAvailableActionNames().contains("melee")) {
                 //Try to use "melee" ability if possible
                 creep.useAction("melee");
@@ -195,25 +175,6 @@ public class CreatureAI {
         }
     }
     
-    /**
-     * line of sight checks if there's structures between target
-     * and given coordinates
-     * @param xCoor start point for line
-     * @param yCoor start point for line
-     * @param target end point for line
-     * @return True if no Structures block the line of sight
-     */
-    protected boolean isInLineOfSight(double xCoor, double yCoor, MapObject target) {
-        ArrayList<MapObject> mobsInBetween = creep.getLocation().checkCollisions(xCoor, yCoor, target.getCenterXPos(), target.getCenterYPos());
-        for (MapObject mob : mobsInBetween) {
-           if (mob != creep && mob != target && mob instanceof Structure) {
-               //Mists.logger.log(Level.INFO, "Line of sight between {0},{1} and {2} blocked by {3}", new Object[]{(int)xCoor, (int)yCoor, target.getName(), mob.getName()});
-               return false;
-           }
-        }
-        return true;
-    }
-    
     
     /**
      * line of sight checks if there's structures between target
@@ -222,7 +183,23 @@ public class CreatureAI {
      * @return True if no Structures block the line of sight
      */
     protected boolean isInLineOfSight(MapObject target) {
-        return this.isInLineOfSight(creep.getCenterXPos(), creep.getCenterYPos(), target);
+        return AIutil.isInLineOfSight(creep, target);
+    }
+    
+    /*
+    * mobsInBetween will return both the Creep and the Target. 
+    * If there's anything else on the list, consider path blocked.
+    * @param Target target to draw path to
+    * @return returns true if there is a map object between creep and target
+    */
+    protected boolean hasNothingInBetween(MapObject target) {
+        ArrayList<MapObject> mobsInBetween = creep.getLocation().checkCollisions(creep.getCenterXPos(), creep.getCenterXPos(), target.getCenterXPos(), target.getCenterYPos());
+        for (MapObject m : mobsInBetween) {
+            if (m != creep && m != target) {
+               return false;
+           }
+        }
+        return true;
     }
     
     /**

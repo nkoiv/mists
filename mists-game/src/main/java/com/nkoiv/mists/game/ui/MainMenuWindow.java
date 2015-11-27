@@ -50,6 +50,7 @@ public class MainMenuWindow extends TiledWindow {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
             //For now just generate a new location
             this.game.currentLocation = new Location(this.game.player);
+            this.game.currentLocation.enterLocation(this.game.player);
             this.game.moveToState(Game.LOCATION);
             
         }

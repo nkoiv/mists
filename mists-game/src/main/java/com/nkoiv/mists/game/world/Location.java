@@ -146,11 +146,6 @@ public class Location implements Global {
             this.setMobInRandomOpenSpot(monster);
         }
         
-        Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, 0, 0, 32, 32);
-        monster.getSprite().setCollisionAreaShape(2);
-        this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
-        this.setMobInRandomOpenSpot(monster);
-        
         Mists.logger.info("Location generation complete");
         
         this.setMobInRandomOpenSpot(player);

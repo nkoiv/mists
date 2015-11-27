@@ -40,6 +40,7 @@ public class LocationState implements GameState {
     private final Game game;
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
+    public boolean paused;
     private final AudioControls audioControls = new AudioControls();
     private final LocationButtons locationControls = new LocationButtons();
     private boolean inConsole;
@@ -110,10 +111,12 @@ public class LocationState implements GameState {
             this.game.toggleScale = false;
         }
         
-        //Render the current Location
-        gc.clearRect(0, 0, screenWidth, screenHeight);
-        if (game.currentLocation != null) {
-            game.currentLocation.render(gc);
+        //Render the current Location unless paused
+        if (this.paused == false) {
+            gc.clearRect(0, 0, screenWidth, screenHeight);
+            if (game.currentLocation != null) {
+                game.currentLocation.render(gc);
+            }
         }
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
@@ -158,11 +161,13 @@ public class LocationState implements GameState {
             gameMenu.addSubComponent(mainMenuButton);
             gameMenu.addSubComponent(quitButton);
             uiComponents.put(gameMenu.getName(), gameMenu);
+            this.paused = true;
             Mists.logger.info("GameMenu opened");
         } else {
             gameMenuOpen = false;
             if (uiComponents.containsKey("GameMenu")) 
                     uiComponents.remove("GameMenu");
+            this.paused = false;
             Mists.logger.info("GameMenu closed");
         }
         
@@ -184,8 +189,8 @@ public class LocationState implements GameState {
     @Override
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         
-        if(currentMenu == null) {
-            handleLocationKeyPress(pressedButtons, releasedButtons);
+        handleLocationKeyPress(pressedButtons, releasedButtons);
+        if(this.paused == false) {
             game.currentLocation.update(time);
         } 
     }
@@ -276,8 +281,23 @@ public class LocationState implements GameState {
             return;
         }
         
+        if (releasedButtons.contains(KeyCode.ENTER)) {
+            game.locControls.printClearanceMapIntoConsole();
+            game.locControls.printCollisionMapIntoConsole();
+            
+        }
+        
+        if (releasedButtons.contains(KeyCode.SHIFT)) {
+            game.locControls.toggleFlag("testFlag");
+        
+        }
+        
+        if (releasedButtons.contains(KeyCode.ESCAPE)) {
+            game.locControls.toggleLocationMenu();
+        }
 
-        //TODO: Current movement lets player move superspeed diagonal. should call moveTowards(Direction.UPRIGHT) etc.
+        //Location controls
+        if (this.paused == false) {
         if (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W)) {
             game.locControls.playerMove(Direction.UP);            
         }
@@ -320,19 +340,6 @@ public class LocationState implements GameState {
             game.locControls.playerAttack();
         }
         
-        if (releasedButtons.contains(KeyCode.ENTER)) {
-            game.locControls.printClearanceMapIntoConsole();
-            game.locControls.printCollisionMapIntoConsole();
-            
-        }
-        
-        if (releasedButtons.contains(KeyCode.SHIFT)) {
-            game.locControls.toggleFlag("testFlag");
-        
-        }
-        
-        if (releasedButtons.contains(KeyCode.ESCAPE)) {
-            game.locControls.toggleLocationMenu();
         }
         
         releasedButtons.clear(); //Button releases are handled only once

@@ -39,6 +39,12 @@ public class Effect extends MapObject {
         this.sprite.refreshCollisionBox();
     }
     
+    /**
+     * Effects are Owned by actions.
+     * These actions dictate what happens when effect
+     * lands on something.
+     * @return Action that's reponsible for this effect
+     */
     public Action getOwner() {
         return this.owner;
     }
