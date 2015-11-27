@@ -63,7 +63,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setAnimation("rightMovement", new ImageView("/images/lini.png"), 3, 0, 64, 0, 0, 32, 32 );
         this.setAnimation("upMovement", new ImageView("/images/lini.png"), 3, 0, 96, 0, 0, 32, 32 );       
         this.setFlag("alive", 1);
-        this.setMaxHealth(100);
+        this.setMaxHealth(500);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
         

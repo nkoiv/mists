@@ -91,7 +91,7 @@ public class LocationControls {
     //----------Player controls-----
     
     public void playerAttack() {
-        game.currentLocation.getPlayer().useAction("MeleeAttack");
+        game.currentLocation.getPlayer().useAction("melee");
     }
     
     public void playerMove(Direction direction) {

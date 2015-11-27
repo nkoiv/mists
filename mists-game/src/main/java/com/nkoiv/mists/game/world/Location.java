@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -18,7 +19,6 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
-import com.nkoiv.mists.game.world.util.QuadTree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -138,6 +138,10 @@ public class Location implements Global {
             Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 4, 0, 36, 32);
             monster.getSprite().setCollisionAreaShape(1);
             monster.setAI(new MonsterAI(monster));
+            MeleeAttack monstermelee = new MeleeAttack();
+            monstermelee.setFlag("cooldown", 3000);
+            monstermelee.setFlag("damage", 5);
+            monster.addAction(monstermelee);
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);
         }

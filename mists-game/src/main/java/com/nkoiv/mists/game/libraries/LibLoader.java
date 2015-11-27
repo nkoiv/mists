@@ -57,6 +57,7 @@ public class LibLoader {
         himmu.setAnimation("leftMovement", new ImageView("/images/himmu_walk_left.png"), 4, 0, 0, 0, 0, 64, 64 );
         himmu.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
         himmu.setAI(new CompanionAI(himmu));
+        himmu.setMaxHealth(1000);
         lib.addTemplate(himmu);
         
         //Monsters

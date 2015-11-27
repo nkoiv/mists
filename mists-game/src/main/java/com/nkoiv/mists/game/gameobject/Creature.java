@@ -528,8 +528,8 @@ public class Creature extends MapObject implements Combatant {
         this.setHealth(this.getHealth()-damage);
         Mists.logger.log(Level.INFO,"{0} took {1}"+"points of damage"+" ({2}/{3})",
                 new Object[]{this.getName(), damage, this.getHealth(), this.getMaxHealth()});
-        //TODO: Expand death
-        if(this.getHealth()<1) this.setFlag("removable", 1);
+        //TODO: Expand death - Himmu cant die
+        if(this.getHealth()<1 && !this.name.equals("Himmu")) this.setFlag("removable", 1);
     }
 	
     @Override

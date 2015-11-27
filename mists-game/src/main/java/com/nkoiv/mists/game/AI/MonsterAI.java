@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.AI;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 
 /**
@@ -49,8 +50,15 @@ public class MonsterAI extends CreatureAI{
         }
         else {
             this.creep.stopMovement(); //clear old movement
-            this.moveTowardsMob(creep.getLocation().getPlayer(), time);
+            if (this.inRange(0, creep.getLocation().getPlayer())) {
+                //Mists.logger.info("In range to hit player");
+                this.useMeleeTowards(creep.getLocation().getPlayer());
+            } else {
+                this.moveTowardsMob(creep.getLocation().getPlayer(), time);
+            }
         }
     }
+    
+
     
 }

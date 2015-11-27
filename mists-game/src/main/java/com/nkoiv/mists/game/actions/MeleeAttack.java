@@ -29,13 +29,14 @@ public class MeleeAttack extends Action implements AttackAction {
     private long lastUsed;
     
     public MeleeAttack() {
-        super("MeleeAttack");
+        super("melee");
         this.setAnimation(new ImageView("/images/attackAnimations.png"), 4, 32, 0, 0, 0, 32, 32);
         this.getSpriteAnimation().setAnimationSpeed(100);
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
         this.setFlag("cooldown", 1000);
         this.setFlag("triggered", 0);
+        this.setFlag("damage", 50);
     }
     
     public void setAnimation(ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
@@ -76,7 +77,7 @@ public class MeleeAttack extends Action implements AttackAction {
        
     @Override
     public void hitOn(ArrayList<MapObject> mobs) {
-        int damage = 50;
+        int damage = this.getFlag("damage");
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
             Mists.logger.info(this.toString() + " landed on " + mobs.toString());
             this.setFlag("triggered", 1);
@@ -89,11 +90,11 @@ public class MeleeAttack extends Action implements AttackAction {
                             PlayerCharacter pc =(PlayerCharacter)this.getOwner();
                             if (!pc.getCompanions().contains((Creature)mob)) {
                                 Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
-                                ((Combatant)mob).takeDamage(50);
+                                ((Combatant)mob).takeDamage(damage);
                             }
                         } else {
                             Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
-                            ((Combatant)mob).takeDamage(50);
+                            ((Combatant)mob).takeDamage(damage);
                         }
                     } else if (mob instanceof Structure) {
                         //TODO: Temp: DESTROY THE STRUCTURES!
