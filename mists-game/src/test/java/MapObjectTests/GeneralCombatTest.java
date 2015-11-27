@@ -64,7 +64,7 @@ public class GeneralCombatTest {
     
     @Test
     public void hittingCreatureWithDamagingAttackReducesItsHealth() {
-        Action testAttack = combatant1.getAvailableActions().get("MeleeAttack");
+        Action testAttack = combatant1.getAvailableActions().get("melee");
         ArrayList<MapObject> targets = new ArrayList<>();
         targets.add(combatant2);
         testAttack.hitOn(targets);
@@ -73,14 +73,14 @@ public class GeneralCombatTest {
     
     @Test
     public void usingAttackCreatesAnEffecT() {
-        Action testAttack = combatant1.getAvailableActions().get("MeleeAttack");
+        Action testAttack = combatant1.getAvailableActions().get("melee");
         combatant1.useAction("MeleeAttack");
         
     }
     
     @Test
     public void meleeAttackDoesNotDamageUser() {
-        Action testAttack = combatant1.getAvailableActions().get("MeleeAttack");
+        Action testAttack = combatant1.getAvailableActions().get("melee");
         ArrayList<MapObject> targets = new ArrayList<>();
         targets.add(combatant1);
         testAttack.hitOn(targets);
@@ -89,10 +89,10 @@ public class GeneralCombatTest {
     
     @Test
     public void abilitiesCannotBeUsedOnCooldown() {
-        Action testAttack = combatant1.getAvailableActions().get("MeleeAttack");
+        Action testAttack = combatant1.getAvailableActions().get("melee");
         ArrayList<MapObject> targets = new ArrayList<>();
         targets.add(combatant2);
-        combatant1.getAvailableActions().remove("MeleeAttack");
+        combatant1.getAvailableActions().remove("melee");
         testAttack.hitOn(targets);
         int healthAfterFirstHit = combatant2.getHealth();
         assert(TestTools.CompareTools.isGreaterThan(combatant2.getMaxHealth(), combatant2.getHealth()));
