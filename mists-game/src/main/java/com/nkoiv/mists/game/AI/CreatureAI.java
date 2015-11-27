@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.pathfinding.Path;
+import com.nkoiv.mists.game.world.util.Flags;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.scene.shape.Circle;
@@ -22,13 +23,13 @@ import javafx.scene.shape.Circle;
  * specific ones are located in the classes that extend this one
  * @author nikok
  */
-public class CreatureAI {
+public class CreatureAI extends Flags{
     
     protected Creature creep;
     protected double timeSinceAction;
     protected Path pathToMoveOn;
     protected boolean active;
-    
+        
     public CreatureAI (Creature creep) {
         this.creep = creep;
         this.timeSinceAction = 0;
@@ -248,5 +249,5 @@ public class CreatureAI {
     public void setCreature(Creature creep) {
         this.creep = creep;
     }
-    
+        
 }

@@ -14,8 +14,8 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -255,7 +255,7 @@ public class Creature extends MapObject implements Combatant {
      * The movement is done by creature sprites x and y velocity,
      * multiplied by time spent moving.
      * @param time Time spent moving
-     * @return Return true if movement was possible, false if movement was blocked
+     * @return Return true if movement was possible, false if it was blocked
      */
     
     public boolean applyMovement(double time){
@@ -278,7 +278,7 @@ public class Creature extends MapObject implements Combatant {
             return true;
         } else { 
             //Check which sides we collided on
-            HashSet<Direction> collidedSides = this.getLocation().collidedSides(this);
+            EnumSet<Direction> collidedSides = this.getLocation().collidedSides(this);
             //Mists.logger.info("Checked collisions, found " +collidedSides.toString());
             if (collidedSides.contains(Direction.UP)) {
                 //Block movement up

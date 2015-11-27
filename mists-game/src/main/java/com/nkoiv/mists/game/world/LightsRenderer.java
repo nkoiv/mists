@@ -124,7 +124,8 @@ public class LightsRenderer {
                             if (lightlevel > this.minLightLevel) explored[x][y] = true;
                         }
                         
-                        if (loc.getCollisionMap().getNode(x, y).getCollisionLevel()>0) {
+                        if (loc.getCollisionMap().getNode(x*(Mists.TILESIZE/loc.getCollisionMap().getNodeSize()),
+                                y*(Mists.TILESIZE/loc.getCollisionMap().getNodeSize())).getCollisionLevel()>0) {
                             shadows[col] = 1;
                             if (col==row) {
                                 for (int i = col; i < shadows.length; i++)

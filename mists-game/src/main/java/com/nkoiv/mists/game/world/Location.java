@@ -19,9 +19,10 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
+import com.nkoiv.mists.game.world.util.Flags;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -32,7 +33,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 
 /**
  * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
@@ -40,7 +40,7 @@ import javafx.scene.shape.Rectangle;
  * 
  * @author nkoiv
  */
-public class Location implements Global {
+public class Location extends Flags implements Global {
     
     /*
     * TODO: Lists for various types of MapObjects, from creatures to frills.
@@ -58,7 +58,6 @@ public class Location implements Global {
     private final double[] lastOffsets = new double[2];
     private MapObject screenFocus;
     private PlayerCharacter player;
-    private final HashMap<String, Integer> flags = new HashMap<>();
     private final HashMap<Integer, double[]> entryPoints = new HashMap<>();
     
     public boolean mobsChanged;
@@ -216,7 +215,10 @@ public class Location implements Global {
             for (Creature mob : this.creatures) {
                 if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getSprite().getWidth()) {
                     if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getSprite().getHeight()) {
-                        return mob;
+                        //Do a pixelcheck on the mob;
+                        //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
+                            return mob;
+                        //}
                     }
                 }
                 
@@ -724,10 +726,10 @@ public class Location implements Global {
         return collidingObjects;
     }
     
-    public HashSet<Direction> collidedSides (MapObject mob) {
+    public EnumSet<Direction> collidedSides (MapObject mob) {
         ArrayList<MapObject> collidingObjects = this.checkCollisions(mob); //Get the colliding object(s)
-        HashSet<Direction> collidedDirections = new HashSet<>();   
-        
+        EnumSet<Direction> collidedDirections = EnumSet.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
+        collidedDirections.clear();
         for (MapObject collidingObject : collidingObjects) {
             //Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
             double collidingX = collidingObject.getCenterXPos();//+(collidingObject.getSprite().getWidth()/2);
@@ -939,59 +941,6 @@ public class Location implements Global {
                 gc.strokeLine((i*TILESIZE)-xOffset, 0, (i*TILESIZE)-xOffset, map.getHeight());
             }
             
-        }
-    }
-    
-    /**
-    * Flags store any soft information for the location
-    * @param flag The name of the flag
-    * @param value Value for the flag (0 or less is not flagged)
-    */
-    public void setFlag(String flag, int value) {
-        if (this.flags.containsKey(flag)) {
-            this.flags.replace(flag, value);
-        } else {
-            this.flags.put(flag, value);
-        }   
-    }
-    
-    /**
-    * Toggle flag on or off. If Flag was more than 0, it's now 0.
-    * If it was less or equal to 0 or didnt exist, it's now 1
-    * @param flag Flag to toggle
-    */
-    public void toggleFlag(String flag) {
-        if (this.isFlagged(flag)) {
-            this.setFlag(flag, 0);
-        } else {
-            this.setFlag(flag, 1);
-        }
-        
-    }
-    
-    /**
-    * Return the value for the given flag
-    * @param flag Desired flag
-    * @return Returns the value of the flag
-    */
-    public int getFlag(String flag) {
-        if (this.flags.containsKey(flag)) {
-            return this.flags.get(flag);
-        } else {
-            return 0;
-        }
-    }
-    
-    /**
-    * Check if the Location has the given flag
-    * @param flag Flag to check
-    * @return returns true if Location has given flag at more than 0
-    */
-    public boolean isFlagged (String flag) {
-        if (this.flags.containsKey(flag)) {
-            return this.flags.get(flag) > 0;
-        } else {
-            return false;
         }
     }
     

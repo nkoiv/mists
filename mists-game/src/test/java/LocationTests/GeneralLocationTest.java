@@ -17,6 +17,7 @@ import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
+import java.util.EnumSet;
 import java.util.HashSet;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -146,7 +147,7 @@ public class GeneralLocationTest extends Application {
         
         testLocation.addCreature(testCreature1, 250, 250);
         testLocation.addCreature(testCreature2, 280, 250);
-        HashSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
+        EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
         assert(testLocation.collidedSides(testCreature1).contains(Direction.RIGHT) == true);
     }
@@ -158,7 +159,7 @@ public class GeneralLocationTest extends Application {
         
         testLocation.addCreature(testCreature1, 250, 250);
         testLocation.addCreature(testCreature2, 230, 250);
-        HashSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
+        EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
         assert(testLocation.collidedSides(testCreature1).contains(Direction.LEFT) == true);
     }
@@ -170,7 +171,7 @@ public class GeneralLocationTest extends Application {
         
         testLocation.addCreature(testCreature1, 250, 250);
         testLocation.addCreature(testCreature2, 250, 230);
-        HashSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
+        EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
         assert(testLocation.collidedSides(testCreature1).contains(Direction.UP) == true);
     }
@@ -182,7 +183,7 @@ public class GeneralLocationTest extends Application {
         
         testLocation.addCreature(testCreature1, 250, 250);
         testLocation.addCreature(testCreature2, 250, 270);
-        HashSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
+        EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
         assert(testLocation.collidedSides(testCreature1).contains(Direction.DOWN) == true);
     }

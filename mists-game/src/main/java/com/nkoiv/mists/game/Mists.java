@@ -29,6 +29,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -49,6 +50,7 @@ public class Mists extends Application implements Global {
     public Game MistsGame;
     
     public static int graphicScale = 1;
+    public static Image pixel = new Image("/images/blackpixel.png");
     
     public boolean running = false;
     public final ArrayList<KeyCode> pressedButtons = new ArrayList<>();

@@ -30,12 +30,13 @@ public class MonsterAI extends CreatureAI{
     @Override
     public boolean act(double time) {
         //TODO: For now all creatures just want to home in on player
-        if (this.timeSinceAction > 0.5) { //Acting twice per second
+        //TODO: Adjust the action-picking speed dynamically based on AI load?
+        if (this.timeSinceAction > 0.3) { //Acting thrice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
             this.pickNewAction(time);
             this.timeSinceAction = 0;
         } else {
-            this.getCreature().applyMovement(time);
+            boolean moveOK = this.getCreature().applyMovement(time);
             this.timeSinceAction = this.timeSinceAction+time;
         }
         

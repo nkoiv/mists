@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.util.Flags;
 import java.util.HashMap;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -18,16 +19,11 @@ import javafx.scene.image.Image;
  *  Unlike a mere Sprite (which it heavily utilizes), MapObject is tied to a certain Location.
  * @author nkoiv
  */
-public class MapObject implements Global, Templatable {
+public class MapObject extends Flags implements Global, Templatable {
     
     protected final String name;
     protected Sprite sprite;
     
-    /*
-    * Flags are stored in integers for utility, 
-    * but can be manipulated as booleans (larger than 0) by "isFlagged" & "addFlag" methods
-    */
-    protected HashMap<String, Integer> flags;
     protected int collisionLevel;
     
     protected Location location;
@@ -53,58 +49,6 @@ public class MapObject implements Global, Templatable {
         this.sprite = new Sprite(image);
         this.sprite.setPosition(xCoor, yCoor);
         this.setFlag("visible", 1);
-    }
-    /**
-    * Flags store any soft information for the object
-    * @param flag The name of the flag
-    * @param value Value for the flag (0 or less is not flagged)
-    */
-    public void setFlag(String flag, int value) {
-        if (this.flags.containsKey(flag)) {
-            this.flags.replace(flag, value);
-        } else {
-            this.flags.put(flag, value);
-        }   
-    }
-    
-    /**
-    * Toggle flag on or off. If Flag was more than 0, it's now 0.
-    * If it was less or equal to 0 or didnt exist, it's now 1
-    * @param flag Flag to toggle
-    */
-    public void toggleFlag(String flag) {
-        if (this.isFlagged(flag)) {
-            this.setFlag(flag, 0);
-        } else {
-            this.setFlag(flag, 1);
-        }
-        
-    }
-    
-    /**
-    * Return the value for the given flag
-    * @param flag Desired flag
-    * @return Returns the value of the flag
-    */
-    public int getFlag(String flag) {
-        if (this.flags.containsKey(flag)) {
-            return this.flags.get(flag);
-        } else {
-            return 0;
-        }
-    }
-    
-    /**
-    * Check if the MapObject has the given flag
-    * @param flag Flag to check
-    * @return returns true if MapObject has given flag at more than 0
-    */
-    public boolean isFlagged (String flag) {
-        if (this.flags.containsKey(flag)) {
-            return this.flags.get(flag) > 0;
-        } else {
-            return false;
-        }
     }
     
 
