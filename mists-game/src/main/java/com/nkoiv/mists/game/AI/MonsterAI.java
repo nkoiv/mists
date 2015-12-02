@@ -52,13 +52,7 @@ public class MonsterAI extends CreatureAI{
             }
         }
         else {
-            this.creep.stopMovement(); //clear old movement
-            if (this.inRange(0, creep.getLocation().getPlayer())) {
-                //Mists.logger.info("In range to hit player");
-                this.useMeleeTowards(creep.getLocation().getPlayer());
-            } else {
-                this.moveTowardsMob(creep.getLocation().getPlayer(), time);
-            }
+            this.goMelee(creep.getLocation().getPlayer(), time);
         }
     }
     

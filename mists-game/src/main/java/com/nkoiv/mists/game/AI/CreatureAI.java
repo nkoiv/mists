@@ -224,6 +224,16 @@ public class CreatureAI extends Flags{
         }
     }
     
+    protected void goMelee(MapObject target, double time) {
+        this.creep.stopMovement(); //clear old movement
+            if (this.inRange(0, target)) {
+                //Mists.logger.info("In range to hit player");
+                this.useMeleeTowards(target);
+            } else {
+                this.moveTowardsMob(target, time);
+            }
+    }
+    
     public Path getPath() {
         if (this.pathToMoveOn != null) return this.pathToMoveOn;
         else return null;

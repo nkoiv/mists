@@ -575,6 +575,9 @@ public class Creature extends MapObject implements Combatant {
         }
         nc.crossableTerrain = newCrossable;
         
+        //Abilities
+        
+        
         //AI should be the same type as Template
         if (ai instanceof CompanionAI) {
             nc.ai = new CompanionAI(nc);

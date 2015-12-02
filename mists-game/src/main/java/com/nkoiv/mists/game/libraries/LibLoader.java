@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.libraries;
 import com.nkoiv.mists.game.AI.CompanionAI;
 import static com.nkoiv.mists.game.Global.TILESIZE;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -58,6 +59,10 @@ public class LibLoader {
         himmu.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
         himmu.setAI(new CompanionAI(himmu));
         himmu.setMaxHealth(1000);
+        MeleeAttack himmumelee = new MeleeAttack();
+        himmumelee.setFlag("cooldown", 2000);
+        himmumelee.setFlag("damage", 35);
+        himmu.addAction(himmumelee);
         lib.addTemplate(himmu);
         
         //Monsters
