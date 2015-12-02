@@ -258,6 +258,14 @@ public class Creature extends MapObject implements Combatant {
      * @return Return true if movement was possible, false if it was blocked
      */
     
+    /**
+     * Apply movement to the creature.
+     * The movement is done by creature sprites x and y velocity,
+     * multiplied by time spent moving.
+     * @param time Time spent moving
+     * @return Return true if movement was possible, false if it was blocked
+     */
+    
     public boolean applyMovement(double time){
         /*
         * Check collisions before movement
@@ -284,7 +292,7 @@ public class Creature extends MapObject implements Combatant {
                 //Block movement up
                 if (this.getSprite().getYVelocity() < 0 ) { 
                     //this.getSprite().setYVelocity(0);
-                    this.getSprite().setYVelocity(-this.getSprite().getYVelocity());
+                    this.getSprite().setYVelocity(-this.getSprite().getYVelocity()/2);
                 }
                 this.getSprite().setYPosition(this.oldYPos);
             }
@@ -292,7 +300,7 @@ public class Creature extends MapObject implements Combatant {
                 //Block movement down
                 if (this.getSprite().getYVelocity() > 0 ) {
                     //this.getSprite().setYVelocity(0);
-                    this.getSprite().setYVelocity(-this.getSprite().getYVelocity());
+                    this.getSprite().setYVelocity(-this.getSprite().getYVelocity()/2);
                 }
                 this.getSprite().setYPosition(this.oldYPos);
             }
@@ -300,7 +308,7 @@ public class Creature extends MapObject implements Combatant {
                 //Block movement right
                 if (this.getSprite().getXVelocity() > 0 ) {
                     //this.getSprite().setXVelocity(0);
-                    this.getSprite().setXVelocity(-this.getSprite().getXVelocity());
+                    this.getSprite().setXVelocity(-this.getSprite().getXVelocity()/2);
                 }
                 this.getSprite().setXPosition(this.oldXPos);
             }
@@ -308,7 +316,7 @@ public class Creature extends MapObject implements Combatant {
                 //Block movement left
                 if (this.getSprite().getXVelocity() < 0 ) {
                     //this.getSprite().setXVelocity(0);
-                    this.getSprite().setXVelocity(-this.getSprite().getXVelocity());
+                    this.getSprite().setXVelocity(-this.getSprite().getXVelocity()/2);
                 }
                 this.getSprite().setXPosition(this.oldXPos);
                 
