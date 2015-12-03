@@ -36,7 +36,7 @@ public class SpriteAnimation {
     private Image lastSnapshot;
 
     public SpriteAnimation(
-            ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
+        ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
         this.imageView = imageView;
         this.frameCount = frameCount;
         this.offsetX   = offsetX;

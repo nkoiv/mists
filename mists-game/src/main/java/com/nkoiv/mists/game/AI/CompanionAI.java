@@ -66,7 +66,7 @@ public class CompanionAI extends CreatureAI {
         //Pick the first (effectively random) mob from the list
         if (!nearbyMobs.isEmpty()) {
             Creature target = nearbyMobs.get(0);
-            //Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
+            Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
             this.goMelee(target, time);
         }
         return false;

@@ -70,4 +70,10 @@ public class LibLoader {
         
         
     }
+    
+    public static void initializeActionLibrary(ActionLibrary lib) {
+        Mists.logger.info("Loading up action data");
+        MeleeAttack melee = new MeleeAttack();
+        lib.addTemplate(melee);
+    }
 }

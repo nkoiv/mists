@@ -18,7 +18,7 @@ public class MonsterAI extends CreatureAI{
         super(monster);
     }
     
-    /**
+ /**
     * act() is the main loop for AI
     * it's called whenever it's given creatures
     * turn to do things
@@ -37,8 +37,14 @@ public class MonsterAI extends CreatureAI{
             this.timeSinceAction = 0;
         } else {
             //TODO: Continue current chosen action. Atm this means just movement
-            if(this.getCreature().applyMovement(time)) this.setFlag("movementBlocked", 0);
-            else this.setFlag("movementBlocked", 1);
+            if (this.isFlagged("movementBlocked")) {
+                //Try to move to a free spot that's next to the one we're aiming for
+                if (this.creep.applyMovement(time)) this.setFlag("movementBlocked", 0);
+            } else {
+                if(this.creep.applyMovement(time)) this.setFlag("movementBlocked", 0);
+                else this.setFlag("movementBlocked", 1);
+            }
+            
             this.timeSinceAction = this.timeSinceAction+time;
         }
         

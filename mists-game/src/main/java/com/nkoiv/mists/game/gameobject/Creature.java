@@ -572,6 +572,7 @@ public class Creature extends MapObject implements Combatant {
         for (String a : this.attributes.keySet()) {
             nc.attributes.put(a, this.attributes.get(a));
         }
+        nc.healHealth(nc.getMaxHealth());
         //Flags
         for (String f : this.flags.keySet()) {
             nc.flags.put(f, this.flags.get(f));
@@ -582,9 +583,13 @@ public class Creature extends MapObject implements Combatant {
             newCrossable.add(t);
         }
         nc.crossableTerrain = newCrossable;
-        
         //Abilities
-        
+        HashMap<String, Action> newActions = new HashMap<>();
+        for (String actionName : this.availableActions.keySet()) {
+            Action newAction = Mists.actionLibrary.create(actionName);
+            if (newAction != null) newActions.put(actionName, newAction);
+        }
+        nc.availableActions = newActions;
         
         //AI should be the same type as Template
         if (ai instanceof CompanionAI) {

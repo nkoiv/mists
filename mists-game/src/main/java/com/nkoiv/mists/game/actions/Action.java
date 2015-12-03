@@ -24,14 +24,13 @@ import java.util.logging.Level;
  * @author nkoiv
  */
 public class Action implements Serializable {
-    private static int nextId = 0;
-    private String name;
-    private int id;
-    private MapObject owner;
-    private ArrayList<Effect> effects;
-    private HashMap<String, Integer> flags;    
+    protected static int nextId = 0;
+    protected String name;
+    protected int id;
+    protected MapObject owner;
+    protected ArrayList<Effect> effects;
+    protected HashMap<String, Integer> flags;    
     
-    private static Map<Integer, Action> allById;
     
     public Action(String name) {
         this(name, nextId++);
@@ -41,17 +40,17 @@ public class Action implements Serializable {
         this.name = name;
         this.id = id;
         this.flags = new HashMap<>();
-        getAllById().put(id, this);
     }
     
-    private Map<Integer, Action> getAllById() {
+    /*
+    private static Map<Integer, Action> getAllById() {
         if(allById == null) {
             allById = new HashMap<>();
         }
         return allById;
     }
-    
-        /**
+    */
+    /**
     * Actions are owned by the user
     * setOwner gives this action to the MapObject
     * @param o MapObject to own the action
@@ -77,6 +76,10 @@ public class Action implements Serializable {
     public void use(Creature actor) {
         //Override this to do things
         Mists.logger.log(Level.INFO, "{0} used by {1}", new Object[]{this.toString(), actor.getName()});
+    }
+    
+    public void use(Creature actor, double xCoor, double yCoor) {
+        Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}x{3}", new Object[]{this.toString(), actor.getName(), (int)xCoor, (int)yCoor});
     }
     
     public void setFlag(String flag, int value) {
@@ -107,7 +110,19 @@ public class Action implements Serializable {
         
     }
     
-     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    public Action createFromTemplate() {
+        Action a = new Action(this.name);
+        for (String flag : this.flags.keySet()) {
+            a.setFlag(flag, this.flags.get(flag));
+        }
+        return a;
+    }
+    
+    @Override
     public String toString() {
         return name;
     }

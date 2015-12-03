@@ -13,6 +13,7 @@ import com.nkoiv.mists.game.world.pathfinding.Path;
 import com.nkoiv.mists.game.world.util.Flags;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
 import javafx.scene.shape.Circle;
 
 /**
@@ -63,11 +64,19 @@ public class CreatureAI extends Flags{
     }
     
 
+    /**
+     * MoveTowardsMob uses A* pathfinding to route a path towards the
+     * target, and then moves towards the next step on the path.
+     * The path is stored to AI:s "pathToMoveOn", so it can be used
+     * repeatedly before discarded as outdated
+     * @param mob MapObject to move towards
+     * @param time Time we can spend on moving
+     */
     protected void moveTowardsMob(MapObject mob, double time) {
-        //double collisionSize = creep.getSprite().getWidth();
-        double collisionSize = 32; 
+        //Drop fractions for collisionssize for now
+        //TODO: Make monster collisionboxes adher to pixelsize
+        double collisionSize = (int)(creep.getSprite().getWidth()/Mists.TILESIZE) * Mists.TILESIZE;
         //TODO: CollisionSize should be based on creep size, but sprites are a mess right now
-        //Using default tilesize atm to make pathing work
         double offset;
         if (collisionSize > creep.getLocation().getPathFinder().getTileSize()) {
             offset = creep.getLocation().getPathFinder().getTileSize()/2;
@@ -100,12 +109,10 @@ public class CreatureAI extends Flags{
             //Mists.logger.info("Got a path: " +pathToMob.toString());
             double nextTileX = pathToMob.getNode(1).getX()*pathToMob.getNode(0).getSize();
             double nextTileY = pathToMob.getNode(1).getY()*pathToMob.getNode(0).getSize();
-            targetXCoordinate = nextTileX;
-            targetYCoordinate = nextTileY;
+            
             //Mists.logger.log(Level.INFO, "Pathfinder tile {0},{1} converted into {2},{3}",
             //new Object[]{pathToMob.getNode(1).getX(), pathToMob.getNode(1).getY(), targetXCoordinate, targetYCoordinate});
             this.creep.moveTowards(nextTileX, nextTileY);
-
             this.creep.applyMovement(time);
         }
         
@@ -162,7 +169,11 @@ public class CreatureAI extends Flags{
    
     
     protected void useMeleeTowards(MapObject target) {
-        if (creep.getAvailableActions() == null) return;
+        //Mists.logger.log(Level.INFO, "{0} uses melee towards {1}", new Object[]{creep.getName(), target.getName()});
+        if (creep.getAvailableActions() == null) {
+            Mists.logger.log(Level.INFO, "No available actions for {0}", creep.getName());
+            return;
+        }
         if (!creep.getAvailableActions().isEmpty()) {
             this.turnTowardsMapObject(target);
             if (creep.getAvailableActionNames().contains("melee")) {
@@ -171,6 +182,7 @@ public class CreatureAI extends Flags{
             } else {
                 //If not available, use first available action
                 //TODO: Is this necessary?
+                Mists.logger.info(creep.getName()+" tried to use melee, but it wasn't available");
                 creep.useAction(creep.getAvailableActionNames().get(0));
             }
         }
@@ -227,7 +239,7 @@ public class CreatureAI extends Flags{
     protected void goMelee(MapObject target, double time) {
         this.creep.stopMovement(); //clear old movement
             if (this.inRange(0, target)) {
-                //Mists.logger.info("In range to hit player");
+                //Mists.logger.log(Level.INFO, "{0} in range to hit {1}", new Object[]{creep.getName(), target.getName()});
                 this.useMeleeTowards(target);
             } else {
                 this.moveTowardsMob(target, time);

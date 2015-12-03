@@ -14,6 +14,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.scene.image.ImageView;
@@ -50,8 +51,9 @@ public class MeleeAttack extends Action implements AttackAction {
         attackSprite.refreshCollisionBox();
         return attackSprite;
     }
+    
     @Override
-    public void use(Creature actor) {
+    public void use(Creature actor, double xDirection, double yDirection) {
         if (this.isOnCooldown()) {
             //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {
@@ -63,16 +65,23 @@ public class MeleeAttack extends Action implements AttackAction {
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
             this.lastUsed = System.currentTimeMillis();
-            Double[] attackPoint = actor.getSprite().getCorner(actor.getFacing());
+            double attackPointX = (xDirection * actor.getSprite().getWidth())/2 + actor.getCenterXPos();
+            double attackPointY = (yDirection * actor.getSprite().getHeight())/2 + actor.getCenterYPos();
             Effect attackEffect = new Effect(
                     this, "meleeattack",actor.getLocation(),
-                    (attackPoint[0]-(this.attackAnimation.getFrameWidth()/2)),
-                    (attackPoint[1]-(this.attackAnimation.getFrameHeight()/2)),
+                    (attackPointX-(this.attackAnimation.getFrameWidth()/2)),
+                    (attackPointY-(this.attackAnimation.getFrameHeight()/2)),
                     this.getSprite(actor),400);
             actor.getLocation().addEffect(attackEffect,
-                    (attackPoint[0]-(this.attackAnimation.getFrameWidth()/2)),
-                    (attackPoint[1]-(this.attackAnimation.getFrameHeight()/2)));
+                    (attackPointX-(this.attackAnimation.getFrameWidth()/2)),
+                    (attackPointY-(this.attackAnimation.getFrameHeight()/2)));
         }
+    }
+    
+    @Override
+    public void use(Creature actor) {
+        double[] facing = Toolkit.getDirectionXY(actor.getFacing());
+        this.use(actor, facing[0], facing[1]);
     }
        
     @Override
@@ -99,11 +108,21 @@ public class MeleeAttack extends Action implements AttackAction {
                     } else if (mob instanceof Structure) {
                         //TODO: Temp: DESTROY THE STRUCTURES!
                         //this.getOwner().getLocation().removeMapObject(mob);
-                        mob.setFlag("removable", 1);
+                        if (this.owner instanceof PlayerCharacter) mob.setFlag("removable", 1);
                     }
                 }
             }
         }
+    }
+    
+    @Override
+    public Action createFromTemplate() {
+        MeleeAttack a = new MeleeAttack();
+        for (String flag : this.flags.keySet()) {
+            a.setFlag(flag, this.flags.get(flag));
+        }
+        a.attackAnimation = this.attackAnimation;
+        return a;
     }
     
     @Override
