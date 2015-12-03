@@ -603,7 +603,10 @@ public class Creature extends MapObject implements Combatant {
         HashMap<String, Action> newActions = new HashMap<>();
         for (String actionName : this.availableActions.keySet()) {
             Action newAction = Mists.actionLibrary.create(actionName);
-            if (newAction != null) newActions.put(actionName, newAction);
+            if (newAction != null) {
+                newAction.setOwner(nc);
+                newActions.put(actionName, newAction);
+            }
         }
         nc.availableActions = newActions;
         

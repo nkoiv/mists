@@ -65,6 +65,7 @@ public class Action implements Serializable {
     * @return The owner of the action
     */
     public MapObject getOwner() {
+        if (this.owner == null) return new MapObject("MISSING OWNER ON ACTION");
         return this.owner;
     }
     

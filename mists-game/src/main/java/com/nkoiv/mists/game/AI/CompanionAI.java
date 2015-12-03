@@ -64,9 +64,14 @@ public class CompanionAI extends CreatureAI {
         if (nearbyMobs.contains(creep.getLocation().getPlayer())) nearbyMobs.remove(creep.getLocation().getPlayer());
         //Pick the first (effectively random) mob from the list
         if (!nearbyMobs.isEmpty()) {
-            Creature target = nearbyMobs.get(0);
-            Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
-            this.goMelee(target, time);
+            for (Creature c : nearbyMobs) {
+                if (this.isInLineOfSight(c)) {
+                    Creature target = c;
+                    Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
+                    this.goMelee(target, time);
+                    return true;
+                }
+            }
         }
         return false;
     }

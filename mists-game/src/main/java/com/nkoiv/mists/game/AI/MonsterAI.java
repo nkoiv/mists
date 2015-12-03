@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.AI;
 
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 
 /**

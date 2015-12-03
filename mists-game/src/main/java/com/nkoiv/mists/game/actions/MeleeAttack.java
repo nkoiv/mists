@@ -95,7 +95,7 @@ public class MeleeAttack extends Action implements AttackAction {
     public void hitOn(ArrayList<MapObject> mobs) {
         int damage = this.getFlag("damage");
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
-            Mists.logger.log(Level.INFO, "{0} landed on {1}", new Object[]{this.toString(), mobs.toString()});
+            Mists.logger.log(Level.INFO, "{0}s {1} landed on {2}", new Object[]{this.getOwner().getName(),this.toString(), mobs.toString()});
             this.setFlag("triggered", 1);
             for (MapObject mob : mobs) {
                 if (!mob.equals(this.getOwner())) {
@@ -105,7 +105,7 @@ public class MeleeAttack extends Action implements AttackAction {
                             //TODO: build this into flags somehow (if mob.faction == getOwner.faction...)
                             PlayerCharacter pc =(PlayerCharacter)this.getOwner();
                             if (!pc.getCompanions().contains((Creature)mob)) {
-                                Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
+                                Mists.logger.log(Level.INFO, "{0} Hit {1} for {2} damage", new Object[]{this.getOwner().getName(), mob.getName(), damage});
                                 ((Combatant)mob).takeDamage(damage);
                             }
                         } else {
