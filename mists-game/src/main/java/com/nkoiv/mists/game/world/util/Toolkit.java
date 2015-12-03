@@ -103,4 +103,16 @@ public abstract class Toolkit {
             default: return new double[]{0,0};
         }
     }
+    
+    public static double distance(double fromX, double fromY, double toX, double toY) {
+        /*With euclidean the diagonal movement is considered to be
+        * slightly more expensive than cardinal movement
+        * ((AC = sqrt(AB^2 + BC^2))), 
+        * where AB = x2 - x1 and BC = y2 - y1 and AC will be [x3, y3]
+        */
+        double euclideanDistance = Math.sqrt(Math.pow(fromX - toX, 2)
+                            + Math.pow(fromX - toX, 2));
+        return euclideanDistance;
+    }
+ 
 }

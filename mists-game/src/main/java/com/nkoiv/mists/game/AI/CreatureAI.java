@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.pathfinding.Path;
 import com.nkoiv.mists.game.world.util.Flags;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -236,14 +237,35 @@ public class CreatureAI extends Flags{
         }
     }
     
-    protected void goMelee(MapObject target, double time) {
+    protected boolean goMelee(MapObject target, double time) {
         this.creep.stopMovement(); //clear old movement
             if (this.inRange(0, target)) {
                 //Mists.logger.log(Level.INFO, "{0} in range to hit {1}", new Object[]{creep.getName(), target.getName()});
                 this.useMeleeTowards(target);
+                return true;
             } else {
                 this.moveTowardsMob(target, time);
+                return false;
             }
+    }
+    
+    protected boolean attackNearest(ArrayList<Creature> nearbyMobs, double time) {
+        if (!nearbyMobs.isEmpty()) {
+            Creature target = nearbyMobs.get(0);
+            double distanceToNearest = Toolkit.distance(target.getCenterXPos(), target.getCenterYPos(), creep.getCenterXPos(), creep.getCenterYPos());
+            for (Creature c : nearbyMobs) {
+                if (this.isInLineOfSight(c)) {
+                    if (distanceToNearest > Toolkit.distance(c.getCenterXPos(), c.getCenterYPos(), creep.getCenterXPos(), creep.getCenterYPos())) {
+                        target = c;
+                    }
+                }
+            }
+            
+            Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
+            this.goMelee(target, time);
+            return true;
+        }
+        return false;
     }
     
     public Path getPath() {

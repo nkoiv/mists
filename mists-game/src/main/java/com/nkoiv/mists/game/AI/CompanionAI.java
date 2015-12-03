@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
@@ -63,17 +64,7 @@ public class CompanionAI extends CreatureAI {
         nearbyMobs.remove(creep); //Creature is always near itself
         if (nearbyMobs.contains(creep.getLocation().getPlayer())) nearbyMobs.remove(creep.getLocation().getPlayer());
         //Pick the first (effectively random) mob from the list
-        if (!nearbyMobs.isEmpty()) {
-            for (Creature c : nearbyMobs) {
-                if (this.isInLineOfSight(c)) {
-                    Creature target = c;
-                    Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
-                    this.goMelee(target, time);
-                    return true;
-                }
-            }
-        }
-        return false;
+        return this.attackNearest(nearbyMobs, time);
     }
     
     
