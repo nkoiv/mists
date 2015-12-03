@@ -79,6 +79,7 @@ public class Action implements Serializable {
     }
     
     public void use(Creature actor, double xCoor, double yCoor) {
+        //Override this to do things
         Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}x{3}", new Object[]{this.toString(), actor.getName(), (int)xCoor, (int)yCoor});
     }
     

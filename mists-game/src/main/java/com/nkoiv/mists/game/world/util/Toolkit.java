@@ -70,12 +70,13 @@ public abstract class Toolkit {
         if (yDif<0) up = true;
         double xFactor;
         double yFactor;
-        if (Math.abs(xDif) - Math.abs(yDif) > 0) {
-            xFactor = Math.abs(yDif) / Math.abs(xDif);
+        if (Math.abs(xDif) > Math.abs(yDif)) {
+            yFactor = Math.abs(yDif) / Math.abs(xDif);
+            xFactor = 1-yFactor;
         } else {
-            xFactor = 1-(Math.abs(xDif) / Math.abs(yDif));
+            xFactor = Math.abs(xDif) / Math.abs(yDif);
+            yFactor = 1-xFactor;
         }
-        yFactor = 1-xFactor;
         if (left) xFactor = -xFactor;
         if (up) yFactor = -yFactor;
         

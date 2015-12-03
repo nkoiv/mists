@@ -178,11 +178,11 @@ public class CreatureAI extends Flags{
             this.turnTowardsMapObject(target);
             if (creep.getAvailableActionNames().contains("melee")) {
                 //Try to use "melee" ability if possible
-                creep.useAction("melee");
+                creep.useAction("melee", target);
             } else {
                 //If not available, use first available action
                 //TODO: Is this necessary?
-                Mists.logger.info(creep.getName()+" tried to use melee, but it wasn't available");
+                Mists.logger.log(Level.INFO, "{0} tried to use melee, but it wasn''t available", creep.getName());
                 creep.useAction(creep.getAvailableActionNames().get(0));
             }
         }

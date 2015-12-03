@@ -52,8 +52,8 @@ public class MeleeAttack extends Action implements AttackAction {
         return attackSprite;
     }
     
-    @Override
-    public void use(Creature actor, double xDirection, double yDirection) {
+    
+    private void use(Creature actor, double[] directionXY) {
         if (this.isOnCooldown()) {
             //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {
@@ -63,10 +63,11 @@ public class MeleeAttack extends Action implements AttackAction {
                 Mists.logger.warning("Sounds not available");
             }
             this.setFlag("triggered", 0);
-            Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
+            Mists.logger.log(Level.INFO, "{0} used by {1} towards {2} ({3},{4})",
+                    new Object[]{this.toString(), actor.getName(), actor.getFacing(), directionXY[0], directionXY[1]});
             this.lastUsed = System.currentTimeMillis();
-            double attackPointX = (xDirection * actor.getSprite().getWidth())/2 + actor.getCenterXPos();
-            double attackPointY = (yDirection * actor.getSprite().getHeight())/2 + actor.getCenterYPos();
+            double attackPointX = (directionXY[0] * actor.getSprite().getWidth())/2 + actor.getCenterXPos();
+            double attackPointY = (directionXY[1] * actor.getSprite().getHeight())/2 + actor.getCenterYPos();
             Effect attackEffect = new Effect(
                     this, "meleeattack",actor.getLocation(),
                     (attackPointX-(this.attackAnimation.getFrameWidth()/2)),
@@ -77,18 +78,24 @@ public class MeleeAttack extends Action implements AttackAction {
                     (attackPointY-(this.attackAnimation.getFrameHeight()/2)));
         }
     }
+    @Override
+    public void use(Creature actor, double xTarget, double yTarget) {
+        double[] directionXY = Toolkit.getDirectionXY(actor.getCenterXPos(), actor.getCenterYPos(), xTarget, yTarget);
+        this.use(actor, directionXY);
+    }
     
     @Override
     public void use(Creature actor) {
+        Mists.logger.log(Level.INFO, "{0} using {1} towards {2}", new Object[]{actor.getName(), this.getName(), actor.getFacing()});
         double[] facing = Toolkit.getDirectionXY(actor.getFacing());
-        this.use(actor, facing[0], facing[1]);
+        this.use(actor, facing);
     }
        
     @Override
     public void hitOn(ArrayList<MapObject> mobs) {
         int damage = this.getFlag("damage");
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
-            Mists.logger.info(this.toString() + " landed on " + mobs.toString());
+            Mists.logger.log(Level.INFO, "{0} landed on {1}", new Object[]{this.toString(), mobs.toString()});
             this.setFlag("triggered", 1);
             for (MapObject mob : mobs) {
                 if (!mob.equals(this.getOwner())) {

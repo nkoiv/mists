@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.AI;
 
-import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import java.util.ArrayList;
