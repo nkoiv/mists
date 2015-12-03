@@ -55,10 +55,10 @@ public abstract class Toolkit {
      * convenient x and y doubles, both within range of
      * -1 and +1. This method effectively gets rid of the
      * length of the vector while keeping the direction.
-     * @param xFrom
-     * @param yFrom
-     * @param xTo
-     * @param yTo
+     * @param xFrom Point A x
+     * @param yFrom Point A y
+     * @param xTo Point B x
+     * @param yTo Point B y
      * @return x and y direction in -1 - +1 range
      */
     public static double[] getDirectionXY(double xFrom, double yFrom, double xTo, double yTo) {
@@ -104,6 +104,14 @@ public abstract class Toolkit {
         }
     }
     
+    /**
+     * Simple euclidean distance from point A to point B
+     * @param fromX Point A x
+     * @param fromY Point A y
+     * @param toX Point B x
+     * @param toY Point B y
+     * @return distance between the two points
+     */
     public static double distance(double fromX, double fromY, double toX, double toY) {
         /*With euclidean the diagonal movement is considered to be
         * slightly more expensive than cardinal movement

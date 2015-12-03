@@ -18,8 +18,8 @@ import javafx.util.Duration;
 
 /**
  * SoundManager loads sound effects as AudioClips
- * and music as Media
- * Based on Carl Dea's blogpost
+ * and music as Media.
+ * Based on Carl Dea's blogpost:
  * https://carlfx.wordpress.com/2012/08/26/javafx-2-gametutorial-part-5/
  * @author nikok
  */

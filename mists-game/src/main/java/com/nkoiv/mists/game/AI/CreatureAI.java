@@ -251,8 +251,8 @@ public class CreatureAI extends Flags{
     
     protected boolean attackNearest(ArrayList<Creature> nearbyMobs, double time) {
         if (!nearbyMobs.isEmpty()) {
-            Creature target = nearbyMobs.get(0);
-            double distanceToNearest = Toolkit.distance(target.getCenterXPos(), target.getCenterYPos(), creep.getCenterXPos(), creep.getCenterYPos());
+            Creature target = null;
+            double distanceToNearest = Double.MAX_VALUE;
             for (Creature c : nearbyMobs) {
                 if (this.isInLineOfSight(c)) {
                     if (distanceToNearest > Toolkit.distance(c.getCenterXPos(), c.getCenterYPos(), creep.getCenterXPos(), creep.getCenterYPos())) {
@@ -260,10 +260,12 @@ public class CreatureAI extends Flags{
                     }
                 }
             }
+            if (target == null) return false;
+            else {
+                Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
+                return this.goMelee(target, time);
+            }
             
-            Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
-            this.goMelee(target, time);
-            return true;
         }
         return false;
     }

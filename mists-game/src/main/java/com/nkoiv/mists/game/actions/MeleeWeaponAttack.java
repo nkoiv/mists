@@ -20,7 +20,8 @@ import java.util.logging.Level;
 import javafx.scene.image.ImageView;
 
 /**
- *
+ * Action for swinging whichever (melee)weapon
+ * the actor has at hand.
  * @author nikok
  */
 public class MeleeWeaponAttack extends Action implements AttackAction {

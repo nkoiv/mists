@@ -8,7 +8,8 @@ package com.nkoiv.mists.game.world.util;
 import java.util.HashMap;
 
 /**
- *
+ * Abstract class used for tracking various
+ * misc variables, mainly within the MapObjects.
  * @author nikok
  */
 public abstract class Flags {

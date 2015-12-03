@@ -65,7 +65,8 @@ public class MeleeAttack extends Action implements AttackAction {
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2} ({3},{4})",
                     new Object[]{this.toString(), actor.getName(), actor.getFacing(), directionXY[0], directionXY[1]});
-            this.lastUsed = System.currentTimeMillis();
+            this.lastUsed = System.currentTimeMillis(); //In case the ability has a cooldown
+            //Build the effect
             double attackPointX = (directionXY[0] * actor.getSprite().getWidth())/2 + actor.getCenterXPos();
             double attackPointY = (directionXY[1] * actor.getSprite().getHeight())/2 + actor.getCenterYPos();
             Effect attackEffect = new Effect(
@@ -73,6 +74,7 @@ public class MeleeAttack extends Action implements AttackAction {
                     (attackPointX-(this.attackAnimation.getFrameWidth()/2)),
                     (attackPointY-(this.attackAnimation.getFrameHeight()/2)),
                     this.getSprite(actor),400);
+            //Put the effect on the actor
             actor.getLocation().addEffect(attackEffect,
                     (attackPointX-(this.attackAnimation.getFrameWidth()/2)),
                     (attackPointY-(this.attackAnimation.getFrameHeight()/2)));
