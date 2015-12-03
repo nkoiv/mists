@@ -58,7 +58,7 @@ public class CompanionAI extends CreatureAI {
      * @return Return true if there was something to go and attack
      */
     private boolean attackNearbyEnemies(double time) {
-        ArrayList<Creature> nearbyMobs = this.surroundingCreatures(creep.getCenterXPos(), creep.getCenterYPos(), Mists.TILESIZE*5);
+        ArrayList<Creature> nearbyMobs = this.surroundingCreatures(creep.getCenterXPos(), creep.getCenterYPos(), Mists.TILESIZE*8);
         //TODO: Filter only hostile mobs from the list. For now remove itself and player.
         nearbyMobs.remove(creep); //Creature is always near itself
         if (nearbyMobs.contains(creep.getLocation().getPlayer())) nearbyMobs.remove(creep.getLocation().getPlayer());

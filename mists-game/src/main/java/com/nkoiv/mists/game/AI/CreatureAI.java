@@ -178,7 +178,7 @@ public class CreatureAI extends Flags{
             this.turnTowardsMapObject(target);
             if (creep.getAvailableActionNames().contains("melee")) {
                 //Try to use "melee" ability if possible
-                creep.useAction("melee", target);
+                creep.useAction("melee");
             } else {
                 //If not available, use first available action
                 //TODO: Is this necessary?

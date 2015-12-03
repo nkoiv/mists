@@ -86,7 +86,7 @@ public class MeleeAttack extends Action implements AttackAction {
     
     @Override
     public void use(Creature actor) {
-        Mists.logger.log(Level.INFO, "{0} using {1} towards {2}", new Object[]{actor.getName(), this.getName(), actor.getFacing()});
+        //Mists.logger.log(Level.INFO, "{0} using {1} towards {2}", new Object[]{actor.getName(), this.getName(), actor.getFacing()});
         double[] facing = Toolkit.getDirectionXY(actor.getFacing());
         this.use(actor, facing);
     }
