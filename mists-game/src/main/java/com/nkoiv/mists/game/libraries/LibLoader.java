@@ -75,8 +75,8 @@ public class LibLoader {
         
         Creature rabbit = new Creature("Rabbit", new ImageView("/images/monster_small.png"), 3, 0, 4, 4, 0, 36, 32);
         MonsterAI rabbitAI = new MonsterAI(rabbit);
-        worm.setAI(rabbitAI);
-        worm.addAction(new MeleeAttack());
+        rabbit.setAI(rabbitAI);
+        rabbit.addAction(new MeleeAttack());
         lib.addTemplate(rabbit);
         
         Creature eggy = new Creature("Eggy", new ImageView("/images/monster_small.png"), 3, 3, 0, 4, 0, 36, 32);
