@@ -15,14 +15,15 @@ import javafx.scene.shape.Rectangle;
  * QuadTree taken from Steven Lamberts blog (http://gamedevelopment.tutsplus.com/tutorials/)
  * Modified to be be used with MOBs in a Location
  * @author nikok
+ * @param <E> Type of MapObject to store in the quad tree
  */
-public class QuadTree {
+public class QuadTree<E extends MapObject> {
  
     private int MAX_OBJECTS = 20;
     private int MAX_LEVELS = 5;
 
     private int level;
-    private List<MapObject> objects;
+    private List<E> objects;
     private Rectangle bounds;
     private QuadTree[] nodes;
 
@@ -68,7 +69,7 @@ public class QuadTree {
     * object cannot completely fit within a child node and is part
     * of the parent node
     */
-    private int getIndex(MapObject mob) {
+    private int getIndex(E mob) {
     int index = -1;
     double verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
     double horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
@@ -105,7 +106,7 @@ public class QuadTree {
     * exceeds the capacity, it will split and add all
     * objects to their corresponding nodes.
     */
-    public void insert(MapObject mob) {
+    public void insert(E mob) {
         if (nodes[0] != null) {
          int index = getIndex(mob);
 
@@ -141,7 +142,7 @@ public class QuadTree {
     * Recursively dive the quadrants until the correct depth is found
     * Return all objects that could collide with the given object
     */
-    public List retrieve(List returnObjects, MapObject mob) {
+    public List retrieve(List returnObjects, E mob) {
       int index = getIndex(mob);
       if (index != -1 && nodes[0] != null) {
         nodes[index].retrieve(returnObjects, mob);
