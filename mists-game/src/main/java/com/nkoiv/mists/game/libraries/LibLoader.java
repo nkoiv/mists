@@ -66,7 +66,33 @@ public class LibLoader {
         lib.addTemplate(himmu);
         
         //Monsters
+        Creature worm = new Creature("Worm", new ImageView("/images/monster_small.png"), 3, 0, 0, 4, 0, 36, 32);
+        MeleeAttack wormMelee = new MeleeAttack();
+        wormMelee.setFlag("cooldown", 3000);
+        wormMelee.setFlag("damage", 5);
+        worm.addAction(wormMelee);
+        lib.addTemplate(worm);
         
+        Creature rabbit = new Creature("Rabbit", new ImageView("/images/monster_small.png"), 3, 0, 4, 4, 0, 36, 32);
+        MeleeAttack rabbitmelee = new MeleeAttack();
+        rabbitmelee.setFlag("cooldown", 3000);
+        rabbitmelee.setFlag("damage", 5);
+        rabbit.addAction(rabbitmelee);
+        lib.addTemplate(rabbit);
+        
+        Creature eggy = new Creature("Eggy", new ImageView("/images/monster_small.png"), 3, 3, 0, 4, 0, 36, 32);
+        MeleeAttack eggymelee = new MeleeAttack();
+        eggymelee.setFlag("cooldown", 3000);
+        eggymelee.setFlag("damage", 5);
+        eggy.addAction(eggymelee);
+        lib.addTemplate(eggy);
+        
+        Creature swampy = new Creature("Swampy", new ImageView("/images/monster_small.png"), 3, 3, 4, 4, 0, 36, 32);
+        MeleeAttack swampymelee = new MeleeAttack();
+        swampymelee.setFlag("cooldown", 3000);
+        swampymelee.setFlag("damage", 5);
+        swampy.addAction(swampymelee);
+        lib.addTemplate(swampy);
         
         
     }

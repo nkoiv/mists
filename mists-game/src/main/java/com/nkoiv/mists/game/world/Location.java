@@ -127,20 +127,20 @@ public class Location extends Flags implements Global {
         
         }
         
-        for (int i = 0; i < 20 ; i++) {
+        for (int i = 0; i < 200 ; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
-            int startX = rnd.nextInt(4);
-            int startY = rnd.nextInt(2);
-            Mists.logger.info("Creating monster from sprite sheet position "+startX+","+startY);
-            Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 4, 0, 36, 32);
-            monster.getSprite().setCollisionAreaShape(1);
-            monster.setAI(new MonsterAI(monster));
-            MeleeAttack monstermelee = new MeleeAttack();
-            monstermelee.setFlag("cooldown", 3000);
-            monstermelee.setFlag("damage", 5);
-            monster.addAction(monstermelee);
+            int randomMob = rnd.nextInt(4);
+            Creature monster;
+            switch (randomMob) {
+                case 0: monster = Mists.creatureLibrary.create("worm"); break;
+                case 1: monster = Mists.creatureLibrary.create("swampy"); break;
+                case 2: monster = Mists.creatureLibrary.create("eggy"); break;
+                case 3: monster = Mists.creatureLibrary.create("rabbit"); break;
+                default: monster = Mists.creatureLibrary.create("worm");
+            }
+            
             this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(monster);
         }

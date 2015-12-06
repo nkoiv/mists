@@ -33,6 +33,7 @@ public class SpriteAnimation {
 
     private int currentFrame;
     private long lastFrameChangeMs;
+    private Image[] snapshots;
     private Image lastSnapshot;
 
     public SpriteAnimation(
@@ -48,6 +49,7 @@ public class SpriteAnimation {
         this.lastFrameChangeMs = 0;
         this.startX = startX;
         this.startY = startY;
+        this.snapshots = new Image[frameCount];
         
     }
     
@@ -81,14 +83,14 @@ public class SpriteAnimation {
             }
             this.lastFrameChangeMs = System.currentTimeMillis();
             //Mists.logger.info("Changed to next frame");
+            if (this.snapshots[currentFrame] != null) return this.snapshots[currentFrame];
             imageView.setViewport(new Rectangle2D((currentFrame * frameWidth)+(currentFrame* offsetX)+startX, 0+startY, frameWidth, frameHeight));
-        
-         
-        WritableImage snapshot = null;
-        SnapshotParameters parameters = new SnapshotParameters();
-        parameters.setFill(Color.TRANSPARENT);
-        lastSnapshot = imageView.snapshot(parameters, snapshot);
+            WritableImage snapshot = null;
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setFill(Color.TRANSPARENT);
+            lastSnapshot = imageView.snapshot(parameters, snapshot);
         }
+        this.snapshots[currentFrame] = lastSnapshot;
         return lastSnapshot;
     }
     
