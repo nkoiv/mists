@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.AI.CompanionAI;
+import com.nkoiv.mists.game.AI.MonsterAI;
 import static com.nkoiv.mists.game.Global.TILESIZE;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
@@ -67,31 +68,27 @@ public class LibLoader {
         
         //Monsters
         Creature worm = new Creature("Worm", new ImageView("/images/monster_small.png"), 3, 0, 0, 4, 0, 36, 32);
-        MeleeAttack wormMelee = new MeleeAttack();
-        wormMelee.setFlag("cooldown", 3000);
-        wormMelee.setFlag("damage", 5);
-        worm.addAction(wormMelee);
+        MonsterAI wormAI = new MonsterAI(worm);
+        worm.setAI(wormAI);
+        worm.addAction(new MeleeAttack());
         lib.addTemplate(worm);
         
         Creature rabbit = new Creature("Rabbit", new ImageView("/images/monster_small.png"), 3, 0, 4, 4, 0, 36, 32);
-        MeleeAttack rabbitmelee = new MeleeAttack();
-        rabbitmelee.setFlag("cooldown", 3000);
-        rabbitmelee.setFlag("damage", 5);
-        rabbit.addAction(rabbitmelee);
+        MonsterAI rabbitAI = new MonsterAI(rabbit);
+        worm.setAI(rabbitAI);
+        worm.addAction(new MeleeAttack());
         lib.addTemplate(rabbit);
         
         Creature eggy = new Creature("Eggy", new ImageView("/images/monster_small.png"), 3, 3, 0, 4, 0, 36, 32);
-        MeleeAttack eggymelee = new MeleeAttack();
-        eggymelee.setFlag("cooldown", 3000);
-        eggymelee.setFlag("damage", 5);
-        eggy.addAction(eggymelee);
+        MonsterAI eggyAI = new MonsterAI(eggy);
+        eggy.setAI(eggyAI);
+        eggy.addAction(new MeleeAttack());
         lib.addTemplate(eggy);
         
         Creature swampy = new Creature("Swampy", new ImageView("/images/monster_small.png"), 3, 3, 4, 4, 0, 36, 32);
-        MeleeAttack swampymelee = new MeleeAttack();
-        swampymelee.setFlag("cooldown", 3000);
-        swampymelee.setFlag("damage", 5);
-        swampy.addAction(swampymelee);
+        MonsterAI swampyAI = new MonsterAI(eggy);
+        swampy.setAI(swampyAI);
+        swampy.addAction(new MeleeAttack());
         lib.addTemplate(swampy);
         
         

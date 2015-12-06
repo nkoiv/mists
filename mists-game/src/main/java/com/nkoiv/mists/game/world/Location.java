@@ -127,7 +127,7 @@ public class Location extends Flags implements Global {
         
         }
         
-        for (int i = 0; i < 200 ; i++) {
+        for (int i = 0; i < 40 ; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();

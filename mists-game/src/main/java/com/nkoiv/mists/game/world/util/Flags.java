@@ -5,7 +5,9 @@
  */
 package com.nkoiv.mists.game.world.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Abstract class used for tracking various
@@ -39,6 +41,12 @@ public abstract class Flags {
             this.setFlag(flag, 1);
         }
         
+    }
+    
+    
+    
+    public Set<String> getFlags() {
+        return this.flags.keySet();
     }
     
     /**

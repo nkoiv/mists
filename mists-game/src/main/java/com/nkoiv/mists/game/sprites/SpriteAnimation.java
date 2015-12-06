@@ -33,8 +33,7 @@ public class SpriteAnimation {
 
     private int currentFrame;
     private long lastFrameChangeMs;
-    private Image[] snapshots;
-    private Image lastSnapshot;
+    private final Image[] snapshots;
 
     public SpriteAnimation(
         ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
@@ -73,7 +72,7 @@ public class SpriteAnimation {
             WritableImage snapshot = null;
             SnapshotParameters parameters = new SnapshotParameters();
             parameters.setFill(Color.TRANSPARENT);
-            lastSnapshot = imageView.snapshot(parameters, snapshot);
+            return this.snapshots[currentFrame] = imageView.snapshot(parameters, snapshot);
         }
         if ((System.currentTimeMillis() - lastFrameChangeMs) > this.frameDurationMs) {
             if (this.currentFrame < this.frameCount-1) {
@@ -88,10 +87,10 @@ public class SpriteAnimation {
             WritableImage snapshot = null;
             SnapshotParameters parameters = new SnapshotParameters();
             parameters.setFill(Color.TRANSPARENT);
-            lastSnapshot = imageView.snapshot(parameters, snapshot);
+            this.snapshots[currentFrame] = imageView.snapshot(parameters, snapshot);
+            return this.snapshots[currentFrame];
         }
-        this.snapshots[currentFrame] = lastSnapshot;
-        return lastSnapshot;
+        return this.snapshots[currentFrame];
     }
     
     

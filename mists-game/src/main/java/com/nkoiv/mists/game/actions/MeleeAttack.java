@@ -37,7 +37,7 @@ public class MeleeAttack extends Action implements AttackAction {
         this.setFlag("animationcycles", 1);
         this.setFlag("cooldown", 1000);
         this.setFlag("triggered", 0);
-        this.setFlag("damage", 50);
+        this.setFlag("damage", 10);
     }
     
     public void setAnimation(ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
@@ -96,6 +96,8 @@ public class MeleeAttack extends Action implements AttackAction {
     @Override
     public void hitOn(ArrayList<MapObject> mobs) {
         int damage = this.getFlag("damage");
+        int scalingDamage = this.owner.getFlag("Strength");
+        damage = damage+scalingDamage;
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
             Mists.logger.log(Level.INFO, "{0}s {1} landed on {2}", new Object[]{this.getOwner().getName(),this.toString(), mobs.toString()});
             this.setFlag("triggered", 1);

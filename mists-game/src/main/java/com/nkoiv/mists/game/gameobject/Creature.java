@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.AI.CreatureAI;
+import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
@@ -601,20 +602,39 @@ public class Creature extends MapObject implements Combatant {
         nc.crossableTerrain = newCrossable;
         //Abilities
         HashMap<String, Action> newActions = new HashMap<>();
-        for (String actionName : this.availableActions.keySet()) {
-            Action newAction = Mists.actionLibrary.create(actionName);
-            if (newAction != null) {
-                newAction.setOwner(nc);
-                newActions.put(actionName, newAction);
+        if (this.availableActions != null) {
+            for (String actionName : this.availableActions.keySet()) {
+                Action newAction = Mists.actionLibrary.create(actionName);
+                if (newAction != null) {
+                    newAction.setOwner(nc);
+                    newActions.put(actionName, newAction);
+                }
             }
         }
         nc.availableActions = newActions;
         
         //AI should be the same type as Template
+        //TODO: This needs rethinking
         if (ai instanceof CompanionAI) {
             nc.ai = new CompanionAI(nc);
         }  
+        if (ai instanceof MonsterAI) {
+            nc.ai = new MonsterAI(nc);
+        }
         return nc;
     }
     
+    @Override
+    public String toString() {
+        String n = this.name + " @ "+"|"+(int)this.getCenterXPos()+"x"+(int)this.getCenterYPos()+"|";
+        return n;
+    }
+    
+    public String longString() {
+        String n = this.name + " @ "+"|"+(int)this.getCenterXPos()+"x"+(int)this.getCenterYPos()+"|\n";
+        n = n+this.location+"\n";
+        n = n+"Health: "+this.getHealth()+" / "+this.getMaxHealth()+"\n";
+        n = n+"Abilities: "+this.availableActions.keySet().toString()+"\n";
+        return n;
+    }
 }

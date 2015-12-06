@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.util.Flags;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import java.util.logging.Level;
  * All actions are stored in the (static) allById -map
  * @author nkoiv
  */
-public class Action implements Serializable {
+public class Action extends Flags implements Serializable {
     protected static int nextId = 0;
     protected String name;
     protected int id;
@@ -84,29 +85,6 @@ public class Action implements Serializable {
         Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}x{3}", new Object[]{this.toString(), actor.getName(), (int)xCoor, (int)yCoor});
     }
     
-    public void setFlag(String flag, int value) {
-        if (this.flags.containsKey(flag)) {
-            this.flags.replace(flag, value);
-        } else {
-            this.flags.put(flag, value);
-        }   
-    }
-    
-    public int getFlag(String flag) {
-        if (this.flags.containsKey(flag)) {
-            return this.flags.get(flag);
-        } else {
-            return 0;
-        }
-    }
-      
-    public boolean isFlagged (String flag) {
-        if (this.flags.containsKey(flag)) {
-            return this.flags.get(flag) > 0;
-        } else {
-            return false;
-        }
-    }
 
     public void hitOn(ArrayList<MapObject> mobs) {
         

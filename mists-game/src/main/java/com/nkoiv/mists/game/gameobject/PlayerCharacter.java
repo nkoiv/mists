@@ -66,6 +66,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setMaxHealth(500);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
+        this.setFlag("Strength", 50);
         
     }
        
