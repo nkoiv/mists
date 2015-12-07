@@ -6,16 +6,10 @@
 package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.image.BufferedImage;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -306,13 +300,13 @@ public class Sprite
 
     
     /**
-     * TODO: Javas intersects() from Shapes is really effin slow
-     * New way: just check corners
+     * Check the if the CollisionBoxes intersects
+     * (sweep and prune?) before going to pixel detection
      * @param s Sprite to check collisions with
      * @return True if they overlap somewhere
      */    
     public boolean intersects(Sprite s) {
-        if (this.intersectsWithShape(s.getBoundary())) {
+        if (this.collisionBox.Intersect(s.collisionBox)) {
             //Check pixel collsion
             return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), s.getXPos(), s.getYPos(), s.getImage());
             
@@ -321,7 +315,15 @@ public class Sprite
 
     }
     
-    //Old intersects, with Java shape.intersect
+    /**
+     * Javas IntersectsWithShape is used against
+     * the general boundary of the object.
+     * This is handy for comparing the sprite against
+     * various shapes.
+     * TODO: Insert pixel collision here too?
+     * @param s Shape to test intersection with
+     * @return True if the shapes intersect
+     */
     public boolean intersectsWithShape(Shape s)
     {
         //Shape shape = Shape.intersect(s.getBoundary(), this.getBoundary());
