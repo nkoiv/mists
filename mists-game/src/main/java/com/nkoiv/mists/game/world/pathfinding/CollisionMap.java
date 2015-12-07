@@ -24,9 +24,9 @@ public class CollisionMap {
     private Node[][] nodeMap; 
     /* Visited is used for pathfinding to determine which nodes have already been visited */
     //private Boolean[][] visited;
-    private int mapTileWidth;
-    private int mapTileHeight;
-    private int nodeSize;
+    public int mapTileWidth;
+    public int mapTileHeight;
+    public int nodeSize;
     private boolean structuresOnly;
             
     public CollisionMap(Location l, int nodeSize) {

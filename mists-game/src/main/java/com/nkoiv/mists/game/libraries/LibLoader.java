@@ -7,14 +7,11 @@ package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.AI.MonsterAI;
-import static com.nkoiv.mists.game.Global.TILESIZE;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
-import java.util.HashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 

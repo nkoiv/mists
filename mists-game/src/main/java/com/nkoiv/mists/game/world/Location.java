@@ -5,12 +5,10 @@
  */
 package com.nkoiv.mists.game.world;
 
-import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -20,7 +18,6 @@ import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import com.nkoiv.mists.game.world.util.Flags;
-import com.nkoiv.mists.game.world.util.QuadTree;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -31,10 +28,8 @@ import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 
 /**
  * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
@@ -130,12 +125,13 @@ public class Location extends Flags implements Global {
         
         for (int i = 0; i<10;i++) {
             //Make a bunch of trees
-            Structure tree = Mists.structureLibrary.create("Tree", this, 0, 0);
+            Structure tree = Mists.structureLibrary.create("Tree");
+            this.addStructure(tree, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(tree);
-        
+            Mists.logger.info("Created a "+tree.getName()+" at "+(int)tree.getCenterXPos()+"x"+(int)tree.getCenterYPos());
         }
         
-        for (int i = 0; i < 40 ; i++) {
+        for (int i = 0; i < 50 ; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
@@ -307,7 +303,7 @@ public class Location extends Flags implements Global {
             this.structures.add(s);    
         }
         s.setLocation(this);
-        s.getSprite().setPosition(xPos, yPos);
+        s.setPosition(xPos, yPos);
         if (this.pathFinder != null) this.pathFinder.setMapOutOfDate(true);
     }
     
@@ -334,7 +330,7 @@ public class Location extends Flags implements Global {
             this.effects.add(e);
         }
         e.setLocation(this);
-        e.getSprite().setPosition(xPos, yPos);
+        e.setPosition(xPos, yPos);
     }
     
     /** Adds an Effect to the location
@@ -637,27 +633,26 @@ public class Location extends Flags implements Global {
         //Old collision code (pre QuadTree)
         
         ArrayList<MapObject> collidingObjects = new ArrayList<>();
-        Iterator<Creature> creaturesIter = creatures.iterator();
-        while ( creaturesIter.hasNext() )
-        {
-            MapObject collidingObject = creaturesIter.next();
-            //If the objects are further away than their combined width/height, they cant collide
-            if ((Math.abs(collidingObject.getCenterXPos() - o.getCenterXPos())
-                 > (collidingObject.getSprite().getWidth() + o.getSprite().getWidth()))
-                || (Math.abs(collidingObject.getCenterYPos() - o.getCenterYPos())
-                 > (collidingObject.getSprite().getHeight() + o.getSprite().getHeight()))) {
-                //Objects are far enough from oneanother
-            } else {
-                if (!collidingObject.equals(o)) { // Colliding with yourself is not really a collision
-                if ( o.instersects(collidingObject) ) 
-                 {
-                    collidingObjects.add(collidingObject);
-                }
+        addMapObjectCollisions(o, this.creatures, collidingObjects);
+        
+        //For creatures, check the collision versus collisionmap first
+        if (o instanceof Creature) {
+            if (collidesOnCollisionMap((Creature)o)) {
+                addMapObjectCollisions(o, this.structures, collidingObjects);
             }
-            }
-            
+        } else {
+            addMapObjectCollisions(o, this.structures, collidingObjects);
         }
-        Iterator<Structure> structuresIter = structures.iterator();
+        return collidingObjects;
+        
+    }
+    
+    /**
+    * TODO: Find a way to not go through the ENTIRE mapObjects list
+    */
+    private void addMapObjectCollisions(MapObject o, ArrayList mapObjectsToCheck ,ArrayList collidingObjects) {
+        
+        Iterator<Structure> structuresIter = mapObjectsToCheck.iterator();
         while ( structuresIter.hasNext() )
         {
             MapObject collidingObject = structuresIter.next();
@@ -677,8 +672,26 @@ public class Location extends Flags implements Global {
             }
             
         }
-        return collidingObjects;
-        
+    }
+    
+    /**
+     * Check if a MapObject hits something on the collision map.
+     * Useful for pruning down the list of objects that needs true
+     * collision detection.
+     * TODO: using this, a HUGE creature could get stuck on certain structures?
+     * @param mob
+     * @return True if collision map had something at mobs coordinates
+     */
+    private boolean collidesOnCollisionMap(Creature mob) {
+        Double[] upleft = mob.getSprite().getCorner(Direction.UPLEFT);
+        Double[] upright = mob.getSprite().getCorner(Direction.UPRIGHT);
+        Double[] downleft = mob.getSprite().getCorner(Direction.DOWNLEFT);
+        Double[] downright = mob.getSprite().getCorner(Direction.DOWNRIGHT);
+        if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(upleft[0]/collisionMap.nodeSize), (int)(upleft[1]/collisionMap.nodeSize))) return true;
+        if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(upright[0]/collisionMap.nodeSize), (int)(upright[1]/collisionMap.nodeSize))) return true;
+        if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(downleft[0]/collisionMap.nodeSize), (int)(downleft[1]/collisionMap.nodeSize))) return true;
+        if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(downright[0]/collisionMap.nodeSize), (int)(downright[1]/collisionMap.nodeSize))) return true;
+        return false;
     }
     
     /**
