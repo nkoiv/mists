@@ -57,9 +57,9 @@ public class LibLoader {
         himmu.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
         himmu.setAI(new CompanionAI(himmu));
         himmu.setMaxHealth(1000);
+        himmu.setAttribute("Strength", 20);
         MeleeAttack himmumelee = new MeleeAttack();
         himmumelee.setFlag("cooldown", 2000);
-        himmumelee.setFlag("damage", 35);
         himmu.addAction(himmumelee);
         lib.addTemplate(himmu);
         

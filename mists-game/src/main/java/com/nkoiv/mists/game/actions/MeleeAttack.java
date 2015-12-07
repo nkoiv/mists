@@ -100,7 +100,6 @@ public class MeleeAttack extends Action implements AttackAction {
         damage = damage+scalingDamage;
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
             Mists.logger.log(Level.INFO, "{0}s {1} landed on {2}", new Object[]{this.getOwner().getName(),this.toString(), mobs.toString()});
-            this.setFlag("triggered", 1);
             for (MapObject mob : mobs) {
                 if (!mob.equals(this.getOwner())) {
                     if (mob instanceof Combatant) {
@@ -123,6 +122,7 @@ public class MeleeAttack extends Action implements AttackAction {
                     }
                 }
             }
+            this.setFlag("triggered", 1);
         }
     }
     

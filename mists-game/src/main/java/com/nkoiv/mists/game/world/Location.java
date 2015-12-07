@@ -53,6 +53,7 @@ public class Location extends Flags implements Global {
     private DungeonGenerator mapGen;
     private LightsRenderer lights;
     private final double[] lastOffsets = new double[2];
+    private List<MapObject> lastRenderedMapObjects = new ArrayList<>();
     private MapObject screenFocus;
     private PlayerCharacter player;
     private final HashMap<Integer, double[]> entryPoints = new HashMap<>();
@@ -792,9 +793,9 @@ public class Location extends Flags implements Global {
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.renderMap(gc, xOffset, yOffset);
         
-        List<MapObject> renderedMOBs = this.renderMobs(gc, xOffset, yOffset);
-        this.renderLights(gc, renderedMOBs, xOffset, yOffset);
-        this.renderStructureExtras(gc, renderedMOBs, xOffset, yOffset);
+        this.lastRenderedMapObjects = this.renderMobs(gc, xOffset, yOffset);
+        this.renderLights(gc, lastRenderedMapObjects, xOffset, yOffset);
+        this.renderStructureExtras(gc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderExtras(gc, xOffset, yOffset);
         
         
@@ -938,6 +939,10 @@ public class Location extends Flags implements Global {
             }
         }
         gc.restore();
+    }
+    
+    public List<MapObject> getLastRenderedMobs() {
+        return this.lastRenderedMapObjects;
     }
     
     private void renderExtras(GraphicsContext gc, double xOffset, double yOffset) {

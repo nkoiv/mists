@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
 import com.nkoiv.mists.game.ui.Console;
 import com.nkoiv.mists.game.ui.GoMainMenuButton;
 import com.nkoiv.mists.game.ui.LocationButtons;
+import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.UIComponent;
@@ -120,7 +121,7 @@ public class LocationState implements GameState {
         }
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
-        
+        Overlay.drawAllHPBars(gc, game.currentLocation.getLastRenderedMobs());
         if (gameMenuOpen){
             try {
                 Image controls = new Image("/images/controls.png");
