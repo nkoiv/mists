@@ -20,7 +20,7 @@ import javafx.scene.shape.Rectangle;
 public class QuadTree<E extends MapObject> {
  
     private int MAX_OBJECTS = 20;
-    private int MAX_LEVELS = 5;
+    private int MAX_LEVELS = 10;
 
     private int level;
     private List<E> objects;
@@ -137,10 +137,21 @@ public class QuadTree<E extends MapObject> {
         }
     }
     
+    /**
+     * Remove an element from the QuadTree
+     * by figuring out which node it belongs to
+     * and them removing it from there
+     * @param mob element to remove
+     */
+    public void remove(E mob) {
+        int index = getIndex(mob);
+        if(index != -1) nodes[index].objects.remove(mob);
+    }
     
     /*
     * Recursively dive the quadrants until the correct depth is found
     * Return all objects that could collide with the given object
+    * (meaning all objects that are in the same "box")
     */
     public List retrieve(List returnObjects, E mob) {
       int index = getIndex(mob);
@@ -152,4 +163,6 @@ public class QuadTree<E extends MapObject> {
 
       return returnObjects;
     }
+    
+
 }
