@@ -17,10 +17,10 @@ import javafx.scene.input.MouseEvent;
  * the MainMenuState.
  * @author nikok
  */
-public class MainMenuWindow extends TiledWindow {
+public class MainMenuWindow extends TiledPanel {
 
     public MainMenuWindow(GameState parent) {
-        super(parent, "MainMenu", 220, 300, (parent.getGame().WIDTH/2 - 110), 250);
+        super(parent, "MainMenu", 220, 300, (parent.getGame().WIDTH/2 - 110), 250, Mists.graphLibrary.getImageSet("panelBeige"));
         initializeMenuButtons();
         super.setInteractive(true);
     }

@@ -20,18 +20,18 @@ import javafx.scene.paint.Color;
  */
 public class TiledWindow implements UIComponent{
     
-    private GameState parent;
-    private String name;
-    private boolean interactive;
-    private ArrayList<UIComponent> subComponents;
-    private int currentButton;
-    private Color bgColor;
-    private double bgOpacity;
-    private double xPosition;
-    private double yPosition;
-    private double width;
-    private double height;
-    private double margin;
+    protected GameState parent;
+    protected String name;
+    protected boolean interactive;
+    protected ArrayList<UIComponent> subComponents;
+    protected int currentButton;
+    protected Color bgColor;
+    protected double bgOpacity;
+    protected double xPosition;
+    protected double yPosition;
+    protected double width;
+    protected double height;
+    protected double margin;
     
     public TiledWindow (GameState parent, String name, double width, double height, double xPos, double yPos) {
         this.parent = parent;
@@ -97,7 +97,7 @@ public class TiledWindow implements UIComponent{
      * If the window is still too large, it's downsized to the width and height of the canvas.
      * @param gc GraphicsContext to resize to
      */
-    private void resizeToFit(GraphicsContext gc) {
+    protected void resizeToFit(GraphicsContext gc) {
         double canvasWidth = gc.getCanvas().getWidth();
         double canvasHeight = gc.getCanvas().getHeight();
         if ((this.width + this.xPosition) > canvasWidth) {
@@ -114,7 +114,7 @@ public class TiledWindow implements UIComponent{
         
     }
     
-    private void tileSubComponentPositions (double xOffset, double yOffset) {
+    protected void tileSubComponentPositions (double xOffset, double yOffset) {
         double currentXPos = this.xPosition + xOffset;
         double currentYPos = this.yPosition + this.margin + yOffset;
         double widthOfRow = 0;

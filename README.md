@@ -24,6 +24,8 @@ Please see the [LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.m
 
 ***Licenced assets in use:***
 
+Majority of the UI components are from Kenneys Pack (http://kenney.nl/projects/kenney-game-assets)
+
 Some game sprites are from: Humble Bundle pack: Old School Modern 2 Copyright Jason Perry
 
 Some game tiles are from Humble Bundle -pack: Adventure Tile Starter - Celianna Copyright Celianna

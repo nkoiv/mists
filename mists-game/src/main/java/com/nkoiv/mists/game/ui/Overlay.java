@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -65,7 +66,7 @@ public class Overlay {
     
     /**
      * Actually paint the bar.
-     * TODO: Change this to use fancy bitmap for HP bar
+     * TODO: Consider if the right end of the bar is needed at all
      * @param gc GraphicsContext to draw the bar on
      * @param xCoor xCoor on where to draw the bar
      * @param yCoor yCoor on where to draw the bar
@@ -73,7 +74,18 @@ public class Overlay {
      * @param barHeight Size of the bar (static height?)
      */
     private static void drawHPBar(GraphicsContext gc, double xCoor, double yCoor, double barWidth, double barHeight) {
-        gc.fillRect(xCoor, yCoor, barWidth, barHeight);
+        Image barLeft = Mists.graphLibrary.getImage("barGreenHorizontalLeft");
+        Image barMid = Mists.graphLibrary.getImage("barGreenHorizontalMid");
+        Image barRight = Mists.graphLibrary.getImage("barGreenHorizontalRight");
+        gc.drawImage(barLeft, xCoor, yCoor);
+        double currentX = barLeft.getWidth();
+        while (currentX < (barWidth-barMid.getWidth())) {
+            gc.drawImage(barMid, xCoor+currentX, yCoor);
+            currentX = currentX + barMid.getWidth();
+        }
+        gc.drawImage(barMid, (xCoor+barWidth)-barMid.getWidth(), yCoor);
+        //gc.drawImage(barRight, (xCoor+barWidth)-barRight.getWidth(), yCoor);
+        //gc.fillRect(xCoor, yCoor, barWidth, barHeight);
     }
     
     /**
@@ -106,7 +118,7 @@ public class Overlay {
      */
     private static void drawTargettingCircle(GraphicsContext gc, double xCoor, double yCoor, double width, double height) {
         gc.save();
-        gc.setLineDashes(2, 3);
+        gc.setLineDashes(4, 6);
         gc.setStroke(Color.MAGENTA);
         gc.strokeOval(xCoor, yCoor, width, height);
         gc.restore();
@@ -115,7 +127,7 @@ public class Overlay {
     /**
      * InfoBox displaying info about the mob that's currently targeted
      * @param gc
-     * @param mobs 
+     * @param location
      */
     public static void drawInfoBox(GraphicsContext gc, Location location) {
         

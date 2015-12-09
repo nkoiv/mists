@@ -96,4 +96,37 @@ public class LibLoader {
         MeleeAttack melee = new MeleeAttack();
         lib.addTemplate(melee);
     }
+    
+    public static void initializeGraphLibrary(GraphLibrary lib) {
+        //---UI elements----
+        //Panels
+        lib.addImageSet("panelBeige", new ImageView("/images/ui/panel_beige.png"), 4, 4, 25, 25);
+        lib.addImageSet("panelBrown", new ImageView("/images/ui/panel_brown.png"), 4, 4, 25, 25);
+        lib.addImageSet("panelBeigeLight", new ImageView("/images/ui/panel_beigeLight.png"), 4, 4, 25, 25);
+        lib.addImageSet("panelBlue", new ImageView("/images/ui/panel_blue.png"), 4, 4, 25, 25);
+        
+        lib.addImageSet("panelInsetBeige", new ImageView("/images/ui/panelInset_beige.png"), 4, 4, 25, 25);
+        lib.addImageSet("panelInsetBrown", new ImageView("/images/ui/panelInset_brown.png"), 4, 4, 25, 25);
+        lib.addImageSet("panelInsetBeigeLight", new ImageView("/images/ui/panelInset_beigeLight.png"), 4, 4, 25, 25);
+        lib.addImageSet("panelInsetBlue", new ImageView("/images/ui/panelInset_blue.png"), 4, 4, 25, 25);
+        
+        //Bars
+        lib.addImage("barGreenHorizontalLeft", new Image("/images/ui/barGreen_horizontalLeft.png"));
+        lib.addImage("barGreenHorizontalMid", new Image("/images/ui/barGreen_horizontalMid.png"));
+        lib.addImage("barGreenHorizontalRight", new Image("/images/ui/barGreen_horizontalRight.png"));
+        lib.addImage("barRedHorizontalLeft", new Image("/images/ui/barRed_horizontalLeft.png"));
+        lib.addImage("barRedHorizontalMid", new Image("/images/ui/barRed_horizontalMid.png"));
+        lib.addImage("barRedHorizontalRight", new Image("/images/ui/barRed_horizontalRight.png"));
+        
+        
+        //Cursors
+        lib.addImage("cursorHandblue", new Image("/images/ui/cursorHand_blue.png"));
+        lib.addImage("cursorHandbeige", new Image("/images/ui/cursorHand_beige.png"));
+        lib.addImage("cursorHandgrey", new Image("/images/ui/cursorHand_grey.png"));
+        
+        lib.addImage("cursorSwordgold", new Image("/images/ui/cursorSword_gold.png"));
+        lib.addImage("cursorSwordsilver", new Image("/images/ui/cursorSword_silver.png"));
+        lib.addImage("cursorSwordbronze", new Image("/images/ui/cursorSword_bronze.png"));
+        
+    }
 }

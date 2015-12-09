@@ -26,6 +26,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
@@ -184,6 +185,7 @@ public class Mists extends Application implements Global {
     
     private void setupGraphLibrary() {
         Mists.graphLibrary = new GraphLibrary();
+        LibLoader.initializeGraphLibrary(graphLibrary);
     }
     
     private void setupStructureLibrary() {

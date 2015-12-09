@@ -23,10 +23,11 @@ import javafx.scene.paint.Color;
  */
 public class GraphLibrary {
     private final HashMap<String, Image> gallery;
-    
+    private final HashMap<String, Image[]> setgallery;
     
     public GraphLibrary() {
         this.gallery = new HashMap();
+        this.setgallery = new HashMap();
     }
     
     public void addImage(String name, Image i) {
@@ -47,14 +48,50 @@ public class GraphLibrary {
         this.addImage(name, image);
     }
     
+    public void addImageSet(String name, Image... images) {
+        String lowercasename = name.toLowerCase();
+        if (this.containsImage(lowercasename)) {
+            Mists.logger.log(Level.WARNING, "Graphics Set Library already contains {0}", name);
+            return;
+        }
+        this.setgallery.put(lowercasename, images);
+    }
+    
+    public void addImageSet(String name, ImageView iw, int columns, int rows, int width, int height) {
+        WritableImage snapshot = null;
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setFill(Color.TRANSPARENT);
+        Image[] images = new Image[columns * rows];
+        int counter = 0;
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
+                iw.setViewport(new Rectangle2D(x*width, y*height, width, height));
+                WritableImage image = iw.snapshot(parameters, snapshot);
+                images[counter] = image;
+                counter++;
+            }
+        }
+        
+        this.addImageSet(name, images);
+    }
+    
     public Image getImage(String name) {
         String lowercasename = name.toLowerCase();
         return this.gallery.get(lowercasename);
     }
     
+    public Image[] getImageSet(String name) {
+        String lowercasename = name.toLowerCase();
+        return this.setgallery.get(lowercasename);
+    }
+    
     public boolean containsImage(String name) {
         String lowercasename = name.toLowerCase();
         return this.gallery.containsKey(lowercasename);
+    }
+    public boolean containsImageSet(String name) {
+        String lowercasename = name.toLowerCase();
+        return this.setgallery.containsKey(lowercasename);
     }
     
 }

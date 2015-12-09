@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
+import com.nkoiv.mists.game.ui.TiledPanel;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.ui.TiledWindow;
 import java.util.ArrayList;
@@ -154,7 +155,7 @@ public class LocationState implements GameState {
         Mists.logger.info("Game menu toggled");
         if (!gameMenuOpen) {
             gameMenuOpen = true;
-            TiledWindow gameMenu = new TiledWindow(this, "GameMenu", 220, 300, (game.WIDTH/2 - 110), 150);
+            TiledPanel gameMenu = new TiledPanel(this, "GameMenu", 220, 300, (game.WIDTH/2 - 110), 150,Mists.graphLibrary.getImageSet("panelBeige"));
             TextButton resumeButton = new LocationButtons.ResumeButton("Resume", 200, 60, this.game);
             TextButton optionsButton = new TextButton("Options", 200, 60);
             GoMainMenuButton mainMenuButton = new GoMainMenuButton(this.game, 200, 60);
