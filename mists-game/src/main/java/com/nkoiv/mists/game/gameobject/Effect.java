@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * Effects are more or less temporary MapObjects.
@@ -59,6 +60,8 @@ public class Effect extends MapObject {
         //Mists.logger.log(Level.INFO, "Rendering the Effect [{0}]", this.getName());
         if (this.isFlagged("visible")) {
             this.getSprite().render(xOffset, yOffset, gc);
+            gc.setStroke(Color.MAGENTA);
+            gc.strokeRect(this.getXPos()-xOffset, this.getYPos()-yOffset, this.getSprite().getWidth(), this.getSprite().getHeight());
         }
         if(System.currentTimeMillis() > this.endTime)this.setFlag("removable", 1);
     }   

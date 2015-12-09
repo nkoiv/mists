@@ -132,7 +132,7 @@ public class Location extends Flags implements Global {
             Mists.logger.info("Created a "+tree.getName()+" at "+(int)tree.getCenterXPos()+"x"+(int)tree.getCenterYPos());
         }
         
-        for (int i = 0; i < 50 ; i++) {
+        for (int i = 0; i < 50; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
@@ -475,8 +475,9 @@ public class Location extends Flags implements Global {
         if (!this.effects.isEmpty()) {
             //Mists.logger.info("Effects NOT empty");
             for (Effect e : this.effects) { //Handle effects landing on something
-                if (!this.checkCollisions(e).isEmpty()) {       
-                    e.getOwner().hitOn(this.checkCollisions((e)));
+                ArrayList<MapObject> collisions = this.checkCollisions(e);
+                if (!collisions.isEmpty()) {       
+                    e.getOwner().hitOn(collisions);
                 }
             }
         }
@@ -607,31 +608,12 @@ public class Location extends Flags implements Global {
     }
     
     /** CheckCollisions for a given MapObjects
-    *  Returns a List with all the objects that collide with MapObject o
+    * Returns a List with all the objects that collide with MapObject o
     * Now with quad tree to check only objects nearby
     * @param o The MapObject to check collisions with
     * @return a List with all the objects that collide with MapObject o
     */
     public ArrayList<MapObject> checkCollisions (MapObject o) {
-        /*
-        // New QuadTree based collision detection
-        ArrayList<MapObject> nearbyObjects = new ArrayList<>();
-        mobQuadTree.retrieve(nearbyObjects, o);
-        nearbyObjects.remove(o);
-        //System.out.println("nearby objects: "+nearbyObjects.size());
-        Iterator<MapObject> nearbyObjectsIter = nearbyObjects.iterator();
-        while (nearbyObjectsIter.hasNext()) {
-            MapObject collidingObject = nearbyObjectsIter.next();
-            if (!collidingObject.instersects(o) || nearbyObjectsIter.equals(o)) {
-               nearbyObjectsIter.remove();
-            }
-        }
-        //System.out.println("colliding objects: "+nearbyObjects.size());
-        return nearbyObjects;
-        */
-        
-
-        //Old collision code (pre QuadTree)
         
         ArrayList<MapObject> collidingObjects = new ArrayList<>();
         addMapObjectCollisions(o, this.creatures, collidingObjects);
@@ -651,12 +633,11 @@ public class Location extends Flags implements Global {
     /**
     * TODO: Find a way to not go through the ENTIRE mapObjects list
     */
-    private void addMapObjectCollisions(MapObject o, ArrayList mapObjectsToCheck ,ArrayList collidingObjects) {
-        
-        Iterator<Structure> structuresIter = mapObjectsToCheck.iterator();
-        while ( structuresIter.hasNext() )
+    private void addMapObjectCollisions(MapObject o, ArrayList mapObjectsToCheck ,ArrayList collidingObjects) {        
+        Iterator<MapObject> mobIter = mapObjectsToCheck.iterator();
+        while ( mobIter.hasNext() )
         {
-            MapObject collidingObject = structuresIter.next();
+            MapObject collidingObject = mobIter.next();
             //If the objects are further away than their combined width/height, they cant collide
             if ((Math.abs(collidingObject.getCenterXPos() - o.getCenterXPos())
                  > (collidingObject.getSprite().getWidth() + o.getSprite().getWidth()))
