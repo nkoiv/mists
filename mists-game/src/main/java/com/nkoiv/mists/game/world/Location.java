@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import com.nkoiv.mists.game.world.util.Flags;
@@ -46,6 +47,7 @@ public class Location extends Flags implements Global {
     private ArrayList<Creature> creatures;
     private ArrayList<Structure> structures;
     private List<Effect> effects;
+    private List<MapObject> targets;
     private String name;
     private GameMap map;
     private CollisionMap collisionMap;
@@ -169,7 +171,7 @@ public class Location extends Flags implements Global {
         this.collisionMap.printMapToConsole();
         this.pathFinder = new PathFinder(this.collisionMap, 100, true);
         this.lights = new LightsRenderer(this);
-        
+        this.targets = new ArrayList<MapObject>();
         //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
         Mists.logger.log(Level.INFO, "Map ({0}x{1}) localized", new Object[]{map.getWidth(), map.getHeight()});
     }
@@ -933,6 +935,11 @@ public class Location extends Flags implements Global {
                 e.render(xOffset, yOffset, gc);
             }
         }
+        if (!this.targets.isEmpty()) {
+            for (MapObject mob : this.targets) {
+                Overlay.drawTargettingCircle(gc, mob);
+            }
+        }
     }
     
     private void renderMap(GraphicsContext gc, double xOffset, double yOffset) {
@@ -950,6 +957,23 @@ public class Location extends Flags implements Global {
             }
             
         }
+    }
+    
+    public void setTarget(MapObject mob) {
+        this.targets.clear();
+        if (mob!=null)this.targets.add(mob);
+    }
+    
+    public void clearTarget() {
+        this.targets.clear();
+    }
+    
+    public void addTarget(MapObject mob) {
+        this.targets.add(mob);
+    }
+    
+    public List<MapObject> getTargets() {
+        return this.targets;
     }
     
     public void setMinLightLevel(double lightlevel) {

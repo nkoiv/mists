@@ -8,6 +8,8 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.Location;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -39,6 +41,11 @@ public class Overlay {
         }
     }
     
+    /**
+     * Draw HP bars on a single target
+     * @param gc GraphicsContext to draw the bar on
+     * @param mob Creature to draw the bar on
+     */
     public static void drawHPBar(GraphicsContext gc, Creature mob) {
         int maxHP = mob.getMaxHealth();
         int currentHP = mob.getHealth();
@@ -56,9 +63,62 @@ public class Overlay {
         gc.restore();
     }
     
+    /**
+     * Actually paint the bar.
+     * TODO: Change this to use fancy bitmap for HP bar
+     * @param gc GraphicsContext to draw the bar on
+     * @param xCoor xCoor on where to draw the bar
+     * @param yCoor yCoor on where to draw the bar
+     * @param barWidth Size of the bar (width of creature?)
+     * @param barHeight Size of the bar (static height?)
+     */
     private static void drawHPBar(GraphicsContext gc, double xCoor, double yCoor, double barWidth, double barHeight) {
         gc.fillRect(xCoor, yCoor, barWidth, barHeight);
     }
     
+    /**
+     * Draw the targetting circle on a location
+     * @param gc GraphicsContext to draw the bar on
+     * @param xCoor (center) xCoor on where to draw the marker on
+     * @param yCoor (center) yCoor on where to draw the marker on
+     */
+    public static void drawTargettingCircle (GraphicsContext gc, double xCoor, double yCoor) {
+        drawTargettingCircle(gc, xCoor, yCoor, Mists.TILESIZE, Mists.TILESIZE);
+    }
+    
+    /**
+     * Draw a targetting circle on a specified target MapObject
+     * @param gc GraphicsContext to draw the marker on
+     * @param mob MapObject that's being targeted
+     */
+    public static void drawTargettingCircle(GraphicsContext gc, MapObject mob) {
+        drawTargettingCircle(gc, mob.getXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset(), mob.getWidth(), mob.getHeight());
+    }
+    
+    /**
+     * Actually draw the targetting circle
+     * TODO: Replace with fancy graphics
+     * @param gc GraphicsContext to draw the marker on
+     * @param xCoor xCoor on where to draw the marker on
+     * @param yCoor yCoor on where to draw the marker on
+     * @param width
+     * @param height 
+     */
+    private static void drawTargettingCircle(GraphicsContext gc, double xCoor, double yCoor, double width, double height) {
+        gc.save();
+        gc.setLineDashes(2, 3);
+        gc.setStroke(Color.MAGENTA);
+        gc.strokeOval(xCoor, yCoor, width, height);
+        gc.restore();
+    }
+    
+    /**
+     * InfoBox displaying info about the mob that's currently targeted
+     * @param gc
+     * @param mobs 
+     */
+    public static void drawInfoBox(GraphicsContext gc, Location location) {
+        
+    }
     
 }

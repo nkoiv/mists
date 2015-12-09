@@ -23,6 +23,7 @@ import com.nkoiv.mists.game.ui.TiledWindow;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -122,6 +123,7 @@ public class LocationState implements GameState {
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
         Overlay.drawAllHPBars(gc, game.currentLocation.getLastRenderedMobs());
+        Overlay.drawInfoBox(gc, game.currentLocation);
         if (gameMenuOpen){
             try {
                 Image controls = new Image("/images/controls.png");
@@ -238,8 +240,12 @@ public class LocationState implements GameState {
         if (me.getButton() == MouseButton.PRIMARY) {
             MapObject targetMob = game.currentLocation.getMobAtLocation(clickX+game.currentLocation.getLastxOffset(), clickY+game.currentLocation.getLastyOffset());
             if (targetMob!=null) { 
-                Mists.logger.info("Targetted "+targetMob.toString());
-                game.currentLocation.setScreenFocus(targetMob);
+                if (game.currentLocation.getTargets().contains(targetMob)) game.currentLocation.clearTarget();
+                else {
+                    Mists.logger.log(Level.INFO, "Targetted {0}", targetMob.toString());
+                    game.currentLocation.setTarget(targetMob);
+                    //game.currentLocation.setScreenFocus(targetMob);
+                }
             }
         }
         
