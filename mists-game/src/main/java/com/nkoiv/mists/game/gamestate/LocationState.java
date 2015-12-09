@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
+import com.nkoiv.mists.game.ui.TextPanel;
 import com.nkoiv.mists.game.ui.TiledPanel;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.ui.TiledWindow;
@@ -48,6 +49,7 @@ public class LocationState implements GameState {
     private final LocationButtons locationControls = new LocationButtons();
     private boolean inConsole;
     private final HashMap<String, UIComponent> uiComponents;
+    private TextPanel infobox;
     
     public LocationState (Game game) {
         this.game = game;
@@ -92,6 +94,7 @@ public class LocationState implements GameState {
         actionBar.addSubComponent(toggleScaleButton);
         uiComponents.put(actionBar.getName(), actionBar);
         
+        this.infobox = new TextPanel(this, "InfoBox", 250, 300, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
     }
 
     /**
@@ -124,7 +127,7 @@ public class LocationState implements GameState {
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
         Overlay.drawAllHPBars(gc, game.currentLocation.getLastRenderedMobs());
-        Overlay.drawInfoBox(gc, game.currentLocation);
+        if (!game.currentLocation.getTargets().isEmpty()) Overlay.drawInfoBox(gc, infobox, game.currentLocation.getTargets().get(0));
         if (gameMenuOpen){
             try {
                 Image controls = new Image("/images/controls.png");
@@ -202,6 +205,8 @@ public class LocationState implements GameState {
     @Override
     public void handleMouseEvent(MouseEvent me) {
         //See if there's an UI component to click
+        
+        
         if(!mouseClickOnUI(me)){
             //If not, give the click to the underlying gameLocation
             Mists.logger.info("Click didnt land on an UI button");

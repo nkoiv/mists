@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,10 +128,29 @@ public class Overlay {
     /**
      * InfoBox displaying info about the mob that's currently targeted
      * @param gc
-     * @param location
+     * @param infobox
+     * @param mob
      */
-    public static void drawInfoBox(GraphicsContext gc, Location location) {
-        
+    public static void drawInfoBox(GraphicsContext gc, TextPanel infobox, MapObject mob) {
+        infobox.setText(generateInfoBoxText(mob));
+        infobox.render(gc, 0, 0);
     }
     
+    
+    private static String generateInfoBoxText(MapObject mob) {
+        String text = "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(mob.toString());
+        if (mob instanceof Creature) {
+            sb.append("\n");
+            sb.append(((Creature) mob).getHealth()).append(" / ").append(((Creature) mob).getMaxHealth());
+            sb.append("\n");
+            
+        }
+        if (mob instanceof Structure) {
+            
+        }
+        text = sb.toString();
+        return text;
+    }
 }

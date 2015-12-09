@@ -13,7 +13,6 @@ package com.nkoiv.mists.game;
 public interface Global {
     
     //TileSize
-    public static int SCALE = 1;
     public static final int TILESIZE = 32;
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 800;

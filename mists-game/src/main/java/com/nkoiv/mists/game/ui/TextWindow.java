@@ -19,18 +19,18 @@ import javafx.scene.text.Text;
  */
 public class TextWindow implements UIComponent {
 
-    private GameState parent;
-    private String name;
+    protected GameState parent;
+    protected String name;
     protected Color bgColor;
-    private double bgOpacity;
-    private double xPosition;
-    private double yPosition;
-    private double width;
-    private double height;
-    private double margin;
+    protected double bgOpacity;
+    protected double xPosition;
+    protected double yPosition;
+    protected double width;
+    protected double height;
+    protected double margin;
     
-    private Font font;
-    private String text;
+    protected Font font;
+    protected String text;
     
     public TextWindow(GameState parent, String name, double width, double height, double xPos, double yPos){
         this.parent = parent;
@@ -56,9 +56,9 @@ public class TextWindow implements UIComponent {
         this.renderText(gc, xPosition, yPosition);
     }
 
-    private void renderText(GraphicsContext gc, double xPosition, double yPosition) {
+    protected void renderText(GraphicsContext gc, double xPosition, double yPosition) {
         gc.save();
-        gc.setFont(Font.font("Verdana"));
+        //gc.setFont(Font.font("Verdana"));
         gc.setFill(Color.WHITE);
         gc.strokeText(this.text, xPosition+this.margin, yPosition+this.margin+15);
         gc.restore();
@@ -97,7 +97,7 @@ public class TextWindow implements UIComponent {
         this.xPosition = xPos;
         this.yPosition = yPos;
     }
-
+    
     @Override
     public void onClick(MouseEvent me) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

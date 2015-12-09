@@ -117,7 +117,9 @@ public class LibLoader {
         lib.addImage("barRedHorizontalLeft", new Image("/images/ui/barRed_horizontalLeft.png"));
         lib.addImage("barRedHorizontalMid", new Image("/images/ui/barRed_horizontalMid.png"));
         lib.addImage("barRedHorizontalRight", new Image("/images/ui/barRed_horizontalRight.png"));
-        
+        lib.addImage("barBackHorizontalLeft", new Image("/images/ui/barBack_horizontalLeft.png"));
+        lib.addImage("barBackHorizontalMid", new Image("/images/ui/barBack_horizontalMid.png"));
+        lib.addImage("barBackHorizontalRight", new Image("/images/ui/barBack_horizontalRight.png"));
         
         //Cursors
         lib.addImage("cursorHandblue", new Image("/images/ui/cursorHand_blue.png"));

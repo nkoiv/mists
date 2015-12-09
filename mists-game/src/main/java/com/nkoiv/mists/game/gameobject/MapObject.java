@@ -154,7 +154,7 @@ public class MapObject extends Flags implements Global, Templatable {
     public String toString(){
         String s;
         if (this.location == null) s = this.name+" at Limbo";
-        else s = this.name + " at " + this.location.getName() + ":" + this.sprite.getXPos()+","+this.sprite.getYPos();
+        else s = this.name + " @ " + this.location.getName() + ":" + this.sprite.getXPos()+","+this.sprite.getYPos();
         return s;
     }
 

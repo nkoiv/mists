@@ -13,11 +13,10 @@ import javafx.scene.image.Image;
  *
  * @author nikok
  */
-public class TiledPanel extends TiledWindow {
+public class TextPanel extends TextWindow {
     private Image[] images;
     
-    
-    public TiledPanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images) {
+    public TextPanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images) {
         super(parent, name, width, height, xPos, yPos);
         this.images = images;
     }
@@ -27,26 +26,10 @@ public class TiledPanel extends TiledWindow {
         this.images = images;
     }
     
-    /**
-    * Render the window on the given graphics context
-    * The Subcomponents are drawn in turn, tiled to new row whenever needed
-    * @param  gc GraphicsContext to render the window on 
-    * @param xOffset xPosition offset for the window
-    * @param yOffset yPosition offset for the window
-    */
-    
     @Override
     public void render(GraphicsContext gc, double xOffset, double yOffset) {
-        //Optional resize
-        //this.resizeToFit(gc);
-        
-        //Draw the background
         this.renderBackground(gc);
-        //Render all the subcomponents so that they are tiled in the window area
-        tileSubComponentPositions(xOffset, yOffset);
-        for (UIComponent sc : this.subComponents) {
-            sc.render(gc, sc.getXPosition(), sc.getYPosition());
-        }       
+        this.renderText(gc, xPosition, yPosition);
     }
     
     private void renderBackground(GraphicsContext gc) {
