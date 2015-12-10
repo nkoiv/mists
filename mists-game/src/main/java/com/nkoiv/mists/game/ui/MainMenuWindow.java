@@ -7,6 +7,9 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
@@ -49,10 +52,16 @@ public class MainMenuWindow extends TiledPanel {
             //TODO: Move the gamestate to character creator
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
             //For now just generate a new location
+            PlayerCharacter pocplayer = new PlayerCharacter();
+            Creature companion = Mists.creatureLibrary.create("Himmu");
+            System.out.println(companion.toString());
+            pocplayer.addCompanion(companion);
+            pocplayer.getSprite().setCollisionAreaShape(2);
+            pocplayer.addAction(new MeleeAttack());
+            game.player = pocplayer;
             this.game.currentLocation = new Location(this.game.player);
             this.game.currentLocation.enterLocation(this.game.player);
             this.game.moveToState(Game.LOCATION);
-            
         }
         
     }

@@ -134,6 +134,7 @@ public class Overlay {
     public static void drawInfoBox(GraphicsContext gc, TextPanel infobox, MapObject mob) {
         infobox.setText(generateInfoBoxText(mob));
         infobox.render(gc, 0, 0);
+        gc.drawImage(mob.getSprite().getImage(), infobox.xPosition+infobox.getWidth()-mob.getSprite().getWidth()-10, infobox.yPosition+10);
     }
     
     
