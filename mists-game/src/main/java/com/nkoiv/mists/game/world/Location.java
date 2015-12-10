@@ -22,6 +22,7 @@ import com.nkoiv.mists.game.world.util.Flags;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -43,7 +44,8 @@ public class Location extends Flags implements Global {
     /*
     * TODO: Lists for various types of MapObjects, from creatures to frills.
     */
-    //private QuadTree mobQuadTree; //Used for collision detection
+    //private QuadTree mobQuadTree; //Used for collision detection //retired idea for now
+    private HashMap<Integer, HashSet> spatial; //New idea for lessening collision detection load
     private ArrayList<Creature> creatures;
     private ArrayList<Structure> structures;
     private List<Effect> effects;
@@ -134,7 +136,7 @@ public class Location extends Flags implements Global {
             Mists.logger.info("Created a "+tree.getName()+" at "+(int)tree.getCenterXPos()+"x"+(int)tree.getCenterYPos());
         }
         
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
@@ -171,7 +173,8 @@ public class Location extends Flags implements Global {
         this.collisionMap.printMapToConsole();
         this.pathFinder = new PathFinder(this.collisionMap, 100, true);
         this.lights = new LightsRenderer(this);
-        this.targets = new ArrayList<MapObject>();
+        this.targets = new ArrayList<>();
+        this.spatial = new HashMap<>();
         //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
         Mists.logger.log(Level.INFO, "Map ({0}x{1}) localized", new Object[]{map.getWidth(), map.getHeight()});
     }
@@ -464,7 +467,7 @@ public class Location extends Flags implements Global {
     * @param time Time since the last update
     */
     public void update (double time) {
-        //this.updateQuadTree();
+        this.updateSpatials();
         this.collisionMap.updateCollisionLevels();
         structureCleanup();
         if (!this.creatures.isEmpty()) {
@@ -563,6 +566,61 @@ public class Location extends Flags implements Global {
     }
     */
     
+    private void updateSpatials() {
+        if (this.spatial == null) this.spatial = new HashMap<>();
+        clearSpatials();
+        for (MapObject mob : this.creatures) {
+            int[] mobSpatials = getSpatials(mob);
+            addToSpatial(mob, mobSpatials[0], this.spatial);
+            addToSpatial(mob, mobSpatials[1], this.spatial);
+            addToSpatial(mob, mobSpatials[2], this.spatial);
+            addToSpatial(mob, mobSpatials[3], this.spatial);
+        }
+        
+        /* [ 1][ 2][ 3][ 3]
+        *  [ 4][ 5][ 6][ 7]
+        *  [ 8][ 9][10][11]
+        *  [12][13][14][15]
+        * Above a spatial node is the node number -5,
+        * below it is node number +5 and sides are +/- 1
+        */
+        
+    }
+    
+    private static void addToSpatial (MapObject mob, int spatialID, HashMap<Integer, HashSet> spatial) {
+        if (spatial.get(spatialID) == null) spatial.put(spatialID, new HashSet<MapObject>());
+        spatial.get(spatialID).add(mob);
+    }
+    
+    private void clearSpatials () {
+        if (this.spatial != null) this.spatial.clear();
+    }
+    
+    private int[] getSpatials(MapObject mob) {
+        int spatialsPerRow = 5; //TODO: Calculate these from map size?
+        int spatialRows = 5; //Or maybe map fillrate?
+        int sC = (int)this.map.getWidth()/spatialsPerRow;
+        int sR = (int)this.map.getHeight()/spatialRows;
+        Double[] spatialUpLeft;
+        Double[] spatialUpRight;
+        Double[] spatialDownRight;
+        Double[] spatialDownLeft;
+        int[]spatialList = new int[4];
+        spatialUpLeft = mob.getSprite().getCorner(Direction.UPLEFT);
+        spatialList[0] = (int)(spatialUpLeft[0]/sC) * (int)(spatialUpLeft[1]/sR);
+        
+        spatialUpRight = mob.getSprite().getCorner(Direction.UPRIGHT);
+        spatialList[1] = (int)(spatialUpRight[0]/sC) * (int)(spatialUpRight[1]/sR);
+        
+        spatialDownRight = mob.getSprite().getCorner(Direction.DOWNRIGHT);
+        spatialList[2] = (int)(spatialDownRight[0]/sC) * (int)(spatialDownRight[1]/sR);
+        
+        spatialDownLeft = mob.getSprite().getCorner(Direction.DOWNLEFT);
+        spatialList[3] = (int)(spatialDownLeft[0]/sC) * (int)(spatialDownLeft[1]/sR);
+        
+        return spatialList;
+    }
+    
     private void restructureWalls (ArrayList<Wall> removedWalls) {
         if (removedWalls.isEmpty()) return;
         for (Wall w : removedWalls) {
@@ -618,7 +676,11 @@ public class Location extends Flags implements Global {
     public ArrayList<MapObject> checkCollisions (MapObject o) {
         
         ArrayList<MapObject> collidingObjects = new ArrayList<>();
-        addMapObjectCollisions(o, this.creatures, collidingObjects);
+        int[] mobSpatials = getSpatials(o);
+        for (int i = 0; i < mobSpatials.length; i++) {
+            if (i >0) if (mobSpatials[i]==mobSpatials[i-1]) continue;
+            addMapObjectCollisions(o, this.spatial.get(mobSpatials[i]), collidingObjects);
+        }
         
         //For creatures, check the collision versus collisionmap first
         if (o instanceof Creature) {
@@ -630,12 +692,14 @@ public class Location extends Flags implements Global {
         }
         return collidingObjects;
         
+        
     }
     
     /**
     * TODO: Find a way to not go through the ENTIRE mapObjects list
     */
-    private void addMapObjectCollisions(MapObject o, ArrayList mapObjectsToCheck ,ArrayList collidingObjects) {        
+    private void addMapObjectCollisions(MapObject o, Iterable mapObjectsToCheck ,ArrayList collidingObjects) {        
+        if (mapObjectsToCheck == null) return;
         Iterator<MapObject> mobIter = mapObjectsToCheck.iterator();
         while ( mobIter.hasNext() )
         {
@@ -657,6 +721,8 @@ public class Location extends Flags implements Global {
             
         }
     }
+    
+    
     
     /**
      * Check if a MapObject hits something on the collision map.
