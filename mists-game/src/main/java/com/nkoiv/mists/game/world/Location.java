@@ -570,11 +570,10 @@ public class Location extends Flags implements Global {
         if (this.spatial == null) this.spatial = new HashMap<>();
         clearSpatials();
         for (MapObject mob : this.creatures) {
-            int[] mobSpatials = getSpatials(mob);
-            addToSpatial(mob, mobSpatials[0], this.spatial);
-            addToSpatial(mob, mobSpatials[1], this.spatial);
-            addToSpatial(mob, mobSpatials[2], this.spatial);
-            addToSpatial(mob, mobSpatials[3], this.spatial);
+            HashSet<Integer> mobSpatials = getSpatials(mob);
+            for (Integer i : mobSpatials) {
+                addToSpatial(mob, i, this.spatial);
+            }
         }
         
         /* [ 1][ 2][ 3][ 3]
@@ -596,7 +595,7 @@ public class Location extends Flags implements Global {
         if (this.spatial != null) this.spatial.clear();
     }
     
-    private int[] getSpatials(MapObject mob) {
+    private HashSet<Integer> getSpatials(MapObject mob) {
         int spatialsPerRow = 5; //TODO: Calculate these from map size?
         int spatialRows = 5; //Or maybe map fillrate?
         int sC = (int)this.map.getWidth()/spatialsPerRow;
@@ -605,18 +604,18 @@ public class Location extends Flags implements Global {
         Double[] spatialUpRight;
         Double[] spatialDownRight;
         Double[] spatialDownLeft;
-        int[]spatialList = new int[4];
+        HashSet<Integer> spatialList = new HashSet<>();
         spatialUpLeft = mob.getSprite().getCorner(Direction.UPLEFT);
-        spatialList[0] = (int)(spatialUpLeft[0]/sC) * (int)(spatialUpLeft[1]/sR);
+        spatialList.add((int)(spatialUpLeft[0]/sC) * (int)(spatialUpLeft[1]/sR));
         
         spatialUpRight = mob.getSprite().getCorner(Direction.UPRIGHT);
-        spatialList[1] = (int)(spatialUpRight[0]/sC) * (int)(spatialUpRight[1]/sR);
+        spatialList.add((int)(spatialUpRight[0]/sC) * (int)(spatialUpRight[1]/sR));
         
         spatialDownRight = mob.getSprite().getCorner(Direction.DOWNRIGHT);
-        spatialList[2] = (int)(spatialDownRight[0]/sC) * (int)(spatialDownRight[1]/sR);
+        spatialList.add((int)(spatialDownRight[0]/sC) * (int)(spatialDownRight[1]/sR));
         
         spatialDownLeft = mob.getSprite().getCorner(Direction.DOWNLEFT);
-        spatialList[3] = (int)(spatialDownLeft[0]/sC) * (int)(spatialDownLeft[1]/sR);
+        spatialList.add((int)(spatialDownLeft[0]/sC) * (int)(spatialDownLeft[1]/sR));
         
         return spatialList;
     }
@@ -676,10 +675,9 @@ public class Location extends Flags implements Global {
     public ArrayList<MapObject> checkCollisions (MapObject o) {
         
         ArrayList<MapObject> collidingObjects = new ArrayList<>();
-        int[] mobSpatials = getSpatials(o);
-        for (int i = 0; i < mobSpatials.length; i++) {
-            if (i >0) if (mobSpatials[i]==mobSpatials[i-1]) continue;
-            addMapObjectCollisions(o, this.spatial.get(mobSpatials[i]), collidingObjects);
+        HashSet<Integer> mobSpatials = getSpatials(o);
+        for (Integer i : mobSpatials) {
+            addMapObjectCollisions(o, this.spatial.get(i), collidingObjects);
         }
         
         //For creatures, check the collision versus collisionmap first
@@ -687,7 +685,7 @@ public class Location extends Flags implements Global {
             if (collidesOnCollisionMap((Creature)o)) {
                 addMapObjectCollisions(o, this.structures, collidingObjects);
             }
-        } else {
+        } else if (o instanceof Structure) {
             addMapObjectCollisions(o, this.structures, collidingObjects);
         }
         return collidingObjects;
@@ -696,9 +694,14 @@ public class Location extends Flags implements Global {
     }
     
     /**
-    * TODO: Find a way to not go through the ENTIRE mapObjects list
-    */
-    private void addMapObjectCollisions(MapObject o, Iterable mapObjectsToCheck ,ArrayList collidingObjects) {        
+     * Check the supplied iterable list of objects for collisions
+     * The method is supplied an arraylist instead of returning one,
+     * because same arraylist may go through several cycles of addMapObjectCollisions
+     * @param o MapObject to check collisions for
+     * @param mapObjectsToCheck List of objects
+     * @param collidingObjects List to add the colliding objects on
+     */
+    private void addMapObjectCollisions(MapObject o, Iterable mapObjectsToCheck, ArrayList collidingObjects) {        
         if (mapObjectsToCheck == null) return;
         Iterator<MapObject> mobIter = mapObjectsToCheck.iterator();
         while ( mobIter.hasNext() )

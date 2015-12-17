@@ -247,6 +247,7 @@ public class Creature extends MapObject implements Combatant {
     * Is everything animated?
     */
     void updateSprite() {
+        if (this.spriteAnimations == null) return;
         if (this.isFlagged("visible") && !this.spriteAnimations.isEmpty()) {
             if (this.facing != this.lastFacing) {
             this.lastFacing = this.facing;

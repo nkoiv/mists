@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
@@ -61,7 +62,9 @@ public class Overlay {
         //gc.setFill(Color.BLACK);
         //drawHPBar(gc, xPosition, yPosition, barWidth, barHeight);
         gc.setFill(Color.GREEN); //TODO: Change colour depending on HP amount
-        drawHPBar(gc, xPosition, yPosition, barWidth*hpPercentage, barHeight);
+        //TODO: Use creature affiliation here instead of instanceof
+        if (mob instanceof PlayerCharacter) drawHPBar(gc, xPosition, yPosition, barWidth*hpPercentage, barHeight, Color.RED);
+        else drawHPBar(gc, xPosition, yPosition, barWidth*hpPercentage, barHeight, Color.GREEN);
         gc.restore();
     }
     
@@ -74,10 +77,16 @@ public class Overlay {
      * @param barWidth Size of the bar (width of creature?)
      * @param barHeight Size of the bar (static height?)
      */
-    private static void drawHPBar(GraphicsContext gc, double xCoor, double yCoor, double barWidth, double barHeight) {
+    private static void drawHPBar(GraphicsContext gc, double xCoor, double yCoor, double barWidth, double barHeight, Color colour) {
+        //Set the bar as Green, and colour it differently if the colour is valid
         Image barLeft = Mists.graphLibrary.getImage("barGreenHorizontalLeft");
         Image barMid = Mists.graphLibrary.getImage("barGreenHorizontalMid");
         Image barRight = Mists.graphLibrary.getImage("barGreenHorizontalRight");
+        if (colour == Color.RED) {
+            barLeft = Mists.graphLibrary.getImage("barRedHorizontalLeft");
+            barMid = Mists.graphLibrary.getImage("barRedHorizontalMid");
+            barRight = Mists.graphLibrary.getImage("barRedHorizontalRight");
+        } 
         gc.drawImage(barLeft, xCoor, yCoor);
         double currentX = barLeft.getWidth();
         while (currentX < (barWidth-barMid.getWidth())) {
