@@ -685,7 +685,7 @@ public class Location extends Flags implements Global {
             if (collidesOnCollisionMap((Creature)o)) {
                 addMapObjectCollisions(o, this.structures, collidingObjects);
             }
-        } else if (o instanceof Structure) {
+        } else {
             addMapObjectCollisions(o, this.structures, collidingObjects);
         }
         return collidingObjects;
