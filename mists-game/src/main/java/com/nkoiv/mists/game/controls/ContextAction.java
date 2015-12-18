@@ -87,6 +87,12 @@ public class ContextAction {
         return true;
     }
     
+    public Trigger getCurrentTrigger() {
+        if (this.availableTriggers == null) return null;
+        if (this.availableTriggers.size() < 1) return null;
+        return this.availableTriggers.get(currentTrigger);
+    }
+    
     /**
      * Shift to the next action on the list
      * Return to first action if going over the list

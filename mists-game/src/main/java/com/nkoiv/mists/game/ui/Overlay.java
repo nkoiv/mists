@@ -138,6 +138,18 @@ public class Overlay {
         gc.restore();
     }
     
+     public static void drawHighlightRectangle(GraphicsContext gc, MapObject mob) {
+        drawHighlightRectangle(gc, mob.getXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset(), mob.getWidth(), mob.getHeight());
+    }
+    
+    private static void drawHighlightRectangle (GraphicsContext gc, double xCoor, double yCoor, double width, double height) {
+        gc.save();
+        gc.setLineDashes(4, 6);
+        gc.setStroke(Color.BLUE);
+        gc.strokeRect(xCoor, yCoor, width, height);
+        gc.restore();
+    }
+    
     /**
      * InfoBox displaying info about the mob that's currently targeted
      * @param gc

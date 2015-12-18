@@ -130,6 +130,7 @@ public class LocationState implements GameState {
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
         Overlay.drawAllHPBars(gc, game.getCurrentLocation().getLastRenderedMobs());
+        if (this.contextAction.getCurrentTrigger() != null) Overlay.drawHighlightRectangle(gc, this.contextAction.getCurrentTrigger().getTarget());
         if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(gc, infobox, game.getCurrentLocation().getTargets().get(0));
         if (gameMenuOpen){
             try {
@@ -301,6 +302,11 @@ public class LocationState implements GameState {
         if (releasedButtons.contains(KeyCode.E)) {
             Mists.logger.info("E pressed for context action");
             this.contextAction.useTrigger();
+        }
+        
+        if (releasedButtons.contains(KeyCode.R)) {
+            Mists.logger.info("RE pressed for next context action");
+            this.contextAction.nextAction();
         }
         
         if (releasedButtons.contains(KeyCode.ENTER)) {

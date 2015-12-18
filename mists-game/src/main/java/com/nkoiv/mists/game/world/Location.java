@@ -139,7 +139,7 @@ public class Location extends Flags implements Global {
             Mists.logger.info("Created a "+tree.getName()+" at "+(int)tree.getCenterXPos()+"x"+(int)tree.getCenterYPos());
         }
         
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();

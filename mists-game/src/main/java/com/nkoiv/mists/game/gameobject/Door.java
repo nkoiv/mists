@@ -67,6 +67,11 @@ public class Door  extends Structure {
         public void toggle() {
             this.door.toggle();
         }
+
+        @Override
+        public MapObject getTarget() {
+            return this.door;
+        }
         
     }
     
