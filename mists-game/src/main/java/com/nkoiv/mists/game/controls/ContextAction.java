@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
 
@@ -85,6 +86,14 @@ public class ContextAction {
         if (currentTrigger < 0 || currentTrigger >= availableTriggers.size()) currentTrigger = 0;
         this.availableTriggers.get(currentTrigger).toggle();
         return true;
+    }
+    
+    public List<MapObject> getTriggerObjects() {
+        ArrayList<MapObject> mobs = new ArrayList<>();
+        for (Trigger t : this.availableTriggers) {
+            mobs.add(t.getTarget());
+        }
+        return mobs;
     }
     
     public Trigger getCurrentTrigger() {

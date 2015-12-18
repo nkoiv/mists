@@ -130,7 +130,11 @@ public class LocationState implements GameState {
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
         Overlay.drawAllHPBars(uigc, game.getCurrentLocation().getLastRenderedMobs());
-        if (this.contextAction.getCurrentTrigger() != null) Overlay.drawHandCursor(uigc, this.contextAction.getCurrentTrigger().getTarget());
+        this.contextAction.update();
+        if (this.contextAction.getCurrentTrigger() != null) {
+            Overlay.drawHighlightRectangle(uigc, this.contextAction.getTriggerObjects());
+            Overlay.drawHandCursor(uigc, this.contextAction.getCurrentTrigger().getTarget());
+        }
         if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(uigc, infobox, game.getCurrentLocation().getTargets().get(0));
         if (gameMenuOpen){
             try {
@@ -203,7 +207,6 @@ public class LocationState implements GameState {
         handleLocationKeyPress(pressedButtons, releasedButtons);
         if(this.paused == false) {
             game.getCurrentLocation().update(time);
-            this.contextAction.update();
         } 
     }
     

@@ -139,6 +139,12 @@ public class Overlay {
         gc.restore();
     }
     
+    public static void drawHighlightRectangle(GraphicsContext gc, List<MapObject> mobs) {
+        for (MapObject mob : mobs) {
+            drawHighlightRectangle(gc, mob);
+        }
+    }
+    
     public static void drawHighlightRectangle(GraphicsContext gc, MapObject mob) {
         drawHighlightRectangle(gc, mob.getXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset(), mob.getWidth(), mob.getHeight());
     }
@@ -152,7 +158,7 @@ public class Overlay {
     }
     
     public static void drawHandCursor(GraphicsContext gc, MapObject mob) {
-        gc.drawImage(Mists.graphLibrary.getImage("cursorGauntletbronze"), mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
+        gc.drawImage(Mists.graphLibrary.getImage("cursorGauntletSmallbronze"), mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
     }
     
     public static void drawToggleIcon(GraphicsContext gc, MapObject mob) {

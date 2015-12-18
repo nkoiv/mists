@@ -130,6 +130,7 @@ public class LibLoader {
         lib.addImage("cursorGauntletblue", new Image("/images/ui/cursorGauntlet_blue.png"));
         lib.addImage("cursorGauntletbronze", new Image("/images/ui/cursorGauntlet_bronze.png"));
         lib.addImage("cursorGauntletgrey", new Image("/images/ui/cursorGauntlet_grey.png"));
+        lib.addImage("cursorGauntletSmallbronze", new Image("/images/ui/cursorGauntletSmall_bronze.png"));
         
         lib.addImage("cursorSwordgold", new Image("/images/ui/cursorSword_gold.png"));
         lib.addImage("cursorSwordsilver", new Image("/images/ui/cursorSword_silver.png"));
