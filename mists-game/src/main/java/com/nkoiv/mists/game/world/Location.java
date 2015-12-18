@@ -21,6 +21,7 @@ import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import com.nkoiv.mists.game.world.util.Flags;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -952,7 +953,7 @@ public class Location extends Flags implements Global {
         * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
         */
         List<MapObject> renderedMOBs = new ArrayList<>();
-        
+        //Find the creatures to render
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) {
                 if (mob.getXPos()-xOffset < -mob.getSprite().getWidth() ||
@@ -963,7 +964,6 @@ public class Location extends Flags implements Global {
                     //Mob is not in window
                 } else {
                     //Mob is in window
-                    mob.render(xOffset, yOffset, gc); //Draw objects on the ground
                     renderedMOBs.add(mob);
                     if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
                         gc.setStroke(Color.RED);
@@ -979,6 +979,12 @@ public class Location extends Flags implements Global {
                 }
             }
         }
+        renderedMOBs.sort(new CoordinateComparator());
+        for (MapObject mob : renderedMOBs) {
+            mob.render(xOffset, yOffset, gc); //Draw objects on the ground
+        }
+        
+        
         return renderedMOBs;
     }
     
@@ -1151,6 +1157,15 @@ public class Location extends Flags implements Global {
             }
         }
         this.screenFocus = p;
+        
+    }
+    
+    private class CoordinateComparator implements Comparator<MapObject> {
+
+        @Override
+        public int compare(MapObject m1, MapObject m2) {
+            return (int)(m1.getCenterYPos() - m2.getCenterYPos());
+        }
         
     }
     
