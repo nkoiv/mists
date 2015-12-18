@@ -295,7 +295,8 @@ public class Creature extends MapObject implements Combatant {
         this.oldYPos = this.getSprite().getYPos();
         //Mists.logger.info("Old positions: "+this.oldXPos+","+this.oldYPos);
         
-        if (this.getLocation().checkCollisions(this).isEmpty()) {
+        ArrayList<MapObject> collidedObjects = this.getLocation().checkCollisions(this);
+        if (collidedObjects.isEmpty()) {
             //Collided with nothing, free to move
             if (this.isFlagged("movementBlocked")) {
                 this.setFlag("movementBlocked", 0); //movement went through fine 
@@ -305,7 +306,7 @@ public class Creature extends MapObject implements Combatant {
             return true;
         } else { 
             //Check which sides we collided on
-            EnumSet<Direction> collidedSides = this.getLocation().collidedSides(this);
+            EnumSet<Direction> collidedSides = this.getLocation().collidedSides(this, collidedObjects);
             //Mists.logger.info("Checked collisions, found " +collidedSides.toString());
             if (collidedSides.contains(Direction.UP)) {
                 //Block movement up
@@ -345,6 +346,7 @@ public class Creature extends MapObject implements Combatant {
             return false;
         }
     }
+    
     
     public boolean moveTowards (double xCoor, double yCoor) {
         double xDifference = xCoor - this.getCenterXPos();
