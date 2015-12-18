@@ -129,9 +129,9 @@ public class LocationState implements GameState {
         }
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
-        Overlay.drawAllHPBars(gc, game.getCurrentLocation().getLastRenderedMobs());
-        if (this.contextAction.getCurrentTrigger() != null) Overlay.drawHighlightRectangle(gc, this.contextAction.getCurrentTrigger().getTarget());
-        if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(gc, infobox, game.getCurrentLocation().getTargets().get(0));
+        Overlay.drawAllHPBars(uigc, game.getCurrentLocation().getLastRenderedMobs());
+        if (this.contextAction.getCurrentTrigger() != null) Overlay.drawHandCursor(uigc, this.contextAction.getCurrentTrigger().getTarget());
+        if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(uigc, infobox, game.getCurrentLocation().getTargets().get(0));
         if (gameMenuOpen){
             try {
                 Image controls = new Image("/images/controls.png");

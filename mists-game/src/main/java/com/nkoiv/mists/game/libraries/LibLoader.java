@@ -127,9 +127,16 @@ public class LibLoader {
         lib.addImage("cursorHandbeige", new Image("/images/ui/cursorHand_beige.png"));
         lib.addImage("cursorHandgrey", new Image("/images/ui/cursorHand_grey.png"));
         
+        lib.addImage("cursorGauntletblue", new Image("/images/ui/cursorGauntlet_blue.png"));
+        lib.addImage("cursorGauntletbronze", new Image("/images/ui/cursorGauntlet_bronze.png"));
+        lib.addImage("cursorGauntletgrey", new Image("/images/ui/cursorGauntlet_grey.png"));
+        
         lib.addImage("cursorSwordgold", new Image("/images/ui/cursorSword_gold.png"));
         lib.addImage("cursorSwordsilver", new Image("/images/ui/cursorSword_silver.png"));
         lib.addImage("cursorSwordbronze", new Image("/images/ui/cursorSword_bronze.png"));
+        
+        lib.addImage("buttonSelectbeige", new Image("/images/ui/buttonSquareSelect_beige.png"));
+        lib.addImage("buttonSelectSmallbeige", new Image("/images/ui/buttonSquareSelectSmall_beige.png"));
         
     }
 }

@@ -92,6 +92,7 @@ public class Overlay {
             barRight = Mists.graphLibrary.getImage("barRedHorizontalRight");
         } 
         gc.drawImage(barLeft, xCoor, yCoor);
+        if (barWidth <= barLeft.getWidth()) return;
         double currentX = barLeft.getWidth();
         while (currentX < (barWidth-barMid.getWidth())) {
             gc.drawImage(barMid, xCoor+currentX, yCoor);
@@ -138,7 +139,7 @@ public class Overlay {
         gc.restore();
     }
     
-     public static void drawHighlightRectangle(GraphicsContext gc, MapObject mob) {
+    public static void drawHighlightRectangle(GraphicsContext gc, MapObject mob) {
         drawHighlightRectangle(gc, mob.getXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset(), mob.getWidth(), mob.getHeight());
     }
     
@@ -148,6 +149,14 @@ public class Overlay {
         gc.setStroke(Color.BLUE);
         gc.strokeRect(xCoor, yCoor, width, height);
         gc.restore();
+    }
+    
+    public static void drawHandCursor(GraphicsContext gc, MapObject mob) {
+        gc.drawImage(Mists.graphLibrary.getImage("cursorGauntletbronze"), mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
+    }
+    
+    public static void drawToggleIcon(GraphicsContext gc, MapObject mob) {
+            gc.drawImage(Mists.graphLibrary.getImage("buttonSelectSmallbeige"), mob.getXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset());
     }
     
     /**

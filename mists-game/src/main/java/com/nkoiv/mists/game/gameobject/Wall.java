@@ -76,7 +76,7 @@ public class Wall extends Structure {
                 WritableImage upWall = wallparts.snapshot(parameters, snapshot);
                 s = new Sprite(upWall);
             }
-            this.addExtra(s, 0, -5);
+            this.addExtra(s, 0, -4);
         }
         if (neighbours[3] ==false) {
             Sprite s;
@@ -87,7 +87,7 @@ public class Wall extends Structure {
                 WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
                 s = new Sprite(leftWall);
             }
-            this.addExtra(s, 0, -5);
+            this.addExtra(s, 0, -4);
         }
         if (neighbours[4] ==false) {
             Sprite s;
@@ -98,7 +98,7 @@ public class Wall extends Structure {
                 WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
                 s = new Sprite(rightWall);
             }
-            this.addExtra(s, 0, -5);
+            this.addExtra(s, 0, -4);
         }
         if (neighbours[6] ==false) {
             Sprite s;

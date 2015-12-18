@@ -32,6 +32,7 @@ public class Door  extends Structure {
     public void toggle() {
         if (this.isOpen()) this.close();
         else this.open();
+        this.location.getCollisionMap().updateCollisionLevels();
     }
     
     public void open() {
