@@ -32,6 +32,8 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 /**
  * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
@@ -595,29 +597,45 @@ public class Location extends Flags implements Global {
         if (this.spatial != null) this.spatial.clear();
     }
     
+    /**
+     * Get all the spatial hash IDs a given mob is located in
+     * @param mob MapObject to check for
+     * @return set of spatial hash ID's
+     */
     private HashSet<Integer> getSpatials(MapObject mob) {
-        int spatialsPerRow = 5; //TODO: Calculate these from map size?
-        int spatialRows = 5; //Or maybe map fillrate?
-        int sC = (int)this.map.getWidth()/spatialsPerRow;
-        int sR = (int)this.map.getHeight()/spatialRows;
         Double[] spatialUpLeft;
         Double[] spatialUpRight;
         Double[] spatialDownRight;
         Double[] spatialDownLeft;
         HashSet<Integer> spatialList = new HashSet<>();
         spatialUpLeft = mob.getSprite().getCorner(Direction.UPLEFT);
-        spatialList.add((int)(spatialUpLeft[0]/sC) * (int)(spatialUpLeft[1]/sR));
-        
+        spatialList.add(getSpatial(spatialUpLeft[0],spatialUpLeft[1]));
+
         spatialUpRight = mob.getSprite().getCorner(Direction.UPRIGHT);
-        spatialList.add((int)(spatialUpRight[0]/sC) * (int)(spatialUpRight[1]/sR));
+        spatialList.add(getSpatial(spatialUpRight[0],spatialUpRight[1]));
         
         spatialDownRight = mob.getSprite().getCorner(Direction.DOWNRIGHT);
-        spatialList.add((int)(spatialDownRight[0]/sC) * (int)(spatialDownRight[1]/sR));
+        spatialList.add(getSpatial(spatialDownRight[0],spatialDownRight[1]));
         
         spatialDownLeft = mob.getSprite().getCorner(Direction.DOWNLEFT);
-        spatialList.add((int)(spatialDownLeft[0]/sC) * (int)(spatialDownLeft[1]/sR));
+        spatialList.add(getSpatial(spatialDownLeft[0],spatialDownLeft[1]));
         
         return spatialList;
+    }
+    
+    /**
+     * Get the spatial hash ID for given coordinates
+     * @param xCoor
+     * @param yCoor
+     * @return Spatial hash ID
+     */
+    private int getSpatial (double xCoor, double yCoor) {
+        int spatialsPerRow = 5; //TODO: Calculate these from map size?
+        int spatialRows = 5; //Or maybe map fillrate?
+        int sC = (int)this.map.getWidth()/spatialsPerRow;
+        int sR = (int)this.map.getHeight()/spatialRows;
+        
+        return ((int)(xCoor / sC) * (int)(yCoor / sR));
     }
     
     private void restructureWalls (ArrayList<Wall> removedWalls) {
@@ -690,7 +708,6 @@ public class Location extends Flags implements Global {
         }
         return collidingObjects;
         
-        
     }
     
     /**
@@ -746,6 +763,7 @@ public class Location extends Flags implements Global {
         if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(downright[0]/collisionMap.nodeSize), (int)(downright[1]/collisionMap.nodeSize))) return true;
         return false;
     }
+    
     
     /**
      * Check Collisions for a line drawn between two points.

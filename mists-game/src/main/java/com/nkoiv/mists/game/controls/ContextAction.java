@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.controls;
 
 import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,10 @@ import java.util.ArrayList;
  */
 public class ContextAction {
     private ArrayList<Action> availableActions;
+    MapObject actor; //Usually the player?
     
+    private void refreshNearbyObjects() {
+        
+    }
     
 }
