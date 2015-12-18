@@ -22,10 +22,12 @@ Controls are displayed in game menu (Esc in a Location)
 * Open game menu: Escape
 * Open console: F1
 * Moving around: Arrow keys / WASD
+* Opening doors: E
+* Selecting different door to open: R
 * Using ability (Melee attack): Space
 * Activate/Deactivate creatures: Shift
 * Teleport to a location: Right mousebutton
-* Set camera focus on a creature: Left mousebutton
+* Target a map object: Left mousebutton
 
 
 ***Some useful console commands (POC)***
