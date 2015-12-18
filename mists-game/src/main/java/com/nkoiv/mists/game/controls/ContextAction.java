@@ -99,6 +99,7 @@ public class ContextAction {
     public Trigger getCurrentTrigger() {
         if (this.availableTriggers == null) return null;
         if (this.availableTriggers.size() < 1) return null;
+        if (this.currentTrigger>=this.availableTriggers.size()) return this.availableTriggers.get(this.availableTriggers.size()-1);
         return this.availableTriggers.get(currentTrigger);
     }
     

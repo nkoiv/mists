@@ -137,14 +137,14 @@ public class CollisionMap {
     
     public boolean isBlocked(List<Integer> crossableTerrain ,int x, int y) {
         if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
-        return ((nodeMap[x][y] == null) ||
-		(!crossableTerrain.contains(nodeMap[x][y].getCollisionLevel())));
+        if (nodeMap[x][y] == null) return true;
+        return (!crossableTerrain.contains(nodeMap[x][y].getCollisionLevel()));
     }
     
     public boolean isBlocked(int crossableTerrain, int x, int y) {
         if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
-        return ((nodeMap[x][y] == null) ||
-		!(crossableTerrain == nodeMap[x][y].getCollisionLevel()));
+        if (nodeMap[x][y] == null) return true;
+	return (!(crossableTerrain == nodeMap[x][y].getCollisionLevel()));
     }
 
     //The Visited -thing is not currently in use by pathfinding.

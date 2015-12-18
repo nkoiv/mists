@@ -139,5 +139,9 @@ public class LibLoader {
         lib.addImage("buttonSelectbeige", new Image("/images/ui/buttonSquareSelect_beige.png"));
         lib.addImage("buttonSelectSmallbeige", new Image("/images/ui/buttonSquareSelectSmall_beige.png"));
         
+        //Icons
+        
+        
+        
     }
 }

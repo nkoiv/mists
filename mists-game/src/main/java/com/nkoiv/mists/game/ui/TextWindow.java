@@ -59,8 +59,9 @@ public class TextWindow implements UIComponent {
     protected void renderText(GraphicsContext gc, double xPosition, double yPosition) {
         gc.save();
         //gc.setFont(Font.font("Verdana"));
-        gc.setFill(Color.WHITE);
-        gc.strokeText(this.text, xPosition+this.margin, yPosition+this.margin+15);
+        gc.setFill(Color.BLACK);
+        gc.setFont(Font.font(12));
+        gc.fillText(this.text, xPosition+this.margin, yPosition+this.margin+15);
         gc.restore();
     }
     

@@ -33,6 +33,7 @@ public class Door  extends Structure {
         if (this.isOpen()) this.close();
         else this.open();
         this.location.getCollisionMap().updateCollisionLevels();
+        this.location.getPathFinder().setMapOutOfDate(true);
     }
     
     public void open() {
