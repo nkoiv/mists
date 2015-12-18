@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 /**
- * Action is something that triggers on a call.
+ * Action is something that someone triggers on a call.
  * It might be an attack from a creature, or it might be a trap on the floor.
  * TODO: Consider if the allById map gets bloated and if it should get cleaned
  * TODO: Maybe only unique action templates should be stored in allById
@@ -25,7 +25,7 @@ import java.util.logging.Level;
  * @author nkoiv
  */
 public class Action extends Flags implements Serializable {
-    protected static int nextId = 0;
+    private static int nextId = 0;
     protected String name;
     protected int id;
     protected MapObject owner;

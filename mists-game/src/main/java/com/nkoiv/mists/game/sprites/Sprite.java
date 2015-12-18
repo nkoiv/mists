@@ -141,6 +141,11 @@ public class Sprite
         positionY = y;
         this.refreshCollisionBox();
     }
+    
+    public void setCenterPosition(double x, double y) {
+        this.setPosition(x-(this.getWidth()/2), y-(this.getHeight()/2));
+        this.refreshCollisionBox();
+    }
 
     public void setVelocity(double x, double y)
     {

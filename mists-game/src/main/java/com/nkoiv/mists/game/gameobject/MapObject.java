@@ -6,6 +6,8 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.util.Flags;
@@ -64,8 +66,7 @@ public class MapObject extends Flags implements Global, Templatable {
      * @param yPos Center position of the sprite on Y
      */
     public void setCenterPosition (double xPos, double yPos) {
-        this.sprite.setPosition(xPos-(this.getSprite().getWidth()/2), yPos-(this.getSprite().getHeight()/2));
-        this.sprite.refreshCollisionBox();
+        this.sprite.setCenterPosition(xPos, yPos);
     }
     
     public int getCollisionLevel() {
@@ -81,11 +82,11 @@ public class MapObject extends Flags implements Global, Templatable {
     }
     
     public double getCenterXPos() {
-        return this.sprite.getCenter()[0];
+        return this.sprite.getCenterXPos();
     }
     
     public double getCenterYPos(){
-        return this.sprite.getCenter()[1];
+        return this.sprite.getCenterYPos();
     }
     
     public double getXPos(){
@@ -131,6 +132,15 @@ public class MapObject extends Flags implements Global, Templatable {
     */
     public void update(double time) {
         this.sprite.update(time);
+    }
+    
+    /**
+     * Get the list of triggers that can be performed on
+     * this MapObject;
+     * @return 
+     */
+    public Trigger[] getTriggers() {
+        return new Trigger[0];
     }
     
     public Sprite getSprite() {

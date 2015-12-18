@@ -26,6 +26,10 @@ import javafx.scene.paint.Color;
  */
 public class Overlay {
     
+    private Overlay() {
+        //Dont subclass this static class
+    }
+    
     /**
      * Takes in a list of mobs and draws HP bars on them.
      * HP bars are drawn only on Creatures and only on

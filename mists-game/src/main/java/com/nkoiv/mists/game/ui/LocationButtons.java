@@ -71,7 +71,7 @@ public class LocationButtons {
         
         @Override
         public void render(GraphicsContext gc, double xPosition, double yPosition) {
-            if (this.game.currentLocation.isFlagged("drawPaths")) {
+            if (this.game.getCurrentLocation().isFlagged("drawPaths")) {
                 this.setText("Paths On");
                 this.gainFocus();
             } else {

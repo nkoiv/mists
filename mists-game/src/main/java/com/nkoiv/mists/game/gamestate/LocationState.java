@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gamestate;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.controls.ContextAction;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
@@ -50,6 +51,7 @@ public class LocationState implements GameState {
     private boolean inConsole;
     private final HashMap<String, UIComponent> uiComponents;
     private TextPanel infobox;
+    private ContextAction contextAction;
     
     public LocationState (Game game) {
         this.game = game;
@@ -78,7 +80,7 @@ public class LocationState implements GameState {
     
     private void loadDefaultUI() {
         TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
-        TextButton attackButton = new ActionButton(game.player, "Smash!",  80, 60);
+        TextButton attackButton = new ActionButton(game.getPlayer(), "Smash!",  80, 60);
         TextButton pathsButton = new LocationButtons.DrawPathsButton("Paths Off", 80, 60, this.game);
         TextButton lightenButton = new LocationButtons.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
         TextButton darkenButton = new LocationButtons.ReduceLightlevelButton("Darken", 80, 60, this.game);
@@ -95,6 +97,7 @@ public class LocationState implements GameState {
         uiComponents.put(actionBar.getName(), actionBar);
         
         this.infobox = new TextPanel(this, "InfoBox", 250, 300, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
+        this.contextAction = new ContextAction(game.getPlayer());
     }
 
     /**
@@ -120,14 +123,14 @@ public class LocationState implements GameState {
         //Render the current Location unless paused
         if (this.paused == false) {
             gc.clearRect(0, 0, screenWidth, screenHeight);
-            if (game.currentLocation != null) {
-                game.currentLocation.render(gc);
+            if (game.getCurrentLocation() != null) {
+                game.getCurrentLocation().render(gc);
             }
         }
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
-        Overlay.drawAllHPBars(gc, game.currentLocation.getLastRenderedMobs());
-        if (!game.currentLocation.getTargets().isEmpty()) Overlay.drawInfoBox(gc, infobox, game.currentLocation.getTargets().get(0));
+        Overlay.drawAllHPBars(gc, game.getCurrentLocation().getLastRenderedMobs());
+        if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(gc, infobox, game.getCurrentLocation().getTargets().get(0));
         if (gameMenuOpen){
             try {
                 Image controls = new Image("/images/controls.png");
@@ -198,7 +201,7 @@ public class LocationState implements GameState {
         
         handleLocationKeyPress(pressedButtons, releasedButtons);
         if(this.paused == false) {
-            game.currentLocation.update(time);
+            game.getCurrentLocation().update(time);
         } 
     }
     
@@ -239,17 +242,17 @@ public class LocationState implements GameState {
         //Click landed on area without UI component
         if (me.getButton() == MouseButton.SECONDARY) {
             Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
-            double xOffset = this.game.currentLocation.getLastxOffset();
-            double yOffset = this.game.currentLocation.getLastyOffset();
-            this.game.currentLocation.getPlayer().setCenterPosition(clickX+xOffset, clickY+yOffset);
+            double xOffset = this.game.getCurrentLocation().getLastxOffset();
+            double yOffset = this.game.getCurrentLocation().getLastyOffset();
+            this.game.getCurrentLocation().getPlayer().setCenterPosition(clickX+xOffset, clickY+yOffset);
         }
         if (me.getButton() == MouseButton.PRIMARY) {
-            MapObject targetMob = game.currentLocation.getMobAtLocation(clickX+game.currentLocation.getLastxOffset(), clickY+game.currentLocation.getLastyOffset());
+            MapObject targetMob = game.getCurrentLocation().getMobAtLocation(clickX+game.getCurrentLocation().getLastxOffset(), clickY+game.getCurrentLocation().getLastyOffset());
             if (targetMob!=null) { 
-                if (game.currentLocation.getTargets().contains(targetMob)) game.currentLocation.clearTarget();
+                if (game.getCurrentLocation().getTargets().contains(targetMob)) game.getCurrentLocation().clearTarget();
                 else {
                     Mists.logger.log(Level.INFO, "Targetted {0}", targetMob.toString());
-                    game.currentLocation.setTarget(targetMob);
+                    game.getCurrentLocation().setTarget(targetMob);
                     //game.currentLocation.setScreenFocus(targetMob);
                 }
             }
@@ -270,7 +273,7 @@ public class LocationState implements GameState {
     private void handleLocationKeyPress(ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         //TODO: External loadable configfile for keybindings
         //(probably via a class of its own)     
-        game.currentLocation.getPlayer().stopMovement();
+        game.getPlayer().stopMovement();
         
         if (pressedButtons.isEmpty() && releasedButtons.isEmpty()) {
             return;

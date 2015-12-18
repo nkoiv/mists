@@ -25,8 +25,8 @@ import javafx.scene.input.MouseEvent;
  * @author nkoiv
  */
 public class Game {
-    public PlayerCharacter player;
-    public Location currentLocation;
+    private PlayerCharacter player;
+    private Location currentLocation;
     public boolean running = false;
     public final ArrayList<String> inputLog = new ArrayList<>();
     public Scene currentScene;
@@ -102,6 +102,18 @@ public class Game {
     public void updateUI() {
         Mists.logger.info("Updating UI");
         currentState.updateUI();
+    }
+    
+    public PlayerCharacter getPlayer() {
+        return this.player;
+    }
+    
+    public void setPlayer(PlayerCharacter p) {
+        this.player = p;
+    }
+    
+    public Location getCurrentLocation() {
+        return this.currentLocation;
     }
     
     /*

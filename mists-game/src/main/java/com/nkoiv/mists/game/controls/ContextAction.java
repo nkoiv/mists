@@ -6,9 +6,11 @@
 package com.nkoiv.mists.game.controls;
 
 import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.scene.image.Image;
 
 /**
@@ -19,17 +21,72 @@ import javafx.scene.image.Image;
  * @author nikok
  */
 public class ContextAction {
-    private ArrayList<Action> availableActions;
-    private Sprite actionRadius;
+    private final ArrayList<Trigger> availableTriggers;
+    private ArrayList<MapObject> nearbyObjects;
+    private Sprite triggerRadius;
+    int currentTrigger;
     MapObject actor; //Usually the player?
     
-    private void refreshNearbyObjects() {
-        
+    public ContextAction(MapObject actor) {
+        this.actor = actor;
+        this.availableTriggers = new ArrayList<>();
+        this.generateTriggerRange();
     }
     
-    private void generateActionRange() {
-        if (this.actionRadius == null) this.actionRadius = new Sprite(new Image("/images/circle.png"));
+    /**
+     * Refresh the list of available actions
+     */
+    public void update() {
+        this.refreshNearbyObjects();
+        this.refreshObjectTriggers();
+    }
+    
+    /**
+     * Do a collision detection on the actionRadius to
+     * see what's within toggle range
+     */
+    private void refreshNearbyObjects() {
+        if (this.triggerRadius == null) generateTriggerRange();
+        triggerRadius.setCenterPosition(actor.getCenterXPos(), actor.getCenterYPos());
+        this.nearbyObjects = actor.getLocation().checkCollisions(triggerRadius);
+    }
+    
+    /**
+     * Take triggers from nearby objects and add them
+     * to the available triggers -list.
+     */
+    private void refreshObjectTriggers() {
+        this.availableTriggers.clear();
+        if (this.nearbyObjects == null) refreshNearbyObjects();
+        if (this.nearbyObjects.isEmpty()) return;
+        for (MapObject mob : this.nearbyObjects) {
+            this.availableTriggers.addAll(Arrays.asList(mob.getTriggers()));
+        }
+    }
+    
+    private void generateTriggerRange() {
+        //TODO: is 64 pixel size circle always the one we want to use?
+        if (this.triggerRadius == null) this.triggerRadius = new Sprite(new Image("/images/circle.png"));
+    }
+    
+    /**
+     * Use the currently selected action
+     * @return True if action was performed
+     */
+    public boolean useTrigger() {
+        if (availableTriggers.isEmpty()) return false;
+        if (currentTrigger < 0 || currentTrigger >= availableTriggers.size()) currentTrigger = 0;
         
+        return true;
+    }
+    
+    /**
+     * Shift to the next action on the list
+     * Return to first action if going over the list
+     */
+    public void nextAction() {
+        currentTrigger++;
+        if (currentTrigger < 0 || currentTrigger >= availableTriggers.size()) currentTrigger = 0;
     }
     
 }

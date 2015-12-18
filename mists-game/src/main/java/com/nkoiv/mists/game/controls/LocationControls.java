@@ -34,7 +34,7 @@ public class LocationControls {
     }
     
     private Location currentLoc() {
-        return this.game.currentLocation;
+        return this.game.getCurrentLocation();
     }
     
     public Game getGame() {
@@ -63,15 +63,15 @@ public class LocationControls {
     //------------Individual triggers for controlling a location----
     
     public void toggleFlag(String flag) {
-        this.game.currentLocation.toggleFlag(flag);
+        this.game.getCurrentLocation().toggleFlag(flag);
     }
     
     public void printClearanceMapIntoConsole(){
-        game.currentLocation.getPathFinder().printClearanceMapIntoConsole(0);
+        game.getCurrentLocation().getPathFinder().printClearanceMapIntoConsole(0);
     }
     
     public void printCollisionMapIntoConsole() {
-        game.currentLocation.getPathFinder().printCollisionMapIntoConsole();
+        game.getCurrentLocation().getPathFinder().printCollisionMapIntoConsole();
     }
     
     public void toggleLocationMenu() {
@@ -80,30 +80,30 @@ public class LocationControls {
     }
     
     public void increseLightLevel() {
-        this.game.currentLocation.setMinLightLevel(this.game.currentLocation.getMinLightLevel()+0.1);
+        this.game.getCurrentLocation().setMinLightLevel(this.game.getCurrentLocation().getMinLightLevel()+0.1);
     }
     
     public void reduceLightLevel() {
-        this.game.currentLocation.setMinLightLevel(this.game.currentLocation.getMinLightLevel()-0.1);
+        this.game.getCurrentLocation().setMinLightLevel(this.game.getCurrentLocation().getMinLightLevel()-0.1);
     }
     
     
     //----------Player controls-----
     
     public void playerAttack() {
-        game.currentLocation.getPlayer().useAction("melee");
+        game.getPlayer().useAction("melee");
     }
     
     public void playerMove(Direction direction) {
         switch (direction) {
-            case UP: game.currentLocation.getPlayer().moveTowards(Direction.UP); break;         
-            case DOWN: game.currentLocation.getPlayer().moveTowards(Direction.DOWN); break;
-            case LEFT: game.currentLocation.getPlayer().moveTowards(Direction.LEFT); break;
-            case RIGHT: game.currentLocation.getPlayer().moveTowards(Direction.RIGHT);break;
-            case UPRIGHT: game.currentLocation.getPlayer().moveTowards(Direction.UPRIGHT);break;
-            case UPLEFT: game.currentLocation.getPlayer().moveTowards(Direction.UPLEFT);break;
-            case DOWNRIGHT: game.currentLocation.getPlayer().moveTowards(Direction.DOWNRIGHT);break;
-            case DOWNLEFT: game.currentLocation.getPlayer().moveTowards(Direction.DOWNLEFT);break;
+            case UP: game.getPlayer().moveTowards(Direction.UP); break;         
+            case DOWN: game.getPlayer().moveTowards(Direction.DOWN); break;
+            case LEFT: game.getPlayer().moveTowards(Direction.LEFT); break;
+            case RIGHT: game.getPlayer().moveTowards(Direction.RIGHT);break;
+            case UPRIGHT: game.getPlayer().moveTowards(Direction.UPRIGHT);break;
+            case UPLEFT: game.getPlayer().moveTowards(Direction.UPLEFT);break;
+            case DOWNRIGHT: game.getPlayer().moveTowards(Direction.DOWNRIGHT);break;
+            case DOWNLEFT: game.getPlayer().moveTowards(Direction.DOWNLEFT);break;
             default: break;
         } 
     }
@@ -128,10 +128,10 @@ public class LocationControls {
         Random rnd = new Random();
         int startX = rnd.nextInt(1);
         int startY = rnd.nextInt(1);
-        Mists.logger.log(Level.INFO, "Creating monster from sprite sheet position {0},{1} at coordinates {2}+{3}x{4}+{5}", new Object[]{startX, startY, x, game.currentLocation.getLastxOffset(), y, game.currentLocation.getLastyOffset()});
+        Mists.logger.log(Level.INFO, "Creating monster from sprite sheet position {0},{1} at coordinates {2}+{3}x{4}+{5}", new Object[]{startX, startY, x, game.getCurrentLocation().getLastxOffset(), y, game.getCurrentLocation().getLastyOffset()});
         Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 32, 32);
         monster.getSprite().setCollisionAreaShape(2);
-        game.currentLocation.addCreature(monster, x+game.currentLocation.getLastxOffset(), y+game.currentLocation.getLastyOffset());   
+        game.getCurrentLocation().addCreature(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
     }
     
     public void addBlob() {
@@ -140,7 +140,7 @@ public class LocationControls {
         double y = p.y - Mists.primaryStage.getY();
         Creature monster = new Creature("Blob", new ImageView("/images/blob.png"), 3, 0, 0, 84, 84);
         monster.getSprite().setCollisionAreaShape(2);
-        game.currentLocation.addCreature(monster, x+game.currentLocation.getLastxOffset(), y+game.currentLocation.getLastyOffset());   
+        game.getCurrentLocation().addCreature(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
     }
     
     //----------Location creation------------

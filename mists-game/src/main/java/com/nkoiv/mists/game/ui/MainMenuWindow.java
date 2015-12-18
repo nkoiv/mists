@@ -58,9 +58,9 @@ public class MainMenuWindow extends TiledPanel {
             pocplayer.addCompanion(companion);
             pocplayer.getSprite().setCollisionAreaShape(2);
             pocplayer.addAction(new MeleeAttack());
-            game.player = pocplayer;
-            this.game.currentLocation = new Location(this.game.player);
-            this.game.currentLocation.enterLocation(this.game.player);
+            game.setPlayer(pocplayer);
+            Location newLoc = new Location(this.game.getPlayer());
+            this.game.moveToLocation(newLoc);
             this.game.moveToState(Game.LOCATION);
         }
         
@@ -77,7 +77,7 @@ public class MainMenuWindow extends TiledPanel {
         @Override
         public void onClick(MouseEvent me) {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            if (this.game.currentLocation == null) {
+            if (this.game.getCurrentLocation() == null) {
                 //No game to resume
             } else {
                 this.game.moveToState(Game.LOCATION);
