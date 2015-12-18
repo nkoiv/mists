@@ -24,19 +24,12 @@ public class Structure extends MapObject {
 
     public Structure(String name, Image image, int collisionLevel) {
         super(name, image);
-        this.setCollisionLevel(collisionLevel);
+        this.collisionLevel = collisionLevel;
         this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
         this.sprite.refreshCollisionBox();
     }
     
-    public Structure(String name, Image image, Location location, int xCoor, int yCoor) {
-        super(name, image, location, xCoor, yCoor);
-        this.setCollisionLevel(1);
-        this.setFlag("visible", 1);
-        this.extraSprites = new ArrayList<>();
-        this.sprite.refreshCollisionBox();
-    }
     
     public void addExtra (Sprite sprite, double xOffset, double yOffset) {
         sprite.setPosition(this.getXPos()+xOffset, this.getYPos()+yOffset);

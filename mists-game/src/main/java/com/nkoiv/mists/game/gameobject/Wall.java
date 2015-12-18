@@ -49,20 +49,15 @@ public class Wall extends Structure {
      [5][6][7]
     */
     
-    public Wall(String name, Image image, int collisionLevel, Location location, int xCoor, int yCoor, ImageView wallparts) {
-        this(name, image, collisionLevel, location, xCoor, yCoor);
+    public Wall(String name, Image image, int collisionLevel, ImageView wallparts) {
+        super(name, image, collisionLevel);
         this.wallparts = wallparts;
-    }
-    
-    public Wall(String name, Image image, int collisionLevel, Location location, int xCoor, int yCoor, Image[] wallparts) {
-        this(name, image, collisionLevel, location, xCoor, yCoor);
-        this.wallimages = wallparts;
-    }
-    
-    private Wall(String name, Image image, int collisionLevel, Location location, int xCoor, int yCoor) {
-        super(name, image, location, xCoor, yCoor);
-        this.setCollisionLevel(collisionLevel);
         this.wallimages = new Image[8];
+    }
+    
+    public Wall(String name, Image image, int collisionLevel,  Image[] wallparts) {
+        super(name, image, collisionLevel);
+        this.wallimages = wallparts;
     }
     
  
@@ -236,7 +231,7 @@ public class Wall extends Structure {
     @Override
     public Wall createFromTemplate() {
         if (this.wallimages == null) this.generateWallImages(this.wallparts);
-        Wall newWall = new Wall(this.name, this.getSprite().getImage(), this.getCollisionLevel(), null, 0, 0, this.wallparts);
+        Wall newWall = new Wall(this.name, this.getSprite().getImage(), this.getCollisionLevel(), this.wallparts);
         return newWall;
     }
 }

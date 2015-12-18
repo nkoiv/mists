@@ -42,15 +42,6 @@ public class MapObject extends Flags implements Global, Templatable {
         this.setFlag("visible", 1);
     }
     
-    public MapObject (String name, Image image, Location location, double xCoor, double yCoor) {
-        this.flags  = new HashMap<>();
-        this.name = name;
-        this.location = location;
-        this.sprite = new Sprite(image);
-        this.sprite.setPosition(xCoor, yCoor);
-        this.setFlag("visible", 1);
-    }
-    
 
     public boolean instersects(MapObject o) {
         return o.getSprite().intersects(this.getSprite());
@@ -149,7 +140,7 @@ public class MapObject extends Flags implements Global, Templatable {
     public String getName() {
         return this.name;
     }
-
+    
     @Override
     public String toString(){
         String s;

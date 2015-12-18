@@ -29,17 +29,17 @@ public class LibLoader {
         
         //Dungeon walls
         ImageView wallimages = new ImageView("/images/structures/dwall.png");
-        Wall dungeonwall = new Wall("DungeonWall", new Image("/images/structures/blank.png"), 1, null, 0, 0, wallimages);
+        Wall dungeonwall = new Wall("DungeonWall", new Image("/images/structures/blank.png"), 1, wallimages);
         lib.addTemplate(dungeonwall);
         //Dungeon stuff
-        Structure dungeondoor = new Structure("DungeonDoor", new Image("/images/structures/ddoor.png"), null, 0, 0);
+        Structure dungeondoor = new Structure("DungeonDoor", new Image("/images/structures/ddoor.png"), 1);
         lib.addTemplate(dungeondoor);
         
         //Outdoor stuff
-        Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), null, 0, 0);
+        Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), 1);
         tree.addExtra(new Image("/images/tree.png"), -35, -96);
         lib.addTemplate(tree);
-        Structure rock = new Structure("Rock", new Image("/images/block.png"), null, 0, 0);
+        Structure rock = new Structure("Rock", new Image("/images/block.png"), 1);
         lib.addTemplate(rock);
         
     }

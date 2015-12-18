@@ -81,6 +81,7 @@ public class Creature extends MapObject implements Combatant {
     /*Constructing a creature with only a still image
     * TODO: This should not be needed once Libraries are done
     */
+    /*
     public Creature(String name, Image image, Location location, double xCoor, double yCoor) {
         super(name, image, location, xCoor, yCoor);
         this.setFacing(Direction.DOWN);
@@ -90,7 +91,7 @@ public class Creature extends MapObject implements Combatant {
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
     }
-    
+    */
     
     //TODO: Make this load stats from creature library
     private void initializeAttributes() {

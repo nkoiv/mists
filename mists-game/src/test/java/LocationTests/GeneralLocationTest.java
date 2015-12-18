@@ -119,7 +119,7 @@ public class GeneralLocationTest extends Application {
     
     @Test
     public void structureExtrasMoveWithStructure() {
-        Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), testLocation, 6*TILESIZE, 5*TILESIZE);
+        Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), 1);
         tree.addExtra(new Image("/images/tree.png"), -35, -96);
         testLocation.addStructure(tree, 200 , 200);
         double startX = tree.getExtras().get(0).getXPos();
