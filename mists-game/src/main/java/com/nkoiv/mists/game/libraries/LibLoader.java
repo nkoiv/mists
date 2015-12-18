@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import javafx.scene.image.Image;
@@ -32,7 +33,7 @@ public class LibLoader {
         Wall dungeonwall = new Wall("DungeonWall", new Image("/images/structures/blank.png"), 1, wallimages);
         lib.addTemplate(dungeonwall);
         //Dungeon stuff
-        Structure dungeondoor = new Structure("DungeonDoor", new Image("/images/structures/ddoor.png"), 1);
+        Door dungeondoor = new Door("DungeonDoor", new Image("/images/structures/ddoor.png"), new Image("/images/structures/ddoor_open.png"), 1);
         lib.addTemplate(dungeondoor);
         
         //Outdoor stuff
