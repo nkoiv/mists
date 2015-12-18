@@ -100,12 +100,14 @@ public class Sprite
         width = i.getWidth();
         height = i.getHeight();
         animated = false;
+        this.refreshCollisionBox();
     }
     
     public void setImage(String filename)
     {
         Image i = new Image(filename);
         setImage(i);
+        this.refreshCollisionBox();
     }
     
     public Image getImage() {
@@ -251,6 +253,14 @@ public class Sprite
         center[0] = xCenter;
         center[1] = yCenter;
         return center;
+    }
+    
+    public double getCenterXPos() {
+        return this.positionX + (this.width/2);
+    }
+    
+    public double getCenterYPos() {
+        return this.positionY + (this.height/2);
     }
     
     public Double[] getCorner(Direction d) {

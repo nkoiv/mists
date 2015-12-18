@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
@@ -138,7 +139,7 @@ public class Location extends Flags implements Global {
             Mists.logger.info("Created a "+tree.getName()+" at "+(int)tree.getCenterXPos()+"x"+(int)tree.getCenterYPos());
         }
         
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             //Make a bunch of monsters
             //Random graphic from sprite sheet
             Random rnd = new Random();
@@ -603,21 +604,25 @@ public class Location extends Flags implements Global {
      * @return set of spatial hash ID's
      */
     private HashSet<Integer> getSpatials(MapObject mob) {
+        return getSpatials(mob.getSprite());
+    }
+    
+    private HashSet<Integer> getSpatials(Sprite s) {
         Double[] spatialUpLeft;
         Double[] spatialUpRight;
         Double[] spatialDownRight;
         Double[] spatialDownLeft;
         HashSet<Integer> spatialList = new HashSet<>();
-        spatialUpLeft = mob.getSprite().getCorner(Direction.UPLEFT);
+        spatialUpLeft = s.getCorner(Direction.UPLEFT);
         spatialList.add(getSpatial(spatialUpLeft[0],spatialUpLeft[1]));
 
-        spatialUpRight = mob.getSprite().getCorner(Direction.UPRIGHT);
+        spatialUpRight = s.getCorner(Direction.UPRIGHT);
         spatialList.add(getSpatial(spatialUpRight[0],spatialUpRight[1]));
         
-        spatialDownRight = mob.getSprite().getCorner(Direction.DOWNRIGHT);
+        spatialDownRight = s.getCorner(Direction.DOWNRIGHT);
         spatialList.add(getSpatial(spatialDownRight[0],spatialDownRight[1]));
         
-        spatialDownLeft = mob.getSprite().getCorner(Direction.DOWNLEFT);
+        spatialDownLeft = s.getCorner(Direction.DOWNLEFT);
         spatialList.add(getSpatial(spatialDownLeft[0],spatialDownLeft[1]));
         
         return spatialList;
@@ -694,11 +699,14 @@ public class Location extends Flags implements Global {
         
         ArrayList<MapObject> collidingObjects = new ArrayList<>();
         HashSet<Integer> mobSpatials = getSpatials(o);
+        //Spatials cover the creature collisions
         for (Integer i : mobSpatials) {
             addMapObjectCollisions(o, this.spatial.get(i), collidingObjects);
         }
         
+        //Check collisions for structures too
         //For creatures, check the collision versus collisionmap first
+        //Note that this returns false on structures the creature is allowed to pass through
         if (o instanceof Creature) {
             if (collidesOnCollisionMap((Creature)o)) {
                 addMapObjectCollisions(o, this.structures, collidingObjects);
@@ -710,6 +718,18 @@ public class Location extends Flags implements Global {
         
     }
     
+    public ArrayList<MapObject> checkCollisions (Sprite s) {
+        ArrayList<MapObject> collidingObjects = new ArrayList<>();
+        HashSet<Integer> spriteSpatials = getSpatials(s);
+        for (Integer i : spriteSpatials) {
+            addMapObjectCollisions(s, this.spatial.get(i), collidingObjects);
+        }
+        
+        addMapObjectCollisions(s, this.structures, collidingObjects);
+       
+        return collidingObjects;
+    }
+    
     /**
      * Check the supplied iterable list of objects for collisions
      * The method is supplied an arraylist instead of returning one,
@@ -719,20 +739,24 @@ public class Location extends Flags implements Global {
      * @param collidingObjects List to add the colliding objects on
      */
     private void addMapObjectCollisions(MapObject o, Iterable mapObjectsToCheck, ArrayList collidingObjects) {        
+        this.addMapObjectCollisions(o.getSprite(), mapObjectsToCheck, collidingObjects);
+    }
+    
+    private void addMapObjectCollisions(Sprite s, Iterable mapObjectsToCheck, ArrayList collidingObjects) {         
         if (mapObjectsToCheck == null) return;
         Iterator<MapObject> mobIter = mapObjectsToCheck.iterator();
         while ( mobIter.hasNext() )
         {
             MapObject collidingObject = mobIter.next();
             //If the objects are further away than their combined width/height, they cant collide
-            if ((Math.abs(collidingObject.getCenterXPos() - o.getCenterXPos())
-                 > (collidingObject.getSprite().getWidth() + o.getSprite().getWidth()))
-                || (Math.abs(collidingObject.getCenterYPos() - o.getCenterYPos())
-                 > (collidingObject.getSprite().getHeight() + o.getSprite().getHeight()))) {
+            if ((Math.abs(collidingObject.getCenterXPos() - s.getCenterXPos())
+                 > (collidingObject.getSprite().getWidth() + s.getWidth()))
+                || (Math.abs(collidingObject.getCenterYPos() - s.getCenterYPos())
+                 > (collidingObject.getSprite().getHeight() + s.getHeight()))) {
                 //Objects are far enough from oneanother
             } else {
-                if (!collidingObject.equals(o)) { // Colliding with yourself is not really a collision
-                if ( o.instersects(collidingObject) ) 
+                if (!collidingObject.getSprite().equals(s)) { // Colliding with yourself is not really a collision
+                if ( s.intersects(collidingObject.getSprite()) ) 
                  {
                     collidingObjects.add(collidingObject);
                 }
@@ -764,6 +788,7 @@ public class Location extends Flags implements Global {
         return false;
     }
     
+ 
     
     /**
      * Check Collisions for a line drawn between two points.
