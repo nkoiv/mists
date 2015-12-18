@@ -159,10 +159,11 @@ public class Overlay {
             sb.append("\n");
             sb.append(((Creature) mob).getHealth()).append(" / ").append(((Creature) mob).getMaxHealth());
             sb.append("\n");
-            
+            sb.append("Crossable terrain: ").append(((Creature) mob).getCrossableTerrain());
         }
         if (mob instanceof Structure) {
-            
+            sb.append("\n");
+            sb.append("Collision level: ").append(((Structure) mob).getCollisionLevel());
         }
         text = sb.toString();
         return text;

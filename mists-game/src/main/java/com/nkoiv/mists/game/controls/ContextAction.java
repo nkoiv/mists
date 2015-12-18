@@ -5,12 +5,14 @@
  */
 package com.nkoiv.mists.game.controls;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
 import javafx.scene.image.Image;
 
 /**
@@ -49,6 +51,7 @@ public class ContextAction {
         if (this.triggerRadius == null) generateTriggerRange();
         triggerRadius.setCenterPosition(actor.getCenterXPos(), actor.getCenterYPos());
         this.nearbyObjects = actor.getLocation().checkCollisions(triggerRadius);
+        this.nearbyObjects.remove(this.actor);
     }
     
     /**
@@ -74,9 +77,13 @@ public class ContextAction {
      * @return True if action was performed
      */
     public boolean useTrigger() {
+        Mists.logger.log(Level.INFO, "Context trigger used. Trigger list size: {0}. Nearby objects: {1}", new Object[]{this.availableTriggers.size(), this.nearbyObjects.size()});
+        for (MapObject mob : this.nearbyObjects) {
+            Mists.logger.info(mob.toString());
+        }
         if (availableTriggers.isEmpty()) return false;
         if (currentTrigger < 0 || currentTrigger >= availableTriggers.size()) currentTrigger = 0;
-        
+        this.availableTriggers.get(currentTrigger).toggle();
         return true;
     }
     

@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.sprites.Sprite;
 import javafx.scene.image.Image;
 
 /**
@@ -14,7 +15,7 @@ import javafx.scene.image.Image;
  * @author nikok
  */
 public class Door  extends Structure {
-    
+    private int closedCollisionLevel;
     private boolean open;
     private Image openImage;
     private Image closedImage;
@@ -22,6 +23,7 @@ public class Door  extends Structure {
     
     public Door(String name, Image closedImage, Image openImage, int collisionLevel) {
         super(name, closedImage, collisionLevel);
+        this.closedCollisionLevel = collisionLevel;
         this.closedImage = closedImage;
         this.openImage = openImage;
         this.open = false;
@@ -34,11 +36,13 @@ public class Door  extends Structure {
     
     public void open() {
        this.open = true; 
+       this.setCollisionLevel(0);
        this.getSprite().setImage(openImage);
     }
     
     public void close() {
         this.open = false;
+        this.setCollisionLevel(closedCollisionLevel);
         this.getSprite().setImage(closedImage);
     }
     
@@ -64,5 +68,18 @@ public class Door  extends Structure {
             this.door.toggle();
         }
         
+    }
+    
+    @Override
+    public Door createFromTemplate() {
+        Door nd = new Door(this.name, this.openImage, this.closedImage, this.collisionLevel);
+        if (!this.extraSprites.isEmpty()) {
+            for (Sprite s : this.extraSprites) {
+                double xOffset = s.getXPos() - this.getSprite().getXPos();
+                double yOffset = s.getYPos() - this.getSprite().getYPos();
+                nd.addExtra(s.getImage(), xOffset, yOffset);
+            }
+        }
+        return nd;
     }
 }

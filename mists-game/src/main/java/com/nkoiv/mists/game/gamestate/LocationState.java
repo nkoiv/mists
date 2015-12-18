@@ -202,6 +202,7 @@ public class LocationState implements GameState {
         handleLocationKeyPress(pressedButtons, releasedButtons);
         if(this.paused == false) {
             game.getCurrentLocation().update(time);
+            this.contextAction.update();
         } 
     }
     
@@ -295,6 +296,11 @@ public class LocationState implements GameState {
             }
             releasedButtons.clear();
             return;
+        }
+        
+        if (releasedButtons.contains(KeyCode.E)) {
+            Mists.logger.info("E pressed for context action");
+            this.contextAction.useTrigger();
         }
         
         if (releasedButtons.contains(KeyCode.ENTER)) {

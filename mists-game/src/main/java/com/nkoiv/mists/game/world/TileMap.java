@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.world;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.sprites.Sprite;
@@ -103,7 +104,7 @@ public class TileMap implements GameMap {
         }
         if (tileCode == FLOOR) return null;
         if (tileCode == DOOR) {
-            Structure dungeondoor = (Structure)Mists.structureLibrary.create("dungeondoor", l, xCoor*tilesize, yCoor*tilesize);
+            Door dungeondoor = (Door)Mists.structureLibrary.create("dungeondoor", l, xCoor*tilesize, yCoor*tilesize);
             return dungeondoor;
         }
         return null;

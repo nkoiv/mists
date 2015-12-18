@@ -20,7 +20,7 @@ import javafx.scene.image.Image;
 public class Structure extends MapObject {
     
     //Extra sprites are used as a non-collision part of the structure
-    private ArrayList<Sprite> extraSprites;
+    protected ArrayList<Sprite> extraSprites;
 
     public Structure(String name, Image image, int collisionLevel) {
         super(name, image);

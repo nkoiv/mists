@@ -711,9 +711,18 @@ public class Location extends Flags implements Global {
             if (collidesOnCollisionMap((Creature)o)) {
                 addMapObjectCollisions(o, this.structures, collidingObjects);
             }
+            Iterator<MapObject> mobIter = collidingObjects.iterator();
+            while (mobIter.hasNext()) {
+                MapObject mob = mobIter.next();
+                if (((Creature)o).getCrossableTerrain().contains(mob.getCollisionLevel())) {
+                    mobIter.remove();
+                }
+            }
         } else {
             addMapObjectCollisions(o, this.structures, collidingObjects);
         }
+        
+        
         return collidingObjects;
         
     }
