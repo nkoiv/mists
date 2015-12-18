@@ -25,16 +25,18 @@ public class Door  extends Structure {
     }
     
     public void toggle() {
-        
+        if (this.isOpen()) this.close();
+        else this.open();
     }
     
     public void open() {
-        
-       
+       this.open = true; 
+       this.getSprite().setImage(openImage);
     }
     
     public void close() {
-        
+        this.open = false;
+        this.getSprite().setImage(closedImage);
     }
     
     public boolean isOpen() {
