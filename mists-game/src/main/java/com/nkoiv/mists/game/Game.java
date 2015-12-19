@@ -6,10 +6,12 @@
 package com.nkoiv.mists.game;
 
 import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.controls.LocationControls;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import java.util.ArrayList;
@@ -67,7 +69,8 @@ public class Game {
         System.out.println(companion.toString());
         pocplayer.addCompanion(companion);
         pocplayer.getSprite().setCollisionAreaShape(2);
-        pocplayer.addAction(new MeleeAttack());
+        pocplayer.equipWeapon((Weapon)Mists.itemLibrary.create("sword"));
+        pocplayer.addAction(new MeleeWeaponAttack());
         this.player = pocplayer;
         //Initialize GameStates
         this.gameStates = new ArrayList<>();

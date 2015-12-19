@@ -28,6 +28,9 @@ public class Sprite
     private SpriteAnimation animation;
     private double width;
     private double height;
+    private double rotation;
+
+
     /** Position for Sprite is pixel coordinates on the screen 
      *   Not to be confused with position for game objects (they're at a location)
      */
@@ -133,6 +136,14 @@ public class Sprite
     public void setAnimation (ImageView image, int frameCount, int startX, int startY, int offsetX, int offsetY, int width,   int height) {
         this.animation = new SpriteAnimation (image, frameCount, startX, startY, offsetX, offsetY, width, height);
         this.animated = true;
+    }
+    
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
     }
     
     public void setPosition(double x, double y)
@@ -253,7 +264,7 @@ public class Sprite
         gc.translate((this.getCenterXPos() - xOffset), (this.getCenterYPos() - yOffset));
         gc.rotate(degrees);
         gc.translate(-(this.getCenterXPos() - xOffset), -(this.getCenterYPos() - yOffset));
-        this.render(xOffset, yOffset, gc);
+        this.renderOnScreen(xOffset, yOffset, gc);
         gc.restore();
     }
     
@@ -266,12 +277,19 @@ public class Sprite
      */
     public void render(double xOffset, double yOffset, GraphicsContext gc)
     {
+        if (this.rotation != 0 ) this.render(xOffset, yOffset, rotation, gc);
+        else {
+            this.renderOnScreen(xOffset, yOffset, gc);
+        }
+    }
+    
+    private void renderOnScreen(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.animated) {
-            gc.drawImage( this.animation.getCurrentFrame(), positionX-xOffset, positionY-yOffset );
-            this.width = this.animation.getCurrentFrame().getWidth();
-            this.height = this.animation.getCurrentFrame().getHeight();
-        } else if (this.image != null) {
-            gc.drawImage( image, positionX-xOffset, positionY-yOffset );
+                gc.drawImage( this.animation.getCurrentFrame(), positionX-xOffset, positionY-yOffset );
+                this.width = this.animation.getCurrentFrame().getWidth();
+                this.height = this.animation.getCurrentFrame().getHeight();
+            } else if (this.image != null) {
+                gc.drawImage( image, positionX-xOffset, positionY-yOffset );
         }
     }
     

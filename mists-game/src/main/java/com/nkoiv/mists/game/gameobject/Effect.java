@@ -9,8 +9,6 @@ import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.transform.Rotate;
 
 /**
  * Effects are more or less temporary MapObjects.
@@ -21,12 +19,13 @@ import javafx.scene.transform.Rotate;
 public class Effect extends MapObject {
 
     protected Action owner;
+    protected long startTime;
+    protected long endTime;
+    
     protected MapObject linkedObject;
     protected boolean linkedLocation;
     protected double oldLinkX;
     protected double oldLinkY;
-    protected long startTime;
-    protected long endTime;
     
     public Effect(String name) {
         super(name);
@@ -35,9 +34,9 @@ public class Effect extends MapObject {
     public Effect(Action owner, String name, Location location, double xPos, double yPos, Sprite sprite, int durationMS) {
         super(name);
         this.owner = owner;
-        this.setSprite(sprite);
-        this.getSprite().setPosition(xPos, yPos);
-        this.setLocation(location);
+        this.sprite = sprite;
+        this.sprite.setPosition(xPos, yPos);
+        this.location = location;
         this.setFlag("durationMS", durationMS);
         this.setFlag("startdurationMS", durationMS);
         this.startTime = System.currentTimeMillis();

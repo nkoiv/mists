@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.items.Weapon;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
@@ -21,25 +22,6 @@ import javafx.scene.image.ImageView;
 public class PlayerCharacter extends Creature implements Combatant {
     
     
-    //A bunch of Strings to be used for describing various attacks
-    //TODO: Consider moving these into a map
-    private ArrayList<String> overpoweringAttack;
-    private ArrayList<String> overpoweringDefense;
-    private ArrayList<String> weakAttack;
-    private ArrayList<String> weakDefense;
-    
-    //Sprite-Arrays for animated movement
-    /*
-    * TODO: Make a separate SpriteSheet-cutter class
-    * to manage different animations via one picture
-    
-    private SpriteAnimation walkUp;
-    private SpriteAnimation walkDown;
-    private SpriteAnimation walkLeft;
-    private SpriteAnimation walkRight;
-    */
-    
-
     private ArrayList<Creature> companions;
     
     public PlayerCharacter() {
@@ -66,7 +48,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setMaxHealth(500);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
-        this.setFlag("Strength", 50);
+        this.setAttribute("Strength", 50);
         
     }
        

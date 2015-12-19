@@ -31,8 +31,8 @@ public class MeleeAttack extends Action implements AttackAction {
     
     public MeleeAttack() {
         super("melee");
-        this.setAnimation(new ImageView("/images/attackAnimations.png"), 4, 32, 0, 0, 0, 32, 32);
-        this.getSpriteAnimation().setAnimationSpeed(100);
+        this.attackAnimation = new SpriteAnimation(new ImageView("/images/attackAnimations.png"), 4, 32, 0, 0, 0, 32, 32);
+        this.attackAnimation.setAnimationSpeed(100);
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
         this.setFlag("cooldown", 1000);
@@ -137,11 +137,6 @@ public class MeleeAttack extends Action implements AttackAction {
         return a;
     }
     
-    @Override
-    public SpriteAnimation getSpriteAnimation() {
-        return this.attackAnimation;
-    }
-
     @Override
     public boolean isOnCooldown() {
         return System.currentTimeMillis() < (this.lastUsed+this.getFlag("cooldown"));

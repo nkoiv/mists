@@ -13,12 +13,13 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.items.Weapon;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Libloader stocks up the libraries with
- * required preloaded data.
+ * Libloader stocks up the libraries with required preloaded data.
+ * TODO: parse the library data from XML or something
  * @author nikok
  */
 public class LibLoader {
@@ -96,6 +97,12 @@ public class LibLoader {
         Mists.logger.info("Loading up action data");
         MeleeAttack melee = new MeleeAttack();
         lib.addTemplate(melee);
+    }
+    
+    public static void initializeItemLibrary(ItemLibrary lib) {
+        Weapon sword = new Weapon("Sword", "a simple sword", 12, new Image("/images/sword.png"));
+        lib.addTemplate(sword);
+        
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {

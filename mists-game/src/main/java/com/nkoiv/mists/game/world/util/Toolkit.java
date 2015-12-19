@@ -31,12 +31,12 @@ public abstract class Toolkit {
         double xMovement = xTo - xFrom;
         double yMovement = yTo - yFrom;
         Direction d = Direction.STAY;
-        if (xMovement < 0) {
+        if (xMovement > 0) {
             //We're going Right
             if (yMovement>0) d = Direction.DOWNRIGHT;
             else if (yMovement<0) d = Direction.UPRIGHT;
             else d = Direction.RIGHT;
-        } else if (xMovement >0) {
+        } else if (xMovement < 0) {
             //We're going Left
             if (yMovement>0) d = Direction.DOWNLEFT;
             else if (yMovement<0) d = Direction.UPLEFT;
@@ -48,6 +48,12 @@ public abstract class Toolkit {
         
         
         return d;
+    }
+    
+    public static Direction getDirection(Direction from, Direction to) {
+        double[] a = getDirectionXY(from);
+        double[] b = getDirectionXY(to);
+        return getDirection(a[0], a[1], b[0], b[1]);
     }
     
     /**
@@ -101,6 +107,70 @@ public abstract class Toolkit {
             case DOWNLEFT: return new double[]{-0.71,0.71};
             case STAY: return new double[]{0,0};
             default: return new double[]{0,0};
+        }
+    }
+    
+    /**
+     * Next direction going clockwise
+     * @param d Direction to go clockwise from
+     * @return The next direction
+     */
+    public static Direction clockwise(Direction d) {
+        switch (d) {
+            case UP: return Direction.UPRIGHT;
+            case DOWN: return Direction.DOWNLEFT;
+            case RIGHT: return Direction.DOWNRIGHT;
+            case LEFT: return Direction.UPLEFT;
+            case UPRIGHT: return Direction.RIGHT;
+            case UPLEFT: return Direction.UP;
+            case DOWNRIGHT: return Direction.DOWN;
+            case DOWNLEFT: return Direction.LEFT;
+            case STAY: return Direction.STAY;
+            default: return Direction.STAY;
+        }
+    }
+    
+    /**
+     * Next direction going counterclockwise
+     * @param d Direction to go counterclockwise from
+     * @return The next direction
+     */
+    public static Direction counterClockwise(Direction d) {
+        switch (d) {
+            case UP: return Direction.UPLEFT;
+            case DOWN: return Direction.DOWNRIGHT;
+            case RIGHT: return Direction.UPRIGHT;
+            case LEFT: return Direction.DOWNLEFT;
+            case UPRIGHT: return Direction.UP;
+            case UPLEFT: return Direction.LEFT;
+            case DOWNRIGHT: return Direction.RIGHT;
+            case DOWNLEFT: return Direction.DOWN;
+            case STAY: return Direction.STAY;
+            default: return Direction.STAY;
+        }
+    }
+    
+    /**
+     * Get the rotation for Direction, assuming that
+     * the "normal" rotation (0) would be up.
+     * [315][00 ][ 45]
+     * [270][00 ][ 90]
+     * [225][180][135]
+     * @param d
+     * @return 
+     */
+    public static double getRotation(Direction d) {
+        switch (d) {
+            case UP: return 0;
+            case DOWN: return 180;
+            case RIGHT: return 90;
+            case LEFT: return 270;
+            case UPRIGHT: return 45;
+            case UPLEFT: return 315;
+            case DOWNRIGHT: return 135;
+            case DOWNLEFT: return 225;
+            case STAY: return 0;
+            default: return 0;
         }
     }
     

@@ -13,7 +13,6 @@ import com.nkoiv.mists.game.sprites.SpriteAnimation;
  * @author nkoiv
  */
 public interface AttackAction {
-    SpriteAnimation getSpriteAnimation();
 
     boolean isOnCooldown();
     

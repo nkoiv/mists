@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
@@ -33,6 +34,8 @@ public class Creature extends MapObject implements Combatant {
     private Direction facing;
     private Direction lastFacing = null;
     private HashMap<String, SpriteAnimation> spriteAnimations;
+    
+    private Weapon equippedWeapon; //TODO: Proper inventorymanagement isntead of this
     
     /*Attributes are stored in a separate HashMap
     * These are not Flags because they're limited to creatures
@@ -526,6 +529,18 @@ public class Creature extends MapObject implements Combatant {
     public void setFacing(Direction d) {
         this.facing = d;
     }
+    
+    //---TEMP methods for testing weapon usage via actions---
+    public Weapon getWeapon() {
+        return this.equippedWeapon;
+    }
+    
+    public void equipWeapon(Weapon w) {
+        this.equippedWeapon = w;
+    }
+    
+    //-------------------------------------------------------
+    
     
     //TODO: Calculate attack and defense values from their sources
     @Override

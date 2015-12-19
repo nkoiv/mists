@@ -11,8 +11,10 @@ import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.audio.SoundManager;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.ActionLibrary;
 import com.nkoiv.mists.game.libraries.GraphLibrary;
+import com.nkoiv.mists.game.libraries.ItemLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.libraries.MobLibrary;
 import java.util.ArrayList;
@@ -61,6 +63,7 @@ public class Mists extends Application implements Global {
     public static GraphLibrary graphLibrary;
     public static HashMap<String, Font> fonts;
     public static ActionLibrary<Action> actionLibrary;
+    public static ItemLibrary<Item> itemLibrary;
     public static MobLibrary<Structure> structureLibrary;
     public static MobLibrary<Creature> creatureLibrary;
     public static Stage primaryStage;
@@ -97,6 +100,8 @@ public class Mists extends Application implements Global {
         logger.info("Fonts loaded");
         setupActionLibrary();
         logger.info("Action library initialized");
+        setupItemLibrary();
+        logger.info("Item library initialized");
         setupStructureLibrary();
         logger.info("Structure library initialized");
         setupCreatureLibrary();
@@ -196,6 +201,11 @@ public class Mists extends Application implements Global {
     private void setupActionLibrary() {
         Mists.actionLibrary = new ActionLibrary<>();
         LibLoader.initializeActionLibrary(actionLibrary);
+    }
+    
+    private void setupItemLibrary() {
+        Mists.itemLibrary = new ItemLibrary<>();
+        LibLoader.initializeItemLibrary(itemLibrary);
     }
     
     private void setupCreatureLibrary() {
