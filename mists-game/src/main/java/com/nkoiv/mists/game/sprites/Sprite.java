@@ -89,7 +89,10 @@ public class Sprite
     public void refreshCollisionBox() {
         if (this.collisionBox == null) this.collisionBox = new CollisionBox(positionX, positionY, width, height);
         else {
-            this.collisionBox.refresh(positionX, positionY, width, height);
+            if (this.rotation == 0 )this.collisionBox.refresh(positionX, positionY, width, height);
+            else {
+                this.collisionBox.refresh(positionX+(width-height)/2, positionY, Math.max(width, height), Math.max(width, height));
+            }
         }
         //Mists.logger.log(Level.INFO, "{0}Refreshed new collisionbox with values {1}x{2}:{3}x{4}", new Object[]{height, positionX, positionY, width, height});
     }

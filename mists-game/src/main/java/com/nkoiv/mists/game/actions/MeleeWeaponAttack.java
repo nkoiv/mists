@@ -34,7 +34,7 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
         super("weaponmelee");
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
-        this.setFlag("cooldown", 1000);
+        this.setFlag("cooldown", 500);
         this.setFlag("triggered", 0);
     }
     
@@ -46,6 +46,7 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
     }
     @Override
     public void use(Creature actor) {
+        if (actor.getWeapon() == null) return; //Cant attack with weapon without weapon
         if (this.isOnCooldown()) {
             //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {
@@ -66,9 +67,9 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
                     //(attackPoint[1]-(actor.getWeapon().getImage().getHeight()/2)),
                     this.getSprite(actor),200);
             attackEffect.getSprite().setRotation(Toolkit.getRotation(Toolkit.counterClockwise(actor.getFacing(), 2)));
-            double[] swingTarget = Toolkit.getDirectionXY(Toolkit.clockwise(actor.getFacing(),2));
-            int speed = 60;
-            attackEffect.getSprite().addVelocity(swingTarget[0]*speed, swingTarget[1]*speed);
+            //double[] swingTarget = Toolkit.getDirectionXY(Toolkit.clockwise(actor.getFacing(),2));
+            //int speed = 60;
+            //attackEffect.getSprite().addVelocity(swingTarget[0]*speed, swingTarget[1]*speed);
             attackEffect.getSprite().setSpin(600);
             Mists.logger.info("Swinging towards: "+Toolkit.clockwise(actor.getFacing()));
             actor.getLocation().addEffect(attackEffect,
