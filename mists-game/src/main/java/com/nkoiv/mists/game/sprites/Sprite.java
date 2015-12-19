@@ -238,7 +238,23 @@ public class Sprite
         positionY += velocityY * time;
         this.collisionBox.SetPosition(positionX, positionY);
     }
-
+    
+    public void render (double xOffset, double yOffset, double degrees, GraphicsContext gc) {
+        gc.save();
+        gc.translate((this.getCenterXPos() - xOffset), (this.getCenterYPos() - yOffset));
+        gc.rotate(degrees);
+        gc.translate(-(this.getCenterXPos() - xOffset), -(this.getCenterYPos() - yOffset));
+        this.render(xOffset, yOffset, gc);
+        gc.restore();
+    }
+    
+    /**
+     * Render draws the Sprite on the given GraphicsContext
+     * at the coordinates its located at.
+     * @param xOffset xOffset for screen position on the location map
+     * @param yOffset xOffset for screen position on the (location) map
+     * @param gc 
+     */
     public void render(double xOffset, double yOffset, GraphicsContext gc)
     {
         if (this.animated) {

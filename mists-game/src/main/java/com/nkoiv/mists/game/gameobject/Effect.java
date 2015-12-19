@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 
 /**
  * Effects are more or less temporary MapObjects.
