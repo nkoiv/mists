@@ -187,6 +187,9 @@ public class Overlay {
             sb.append(((Creature) mob).getHealth()).append(" / ").append(((Creature) mob).getMaxHealth());
             sb.append("\n");
             sb.append("Crossable terrain: ").append(((Creature) mob).getCrossableTerrain());
+            sb.append("\n");
+            sb.append("Available actions: ");
+            sb.append(((Creature) mob).getAvailableActionNames());
         }
         if (mob instanceof Structure) {
             sb.append("\n");

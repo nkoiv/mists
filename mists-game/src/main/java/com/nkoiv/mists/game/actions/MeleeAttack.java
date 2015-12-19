@@ -78,6 +78,8 @@ public class MeleeAttack extends Action implements AttackAction {
             actor.getLocation().addEffect(attackEffect,
                     (attackPointX-(this.attackAnimation.getFrameWidth()/2)),
                     (attackPointY-(this.attackAnimation.getFrameHeight()/2)));
+            //Link the effect so it moves with actor
+            attackEffect.setLinkedObject(actor);
         }
     }
     @Override

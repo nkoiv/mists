@@ -95,10 +95,10 @@ public abstract class Toolkit {
             case DOWN: return new double[]{0,1};
             case RIGHT: return new double[]{1,0};
             case LEFT: return new double[]{-1,0};
-            case UPRIGHT: return new double[]{0.5,-0.5};
-            case UPLEFT: return new double[]{-0.5,-0.5};
-            case DOWNRIGHT: return new double[]{0.5,0.5};
-            case DOWNLEFT: return new double[]{-0.5,0.5};
+            case UPRIGHT: return new double[]{0.71,-0.71};
+            case UPLEFT: return new double[]{-0.71,-0.71};
+            case DOWNRIGHT: return new double[]{0.71,0.71};
+            case DOWNLEFT: return new double[]{-0.71,0.71};
             case STAY: return new double[]{0,0};
             default: return new double[]{0,0};
         }

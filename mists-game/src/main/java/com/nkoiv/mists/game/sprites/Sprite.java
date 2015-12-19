@@ -239,6 +239,15 @@ public class Sprite
         this.collisionBox.SetPosition(positionX, positionY);
     }
     
+    /**
+     * Render sprites at an angle.
+     * Performed by rotating canvas at the sprites location
+     * TODO: How is this performance wise?
+     * @param xOffset xOffset for screen position on the (location) map
+     * @param yOffset yOffset for screen position on the (location) map
+     * @param degrees Degrees to rotate the sprite around its center.
+     * @param gc GraphicsContext to draw the sprite on
+     */
     public void render (double xOffset, double yOffset, double degrees, GraphicsContext gc) {
         gc.save();
         gc.translate((this.getCenterXPos() - xOffset), (this.getCenterYPos() - yOffset));
@@ -251,9 +260,9 @@ public class Sprite
     /**
      * Render draws the Sprite on the given GraphicsContext
      * at the coordinates its located at.
-     * @param xOffset xOffset for screen position on the location map
-     * @param yOffset xOffset for screen position on the (location) map
-     * @param gc 
+     * @param xOffset xOffset for screen position on the (location) map
+     * @param yOffset yOffset for screen position on the (location) map
+     * @param gc GraphicsContext to draw the sprite on
      */
     public void render(double xOffset, double yOffset, GraphicsContext gc)
     {

@@ -21,6 +21,10 @@ import javafx.scene.transform.Rotate;
 public class Effect extends MapObject {
 
     protected Action owner;
+    protected MapObject linkedObject;
+    protected boolean linkedLocation;
+    protected double oldLinkX;
+    protected double oldLinkY;
     protected long startTime;
     protected long endTime;
     
@@ -51,6 +55,13 @@ public class Effect extends MapObject {
         return this.owner;
     }
     
+    public void setLinkedObject(MapObject link) {
+        this.linkedObject = link;
+        this.linkedLocation = true;
+        this.oldLinkX = link.getXPos();
+        this.oldLinkY = link.getYPos();
+    }
+    
     @Override
     public void update(double time) {
         this.sprite.update(time);
@@ -58,13 +69,22 @@ public class Effect extends MapObject {
     
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        //Mists.logger.log(Level.INFO, "Rendering the Effect [{0}]", this.getName());
         if (this.isFlagged("visible")) {
+            if (this.linkedLocation) this.updatePosition();
             this.getSprite().render(xOffset, yOffset, gc);
-            //gc.setStroke(Color.MAGENTA);
-            //gc.strokeRect(this.getXPos()-xOffset, this.getYPos()-yOffset, this.getSprite().getWidth(), this.getSprite().getHeight());
         }
         if(System.currentTimeMillis() > this.endTime)this.setFlag("removable", 1);
     }   
     
+    private void updatePosition() {
+        if (linkedObject.getXPos() != oldLinkX) {
+            this.getSprite().setXPosition(this.getSprite().getXPos() + (linkedObject.getXPos()- oldLinkX));
+            oldLinkX = linkedObject.getXPos();
+        }
+        if (linkedObject.getYPos() != oldLinkY) {
+            this.getSprite().setYPosition(this.getSprite().getYPos() + (linkedObject.getYPos()- oldLinkY));
+            oldLinkY = linkedObject.getYPos();
+        }
+    }
+
 }
