@@ -25,6 +25,13 @@ public class CollisionBox {
         this.maxY = y + h -1;
     }
 
+    public void refresh(double x, double y, double w, double h) {
+        this.minX = x;
+        this.minY = y;
+        this.maxX = x + w -1;
+        this.maxY = y + h -1;
+    }
+    
     public boolean Intersect(CollisionBox r) {
         return this.maxX >= r.minX &&
                this.minX <= r.maxX &&

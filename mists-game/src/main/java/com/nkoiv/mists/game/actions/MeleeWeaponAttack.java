@@ -57,18 +57,20 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
             this.lastUsed = System.currentTimeMillis();
-            Double[] attackPoint = actor.getSprite().getCorner(actor.getFacing());
+            Double[] attackPoint = actor.getSprite().getCorner(Toolkit.counterClockwise(actor.getFacing(), 0));
             Effect attackEffect = new Effect(
                     this, "weaponattack",actor.getLocation(),
-                    (attackPoint[0]-(actor.getWeapon().getImage().getWidth()/2)),
-                    (attackPoint[1]-(actor.getWeapon().getImage().getHeight()/2)),
-                    this.getSprite(actor),400);
-            attackEffect.getSprite().setRotation(Toolkit.getRotation(actor.getFacing()));
-            //double[] swingTarget = Toolkit.getDirectionXY(Toolkit.getDirection(actor.getFacing(), Toolkit.clockwise(actor.getFacing())));
-            //int speed = 40;
-            //attackEffect.getSprite().addVelocity(swingTarget[0]*speed, swingTarget[1]*speed);
+                    //(attackPoint[0]-(actor.getWeapon().getImage().getWidth()/2)),
+                    (attackPoint[0]),
+                    (attackPoint[1]),
+                    //(attackPoint[1]-(actor.getWeapon().getImage().getHeight()/2)),
+                    this.getSprite(actor),200);
+            attackEffect.getSprite().setRotation(Toolkit.getRotation(Toolkit.counterClockwise(actor.getFacing(), 2)));
+            double[] swingTarget = Toolkit.getDirectionXY(Toolkit.clockwise(actor.getFacing(),2));
+            int speed = 60;
+            attackEffect.getSprite().addVelocity(swingTarget[0]*speed, swingTarget[1]*speed);
+            attackEffect.getSprite().setSpin(600);
             Mists.logger.info("Swinging towards: "+Toolkit.clockwise(actor.getFacing()));
-            Mists.logger.info("Turning weapon: "+Toolkit.getDirection(actor.getFacing(), Toolkit.clockwise(actor.getFacing())));
             actor.getLocation().addEffect(attackEffect,
                     (attackPoint[0]-(actor.getWeapon().getImage().getWidth()/2)),
                     (attackPoint[1]-(actor.getWeapon().getImage().getHeight()/2)));

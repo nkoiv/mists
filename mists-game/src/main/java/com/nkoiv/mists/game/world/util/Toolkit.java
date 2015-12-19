@@ -150,6 +150,18 @@ public abstract class Toolkit {
         }
     }
     
+    public static Direction clockwise(Direction d, int steps) {
+        if (steps <= 0) return d;
+        d = clockwise(d);
+        return clockwise (d, steps-1);
+    }
+    
+    public static Direction counterClockwise(Direction d, int steps) {
+        if (steps <= 0) return d;
+        d = counterClockwise(d);
+        return counterClockwise (d, steps-1);
+    }
+    
     /**
      * Get the rotation for Direction, assuming that
      * the "normal" rotation (0) would be up.

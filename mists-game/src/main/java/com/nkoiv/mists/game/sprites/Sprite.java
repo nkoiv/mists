@@ -29,6 +29,7 @@ public class Sprite
     private double width;
     private double height;
     private double rotation;
+    private double spin; //rotation per timeframe
 
 
     /** Position for Sprite is pixel coordinates on the screen 
@@ -86,7 +87,10 @@ public class Sprite
     }
     
     public void refreshCollisionBox() {
-        this.collisionBox = new CollisionBox(positionX, positionY, width, height);
+        if (this.collisionBox == null) this.collisionBox = new CollisionBox(positionX, positionY, width, height);
+        else {
+            this.collisionBox.refresh(positionX, positionY, width, height);
+        }
         //Mists.logger.log(Level.INFO, "{0}Refreshed new collisionbox with values {1}x{2}:{3}x{4}", new Object[]{height, positionX, positionY, width, height});
     }
     
@@ -144,6 +148,14 @@ public class Sprite
 
     public void setRotation(double rotation) {
         this.rotation = rotation;
+    }
+    
+    public double getSpin() {
+        return spin;
+    }
+    
+    public void setSpin(double spin) {
+        this.spin = spin;
     }
     
     public void setPosition(double x, double y)
@@ -247,7 +259,10 @@ public class Sprite
     {
         positionX += velocityX * time;
         positionY += velocityY * time;
+        rotation += spin * time;
+        if (rotation >= 360 || rotation <= -360) rotation = rotation%360;
         this.collisionBox.SetPosition(positionX, positionY);
+        if (this.spin!=0) this.refreshCollisionBox();
     }
     
     /**
@@ -365,6 +380,8 @@ public class Sprite
      */    
     public boolean intersects(Sprite s) {
         if (this.collisionBox.Intersect(s.collisionBox)) {
+            //Rotated objects are happy with intersection, because pixel collision would require rotating the pixel image too...
+            if (this.rotation!=0) return true;
             //Check pixel collsion
             return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), s.getXPos(), s.getYPos(), s.getImage());
             
