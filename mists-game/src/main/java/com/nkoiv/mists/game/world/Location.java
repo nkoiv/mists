@@ -1000,7 +1000,7 @@ public class Location extends Flags implements Global {
                     mob.render(xOffset, yOffset, gc); //Draw objects on the ground
                     renderedMOBs.add(mob);
                     if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
-                       this.renderCollisions(screenFocus, gc, xOffset, yOffset);
+                       this.renderCollisions(mob, gc, xOffset, yOffset);
                     }
                 }
             }

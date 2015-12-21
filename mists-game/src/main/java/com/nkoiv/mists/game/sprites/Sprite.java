@@ -324,7 +324,7 @@ public class Sprite
      * TODO: How is this performance wise?
      * @param xOffset xOffset for screen position on the (location) map
      * @param yOffset yOffset for screen position on the (location) map
-     * @param degrees Degrees to rotate the sprite around its center.
+     * @param degrees Degrees to rotate the sprite around its center.   
      * @param gc GraphicsContext to draw the sprite on
      */
     public void render (double xOffset, double yOffset, double degrees, GraphicsContext gc) {
@@ -529,10 +529,16 @@ public class Sprite
             double bottomrightX = (this.positionX+rotatePointX) + (radius[3] * Math.cos(Math.toRadians(rotation+angle[3])));
             double bottomrightY = (this.positionY+rotatePointY) + (radius[3] * Math.sin(Math.toRadians(rotation+angle[3])));
            boolean intersects = false;
+           if (s.getBoundsInLocal().intersects(new Line(toprightX, toprightY, bottomrightX, bottomrightY).getBoundsInLocal())) intersects = true;
+           if (s.getBoundsInLocal().intersects(new Line(topleftX, topleftY, bottomleftX, bottomleftY).getBoundsInLocal())) intersects = true;
+           if (s.getBoundsInLocal().intersects(new Line(topleftX, topleftY, toprightX, toprightY).getBoundsInLocal())) intersects = true;
+           if (s.getBoundsInLocal().intersects(new Line(bottomrightX, bottomrightY, bottomleftX, bottomleftY).getBoundsInLocal())) intersects = true;
+           /*
            if (s.getBoundsInLocal().contains(topleftX, topleftY)) intersects = true;
            if (s.getBoundsInLocal().contains(toprightX, toprightY)) intersects = true; 
            if (s.getBoundsInLocal().contains(bottomleftX, bottomleftY)) intersects = true;
            if (s.getBoundsInLocal().contains(bottomrightX, bottomrightY)) intersects = true;
+           */
            //Mists.logger.info("Rotationary collision!");
            return intersects;
         }

@@ -63,11 +63,11 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
             Effect attackEffect = new Effect(
                     this, "weaponattack",
                     this.getSprite(actor),400);
-            attackEffect.getSprite().setRotation(Toolkit.getRotation(Toolkit.counterClockwise(actor.getFacing(),1)));
+            attackEffect.getSprite().setRotation(Toolkit.getRotation(Toolkit.counterClockwise(actor.getFacing(),2)));
             //double[] swingTarget = Toolkit.getDirectionXY(Toolkit.clockwise(actor.getFacing(),2));
             //int speed = 60;
             //attackEffect.getSprite().addVelocity(swingTarget[0]*speed, swingTarget[1]*speed);
-            attackEffect.getSprite().setSpin(200);
+            attackEffect.getSprite().setSpin(400);
             Mists.logger.info("Swinging towards: "+Toolkit.clockwise(actor.getFacing()));
             actor.getLocation().addEffect(attackEffect,
                     (attackPoint[0]-attackEffect.getSprite().getRotationPointX()),
@@ -86,9 +86,9 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
         
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
             Mists.logger.log(Level.INFO, "{0} landed on {1}", new Object[]{this.toString(), mobs.toString()});
-            this.setFlag("triggered", 1);
             for (MapObject mob : mobs) {
                 if (!mob.equals(this.getOwner())) {
+                    this.setFlag("triggered", 1);
                     if (mob instanceof Combatant) {
                         if (this.getOwner() instanceof PlayerCharacter && mob instanceof Creature) {
                             //Disallow friendly fire
