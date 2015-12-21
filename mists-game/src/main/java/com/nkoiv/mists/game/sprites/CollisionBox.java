@@ -66,5 +66,6 @@ public class CollisionBox {
         this.maxX = x + w -1;
         this.maxY = y + h -1;
     }
+    
 }
 

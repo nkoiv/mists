@@ -6,13 +6,17 @@
 package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
 /**
  * Sprite-class handles (movable) images.
@@ -29,6 +33,11 @@ public class Sprite
     private double width;
     private double height;
     private double rotation;
+    private double rotatePointX; //point of rotation
+    private double rotatePointY; //point of rotation
+    //corners: [up left][up right][down right][down left]
+    private double[] angle; //Angles to the corners from point of rotation
+    private double[] radius; //Pythagoras is expensive to calc, so do it only once.
     private double spin; //rotation per timeframe
 
 
@@ -49,7 +58,7 @@ public class Sprite
      */
     private boolean animated;
     
-    private int collisionArea = 1; // 1=Rectangle, 2=Ellipse
+    private int collisionArea = 1; // 1=Rectangle, 2=Ellipse, 3=Line
     private CollisionBox collisionBox;
 
     public Sprite()
@@ -58,6 +67,8 @@ public class Sprite
         positionY = 0;    
         velocityX = 0;
         velocityY = 0;
+        radius = new double[4];
+        angle = new double[4];
         animated = false;
         collisionBox = new CollisionBox(positionX, positionY, 0, 0);
     }
@@ -67,7 +78,10 @@ public class Sprite
         image = i;
         width = i.getWidth();
         height = i.getHeight();
+        this.rotatePointX = width/2;
+        this.rotatePointY = height/2;
         collisionBox = new CollisionBox(positionX, positionY, width, height);
+        this.refreshRotationData();
     }
     
     public Sprite (Image i, double xPosition, double yPosition) {
@@ -75,6 +89,7 @@ public class Sprite
         positionX = xPosition;
         positionY = yPosition;    
         collisionBox = new CollisionBox(positionX, positionY, width, height);
+        this.refreshRotationData();
     }
 
     public void setCollisionAreaShape (int ShapeNumber) {
@@ -89,10 +104,7 @@ public class Sprite
     public void refreshCollisionBox() {
         if (this.collisionBox == null) this.collisionBox = new CollisionBox(positionX, positionY, width, height);
         else {
-            if (this.rotation == 0 )this.collisionBox.refresh(positionX, positionY, width, height);
-            else {
-                this.collisionBox.refresh(positionX+(width-height)/2, positionY, Math.max(width, height), Math.max(width, height));
-            }
+            this.collisionBox.refresh(positionX, positionY, width, height);
         }
         //Mists.logger.log(Level.INFO, "{0}Refreshed new collisionbox with values {1}x{2}:{3}x{4}", new Object[]{height, positionX, positionY, width, height});
     }
@@ -111,6 +123,8 @@ public class Sprite
         height = i.getHeight();
         animated = false;
         this.refreshCollisionBox();
+        this.refreshRotationData();
+        
     }
     
     public void setImage(String filename)
@@ -118,6 +132,7 @@ public class Sprite
         Image i = new Image(filename);
         setImage(i);
         this.refreshCollisionBox();
+        this.refreshRotationData();
     }
     
     public Image getImage() {
@@ -132,7 +147,7 @@ public class Sprite
         this.animated = true;
         this.width = animation.getFrameWidth();
         this.height = animation.getFrameHeight();
-    };
+    }
     
     public void removeAnimation () {
         this.animated = false;
@@ -143,6 +158,40 @@ public class Sprite
     public void setAnimation (ImageView image, int frameCount, int startX, int startY, int offsetX, int offsetY, int width,   int height) {
         this.animation = new SpriteAnimation (image, frameCount, startX, startY, offsetX, offsetY, width, height);
         this.animated = true;
+        this.width = animation.getFrameWidth();
+        this.height = animation.getFrameHeight();
+    }
+    
+    /**
+     * By default sprites rotate around their center (width/2, height/2)
+     * setting rotationpoint moves this around.
+     * @param x xCoordinate (withing the sprite, from top left corner) to rotate the sprite around
+     * @param y yCoordinate (withing the sprite, from top left corner) to rotate the sprite around
+     */
+    public void setRotationPoint(double x, double y) {
+        this.rotatePointX = x;
+        this.rotatePointY = y;
+        this.refreshRotationData();
+    }
+    
+    private void refreshRotationData() {
+        this.angle[0] = Math.toDegrees(Math.atan2(rotatePointY,rotatePointX));
+        this.angle[1] = Math.toDegrees(Math.atan2(rotatePointY,width-rotatePointX));
+        this.angle[2] = Math.toDegrees(Math.atan2(height-rotatePointY,rotatePointX));
+        this.angle[3] = Math.toDegrees(Math.atan2(height-rotatePointY,width-rotatePointX));
+        
+        this.radius[0] = Math.pow(Math.pow(rotatePointX, 2) + Math.pow(rotatePointY, 2), 0.5);
+        this.radius[1] = Math.pow(Math.pow(width-rotatePointX, 2) + Math.pow(rotatePointY, 2), 0.5);
+        this.radius[2] = Math.pow(Math.pow(rotatePointX, 2) + Math.pow(height-rotatePointY, 2), 0.5);
+        this.radius[3] = Math.pow(Math.pow(width-rotatePointX, 2) + Math.pow(height-rotatePointY, 2), 0.5);
+    }
+    
+    public double getRotationPointX() {
+        return this.rotatePointX;
+    }
+    
+    public double getRotationPointY() {
+        return this.rotatePointY;
     }
     
     public double getRotation() {
@@ -160,6 +209,7 @@ public class Sprite
     public void setSpin(double spin) {
         this.spin = spin;
     }
+    
     
     public void setPosition(double x, double y)
     {
@@ -279,9 +329,9 @@ public class Sprite
      */
     public void render (double xOffset, double yOffset, double degrees, GraphicsContext gc) {
         gc.save();
-        gc.translate((this.getCenterXPos() - xOffset), (this.getCenterYPos() - yOffset));
+        gc.translate((this.positionX+rotatePointX - xOffset), (this.positionY+rotatePointY - yOffset));
         gc.rotate(degrees);
-        gc.translate(-(this.getCenterXPos() - xOffset), -(this.getCenterYPos() - yOffset));
+        gc.translate(-(this.positionX+rotatePointX - xOffset), -(this.positionY+rotatePointY - yOffset));
         this.renderOnScreen(xOffset, yOffset, gc);
         gc.restore();
     }
@@ -301,6 +351,12 @@ public class Sprite
         }
     }
     
+    /**
+     * Internal rendering of the sprite
+     * @param xOffset xOffset for screen position on the (location) map
+     * @param yOffset yOffset for screen position on the (location) map
+     * @param gc GraphicsContext to draw the sprite on
+     */
     private void renderOnScreen(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.animated) {
                 gc.drawImage( this.animation.getCurrentFrame(), positionX-xOffset, positionY-yOffset );
@@ -311,6 +367,55 @@ public class Sprite
         }
     }
     
+    public void renderCollisions(double xOffset, double yOffset, GraphicsContext gc) {
+        gc.setStroke(Color.RED);
+        switch (this.collisionArea) {
+            case 1:
+                if(this.rotation == 0) {
+                    gc.strokeRect(this.getXPos()-xOffset, this.getYPos()-yOffset, this.getWidth(), this.getHeight());
+                } else if (this.rotation != 0) {
+                    this.renderRotatedCollision(xOffset, yOffset, gc);
+                } 
+                break;
+            case 2:
+                gc.strokeOval(this.getXPos()-xOffset, this.getYPos()-yOffset,
+                        this.getWidth(), this.getHeight());
+                break;
+            case 3:
+                break;
+            default:
+                break;
+        }
+    }
+    
+    private void renderRotatedCollision(double xOffset, double yOffset, GraphicsContext gc) {
+        //Rectangle is four lines
+        
+        double topleftX = (this.positionX+rotatePointX)-xOffset + (radius[0] * Math.cos(Math.toRadians(rotation+angle[0]+180)));
+        double topleftY = (this.positionY+rotatePointY)-yOffset + (radius[0] * Math.sin(Math.toRadians(rotation+angle[0]+180)));
+        
+        double toprightX = (this.positionX+rotatePointX)-xOffset + (radius[1] * Math.cos(Math.toRadians(rotation-angle[1])));
+        double toprightY = (this.positionY+rotatePointY)-yOffset + (radius[1] * Math.sin(Math.toRadians(rotation-angle[1])));
+        
+        double bottomleftX = (this.positionX+rotatePointX)-xOffset + (radius[2] * Math.cos(Math.toRadians(rotation-angle[2]+180)));
+        double bottomleftY = (this.positionY+rotatePointY)-yOffset + (radius[2] * Math.sin(Math.toRadians(rotation-angle[2]+180)));
+        
+        double bottomrightX = (this.positionX+rotatePointX)-xOffset + (radius[3] * Math.cos(Math.toRadians(rotation+angle[3])));
+        double bottomrightY = (this.positionY+rotatePointY)-yOffset + (radius[3] * Math.sin(Math.toRadians(rotation+angle[3])));
+        gc.setStroke(Color.RED);
+        /*
+        gc.strokeText("TL", topleftX, topleftY);
+        gc.strokeText("Rotate: "+rotatePointX+","+rotatePointY+" width: "+this.width+" height: "+this.height, this.getCenterXPos()-xOffset, this.getCenterYPos()-yOffset);
+        gc.strokeText("TR", toprightX, toprightY);
+        gc.strokeText("BL", bottomleftX, bottomleftY);
+        gc.strokeText("BR", bottomrightX, bottomrightY);
+        */
+        gc.strokeLine(topleftX, topleftY, toprightX, toprightY);
+        gc.strokeLine(toprightX, toprightY, bottomrightX, bottomrightY);
+        gc.strokeLine(bottomrightX, bottomrightY, bottomleftX, bottomleftY);
+        gc.strokeLine(bottomleftX, bottomleftY, topleftX, topleftY);
+        
+    }           
     
     public Double[] getCenter() {
         double xCenter = this.positionX + (this.width/2);
@@ -362,16 +467,17 @@ public class Sprite
         return corner;
     }
 
-    public Shape getBoundary()
-    {   
+    public Shape getBoundary() {
+    Shape s;
     switch(collisionArea) {
-        case 1: return new Rectangle(positionX,positionY,width,height);
-        case 2: return new Ellipse((positionX+(width/2)),(positionY+(height/2)),((width)/2),((height)/2));
-        default: break;
+        case 1: s =  new Rectangle(positionX,positionY,width,height); break;
+        case 2: s =  new Ellipse((positionX+(width/2)),(positionY+(height/2)),((width)/2),((height)/2)); break;
+        case 3: s = new Line(positionX+width/2, positionY+height, positionX+width/2, positionY); break;
+        default: s =  new Rectangle(positionX,positionY,width,height); break;
     }
-   
-        return new Rectangle(positionX,positionY,width,height);
-        //return new Rectangle2D(positionX+1,positionY+1,width-2,height-2);
+    Rotate r = new Rotate(0, 0, this.rotation);
+    if (this.rotation != 0) s.setRotate(this.rotation);
+    return s;
     }
 
     
@@ -382,9 +488,11 @@ public class Sprite
      * @return True if they overlap somewhere
      */    
     public boolean intersects(Sprite s) {
+        //Rotated objects are happy with intersection, because pixel collision would require rotating the pixel image too...
+        if (this.rotation!=0 || s.rotation != 0) {
+           return this.intersectsWithShape(s.getBoundary());
+        }
         if (this.collisionBox.Intersect(s.collisionBox)) {
-            //Rotated objects are happy with intersection, because pixel collision would require rotating the pixel image too...
-            if (this.rotation!=0) return true;
             //Check pixel collsion
             return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), s.getXPos(), s.getYPos(), s.getImage());
             
@@ -404,16 +512,33 @@ public class Sprite
      */
     public boolean intersectsWithShape(Shape s)
     {
-        //Shape shape = Shape.intersect(s.getBoundary(), this.getBoundary());
-        return this.getBoundary().intersects(s.getBoundsInLocal());
+        Shape bounds = this.getBoundary();
         
-        /*
-        if (shape.getBoundsInLocal().getWidth() != -1) {
-            return pixelCollision(s.getImage());
-        } else {
-            return false;
+        if (this.rotation != 0) {
+           //If the target shape contains any of the four corners of this sprite, then the shapes intersect
+           
+            double topleftX = (this.positionX+rotatePointX) + (radius[0] * Math.cos(Math.toRadians(rotation+angle[0]+180)));
+            double topleftY = (this.positionY+rotatePointY) + (radius[0] * Math.sin(Math.toRadians(rotation+angle[0]+180)));
+
+            double toprightX = (this.positionX+rotatePointX) + (radius[1] * Math.cos(Math.toRadians(rotation-angle[1])));
+            double toprightY = (this.positionY+rotatePointY) + (radius[1] * Math.sin(Math.toRadians(rotation-angle[1])));
+
+            double bottomleftX = (this.positionX+rotatePointX) + (radius[2] * Math.cos(Math.toRadians(rotation-angle[2]+180)));
+            double bottomleftY = (this.positionY+rotatePointY) + (radius[2] * Math.sin(Math.toRadians(rotation-angle[2]+180)));
+
+            double bottomrightX = (this.positionX+rotatePointX) + (radius[3] * Math.cos(Math.toRadians(rotation+angle[3])));
+            double bottomrightY = (this.positionY+rotatePointY) + (radius[3] * Math.sin(Math.toRadians(rotation+angle[3])));
+           boolean intersects = false;
+           if (s.getBoundsInLocal().contains(topleftX, topleftY)) intersects = true;
+           if (s.getBoundsInLocal().contains(toprightX, toprightY)) intersects = true; 
+           if (s.getBoundsInLocal().contains(bottomleftX, bottomleftY)) intersects = true;
+           if (s.getBoundsInLocal().contains(bottomrightX, bottomrightY)) intersects = true;
+           //Mists.logger.info("Rotationary collision!");
+           return intersects;
         }
-        */
+        
+        return bounds.intersects(s.getBoundsInParent());
+
     }
     
     

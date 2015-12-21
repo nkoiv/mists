@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.actions;
 
-import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Combatant;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -41,6 +40,8 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
     public Sprite getSprite(Creature actor) {
         Sprite attackSprite = new Sprite(actor.getWeapon().getImage());
         attackSprite.setPosition(actor.getXPos(), actor.getYPos());
+        //attackSprite.setRotationPoint(5, 10);   
+        attackSprite.setRotationPoint(attackSprite.getWidth()/2, attackSprite.getHeight()); //Rotate around bottom center - "the handle"
         attackSprite.refreshCollisionBox();
         return attackSprite;
     }
@@ -58,23 +59,19 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
             this.lastUsed = System.currentTimeMillis();
-            Double[] attackPoint = actor.getSprite().getCorner(Toolkit.counterClockwise(actor.getFacing(), 0));
+            Double[] attackPoint = actor.getSprite().getCorner(actor.getFacing());
             Effect attackEffect = new Effect(
-                    this, "weaponattack",actor.getLocation(),
-                    //(attackPoint[0]-(actor.getWeapon().getImage().getWidth()/2)),
-                    (attackPoint[0]),
-                    (attackPoint[1]),
-                    //(attackPoint[1]-(actor.getWeapon().getImage().getHeight()/2)),
-                    this.getSprite(actor),200);
-            attackEffect.getSprite().setRotation(Toolkit.getRotation(Toolkit.counterClockwise(actor.getFacing(), 2)));
+                    this, "weaponattack",
+                    this.getSprite(actor),400);
+            attackEffect.getSprite().setRotation(Toolkit.getRotation(Toolkit.counterClockwise(actor.getFacing(),1)));
             //double[] swingTarget = Toolkit.getDirectionXY(Toolkit.clockwise(actor.getFacing(),2));
             //int speed = 60;
             //attackEffect.getSprite().addVelocity(swingTarget[0]*speed, swingTarget[1]*speed);
-            attackEffect.getSprite().setSpin(600);
+            attackEffect.getSprite().setSpin(200);
             Mists.logger.info("Swinging towards: "+Toolkit.clockwise(actor.getFacing()));
             actor.getLocation().addEffect(attackEffect,
-                    (attackPoint[0]-(actor.getWeapon().getImage().getWidth()/2)),
-                    (attackPoint[1]-(actor.getWeapon().getImage().getHeight()/2)));
+                    (attackPoint[0]-attackEffect.getSprite().getRotationPointX()),
+                    (attackPoint[1]-attackEffect.getSprite().getRotationPointY()));
             attackEffect.setLinkedObject(actor);
         }
     }

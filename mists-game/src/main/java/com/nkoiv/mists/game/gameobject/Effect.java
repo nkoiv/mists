@@ -31,12 +31,10 @@ public class Effect extends MapObject {
         super(name);
     }
     
-    public Effect(Action owner, String name, Location location, double xPos, double yPos, Sprite sprite, int durationMS) {
+    public Effect(Action owner, String name, Sprite sprite, int durationMS) {
         super(name);
         this.owner = owner;
         this.sprite = sprite;
-        this.sprite.setPosition(xPos, yPos);
-        this.location = location;
         this.setFlag("durationMS", durationMS);
         this.setFlag("startdurationMS", durationMS);
         this.startTime = System.currentTimeMillis();

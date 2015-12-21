@@ -68,7 +68,7 @@ public class Game {
         Creature companion = Mists.creatureLibrary.create("Himmu");
         System.out.println(companion.toString());
         pocplayer.addCompanion(companion);
-        pocplayer.getSprite().setCollisionAreaShape(2);
+        pocplayer.getSprite().setCollisionAreaShape(1);
         pocplayer.equipWeapon((Weapon)Mists.itemLibrary.create("sword"));
         pocplayer.addAction(new MeleeWeaponAttack());
         this.player = pocplayer;

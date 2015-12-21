@@ -115,7 +115,13 @@ public class MapObject extends Flags implements Global, Templatable {
         if (this.isFlagged("visible")) {
             this.sprite.render(xOffset, yOffset, gc);
         }
-    }   
+    }
+    
+    public void renderCollisions(double xOffset, double yOffset, GraphicsContext gc) {
+        if (this.isFlagged("visible")) {
+            this.sprite.renderCollisions(xOffset, yOffset, gc);
+        }
+    }
    
     /**
     * Set the MapObject a new Sprite (replacing the old old)

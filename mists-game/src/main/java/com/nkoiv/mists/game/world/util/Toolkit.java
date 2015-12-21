@@ -6,6 +6,8 @@
 package com.nkoiv.mists.game.world.util;
 
 import com.nkoiv.mists.game.Direction;
+import java.awt.Point;
+import javafx.scene.shape.Polygon;
 
 /**
  * Toolkit (TODO: poor name, rename) contains
@@ -205,4 +207,6 @@ public abstract class Toolkit {
         return euclideanDistance;
     }
  
+    
+    
 }

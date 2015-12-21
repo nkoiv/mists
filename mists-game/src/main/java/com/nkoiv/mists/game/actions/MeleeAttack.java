@@ -70,9 +70,7 @@ public class MeleeAttack extends Action implements AttackAction {
             double attackPointX = (directionXY[0] * actor.getSprite().getWidth())/2 + actor.getCenterXPos();
             double attackPointY = (directionXY[1] * actor.getSprite().getHeight())/2 + actor.getCenterYPos();
             Effect attackEffect = new Effect(
-                    this, "meleeattack",actor.getLocation(),
-                    (attackPointX-(this.attackAnimation.getFrameWidth()/2)),
-                    (attackPointY-(this.attackAnimation.getFrameHeight()/2)),
+                    this, "meleeattack",
                     this.getSprite(actor),400);
             //Put the effect on the actor
             actor.getLocation().addEffect(attackEffect,

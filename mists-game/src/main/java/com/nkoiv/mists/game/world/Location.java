@@ -967,15 +967,7 @@ public class Location extends Flags implements Global {
                     //Mob is in window
                     renderedMOBs.add(mob);
                     if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
-                        gc.setStroke(Color.RED);
-                        if (mob.getSprite().getCollisionAreaType() == 1) {
-                            gc.strokeRect(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
-                            mob.getSprite().getWidth(), mob.getSprite().getHeight());
-                        } else if (mob.getSprite().getCollisionAreaType() == 2) {
-                            gc.strokeOval(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
-                            mob.getSprite().getWidth(), mob.getSprite().getHeight());
-                        }
-
+                        this.renderCollisions(mob, gc, xOffset, yOffset);
                     }
                 }
             }
@@ -1008,15 +1000,7 @@ public class Location extends Flags implements Global {
                     mob.render(xOffset, yOffset, gc); //Draw objects on the ground
                     renderedMOBs.add(mob);
                     if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
-                        gc.setStroke(Color.RED);
-                        if (mob.getSprite().getCollisionAreaType() == 1) {
-                            gc.strokeRect(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
-                            mob.getSprite().getWidth(), mob.getSprite().getHeight());
-                        } else if (mob.getSprite().getCollisionAreaType() == 2) {
-                            gc.strokeOval(mob.getSprite().getXPos()-xOffset, mob.getSprite().getYPos()-yOffset,
-                            mob.getSprite().getWidth(), mob.getSprite().getHeight());
-                        }
-
+                       this.renderCollisions(screenFocus, gc, xOffset, yOffset);
                     }
                 }
             }
@@ -1065,6 +1049,9 @@ public class Location extends Flags implements Global {
         if (!this.effects.isEmpty()) {
             for (Effect e : this.effects) {
                 e.render(xOffset, yOffset, gc);
+                if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
+                       this.renderCollisions(e, gc, xOffset, yOffset);
+                }
             }
         }
         if (!this.targets.isEmpty()) {
@@ -1072,6 +1059,10 @@ public class Location extends Flags implements Global {
                 Overlay.drawTargettingCircle(gc, mob);
             }
         }
+    }
+    
+    private void renderCollisions(MapObject mob, GraphicsContext gc, double xOffset, double yOffset) {
+        mob.renderCollisions(xOffset, yOffset, gc);
     }
     
     private void renderMap(GraphicsContext gc, double xOffset, double yOffset) {
