@@ -119,14 +119,14 @@ public class GeneralMobTest {
     public void mobCenterXPositionIsPositionPlusHalfWidth() {
         testCreature.setPosition(100,100);
         double centerX = testCreature.getCenterXPos();
-        assert(centerX == 100+(testCreature.getSprite().getWidth()/2));
+        assert(centerX == 100+(testCreature.getWidth()/2));
     }
     
     @Test
     public void mobCenterYPositionIsPositionPlusHalfHeight() {
         testCreature.setPosition(200,200);
         double centerY = testCreature.getCenterYPos();
-        assert(centerY == 200+(testCreature.getSprite().getHeight()/2));
+        assert(centerY == 200+(testCreature.getHeight()/2));
     }
     
     @After

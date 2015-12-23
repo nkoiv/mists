@@ -26,7 +26,7 @@ import javafx.scene.image.Image;
 public class ContextAction {
     private final ArrayList<Trigger> availableTriggers;
     private ArrayList<MapObject> nearbyObjects;
-    private Sprite triggerRadius;
+    private MapObject triggerRadius;
     int currentTrigger;
     MapObject actor; //Usually the player?
     
@@ -70,7 +70,10 @@ public class ContextAction {
     
     private void generateTriggerRange() {
         //TODO: is 64 pixel size circle always the one we want to use?
-        if (this.triggerRadius == null) this.triggerRadius = new Sprite(new Image("/images/circle.png"));
+        if (this.triggerRadius == null) {
+            this.triggerRadius = new MapObject("trigger radius",new Image("/images/circle.png"));
+            //this.triggerRadius.setFlag("visible", 0); //TriggerRadius doesnt even need to be invisible, as its never placed in a location.
+        }
     }
     
     /**

@@ -228,8 +228,8 @@ public class Location extends Flags implements Global {
         MapObject mobAtLocation = null;
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) {
-                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getSprite().getWidth()) {
-                    if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getSprite().getHeight()) {
+                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth()) {
+                    if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
                         //Do a pixelcheck on the mob;
                         //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
                             return mob;
@@ -241,8 +241,8 @@ public class Location extends Flags implements Global {
         }
         if (!this.structures.isEmpty()) {
             for (Structure mob : this.structures) {
-                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getSprite().getWidth()) {
-                    if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getSprite().getHeight()) {
+                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth()) {
+                    if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
                         return mob;
                     }
                 }
@@ -257,7 +257,7 @@ public class Location extends Flags implements Global {
     * @param mob MapObject to be positioned
     */
     public void setMobInRandomOpenSpot (MapObject mob) {
-        double[] openSpot = this.getRandomOpenSpot(mob.getSprite().getWidth());
+        double[] openSpot = this.getRandomOpenSpot(mob.getWidth());
         mob.setPosition(openSpot[0], openSpot[1]);
     }
     
@@ -265,7 +265,7 @@ public class Location extends Flags implements Global {
         /*TODO: use the HashMap entryPoints to select
         * where the player lands when he first enters the location
         */
-        return this.getRandomOpenSpot(this.getPlayer().getSprite().getWidth());
+        return this.getRandomOpenSpot(this.getPlayer().getWidth());
     }
             
     /**
@@ -277,8 +277,8 @@ public class Location extends Flags implements Global {
     private double[] getRandomOpenSpot(double sizeRequirement) {
         //
         Creature collisionTester = new Creature("CollisionTester", new Image("/images/himmutoy.png"));
-        collisionTester.getSprite().setWidth(sizeRequirement);
-        collisionTester.getSprite().setHeight(sizeRequirement);
+        //collisionTester.getSprite().setWidth(sizeRequirement);
+        //collisionTester.getSprite().setHeight(sizeRequirement);
         Random rnd = new Random();
         boolean foundSpot = false;
         int openX = 0;
@@ -353,7 +353,7 @@ public class Location extends Flags implements Global {
             this.creatures.add(p);
         }
         p.setLocation(this);
-        p.getSprite().setPosition(xPos, yPos);
+        p.setPosition(xPos, yPos);
     }
     
     private void setMap(GameMap m) {
@@ -606,25 +606,21 @@ public class Location extends Flags implements Global {
      * @return set of spatial hash ID's
      */
     private HashSet<Integer> getSpatials(MapObject mob) {
-        return getSpatials(mob.getSprite());
-    }
-    
-    private HashSet<Integer> getSpatials(Sprite s) {
         Double[] spatialUpLeft;
         Double[] spatialUpRight;
         Double[] spatialDownRight;
         Double[] spatialDownLeft;
         HashSet<Integer> spatialList = new HashSet<>();
-        spatialUpLeft = s.getCorner(Direction.UPLEFT);
+        spatialUpLeft = mob.getCorner(Direction.UPLEFT);
         spatialList.add(getSpatial(spatialUpLeft[0],spatialUpLeft[1]));
 
-        spatialUpRight = s.getCorner(Direction.UPRIGHT);
+        spatialUpRight = mob.getCorner(Direction.UPRIGHT);
         spatialList.add(getSpatial(spatialUpRight[0],spatialUpRight[1]));
         
-        spatialDownRight = s.getCorner(Direction.DOWNRIGHT);
+        spatialDownRight = mob.getCorner(Direction.DOWNRIGHT);
         spatialList.add(getSpatial(spatialDownRight[0],spatialDownRight[1]));
         
-        spatialDownLeft = s.getCorner(Direction.DOWNLEFT);
+        spatialDownLeft = mob.getCorner(Direction.DOWNLEFT);
         spatialList.add(getSpatial(spatialDownLeft[0],spatialDownLeft[1]));
         
         return spatialList;
@@ -728,7 +724,7 @@ public class Location extends Flags implements Global {
         return collidingObjects;
         
     }
-    
+    /*
     public ArrayList<MapObject> checkCollisions (Sprite s) {
         ArrayList<MapObject> collidingObjects = new ArrayList<>();
         HashSet<Integer> spriteSpatials = getSpatials(s);
@@ -740,7 +736,7 @@ public class Location extends Flags implements Global {
        
         return collidingObjects;
     }
-    
+    */
     /**
      * Check the supplied iterable list of objects for collisions
      * The method is supplied an arraylist instead of returning one,
@@ -749,25 +745,21 @@ public class Location extends Flags implements Global {
      * @param mapObjectsToCheck List of objects
      * @param collidingObjects List to add the colliding objects on
      */
-    private void addMapObjectCollisions(MapObject o, Iterable mapObjectsToCheck, ArrayList collidingObjects) {        
-        this.addMapObjectCollisions(o.getSprite(), mapObjectsToCheck, collidingObjects);
-    }
-    
-    private void addMapObjectCollisions(Sprite s, Iterable mapObjectsToCheck, ArrayList collidingObjects) {         
+    private void addMapObjectCollisions(MapObject mob, Iterable mapObjectsToCheck, ArrayList collidingObjects) {         
         if (mapObjectsToCheck == null) return;
         Iterator<MapObject> mobIter = mapObjectsToCheck.iterator();
         while ( mobIter.hasNext() )
         {
             MapObject collidingObject = mobIter.next();
             //If the objects are further away than their combined width/height, they cant collide
-            if ((Math.abs(collidingObject.getCenterXPos() - s.getCenterXPos())
-                 > (collidingObject.getSprite().getWidth() + s.getWidth()))
-                || (Math.abs(collidingObject.getCenterYPos() - s.getCenterYPos())
-                 > (collidingObject.getSprite().getHeight() + s.getHeight()))) {
+            if ((Math.abs(collidingObject.getCenterXPos() - mob.getCenterXPos())
+                 > (collidingObject.getWidth() + mob.getWidth()))
+                || (Math.abs(collidingObject.getCenterYPos() - mob.getCenterYPos())
+                 > (collidingObject.getHeight() + mob.getHeight()))) {
                 //Objects are far enough from oneanother
             } else {
-                if (!collidingObject.getSprite().equals(s)) { // Colliding with yourself is not really a collision
-                if ( s.intersects(collidingObject.getSprite()) ) 
+                if (!collidingObject.equals(mob)) { // Colliding with yourself is not really a collision
+                if ( mob.intersects(collidingObject) ) 
                  {
                     collidingObjects.add(collidingObject);
                 }
@@ -788,10 +780,10 @@ public class Location extends Flags implements Global {
      * @return True if collision map had something at mobs coordinates
      */
     private boolean collidesOnCollisionMap(Creature mob) {
-        Double[] upleft = mob.getSprite().getCorner(Direction.UPLEFT);
-        Double[] upright = mob.getSprite().getCorner(Direction.UPRIGHT);
-        Double[] downleft = mob.getSprite().getCorner(Direction.DOWNLEFT);
-        Double[] downright = mob.getSprite().getCorner(Direction.DOWNRIGHT);
+        Double[] upleft = mob.getCorner(Direction.UPLEFT);
+        Double[] upright = mob.getCorner(Direction.UPRIGHT);
+        Double[] downleft = mob.getCorner(Direction.DOWNLEFT);
+        Double[] downright = mob.getCorner(Direction.DOWNRIGHT);
         if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(upleft[0]/collisionMap.nodeSize), (int)(upleft[1]/collisionMap.nodeSize))) return true;
         if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(upright[0]/collisionMap.nodeSize), (int)(upright[1]/collisionMap.nodeSize))) return true;
         if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(downleft[0]/collisionMap.nodeSize), (int)(downleft[1]/collisionMap.nodeSize))) return true;
@@ -821,12 +813,12 @@ public class Location extends Flags implements Global {
             MapObject collidingObject = creaturesIter.next();
             //If the objects are further away than their combined width/height, they cant collide
             if ((Math.abs(collidingObject.getCenterXPos() - xStart)
-                 > (collidingObject.getSprite().getWidth() + Math.abs(xDistance)))
+                 > (collidingObject.getWidth() + Math.abs(xDistance)))
                 || (Math.abs(collidingObject.getCenterYPos() - yStart)
-                 > (collidingObject.getSprite().getHeight() + Math.abs(yDistance)))) {
+                 > (collidingObject.getHeight() + Math.abs(yDistance)))) {
                 //Objects are far enough from oneanother
             } else {
-                if (collidingObject.getSprite().intersectsWithShape(line) ) 
+                if (collidingObject.intersects(line) ) 
                  {
                     collidingObjects.add(collidingObject);
                 }
@@ -839,12 +831,12 @@ public class Location extends Flags implements Global {
             MapObject collidingObject = structuresIter.next();
             //If the objects are further away than their combined width/height, they cant collide
             if ((Math.abs(collidingObject.getCenterXPos() - xStart)
-                 > (collidingObject.getSprite().getWidth() + Math.abs(xDistance)))
+                 > (collidingObject.getWidth() + Math.abs(xDistance)))
                 || (Math.abs(collidingObject.getCenterYPos() - yStart)
-                 > (collidingObject.getSprite().getHeight() + Math.abs(yDistance)))) {
+                 > (collidingObject.getHeight() + Math.abs(yDistance)))) {
                 //Objects are far enough from oneanother
             } else {
-                if (collidingObject.getSprite().intersectsWithShape(line)) 
+                if (collidingObject.intersects(line)) 
                  {
                     collidingObjects.add(collidingObject);
                 }
@@ -898,8 +890,8 @@ public class Location extends Flags implements Global {
         /*
         * Update Offsets first to know which parts of the location are drawn
         */
-        double xOffset = getxOffset(gc, screenFocus.getSprite().getXPos());
-        double yOffset = getyOffset(gc, screenFocus.getSprite().getYPos());
+        double xOffset = getxOffset(gc, screenFocus.getXPos());
+        double yOffset = getyOffset(gc, screenFocus.getYPos());
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.renderMap(gc, xOffset, yOffset);
         
@@ -957,10 +949,10 @@ public class Location extends Flags implements Global {
         //Find the creatures to render
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) {
-                if (mob.getXPos()-xOffset < -mob.getSprite().getWidth() ||
+                if (mob.getXPos()-xOffset < -mob.getWidth() ||
                     mob.getXPos()-xOffset > gc.getCanvas().getWidth()) {
                     //Mob is not in window
-                } else if (mob.getYPos()-yOffset < -mob.getSprite().getHeight() ||
+                } else if (mob.getYPos()-yOffset < -mob.getHeight() ||
                     mob.getYPos()-yOffset > gc.getCanvas().getHeight()) {
                     //Mob is not in window
                 } else {
@@ -989,10 +981,10 @@ public class Location extends Flags implements Global {
         
         if (!this.structures.isEmpty()) {
             for (Structure mob : this.structures) {
-                if (mob.getXPos()-xOffset < -mob.getSprite().getWidth() ||
+                if (mob.getXPos()-xOffset < -mob.getWidth() ||
                     mob.getXPos()-xOffset > gc.getCanvas().getWidth()) {
                     //Mob is not in window
-                } else if (mob.getYPos()-yOffset < -mob.getSprite().getHeight() ||
+                } else if (mob.getYPos()-yOffset < -mob.getHeight() ||
                     mob.getYPos()-yOffset > gc.getCanvas().getHeight()) {
                     //Mob is not in window
                 } else {

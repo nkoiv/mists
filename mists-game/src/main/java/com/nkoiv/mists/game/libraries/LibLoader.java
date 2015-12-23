@@ -24,7 +24,7 @@ import javafx.scene.image.ImageView;
  */
 public class LibLoader {
     
-    
+
     public static void initializeStructureLibrary(MobLibrary<Structure> lib) {
         Mists.logger.info("Loading up structure data");
         //TODO: Load the data from a file

@@ -72,7 +72,7 @@ public class Wall extends Structure {
             if (this.wallimages[1]!=null) {
                 s = new Sprite(this.wallimages[1]);
             } else {
-                wallparts.setViewport(new Rectangle2D(this.sprite.getWidth(),0,this.sprite.getWidth(),this.sprite.getHeight()));
+                wallparts.setViewport(new Rectangle2D(this.getWidth(),0,this.getWidth(),this.getHeight()));
                 WritableImage upWall = wallparts.snapshot(parameters, snapshot);
                 s = new Sprite(upWall);
             }
@@ -83,7 +83,7 @@ public class Wall extends Structure {
             if (this.wallimages[1]!=null) {
                 s = new Sprite(this.wallimages[3]);
             } else {
-                wallparts.setViewport(new Rectangle2D(this.sprite.getWidth()*3,0,this.sprite.getWidth(),this.sprite.getHeight()));
+                wallparts.setViewport(new Rectangle2D(this.getWidth()*3,0,this.getWidth(),this.getHeight()));
                 WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
                 s = new Sprite(leftWall);
             }

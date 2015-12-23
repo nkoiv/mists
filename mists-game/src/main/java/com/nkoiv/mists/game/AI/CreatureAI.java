@@ -76,7 +76,7 @@ public class CreatureAI extends Flags{
     protected void moveTowardsMob(MapObject mob, double time) {
         //Drop fractions for collisionssize for now
         //TODO: Make monster collisionboxes adher to pixelsize
-        double collisionSize = (int)(creep.getSprite().getWidth()/Mists.TILESIZE) * Mists.TILESIZE;
+        double collisionSize = (int)(creep.getWidth()/Mists.TILESIZE) * Mists.TILESIZE;
         //TODO: CollisionSize should be based on creep size, but sprites are a mess right now
         double offset;
         if (collisionSize > creep.getLocation().getPathFinder().getTileSize()) {
@@ -280,8 +280,8 @@ public class CreatureAI extends Flags{
     }
     
     protected boolean inRange(double range, MapObject target) {
-        Circle rangeCircle = new Circle(creep.getCenterXPos(), creep.getCenterYPos(), (creep.getSprite().getWidth()/2)+range);
-        return target.getSprite().intersectsWithShape(rangeCircle);
+        Circle rangeCircle = new Circle(creep.getCenterXPos(), creep.getCenterYPos(), (creep.getWidth()/2)+range);
+        return target.intersects(rangeCircle);
     }
     
     protected double distanceToMob(MapObject mob) {

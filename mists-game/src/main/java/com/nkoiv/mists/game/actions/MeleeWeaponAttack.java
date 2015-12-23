@@ -42,7 +42,6 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
         attackSprite.setPosition(actor.getXPos(), actor.getYPos());
         //attackSprite.setRotationPoint(5, 10);   
         attackSprite.setRotationPoint(attackSprite.getWidth()/2, attackSprite.getHeight()); //Rotate around bottom center - "the handle"
-        attackSprite.refreshCollisionBox();
         return attackSprite;
     }
     @Override
@@ -59,7 +58,7 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
             this.lastUsed = System.currentTimeMillis();
-            Double[] attackPoint = actor.getSprite().getCorner(actor.getFacing());
+            Double[] attackPoint = actor.getCorner(actor.getFacing());
             Effect attackEffect = new Effect(
                     this, "weaponattack",
                     this.getSprite(actor),400);

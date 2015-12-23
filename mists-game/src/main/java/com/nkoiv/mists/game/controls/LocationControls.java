@@ -130,7 +130,6 @@ public class LocationControls {
         int startY = rnd.nextInt(1);
         Mists.logger.log(Level.INFO, "Creating monster from sprite sheet position {0},{1} at coordinates {2}+{3}x{4}+{5}", new Object[]{startX, startY, x, game.getCurrentLocation().getLastxOffset(), y, game.getCurrentLocation().getLastyOffset()});
         Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 32, 32);
-        monster.getSprite().setCollisionAreaShape(2);
         game.getCurrentLocation().addCreature(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
     }
     
@@ -139,7 +138,6 @@ public class LocationControls {
         double x = p.x - Mists.primaryStage.getX();
         double y = p.y - Mists.primaryStage.getY();
         Creature monster = new Creature("Blob", new ImageView("/images/blob.png"), 3, 0, 0, 84, 84);
-        monster.getSprite().setCollisionAreaShape(2);
         game.getCurrentLocation().addCreature(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
     }
     

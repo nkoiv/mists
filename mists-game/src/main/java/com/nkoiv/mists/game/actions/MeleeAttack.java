@@ -48,7 +48,6 @@ public class MeleeAttack extends Action implements AttackAction {
         Sprite attackSprite = new Sprite(this.attackAnimation.getCurrentFrame());
         attackSprite.setAnimation(attackAnimation);
         attackSprite.setPosition(actor.getXPos(), actor.getYPos());
-        attackSprite.refreshCollisionBox();
         return attackSprite;
     }
     
@@ -67,8 +66,8 @@ public class MeleeAttack extends Action implements AttackAction {
                     new Object[]{this.toString(), actor.getName(), actor.getFacing(), directionXY[0], directionXY[1]});
             this.lastUsed = System.currentTimeMillis(); //In case the ability has a cooldown
             //Build the effect
-            double attackPointX = (directionXY[0] * actor.getSprite().getWidth())/2 + actor.getCenterXPos();
-            double attackPointY = (directionXY[1] * actor.getSprite().getHeight())/2 + actor.getCenterYPos();
+            double attackPointX = (directionXY[0] * actor.getWidth())/2 + actor.getCenterXPos();
+            double attackPointY = (directionXY[1] * actor.getHeight())/2 + actor.getCenterYPos();
             Effect attackEffect = new Effect(
                     this, "meleeattack",
                     this.getSprite(actor),400);

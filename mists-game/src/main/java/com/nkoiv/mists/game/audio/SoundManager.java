@@ -46,6 +46,7 @@ public class SoundManager {
         }
         mediaPlayer.setVolume(0.3);
         mediaPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
             public void run() {
                 mediaPlayer.seek(Duration.ZERO);
             }
@@ -119,11 +120,17 @@ public class SoundManager {
     
     //TODO: Test init
     private void initializeSounds() {
-        try {
-            this.loadSoundEffects("weapon_blow", "audio/sounds/weapon_blow.wav");
-        } catch (Exception e) {
-            Mists.logger.warning("Tried to load audio/sounds/weapon_blow.wav but failed");
-        }   
+        this.loadSoundEffects("weapon_blow", "audio/sounds/weapon_blow.wav");
+        /*
+        this.loadSoundEffects("woosh1", "audio/sounds/woosh/woosh1.ogg");
+        this.loadSoundEffects("woosh2", "audio/sounds/woosh/woosh2.ogg");
+        this.loadSoundEffects("woosh3", "audio/sounds/woosh/woosh3.ogg");
+        this.loadSoundEffects("woosh4", "audio/sounds/woosh/woosh4.ogg");
+        this.loadSoundEffects("woosh5", "audio/sounds/woosh/woosh5.ogg");
+        this.loadSoundEffects("woosh6", "audio/sounds/woosh/woosh6.ogg");
+        this.loadSoundEffects("woosh7", "audio/sounds/woosh/woosh7.ogg");
+        this.loadSoundEffects("woosh8", "audio/sounds/woosh/woosh8.ogg");
+        */
     }
     
     public void loadSoundEffects(String id, String filename) {

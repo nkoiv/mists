@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.Trigger;
@@ -14,6 +15,7 @@ import com.nkoiv.mists.game.world.util.Flags;
 import java.util.HashMap;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Shape;
 
 /** MapObjects are basically anything that can be encountered on in a Location (dungeon/town/whatever)
  *  This generic class is meant for things that don't fit in various subclasses.
@@ -56,7 +58,6 @@ public class MapObject extends Flags implements Global, Templatable {
     
     public void setPosition (double xPos, double yPos) {
         this.sprite.setPosition(xPos, yPos);
-        this.sprite.refreshCollisionBox();
     }
     
     /**
@@ -105,6 +106,18 @@ public class MapObject extends Flags implements Global, Templatable {
         return this.sprite.getHeight();
     }
     
+    public Double[] getCorner(Direction d) {
+        return this.getSprite().getCorner(d);
+    }
+    
+    public boolean intersects(MapObject mob) {
+        return this.sprite.intersects(mob.getSprite());
+    }
+    
+    public boolean intersects(Shape s) {
+        return this.sprite.intersectsWithShape(s);
+    }
+    
     /**
     * Render draws the Sprite of the MapObject on a given GraphicsContext
     * @param gc GraphicsContext where the object is drawn
@@ -129,7 +142,6 @@ public class MapObject extends Flags implements Global, Templatable {
     */
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
-        this.sprite.refreshCollisionBox();
     }
     
     /**
@@ -149,7 +161,7 @@ public class MapObject extends Flags implements Global, Templatable {
         return new Trigger[0];
     }
     
-    public Sprite getSprite() {
+    protected Sprite getSprite() {
         return this.sprite;
     }
     

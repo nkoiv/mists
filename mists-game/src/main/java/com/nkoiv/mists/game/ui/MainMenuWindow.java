@@ -56,7 +56,6 @@ public class MainMenuWindow extends TiledPanel {
             Creature companion = Mists.creatureLibrary.create("Himmu");
             System.out.println(companion.toString());
             pocplayer.addCompanion(companion);
-            pocplayer.getSprite().setCollisionAreaShape(2);
             pocplayer.addAction(new MeleeAttack());
             game.setPlayer(pocplayer);
             Location newLoc = new Location(this.game.getPlayer());

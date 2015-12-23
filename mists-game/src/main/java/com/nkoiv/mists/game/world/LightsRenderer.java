@@ -220,9 +220,9 @@ public class LightsRenderer {
             Polygon mobPolygon = new Polygon();
             mobPolygon.getPoints().addAll(new Double[]{
                mob.getXPos()-xOffset, mob.getYPos()-yOffset,
-               mob.getXPos()-xOffset+mob.getSprite().getWidth(), mob.getYPos()-yOffset,
-               mob.getXPos()-xOffset, mob.getYPos()-yOffset+mob.getSprite().getHeight(),
-               mob.getXPos()-xOffset+mob.getSprite().getWidth(), mob.getYPos()-yOffset+mob.getSprite().getHeight()
+               mob.getXPos()-xOffset+mob.getWidth(), mob.getYPos()-yOffset,
+               mob.getXPos()-xOffset, mob.getYPos()-yOffset+mob.getHeight(),
+               mob.getXPos()-xOffset+mob.getWidth(), mob.getYPos()-yOffset+mob.getHeight()
             });        
             mobPolygons[i] = mobPolygon;
             i++;

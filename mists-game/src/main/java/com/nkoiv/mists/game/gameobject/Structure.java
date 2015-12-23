@@ -27,7 +27,6 @@ public class Structure extends MapObject {
         this.collisionLevel = collisionLevel;
         this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
-        this.sprite.refreshCollisionBox();
     }
     
     
@@ -78,13 +77,11 @@ public class Structure extends MapObject {
             }
         }
         this.getSprite().setPosition(xPos, yPos);
-        this.sprite.refreshCollisionBox();
     }
     
     @Override
     public void setCenterPosition (double xPos, double yPos) {
         this.setPosition(xPos+(this.getSprite().getWidth()/2), yPos+(this.getSprite().getHeight()/2));
-        this.sprite.refreshCollisionBox();
     }
     
     @Override

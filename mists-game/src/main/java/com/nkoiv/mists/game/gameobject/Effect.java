@@ -39,7 +39,6 @@ public class Effect extends MapObject {
         this.setFlag("startdurationMS", durationMS);
         this.startTime = System.currentTimeMillis();
         this.endTime = startTime + (durationMS);
-        this.sprite.refreshCollisionBox();
     }
     
     /**
@@ -57,6 +56,11 @@ public class Effect extends MapObject {
         this.linkedLocation = true;
         this.oldLinkX = link.getXPos();
         this.oldLinkY = link.getYPos();
+    }
+    
+    @Override
+    public Sprite getSprite() {
+        return this.sprite;
     }
     
     @Override
