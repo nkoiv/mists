@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.util.Flags;
@@ -26,7 +27,7 @@ import javafx.scene.shape.Shape;
 public class MapObject extends Flags implements Global, Templatable {
     
     protected final String name;
-    protected Sprite sprite;
+    protected MovingGraphics graphics;
     
     protected int collisionLevel;
     
@@ -42,13 +43,13 @@ public class MapObject extends Flags implements Global, Templatable {
     public MapObject (String name, Image image) {
         this.flags  = new HashMap<>();
         this.name = name;
-        this.sprite = new Sprite(image);
+        this.graphics = new Sprite(image);
         this.setFlag("visible", 1);
     }
     
 
     public boolean instersects(MapObject o) {
-        return o.getSprite().intersects(this.getSprite());
+        return o.getGraphics().intersects(this.getGraphics());
     }
     
     
@@ -57,7 +58,7 @@ public class MapObject extends Flags implements Global, Templatable {
     }
     
     public void setPosition (double xPos, double yPos) {
-        this.sprite.setPosition(xPos, yPos);
+        this.graphics.setPosition(xPos, yPos);
     }
     
     /**
@@ -67,7 +68,7 @@ public class MapObject extends Flags implements Global, Templatable {
      * @param yPos Center position of the sprite on Y
      */
     public void setCenterPosition (double xPos, double yPos) {
-        this.sprite.setCenterPosition(xPos, yPos);
+        this.graphics.setCenterPosition(xPos, yPos);
     }
     
     public int getCollisionLevel() {
@@ -83,39 +84,39 @@ public class MapObject extends Flags implements Global, Templatable {
     }
     
     public double getCenterXPos() {
-        return this.sprite.getCenterXPos();
+        return this.graphics.getCenterXPos();
     }
     
     public double getCenterYPos(){
-        return this.sprite.getCenterYPos();
+        return this.graphics.getCenterYPos();
     }
     
     public double getXPos(){
-        return this.sprite.getXPos();
+        return this.graphics.getXPos();
     }
     
     public double getYPos(){
-        return this.sprite.getYPos();
+        return this.graphics.getYPos();
     }
     
     public double getWidth() {
-        return this.sprite.getWidth();
+        return this.graphics.getWidth();
     }
     
     public double getHeight() {
-        return this.sprite.getHeight();
+        return this.graphics.getHeight();
     }
     
     public Double[] getCorner(Direction d) {
-        return this.getSprite().getCorner(d);
+        return this.getGraphics().getCorner(d);
     }
     
     public boolean intersects(MapObject mob) {
-        return this.sprite.intersects(mob.getSprite());
+        return this.graphics.intersects(mob.getGraphics());
     }
     
     public boolean intersects(Shape s) {
-        return this.sprite.intersectsWithShape(s);
+        return this.graphics.intersectsWithShape(s);
     }
     
     /**
@@ -126,13 +127,13 @@ public class MapObject extends Flags implements Global, Templatable {
     */
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.isFlagged("visible")) {
-            this.sprite.render(xOffset, yOffset, gc);
+            this.graphics.render(xOffset, yOffset, gc);
         }
     }
     
     public void renderCollisions(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.isFlagged("visible")) {
-            this.sprite.renderCollisions(xOffset, yOffset, gc);
+            this.graphics.renderCollisions(xOffset, yOffset, gc);
         }
     }
    
@@ -141,7 +142,7 @@ public class MapObject extends Flags implements Global, Templatable {
     * @param sprite Sprite to be added
     */
     public void setSprite(Sprite sprite) {
-        this.sprite = sprite;
+        this.graphics = sprite;
     }
     
     /**
@@ -149,7 +150,7 @@ public class MapObject extends Flags implements Global, Templatable {
     * @param time Amount of time passed since the last update
     */
     public void update(double time) {
-        this.sprite.update(time);
+        this.graphics.update(time);
     }
     
     /**
@@ -161,8 +162,8 @@ public class MapObject extends Flags implements Global, Templatable {
         return new Trigger[0];
     }
     
-    protected Sprite getSprite() {
-        return this.sprite;
+    protected MovingGraphics getGraphics() {
+        return this.graphics;
     }
     
     public String getName() {
@@ -173,7 +174,7 @@ public class MapObject extends Flags implements Global, Templatable {
     public String toString(){
         String s;
         if (this.location == null) s = this.name+" at Limbo";
-        else s = this.name + " @ |"  + this.sprite.getXPos()+","+this.sprite.getYPos()+"|";
+        else s = this.name + " @ |"  + this.graphics.getXPos()+","+this.graphics.getYPos()+"|";
         return s;
     }
 

@@ -14,6 +14,7 @@ import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
+import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -241,16 +242,21 @@ public class Creature extends MapObject implements Combatant {
         */
         //this.moveTowardsPlayer(time); //TODO: Temporary before actual AI and behaviours
         this.ai.act(time);
-        this.updateSprite();
+        this.updateGraphics();
         //this.applyMovement(time);  //ApplyMovement moved to the actual movement routine
     }
     
 
+    protected void updateGraphics() {
+        if (this.graphics instanceof Sprite) this.updateSprite();
+        if (this.graphics instanceof SpriteSkeleton) this.updateSpriteSkeleton();
+    }
+    
     /*
     * TODO: General sprite updates for general creatures
     * Is everything animated?
     */
-    void updateSprite() {
+    private void updateSprite() {
         if (this.spriteAnimations == null) return;
         if (this.isFlagged("visible") && !this.spriteAnimations.isEmpty()) {
             if (this.facing != this.lastFacing) {
@@ -269,7 +275,15 @@ public class Creature extends MapObject implements Combatant {
             }
             }
         }
+    }
+    
+    private void updateSpriteSkeleton() {
         
+    }
+    
+    //TODO: GET RID OF THIS
+    public Sprite getSprite() {
+        return (Sprite)this.graphics;
     }
     
     /**
@@ -294,8 +308,8 @@ public class Creature extends MapObject implements Combatant {
         * TODO: Add in pixel-based collision detection (compare alphamaps?)
         * TODO: Make collisions respect collisionlevel.
         */
-        this.oldXPos = this.getSprite().getXPos();
-        this.oldYPos = this.getSprite().getYPos();
+        this.oldXPos = this.getGraphics().getXPos();
+        this.oldYPos = this.getGraphics().getYPos();
         //Mists.logger.info("Old positions: "+this.oldXPos+","+this.oldYPos);
         
         ArrayList<MapObject> collidedObjects = this.getLocation().checkCollisions(this);
@@ -305,7 +319,7 @@ public class Creature extends MapObject implements Combatant {
                 this.setFlag("movementBlocked", 0); //movement went through fine 
                 //Mists.logger.info("Movement blocked!");
             }
-            this.getSprite().update(time);
+            this.getGraphics().update(time);
             return true;
         } else { 
             //Check which sides we collided on
@@ -313,38 +327,38 @@ public class Creature extends MapObject implements Combatant {
             //Mists.logger.info("Checked collisions, found " +collidedSides.toString());
             if (collidedSides.contains(Direction.UP)) {
                 //Block movement up
-                if (this.getSprite().getYVelocity() < 0 ) { 
-                    //this.getSprite().setYVelocity(0);
-                    this.getSprite().setYVelocity(-this.getSprite().getYVelocity()/2);
+                if (this.getGraphics().getYVelocity() < 0 ) { 
+                    //this.getGraphics().setYVelocity(0);
+                    this.getGraphics().setYVelocity(-this.getGraphics().getYVelocity()/2);
                 }
-                this.getSprite().setYPosition(this.oldYPos);
+                this.getGraphics().setYPosition(this.oldYPos);
             }
             if (collidedSides.contains(Direction.DOWN)) {
                 //Block movement down
-                if (this.getSprite().getYVelocity() > 0 ) {
-                    //this.getSprite().setYVelocity(0);
-                    this.getSprite().setYVelocity(-this.getSprite().getYVelocity()/2);
+                if (this.getGraphics().getYVelocity() > 0 ) {
+                    //this.getGraphics().setYVelocity(0);
+                    this.getGraphics().setYVelocity(-this.getGraphics().getYVelocity()/2);
                 }
-                this.getSprite().setYPosition(this.oldYPos);
+                this.getGraphics().setYPosition(this.oldYPos);
             }
             if (collidedSides.contains(Direction.RIGHT)) {
                 //Block movement right
-                if (this.getSprite().getXVelocity() > 0 ) {
-                    //this.getSprite().setXVelocity(0);
-                    this.getSprite().setXVelocity(-this.getSprite().getXVelocity()/2);
+                if (this.getGraphics().getXVelocity() > 0 ) {
+                    //this.getGraphics().setXVelocity(0);
+                    this.getGraphics().setXVelocity(-this.getGraphics().getXVelocity()/2);
                 }
-                this.getSprite().setXPosition(this.oldXPos);
+                this.getGraphics().setXPosition(this.oldXPos);
             }
             if (collidedSides.contains(Direction.LEFT)) {
                 //Block movement left
-                if (this.getSprite().getXVelocity() < 0 ) {
-                    //this.getSprite().setXVelocity(0);
-                    this.getSprite().setXVelocity(-this.getSprite().getXVelocity()/2);
+                if (this.getGraphics().getXVelocity() < 0 ) {
+                    //this.getGraphics().setXVelocity(0);
+                    this.getGraphics().setXVelocity(-this.getGraphics().getXVelocity()/2);
                 }
-                this.getSprite().setXPosition(this.oldXPos);
+                this.getGraphics().setXPosition(this.oldXPos);
                 
             }
-            this.getSprite().update(time);
+            this.getGraphics().update(time);
             this.setFlag("movementBlocked", 1); //remember this was a bad way to go to
             return false;
         }
@@ -388,12 +402,12 @@ public class Creature extends MapObject implements Combatant {
             //Moving Right
             if (this.getYPos() <= yCoor) {
                 //Moving Down(&Right)
-                this.getSprite().addVelocity(
+                this.getGraphics().addVelocity(
                 this.getAttribute("Speed")*xSpeedMultiplier,
                 this.getAttribute("Speed")*ySpeedMultiplier);
             } else {
                 //Moving Up(&Right)
-                this.getSprite().addVelocity(
+                this.getGraphics().addVelocity(
                 this.getAttribute("Speed")*xSpeedMultiplier,
                 -this.getAttribute("Speed")*ySpeedMultiplier);
             }
@@ -401,21 +415,21 @@ public class Creature extends MapObject implements Combatant {
             //Moving Left
             if (this.getYPos() <= yCoor) {
                 //Moving Down(&Left)
-                this.getSprite().addVelocity(
+                this.getGraphics().addVelocity(
                 -this.getAttribute("Speed")*xSpeedMultiplier,
                 this.getAttribute("Speed")*ySpeedMultiplier);
             } else {
                 //Moving Up(&Left)
-                this.getSprite().addVelocity(
+                this.getGraphics().addVelocity(
                 -this.getAttribute("Speed")*xSpeedMultiplier,
                 -this.getAttribute("Speed")*ySpeedMultiplier);
             }
         }
         //Update facing
-        if (this.getSprite().getYVelocity() > 0) this.setFacing(Direction.DOWN);
+        if (this.getGraphics().getYVelocity() > 0) this.setFacing(Direction.DOWN);
         else this.setFacing(Direction.UP);
-        if (Math.abs(this.getSprite().getYVelocity()) < Math.abs(this.getSprite().getXVelocity())) {
-            if (this.sprite.getXVelocity() > 0) this.setFacing(Direction.RIGHT);
+        if (Math.abs(this.getGraphics().getYVelocity()) < Math.abs(this.getGraphics().getXVelocity())) {
+            if (this.graphics.getXVelocity() > 0) this.setFacing(Direction.RIGHT);
             else this.setFacing(Direction.LEFT);
         }
         
@@ -453,7 +467,7 @@ public class Creature extends MapObject implements Combatant {
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.isFlagged("visible")) {
-            this.sprite.render(xOffset, yOffset, gc);
+            this.graphics.render(xOffset, yOffset, gc);
             
             if (this.ai.getPath()!=null && this.getLocation().isFlagged("drawPaths")) {
                 this.ai.getPath().drawPath(gc, TILESIZE, xOffset, yOffset);
@@ -465,56 +479,56 @@ public class Creature extends MapObject implements Combatant {
     
     private boolean moveUp() {
         this.facing = Direction.UP;
-        this.getSprite().setVelocity(0, -this.getAttribute("Speed"));
+        this.getGraphics().setVelocity(0, -this.getAttribute("Speed"));
         return true;
     }
     
     private boolean moveDown() {
         this.facing = Direction.DOWN;
-        this.getSprite().setVelocity(0, this.getAttribute("Speed"));
+        this.getGraphics().setVelocity(0, this.getAttribute("Speed"));
         return true;
     }
         
     private boolean moveLeft() {
         this.facing = Direction.LEFT;
-        this.getSprite().setVelocity(-this.getAttribute("Speed"), 0);
+        this.getGraphics().setVelocity(-this.getAttribute("Speed"), 0);
         return true;
     }
     
     private boolean moveRight() {
         this.facing = Direction.RIGHT;
-        this.getSprite().setVelocity(this.getAttribute("Speed"), 0);
+        this.getGraphics().setVelocity(this.getAttribute("Speed"), 0);
         return true;
     }
 
     private boolean moveUpRight() {
-        this.getSprite().setVelocity(this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
+        this.getGraphics().setVelocity(this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
         this.facing = Direction.UPRIGHT;
         return true;
     }
     
     private boolean moveUpLeft() {
-        this.getSprite().setVelocity(-this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
+        this.getGraphics().setVelocity(-this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
         this.facing = Direction.UPLEFT;
         return true;
     }
         
     private boolean moveDownRight() {
-        this.getSprite().setVelocity(this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
+        this.getGraphics().setVelocity(this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
         this.facing = Direction.DOWNRIGHT;
         return true;
     }
     
     private boolean moveDownLeft() {
-        this.getSprite().setVelocity(-this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
+        this.getGraphics().setVelocity(-this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
         this.facing = Direction.DOWNLEFT;
         return true;
     }
 
     public boolean stopMovement() {
         this.setFlag("moving", 0);
-        this.getSprite().setVelocity(0, 0);
-        //this.getSprite().setImage(this.getSprite().getImage());
+        this.getGraphics().setVelocity(0, 0);
+        //this.getGraphics().setImage(this.getGraphics().getImage());
         return true;
     }
 

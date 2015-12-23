@@ -74,7 +74,7 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     @Override
     public void update(double time) {
-        this.updateSprite();
+        this.updateGraphics();
         this.applyMovement(time);  
     }
      

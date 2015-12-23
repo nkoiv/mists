@@ -29,6 +29,10 @@ public class Door  extends Structure {
         this.open = false;
     }
     
+    public Sprite getSprite() {
+        return (Sprite)this.graphics;
+    }
+    
     public void toggle() {
         if (this.isOpen()) this.close();
         else this.open();
@@ -82,8 +86,8 @@ public class Door  extends Structure {
         Door nd = new Door(this.name, this.openImage, this.closedImage, this.collisionLevel);
         if (!this.extraSprites.isEmpty()) {
             for (Sprite s : this.extraSprites) {
-                double xOffset = s.getXPos() - this.getSprite().getXPos();
-                double yOffset = s.getYPos() - this.getSprite().getYPos();
+                double xOffset = s.getXPos() - this.getXPos();
+                double yOffset = s.getYPos() - this.getYPos();
                 nd.addExtra(s.getImage(), xOffset, yOffset);
             }
         }

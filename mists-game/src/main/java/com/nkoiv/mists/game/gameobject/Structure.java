@@ -57,6 +57,10 @@ public class Structure extends MapObject {
         }
     }
     
+    public Sprite getSprite() {
+        return (Sprite)this.graphics;
+    }
+    
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.isFlagged("visible")) {

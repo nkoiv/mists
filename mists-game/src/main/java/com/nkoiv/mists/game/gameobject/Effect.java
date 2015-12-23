@@ -34,7 +34,7 @@ public class Effect extends MapObject {
     public Effect(Action owner, String name, Sprite sprite, int durationMS) {
         super(name);
         this.owner = owner;
-        this.sprite = sprite;
+        this.graphics = sprite;
         this.setFlag("durationMS", durationMS);
         this.setFlag("startdurationMS", durationMS);
         this.startTime = System.currentTimeMillis();
@@ -58,14 +58,13 @@ public class Effect extends MapObject {
         this.oldLinkY = link.getYPos();
     }
     
-    @Override
     public Sprite getSprite() {
-        return this.sprite;
+        return (Sprite)this.graphics;
     }
     
     @Override
     public void update(double time) {
-        this.sprite.update(time);
+        this.graphics.update(time);
     }
     
     @Override

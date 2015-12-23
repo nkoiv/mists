@@ -232,12 +232,10 @@ public class Sprite extends MovingGraphics
      * @param time Time spent since last update
      */
     
+    @Override
     public void update(double time)
     {
-        positionX += velocityX * time;
-        positionY += velocityY * time;
-        rotation += spin * time;
-        if (rotation >= 360 || rotation <= -360) rotation = rotation%360;
+        super.update(time);
         this.collisionBox.SetPosition(positionX, positionY);
         if (this.spin!=0) this.refreshCollisionBox();
     }
@@ -267,6 +265,7 @@ public class Sprite extends MovingGraphics
      * @param yOffset yOffset for screen position on the (location) map
      * @param gc GraphicsContext to draw the sprite on
      */
+    @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc)
     {
         if (this.rotation != 0 ) this.render(xOffset, yOffset, rotation, gc);
@@ -355,6 +354,11 @@ public class Sprite extends MovingGraphics
     return s;
     }
 
+    @Override
+    public boolean intersects(MovingGraphics m) {
+        if (m instanceof Sprite) return this.intersects((Sprite)m);
+        return this.intersectsWithShape(m.getBoundary());
+    }
     
     /**
      * Check the if the CollisionBoxes intersects
@@ -362,7 +366,7 @@ public class Sprite extends MovingGraphics
      * @param s Sprite to check collisions with
      * @return True if they overlap somewhere
      */    
-    public boolean intersects(Sprite s) {
+    private boolean intersects(Sprite s) {
         //Rotated objects are happy with intersection, because pixel collision would require rotating the pixel image too...
         if (this.rotation!=0 || s.rotation != 0) {
            return this.intersectsWithShape(s.getBoundary());
@@ -373,52 +377,6 @@ public class Sprite extends MovingGraphics
             
         }
         else return false;
-
-    }
-    
-    /**
-     * Javas IntersectsWithShape is used against
-     * the general boundary of the object.
-     * This is handy for comparing the sprite against
-     * various shapes.
-     * TODO: Insert pixel collision here too?
-     * @param s Shape to test intersection with
-     * @return True if the shapes intersect
-     */
-    public boolean intersectsWithShape(Shape s)
-    {
-        Shape bounds = this.getBoundary();
-        
-        if (this.rotation != 0) {
-           //If the target shape contains any of the four corners of this sprite, then the shapes intersect
-           
-            double topleftX = (this.positionX+rotatePointX) + (radius[0] * Math.cos(Math.toRadians(rotation+angle[0]+180)));
-            double topleftY = (this.positionY+rotatePointY) + (radius[0] * Math.sin(Math.toRadians(rotation+angle[0]+180)));
-
-            double toprightX = (this.positionX+rotatePointX) + (radius[1] * Math.cos(Math.toRadians(rotation-angle[1])));
-            double toprightY = (this.positionY+rotatePointY) + (radius[1] * Math.sin(Math.toRadians(rotation-angle[1])));
-
-            double bottomleftX = (this.positionX+rotatePointX) + (radius[2] * Math.cos(Math.toRadians(rotation-angle[2]+180)));
-            double bottomleftY = (this.positionY+rotatePointY) + (radius[2] * Math.sin(Math.toRadians(rotation-angle[2]+180)));
-
-            double bottomrightX = (this.positionX+rotatePointX) + (radius[3] * Math.cos(Math.toRadians(rotation+angle[3])));
-            double bottomrightY = (this.positionY+rotatePointY) + (radius[3] * Math.sin(Math.toRadians(rotation+angle[3])));
-           boolean intersects = false;
-           if (s.getBoundsInLocal().intersects(new Line(toprightX, toprightY, bottomrightX, bottomrightY).getBoundsInLocal())) intersects = true;
-           if (s.getBoundsInLocal().intersects(new Line(topleftX, topleftY, bottomleftX, bottomleftY).getBoundsInLocal())) intersects = true;
-           if (s.getBoundsInLocal().intersects(new Line(topleftX, topleftY, toprightX, toprightY).getBoundsInLocal())) intersects = true;
-           if (s.getBoundsInLocal().intersects(new Line(bottomrightX, bottomrightY, bottomleftX, bottomleftY).getBoundsInLocal())) intersects = true;
-           /*
-           if (s.getBoundsInLocal().contains(topleftX, topleftY)) intersects = true;
-           if (s.getBoundsInLocal().contains(toprightX, toprightY)) intersects = true; 
-           if (s.getBoundsInLocal().contains(bottomleftX, bottomleftY)) intersects = true;
-           if (s.getBoundsInLocal().contains(bottomrightX, bottomrightY)) intersects = true;
-           */
-           //Mists.logger.info("Rotationary collision!");
-           return intersects;
-        }
-        
-        return bounds.intersects(s.getBoundsInParent());
 
     }
 
