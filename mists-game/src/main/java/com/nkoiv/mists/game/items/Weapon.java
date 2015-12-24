@@ -17,12 +17,12 @@ public class Weapon extends Item {
     //private Enum.WEAPONTYPE wtype; //TODO: Enumerator for weapontypes (sword, axe...)
     //private Enum.DAMAGETYPE dtype; //TODO: Enumerator for damagetypes (piercing, slashing, fire...)
     
-    public Weapon(String name, Image image) {
-        super(name, image);
+    public Weapon(String name, ItemType itype, Image image) {
+        super(name, itype, image);
     }
     
-    public Weapon(String name, String description, int damage, Image image) {
-        super(name, image);
+    public Weapon(String name, ItemType itype, String description, int damage, Image image) {
+        super(name, itype, image);
         this.description = description;
         this.damageValue = damage;
     }
@@ -33,7 +33,7 @@ public class Weapon extends Item {
     
     @Override
     public Weapon createFromTemplate() {
-        Weapon w = new Weapon(this.name, this.description, this.damageValue, this.image);
+        Weapon w = new Weapon(this.name, this.itype, this.description, this.damageValue, this.image);
         
         return w;
     }

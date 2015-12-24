@@ -16,11 +16,12 @@ import javafx.scene.image.Image;
 public class Item {
     protected String name;
     protected String description;
-    //private Enum.ITEMTYPE itype; //TODO: Enumerator for item types (pants, boots, weapon, book...)
+    protected ItemType itype; //TODO: Enumerator for item types (pants, boots, weapon, book...)
     protected int weight; //TODO: Probably pointless
     protected Image image;
+    protected Image equipImage;
     
-    public Item(String name, Image image) {
+    public Item(String name, ItemType itype, Image image) {
         this.name = name;
         this.image = image;
         this.description = "";
@@ -44,7 +45,7 @@ public class Item {
     }
     
     public Item createFromTemplate() {
-        Item i = new Item(this.name, this.image);
+        Item i = new Item(this.name, this.itype, this.image);
         i.description = this.description;
         i.weight = this.weight;
         
