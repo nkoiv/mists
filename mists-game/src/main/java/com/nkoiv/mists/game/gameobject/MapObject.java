@@ -36,7 +36,7 @@ public class MapObject extends Flags implements Global, Templatable {
     public MapObject (String name) {
         this.flags = new HashMap<>();
         this.name = name;
-        this.setFlag("visible", 1);
+        this.flags.put("visible", 1);
     }
 
     

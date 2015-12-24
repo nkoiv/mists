@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.items.Weapon;
+import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
@@ -51,7 +52,10 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setAttribute("Strength", 50);
         
     }
-       
+    
+    private static SpriteSkeleton generatePlayerSkeleton() {
+        return null;
+    }
 
     public PlayerCharacter(String name, Image image) {
         super(name, image);

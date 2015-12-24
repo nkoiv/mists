@@ -262,20 +262,21 @@ public class Creature extends MapObject implements Combatant {
     * Is everything animated?
     */
     private void updateSprite() {
+        if (!(this.graphics instanceof Sprite)) return;
         if (this.spriteAnimations == null) return;
         if (this.isFlagged("visible") && !this.spriteAnimations.isEmpty()) {
             if (this.facing != this.lastFacing) {
             this.lastFacing = this.facing;
             //Mists.logger.log(Level.INFO, "{0} is facing {1}", new Object[]{this.getName(), this.facing});
             switch(this.facing) {
-                case UP: this.getSprite().setAnimation(this.spriteAnimations.get("upMovement")); break;
-                case DOWN: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
-                case LEFT: this.getSprite().setAnimation(this.spriteAnimations.get("leftMovement")); break;
-                case RIGHT: this.getSprite().setAnimation(this.spriteAnimations.get("rightMovement")); break;
-                case UPRIGHT: this.getSprite().setAnimation(this.spriteAnimations.get("upMovement")); break;
-                case UPLEFT: this.getSprite().setAnimation(this.spriteAnimations.get("upMovement")); break;
-                case DOWNRIGHT: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
-                case DOWNLEFT: this.getSprite().setAnimation(this.spriteAnimations.get("downMovement")); break;
+                case UP: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
+                case DOWN: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
+                case LEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("leftMovement")); break;
+                case RIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("rightMovement")); break;
+                case UPRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
+                case UPLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
+                case DOWNRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
+                case DOWNLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
                 default: break;
             }
             }
@@ -284,11 +285,6 @@ public class Creature extends MapObject implements Combatant {
     
     private void updateSpriteSkeleton() {
         
-    }
-    
-    //TODO: GET RID OF THIS
-    private Sprite getSprite() {
-        return (Sprite)this.graphics;
     }
     
     /**
@@ -617,7 +613,7 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public Creature createFromTemplate() {
-        Creature nc = new Creature(this.name, this.getSprite().getImage());
+        Creature nc = new Creature(this.name, this.graphics.getImage());
         HashMap<String, SpriteAnimation> nanimations = new HashMap<>();
         for (String s : this.spriteAnimations.keySet()) {
             nanimations.put(s, this.spriteAnimations.get(s));

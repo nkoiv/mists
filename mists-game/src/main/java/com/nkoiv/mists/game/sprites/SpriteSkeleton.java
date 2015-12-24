@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.sprites;
 
+import com.nkoiv.mists.game.items.Item;
 import java.util.HashMap;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -32,6 +33,10 @@ public class SpriteSkeleton extends MovingGraphics {
     public SpriteSkeleton() {
         this.sprites = new HashMap<>();
         this.collisionBox = new CollisionBox();
+    }
+    
+    public void equipItem(Item item) {
+        
     }
     
     public void addPart(String partName, Sprite part) {

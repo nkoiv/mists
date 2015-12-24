@@ -6,7 +6,9 @@
 package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -234,6 +236,15 @@ public abstract class MovingGraphics {
     
     public void renderCollisions(double xOffset, double yOffset, GraphicsContext gc) {
         
+    }
+    
+    /**
+     * getImage should always be overridden to provide actual snapshot of the graphics
+     * @return 
+     */
+    public Image getImage() {
+        Mists.logger.warning("getImage() used in generic MovingGraphics");
+        return Mists.graphLibrary.getImage("blank");
     }
     
     public boolean intersects(MovingGraphics m) {

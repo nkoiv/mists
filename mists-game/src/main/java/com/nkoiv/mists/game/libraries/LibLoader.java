@@ -106,6 +106,9 @@ public class LibLoader {
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {
+        //---Base elements---
+        lib.addImage("blank", new Image("/images/blank.png"));
+        
         //---UI elements----
         //Panels
         lib.addImageSet("panelBeige", new ImageView("/images/ui/panel_beige.png"), 4, 4, 25, 25);
