@@ -38,7 +38,7 @@ public class Sprite extends MovingGraphics
     private boolean animated;
     
     private int collisionArea = 1; // 1=Rectangle, 2=Ellipse, 3=Line
-    private CollisionBox collisionBox;
+    
 
     public Sprite()
     {
@@ -78,21 +78,6 @@ public class Sprite extends MovingGraphics
     
     public int getCollisionAreaType () {
         return this.collisionArea;
-    }
-    
-    private void refreshCollisionBox() {
-        if (this.collisionBox == null) this.collisionBox = new CollisionBox(positionX, positionY, width, height);
-        else {
-            this.collisionBox.refresh(positionX, positionY, width, height);
-        }
-        //Mists.logger.log(Level.INFO, "{0}Refreshed new collisionbox with values {1}x{2}:{3}x{4}", new Object[]{height, positionX, positionY, width, height});
-    }
-    
-    public CollisionBox getCollisionBox() {
-        if (this.collisionBox.GetWidth()<=1 || this.collisionBox.GetHeight() <=1) {
-            this.collisionBox = new CollisionBox(positionX, positionY, width, height);
-        }
-        return this.collisionBox;
     }
     
     public void setImage(Image i)

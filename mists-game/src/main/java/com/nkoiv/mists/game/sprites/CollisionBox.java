@@ -7,7 +7,7 @@ package com.nkoiv.mists.game.sprites;
 
 /**
  * CollisionBox for finding quick and dirty collisions
- * without (before?) Javas shape.intersects.
+ * before more pixel collisions or the like
  * @author nikok
  */
 public class CollisionBox {

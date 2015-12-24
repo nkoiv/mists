@@ -41,10 +41,12 @@ public class MapObject extends Flags implements Global, Templatable {
 
     
     public MapObject (String name, Image image) {
-        this.flags  = new HashMap<>();
-        this.name = name;
-        this.graphics = new Sprite(image);
-        this.setFlag("visible", 1);
+        this(name, new Sprite(image));
+    }
+    
+    public MapObject (String name, MovingGraphics graphics) {
+        this(name);
+        this.graphics = graphics;
     }
     
 

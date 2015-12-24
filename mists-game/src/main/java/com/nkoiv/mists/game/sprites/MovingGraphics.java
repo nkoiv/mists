@@ -6,7 +6,6 @@
 package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
-import static com.nkoiv.mists.game.sprites.Sprite.pixelCollision;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -40,6 +39,8 @@ public abstract class MovingGraphics {
      */
     protected double velocityX;
     protected double velocityY;
+    
+    protected CollisionBox collisionBox;
     
     /**
      * By default sprites rotate around their center (width/2, height/2)
@@ -236,7 +237,22 @@ public abstract class MovingGraphics {
     }
     
     public boolean intersects(MovingGraphics m) {
-        return this.intersectsWithShape(m.getBoundary());
+        return this.collisionBox.Intersect(m.getCollisionBox());
+    }
+    
+    protected void refreshCollisionBox() {
+        if (this.collisionBox == null) this.collisionBox = new CollisionBox(positionX, positionY, width, height);
+        else {
+            this.collisionBox.refresh(positionX, positionY, width, height);
+        }
+        //Mists.logger.log(Level.INFO, "{0}Refreshed new collisionbox with values {1}x{2}:{3}x{4}", new Object[]{height, positionX, positionY, width, height});
+    }
+    
+    protected CollisionBox getCollisionBox() {
+        if (this.collisionBox.GetWidth()<=1 || this.collisionBox.GetHeight() <=1) {
+            this.collisionBox = new CollisionBox(positionX, positionY, width, height);
+        }
+        return this.collisionBox;
     }
     
     

@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.items.Weapon;
+import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
@@ -55,14 +56,18 @@ public class Creature extends MapObject implements Combatant {
     private double oldYPos;
     
     //Constructor for a creature template with one static image
-    public Creature (String name, Image image) {
-        super (name, image);
+    public Creature (String name, MovingGraphics graphics) {
+        super (name, graphics);
         this.setFacing(Direction.DOWN);
         this.initializeAttributes();
         this.initializeFlags();
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
         this.ai = new CreatureAI(this);
+    }
+    
+    public Creature (String name, Image image) {
+        this(name, new Sprite(image));
     }
        
     //Constructing a creature template with sprite animations
@@ -282,7 +287,7 @@ public class Creature extends MapObject implements Combatant {
     }
     
     //TODO: GET RID OF THIS
-    public Sprite getSprite() {
+    private Sprite getSprite() {
         return (Sprite)this.graphics;
     }
     
