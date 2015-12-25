@@ -6,14 +6,13 @@
 package com.nkoiv.mists.game.sprites;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.items.Item;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 /**
@@ -38,6 +37,7 @@ public class SpriteSkeleton extends MovingGraphics {
     private HashMap<String, Sprite> sprites; //HashMap is used to individualize parts and replace them by name as need be
     private HashMap<String, Image[]> directionalImages; //Different images are used for different directions
     private Direction facing; //Skeleton needs to know its facing to choose right sprites
+    private WritableImage outline; 
     
     public SpriteSkeleton() {
         this.sprites = new HashMap<>();
@@ -60,6 +60,7 @@ public class SpriteSkeleton extends MovingGraphics {
     public void addPart(String partName, Sprite part) {
         this.sprites.put(partName, part);
         this.updateDimensions();
+        this.updateOutline();
         this.refreshCollisionBox();
     }
     
@@ -135,6 +136,22 @@ public class SpriteSkeleton extends MovingGraphics {
         this.height = Math.abs(smallestY) + Math.abs(largestY);
     }
     
+    private void updateOutline() {
+        this.outline = new WritableImage((int)this.width,(int)this.height);
+        PixelWriter pw = outline.getPixelWriter();
+        for (String s : this.sprites.keySet()) {
+            Sprite sprite = this.sprites.get(s);
+            Image image = sprite.getImage();
+            PixelReader pr = image.getPixelReader();
+            for(int y=0; y<image.getHeight(); y++){
+                    for(int x=0; x<image.getWidth(); x++){
+                        Color color = pr.getColor(x, y);
+                        pw.setColor((int)(x+sprite.getXPos()), (int)(y+sprite.getYPos()), color);
+                    }
+                }
+        }
+    }
+    
     @Override
     public void setPosition(double x, double y)
     {
@@ -192,7 +209,35 @@ public class SpriteSkeleton extends MovingGraphics {
             sprites.get(s).update(time);
         }
     }
+    
+    @Override
+    public boolean intersects(MovingGraphics m) {
+        if (m instanceof Sprite || m instanceof SpriteSkeleton) return this.intersectsInPixels(m);
+        return this.intersectsWithShape(m.getBoundary());
+    }
+    
+     /**
+     * Check the if the CollisionBoxes intersects
+     * (sweep and prune?) before going to pixel detection
+     * @param s Sprite to check collisions with
+     * @return True if they overlap somewhere
+     */    
+    private boolean intersectsInPixels(MovingGraphics m) {
+        //Rotated objects are happy with intersection, because pixel collision would require rotating the pixel image too...
+        if (this.rotation!=0 || m.rotation != 0) {
+           return this.intersectsWithShape(m.getBoundary());
+        }
+        if (this.collisionBox.Intersect(m.collisionBox)) {
+            return Sprite.pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), m.getXPos(), m.getYPos(), m.getImage());
+        }
+        else return false;
+    }
 
+    @Override
+    public Image getImage() {
+        return this.outline;
+    }
+    
     private static String[] getRenderOrder(Direction d) {
         switch (d) {
             case UP: return new String[]{"body", "legs", "feet","weapon", "arms", "cloak", "head"};

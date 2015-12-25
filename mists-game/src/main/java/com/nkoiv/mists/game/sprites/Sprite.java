@@ -339,24 +339,24 @@ public class Sprite extends MovingGraphics
 
     @Override
     public boolean intersects(MovingGraphics m) {
-        if (m instanceof Sprite) return this.intersects((Sprite)m);
+        if (m instanceof Sprite || m instanceof SpriteSkeleton) return this.intersectsInPixels(m);
         return this.intersectsWithShape(m.getBoundary());
     }
     
     /**
      * Check the if the CollisionBoxes intersects
      * (sweep and prune?) before going to pixel detection
-     * @param s Sprite to check collisions with
+     * @param m Sprite to check collisions with
      * @return True if they overlap somewhere
      */    
-    private boolean intersects(Sprite s) {
+    private boolean intersectsInPixels(MovingGraphics m) {
         //Rotated objects are happy with intersection, because pixel collision would require rotating the pixel image too...
-        if (this.rotation!=0 || s.rotation != 0) {
-           return this.intersectsWithShape(s.getBoundary());
+        if (this.rotation!=0 || m.rotation != 0) {
+           return this.intersectsWithShape(m.getBoundary());
         }
-        if (this.collisionBox.Intersect(s.collisionBox)) {
+        if (this.collisionBox.Intersect(m.collisionBox)) {
             //Check pixel collsion
-            return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), s.getXPos(), s.getYPos(), s.getImage());
+            return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), m.getXPos(), m.getYPos(), m.getImage());
             
         }
         else return false;
