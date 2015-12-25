@@ -68,7 +68,6 @@ public class Game {
         Creature companion = Mists.creatureLibrary.create("Himmu");
         System.out.println(companion.toString());
         pocplayer.addCompanion(companion);
-        pocplayer.equipWeapon((Weapon)Mists.itemLibrary.create("sword"));
         pocplayer.addAction(new MeleeWeaponAttack());
         this.player = pocplayer;
         //Initialize GameStates

@@ -13,6 +13,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.ItemType;
 import com.nkoiv.mists.game.items.Weapon;
 import javafx.scene.image.Image;
@@ -104,6 +105,8 @@ public class LibLoader {
         Weapon sword = new Weapon("Sword", ItemType.WEAPON_1H, "a simple sword", 12, new Image("/images/sword.png"));
         lib.addTemplate(sword);
         
+        Item himmutoy = new Item("Himmytoy", ItemType.MISC, new Image("/images/himmuToyMini.png"));
+        lib.addTemplate(himmutoy);
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {

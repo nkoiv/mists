@@ -14,8 +14,8 @@ public interface Global {
     
     //TileSize
     public static final int TILESIZE = 32;
-    public static final int WIDTH = 1280;
-    public static final int HEIGHT = 800;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
     
     //TILES_DRAWN is obsolete and should not be used.
     //It should be derived dynamically from Mists.WIDTH / Mists.HEIGHT
@@ -27,7 +27,7 @@ public interface Global {
 	
     //Config mode
     public static boolean debug = false;
-    public static boolean DRAW_COLLISIONS = false;
+    public static boolean DRAW_COLLISIONS = true;
     public static boolean DRAW_GRID = false;
     
 }

@@ -20,8 +20,8 @@ public class Config {
      //TileSize
     public int scale = 1;
     public int tilesize = 32;
-    public int width = 800;
-    public int height = 600;
+    public int width = 600;
+    public int height = 400;
     
     //TILES_DRAWN is obsolete and should not be used.
     //It should be derived dynamically from Mists.WIDTH / Mists.HEIGHT
@@ -48,8 +48,6 @@ public class Config {
             case "drawCollisions": setDrawCollisions(value); break;
             case "drawGrid": setDrawGrid(value); break;
         }
-        
-        
     }
     
     private void setDebugMode(String value) {

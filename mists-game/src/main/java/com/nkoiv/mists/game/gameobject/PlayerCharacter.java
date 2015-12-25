@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.items.Weapon;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -40,11 +41,17 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setSpeed(50);
         */
         super ("Lini",new Image("/images/himmutoy.png"));
+        SpriteSkeleton playerSkeleton = new SpriteSkeleton();
+        playerSkeleton.addPart("body", new Sprite(new Image("/images/lini_test.png"),0,0));
+        this.graphics = playerSkeleton;
+        this.equipWeapon((Weapon)Mists.itemLibrary.create("sword"));
         
+        /*
         this.setAnimation("downMovement", new ImageView("/images/lini.png"), 3, 0, 0, 0, 0, 32, 32 );
         this.setAnimation("leftMovement", new ImageView("/images/lini.png"), 3, 0, 32, 0, 0, 32, 32 );
         this.setAnimation("rightMovement", new ImageView("/images/lini.png"), 3, 0, 64, 0, 0, 32, 32 );
         this.setAnimation("upMovement", new ImageView("/images/lini.png"), 3, 0, 96, 0, 0, 32, 32 );       
+        */
         this.setFlag("alive", 1);
         this.setMaxHealth(500);
         this.setHealth(this.getMaxHealth());

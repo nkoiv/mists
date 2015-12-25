@@ -468,13 +468,11 @@ public class Creature extends MapObject implements Combatant {
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.isFlagged("visible")) {
-            this.graphics.render(xOffset, yOffset, gc);
-            
+            if (this.graphics instanceof SpriteSkeleton) ((SpriteSkeleton)this.graphics).render(xOffset, yOffset, gc, this.facing);
+            else this.graphics.render(xOffset, yOffset, gc);
             if (this.ai.getPath()!=null && this.getLocation().isFlagged("drawPaths")) {
                 this.ai.getPath().drawPath(gc, TILESIZE, xOffset, yOffset);
             }
-            
-            
         }
     } 
     
@@ -551,7 +549,12 @@ public class Creature extends MapObject implements Combatant {
     }
     
     public void equipWeapon(Weapon w) {
+        if (w==null) return;
         this.equippedWeapon = w;
+        if (this.graphics instanceof SpriteSkeleton) {
+            Mists.logger.info("Added "+w.getName()+" to "+this.getName()+" spriteskeleton");
+            ((SpriteSkeleton)graphics).addPart("weapon", new Sprite(w.getImage(), 5, 10));
+        }
     }
     
     //-------------------------------------------------------

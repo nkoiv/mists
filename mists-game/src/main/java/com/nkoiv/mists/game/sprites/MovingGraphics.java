@@ -222,6 +222,7 @@ public abstract class MovingGraphics {
         positionY += velocityY * time;
         rotation += spin * time;
         if (rotation >= 360 || rotation <= -360) rotation = rotation%360;
+        this.refreshCollisionBox();
     }
     
     /**
