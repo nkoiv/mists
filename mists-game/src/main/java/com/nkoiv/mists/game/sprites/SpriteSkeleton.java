@@ -37,7 +37,7 @@ public class SpriteSkeleton extends MovingGraphics {
     private HashMap<String, Sprite> sprites; //HashMap is used to individualize parts and replace them by name as need be
     private HashMap<String, Image[]> directionalImages; //Different images are used for different directions
     private Direction facing; //Skeleton needs to know its facing to choose right sprites
-    private WritableImage outline; 
+    private WritableImage snapshot; 
     
     public SpriteSkeleton() {
         this.sprites = new HashMap<>();
@@ -60,7 +60,7 @@ public class SpriteSkeleton extends MovingGraphics {
     public void addPart(String partName, Sprite part) {
         this.sprites.put(partName, part);
         this.updateDimensions();
-        this.updateOutline();
+        this.updateSnapshot();
         this.refreshCollisionBox();
     }
     
@@ -76,6 +76,7 @@ public class SpriteSkeleton extends MovingGraphics {
     public void addPart(String partName, Sprite part, Image[] directionalImages) {
         this.addPart(partName, part);
         this.addDirectionalImages(partName, directionalImages);
+        this.updateSnapshot();
     }
     
     /**
@@ -92,6 +93,7 @@ public class SpriteSkeleton extends MovingGraphics {
         this.sprites.remove(partName);
         this.directionalImages.remove(partName);
         this.updateDimensions();
+        this.updateSnapshot();
         this.refreshCollisionBox();
     }
     
@@ -136,19 +138,19 @@ public class SpriteSkeleton extends MovingGraphics {
         this.height = Math.abs(smallestY) + Math.abs(largestY);
     }
     
-    private void updateOutline() {
-        this.outline = new WritableImage((int)this.width,(int)this.height);
-        PixelWriter pw = outline.getPixelWriter();
+    private void updateSnapshot() {
+        this.snapshot = new WritableImage((int)this.width,(int)this.height);
+        PixelWriter pw = snapshot.getPixelWriter();
         for (String s : this.sprites.keySet()) {
             Sprite sprite = this.sprites.get(s);
             Image image = sprite.getImage();
             PixelReader pr = image.getPixelReader();
             for(int y=0; y<image.getHeight(); y++){
-                    for(int x=0; x<image.getWidth(); x++){
-                        Color color = pr.getColor(x, y);
-                        pw.setColor((int)(x+sprite.getXPos()), (int)(y+sprite.getYPos()), color);
-                    }
+                for(int x=0; x<image.getWidth(); x++){
+                    Color color = pr.getColor(x, y);
+                    pw.setColor((int)(x+sprite.getXPos()), (int)(y+sprite.getYPos()), color);
                 }
+            }
         }
     }
     
@@ -235,7 +237,7 @@ public class SpriteSkeleton extends MovingGraphics {
 
     @Override
     public Image getImage() {
-        return this.outline;
+        return this.snapshot;
     }
     
     private static String[] getRenderOrder(Direction d) {

@@ -172,6 +172,10 @@ public class MapObject extends Flags implements Global, Templatable {
         return this.name;
     }
     
+    public Image getSnapshot() {
+        return this.graphics.getImage();
+    }
+    
     @Override
     public String toString(){
         String s;

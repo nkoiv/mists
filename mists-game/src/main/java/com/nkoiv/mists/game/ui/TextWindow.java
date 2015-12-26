@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
- *
+ * TextWindow is a simple UI component with just text in it.
  * @author nikok
  */
 public class TextWindow implements UIComponent {

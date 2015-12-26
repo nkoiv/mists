@@ -175,7 +175,7 @@ public class Overlay {
         infobox.setText(generateInfoBoxText(mob));
         infobox.render(gc, 0, 0);
         //TODO: Snapshot for MOB image
-        //gc.drawImage(mob.getSprite().getImage(), infobox.xPosition+infobox.getWidth()-mob.getWidth()-10, infobox.yPosition+10);
+        gc.drawImage(mob.getSnapshot(), infobox.xPosition+infobox.getWidth()-mob.getWidth()-10, infobox.yPosition+10);
     }
     
     

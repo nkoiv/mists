@@ -21,7 +21,7 @@ import java.util.logging.Level;
  * It might be an attack from a creature, or it might be a trap on the floor.
  * TODO: Consider if the allById map gets bloated and if it should get cleaned
  * TODO: Maybe only unique action templates should be stored in allById
- * All actions are stored in the (static) allById -map
+ * TODO: (?) All actions are stored in the (static) allById -map
  * @author nkoiv
  */
 public class Action extends Flags implements Serializable {

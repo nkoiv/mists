@@ -10,7 +10,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
- *
+ * Derivative of the Tiled Window, Tiled Panel groups together
+ * a bunch of UI components with a background image composed of recurring images.
+ * The default Image[] Tiled Panel takes should be arranged as follows:
+ *                  [0], [3], [12] and [15] are corners
+ * [**][**][**][**] [1] and [2] are top sides
+ * [* ][  ][  ][ *] [4] and [8] are left sides
+ * [* ][  ][  ][ *] [7] and [11] are right sides
+ * [**][**][**][**] [13] and [14] are bottom sides
+ *                  [5], [6], [9] and [10] are central area.
+ *      
  * @author nikok
  */
 public class TiledPanel extends TiledWindow {
