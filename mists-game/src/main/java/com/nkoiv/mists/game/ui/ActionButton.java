@@ -8,7 +8,6 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import java.util.logging.Level;
-import javafx.scene.input.MouseEvent;
 
 /**
  * ActionButtons (currently) extend the Test button,
@@ -29,9 +28,8 @@ public class ActionButton extends TextButton {
         this.player = player;
         this.actionName = actionName;
     }
-    
-    @Override
-    public void onClick(MouseEvent me) {
+
+    public void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         player.useAction(actionName);
     }

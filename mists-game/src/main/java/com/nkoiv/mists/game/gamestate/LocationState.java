@@ -86,7 +86,7 @@ public class LocationState implements GameState {
         TextButton darkenButton = new LocationButtons.ReduceLightlevelButton("Darken", 80, 60, this.game);
         TextButton toggleScaleButton = new LocationButtons.ToggleScaleButton("Resize", 80, 60, this.game);
         MuteMusicButton muteMusicButton;
-        muteMusicButton = new AudioControls.MuteMusicButton("Mute music", 80, 60);
+        muteMusicButton = new AudioControls.MuteMusicButton();
         
         actionBar.addSubComponent(attackButton);
         actionBar.addSubComponent(pathsButton);
@@ -96,7 +96,7 @@ public class LocationState implements GameState {
         actionBar.addSubComponent(toggleScaleButton);
         uiComponents.put(actionBar.getName(), actionBar);
         
-        this.infobox = new TextPanel(this, "InfoBox", 250, 300, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
+        this.infobox = new TextPanel(this, "InfoBox", 250, 100, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
         this.contextAction = new ContextAction(game.getPlayer());
     }
 
@@ -212,12 +212,11 @@ public class LocationState implements GameState {
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
-        //See if there's an UI component to click
-        
-        
+        //See if there's an UI component to click      
         if(!mouseClickOnUI(me)){
             //If not, give the click to the underlying gameLocation
             Mists.logger.info("Click didnt land on an UI button");
+            this.mouseClickOnLocation(me);
         }
     }
     
@@ -238,20 +237,27 @@ public class LocationState implements GameState {
             //Check if the click landed on the ui component
             if (clickX >= uicX && clickX <= (uicX + uicWidth)) {
                 if (clickY >= uicY && clickY <= uicY + uicHeight) {
-                    entry.getValue().onClick(me);
+                    entry.getValue().handleMouseEvent(me);
                     return true;
                 }
             }
             
         }
         //Click landed on area without UI component
-        if (me.getButton() == MouseButton.SECONDARY) {
+        return false;
+    }
+    
+    private boolean mouseClickOnLocation(MouseEvent me) {
+        double clickX = me.getX();
+        double clickY = me.getY();
+        if (me.getButton() == MouseButton.SECONDARY  && me.getEventType() == MouseEvent.MOUSE_RELEASED) {
             Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
             double xOffset = this.game.getCurrentLocation().getLastxOffset();
             double yOffset = this.game.getCurrentLocation().getLastyOffset();
             this.game.getCurrentLocation().getPlayer().setCenterPosition(clickX+xOffset, clickY+yOffset);
+            return true;
         }
-        if (me.getButton() == MouseButton.PRIMARY) {
+        if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_RELEASED) {
             MapObject targetMob = game.getCurrentLocation().getMobAtLocation(clickX+game.getCurrentLocation().getLastxOffset(), clickY+game.getCurrentLocation().getLastyOffset());
             if (targetMob!=null) { 
                 if (game.getCurrentLocation().getTargets().contains(targetMob)) game.getCurrentLocation().clearTarget();
@@ -260,10 +266,11 @@ public class LocationState implements GameState {
                     game.getCurrentLocation().setTarget(targetMob);
                     //game.currentLocation.setScreenFocus(targetMob);
                 }
+                return true;
             }
+            
         }
-        
-        
+        //Click didn't do anything
         return false;
     }
 

@@ -179,7 +179,7 @@ public class TiledWindow implements UIComponent{
     }
     
     @Override
-    public void onClick(MouseEvent me) {
+    public void handleMouseEvent(MouseEvent me) {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         double clickX = me.getX();
         double clickY = me.getY();
@@ -191,7 +191,7 @@ public class TiledWindow implements UIComponent{
             //Check if the click landed on the ui component
             if (clickX >= uicX && clickX <= (uicX + uicWidth)) {
                 if (clickY >= uicY && clickY <= uicY + uicHeight) {
-                    uic.onClick(me);
+                    uic.handleMouseEvent(me);
                 }
             }
             

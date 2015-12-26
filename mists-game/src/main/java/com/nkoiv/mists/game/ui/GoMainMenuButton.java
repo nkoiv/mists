@@ -27,7 +27,7 @@ public class GoMainMenuButton extends TextButton {
     }
     
     @Override
-    public void onClick(MouseEvent me) {
+    public void handleMouseEvent(MouseEvent me) {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         this.game.moveToState(Game.MAINMENU);
     }

@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -24,21 +25,27 @@ public class AudioControls {
         
     }
     
-    public static class MuteMusicButton extends TextButton {
+    public static class MuteMusicButton extends IconButton {
         
-        public MuteMusicButton(String name, double width, double height) {
-            super(name, width, height);
+        public MuteMusicButton() {
+            super("Mute music", 0, 0, Mists.graphLibrary.getImage("musicOnIcon"), Mists.graphLibrary.getImage("musicOffIcon"), Mists.graphLibrary.getImage("buttonSquareBeige"), Mists.graphLibrary.getImage("buttonSquareBeigePressed"));
+            this.alpha = 0.5;
         }
         
         @Override
-        public void onClick(MouseEvent me) {
-            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            Mists.soundManager.toggleMusicMute();
-            if (Mists.soundManager.isMusicMuted()) {
-                this.setText("Music muted");
-            } else {
-                this.setText("Mute music");
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_PRESSED) this.pressed = true;
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                this.pressed = false;
+                Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+                Mists.soundManager.toggleMusicMute();
+                if (Mists.soundManager.isMusicMuted()) {
+                    this.drawAlt = true;
+                } else {
+                    this.drawAlt = false;
+                }
             }
+            me.consume();
         }
         
     }

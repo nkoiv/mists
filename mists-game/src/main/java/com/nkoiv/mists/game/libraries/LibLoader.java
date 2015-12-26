@@ -150,6 +150,14 @@ public class LibLoader {
         lib.addImage("cursorSwordsilver", new Image("/images/ui/cursorSword_silver.png"));
         lib.addImage("cursorSwordbronze", new Image("/images/ui/cursorSword_bronze.png"));
         
+        //Buttons
+        lib.addImage("buttonSquareBeige", new Image("/images/ui/buttonSquare_beige.png"));
+        lib.addImage("buttonSquareBeigePressed", new Image("/images/ui/buttonSquare_beige_pressed.png"));
+        
+        //Icons
+        lib.addImage("musicOnIcon", new Image("/images/ui/musicOn.png"));
+        lib.addImage("musicOffIcon", new Image("/images/ui/musicOff.png"));
+        
         lib.addImage("buttonSelectbeige", new Image("/images/ui/buttonSquareSelect_beige.png"));
         lib.addImage("buttonSelectSmallbeige", new Image("/images/ui/buttonSquareSelectSmall_beige.png"));
         

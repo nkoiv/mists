@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Mists;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -123,7 +124,11 @@ public class TextButton implements UIComponent{
     }
     
     @Override
-    public void onClick(MouseEvent me) {
+    public void handleMouseEvent(MouseEvent me) {
+        if (me.getEventType() == MouseEvent.MOUSE_RELEASED && me.getButton() == MouseButton.PRIMARY) this.buttonPress();
+    }
+    
+    private void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
     }
     

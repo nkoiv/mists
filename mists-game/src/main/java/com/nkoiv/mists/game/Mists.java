@@ -223,7 +223,13 @@ public class Mists extends Application implements Global {
     
     private void setupMouseHandles(Group root) {
         //Pass the event over to the game
-        root.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        root.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent me) {
+                MistsGame.handleMouseEvent(me);
+            }
+        });
+        root.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent me) {
                 MistsGame.handleMouseEvent(me);

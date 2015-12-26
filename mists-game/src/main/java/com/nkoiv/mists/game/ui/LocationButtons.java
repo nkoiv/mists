@@ -33,9 +33,11 @@ public class LocationButtons {
         }
         
         @Override
-        public void onClick(MouseEvent me) {
-            //Mists.logger.info("Trying to toggle game menu");
-            this.game.locControls.toggleLocationMenu();
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                Mists.logger.info("Trying to toggle game menu");
+                this.game.locControls.toggleLocationMenu();
+            }
         }
         
     }
@@ -48,9 +50,11 @@ public class LocationButtons {
         }
         
         @Override
-        public void onClick(MouseEvent me) {
-            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            this.game.toggleScale = true;
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+                this.game.toggleScale = true;
+            }
         }
         
     }
@@ -64,9 +68,11 @@ public class LocationButtons {
         }
         
         @Override
-        public void onClick(MouseEvent me) {
-            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            this.game.locControls.toggleFlag("drawPaths");
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+                this.game.locControls.toggleFlag("drawPaths");
+            }
         }
         
         @Override
@@ -93,9 +99,11 @@ public class LocationButtons {
         }
         
         @Override
-        public void onClick(MouseEvent me) {
-            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            this.game.locControls.increseLightLevel();
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+                this.game.locControls.increseLightLevel();
+            }
         }
         
     }
@@ -108,9 +116,11 @@ public class LocationButtons {
         }
         
         @Override
-        public void onClick(MouseEvent me) {
-            Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-            this.game.locControls.reduceLightLevel();
+        public void handleMouseEvent(MouseEvent me) {
+           if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+               Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+               this.game.locControls.reduceLightLevel();
+           }
         }
         
     }

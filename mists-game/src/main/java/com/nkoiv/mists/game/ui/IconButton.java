@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -24,15 +25,18 @@ public class IconButton implements UIComponent {
     protected Image icon;
     protected Image altIcon;
     protected boolean drawAlt;
+    protected boolean pressed;
     private Rectangle background;
     private Image bgImage;
+    private Image bgImagePressed;
     private double xPosition;
     private double yPosition;
-    protected Color textColor;
+    protected double alpha;
 
-    public IconButton(String name, double xPosition, double yPosition, Image icon, Image altIcon, Image bgImage) {
+    public IconButton(String name, double xPosition, double yPosition, Image icon, Image altIcon, Image bgImage, Image bgImagePressed) {
         this(name, bgImage.getWidth(), bgImage.getHeight(), xPosition, yPosition, icon, altIcon);
         this.bgImage = bgImage;
+        this.bgImagePressed = bgImagePressed;
     }
     
     public IconButton(String name, double width, double height, double xPosition, double yPosition, Image icon, Image altIcon) {
@@ -40,23 +44,32 @@ public class IconButton implements UIComponent {
         background = new Rectangle(width, height);
         background.setOpacity(0.6);
         background.setFill(Color.BLACK);
+        this.icon = icon;
+        this.altIcon = altIcon; 
     }
         
     @Override
     public void render (GraphicsContext gc, double xPosition, double yPosition) {
+         if (this.alpha != 0) {
+            gc.save();
+            gc.setGlobalAlpha(alpha);
+        }
         this.renderBackground(gc, xPosition, yPosition);
         this.renderCenteredIcon(gc, xPosition, yPosition);
+        if (this.alpha != 0) gc.restore();
     }
     
     private void renderBackground (GraphicsContext gc, double xPosition, double yPosition) {
-        if (this.bgImage == null) {
+       
+        if (this.bgImage == null || this.bgImagePressed == null) {
             gc.save();
             gc.setGlobalAlpha(background.getOpacity());
             gc.setFill(background.getFill());
             gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
             gc.restore();
         } else {
-            gc.drawImage(this.bgImage, xPosition, yPosition);
+            if (this.pressed) gc.drawImage(this.bgImagePressed, xPosition, yPosition+(this.bgImage.getHeight()-this.bgImagePressed.getHeight()));
+            else gc.drawImage(this.bgImage, xPosition, yPosition);
         }
     }
     
@@ -125,8 +138,21 @@ public class IconButton implements UIComponent {
         return this.yPosition;
     }
     
+    
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
+    
     @Override
-    public void onClick(MouseEvent me) {
+    public void handleMouseEvent(MouseEvent me) {
+        if (me.getEventType() == MouseEvent.MOUSE_RELEASED && me.getButton() == MouseButton.PRIMARY) this.buttonPress();
+    }
+    
+    private void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
     }
     

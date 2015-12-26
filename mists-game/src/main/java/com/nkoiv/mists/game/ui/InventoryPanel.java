@@ -10,6 +10,8 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.items.Inventory;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 /**
  * 
@@ -40,8 +42,17 @@ public class InventoryPanel extends TiledPanel {
         public ItemButton(Inventory inv, int inventoryID, double xPos, double yPos) {
             super (inv.getItem(inventoryID).getName(), Mists.TILESIZE, Mists.TILESIZE, xPos, yPos, inv.getItem(inventoryID).getImage(), inv.getItem(inventoryID).getImage());
             this.inv = inv;
-            this.invID = inventoryID;
-            
+            this.invID = inventoryID;   
+        }
+        
+        private void itemClicked() {
+            Mists.logger.info("Inventory slot "+invID+" was clicked");
+        }
+        
+        
+        @Override
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED && me.getButton() == MouseButton.PRIMARY) this.itemClicked();
         }
         
     }

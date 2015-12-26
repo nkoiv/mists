@@ -26,7 +26,7 @@ public class QuitButton extends TextButton {
     }
     
     @Override
-    public void onClick(MouseEvent me) {
+    public void handleMouseEvent(MouseEvent me) {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         Platform.exit();
         System.exit(0);

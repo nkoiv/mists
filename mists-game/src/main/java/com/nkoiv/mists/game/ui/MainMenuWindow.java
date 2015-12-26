@@ -48,7 +48,7 @@ public class MainMenuWindow extends TiledPanel {
         }
         
         @Override
-        public void onClick(MouseEvent me) {
+        public void handleMouseEvent(MouseEvent me) {
             //TODO: Move the gamestate to character creator
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
             //For now just generate a new location
@@ -74,7 +74,7 @@ public class MainMenuWindow extends TiledPanel {
         }
         
         @Override
-        public void onClick(MouseEvent me) {
+        public void handleMouseEvent(MouseEvent me) {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
             if (this.game.getCurrentLocation() == null) {
                 //No game to resume
@@ -92,7 +92,7 @@ public class MainMenuWindow extends TiledPanel {
         }
         
         @Override
-        public void onClick(MouseEvent me) {
+        public void handleMouseEvent(MouseEvent me) {
             //TODO: Open options menu (window?)
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
 
