@@ -11,6 +11,8 @@ import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.items.Inventory;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
@@ -36,8 +38,8 @@ public class Creature extends MapObject implements Combatant {
     private Direction facing;
     private Direction lastFacing = null;
     private HashMap<String, SpriteAnimation> spriteAnimations;
-    
-    private Weapon equippedWeapon; //TODO: Proper inventorymanagement isntead of this
+    protected Inventory inventory;
+    protected Weapon equippedWeapon; //TODO: Proper inventorymanagement isntead of this
     
     /*Attributes are stored in a separate HashMap
     * These are not Flags because they're limited to creatures
@@ -61,6 +63,7 @@ public class Creature extends MapObject implements Combatant {
         this.setFacing(Direction.DOWN);
         this.initializeAttributes();
         this.initializeFlags();
+        this.inventory = new Inventory();
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
         this.ai = new CreatureAI(this);
@@ -78,6 +81,7 @@ public class Creature extends MapObject implements Combatant {
         this.setSprite(new Sprite(this.spriteAnimations.get("downMovement").getCurrentFrame()));
         this.initializeAttributes();
         this.initializeFlags();
+        this.inventory = new Inventory();
         this.ai = new CreatureAI(this);
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
@@ -541,6 +545,15 @@ public class Creature extends MapObject implements Combatant {
     
     public void setFacing(Direction d) {
         this.facing = d;
+    }
+    
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+    
+    public boolean giveItem(Item i) {
+        Mists.logger.info("Attempted to give "+this.getName()+" "+i.getName());
+        return this.inventory.addItem(i);
     }
     
     //---TEMP methods for testing weapon usage via actions---

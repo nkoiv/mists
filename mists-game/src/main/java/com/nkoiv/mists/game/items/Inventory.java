@@ -16,7 +16,8 @@ public class Inventory {
     private Item[] items;
     private String[] slotnames;
     //private int maxSize;
-    private static int defaultSize = 10;
+    private static int defaultCapacity = 10;
+    private int itemSize;
     
     public Inventory(int size) {
         this.items = new Item[size];
@@ -25,7 +26,7 @@ public class Inventory {
     }
     
     public Inventory() {
-        this(defaultSize);
+        this(defaultCapacity);
     }
     
     private void prepareInventory() {
@@ -43,6 +44,7 @@ public class Inventory {
         int slot = nextFreeSlot();
         if (slot == -1) return false;
         this.items[slot] = i;
+        this.itemSize++;
         return true;
     }
     
@@ -100,7 +102,7 @@ public class Inventory {
         return this.items[slotnumber];
     }
     
-    public Item getItem(String slotname) {
+    public Item getItemFromSlot(String slotname) {
         int id = -1;
         for (int i = 0; i < this.slotnames.length; i ++) {
             if (this.slotnames[i].equals(slotname)) id =i;
@@ -117,7 +119,38 @@ public class Inventory {
         return null;
     }
     
+    public Item removeItem(int slotnumber) {
+        if (slotnumber < 0 || slotnumber >= this.items.length) return null;
+        Item i = this.items[slotnumber];
+        this.items[slotnumber] = null;
+        this.itemSize--;
+        return i;
+    }
+    
+    public Item removeItemFromSlot(String slotname) {
+        int id = -1;
+        for (int i = 0; i < this.slotnames.length; i ++) {
+            if (this.slotnames[i].equals(slotname)) id =i;
+        }
+        if (id == -1) return null;
+        return removeItem(id);
+    }
+    
+    public Item removeItemByName(String itemname) {
+        int id = -1;
+        for (int i = 0; i< this.items.length; i++) {
+            if (this.items[i] != null) {
+                if (this.items[i].getName().equals(itemname)) return this.removeItem(i);
+            }
+        }
+        return null;
+    }
+    
     public int getSize() {
+        return itemSize;
+    }
+    
+    public int getCapacity() {
         return this.items.length;
     }
     

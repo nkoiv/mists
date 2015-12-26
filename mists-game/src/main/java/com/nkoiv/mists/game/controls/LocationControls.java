@@ -10,10 +10,13 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gamestate.LocationState;
+import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import javafx.scene.image.ImageView;
@@ -108,6 +111,14 @@ public class LocationControls {
         } 
     }
     
+    public void toggleInventory(InventoryPanel inv) {
+        if (game.currentState.getUIComponents().containsKey(inv.getName())) game.currentState.getUIComponents().remove(inv.getName());
+        else {
+            game.currentState.getUIComponents().put(inv.getName(), inv); 
+            Mists.logger.log(Level.INFO, "Inventory size: {0} items, capacity {1}", new Object[]{inv.getInventory().getSize(), inv.getInventory().getCapacity()});
+        }
+    }
+    
     //-------- Mob creation ------
     
     public void addCreature(String mobTemplate) {
@@ -116,6 +127,22 @@ public class LocationControls {
             if ("blob".equals(mobTemplate)) addBlob();
         }
         
+    }
+    
+    //------- Inventory manipulation ------
+    
+    public void giveItem(String attributes) {
+        int space = attributes.indexOf(" ");
+        if (space>1) {
+            String target = attributes.substring(0, space);
+            String item = attributes.substring(space+1, attributes.length());
+            Creature targetCreature;
+            if (target.equals(game.getPlayer().getName())) targetCreature = game.getPlayer();
+            else targetCreature = game.getCurrentLocation().getCreatureByName(target);
+            Item itemToGive = Mists.itemLibrary.create(item);
+            if (targetCreature == null || itemToGive == null) Mists.logger.warning ("Could not parse giveItem. Item was: "+item+ " Target was: "+target);
+            else targetCreature.giveItem(itemToGive);
+        } else Mists.logger.warning ("Could not parse giveItem");
     }
     
     /**

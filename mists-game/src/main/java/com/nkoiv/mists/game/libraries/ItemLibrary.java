@@ -25,13 +25,13 @@ public class ItemLibrary <E extends Item> {
         this.lib = new HashMap<>();
     }
     
-    public E getTemplate(String actionName) {
-        String lowercase = actionName.toLowerCase();
+    public E getTemplate(String itemname) {
+        String lowercase = itemname.toLowerCase();
         return this.lib.get(lowercase);
     }
     
-    public E create(String actionName) {
-        String lowercase = actionName.toLowerCase();
+    public E create(String itemname) {
+        String lowercase = itemname.toLowerCase();
         if (this.lib.keySet().contains(lowercase)) {
             return (E)this.lib.get(lowercase).createFromTemplate();
         }

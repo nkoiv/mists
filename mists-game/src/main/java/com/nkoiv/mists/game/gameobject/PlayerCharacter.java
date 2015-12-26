@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
@@ -45,7 +46,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         playerSkeleton.addPart("body", new Sprite(new Image("/images/lini_test.png"),0,0));
         this.graphics = playerSkeleton;
         this.equipWeapon((Weapon)Mists.itemLibrary.create("sword"));
-        
+        this.inventory = new Inventory();
         /*
         this.setAnimation("downMovement", new ImageView("/images/lini.png"), 3, 0, 0, 0, 0, 32, 32 );
         this.setAnimation("leftMovement", new ImageView("/images/lini.png"), 3, 0, 32, 0, 0, 32, 32 );

@@ -47,7 +47,7 @@ public class TiledWindow implements UIComponent{
                 
     }
     
-    private void close() {
+    public void close() {
         this.parent.getUIComponents().remove(this.name);
     }
     
@@ -166,6 +166,10 @@ public class TiledWindow implements UIComponent{
         return this.name;
     }
     
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     /**
      * handleKeyPress is called if the window is interactive.
      * The keyboard input is directed to this frame, and possibly away from elsewhere.
@@ -180,7 +184,7 @@ public class TiledWindow implements UIComponent{
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
-        Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+        //Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         double clickX = me.getX();
         double clickY = me.getY();
         for (UIComponent uic : subComponents) {

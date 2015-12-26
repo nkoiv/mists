@@ -79,6 +79,12 @@ public class Item {
         return this.weight;
     }
     
+    @Override
+    public String toString() {
+        String s = "["+this.itype+"|"+this.name+"]";
+        return s;
+    }
+    
     public Item createFromTemplate() {
         Item i = new Item(this.name, this.itype, this.image);
         i.description = this.description;

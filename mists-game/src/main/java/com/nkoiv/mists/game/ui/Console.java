@@ -91,13 +91,14 @@ public class Console extends TextWindow{
         if (current.contains(" ")) attributes = attributes+current.substring(current.indexOf(" ")+1, current.length());
         switch (command) {
             case "quit": Platform.exit(); System.exit(0); break;
-            case "toggleFlag": super.getGame().locControls.toggleFlag(attributes); break;
-            case "drawCollisions": ; break;
-            case "clearanceMap": super.getGame().locControls.printClearanceMapIntoConsole(); break;
-            case "collisionMap": super.getGame().locControls.printCollisionMapIntoConsole(); break;
-            case "addCreature" : super.getGame().locControls.addCreature(attributes); break;
-            case "createLoc":super.getGame().locControls.createLoc(attributes); break;
-            case "toggleScale":super.getGame().toggleScale =true;
+            case "toggleflag": super.getGame().locControls.toggleFlag(attributes); break;
+            case "drawcollisions": ; break;
+            case "clearancemap": super.getGame().locControls.printClearanceMapIntoConsole(); break;
+            case "collisionmap": super.getGame().locControls.printCollisionMapIntoConsole(); break;
+            case "addcreature" : super.getGame().locControls.addCreature(attributes); break;
+            case "createloc":super.getGame().locControls.createLoc(attributes); break;
+            case "togglescale":super.getGame().toggleScale =true;
+            case "giveitem": super.getGame().locControls.giveItem(attributes); break;
             case "help": printHelp(); ;break;
             default: break;
         }

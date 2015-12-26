@@ -44,6 +44,8 @@ public class IconButton implements UIComponent {
         background = new Rectangle(width, height);
         background.setOpacity(0.6);
         background.setFill(Color.BLACK);
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
         this.icon = icon;
         this.altIcon = altIcon; 
     }

@@ -58,7 +58,7 @@ public class TiledPanel extends TiledWindow {
         }       
     }
     
-    private void renderBackground(GraphicsContext gc) {
+    protected void renderBackground(GraphicsContext gc) {
         double currentX = 0;
         double currentY = 0;
         //First row

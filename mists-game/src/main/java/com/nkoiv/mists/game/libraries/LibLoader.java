@@ -105,7 +105,7 @@ public class LibLoader {
         Weapon sword = new Weapon("Sword", ItemType.WEAPON_1H, "a simple sword", 12, new Image("/images/sword.png"));
         lib.addTemplate(sword);
         
-        Item himmutoy = new Item("Himmytoy", ItemType.MISC, new Image("/images/himmuToyMini.png"));
+        Item himmutoy = new Item("Himmutoy", ItemType.MISC, new Image("/images/himmuToyMini.png"));
         lib.addTemplate(himmutoy);
     }
     

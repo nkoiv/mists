@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
 import com.nkoiv.mists.game.ui.Console;
 import com.nkoiv.mists.game.ui.GoMainMenuButton;
+import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.ui.QuitButton;
@@ -52,6 +53,7 @@ public class LocationState implements GameState {
     private final HashMap<String, UIComponent> uiComponents;
     private TextPanel infobox;
     private ContextAction contextAction;
+    private InventoryPanel playerInventory;
     
     public LocationState (Game game) {
         this.game = game;
@@ -97,6 +99,8 @@ public class LocationState implements GameState {
         uiComponents.put(actionBar.getName(), actionBar);
         
         this.infobox = new TextPanel(this, "InfoBox", 250, 100, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
+        this.playerInventory = new InventoryPanel(game.currentState, game.getPlayer().getInventory());
+        this.playerInventory.setName("PlayerInventory");
         this.contextAction = new ContextAction(game.getPlayer());
     }
 
@@ -312,6 +316,11 @@ public class LocationState implements GameState {
         if (releasedButtons.contains(KeyCode.E)) {
             Mists.logger.info("E pressed for context action");
             this.contextAction.useTrigger();
+        }
+        
+        if (releasedButtons.contains(KeyCode.I)) {
+            Mists.logger.info("I pressed for Inventory");
+            game.locControls.toggleInventory(this.playerInventory);
         }
         
         if (releasedButtons.contains(KeyCode.R)) {
