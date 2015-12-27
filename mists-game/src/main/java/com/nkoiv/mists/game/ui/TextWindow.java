@@ -17,16 +17,11 @@ import javafx.scene.text.Text;
  * TextWindow is a simple UI component with just text in it.
  * @author nikok
  */
-public class TextWindow implements UIComponent {
+public class TextWindow extends UIComponent {
 
     protected GameState parent;
-    protected String name;
     protected Color bgColor;
     protected double bgOpacity;
-    protected double xPosition;
-    protected double yPosition;
-    protected double width;
-    protected double height;
     protected double margin;
     
     protected Font font;
@@ -72,33 +67,7 @@ public class TextWindow implements UIComponent {
     public String getText() {
         return this.text;
     }
-    
-    @Override
-    public double getWidth() {
-        return this.width;
-    }
 
-    @Override
-    public double getHeight() {
-        return this.height;
-    }
-
-@Override
-    public double getXPosition() {
-        return this.xPosition;
-    }
-
-    @Override
-    public double getYPosition() {
-        return this.yPosition;
-    }
-
-    @Override
-    public void setPosition(double xPos, double yPos) {
-        this.xPosition = xPos;
-        this.yPosition = yPos;
-    }
-    
     @Override
     public void handleMouseEvent(MouseEvent me) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -111,10 +80,5 @@ public class TextWindow implements UIComponent {
     protected Game getGame() {
         return this.parent.getGame();
     }
-    
-    @Override
-    public String getName() {
-        return this.name;
-    }
-    
+
 }

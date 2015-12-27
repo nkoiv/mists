@@ -46,10 +46,15 @@ public class InventoryPanel extends TiledPanel {
         this.subComponents.clear();
         int rowSize = (int)(this.width/(buttonSize+pacing));
         int row = 0;
+        int column = 0;
         for (int i = 0; i < this.inv.getSize(); i++) {
             if (this.inv.getItem(i) != null) {
-                ItemButton ib = new ItemButton(this.inv, i, this.xPosition+pacing+(i*(buttonSize+pacing)), this.yPosition+pacing+(row*(buttonSize+pacing)));
-                if (rowSize!=0) if (i%rowSize == 0 && i!=0) row++;
+                ItemButton ib = new ItemButton(this.inv, i, this.xPosition+pacing+(column*(buttonSize+pacing)), this.yPosition+pacing+(row*(buttonSize+pacing)));
+                column++;
+                if ((i+1)%rowSize == 0) {
+                    row++;
+                    column = 0;
+                }
                 this.subComponents.add(ib);
             }
         }

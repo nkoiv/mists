@@ -20,8 +20,7 @@ import javafx.scene.shape.Rectangle;
  * overwrite the onClick() with whatever the button should do
  * @author nikok
  */
-public class IconButton implements UIComponent {
-    protected String name;
+public class IconButton extends UIComponent {
     protected Image icon;
     protected Image altIcon;
     protected boolean drawAlt;
@@ -29,8 +28,6 @@ public class IconButton implements UIComponent {
     private Rectangle background;
     private Image bgImage;
     private Image bgImagePressed;
-    private double xPosition;
-    private double yPosition;
     protected double alpha;
 
     public IconButton(String name, double xPosition, double yPosition, Image icon, Image altIcon, Image bgImage, Image bgImagePressed) {
@@ -109,10 +106,7 @@ public class IconButton implements UIComponent {
         this.drawAlt = false;
     }
     
-    @Override
-    public String getName() {
-        return this.name;
-    }
+
     
     @Override
     public double getWidth() {
@@ -123,23 +117,6 @@ public class IconButton implements UIComponent {
     public double getHeight() {
         return this.background.getHeight();
     }
-    
-    @Override
-    public void setPosition(double xPos, double yPos) {
-        this.xPosition = xPos;
-        this.yPosition = yPos;
-    }
-    
-    @Override
-    public double getXPosition() {
-        return this.xPosition;
-    }
-
-    @Override
-    public double getYPosition() {
-        return this.yPosition;
-    }
-    
     
     public double getAlpha() {
         return alpha;

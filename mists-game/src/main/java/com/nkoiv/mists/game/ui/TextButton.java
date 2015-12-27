@@ -20,13 +20,11 @@ import javafx.scene.text.Text;
  * but it remains a simple button for testing.
  * @author nikok
  */
-public class TextButton implements UIComponent{ 
+public class TextButton extends UIComponent{ 
     protected Text text;
     private double textXOffset;
     private double textYOffset;
     private Rectangle background;
-    private double xPosition;
-    private double yPosition;
     protected Color textColor;
 
     public TextButton(String name, double width, double height) {
@@ -105,22 +103,6 @@ public class TextButton implements UIComponent{
     @Override
     public String getName() {
         return this.text.getText();
-    }
-    
-    @Override
-    public void setPosition(double xPos, double yPos) {
-        this.xPosition = xPos;
-        this.yPosition = yPos;
-    }
-    
-    @Override
-    public double getXPosition() {
-        return this.xPosition;
-    }
-
-    @Override
-    public double getYPosition() {
-        return this.yPosition;
     }
     
     @Override

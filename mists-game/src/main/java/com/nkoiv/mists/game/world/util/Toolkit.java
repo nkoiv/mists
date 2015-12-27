@@ -7,7 +7,11 @@ package com.nkoiv.mists.game.world.util;
 
 import com.nkoiv.mists.game.Direction;
 import java.awt.Point;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /**
  * Toolkit (TODO: poor name, rename) contains
@@ -207,6 +211,21 @@ public abstract class Toolkit {
         return euclideanDistance;
     }
  
+    /**
+     * Scale a font to fit text within given width
+     * @param text Text to use
+     * @param maxwidth Maximum width for the text
+     * @param pFont Font to do the scaling with
+     * @return Given font, scaled to max size that fits inside "maxwidth"
+     */
+    public static Font scaleFont(String text, double maxwidth, Font pFont) {
+        Text t = new Text(text);
+        float fontSize = 20.0f;
+        t.setFont(Font.font(pFont.getName(), fontSize));
+        int width = (int)t.getLayoutBounds().getWidth();
+        fontSize = (int)(maxwidth / width ) * fontSize;
+        return Font.font(pFont.getName(), fontSize);
+    }
     
     
 }

@@ -18,19 +18,14 @@ import javafx.scene.paint.Color;
  * Windows can be interactive (reserving input) or simply static.
  * @author nikok
  */
-public class TiledWindow implements UIComponent{
+public class TiledWindow extends UIComponent{
     
     protected GameState parent;
-    protected String name;
     protected boolean interactive;
     protected ArrayList<UIComponent> subComponents;
     protected int currentButton;
     protected Color bgColor;
     protected double bgOpacity;
-    protected double xPosition;
-    protected double yPosition;
-    protected double width;
-    protected double height;
     protected double margin;
     
     public TiledWindow (GameState parent, String name, double width, double height, double xPos, double yPos) {
@@ -82,15 +77,6 @@ public class TiledWindow implements UIComponent{
         return this.parent;
     }
     
-    @Override
-    public double getWidth() {
-        return this.width;
-    }
-    @Override
-    public double getHeight() {
-        return this.height;
-    }
-    
     /**
      * Resizes the window to fit in the given GC.
      * First the window is moved left/up if it would clip outside the canvas (at most to 0,0).
@@ -114,6 +100,13 @@ public class TiledWindow implements UIComponent{
         
     }
     
+    /**
+     * Tile the subcomponents of this window to
+     * fit inside the window, reserving Offset amounts
+     * of padding on the sides of the window
+     * @param xOffset upper left corner of the first subcomponent
+     * @param yOffset upper left corner of the first subcomponent
+     */
     protected void tileSubComponentPositions (double xOffset, double yOffset) {
         double currentXPos = this.xPosition + xOffset;
         double currentYPos = this.yPosition + this.margin + yOffset;
@@ -160,12 +153,7 @@ public class TiledWindow implements UIComponent{
         }
         
     }
-    
-    @Override
-    public String getName() {
-        return this.name;
-    }
-    
+
     public void setName(String name) {
         this.name = name;
     }
@@ -200,22 +188,6 @@ public class TiledWindow implements UIComponent{
             }
             
         }
-    }
-
-    @Override
-    public double getXPosition() {
-        return this.xPosition;
-    }
-
-    @Override
-    public double getYPosition() {
-        return this.yPosition;
-    }
-
-    @Override
-    public void setPosition(double xPos, double yPos) {
-        this.xPosition = xPos;
-        this.yPosition = yPos;
     }
     
 }
