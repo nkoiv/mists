@@ -99,7 +99,7 @@ public class LocationState implements GameState {
         uiComponents.put(actionBar.getName(), actionBar);
         
         this.infobox = new TextPanel(this, "InfoBox", 250, 100, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
-        this.playerInventory = new InventoryPanel(game.currentState, game.getPlayer().getInventory());
+        this.playerInventory = new InventoryPanel(this, game.getPlayer().getInventory());
         this.playerInventory.setName("PlayerInventory");
         this.contextAction = new ContextAction(game.getPlayer());
     }

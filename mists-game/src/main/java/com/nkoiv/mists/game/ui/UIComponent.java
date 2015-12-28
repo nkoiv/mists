@@ -52,7 +52,8 @@ public abstract class UIComponent {
     }
     
     public String getName() {
-        return this.name;
+        if (this.name == null) return "Nameless UI component";
+        else return this.name;
     }
     
 }

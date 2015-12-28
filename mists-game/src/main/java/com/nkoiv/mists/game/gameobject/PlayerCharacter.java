@@ -47,6 +47,8 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.graphics = playerSkeleton;
         this.equipWeapon((Weapon)Mists.itemLibrary.create("sword"));
         this.inventory = new Inventory();
+        this.giveItem(Mists.itemLibrary.create("sword"));
+        this.giveItem(Mists.itemLibrary.create("himmutoy"));
         /*
         this.setAnimation("downMovement", new ImageView("/images/lini.png"), 3, 0, 0, 0, 0, 32, 32 );
         this.setAnimation("leftMovement", new ImageView("/images/lini.png"), 3, 0, 32, 0, 0, 32, 32 );

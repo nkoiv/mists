@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.items;
 
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -77,6 +79,14 @@ public class Item {
     
     public int getWeight() {
         return this.weight;
+    }
+    
+    public void use() {
+        Mists.logger.info(this.getName() + " was used");
+    }
+    
+    public void use(MapObject target) {
+        Mists.logger.info(this.getName() + " was used on "+target.getName());
     }
     
     @Override
