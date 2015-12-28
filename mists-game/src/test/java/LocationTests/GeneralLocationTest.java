@@ -95,7 +95,7 @@ public class GeneralLocationTest extends Application {
     public void updatingLocationCleansDeadMobs() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
         testLocation.addStructure(testRock, 500 , 200);
-        PlayerCharacter testPlayer = new PlayerCharacter();
+        PlayerCharacter testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
         testLocation.addPlayerCharacter(testPlayer, 500, 500);
         testLocation.addCreature(testCreature, 300, 300);
         testCreature.setFlag("removable",1);
@@ -105,7 +105,7 @@ public class GeneralLocationTest extends Application {
     
     @Test
     public void movingIntoLocationUpdatesCurrentPlayer() {
-        PlayerCharacter testPlayer = new PlayerCharacter();
+        PlayerCharacter testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
         testLocation.enterLocation(testPlayer);
         assert(testLocation.getPlayer()==testPlayer);
     }

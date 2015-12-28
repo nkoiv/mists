@@ -112,9 +112,9 @@ public class LocationControls {
     }
     
     public void toggleInventory(InventoryPanel inv) {
-        if (game.currentState.getUIComponents().containsKey(inv.getName())) game.currentState.getUIComponents().remove(inv.getName());
+        if (game.currentState.removeUIComponent(inv.getName()));
         else {
-            game.currentState.getUIComponents().put(inv.getName(), inv); 
+            game.currentState.addUIComponent(inv); 
             Mists.logger.log(Level.INFO, "Inventory size: {0} items, capacity {1}", new Object[]{inv.getInventory().getSize(), inv.getInventory().getCapacity()});
         }
     }

@@ -9,6 +9,8 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeMap;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -26,7 +28,12 @@ import javafx.scene.input.MouseEvent;
  */
 public interface GameState {
     
-    public HashMap<String, UIComponent> getUIComponents();
+    //public HashMap<String, UIComponent> getUIComponents();
+    public void addUIComponent(UIComponent uic);
+    public UIComponent getUIComponent(String uicname);
+    public boolean removeUIComponent(String uicname);
+    public boolean removeUIComponent(UIComponent uic);
+    
     public Game getGame();
     
     //Draw things

@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.items;
 
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Creature;
 import java.util.Arrays;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Arrays;
  * @author nikok
  */
 public class Inventory {
-    
+    private Creature owner;
     private Item[] items;
     private String[] slotnames;
     //private int maxSize;
@@ -27,6 +29,15 @@ public class Inventory {
     
     public Inventory() {
         this(defaultCapacity);
+    }
+    
+    public Inventory(Creature c) {
+        this(c, defaultCapacity);
+    }
+    
+    public Inventory(Creature c, int size) {
+        this(size);
+        this.owner = c;
     }
     
     private void prepareInventory() {
@@ -154,6 +165,37 @@ public class Inventory {
         return this.items.length;
     }
     
+    public void setOwner(Creature c) {
+        this.owner = c;
+    }
+    
+    public Creature getOwner() {
+        return this.owner;
+    }
+    
+    public static boolean equipItem(Inventory inv, int slot) {
+        //TODO: Currently just equipping weapon
+        if (inv.getOwner() == null) return false;
+        Mists.logger.info("Equipping item on "+inv.getOwner().getName());
+        if (inv.getItem(slot) instanceof Weapon) {
+            Item currentWeapon = inv.getOwner().getWeapon();
+            Weapon newWeapon = (Weapon)inv.removeItem(slot);
+            inv.getOwner().equipWeapon(newWeapon);
+            inv.addItem(currentWeapon);
+            Mists.logger.info("Equipped "+newWeapon.getName()+", replacing "+currentWeapon.getName());
+            return true;
+        }
+        return false;
+    }
+    
+    public static boolean dropItem(Inventory inv, int slot) {
+            if (inv.getOwner() == null) return false;
+            if (inv.getItem(slot) == null) return false;
+            Item droppedItem = inv.removeItem(slot);
+            //TODO: Spawn the item as a mapobject on the location
+            return true;
+        }
+    
     private void expand(int extraSlots) {
         Item[] newInventory = Arrays.copyOf(this.items, this.items.length + extraSlots);
         String[] newNames = Arrays.copyOf(this.slotnames, this.slotnames.length + extraSlots);
@@ -167,4 +209,14 @@ public class Inventory {
         this.expand(-slotsToReduce);
         return overflow;
     }
+    
+    public int contentHash() {
+        int hash = 1;
+        for (int i = 0; i < this.items.length; i++) {
+            if (this.items[i]!=null) hash += this.items[i].getName().hashCode()/(i+17);
+        }
+        //Mists.logger.info("Generated inv content hash: "+hash);
+        return hash;
+    }
+    
 }

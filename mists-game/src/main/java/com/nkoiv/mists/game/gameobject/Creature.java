@@ -18,7 +18,6 @@ import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
-import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -63,7 +62,7 @@ public class Creature extends MapObject implements Combatant {
         this.setFacing(Direction.DOWN);
         this.initializeAttributes();
         this.initializeFlags();
-        this.inventory = new Inventory();
+        this.inventory = new Inventory(this);
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
         this.ai = new CreatureAI(this);
@@ -81,7 +80,7 @@ public class Creature extends MapObject implements Combatant {
         this.setSprite(new Sprite(this.spriteAnimations.get("downMovement").getCurrentFrame()));
         this.initializeAttributes();
         this.initializeFlags();
-        this.inventory = new Inventory();
+        this.inventory = new Inventory(this);
         this.ai = new CreatureAI(this);
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);

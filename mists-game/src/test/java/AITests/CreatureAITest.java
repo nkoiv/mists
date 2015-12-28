@@ -47,7 +47,7 @@ public class CreatureAITest {
     @Before
     public void setUp() {
        testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
-       testPlayer = new PlayerCharacter();
+       testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
        testPlayer.setLocation(testLocation);
        testLocation.addPlayerCharacter(testPlayer, 200, 200);
        testCreature = new Creature("AITest", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);

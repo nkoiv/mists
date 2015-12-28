@@ -21,6 +21,7 @@ import javafx.scene.shape.Rectangle;
  * @author nikok
  */
 public class IconButton extends UIComponent {
+    protected long lastClickTime;
     protected Image icon;
     protected Image altIcon;
     protected boolean drawAlt;
@@ -128,7 +129,10 @@ public class IconButton extends UIComponent {
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
-        if (me.getEventType() == MouseEvent.MOUSE_RELEASED && me.getButton() == MouseButton.PRIMARY) this.buttonPress();
+        if (me.getEventType() == MouseEvent.MOUSE_RELEASED && me.getButton() == MouseButton.PRIMARY) {
+            this.lastClickTime = System.currentTimeMillis();
+            this.buttonPress();
+        }
     }
     
     private void buttonPress() {

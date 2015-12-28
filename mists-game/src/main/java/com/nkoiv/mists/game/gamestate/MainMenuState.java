@@ -11,7 +11,9 @@ import com.nkoiv.mists.game.ui.MainMenuWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -54,12 +56,11 @@ public class MainMenuState implements GameState {
         uigc.clearRect(0, 0, screenWidth, screenHeight);
         this.drawLogo(uiCanvas);
         this.drawVersion(uiCanvas);
-        if (uiComponents != null) {
-            for (Map.Entry<String, UIComponent> entry : uiComponents.entrySet()) {
-                entry.getValue().render(uigc, 0, 0);
-                //Mists.logger.info("Rendering UIC " + entry.getKey());
+        if (this.uiComponents != null) {
+            for (String s: this.uiComponents.keySet()) {
+                this.uiComponents.get(s).render(uigc, 0, 0);
             }
-        }   
+        }
     }
     
     private void drawLogo(Canvas canvas) {
@@ -133,11 +134,35 @@ public class MainMenuState implements GameState {
         }
     }
 
-    @Override
-    public HashMap<String, UIComponent> getUIComponents() {
-        return this.uiComponents;
+     @Override
+    public void addUIComponent(UIComponent uic) {
+        this.uiComponents.put(uic.getName(), uic);
+        //this.drawOrder.add(uic);
     }
-
+    
+    @Override
+    public boolean removeUIComponent(String uicName) {
+        if (this.uiComponents.keySet().contains(uicName)) {
+            //this.drawOrder.remove(this.uiComponents.get(uicName));
+            this.uiComponents.remove(uicName);
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean removeUIComponent(UIComponent uic) {
+        if (this.uiComponents.containsValue(uic)) {
+            this.uiComponents.remove(uic.getName());
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public UIComponent getUIComponent(String uicName) {
+        return this.uiComponents.get(uicName);
+    }
     @Override
     public void updateUI() {
         this.uiComponents.get("MainMenu").setPosition((game.WIDTH/2 - 110), 250);

@@ -30,13 +30,15 @@ public class PopUpMenu extends UIComponent{
     private boolean openUpwards = false;
     
     public PopUpMenu (GameState parent) {
+        this.name = "PopUpMenu";
         this.menuButtons = new MenuButton[10];
         this.buttonCount = 0;
         this.parent = parent;
     }
     
     public void close() {
-        this.parent.getUIComponents().remove(this.name);
+        //Mists.logger.info(this.getName()+ " should be closing now");
+        this.parent.removeUIComponent(this);
     }
     
     public void addMenuButton(MenuButton mb) {
@@ -79,18 +81,24 @@ public class PopUpMenu extends UIComponent{
      * true or false 
     */
     private void updatePositions() {
+        this.width = 0;
+        this.height = 0;
         if (this.menuButtons[0] == null) return;
         this.menuButtons[0].setPosition(this.xPosition, this.yPosition);
+        this.height += this.menuButtons[0].getHeight();
         for (int i = 1; i < this.buttonCount; i++) {
             if (this.menuButtons[i] == null) return;
-            this.menuButtons[i].setPosition(this.menuButtons[i-1].getXPosition(), this.menuButtons[i-1].getYPosition());
-            if (this.openUpwards) this.menuButtons[i].movePosition(0, -(this.menuButtons[i].height+this.menuButtons[i-1].height));
-            else this.menuButtons[i].movePosition(0, this.menuButtons[i-1].height);
+            if (this.width < menuButtons[i].width) this.width = menuButtons[i].width;
+            this.height += menuButtons[i].height;
+            this.menuButtons[i].setPosition(this.xPosition, this.menuButtons[i-1].getYPosition());
+            if (this.openUpwards) this.menuButtons[i].movePosition(0, -(this.menuButtons[i].height));
+            else this.menuButtons[i].movePosition(0, this.menuButtons[i].height);
         }
     }
 
     @Override
     public void handleMouseEvent(MouseEvent me) {
+        Mists.logger.info("Click landed on "+this.getName());
         double clickX = me.getX();
         double clickY = me.getY();
         for (int i = 0; i < this.buttonCount; i++) {
@@ -108,11 +116,6 @@ public class PopUpMenu extends UIComponent{
         }
     }
 
-    @Override
-    public String getName() {
-        String s = "[PopupMenu:"+this.name+"]";
-        return s;
-    }
     
     public static class MenuButton  extends UIComponent {
         private static Font defaultFont = Mists.fonts.get("alagard");
@@ -126,7 +129,7 @@ public class PopUpMenu extends UIComponent{
         public MenuButton(PopUpMenu parent) {
             this.parent = parent;
             this.fontSize = -1;
-            this.width = 100;
+            this.width = 80;
             this.height = 20;
         }
 
@@ -143,18 +146,18 @@ public class PopUpMenu extends UIComponent{
             gc.setFill(Color.BLACK);
             gc.fillRect(xPosition, yPosition, this.width, this.height);
             gc.setGlobalAlpha(0.5);
-            gc.setStroke(Color.WHITE);
+            gc.setFill(Color.WHITE);
             gc.setFont(Font.font(gc.getFont().getName(), this.fontSize));
-            gc.strokeText(this.text, xPosition, yPosition);
+            gc.fillText(this.text, xPosition+textXOffset, yPosition-textYOffset+height, this.width);
             gc.restore();
         }
         
         public void render(GraphicsContext gc) {
-            this.render(gc, this.xPosition+this.textXOffset, this.yPosition+this.textYOffset);
+            this.render(gc, this.xPosition, this.yPosition);
         }
         
         private void updateFontSize(Font currentFont) {
-            double currentFontSize = currentFont.getSize();
+            double currentFontSize = 16; //currentFont.getSize();
             Font scaledFont = Toolkit.scaleFont(this.text, this.width, currentFont);
             this.fontSize = Math.min(currentFontSize, scaledFont.getSize());
         }
@@ -163,7 +166,7 @@ public class PopUpMenu extends UIComponent{
             Text t = new Text(this.text);
             t.setFont(Font.font(currentFont.getName(), this.fontSize));
             this.textXOffset = (this.width - t.getLayoutBounds().getWidth())/2;
-            this.textYOffset = (this.height - t.getLayoutBounds().getHeight())/2;
+            this.textYOffset = (this.height - t.getLayoutBounds().getHeight());
         }
 
 
@@ -186,12 +189,6 @@ public class PopUpMenu extends UIComponent{
         protected boolean click() {
             
             return false;
-        }
-
-        @Override
-        public String getName() {
-            String s = "[MenuItem:"+this.text+"]";
-            return s;
         }
     
     }

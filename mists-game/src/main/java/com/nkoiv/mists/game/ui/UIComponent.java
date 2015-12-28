@@ -10,11 +10,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
 /**
- * UIComponent is the interface for anything drawn on the UI layer
+ * UIComponent is the abstract class for anything drawn on the UI layer
  * Everything visible on the UI should implement this.
  * @author nikok
  */
-public abstract class UIComponent {
+public abstract class UIComponent implements Comparable<UIComponent>{
+    protected int renderZ;
     protected String name;
     protected double width;
     protected double height;
@@ -38,6 +39,14 @@ public abstract class UIComponent {
         return this.yPosition;
     }
     
+    public int getRenderZ() {
+        return this.renderZ;
+    }
+    
+    public void setRenderZ(int renderZ) {
+        this.renderZ = renderZ;
+    }
+    
     public void setPosition(double xPos, double yPos) {
         this.xPosition = xPos;
         this.yPosition = yPos;
@@ -55,5 +64,11 @@ public abstract class UIComponent {
         if (this.name == null) return "Nameless UI component";
         else return this.name;
     }
+    
+    @Override
+    public int compareTo(UIComponent uic) {
+        return (this.renderZ-uic.renderZ);
+    }
+
     
 }

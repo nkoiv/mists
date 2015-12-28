@@ -104,6 +104,9 @@ public class LibLoader {
     public static void initializeItemLibrary(ItemLibrary lib) {
         Weapon sword = new Weapon("Sword", ItemType.WEAPON_1H, "a simple sword", 12, new Image("/images/sword.png"));
         lib.addTemplate(sword);
+     
+        Weapon axe = new Weapon("Axe", ItemType.WEAPON_1H, "a fugly axe", 5, new Image("/images/axe.png"));
+        lib.addTemplate(axe);
         
         Item himmutoy = new Item("Himmutoy", ItemType.MISC, new Image("/images/himmuToyMini.png"));
         lib.addTemplate(himmutoy);

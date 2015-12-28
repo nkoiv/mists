@@ -26,7 +26,9 @@ import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.ui.TiledWindow;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -51,6 +53,7 @@ public class LocationState implements GameState {
     private final LocationButtons locationControls = new LocationButtons();
     private boolean inConsole;
     private final HashMap<String, UIComponent> uiComponents;
+    private final TreeSet<UIComponent> drawOrder;
     private TextPanel infobox;
     private ContextAction contextAction;
     private InventoryPanel playerInventory;
@@ -58,6 +61,7 @@ public class LocationState implements GameState {
     public LocationState (Game game) {
         this.game = game;
         uiComponents = new HashMap<>();
+        this.drawOrder = new TreeSet<>();
         this.loadDefaultUI();
     }
     
@@ -96,7 +100,8 @@ public class LocationState implements GameState {
         actionBar.addSubComponent(darkenButton);
         actionBar.addSubComponent(muteMusicButton);
         actionBar.addSubComponent(toggleScaleButton);
-        uiComponents.put(actionBar.getName(), actionBar);
+        actionBar.setRenderZ(-10);
+        this.addUIComponent(actionBar);
         
         this.infobox = new TextPanel(this, "InfoBox", 250, 100, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
         this.playerInventory = new InventoryPanel(this, game.getPlayer().getInventory());
@@ -115,7 +120,6 @@ public class LocationState implements GameState {
     @Override
     public void render(Canvas gameCanvas, Canvas uiCanvas) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
-        GraphicsContext uigc = uiCanvas.getGraphicsContext2D();
         double screenWidth = gameCanvas.getWidth();
         double screenHeight = gameCanvas.getHeight();
         
@@ -131,9 +135,20 @@ public class LocationState implements GameState {
                 game.getCurrentLocation().render(gc);
             }
         }
+        //Render Location overlay
+        Overlay.drawAllHPBars(gc, game.getCurrentLocation().getLastRenderedMobs());
+        //Render the UI
+        this.renderUI(uiCanvas);
+        
+    }
+    
+    private void renderUI(Canvas uiCanvas) {
+        GraphicsContext uigc = uiCanvas.getGraphicsContext2D();
+        double screenWidth = uiCanvas.getWidth();
+        double screenHeight = uiCanvas.getHeight();
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
-        Overlay.drawAllHPBars(uigc, game.getCurrentLocation().getLastRenderedMobs());
+        
         this.contextAction.update();
         if (this.contextAction.getCurrentTrigger() != null) {
             Overlay.drawHighlightRectangle(uigc, this.contextAction.getTriggerObjects());
@@ -143,17 +158,16 @@ public class LocationState implements GameState {
         if (gameMenuOpen){
             try {
                 Image controls = new Image("/images/controls.png");
-                gc.drawImage(controls, screenWidth-controls.getWidth(), 50);
+                uigc.drawImage(controls, screenWidth-controls.getWidth(), 50);
             } catch (Exception e){
                 Mists.logger.info("controls.png not found");
             }
             
         }
         
-        if (uiComponents != null) {
-            for (Map.Entry<String, UIComponent> entry : uiComponents.entrySet()) {
-                entry.getValue().render(uigc, 0, 0);
-                //Mists.logger.info("Rendering UIC " + entry.getKey());
+        if (this.drawOrder != null) {
+            for (UIComponent uic : this.drawOrder) {
+                uic.render(uigc, 0, 0);
             }
         }
         
@@ -179,13 +193,13 @@ public class LocationState implements GameState {
             gameMenu.addSubComponent(optionsButton);
             gameMenu.addSubComponent(mainMenuButton);
             gameMenu.addSubComponent(quitButton);
-            uiComponents.put(gameMenu.getName(), gameMenu);
+            gameMenu.setRenderZ(-1);
+            this.addUIComponent(gameMenu);
             this.paused = true;
             Mists.logger.info("GameMenu opened");
         } else {
             gameMenuOpen = false;
-            if (uiComponents.containsKey("GameMenu")) 
-                    uiComponents.remove("GameMenu");
+            this.removeUIComponent("GameMenu");
             this.paused = false;
             Mists.logger.info("GameMenu closed");
         }
@@ -233,15 +247,17 @@ public class LocationState implements GameState {
     public boolean mouseClickOnUI(MouseEvent me) {
         double clickX = me.getX();
         double clickY = me.getY();
-        for (Map.Entry<String, UIComponent> entry : uiComponents.entrySet()) {
-            double uicHeight = entry.getValue().getHeight();
-            double uicWidth = entry.getValue().getWidth();
-            double uicX = entry.getValue().getXPosition();
-            double uicY = entry.getValue().getYPosition();
+        //Mists.logger.info("UIC keyset: "+this.uiComponents.keySet());
+        //Mists.logger.info("Descending keyset: "+this.uiComponents.descendingKeySet());
+        for (UIComponent uic : this.drawOrder.descendingSet()) {
+            double uicHeight = uic.getHeight();
+            double uicWidth = uic.getWidth();
+            double uicX = uic.getXPosition();
+            double uicY = uic.getYPosition();
             //Check if the click landed on the ui component
             if (clickX >= uicX && clickX <= (uicX + uicWidth)) {
                 if (clickY >= uicY && clickY <= uicY + uicHeight) {
-                    entry.getValue().handleMouseEvent(me);
+                    uic.handleMouseEvent(me);
                     return true;
                 }
             }
@@ -279,6 +295,20 @@ public class LocationState implements GameState {
     }
 
     /**
+     * Close the topmost open menu if menus/windows
+     * are open. Return false if nothing was closed.
+     * @return 
+     */
+    private boolean closeMenus() {
+        for (UIComponent uic : this.drawOrder.descendingSet()) {
+            if (uic.getRenderZ() < 0) return false;
+            else this.removeUIComponent(uic);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * HandleLocationKeyPresses takes in the arraylists of keypresses and releases from the Game,
      * and does location-appropriate things with them.
      * TODO: Load these keybindings from an external file.
@@ -290,7 +320,6 @@ public class LocationState implements GameState {
         //TODO: External loadable configfile for keybindings
         //(probably via a class of its own)     
         game.getPlayer().stopMovement();
-        
         if (pressedButtons.isEmpty() && releasedButtons.isEmpty()) {
             return;
         }
@@ -340,7 +369,7 @@ public class LocationState implements GameState {
         }
         
         if (releasedButtons.contains(KeyCode.ESCAPE)) {
-            game.locControls.toggleLocationMenu();
+            if (!this.closeMenus()) game.locControls.toggleLocationMenu();
         }
 
         //Location controls
@@ -409,9 +438,37 @@ public class LocationState implements GameState {
         Mists.soundManager.playMusic("dungeon");
     }
 
+    
     @Override
-    public HashMap<String, UIComponent> getUIComponents() {
-        return this.uiComponents;
+    public void addUIComponent(UIComponent uic) {
+        this.uiComponents.put(uic.getName(), uic);
+        this.drawOrder.add(uic);
+    }
+    
+    @Override
+    public boolean removeUIComponent(String uicName) {
+        if (this.uiComponents.keySet().contains(uicName)) {
+            //Mists.logger.info("Removing UIC "+uicName);
+            this.drawOrder.remove(this.uiComponents.get(uicName));
+            this.uiComponents.remove(uicName);
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean removeUIComponent(UIComponent uic) {
+        if (this.uiComponents.containsValue(uic)) {
+            this.drawOrder.remove(uic);
+            this.uiComponents.remove(uic.getName());
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public UIComponent getUIComponent(String uicName) {
+        return this.uiComponents.get(uicName);
     }
     
     
