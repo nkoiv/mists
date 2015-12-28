@@ -300,11 +300,18 @@ public class LocationState implements GameState {
      * @return 
      */
     private boolean closeMenus() {
+        //Close the frontmost menu/window
         for (UIComponent uic : this.drawOrder.descendingSet()) {
-            if (uic.getRenderZ() < 0) return false;
+            if (uic.getRenderZ() < 0) break;
             else this.removeUIComponent(uic);
             return true;
         }
+        //If no window was closed, deselect a target if a target is selected
+        if (!game.getCurrentLocation().getTargets().isEmpty()) {
+            game.getCurrentLocation().clearTarget();
+            return true;
+        }
+        //If nothing was closed, return false
         return false;
     }
     

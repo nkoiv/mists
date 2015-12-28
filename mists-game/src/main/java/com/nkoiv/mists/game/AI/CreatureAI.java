@@ -262,7 +262,7 @@ public class CreatureAI extends Flags{
             }
             if (target == null) return false;
             else {
-                Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
+                //Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
                 return this.goMelee(target, time);
             }
             
