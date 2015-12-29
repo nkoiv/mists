@@ -162,5 +162,5 @@ public class Game {
         //Pass the mouse event to the current gamestate
         currentState.handleMouseEvent(me);
     }
-    
+
 }

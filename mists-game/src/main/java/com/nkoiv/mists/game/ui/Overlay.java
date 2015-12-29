@@ -166,22 +166,25 @@ public class Overlay {
             gc.drawImage(Mists.graphLibrary.getImage("buttonSelectSmallbeige"), mob.getXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset());
     }
     
+    
     /**
+     * OUTDATED
      * InfoBox displaying info about the mob that's currently targeted
      * @param gc
      * @param infobox
      * @param mob
-     */
+     
     public static void drawInfoBox(GraphicsContext gc, TextPanel infobox, MapObject mob) {
         infobox.setText(generateInfoBoxText(mob));
         infobox.render(gc, 0, 0);
         //TODO: Snapshot for MOB image
         gc.drawImage(mob.getSnapshot(), infobox.xPosition+infobox.getWidth()-mob.getWidth()-10, infobox.yPosition+10);
     }
+    */
     
-    
-    private static String generateInfoBoxText(MapObject mob) {
+    public static String generateInfoBoxText(MapObject mob) {
         String text = "";
+        if (mob == null) return text;
         StringBuilder sb = new StringBuilder();
         sb.append(mob.toString());
         if (mob instanceof Creature) {

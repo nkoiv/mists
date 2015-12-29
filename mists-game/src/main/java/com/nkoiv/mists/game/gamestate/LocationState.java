@@ -49,6 +49,9 @@ public class LocationState implements GameState {
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
     public boolean paused;
+    public double lastDragX;
+    public double lastDragY;
+    public boolean infoBoxOpen;
     private final AudioControls audioControls = new AudioControls();
     private final LocationButtons locationControls = new LocationButtons();
     private boolean inConsole;
@@ -148,13 +151,13 @@ public class LocationState implements GameState {
         double screenHeight = uiCanvas.getHeight();
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
-        
+        this.updateInfoBox();
         this.contextAction.update();
         if (this.contextAction.getCurrentTrigger() != null) {
             Overlay.drawHighlightRectangle(uigc, this.contextAction.getTriggerObjects());
             Overlay.drawHandCursor(uigc, this.contextAction.getCurrentTrigger().getTarget());
         }
-        if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(uigc, infobox, game.getCurrentLocation().getTargets().get(0));
+        //if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(uigc, infobox, game.getCurrentLocation().getTargets().get(0));
         if (gameMenuOpen){
             try {
                 Image controls = new Image("/images/controls.png");
@@ -173,7 +176,10 @@ public class LocationState implements GameState {
         
     }
     
-    
+    private void updateInfoBox() {
+        if (game.getCurrentLocation().getTargets().size() < 1) return;
+        this.infobox.setText(Overlay.generateInfoBoxText(game.getCurrentLocation().getTargets().get(0)));
+    }
     
     
     /**
@@ -228,14 +234,49 @@ public class LocationState implements GameState {
         } 
     }
     
+    
     @Override
     public void handleMouseEvent(MouseEvent me) {
-        //See if there's an UI component to click      
+        //See if there's an UI component to click
+        if (me.getEventType() == MouseEvent.MOUSE_CLICKED || me.getEventType() == MouseEvent.MOUSE_PRESSED || me.getEventType() == MouseEvent.MOUSE_RELEASED) this.handleClicks(me);
+        if (me.getEventType() == MouseEvent.MOUSE_DRAGGED) this.handleMouseDrags(me);
+        me.consume();
+    }
+    
+    private void handleClicks(MouseEvent me) {
+        this.lastDragX = 0; this.lastDragY = 0;
         if(!mouseClickOnUI(me)){
             //If not, give the click to the underlying gameLocation
             Mists.logger.info("Click didnt land on an UI button");
             this.mouseClickOnLocation(me);
         }
+    }
+    
+    private void handleMouseDrags(MouseEvent me) {
+        if (lastDragX == 0 || lastDragY == 0) {
+            lastDragX = me.getX();
+            lastDragY = me.getY();
+        }
+        UIComponent uic = this.getUIComponentAtCoordinates(me.getX(), me.getY());
+        if (uic != null) uic.handleMouseDrag(me, lastDragX, lastDragY);
+        lastDragX = me.getX(); lastDragY = me.getY();
+    }
+    
+    protected UIComponent getUIComponentAtCoordinates(double xCoor, double yCoor) {
+        for (UIComponent uic : this.drawOrder.descendingSet()) {
+            double uicHeight = uic.getHeight();
+            double uicWidth = uic.getWidth();
+            double uicX = uic.getXPosition();
+            double uicY = uic.getYPosition();
+            //Check if the click landed on the ui component
+            if (xCoor >= uicX && xCoor <= (uicX + uicWidth)) {
+                if (yCoor >= uicY && yCoor <= uicY + uicHeight) {
+                    return uic;
+                }
+            }
+        }
+        //Click landed on area without UI component
+        return null;
     }
     
     /**
@@ -245,26 +286,13 @@ public class LocationState implements GameState {
      * @return True if UI component was clicked. False if there was no UI there
      */
     public boolean mouseClickOnUI(MouseEvent me) {
-        double clickX = me.getX();
-        double clickY = me.getY();
-        //Mists.logger.info("UIC keyset: "+this.uiComponents.keySet());
-        //Mists.logger.info("Descending keyset: "+this.uiComponents.descendingKeySet());
-        for (UIComponent uic : this.drawOrder.descendingSet()) {
-            double uicHeight = uic.getHeight();
-            double uicWidth = uic.getWidth();
-            double uicX = uic.getXPosition();
-            double uicY = uic.getYPosition();
-            //Check if the click landed on the ui component
-            if (clickX >= uicX && clickX <= (uicX + uicWidth)) {
-                if (clickY >= uicY && clickY <= uicY + uicHeight) {
-                    uic.handleMouseEvent(me);
-                    return true;
-                }
-            }
-            
+        UIComponent uic = this.getUIComponentAtCoordinates(me.getX(), me.getY());
+        if (uic != null) {
+            uic.handleMouseEvent(me);
+            return true;
         }
-        //Click landed on area without UI component
         return false;
+        
     }
     
     private boolean mouseClickOnLocation(MouseEvent me) {
@@ -280,11 +308,14 @@ public class LocationState implements GameState {
         if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_RELEASED) {
             MapObject targetMob = game.getCurrentLocation().getMobAtLocation(clickX+game.getCurrentLocation().getLastxOffset(), clickY+game.getCurrentLocation().getLastyOffset());
             if (targetMob!=null) { 
-                if (game.getCurrentLocation().getTargets().contains(targetMob)) game.getCurrentLocation().clearTarget();
+                if (game.getCurrentLocation().getTargets().contains(targetMob)) {
+                    game.getCurrentLocation().clearTarget();
+                    this.removeUIComponent("InfoBox");
+                }
                 else {
                     Mists.logger.log(Level.INFO, "Targetted {0}", targetMob.toString());
                     game.getCurrentLocation().setTarget(targetMob);
-                    //game.currentLocation.setScreenFocus(targetMob);
+                    this.addUIComponent(this.infobox);
                 }
                 return true;
             }

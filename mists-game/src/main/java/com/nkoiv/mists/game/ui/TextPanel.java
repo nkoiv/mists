@@ -28,6 +28,7 @@ public class TextPanel extends TextWindow {
     public TextPanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images) {
         super(parent, name, width, height, xPos, yPos);
         this.images = images;
+        this.draggable = true;
     }
     
     

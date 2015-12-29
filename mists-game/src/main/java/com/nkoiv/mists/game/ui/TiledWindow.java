@@ -39,7 +39,7 @@ public class TiledWindow extends UIComponent{
         this.margin = 10;
         this.bgOpacity = 0.3;
         this.bgColor = Color.BLACK;
-                
+        
     }
     
     public void close() {
@@ -167,6 +167,17 @@ public class TiledWindow extends UIComponent{
     public void handleKeyPress(ArrayList<String> pressedButtons, ArrayList<String> releasedButtons) {
         if(this.interactive) {
             
+        }
+    }
+    
+    @Override
+    public void handleMouseDrag(MouseEvent me, double lastDragX, double lastDragY) {
+        if (this.draggable) {
+            Mists.logger.info("Mouse drag: "+me.getX()+","+me.getY());
+            this.movePosition(me.getX()-lastDragX, me.getY()-lastDragY);
+            for (UIComponent uic : this.subComponents) {
+                uic.movePosition(me.getX()-lastDragX, me.getY()-lastDragY);
+            }
         }
     }
     

@@ -37,12 +37,14 @@ public class InventoryPanel extends TiledPanel {
     public InventoryPanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images, Inventory inv) {
         super(parent, name, width, height, xPos, yPos, images);
         this.inv = inv;
+        this.draggable = true;
     }
     
     public InventoryPanel(GameState parent, Inventory inv) {
         super(parent, "Inventory", defaultWidth, defaultHeight, Mists.WIDTH/2, Mists.HEIGHT/2, Mists.graphLibrary.getImageSet(defaultPanelImages));
         this.inv = inv;
         this.populateItemsIntoButtons();
+        this.draggable = true;
     }
     
     private void populateItemsIntoButtons() {

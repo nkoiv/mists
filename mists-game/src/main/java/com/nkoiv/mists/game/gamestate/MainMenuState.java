@@ -84,14 +84,18 @@ public class MainMenuState implements GameState {
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         
     }
+ 
 
     @Override
     public void handleMouseEvent(MouseEvent me) {
         //See if there's an UI component to click
-        if(!mouseClickOnUI(me)){
+        if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+            if(!mouseClickOnUI(me)){
             //If not, give the click to the underlying gameLocation
             Mists.logger.info("Click didnt land on an UI button");
         }
+        }
+        
     }
     
     public boolean mouseClickOnUI(MouseEvent me) {

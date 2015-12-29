@@ -22,6 +22,10 @@ public abstract class UIComponent implements Comparable<UIComponent>{
     protected double xPosition;
     protected double yPosition;
     
+    protected boolean draggable;
+    protected double lastDragStartX;
+    protected double lastDragStartY;
+    
     public void render(GraphicsContext gc, double xPosition, double yPosition) {
         
     }
@@ -43,6 +47,10 @@ public abstract class UIComponent implements Comparable<UIComponent>{
         return this.renderZ;
     }
     
+    public boolean isDraggable() {
+        return this.draggable;
+    }
+    
     public void setRenderZ(int renderZ) {
         this.renderZ = renderZ;
     }
@@ -54,6 +62,13 @@ public abstract class UIComponent implements Comparable<UIComponent>{
     public void movePosition(double xChange, double yChange) {
         this.xPosition += xChange;
         this.yPosition += yChange;
+    }
+    
+    public void handleMouseDrag(MouseEvent me, double lastDragX, double lastDragY) {
+        if (this.draggable) {
+            Mists.logger.info("Mouse drag: "+me.getX()+","+me.getY());
+            this.movePosition(me.getX()-lastDragX, me.getY()-lastDragY);
+        }
     }
     
     public void handleMouseEvent(MouseEvent me) {
