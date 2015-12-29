@@ -7,6 +7,8 @@ package com.nkoiv.mists.game.items;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
+import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.Arrays;
 
 /**
@@ -201,7 +203,11 @@ public class Inventory {
             if (inv.getOwner() == null) return false;
             if (inv.getItem(slot) == null) return false;
             Item droppedItem = inv.removeItem(slot);
-            //TODO: Spawn the item as a mapobject on the location
+            Mists.logger.info("Spawning itempile with "+droppedItem.getName()+" on the ground at "+inv.getOwner().getXPos()+", "+inv.getOwner().getYPos());
+            ItemContainer itemPile = new ItemContainer(droppedItem.getName(), new Sprite(Mists.graphLibrary.getImage("blank")));
+            itemPile.addItem(droppedItem);
+            itemPile.setRenderContent(true);
+            inv.owner.getLocation().addStructure(itemPile, inv.owner.getXPos(), inv.owner.getYPos());
             return true;
         }
     

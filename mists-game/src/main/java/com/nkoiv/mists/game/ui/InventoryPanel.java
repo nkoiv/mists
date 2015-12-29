@@ -170,12 +170,23 @@ public class InventoryPanel extends TiledPanel {
         @Override
         protected boolean click() {
             switch (this.actionType) {
-                case USE_ITEM: this.inv.getItem(slot).use(); this.parent.close() ;return true;
-                case EQUIP_ITEM: if (Inventory.equipItem(this.inv, slot)) {
+                case USE_ITEM: {
+                    this.inv.getItem(slot).use();
                     this.parent.close();
                     return true;
-                } return false;
-                case DROP_ITEM: Inventory.dropItem(this.inv, slot);
+                } 
+                case EQUIP_ITEM: {
+                    if (Inventory.equipItem(this.inv, slot)) {
+                        this.parent.close();
+                        return true;
+                    } return false;
+                }
+                case DROP_ITEM: {
+                    if (Inventory.dropItem(this.inv, slot)) {
+                        this.parent.close();
+                        return true;
+                    } return false;
+                }
                 default: break;
             }
             return false;

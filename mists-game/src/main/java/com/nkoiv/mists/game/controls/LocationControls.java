@@ -9,14 +9,15 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import javafx.scene.image.ImageView;
@@ -127,6 +128,13 @@ public class LocationControls {
             if ("blob".equals(mobTemplate)) addBlob();
         }
         
+    }
+    
+    public void createItemPile(Item item, double xCoor, double yCoor) {
+        ItemContainer itemPile = new ItemContainer(item.getName(), new Sprite(Mists.graphLibrary.getImage("blank")));
+        itemPile.addItem(item);
+        itemPile.setRenderContent(true);
+        this.currentLoc().addStructure(itemPile, xCoor, yCoor);
     }
     
     //------- Inventory manipulation ------

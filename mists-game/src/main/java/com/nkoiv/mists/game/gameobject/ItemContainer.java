@@ -103,7 +103,7 @@ public class ItemContainer extends Structure {
         }
         if (images.length ==1) compilation = images[0];
         else {
-            compilation = Toolkit.mergeImage(false, images);
+            compilation = Toolkit.mergeImage(true, images);
         }
         
         return compilation;
