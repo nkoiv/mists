@@ -13,7 +13,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
  * @author nikok
  */
 public interface Trigger {
-    
+    public String getDescription();
     public void toggle();
     public MapObject getTarget();
 }

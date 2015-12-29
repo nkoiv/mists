@@ -81,12 +81,14 @@ public class Item {
         return this.weight;
     }
     
-    public void use() {
-        Mists.logger.info(this.getName() + " was used");
+    public boolean use() {
+        Mists.logger.info(this.getName() + " can't be used");
+        return false;
     }
     
-    public void use(MapObject target) {
-        Mists.logger.info(this.getName() + " was used on "+target.getName());
+    public boolean use(MapObject target) {
+        Mists.logger.info(this.getName() + " was used on "+target.getName()+" but can't be used");
+        return false;
     }
     
     @Override

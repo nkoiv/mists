@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -138,6 +139,17 @@ public class Location extends Flags implements Global {
             this.addStructure(tree, 2*TILESIZE, 10*TILESIZE);   
             this.setMobInRandomOpenSpot(tree);
             Mists.logger.info("Created a "+tree.getName()+" at "+(int)tree.getCenterXPos()+"x"+(int)tree.getCenterYPos());
+        }
+        
+        for (int i = 0; i<10;i++) {
+            //Make a bunch of itempiles
+            ItemContainer pile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
+            pile.setRenderContent(true);
+            pile.addItem(Mists.itemLibrary.create("sword"));
+            pile.addItem(Mists.itemLibrary.create("himmutoy"));
+            this.addStructure(pile, 0, 0);
+            this.setMobInRandomOpenSpot(pile);
+            Mists.logger.info("Created a "+pile.getName()+" at "+(int)pile.getCenterXPos()+"x"+(int)pile.getCenterYPos());
         }
         
         for (int i = 0; i < 20; i++) {

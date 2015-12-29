@@ -157,6 +157,10 @@ public class Inventory {
         return null;
     }
     
+    public boolean isFull() {
+        return this.itemSize >= this.items.length;
+    }
+    
     public int getSize() {
         return itemSize;
     }
@@ -173,6 +177,11 @@ public class Inventory {
         return this.owner;
     }
     
+    public static boolean useItem(Inventory inv, int slot) {
+        if (inv.owner != null) return inv.getItem(slot).use(inv.owner);
+        else return inv.getItem(slot).use();
+    }
+    
     public static boolean equipItem(Inventory inv, int slot) {
         //TODO: Currently just equipping weapon
         if (inv.getOwner() == null) return false;
@@ -181,8 +190,8 @@ public class Inventory {
             Item currentWeapon = inv.getOwner().getWeapon();
             Weapon newWeapon = (Weapon)inv.removeItem(slot);
             inv.getOwner().equipWeapon(newWeapon);
-            inv.addItem(currentWeapon);
-            Mists.logger.info("Equipped "+newWeapon.getName()+", replacing "+currentWeapon.getName());
+            if (currentWeapon != null) inv.addItem(currentWeapon);
+            Mists.logger.info("Equipped "+newWeapon.getName());
             return true;
         }
         return false;
@@ -196,14 +205,14 @@ public class Inventory {
             return true;
         }
     
-    private void expand(int extraSlots) {
+    public void expand(int extraSlots) {
         Item[] newInventory = Arrays.copyOf(this.items, this.items.length + extraSlots);
         String[] newNames = Arrays.copyOf(this.slotnames, this.slotnames.length + extraSlots);
         this.items = newInventory;
         this.slotnames = newNames;
     }
     
-    private Item[] shrink(int slotsToReduce) {
+    public Item[] shrink(int slotsToReduce) {
         if (slotsToReduce > items.length) return null; //Cant reduce the size of inventory to negative
         Item[] overflow = Arrays.copyOfRange(items, items.length-slotsToReduce, items.length);
         this.expand(-slotsToReduce);

@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
@@ -29,6 +30,12 @@ public class Structure extends MapObject {
         this.extraSprites = new ArrayList<>();
     }
     
+    public Structure(String name, MovingGraphics graphics, int collisionLevel) {
+        super(name, graphics);
+        this.collisionLevel = collisionLevel;
+        this.setFlag("visible", 1);
+        this.extraSprites = new ArrayList<>();
+    }
     
     public void addExtra (Sprite sprite, double xOffset, double yOffset) {
         sprite.setPosition(this.getXPos()+xOffset, this.getYPos()+yOffset);

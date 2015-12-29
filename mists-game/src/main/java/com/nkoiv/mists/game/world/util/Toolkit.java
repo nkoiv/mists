@@ -8,6 +8,11 @@ package com.nkoiv.mists.game.world.util;
 import com.nkoiv.mists.game.Direction;
 import java.awt.Point;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -227,5 +232,33 @@ public abstract class Toolkit {
         return Font.font(pFont.getName(), fontSize);
     }
     
+    /**
+     * Make an image composed of several images, layered
+     * atop another with PixelWriter
+     * @param centerImages set True if (smaller than the first one) images should be centred 
+     * @param images List of images to merge
+     * @return 
+     */
+    public static Image mergeImage(boolean centerImages, Image... images) {
+        WritableImage compose = new WritableImage((int)images[0].getWidth(), (int)images[0].getHeight());
+        PixelWriter pw = compose.getPixelWriter();
+        
+        for (Image image : images) {
+            int xOffset =0;
+            int yOffset =0;
+            if (centerImages) {
+                if (image.getWidth() < images[0].getWidth()) xOffset = (int)((images[0].getWidth() - image.getWidth())/2);
+                if (image.getHeight() < images[0].getHeight()) yOffset = (int)((images[0].getHeight() - image.getHeight())/2);
+            }
+            PixelReader pr = image.getPixelReader();
+            for(int y=0; y<Math.min(image.getHeight(), images[0].getHeight()); y++){
+                for(int x=0; x<Math.min(image.getWidth(), images[0].getWidth()); x++){
+                    Color color = pr.getColor(x, y);
+                    pw.setColor((x+xOffset), (int)(y+yOffset), color);
+                }
+            }
+        }
+        return compose;
+    }
     
 }

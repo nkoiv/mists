@@ -79,6 +79,12 @@ public class Door  extends Structure {
             return this.door;
         }
         
+        @Override
+        public String getDescription() {
+            if (this.door.open) return "Close door";
+            else return "Open door";
+        }
+        
     }
     
     @Override

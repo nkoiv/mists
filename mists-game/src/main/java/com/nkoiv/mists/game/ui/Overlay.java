@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -191,10 +192,21 @@ public class Overlay {
             sb.append("\n");
             sb.append("Available actions: ");
             sb.append(((Creature) mob).getAvailableActionNames());
+            text = sb.toString();
+            return text;
+        }
+        if (mob instanceof ItemContainer) {
+            sb.append("\n");
+            sb.append("Collision level: ").append(((Structure) mob).getCollisionLevel());
+            sb.append("\n");
+            sb.append("Containing:");
+            sb.append("\n");
         }
         if (mob instanceof Structure) {
             sb.append("\n");
             sb.append("Collision level: ").append(((Structure) mob).getCollisionLevel());
+            text = sb.toString();
+            return text;
         }
         text = sb.toString();
         return text;
