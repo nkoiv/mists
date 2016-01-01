@@ -201,4 +201,20 @@ public class TiledWindow extends UIComponent{
         }
     }
     
+    protected class CloseButton extends IconButton {
+        TiledWindow tw;
+        
+        public CloseButton(TiledWindow tw, double xPosition, double yPosition) {
+            super("CloseButton", 15, 15, xPosition, yPosition, Mists.graphLibrary.getImage("iconCrossBlue"), Mists.graphLibrary.getImage("iconCrossBlue"));
+            this.tw = tw;
+            
+        }
+        
+        @Override
+        protected void buttonPress() {
+            this.tw.close();
+        }
+        
+    }
+    
 }

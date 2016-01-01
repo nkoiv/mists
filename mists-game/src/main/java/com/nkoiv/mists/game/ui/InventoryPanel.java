@@ -64,6 +64,9 @@ public class InventoryPanel extends TiledPanel {
                 this.subComponents.add(ib);
             }   
         }
+        //Add a close button
+        CloseButton cb = new CloseButton (this, this.xPosition + this.width - 20, this.yPosition+5);
+        this.subComponents.add(cb);
     }
     
     public Inventory getInventory() {

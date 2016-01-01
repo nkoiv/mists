@@ -157,6 +157,18 @@ public class LibLoader {
         lib.addImage("buttonSquareBeige", new Image("/images/ui/buttonSquare_beige.png"));
         lib.addImage("buttonSquareBeigePressed", new Image("/images/ui/buttonSquare_beige_pressed.png"));
         
+        lib.addImage("iconCheckBeige", new Image("/images/ui/iconCheck_beige.png"));
+        lib.addImage("iconCheckBlue", new Image("/images/ui/iconCheck_blue.png"));
+        lib.addImage("iconCheckBronze", new Image("/images/ui/iconCheck_bronze.png"));
+        
+        lib.addImage("iconCrossBeige", new Image("/images/ui/iconCross_beige.png"));
+        lib.addImage("iconCrossBlue", new Image("/images/ui/iconCross_blue.png"));
+        lib.addImage("iconCrossBronze", new Image("/images/ui/iconCross_bronze.png"));
+        
+        lib.addImage("iconCircleBeige", new Image("/images/ui/iconCircle_beige.png"));
+        lib.addImage("iconCircleBlue", new Image("/images/ui/iconCircle_blue.png"));
+        lib.addImage("iconCircleronze", new Image("/images/ui/iconCircle_bronze.png"));
+        
         //Icons
         lib.addImage("musicOnIcon", new Image("/images/ui/musicOn.png"));
         lib.addImage("musicOffIcon", new Image("/images/ui/musicOff.png"));

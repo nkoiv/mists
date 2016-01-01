@@ -135,7 +135,7 @@ public class IconButton extends UIComponent {
         }
     }
     
-    private void buttonPress() {
+    protected void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
     }
     

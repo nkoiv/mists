@@ -6,8 +6,10 @@
 package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Game;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -60,6 +62,10 @@ public class TextWindow extends UIComponent {
         gc.restore();
     }
     
+    public void close() {
+        this.parent.removeUIComponent(this.name);
+    }
+    
     public void setText(String string) {
         this.text = string;
     }
@@ -79,6 +85,22 @@ public class TextWindow extends UIComponent {
     
     protected Game getGame() {
         return this.parent.getGame();
+    }
+    
+    protected class CloseButton extends IconButton {
+        TextWindow tw;
+        
+        public CloseButton(TextWindow tw, double xPosition, double yPosition) {
+            super("CloseButton", 15, 15, xPosition, yPosition, Mists.graphLibrary.getImage("iconCrossBlue"), Mists.graphLibrary.getImage("iconCrossBlue"));
+            this.tw = tw;
+            
+        }
+        
+        @Override
+        protected void buttonPress() {
+            this.tw.close();
+        }
+        
     }
 
 }
