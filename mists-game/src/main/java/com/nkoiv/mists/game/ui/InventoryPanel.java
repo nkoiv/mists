@@ -26,6 +26,7 @@ import javafx.scene.shape.Rectangle;
  * @author nikok
  */
 public class InventoryPanel extends TiledPanel {
+    private static double topMargin = 20;
     private static double buttonSize = Mists.TILESIZE;
     private static double pacing = 5;
     private static double defaultWidth = 300;
@@ -55,7 +56,7 @@ public class InventoryPanel extends TiledPanel {
         int column = 0;
         for (int i = 0; i < this.inv.getCapacity(); i++) {
             if (this.inv.getItem(i) != null) {
-                ItemButton ib = new ItemButton(this.parent, this.inv, i, this.xPosition+pacing+(column*(buttonSize+pacing)), this.yPosition+pacing+(row*(buttonSize+pacing)));
+                ItemButton ib = new ItemButton(this.parent, this.inv, i, this.xPosition+pacing+(column*(buttonSize+pacing)), topMargin + this.yPosition+pacing+(row*(buttonSize+pacing)));
                 column++;
                 if ((i+1)%rowSize == 0) {
                     row++;
