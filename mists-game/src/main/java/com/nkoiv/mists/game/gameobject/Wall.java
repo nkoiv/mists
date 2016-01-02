@@ -5,8 +5,10 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -41,6 +43,7 @@ import javafx.scene.paint.Color;
 public class Wall extends Structure {
     private ImageView wallparts;
     private Image[] wallimages;
+    private boolean useExtrasForWalls;
     
     private boolean[] neighbours = new boolean[8];
     /* Neighbours is the list of walls that affect the looks of this wall
@@ -52,113 +55,138 @@ public class Wall extends Structure {
     public Wall(String name, Image image, int collisionLevel, ImageView wallparts) {
         super(name, image, collisionLevel);
         this.wallparts = wallparts;
-        this.wallimages = new Image[8];
+        this.useExtrasForWalls = false;
     }
     
-    public Wall(String name, Image image, int collisionLevel,  Image[] wallparts) {
+    public Wall(String name, Image image, int collisionLevel,  Image[] wallimages) {
         super(name, image, collisionLevel);
-        this.wallimages = wallparts;
+        this.wallimages = wallimages;
+        this.useExtrasForWalls = false;
     }
     
  
     public void updateNeighbours() {
-        this.removeExtras();
-        WritableImage snapshot = null;
-        SnapshotParameters parameters = new SnapshotParameters();
-        parameters.setFill(Color.TRANSPARENT);
-        //Cardinals
-        if (neighbours[1] ==false) {
-            Sprite s;
-            if (this.wallimages[1]!=null) {
-                s = new Sprite(this.wallimages[1]);
-            } else {
-                wallparts.setViewport(new Rectangle2D(this.getWidth(),0,this.getWidth(),this.getHeight()));
-                WritableImage upWall = wallparts.snapshot(parameters, snapshot);
-                s = new Sprite(upWall);
+        if (this.useExtrasForWalls == false) {
+            if (this.wallimages == null) this.generateWallImages(this.wallparts);
+            this.getSprite().setImage(this.composeImage());
+        } else {
+            
+
+            this.removeExtras();
+            WritableImage snapshot = null;
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setFill(Color.TRANSPARENT);
+            //Cardinals
+            if (neighbours[1] ==false) {
+                Sprite s;
+                if (this.wallimages[1]!=null) {
+                    s = new Sprite(this.wallimages[1]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(this.getWidth(),0,this.getWidth(),this.getHeight()));
+                    WritableImage upWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(upWall);
+                }
+                this.addExtra(s, 0, -4);
             }
-            this.addExtra(s, 0, -4);
-        }
-        if (neighbours[3] ==false) {
-            Sprite s;
-            if (this.wallimages[1]!=null) {
-                s = new Sprite(this.wallimages[3]);
-            } else {
-                wallparts.setViewport(new Rectangle2D(this.getWidth()*3,0,this.getWidth(),this.getHeight()));
-                WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
-                s = new Sprite(leftWall);
+            if (neighbours[3] ==false) {
+                Sprite s;
+                if (this.wallimages[1]!=null) {
+                    s = new Sprite(this.wallimages[3]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(this.getWidth()*3,0,this.getWidth(),this.getHeight()));
+                    WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(leftWall);
+                }
+                this.addExtra(s, 0, -4);
             }
-            this.addExtra(s, 0, -4);
-        }
-        if (neighbours[4] ==false) {
-            Sprite s;
-            if (this.wallimages[1]!=null) {
-                s = new Sprite(this.wallimages[4]);
-            } else {
-                wallparts.setViewport(new Rectangle2D(this.graphics.getWidth()*2,0,this.graphics.getWidth(),this.graphics.getHeight()));
-                WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
-                s = new Sprite(rightWall);
+            if (neighbours[4] ==false) {
+                Sprite s;
+                if (this.wallimages[1]!=null) {
+                    s = new Sprite(this.wallimages[4]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(this.graphics.getWidth()*2,0,this.graphics.getWidth(),this.graphics.getHeight()));
+                    WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(rightWall);
+                }
+                this.addExtra(s, 0, -4);
             }
-            this.addExtra(s, 0, -4);
-        }
-        if (neighbours[6] ==false) {
-            Sprite s;
-            if (this.wallimages[1]!=null) {
-                s = new Sprite(this.wallimages[6]);
-            } else {
-                wallparts.setViewport(new Rectangle2D(0,0,this.graphics.getWidth(),this.graphics.getHeight()));
-                WritableImage downWall = wallparts.snapshot(parameters, snapshot);
-                s = new Sprite(downWall);
+            if (neighbours[6] ==false) {
+                Sprite s;
+                if (this.wallimages[1]!=null) {
+                    s = new Sprite(this.wallimages[6]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(0,0,this.graphics.getWidth(),this.graphics.getHeight()));
+                    WritableImage downWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(downWall);
+                }
+                //this.addExtra(s, 0, 0);
+                this.getSprite().setImage(s.getImage());
             }
-            //this.addExtra(s, 0, 0);
-            this.getSprite().setImage(s.getImage());
-        }
-        //Diagonals
-        /*
-        if (neighbours[0] ==false) {
-            Sprite s;
-            if (this.wallimages[0]!=null) {
-                s = new Sprite(this.wallimages[0]);
-            } else {
-                wallparts.setViewport(new Rectangle2D(0,this.sprite.getHeight(),this.sprite.getWidth(),this.sprite.getHeight()));
-                WritableImage upWall = wallparts.snapshot(parameters, snapshot);
-                s = new Sprite(upWall);
+            //Diagonals
+            /*
+            if (neighbours[0] ==false) {
+                Sprite s;
+                if (this.wallimages[0]!=null) {
+                    s = new Sprite(this.wallimages[0]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(0,this.sprite.getHeight(),this.sprite.getWidth(),this.sprite.getHeight()));
+                    WritableImage upWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(upWall);
+                }
+                this.addExtra(s, 0, -8);
             }
-            this.addExtra(s, 0, -8);
-        }
-        if (neighbours[5] ==false) {
-            Sprite s;
-            if (this.wallimages[5]!=null) {
-                s = new Sprite(this.wallimages[5]);
-            } else {
-                wallparts.setViewport(new Rectangle2D(this.sprite.getWidth(),this.sprite.getHeight(),this.sprite.getWidth(),this.sprite.getHeight()));
-                WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
-                s = new Sprite(leftWall);
+            if (neighbours[5] ==false) {
+                Sprite s;
+                if (this.wallimages[5]!=null) {
+                    s = new Sprite(this.wallimages[5]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(this.sprite.getWidth(),this.sprite.getHeight(),this.sprite.getWidth(),this.sprite.getHeight()));
+                    WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(leftWall);
+                }
+                this.addExtra(s, 0, 0);
             }
-            this.addExtra(s, 0, 0);
-        }
-        if (neighbours[7] ==false) {
-            Sprite s;
-            if (this.wallimages[7]!=null) {
-                s = new Sprite(this.wallimages[7]);
-            } else {
-                wallparts.setViewport(new Rectangle2D(this.sprite.getWidth()*2,this.sprite.getHeight(),this.sprite.getWidth(),this.sprite.getHeight()));
-                WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
-                s = new Sprite(rightWall);
+            if (neighbours[7] ==false) {
+                Sprite s;
+                if (this.wallimages[7]!=null) {
+                    s = new Sprite(this.wallimages[7]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(this.sprite.getWidth()*2,this.sprite.getHeight(),this.sprite.getWidth(),this.sprite.getHeight()));
+                    WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(rightWall);
+                }
+                this.addExtra(s, 0, 0);
             }
-            this.addExtra(s, 0, 0);
-        }
-        if (neighbours[2] ==false) {
-            Sprite s;
-            if (this.wallimages[2]!=null) {
-                s = new Sprite(this.wallimages[2]);
-            } else {
-                wallparts.setViewport(new Rectangle2D(this.sprite.getWidth()*3,this.sprite.getHeight(),this.sprite.getWidth(),this.sprite.getHeight()));
-                WritableImage downWall = wallparts.snapshot(parameters, snapshot);
-                s = new Sprite(downWall);
+            if (neighbours[2] ==false) {
+                Sprite s;
+                if (this.wallimages[2]!=null) {
+                    s = new Sprite(this.wallimages[2]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(this.sprite.getWidth()*3,this.sprite.getHeight(),this.sprite.getWidth(),this.sprite.getHeight()));
+                    WritableImage downWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(downWall);
+                }
+                this.addExtra(s, 0, -8);
             }
-            this.addExtra(s, 0, -8);
+            */
         }
-        */
+    }
+    
+    private Image composeImage() {
+        Image[] extraImages = new Image[8];
+        extraImages[0] = Mists.graphLibrary.getImage("black");
+        int n = 1;
+        for (int i = 0; i < this.neighbours.length; i++) {
+            if (this.neighbours[i] == false) {
+                extraImages[n] = this.wallimages[i];
+                n++;
+            }
+        }
+        if (n == 0) return Mists.graphLibrary.getImage("blank");
+        Image[] trimmedExtraImages = new Image[n];
+        System.arraycopy(extraImages, 0, trimmedExtraImages, 0, n);
+        if (trimmedExtraImages.length == 1) return trimmedExtraImages[0];
+        return Toolkit.mergeImage(false, trimmedExtraImages);
     }
     
     public void setWallImages(Image[] wallimages) {
@@ -200,7 +228,7 @@ public class Wall extends Structure {
     }
     
     public void generateWallImages(ImageView wallparts) {
-        
+        Mists.logger.info("Generating wallimages from wallparts");
         WritableImage snapshot = null;
         SnapshotParameters parameters = new SnapshotParameters();
         parameters.setFill(Color.TRANSPARENT);
@@ -231,7 +259,7 @@ public class Wall extends Structure {
     @Override
     public Wall createFromTemplate() {
         if (this.wallimages == null) this.generateWallImages(this.wallparts);
-        Wall newWall = new Wall(this.name, this.getSprite().getImage(), this.getCollisionLevel(), this.wallparts);
+        Wall newWall = new Wall(this.name, this.getSprite().getImage(), this.getCollisionLevel(), this.wallimages);
         return newWall;
     }
 }

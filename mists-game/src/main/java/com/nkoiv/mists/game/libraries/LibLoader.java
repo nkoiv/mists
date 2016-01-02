@@ -115,6 +115,7 @@ public class LibLoader {
     public static void initializeGraphLibrary(GraphLibrary lib) {
         //---Base elements---
         lib.addImage("blank", new Image("/images/blank.png"));
+        lib.addImage("black", new Image("/images/black.png"));
         
         //---UI elements----
         //Panels

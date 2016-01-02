@@ -254,7 +254,7 @@ public abstract class Toolkit {
             for(int y=0; y<Math.min(image.getHeight(), images[0].getHeight()); y++){
                 for(int x=0; x<Math.min(image.getWidth(), images[0].getWidth()); x++){
                     Color color = pr.getColor(x, y);
-                    pw.setColor((x+xOffset), (int)(y+yOffset), color);
+                    if (pr.getArgb(x, y) >> 28 != 0) pw.setColor((x+xOffset), (int)(y+yOffset), color);
                 }
             }
         }

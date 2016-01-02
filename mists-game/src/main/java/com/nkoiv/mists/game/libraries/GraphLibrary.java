@@ -77,7 +77,9 @@ public class GraphLibrary {
     
     public Image getImage(String name) {
         String lowercasename = name.toLowerCase();
-        return this.gallery.get(lowercasename);
+        Image i = this.gallery.get(lowercasename);
+        if (i == null) Mists.logger.warning("GraphLibrary couldn't find: '"+name+"'");
+        return i;
     }
     
     public Image[] getImageSet(String name) {

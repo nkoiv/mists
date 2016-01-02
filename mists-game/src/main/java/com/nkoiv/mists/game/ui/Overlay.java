@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.List;
@@ -211,6 +212,13 @@ public class Overlay {
             text = sb.toString();
             return text;
         }
+        if (mob instanceof Wall) {
+            sb.append("\n");
+            sb.append("Neighbours: ").append(((Wall) mob).getNeighbours());
+            text = sb.toString();
+            return text;
+        }
+        
         text = sb.toString();
         return text;
     }
