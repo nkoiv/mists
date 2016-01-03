@@ -26,7 +26,7 @@ public class Projectile extends Effect {
         if (this.isFlagged("visible")) {
             this.getSprite().render(xOffset, yOffset, gc);
         }
-        if(System.currentTimeMillis() > this.endTime)this.setFlag("removable", 1);
+        if(System.currentTimeMillis() > this.endTime)this.setRemovable();
     }  
     
 }

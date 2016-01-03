@@ -98,7 +98,7 @@ public class GeneralLocationTest extends Application {
         PlayerCharacter testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
         testLocation.addPlayerCharacter(testPlayer, 500, 500);
         testLocation.addCreature(testCreature, 300, 300);
-        testCreature.setFlag("removable",1);
+        testCreature.setRemovable();
         testLocation.update(0.15f);
         assert(testLocation.getCreatures().contains(testCreature) == false);
     }
@@ -132,7 +132,7 @@ public class GeneralLocationTest extends Application {
     @Test
     public void removableFlaggedMobsShouldBeRemovedOnUpdate() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
-        testRock.setFlag("removable", 1);
+        testRock.setRemovable();
         testLocation.addStructure(testRock, 500 , 200);
         testLocation.update(1);
         assert(testLocation.getStructures().isEmpty());
@@ -203,8 +203,8 @@ public class GeneralLocationTest extends Application {
         testLocation.addCreature(testCreature3, 150, 50);
         testLocation.addCreature(testCreature4, 250, 50);
         int mobsAtLocation = testLocation.getCreatures().size();
-        testCreature1.setFlag("removable", 1);
-        testCreature2.setFlag("removable", 1);
+        testCreature1.setRemovable();
+        testCreature2.setRemovable();
         testLocation.update(0.15f);
         assert(testLocation.getCreatures().size() == mobsAtLocation-2);
     }
@@ -240,7 +240,7 @@ public class GeneralLocationTest extends Application {
     @Test
     public void removableMobsAreRemovedOnUpdate() {
         testLocation.addCreature(testCreature, 50, 70);
-        testCreature.setFlag("removable", 1);
+        testCreature.setRemovable();
         testLocation.update(1);
         assert(testLocation.getCreatures().isEmpty());
     }

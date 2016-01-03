@@ -73,7 +73,7 @@ public class Effect extends MapObject {
             if (this.linkedLocation) this.updatePosition();
             this.getSprite().render(xOffset, yOffset, gc);
         }
-        if(System.currentTimeMillis() > this.endTime)this.setFlag("removable", 1);
+        if(System.currentTimeMillis() > this.endTime)this.setRemovable();
     }   
     
     private void updatePosition() {

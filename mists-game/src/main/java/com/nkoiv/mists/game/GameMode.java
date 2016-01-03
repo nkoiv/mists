@@ -7,12 +7,8 @@ package com.nkoiv.mists.game;
 
 /**
  *
- * @author nkoiv
+ * @author nikok
  */
-
-public enum Direction {
-	UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT, STAY;
-
+public enum GameMode {
+    SERVER, CLIENT;
 }
-
-

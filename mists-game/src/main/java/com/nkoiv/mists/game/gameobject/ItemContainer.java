@@ -40,7 +40,7 @@ public class ItemContainer extends Structure {
     @Override
     public void update(double time) {
         if (this.inv.getSize() <= 0) {
-            this.setFlag("removable", 1);
+            this.setRemovable();
             return;
         }
         
@@ -80,12 +80,12 @@ public class ItemContainer extends Structure {
         Item topItemInPile = null;
         for (int i  = 0; i < this.inv.getCapacity(); i++)  {
             if (inv.getItem(i) != null) {
-                if (this.inv.getSize() < 1) this.flags.put("removable", 1);
+                if (this.inv.getSize() < 1) this.setRemovable();
                 topItemInPile =  this.inv.removeItem(i);
                 break;
             }
         }
-        if (this.inv.getSize() < 1) this.flags.put("removable", 1);
+        if (this.inv.getSize() < 1) this.setRemovable();
         return topItemInPile;
     }
 

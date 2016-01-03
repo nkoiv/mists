@@ -30,7 +30,7 @@ public class MapObject extends Flags implements Global, Templatable {
     protected MovingGraphics graphics;
     
     protected int collisionLevel;
-    
+    protected boolean removable;
     protected Location location;
     
     public MapObject (String name) {
@@ -174,6 +174,14 @@ public class MapObject extends Flags implements Global, Templatable {
     
     public Image getSnapshot() {
         return this.graphics.getImage();
+    }
+    
+    public void setRemovable() {
+        this.removable = true;
+    }
+    
+    public boolean isRemovable() {
+        return this.removable;
     }
     
     @Override

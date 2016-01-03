@@ -118,7 +118,7 @@ public class GeneralCombatTest {
     @Test
     public void creaturesHitToZeroHealthGetRemovableFlag() {
         combatant1.takeDamage(combatant1.getMaxHealth());
-        assert(combatant1.isFlagged("removable"));
+        assert(combatant1.isRemovable());
     }
     
     @After

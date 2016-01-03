@@ -517,7 +517,7 @@ public class Location extends Flags implements Global {
             Iterator<Structure> structureIterator = structures.iterator(); //Cleanup of mobs
             while (structureIterator.hasNext()) {
                 MapObject mob = structureIterator.next();
-                if (mob.isFlagged("removable")) {
+                if (mob.isRemovable()) {
                     if (mob instanceof Wall) {
                         removedWalls.add((Wall)mob);
                         //Update the surrounding walls as per needed
@@ -541,7 +541,7 @@ public class Location extends Flags implements Global {
             Iterator<Creature> creatureIterator = creatures.iterator(); //Cleanup of mobs
             while (creatureIterator.hasNext()) {
                 MapObject mob = creatureIterator.next();
-                if (mob.isFlagged("removable")) {
+                if (mob.isRemovable()) {
                     creatureIterator.remove();
                     //this.pathFinder.setMapOutOfDate(true); //Creatures are not on pathFindermap atm
                 }
@@ -558,7 +558,7 @@ public class Location extends Flags implements Global {
         if (!this.effects.isEmpty()) {
             Iterator<Effect> effectsIterator = effects.iterator(); //Cleanup of effects
             while (effectsIterator.hasNext()) {
-                if (effectsIterator.next().isFlagged("removable")) {
+                if (effectsIterator.next().isRemovable()) {
                     effectsIterator.remove();
                 } 
             }
