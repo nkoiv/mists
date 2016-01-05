@@ -188,6 +188,8 @@ public class Overlay {
         if (mob == null) return text;
         StringBuilder sb = new StringBuilder();
         sb.append(mob.toString());
+        sb.append("\n");
+        sb.append("LocationID: ").append(mob.getID());
         if (mob instanceof Creature) {
             sb.append("\n");
             sb.append(((Creature) mob).getHealth()).append(" / ").append(((Creature) mob).getMaxHealth());

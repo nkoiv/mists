@@ -33,6 +33,8 @@ public class MapObject extends Flags implements Global, Templatable {
     protected boolean removable;
     protected Location location;
     
+    protected int IDinLocation;
+    
     public MapObject (String name) {
         this.flags = new HashMap<>();
         this.name = name;
@@ -182,6 +184,14 @@ public class MapObject extends Flags implements Global, Templatable {
     
     public boolean isRemovable() {
         return this.removable;
+    }
+    
+    public void setID(int IDinLocation) {
+        this.IDinLocation = IDinLocation;
+    }
+    
+    public int getID() {
+        return this.IDinLocation;
     }
     
     @Override

@@ -35,8 +35,6 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 /**
  * Location is the main playfield of the game. It could be a castle, forest, dungeon or anything in between.
@@ -54,6 +52,10 @@ public class Location extends Flags implements Global {
     private ArrayList<Creature> creatures;
     private ArrayList<Structure> structures;
     private List<Effect> effects;
+    
+    private final HashMap<Integer, MapObject> mobs = new HashMap<>();
+    private int nextID = 1;
+    
     private List<MapObject> targets;
     private String name;
     private GameMap map;
@@ -211,6 +213,16 @@ public class Location extends Flags implements Global {
         Mists.logger.log(Level.INFO, "{0} structures generated", addedStructures);
     }
     
+    
+    /**
+     * Pull the creature by ID from the general MOBs table
+     * @param ID Location-specific Identifier for the mob
+     * @return MapObject if it exists in the location
+     */
+    public MapObject getMapObject(int ID) {
+        return this.mobs.get(ID);
+    }
+    
     /**
     * Find the first (random) Creature on the map with the given name.
     * Returns null if no creature is found with the name.
@@ -314,6 +326,67 @@ public class Location extends Flags implements Global {
         if (this.pathFinder == null) this.pathFinder = new PathFinder(this.collisionMap, 50, true);
         return this.pathFinder;
     }
+    
+    /**
+     * Give the MapObject an unique location-specific ID-number
+     * @param mob MapObject to set the ID to
+     */
+    private void giveID(MapObject mob) {
+        if (nextID == Integer.MAX_VALUE) nextID = Integer.MIN_VALUE;
+        mob.setID(this.nextID);
+        nextID++;
+        if (nextID == 0) {
+            Mists.logger.warning("Out of MapObject IDs, cleaning up");
+            this.cleanupIDs();
+        } 
+    }
+    
+    /**
+     * If ID's run out, clean up the ID list.
+     */
+    private void cleanupIDs() {
+        this.nextID = 1;
+        if (this.mobs.isEmpty()) return;
+        for (Integer mobID : this.mobs.keySet()) {
+            this.giveID(this.mobs.get(mobID));
+        }
+        //TODO: Inform possible clients that ID's have changed.
+    }
+    
+    /**
+     * Generic MapObject insertion.
+     * @param mob MapObject to insert in the map
+     */
+    public void addMapObject(MapObject mob) {
+        this.giveID(mob);
+        if (mob instanceof Structure) {
+            this.structures.add((Structure)mob);
+        }
+        if (mob instanceof Creature) {
+            this.creatures.add((Creature)mob);
+        }
+        if (mob instanceof Effect) {
+            this.effects.add((Effect)mob);
+        }
+        this.mobs.put(mob.getID(), mob);
+        mob.setLocation(this);
+    }
+    
+    public void removeMapObject(MapObject mob) {
+        if (mob instanceof Structure) {
+            this.structures.remove(mob);
+        }
+        if (mob instanceof Creature) {
+            this.creatures.remove(mob);
+        }
+        if (mob instanceof Effect) {
+            this.effects.remove(mob);
+        }
+        this.mobs.remove(mob.getID());
+    }
+    
+    
+    
     /**
     * Adds a Structure to the location
     * @param s The structure to be added
@@ -322,7 +395,7 @@ public class Location extends Flags implements Global {
     */
     public void addStructure(Structure s, double xPos, double yPos) {
         if (!this.structures.contains(s)) {
-            this.structures.add(s);    
+            this.addMapObject(s);
         }
         s.setLocation(this);
         s.setPosition(xPos, yPos);
@@ -336,7 +409,7 @@ public class Location extends Flags implements Global {
     */
     public void addCreature(Creature c, double xPos, double yPos) {
         if (!this.creatures.contains(c)) {
-            this.creatures.add(c);
+            this.addMapObject(c);
         }
         c.setLocation(this);
         c.setCenterPosition(xPos, yPos);
@@ -349,7 +422,7 @@ public class Location extends Flags implements Global {
     */
     public void addEffect(Effect e, double xPos, double yPos) {
         if (!this.effects.contains(e)) {
-            this.effects.add(e);
+            this.addMapObject(e);
         }
         e.setLocation(this);
         e.setPosition(xPos, yPos);
@@ -362,7 +435,7 @@ public class Location extends Flags implements Global {
     */
     public void addPlayerCharacter(PlayerCharacter p, double xPos, double yPos) {
         if (!this.creatures.contains(p)) {
-            this.creatures.add(p);
+            this.addMapObject(p);
         }
         p.setLocation(this);
         p.setPosition(xPos, yPos);
@@ -388,15 +461,6 @@ public class Location extends Flags implements Global {
         return this.structures;
     }
     
-    public void removeMapObject (MapObject o) {
-        if (o instanceof Creature) {
-            if(this.creatures.contains((Creature)o)) this.creatures.remove(o);
-        } else if (o instanceof Structure) {
-            if(this.structures.contains((Structure)o)) this.structures.remove(o);
-        } else if (o instanceof Effect) {
-            if(this.effects.contains((Effect)o)) this.effects.remove(o);
-        }
-    }
     
     public void removeEffect (Effect e) {
         if(this.effects.contains(e)) this.effects.remove(e);
@@ -543,6 +607,7 @@ public class Location extends Flags implements Global {
                 MapObject mob = creatureIterator.next();
                 if (mob.isRemovable()) {
                     creatureIterator.remove();
+                    this.mobs.remove(mob.getID());
                     //this.pathFinder.setMapOutOfDate(true); //Creatures are not on pathFindermap atm
                 }
             }     
@@ -558,8 +623,10 @@ public class Location extends Flags implements Global {
         if (!this.effects.isEmpty()) {
             Iterator<Effect> effectsIterator = effects.iterator(); //Cleanup of effects
             while (effectsIterator.hasNext()) {
-                if (effectsIterator.next().isRemovable()) {
+                Effect e = effectsIterator.next();
+                if (e.isRemovable()) {
                     effectsIterator.remove();
+                    this.mobs.remove(e.getID());
                 } 
             }
         }
