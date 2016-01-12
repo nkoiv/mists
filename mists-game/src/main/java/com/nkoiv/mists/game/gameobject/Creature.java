@@ -37,6 +37,8 @@ import javafx.scene.image.ImageView;
 public class Creature extends MapObject implements Combatant {
     
     private CreatureAI ai;
+    private Task lastTask;
+    
     private Direction facing;
     private Direction lastFacing = null;
     private HashMap<String, SpriteAnimation> spriteAnimations;
@@ -247,10 +249,15 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public void update (double time) {
-        Task currentTask = this.ai.act(time);
-        //Mists.logger.info(this.name+" doing "+currentTask.toString());
-        GenericTasks.performTask(location, currentTask, time);
+        this.lastTask = this.ai.act(time);
+        Mists.logger.info(this.name+" doing "+lastTask.toString());
+        this.stopMovement();
+        GenericTasks.performTask(location, lastTask, time);
         this.updateGraphics();
+    }
+    
+    public Task getLastTask() {
+        return this.lastTask;
     }
     
     public void update (double time, LocationServer server) {
@@ -377,6 +384,7 @@ public class Creature extends MapObject implements Combatant {
     
     
     public boolean moveTowards (double xCoor, double yCoor) {
+        Mists.logger.log(Level.INFO, "{0} moving from {1},{2} to {3},{4}", new Object[]{this.getName(), this.getCenterXPos(), this.getCenterYPos(), xCoor, yCoor});
         double xDifference = xCoor - this.getCenterXPos();
         double yDifference = yCoor - this.getCenterYPos();
         if (xDifference < 1) xDifference = 0;

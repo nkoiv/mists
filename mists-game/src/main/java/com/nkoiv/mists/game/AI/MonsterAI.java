@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.AI;
 
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.world.util.Toolkit;
 
@@ -32,23 +31,14 @@ public class MonsterAI extends CreatureAI{
     public Task act(double time) {
         //TODO: For now all creatures just want to home in on player
         //TODO: Adjust the action-picking speed dynamically based on AI load?
-        if (this.timeSinceAction > 0.3) { //Acting thrice per second
+        if (this.timeSinceAction > 0.3 || creep.getLastTask() == null) { //Acting thrice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
             this.timeSinceAction = 0;
             return this.pickNewAction(time);
         } else {
             //TODO: Continue current chosen action. Atm this means just movement
-            /*
-            if (this.isFlagged("movementBlocked")) {
-                //Try to move to a free spot that's next to the one we're aiming for
-                if (this.creep.applyMovement(time)) this.setFlag("movementBlocked", 0);
-            } else {
-                if(this.creep.applyMovement(time)) this.setFlag("movementBlocked", 0);
-                else this.setFlag("movementBlocked", 1);
-            }
-            */
             this.timeSinceAction = this.timeSinceAction+time;
-            return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
+            return creep.getLastTask();
         }
     }
     

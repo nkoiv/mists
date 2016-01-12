@@ -45,19 +45,16 @@ public class CreatureAI extends Flags{
     * @return Returns the task the creature decided to perform
     */
     public Task act(double time) {
-        if (!this.creep.getLocation().isFlagged("testFlag")) return new Task(GenericTasks.ID_STOP_MOVEMENT, creep.getID(), null); //Dont my unless flagged TODO: This is for testing
+        //if (!this.creep.getLocation().isFlagged("testFlag")) return new Task(GenericTasks.ID_STOP_MOVEMENT, creep.getID(), null); //Dont my unless flagged TODO: This is for testing
         //TODO: For now all creatures just want to home in on player
-        if (this.timeSinceAction > 0.5) { //Acting twice per second
+        if (this.timeSinceAction > 0.5 || creep.getLastTask() == null) { //Acting twice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
-            //this.creep.stopMovement(); //clear old movement
-            //this.moveTowardsPlayer(time);
-            //this.moveTowardsMob(creep.getLocation().getPlayer(), time);
             this.timeSinceAction = 0;
             return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{creep.getLocation().getPlayer().getID()});
         } else {
             //this.getCreature().applyMovement(time);
             this.timeSinceAction = this.timeSinceAction+time;
-            return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
+            return creep.getLastTask();
         }
     }
     
@@ -91,45 +88,36 @@ public class CreatureAI extends Flags{
             *  just move in the general direction of target
             */
             //Mists.logger.info("Got a short path or no path");
-            //this.creep.moveTowards(mob.getCenterXPos(), mob.getCenterYPos());
             this.pathToMoveOn = null;
             return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{mob.getID()});
         }
         if (pathToMob.getLength() == 2) {
             /* We're next to target
-            *  Try to get even closer (TODO: Is this the right course of action?
+            *  Try to get even closer (TODO: Is this the right course of action?)
             */
             //Mists.logger.info("Next to target");
-            //this.creep.moveTowards(mob.getCenterXPos(), mob.getCenterYPos());
             return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{mob.getID()});
         }
-        if (pathToMob.getLength() > 2) {
+        else { //if (pathToMob.getLength() > 2)
             /* There's tiles between us and the target
             *  Try to move towards the next tile
             */
             //Mists.logger.info("Got a path: " +pathToMob.toString());
-            int nextTileX = pathToMob.getNode(1).getX()*pathToMob.getNode(0).getSize();
-            int nextTileY = pathToMob.getNode(1).getY()*pathToMob.getNode(0).getSize();
-            
-            //Mists.logger.log(Level.INFO, "Pathfinder tile {0},{1} converted into {2},{3}",
-            //new Object[]{pathToMob.getNode(1).getX(), pathToMob.getNode(1).getY(), targetXCoordinate, targetYCoordinate});
-            //this.creep.moveTowards(nextTileX, nextTileY);
-            //this.creep.applyMovement(time);
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{nextTileX, nextTileY});
+            int nextTileX = pathToMob.getNode(1).getX();//*pathToMob.getNode(0).getSize();
+            int nextTileY = pathToMob.getNode(1).getY();//*pathToMob.getNode(0).getSize();
+
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{nextTileX, nextTileY});
         }
-        return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
     }
     
     protected Task goMelee(MapObject target, double time) {
-        creep.stopMovement(); //clear old movement
-            if (AIutil.inRange(creep, 0, target)) {
-                //Mists.logger.log(Level.INFO, "{0} in range to hit {1}", new Object[]{creep.getName(), target.getName()});
-                //GenericTasks.useMeleeTowardsMob(creep, target.getID());
-                return new Task(GenericTasks.ID_USE_MELEE_TOWARDS_MOB, creep.getID(), new int[]{target.getID()});
-            } else {
-                //this.moveTowardsMob(target, time);
-                return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{target.getID()});
-            }
+        if (AIutil.inRange(creep, 0, target)) {
+            //Mists.logger.log(Level.INFO, "{0} in range to hit {1}", new Object[]{creep.getName(), target.getName()});
+            return new Task(GenericTasks.ID_USE_MELEE_TOWARDS_MOB, creep.getID(), new int[]{target.getID()});
+        } else {
+            //return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{target.getID()});
+            return this.moveTowardsMob(target, time);
+        }
     }
     
     
@@ -141,22 +129,7 @@ public class CreatureAI extends Flags{
      */
     protected Task moveRandomly(double time) {
         Random rnd = new Random();
-        int randomint = rnd.nextInt(9);
-        /*
-        switch (randomint) {
-            case 0: this.creep.moveTowards(Direction.UP); break;
-            case 1: this.creep.moveTowards(Direction.UPRIGHT); break;
-            case 2: this.creep.moveTowards(Direction.RIGHT); break;
-            case 3: this.creep.moveTowards(Direction.DOWNRIGHT); break;
-            case 4: this.creep.moveTowards(Direction.DOWN); break;
-            case 5: this.creep.moveTowards(Direction.DOWNLEFT); break;
-            case 6: this.creep.moveTowards(Direction.LEFT); break;
-            case 7: this.creep.moveTowards(Direction.UPLEFT); break;
-            case 8: this.creep.moveTowards(Direction.STAY); break;
-            default: this.creep.moveTowards(Direction.STAY); break;
-        }
-        */
-        //this.creep.applyMovement(time);     
+        int randomint = rnd.nextInt(9);  
         return new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, creep.getID(), new int[]{randomint});
     }
     

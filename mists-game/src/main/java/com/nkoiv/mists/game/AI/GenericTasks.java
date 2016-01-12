@@ -5,10 +5,6 @@
  */
 package com.nkoiv.mists.game.AI;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.KryoSerializable;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -40,9 +36,9 @@ public class GenericTasks {
         switch (task.taskID) {
             case ID_IDLE: break;
             case ID_CONTINUE_MOVEMENT: actor.applyMovement(time); break;
-            case ID_MOVE_TOWARDS_DIRECTION: moveTowardsDirection(actor, task.arguments[0]); break;
-            case ID_MOVE_TOWARDS_TARGET: moveTowardsTarget(actor, task.arguments[0]); break;
-            case ID_MOVE_TOWARDS_COORDINATES: actor.moveTowards(task.arguments[0], task.arguments[1]); break;
+            case ID_MOVE_TOWARDS_DIRECTION: moveTowardsDirection(actor, task.arguments[0]); actor.applyMovement(time);break;
+            case ID_MOVE_TOWARDS_TARGET: moveTowardsTarget(actor, task.arguments[0]); actor.applyMovement(time); break;
+            case ID_MOVE_TOWARDS_COORDINATES: moveTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); actor.applyMovement(time); break;
             case ID_STOP_MOVEMENT: actor.stopMovement(); break;
             case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, task.arguments[0]); break;
             case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]); break;
@@ -89,6 +85,12 @@ public class GenericTasks {
             case DOWNLEFT: creature.moveTowards(Direction.DOWNLEFT);break;
             default: break;
         } 
+    }
+    
+    public static void moveTowardsCoordinates(Creature actor, int locationXTile, int locationYTile) {
+        double nextTileX = locationXTile*Mists.TILESIZE;
+        double nextTileY = locationYTile*Mists.TILESIZE;
+        actor.moveTowards(nextTileX, nextTileY);
     }
     
     public static void moveTowardsTarget(Creature actor, int targetID) {

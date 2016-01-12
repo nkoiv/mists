@@ -32,14 +32,13 @@ public class CompanionAI extends CreatureAI {
     @Override
     public Task act(double time) {
         //TODO: For now all creatures just want to home in on player
-        if (this.timeSinceAction > 0.5) { //Acting twice per second
+        if (this.timeSinceAction > 0.5 || creep.getLastTask() == null) { //Acting twice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
             this.timeSinceAction = 0;
             return this.pickNewAction(time);
         } else {
-            //this.getCreature().applyMovement(time);
             this.timeSinceAction = this.timeSinceAction+time;
-            return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
+            return creep.getLastTask();
         }
     }
     
