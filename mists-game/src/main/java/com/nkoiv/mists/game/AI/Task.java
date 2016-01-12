@@ -23,7 +23,12 @@ import com.esotericsoftware.kryo.io.Output;
         public Task(int taskID, int actorID, int[] arguments) {
             this.taskID = taskID;
             this.actorID = actorID;
-            this.argumentCount = arguments.length;
+            if (arguments == null) {
+                this.argumentCount = 0;
+            } else {
+                this.argumentCount = arguments.length;
+            }
+            
             this.arguments = arguments;
         }
 
