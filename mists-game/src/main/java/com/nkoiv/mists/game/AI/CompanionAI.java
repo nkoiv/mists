@@ -20,29 +20,10 @@ public class CompanionAI extends CreatureAI {
         super(companion);
     }
     
-    /**
-    * act() is the main loop for AI
-    * it's called whenever it's given creatures
-    * turn to do things
-    * TimeSinceAction governs creature decisionmaking
-    * No creature needs to act on every tick!
-    * @param time Time passed since the last action
-    * @return Returns the task the creature decided to perform
-    */
-    @Override
-    public Task act(double time) {
-        //TODO: For now all creatures just want to home in on player
-        if (this.timeSinceAction > 0.5 || creep.getLastTask() == null) { //Acting twice per second
-            //Mists.logger.info(this.getCreature().getName()+" decided to act!");
-            this.timeSinceAction = 0;
-            return this.pickNewAction(time);
-        } else {
-            this.timeSinceAction = this.timeSinceAction+time;
-            return creep.getLastTask();
-        }
-    }
     
-    private Task pickNewAction(double time) {
+    
+    @Override
+    protected Task pickNewAction(double time) {
         Task t = this.attackNearbyEnemies(time);
         if (t.taskID == GenericTasks.ID_IDLE) {
             return distanceBasedFollow(time, creep.getLocation().getPlayer());

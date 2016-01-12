@@ -29,7 +29,7 @@ public class CreatureAI extends Flags{
     protected double timeSinceAction;
     protected Path pathToMoveOn;
     protected boolean active;
-        
+    
     public CreatureAI (Creature creep) {
         this.creep = creep;
         this.timeSinceAction = 0;
@@ -45,19 +45,39 @@ public class CreatureAI extends Flags{
     * @return Returns the task the creature decided to perform
     */
     public Task act(double time) {
-        //if (!this.creep.getLocation().isFlagged("testFlag")) return new Task(GenericTasks.ID_STOP_MOVEMENT, creep.getID(), null); //Dont my unless flagged TODO: This is for testing
         //TODO: For now all creatures just want to home in on player
-        if (this.timeSinceAction > 0.5 || creep.getLastTask() == null) { //Acting twice per second
+        //TODO: Adjust the action-picking speed dynamically based on AI load?
+        if (this.timeSinceAction > 0.3 || creep.getLastTask() == null) { //Acting thrice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
             this.timeSinceAction = 0;
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{creep.getLocation().getPlayer().getID()});
+            return this.pickNewAction(time);
         } else {
-            //this.getCreature().applyMovement(time);
+            //TODO: Continue current chosen action. Atm this means just movement
             this.timeSinceAction = this.timeSinceAction+time;
             return creep.getLastTask();
         }
     }
     
+    /**
+     * PickNewAction is the root of the AI decision tree
+     * @param time Time used on the action //TODO: Actually unneeded for AI
+     * @return Task the AI deicided to perform next
+     */
+    protected Task pickNewAction(double time) {
+        if (creep.getLocation().getPlayer() == null) return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
+        if (!this.active) {
+            if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), creep.getLocation().getPlayer().getCenterXPos(), creep.getLocation().getPlayer().getCenterYPos())
+                    < 10 * 32) {
+                if (this.isInLineOfSight(creep.getLocation().getPlayer())) {
+                    this.active = true;
+                }
+            }
+            return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
+        }
+        else {
+            return this.goMelee(creep.getLocation().getPlayer(), time);
+        }
+    }
 
     /**
      * MoveTowardsMob uses A* pathfinding to route a path towards the
