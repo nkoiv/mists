@@ -34,16 +34,18 @@ public class GenericTasks {
     public static final int ID_USE_MELEE_TOWARDS_MOB = 21; // 1 argument: MobID
     
     public static void performTask(Location l, Task task, double time) {
+        if (task == null || l == null) return;
         Creature actor = (Creature)l.getMapObject(task.actorID);
+        if (actor == null) return;
         switch (task.taskID) {
             case ID_IDLE: break;
-            case ID_CONTINUE_MOVEMENT: actor.applyMovement(time);
-            case ID_MOVE_TOWARDS_DIRECTION: moveTowardsDirection(actor, task.arguments[0]);
-            case ID_MOVE_TOWARDS_TARGET: moveTowardsTarget(actor, task.arguments[0]);
-            case ID_MOVE_TOWARDS_COORDINATES: actor.moveTowards(task.arguments[0], task.arguments[1]);
-            case ID_STOP_MOVEMENT: actor.stopMovement();
-            case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, task.arguments[0]);
-            case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]);
+            case ID_CONTINUE_MOVEMENT: actor.applyMovement(time); break;
+            case ID_MOVE_TOWARDS_DIRECTION: moveTowardsDirection(actor, task.arguments[0]); break;
+            case ID_MOVE_TOWARDS_TARGET: moveTowardsTarget(actor, task.arguments[0]); break;
+            case ID_MOVE_TOWARDS_COORDINATES: actor.moveTowards(task.arguments[0], task.arguments[1]); break;
+            case ID_STOP_MOVEMENT: actor.stopMovement(); break;
+            case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, task.arguments[0]); break;
+            case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]); break;
             default: break;
         }
         

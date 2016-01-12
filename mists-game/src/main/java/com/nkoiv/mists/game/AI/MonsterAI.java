@@ -38,6 +38,7 @@ public class MonsterAI extends CreatureAI{
             return this.pickNewAction(time);
         } else {
             //TODO: Continue current chosen action. Atm this means just movement
+            /*
             if (this.isFlagged("movementBlocked")) {
                 //Try to move to a free spot that's next to the one we're aiming for
                 if (this.creep.applyMovement(time)) this.setFlag("movementBlocked", 0);
@@ -45,6 +46,7 @@ public class MonsterAI extends CreatureAI{
                 if(this.creep.applyMovement(time)) this.setFlag("movementBlocked", 0);
                 else this.setFlag("movementBlocked", 1);
             }
+            */
             this.timeSinceAction = this.timeSinceAction+time;
             return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
         }

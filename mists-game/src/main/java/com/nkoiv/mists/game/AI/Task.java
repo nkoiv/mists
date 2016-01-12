@@ -9,16 +9,19 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import java.util.Arrays;
 
 /**
- *
+ * Task is a ToDo for creatures. It's simple and fundamental
+ * action meant to be transferred over network instead of
+ * mirroring actual creature states.
  * @author nikok
  */
  public class Task implements KryoSerializable {
-        int taskID;
-        int actorID;
-        int argumentCount;
-        int arguments[];
+        public int taskID;
+        public int actorID;
+        public int argumentCount;
+        public int arguments[];
         
         public Task(int taskID, int actorID, int[] arguments) {
             this.taskID = taskID;
@@ -28,7 +31,6 @@ import com.esotericsoftware.kryo.io.Output;
             } else {
                 this.argumentCount = arguments.length;
             }
-            
             this.arguments = arguments;
         }
 
@@ -46,5 +48,11 @@ import com.esotericsoftware.kryo.io.Output;
             this.actorID = input.readInt();
             this.argumentCount = input.readInt();
             this.arguments = input.readInts(this.argumentCount);
+        }
+        
+        @Override
+        public String toString() {
+            String s = "["+taskID+":"+actorID+"]:"+Arrays.toString(arguments);
+            return s;
         }
     }

@@ -7,13 +7,16 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.AI.CreatureAI;
+import com.nkoiv.mists.game.AI.GenericTasks;
 import com.nkoiv.mists.game.AI.MonsterAI;
+import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
+import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
@@ -244,14 +247,20 @@ public class Creature extends MapObject implements Combatant {
     
     @Override
     public void update (double time) {
-        
-        /* Call AI routines
-        *  TODO: Separate movements etc to the AI
-        */
-        this.ai.act(time);
+        Task currentTask = this.ai.act(time);
+        //Mists.logger.info(this.name+" doing "+currentTask.toString());
+        GenericTasks.performTask(location, currentTask, time);
         this.updateGraphics();
     }
     
+    public void update (double time, LocationServer server) {
+        
+        
+    }
+    
+    public void update (double time, Task task) {
+        
+    }
 
     protected void updateGraphics() {
         if (this.graphics instanceof Sprite) this.updateSprite();

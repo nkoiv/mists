@@ -37,7 +37,7 @@ public class CompanionAI extends CreatureAI {
             this.timeSinceAction = 0;
             return this.pickNewAction(time);
         } else {
-            this.getCreature().applyMovement(time);
+            //this.getCreature().applyMovement(time);
             this.timeSinceAction = this.timeSinceAction+time;
             return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
         }
