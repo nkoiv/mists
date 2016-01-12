@@ -5,8 +5,6 @@
  */
 package com.nkoiv.mists.game.actions;
 
-import com.nkoiv.mists.game.sprites.SpriteAnimation;
-
 /**
  * AttackActions are types of actions that are used for combat.
  * All attacks have a cooldown and an animation.

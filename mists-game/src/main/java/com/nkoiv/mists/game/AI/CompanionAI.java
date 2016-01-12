@@ -7,9 +7,7 @@ package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
  * CompanionAI is used for the friendly companions
@@ -29,26 +27,29 @@ public class CompanionAI extends CreatureAI {
     * TimeSinceAction governs creature decisionmaking
     * No creature needs to act on every tick!
     * @param time Time passed since the last action
-    * @return Returns true if the creature was able to act
+    * @return Returns the task the creature decided to perform
     */
     @Override
-    public boolean act(double time) {
+    public Task act(double time) {
         //TODO: For now all creatures just want to home in on player
         if (this.timeSinceAction > 0.5) { //Acting twice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
-            this.pickNewAction(time);
             this.timeSinceAction = 0;
+            return this.pickNewAction(time);
         } else {
             this.getCreature().applyMovement(time);
             this.timeSinceAction = this.timeSinceAction+time;
+            return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
         }
-        
-        return true;
     }
     
-    private void pickNewAction(double time) {
-        if (!this.attackNearbyEnemies(time)) {
-            distanceBasedFollow(time, creep.getLocation().getPlayer());
+    private Task pickNewAction(double time) {
+        Task t = this.attackNearbyEnemies(time);
+        if (t.taskID == GenericTasks.ID_IDLE) {
+            return distanceBasedFollow(time, creep.getLocation().getPlayer());
+        }
+        else {
+            return t;
         }
     }
     
@@ -58,7 +59,7 @@ public class CompanionAI extends CreatureAI {
      * @param time Time given for acting
      * @return Return true if there was something to go and attack
      */
-    private boolean attackNearbyEnemies(double time) {
+    private Task attackNearbyEnemies(double time) {
         ArrayList<Creature> nearbyMobs = this.surroundingCreatures(creep.getCenterXPos(), creep.getCenterYPos(), Mists.TILESIZE*8);
         //TODO: Filter only hostile mobs from the list. For now remove itself and player.
         nearbyMobs.remove(creep); //Creature is always near itself

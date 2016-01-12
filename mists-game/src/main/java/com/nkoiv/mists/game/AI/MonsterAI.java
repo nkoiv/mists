@@ -26,16 +26,16 @@ public class MonsterAI extends CreatureAI{
     * TimeSinceAction governs creature decision making
     * No creature needs to act on every tick!
     * @param time Time passed since the last action
-    * @return Returns true if the creature was able to act
+    * @return Returns the task the creature decided to perform
     */
     @Override
-    public boolean act(double time) {
+    public Task act(double time) {
         //TODO: For now all creatures just want to home in on player
         //TODO: Adjust the action-picking speed dynamically based on AI load?
         if (this.timeSinceAction > 0.3) { //Acting thrice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
-            this.pickNewAction(time);
             this.timeSinceAction = 0;
+            return this.pickNewAction(time);
         } else {
             //TODO: Continue current chosen action. Atm this means just movement
             if (this.isFlagged("movementBlocked")) {
@@ -45,14 +45,12 @@ public class MonsterAI extends CreatureAI{
                 if(this.creep.applyMovement(time)) this.setFlag("movementBlocked", 0);
                 else this.setFlag("movementBlocked", 1);
             }
-            
             this.timeSinceAction = this.timeSinceAction+time;
+            return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
         }
-        
-        return true;
     }
     
-    private void pickNewAction(double time) {
+    private Task pickNewAction(double time) {
         if (!this.active) {
             if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), creep.getLocation().getPlayer().getCenterXPos(), creep.getLocation().getPlayer().getCenterYPos())
                     < 10 * 32) {
@@ -60,9 +58,10 @@ public class MonsterAI extends CreatureAI{
                     this.active = true;
                 }
             }
+            return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         }
         else {
-            this.goMelee(creep.getLocation().getPlayer(), time);
+            return this.goMelee(creep.getLocation().getPlayer(), time);
         }
     }
     

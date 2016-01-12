@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.controls;
 
+import com.nkoiv.mists.game.AI.GenericTasks;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
@@ -99,17 +100,7 @@ public class LocationControls {
     }
     
     public void playerMove(Direction direction) {
-        switch (direction) {
-            case UP: game.getPlayer().moveTowards(Direction.UP); break;         
-            case DOWN: game.getPlayer().moveTowards(Direction.DOWN); break;
-            case LEFT: game.getPlayer().moveTowards(Direction.LEFT); break;
-            case RIGHT: game.getPlayer().moveTowards(Direction.RIGHT);break;
-            case UPRIGHT: game.getPlayer().moveTowards(Direction.UPRIGHT);break;
-            case UPLEFT: game.getPlayer().moveTowards(Direction.UPLEFT);break;
-            case DOWNRIGHT: game.getPlayer().moveTowards(Direction.DOWNRIGHT);break;
-            case DOWNLEFT: game.getPlayer().moveTowards(Direction.DOWNLEFT);break;
-            default: break;
-        } 
+        GenericTasks.moveTowardsDirection(game.getPlayer(), direction);
     }
     
     public void toggleInventory(InventoryPanel inv) {

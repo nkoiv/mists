@@ -13,7 +13,6 @@ import com.nkoiv.mists.game.world.util.Flags;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
 /**

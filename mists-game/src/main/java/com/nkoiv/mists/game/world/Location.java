@@ -16,6 +16,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
@@ -29,6 +30,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.ColorAdjust;
@@ -44,9 +46,6 @@ import javafx.scene.shape.Line;
  */
 public class Location extends Flags implements Global {
     
-    /*
-    * TODO: Lists for various types of MapObjects, from creatures to frills.
-    */
     //private QuadTree mobQuadTree; //Used for collision detection //retired idea for now
     private HashMap<Integer, HashSet> spatial; //New idea for lessening collision detection load
     private ArrayList<Creature> creatures;
@@ -549,13 +548,13 @@ public class Location extends Flags implements Global {
     public void update (double time) {
         this.updateSpatials();
         this.collisionMap.updateCollisionLevels();
-        structureCleanup();
+        
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) { //Mobs do whatever mobs do
                 mob.update(time);
             }
         }
-        creatureCleanup();
+        
         //Check collisions
         if (!this.effects.isEmpty()) {
             //Mists.logger.info("Effects NOT empty");
@@ -567,15 +566,59 @@ public class Location extends Flags implements Global {
                 }
             }
         }
+        
+        //Cleaup removable objects
+        creatureCleanup();
+        structureCleanup();
         effectCleanup();
+    }
+    
+    /**
+     * Update is the main "tick" of the Location.
+     * Movement, combat and triggers should all be handled here
+     * If a Server is given as argument, the update operations
+     * done are pushed to the servers update stack, to be relayed
+     * to clients.
+     * @param time
+     * @param server 
+     */
+    public void update (double time, LocationServer server) {
+        this.updateSpatials();
+        this.collisionMap.updateCollisionLevels();
+        
+        
+        //AI-stuff
+        if (!this.creatures.isEmpty()) {
+            for (Creature mob : this.creatures) { //Mobs do whatever mobs do
+                mob.update(time);
+            }
+        }
+        
+        //Check collisions
+        if (!this.effects.isEmpty()) {
+            //Mists.logger.info("Effects NOT empty");
+            for (Effect e : this.effects) { //Handle effects landing on something
+                e.update(time);
+                ArrayList<MapObject> collisions = this.checkCollisions(e);
+                if (!collisions.isEmpty()) {       
+                    e.getOwner().hitOn(collisions);
+                }
+            }
+        }
+        
+        //Cleaup removable objects
+        server.compileRemovals(creatureCleanup());
+        server.compileRemovals(structureCleanup());
+        server.compileRemovals(effectCleanup());
     }
     
     /**
      * structureCleanup cleans all the "removable"
      * flagged structures.
      */
-    private void structureCleanup() {
+    private Stack<Integer> structureCleanup() {
         //Structure cleanup
+        Stack<Integer> removedStructureIDs = new Stack<>();
         if (!this.structures.isEmpty()) {
             ArrayList<Wall> removedWalls = new ArrayList();
             Iterator<Structure> structureIterator = structures.iterator(); //Cleanup of mobs
@@ -588,49 +631,58 @@ public class Location extends Flags implements Global {
                         //this.updateWallsAt(mob.getCenterXPos(), mob.getCenterYPos());   
                     }
                     structureIterator.remove();
+                    removedStructureIDs.add(mob.getID());
                     this.pathFinder.setMapOutOfDate(true);
                 }
             }  
             this.restructureWalls(removedWalls);
         }
+        return removedStructureIDs;
     }
     
-     /**
-     * creatureCleanup cleans all the "removable"
-     * flagged creatures.
-     */
-    private void creatureCleanup() {
+    /**
+    * creatureCleanup cleans all the "removable"
+    * flagged creatures.
+    */
+    private Stack<Integer> creatureCleanup() {
         //Creature cleanup
+        Stack<Integer> removedCreatureIDs = new Stack<>();
         if (!this.creatures.isEmpty()) {
             Iterator<Creature> creatureIterator = creatures.iterator(); //Cleanup of mobs
             while (creatureIterator.hasNext()) {
                 MapObject mob = creatureIterator.next();
                 if (mob.isRemovable()) {
                     creatureIterator.remove();
-                    this.mobs.remove(mob.getID());
+                    int mobID = mob.getID();
+                    this.mobs.remove(mobID);
+                    removedCreatureIDs.add(mobID);
                     //this.pathFinder.setMapOutOfDate(true); //Creatures are not on pathFindermap atm
                 }
             }     
         }
+        return removedCreatureIDs;
     }
     
      /**
      * effectCleanup cleans all the "removable"
      * flagged Effects.
      */
-    private void effectCleanup() {
+    private Stack<Integer> effectCleanup() {
         //Effects cleanup
+        Stack<Integer> removedEffectIDs = new Stack<>();
         if (!this.effects.isEmpty()) {
             Iterator<Effect> effectsIterator = effects.iterator(); //Cleanup of effects
             while (effectsIterator.hasNext()) {
                 Effect e = effectsIterator.next();
                 if (e.isRemovable()) {
                     effectsIterator.remove();
-                    this.mobs.remove(e.getID());
+                    int effectID = e.getID();
+                    this.mobs.remove(effectID);
+                    removedEffectIDs.add(effectID);
                 } 
             }
         }
-        
+        return removedEffectIDs;
     }
 
     /**

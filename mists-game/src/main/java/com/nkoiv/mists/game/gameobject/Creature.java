@@ -248,10 +248,8 @@ public class Creature extends MapObject implements Combatant {
         /* Call AI routines
         *  TODO: Separate movements etc to the AI
         */
-        //this.moveTowardsPlayer(time); //TODO: Temporary before actual AI and behaviours
         this.ai.act(time);
         this.updateGraphics();
-        //this.applyMovement(time);  //ApplyMovement moved to the actual movement routine
     }
     
 

@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game;
+package com.nkoiv.mists.game.networking;
 
 /**
- *
+ * Client doesnt run AI routines or do cleanup.
+ * Client receives information from server and updates
+ * based on that.
  * @author nikok
  */
-public enum GameMode {
-    SINGLEPLAYER, SERVER, CLIENT;
+public class LocationClient {
+    
 }

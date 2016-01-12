@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
@@ -23,7 +27,7 @@ import javafx.scene.image.Image;
  *
  * @author nikok
  */
-public class TileMap implements GameMap {
+public class TileMap implements GameMap, KryoSerializable {
 
    
     int tilesize;
@@ -262,6 +266,29 @@ public class TileMap implements GameMap {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void write(Kryo kryo, Output output) {
+        output.writeInt(this.tilesize);
+        output.writeInt(this.tileWidth);
+        output.writeInt(this.tileHeight);
+        for (int[] intRow : this.intMap) {
+            output.writeInts(intRow);
+        }
+        kryo.writeClassAndObject(output, this.tilecodes);
+    }
+
+    @Override
+    public void read(Kryo kryo, Input input) {
+        this.tilesize = input.readInt();
+        this.tileWidth = input.readInt();
+        this.tileHeight = input.readInt();
+        this.intMap = new int[tileWidth][tileHeight];
+        for (int i = 0; i < this.tileHeight; i++) {
+            this.intMap[i] = input.readInts(tileWidth);
+        }
+        this.tilecodes = (HashMap<Integer, String>)kryo.readClassAndObject(input);
     }
 
 }

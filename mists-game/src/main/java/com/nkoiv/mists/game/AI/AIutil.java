@@ -6,13 +6,11 @@
 package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
+import javafx.scene.shape.Circle;
 
 /**
  * AIUtil contains miscellaneous static functions
@@ -51,12 +49,26 @@ public class AIutil {
         if (l == null) return true;
         ArrayList<MapObject> mobsInBetween = l.checkCollisions(start.getCenterXPos(), start.getCenterYPos(), target.getCenterXPos(), target.getCenterYPos());
         for (MapObject mob : mobsInBetween) {
-           if (mob != start && mob != target && mob instanceof Structure) {
+           if (mob != start && mob != target && mob instanceof Structure && mob.getCollisionLevel() > 0) {
                //Mists.logger.log(Level.INFO, "Line of sight between {0}x{1} and {2} blocked by {3}", new Object[]{(int)start.getCenterXPos(), (int)start.getCenterYPos(), target.getName(), mob.toString()});
                return false;
            }
         }
         return true;
+    }
+    
+    public static boolean inRange(MapObject actor, double range, MapObject target) {
+        Circle rangeCircle = new Circle(actor.getCenterXPos(), actor.getCenterYPos(), (actor.getWidth()/2)+range);
+        return target.intersects(rangeCircle);
+    }
+    
+    public static double distanceToMob(MapObject actor, int targetID) {
+        //returns euclidean distance to target mob
+        MapObject target = actor.getLocation().getMapObject(targetID);
+        if (target == null) return -1;
+        double euclideanDistance = Math.sqrt(Math.pow(actor.getXPos() - target.getXPos(), 2)
+                            + Math.pow(actor.getYPos() - target.getYPos(), 2));
+        return euclideanDistance;
     }
     
 }

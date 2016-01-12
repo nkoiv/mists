@@ -7,9 +7,11 @@ package com.nkoiv.mists.game.gamestate;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
+import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.controls.ContextAction;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
@@ -45,6 +47,9 @@ import javafx.scene.input.MouseEvent;
  */
 public class LocationState implements GameState {
     
+    private GameMode gamemode;
+    private LocationServer server;
+    
     private final Game game;
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
@@ -61,11 +66,12 @@ public class LocationState implements GameState {
     private ContextAction contextAction;
     private InventoryPanel playerInventory;
     
-    public LocationState (Game game) {
+    public LocationState (Game game, GameMode gamemode) {
         this.game = game;
         uiComponents = new HashMap<>();
         this.drawOrder = new TreeSet<>();
         this.loadDefaultUI();
+        this.gamemode = gamemode;
     }
     
     @Override
@@ -227,13 +233,29 @@ public class LocationState implements GameState {
      */
     @Override
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
-        
         handleLocationKeyPress(pressedButtons, releasedButtons);
-        if(this.paused == false) {
-            game.getCurrentLocation().update(time);
-        } 
+        switch (this.gamemode) {
+            case SINGLEPLAYER: this.tickSinglePlayer(time); break;
+            case SERVER: this.tickServer(time); break;
+            case CLIENT: this.tickClient(time); break;
+        }
     }
     
+    private void tickSinglePlayer(double time) {
+        if (this.gamemode == GameMode.SINGLEPLAYER) {
+            if(this.paused == false) {
+                game.getCurrentLocation().update(time);
+            } 
+        }
+    }
+    
+    private void tickServer(double time) {
+        this.server.tick(time);
+    }
+    
+    private void tickClient(double time) {
+        
+    }
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
@@ -356,7 +378,7 @@ public class LocationState implements GameState {
     
     private void handleLocationKeyPress(ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         //TODO: External loadable configfile for keybindings
-        //(probably via a class of its own)     
+        //(probably via a class of its own)
         game.getPlayer().stopMovement();
         if (pressedButtons.isEmpty() && releasedButtons.isEmpty()) {
             return;
@@ -459,7 +481,13 @@ public class LocationState implements GameState {
         releasedButtons.clear(); //Button releases are handled only once
     }
     
-
+    public void setGameMode(GameMode gamemode) {
+        this.gamemode = gamemode;
+    }
+    
+    public GameMode getGameMod() {
+        return this.gamemode;
+    }
     
     @Override
     public Game getGame() {

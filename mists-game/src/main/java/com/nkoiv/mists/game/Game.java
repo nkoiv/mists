@@ -73,7 +73,7 @@ public class Game {
         //Initialize GameStates
         this.gameStates = new ArrayList<>();
         gameStates.add(new MainMenuState(this));
-        gameStates.add(new LocationState(this));
+        gameStates.add(new LocationState(this, GameMode.SINGLEPLAYER));
         currentState = gameStates.get(MAINMENU);
         currentState.enter();
         //Temp TODO:

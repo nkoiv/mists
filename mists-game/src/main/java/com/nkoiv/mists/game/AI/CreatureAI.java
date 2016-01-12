@@ -14,8 +14,6 @@ import com.nkoiv.mists.game.world.util.Flags;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
-import javafx.scene.shape.Circle;
 
 /**
  * CreatureAI is the main AI routine for creatures.
@@ -44,10 +42,10 @@ public class CreatureAI extends Flags{
     * TimeSinceAction governs creature decisionmaking
     * No creature needs to act on every tick!
     * @param time Time passed since the last action
-    * @return Returns true if the creature was able to act
+    * @return Returns the task the creature decided to perform
     */
-    public boolean act(double time) {
-        if (!this.creep.getLocation().isFlagged("testFlag")) return false; //Dont my unless flagged TODO: This is for testing
+    public Task act(double time) {
+        if (!this.creep.getLocation().isFlagged("testFlag")) return new Task(GenericTasks.ID_STOP_MOVEMENT, creep.getID(), null); //Dont my unless flagged TODO: This is for testing
         //TODO: For now all creatures just want to home in on player
         if (this.timeSinceAction > 0.5) { //Acting twice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
@@ -55,13 +53,12 @@ public class CreatureAI extends Flags{
             //this.moveTowardsPlayer(time);
             this.moveTowardsMob(creep.getLocation().getPlayer(), time);
             this.timeSinceAction = 0;
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{creep.getLocation().getPlayer().getID()});
         } else {
             this.getCreature().applyMovement(time);
             this.timeSinceAction = this.timeSinceAction+time;
+            return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
         }
-        
-        //this.moveTowardsMob(this.creep.getLocation().getPlayer(), time);
-        return true;
     }
     
 
@@ -72,8 +69,9 @@ public class CreatureAI extends Flags{
      * repeatedly before discarded as outdated
      * @param mob MapObject to move towards
      * @param time Time we can spend on moving
+     * @return Task on what the creature is doing (for networking)
      */
-    protected void moveTowardsMob(MapObject mob, double time) {
+    protected Task moveTowardsMob(MapObject mob, double time) {
         //Drop fractions for collisionssize for now
         //TODO: Make monster collisionboxes adher to pixelsize
         double collisionSize = (int)(creep.getWidth()/Mists.TILESIZE) * Mists.TILESIZE;
@@ -95,6 +93,7 @@ public class CreatureAI extends Flags{
             //Mists.logger.info("Got a short path or no path");
             this.creep.moveTowards(mob.getCenterXPos(), mob.getCenterYPos());
             this.pathToMoveOn = null;
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{mob.getID()});
         }
         if (pathToMob.getLength() == 2) {
             /* We're next to target
@@ -102,29 +101,45 @@ public class CreatureAI extends Flags{
             */
             //Mists.logger.info("Next to target");
             this.creep.moveTowards(mob.getCenterXPos(), mob.getCenterYPos());
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{mob.getID()});
         }
         if (pathToMob.getLength() > 2) {
             /* There's tiles between us and the target
             *  Try to move towards the next tile
             */
             //Mists.logger.info("Got a path: " +pathToMob.toString());
-            double nextTileX = pathToMob.getNode(1).getX()*pathToMob.getNode(0).getSize();
-            double nextTileY = pathToMob.getNode(1).getY()*pathToMob.getNode(0).getSize();
+            int nextTileX = pathToMob.getNode(1).getX()*pathToMob.getNode(0).getSize();
+            int nextTileY = pathToMob.getNode(1).getY()*pathToMob.getNode(0).getSize();
             
             //Mists.logger.log(Level.INFO, "Pathfinder tile {0},{1} converted into {2},{3}",
             //new Object[]{pathToMob.getNode(1).getX(), pathToMob.getNode(1).getY(), targetXCoordinate, targetYCoordinate});
             this.creep.moveTowards(nextTileX, nextTileY);
             this.creep.applyMovement(time);
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{nextTileX, nextTileY});
         }
-        
+        return new Task(GenericTasks.ID_CONTINUE_MOVEMENT, creep.getID(), null);
     }
+    
+    protected Task goMelee(MapObject target, double time) {
+        creep.stopMovement(); //clear old movement
+            if (AIutil.inRange(creep, 0, target)) {
+                //Mists.logger.log(Level.INFO, "{0} in range to hit {1}", new Object[]{creep.getName(), target.getName()});
+                GenericTasks.useMeleeTowardsMob(creep, target.getID());
+                return new Task(GenericTasks.ID_USE_MELEE_TOWARDS_MOB, creep.getID(), new int[]{target.getID()});
+            } else {
+                this.moveTowardsMob(target, time);
+                return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{target.getID()});
+            }
+    }
+    
     
     /**
      * Choose a random direction (can be STAY)
      * and move towards it
      * @param time time spent moving
+     * @return the movement done as a task
      */
-    protected void moveRandomly(double time) {
+    protected Task moveRandomly(double time) {
         Random rnd = new Random();
         int randomint = rnd.nextInt(9);
         switch (randomint) {
@@ -140,7 +155,7 @@ public class CreatureAI extends Flags{
             default: this.creep.moveTowards(Direction.STAY); break;
         }
         this.creep.applyMovement(time);     
-        
+        return new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, creep.getID(), new int[]{randomint});
     }
     
     /**
@@ -159,36 +174,7 @@ public class CreatureAI extends Flags{
             if (euclideanDistance <= range) nearbyCreatures.add(mob);
         }
         return nearbyCreatures;
-    }
-    
-    
-    protected void turnTowardsMapObject(MapObject mob) {
-        Direction d = AIutil.getDirectionTowards(creep.getCenterXPos(), creep.getCenterYPos(),mob.getCenterXPos(), mob.getCenterYPos());
-        creep.setFacing(d);
-    }
-    
-   
-    
-    protected void useMeleeTowards(MapObject target) {
-        //Mists.logger.log(Level.INFO, "{0} uses melee towards {1}", new Object[]{creep.getName(), target.getName()});
-        if (creep.getAvailableActions() == null) {
-            Mists.logger.log(Level.INFO, "No available actions for {0}", creep.getName());
-            return;
-        }
-        if (!creep.getAvailableActions().isEmpty()) {
-            this.turnTowardsMapObject(target);
-            if (creep.getAvailableActionNames().contains("melee")) {
-                //Try to use "melee" ability if possible
-                creep.useAction("melee");
-            } else {
-                //If not available, use first available action
-                //TODO: Is this necessary?
-                Mists.logger.log(Level.INFO, "{0} tried to use melee, but it wasn''t available", creep.getName());
-                creep.useAction(creep.getAvailableActionNames().get(0));
-            }
-        }
-    }
-    
+    }    
     
     /**
      * line of sight checks if there's structures between target
@@ -222,34 +208,27 @@ public class CreatureAI extends Flags{
      * (two or less tiles), then the creep just wanders around randomly
      * @param time time spent for moving
      * @param target target to follow
+     * @return the task the creature decided to perform
      */
-    protected void distanceBasedFollow(double time, MapObject target) {
+    protected Task distanceBasedFollow(double time, MapObject target) {
         creep.stopMovement(); //clear old movement
         Random rnd = new Random();
-        if (this.distanceToMob(target) > 10 * Mists.TILESIZE) {
+        if (AIutil.distanceToMob(creep, target.getID()) > 10 * Mists.TILESIZE) {
             //Mists.logger.log(Level.INFO, "{0} too far to follow {1}", new Object[]{creep.getName(), creep.getLocation().getPlayer().getName()});
-        } else if (this.distanceToMob(target) > 2 * Mists.TILESIZE) {
-            this.moveTowardsMob(target, time);
+            return new Task(GenericTasks.ID_IDLE, this.creep.getID(), null);
+        } else if (AIutil.distanceToMob(creep, target.getID()) > 2 * Mists.TILESIZE) {
+            return this.moveTowardsMob(target, time);
             //Mists.logger.log(Level.INFO, "{0} moving towards {1}", new Object[]{creep.getName(), creep.getLocation().getPlayer().getName()});
         } else {
             int r = rnd.nextInt(10); //50% chance to move around
-            if (r < 5) this.moveRandomly(time);
-        }
+            if (r < 5) return this.moveRandomly(time);
+            else return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
+        } 
     }
     
-    protected boolean goMelee(MapObject target, double time) {
-        this.creep.stopMovement(); //clear old movement
-            if (this.inRange(0, target)) {
-                //Mists.logger.log(Level.INFO, "{0} in range to hit {1}", new Object[]{creep.getName(), target.getName()});
-                this.useMeleeTowards(target);
-                return true;
-            } else {
-                this.moveTowardsMob(target, time);
-                return false;
-            }
-    }
     
-    protected boolean attackNearest(ArrayList<Creature> nearbyMobs, double time) {
+    
+    protected Task attackNearest(ArrayList<Creature> nearbyMobs, double time) {
         if (!nearbyMobs.isEmpty()) {
             Creature target = null;
             double distanceToNearest = Double.MAX_VALUE;
@@ -260,14 +239,13 @@ public class CreatureAI extends Flags{
                     }
                 }
             }
-            if (target == null) return false;
+            if (target == null) return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
             else {
                 //Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
                 return this.goMelee(target, time);
             }
-            
         }
-        return false;
+        return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
     }
     
     public Path getPath() {
@@ -279,17 +257,9 @@ public class CreatureAI extends Flags{
         return this.creep;
     }
     
-    protected boolean inRange(double range, MapObject target) {
-        Circle rangeCircle = new Circle(creep.getCenterXPos(), creep.getCenterYPos(), (creep.getWidth()/2)+range);
-        return target.intersects(rangeCircle);
-    }
     
-    protected double distanceToMob(MapObject mob) {
-        //returns euclidean distance to target mob
-        double euclideanDistance = Math.sqrt(Math.pow(this.getCreature().getXPos() - mob.getXPos(), 2)
-                            + Math.pow(this.getCreature().getYPos() - mob.getYPos(), 2));
-        return euclideanDistance;
-    }
+    
+    
     
     //TODO: Is set-function really needed? Should AI be hardlinked to a creature?
     public void setCreature(Creature creep) {
