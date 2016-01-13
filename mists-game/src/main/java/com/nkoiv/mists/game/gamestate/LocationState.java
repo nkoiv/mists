@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.controls.ContextAction;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.networking.LocationClient;
 import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
@@ -47,8 +48,9 @@ import javafx.scene.input.MouseEvent;
  */
 public class LocationState implements GameState {
     
-    private GameMode gamemode;
+    public GameMode gamemode;
     private LocationServer server;
+    private LocationClient client;
     
     private final Game game;
     private UIComponent currentMenu;
@@ -72,6 +74,24 @@ public class LocationState implements GameState {
         this.drawOrder = new TreeSet<>();
         this.loadDefaultUI();
         this.gamemode = gamemode;
+        if (gamemode == GameMode.SERVER) {
+            try {    
+                this.server = new LocationServer(game);                    
+            } catch (Exception e) {
+                Mists.logger.warning("Error starting server: "+e.getMessage());
+                Mists.logger.warning("Changing to Singleplayer");
+                this.gamemode = GameMode.SINGLEPLAYER;
+            }
+        }
+        if (gamemode == GameMode.CLIENT) {
+            try {    
+                this.client = new LocationClient(game);                    
+            } catch (Exception e) {
+                Mists.logger.warning("Error starting client: "+e.getMessage());
+                Mists.logger.warning("Changing to Singleplayer");
+                this.gamemode = GameMode.SINGLEPLAYER;
+            }
+        }
     }
     
     @Override
@@ -242,11 +262,9 @@ public class LocationState implements GameState {
     }
     
     private void tickSinglePlayer(double time) {
-        if (this.gamemode == GameMode.SINGLEPLAYER) {
-            if(this.paused == false) {
-                game.getCurrentLocation().update(time);
-            } 
-        }
+        if(this.paused == false) {
+            game.getCurrentLocation().update(time);
+        } 
     }
     
     private void tickServer(double time) {

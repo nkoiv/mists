@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
@@ -41,12 +42,14 @@ public class Game {
     
     public DungeonGenerator mapGen;
 
-    private ArrayList<GameState> gameStates;
+    private HashMap<Integer,GameState> gameStates;
     public GameState currentState;
     public static final int MAINMENU = 0;
     public static final int LOCATION = 1;
     public static final int WORLDMAP = 2;
     public static final int LOADSCREEN = 9;
+    
+    private GameMode currentGameMode = GameMode.SINGLEPLAYER;
     
     public LocationControls locControls;
     
@@ -71,9 +74,9 @@ public class Game {
         pocplayer.addAction(new MeleeWeaponAttack());
         this.player = pocplayer;
         //Initialize GameStates
-        this.gameStates = new ArrayList<>();
-        gameStates.add(new MainMenuState(this));
-        gameStates.add(new LocationState(this, GameMode.SINGLEPLAYER));
+        this.gameStates = new HashMap<>();
+        gameStates.put(MAINMENU, new MainMenuState(this));
+        //gameStates.add(new LocationState(this, GameMode.SINGLEPLAYER));
         currentState = gameStates.get(MAINMENU);
         currentState.enter();
         //Temp TODO:
@@ -81,12 +84,35 @@ public class Game {
         currentLocation.enterLocation(player);
     }
     
+    public void setGameMode(GameMode gamemode) {
+        this.currentGameMode = gamemode;
+    }
+    
+    public GameMode getGameMode() {
+        return this.currentGameMode;
+    }
+    
     public void moveToState(int gameStateNumber) {
         //TODO: Do some fancy transition?
         currentState.exit();
+        if (gameStates.get(gameStateNumber) == null) {
+            buildNewState(gameStateNumber);
+        } else if (gameStateNumber == LOCATION) {
+            if (((LocationState)gameStates.get(LOCATION)).gamemode != this.currentGameMode) buildNewState(LOCATION);
+        }
         currentState = gameStates.get(gameStateNumber);
         currentState.enter();
         updateUI();
+    }
+    
+    private void buildNewState(int gameStateNumber) {
+        switch (gameStateNumber) {
+            case MAINMENU: gameStates.put(MAINMENU, new MainMenuState(this)) ;break;
+            case LOCATION: gameStates.put(LOCATION, new LocationState(this, this.currentGameMode)); break;
+            case WORLDMAP: Mists.logger.warning("Tried to enter worldmap!"); break;
+            case LOADSCREEN: Mists.logger.warning("Tried to enter loadscreen!"); break;
+            default: Mists.logger.warning("Unknown gamestate!") ;break;
+        }
     }
     
     /**

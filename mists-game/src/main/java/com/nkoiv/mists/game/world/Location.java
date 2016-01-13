@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
@@ -576,11 +577,12 @@ public class Location extends Flags implements Global {
     /**
      * Update is the main "tick" of the Location.
      * Movement, combat and triggers should all be handled here
+     * 
      * If a Server is given as argument, the update operations
      * done are pushed to the servers update stack, to be relayed
      * to clients.
-     * @param time
-     * @param server 
+     * @param time Time since the last update
+     * @param server Server to relay the updates to
      */
     public void update (double time, LocationServer server) {
         this.updateSpatials();
@@ -591,6 +593,7 @@ public class Location extends Flags implements Global {
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) { //Mobs do whatever mobs do
                 mob.update(time);
+                if (mob instanceof Creature) server.addServerUpdate(mob.getLastTask());
             }
         }
         

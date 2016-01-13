@@ -14,7 +14,7 @@ import com.nkoiv.mists.game.AI.Task;
  * @author nikok
  */
 public class LocationNetwork {
-    static public final int port = 54555;
+    static public final int PORT = 54555;
 
 	// This registers objects that are going to be sent over the network.
 	static public void register (EndPoint endPoint) {
@@ -24,6 +24,7 @@ public class LocationNetwork {
 		kryo.register(Register.class);
 		kryo.register(Task.class);
                 kryo.register(CreatureAct.class);
+                kryo.register(AddMapObject.class);
 		kryo.register(UpdateMapObject.class);
 		kryo.register(RemoveMapObject.class);
 		kryo.register(MoveMapObject.class);
@@ -48,10 +49,15 @@ public class LocationNetwork {
 	static public class UpdateMapObject {
 		public int id, x, y;
 	}
+        
+        static public class AddMapObject {
+            public int id;
+            public AddMapObject(int id){this.id = id;}
+        }
 
 	static public class RemoveMapObject {
-		public int id;
-                public RemoveMapObject(int id) {this.id = id;}
+            public int id;
+            public RemoveMapObject(int id) {this.id = id;}
 	}
 
 	static public class MoveMapObject {

@@ -18,6 +18,31 @@ import java.util.Arrays;
  * @author nikok
  */
  public class Task implements KryoSerializable {
+     public static final String[]ID_CODE = new String[]{
+        "IDLE",
+        "CONTINUE_MOVEMENT",
+        "MOVE_TOWARDS_DIRECTION",
+        "MOVE_TOWARDS_TARGET",
+        "MOVE_TOWARDS_COORDINATES",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "STOP_MOVEMENT",
+        "UNSPECIFIED",
+        "TURN_TOWARDS_MOB",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "USE_MELEE_TOWADS_MOB"
+    };
+    
         public int taskID;
         public int actorID;
         public int argumentCount;
@@ -52,7 +77,7 @@ import java.util.Arrays;
         
         @Override
         public String toString() {
-            String s = "["+taskID+":"+actorID+"]:"+Arrays.toString(arguments);
+            String s = "["+ID_CODE[taskID]+":"+actorID+"]:"+Arrays.toString(arguments);
             return s;
         }
     }

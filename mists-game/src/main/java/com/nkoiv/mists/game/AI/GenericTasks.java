@@ -17,6 +17,9 @@ import java.util.logging.Level;
  * While the creaturetype specific AI-classes handle decisionmaking (serverside),
  * the actual executable tasks can be chopped down to GenericTasks.
  * These GenericTasks can then be transferred over network with simple IDs.
+ * 
+ * When adding new tasks, remember to add the description at Tasks.java static String[]
+ * for debugging use.
  * @author nikok
  */
 public class GenericTasks {
@@ -29,6 +32,14 @@ public class GenericTasks {
     public static final int ID_TURN_TOWARDS_MOB = 11; //1 argument: MobID
     public static final int ID_USE_MELEE_TOWARDS_MOB = 21; // 1 argument: MobID
     
+    /**
+     * PerformTask is the core of task-processing.
+     * It takes the Task object and processes it into
+     * actual (Creature) commands.
+     * @param l Location the task is performed at (MobID's are based on this)
+     * @param task Task-object to parse
+     * @param time Time available for performing the task
+     */
     public static void performTask(Location l, Task task, double time) {
         if (task == null || l == null) return;
         Creature actor = (Creature)l.getMapObject(task.actorID);

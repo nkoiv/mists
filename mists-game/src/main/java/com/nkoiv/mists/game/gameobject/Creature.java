@@ -384,7 +384,7 @@ public class Creature extends MapObject implements Combatant {
     
     
     public boolean moveTowards (double xCoor, double yCoor) {
-        Mists.logger.log(Level.INFO, "{0} moving from {1},{2} to {3},{4}", new Object[]{this.getName(), this.getCenterXPos(), this.getCenterYPos(), xCoor, yCoor});
+        //Mists.logger.log(Level.INFO, "{0} moving from {1},{2} to {3},{4}", new Object[]{this.getName(), this.getCenterXPos(), this.getCenterYPos(), xCoor, yCoor});
         double xDifference = xCoor - this.getCenterXPos();
         double yDifference = yCoor - this.getCenterYPos();
         if (xDifference < 1) xDifference = 0;
