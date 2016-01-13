@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -30,6 +31,7 @@ import javafx.scene.paint.Color;
 public class MainMenuState implements GameState {
 
     private HashMap<String, UIComponent> uiComponents;
+    private final TreeSet<UIComponent> drawOrder;
     private final Game game;
     private UIComponent currentMenu;
     private boolean gameMenuOpen;
@@ -38,8 +40,10 @@ public class MainMenuState implements GameState {
     public MainMenuState (Game game) {
         this.game = game;
         this.uiComponents = new HashMap<>();
+        this.drawOrder = new TreeSet<>();
         MainMenuWindow mainMenuWindow = new MainMenuWindow(this);
-        this.uiComponents.put(mainMenuWindow.getName(), mainMenuWindow);
+        this.addUIComponent(mainMenuWindow);
+        //this.uiComponents.put(mainMenuWindow.getName(), mainMenuWindow);
         this.currentMenu = uiComponents.get(mainMenuWindow.getName());
         
     }
@@ -56,11 +60,18 @@ public class MainMenuState implements GameState {
         uigc.clearRect(0, 0, screenWidth, screenHeight);
         this.drawLogo(uiCanvas);
         this.drawVersion(uiCanvas);
+        if (this.drawOrder != null) {
+            for (UIComponent uic : this.drawOrder) {
+                uic.render(uigc, 0, 0);
+            }
+        }
+        /*
         if (this.uiComponents != null) {
             for (String s: this.uiComponents.keySet()) {
                 this.uiComponents.get(s).render(uigc, 0, 0);
             }
         }
+        */
     }
     
     private void drawLogo(Canvas canvas) {
@@ -141,13 +152,14 @@ public class MainMenuState implements GameState {
      @Override
     public void addUIComponent(UIComponent uic) {
         this.uiComponents.put(uic.getName(), uic);
-        //this.drawOrder.add(uic);
+        this.drawOrder.add(uic);
     }
     
     @Override
     public boolean removeUIComponent(String uicName) {
         if (this.uiComponents.keySet().contains(uicName)) {
-            //this.drawOrder.remove(this.uiComponents.get(uicName));
+            //Mists.logger.info("Removing UIC "+uicName);
+            this.drawOrder.remove(this.uiComponents.get(uicName));
             this.uiComponents.remove(uicName);
             return true;
         }
@@ -157,6 +169,7 @@ public class MainMenuState implements GameState {
     @Override
     public boolean removeUIComponent(UIComponent uic) {
         if (this.uiComponents.containsValue(uic)) {
+            this.drawOrder.remove(uic);
             this.uiComponents.remove(uic.getName());
             return true;
         }

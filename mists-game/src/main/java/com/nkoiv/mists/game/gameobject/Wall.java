@@ -173,6 +173,7 @@ public class Wall extends Structure {
     }
     
     private Image composeImage() {
+        
         Image[] extraImages = new Image[8];
         extraImages[0] = Mists.graphLibrary.getImage("black");
         int n = 1;

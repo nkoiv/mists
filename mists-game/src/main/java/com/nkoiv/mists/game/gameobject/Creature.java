@@ -250,7 +250,7 @@ public class Creature extends MapObject implements Combatant {
     @Override
     public void update (double time) {
         this.lastTask = this.ai.act(time);
-        Mists.logger.info(this.name+" doing "+lastTask.toString());
+        //Mists.logger.info(this.name+" doing "+lastTask.toString());
         this.stopMovement();
         GenericTasks.performTask(location, lastTask, time);
         this.updateGraphics();

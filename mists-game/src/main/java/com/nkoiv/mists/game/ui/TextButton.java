@@ -107,10 +107,11 @@ public class TextButton extends UIComponent{
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
-        if (me.getEventType() == MouseEvent.MOUSE_RELEASED && me.getButton() == MouseButton.PRIMARY) this.buttonPress();
+        if ((me.getEventType() == MouseEvent.MOUSE_CLICKED) && me.getButton() == MouseButton.PRIMARY) this.buttonPress();
+        
     }
     
-    private void buttonPress() {
+    protected void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
     }
     

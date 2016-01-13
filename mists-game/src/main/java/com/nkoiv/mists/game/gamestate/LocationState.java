@@ -54,7 +54,7 @@ public class LocationState implements GameState {
     
     private final Game game;
     private UIComponent currentMenu;
-    private boolean gameMenuOpen;
+    public boolean gameMenuOpen;
     public boolean paused;
     public double lastDragX;
     public double lastDragY;

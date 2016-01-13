@@ -183,7 +183,7 @@ public class TiledWindow extends UIComponent{
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
-        //Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+        Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         double clickX = me.getX();
         double clickY = me.getY();
         for (UIComponent uic : subComponents) {

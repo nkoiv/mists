@@ -43,6 +43,12 @@ public abstract class UIComponent implements Comparable<UIComponent>{
         return this.yPosition;
     }
     
+    /**
+     * RenderZ signifies "how front" the component is drawn.
+     * Generally components are drawn in descending order, 
+     * with renderZ of less than zero being ignored (not drawn)
+     * @return the component depth on screen.
+     */
     public int getRenderZ() {
         return this.renderZ;
     }
@@ -51,6 +57,12 @@ public abstract class UIComponent implements Comparable<UIComponent>{
         return this.draggable;
     }
     
+    /**
+     * RenderZ signifies "how front" the component is drawn.
+     * Generally components are drawn in descending order, 
+     * with renderZ of less than zero being ignored (not drawn)
+     * @param renderZ How front the component is placed .
+     */
     public void setRenderZ(int renderZ) {
         this.renderZ = renderZ;
     }

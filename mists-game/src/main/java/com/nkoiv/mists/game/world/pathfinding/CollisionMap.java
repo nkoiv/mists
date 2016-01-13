@@ -137,6 +137,7 @@ public class CollisionMap {
     
     public boolean isBlocked(List<Integer> crossableTerrain ,int x, int y) {
         if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
+        if (x<0 || y<0) return true;
         if (nodeMap[x][y] == null) return true;
         return (!crossableTerrain.contains(nodeMap[x][y].getCollisionLevel()));
     }
