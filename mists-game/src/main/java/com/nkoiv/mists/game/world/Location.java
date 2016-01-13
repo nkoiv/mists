@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.AI.GenericTasks;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
@@ -593,7 +594,9 @@ public class Location extends Flags implements Global {
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) { //Mobs do whatever mobs do
                 mob.update(time);
-                if (mob instanceof Creature) server.addServerUpdate(mob.getLastTask());
+                if (mob instanceof Creature) {
+                    server.addServerUpdate(mob.getLastTask());
+                }
             }
         }
         

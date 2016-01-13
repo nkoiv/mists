@@ -9,7 +9,6 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import java.util.logging.Level;
-import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -28,9 +27,13 @@ public class GoMainMenuButton extends TextButton {
     }
     
     @Override
-    public void handleMouseEvent(MouseEvent me) {
+    public void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-        if (game.currentState instanceof LocationState) ((LocationState)game.currentState).gameMenuOpen = false;
+        if (game.currentState instanceof LocationState) {
+            ((LocationState)game.currentState).gameMenuOpen = false;
+            game.currentState.removeUIComponent("GameMenu");
+            ((LocationState)game.currentState).paused = false;
+        }
         this.game.moveToState(Game.MAINMENU);
     }
     

@@ -181,6 +181,9 @@ public class LocationServer {
     }
     
     private void handleClientUpdates() {
+        if (!this.incomingUpdatesStack.isEmpty()) {
+            Mists.logger.info("Handling "+this.incomingUpdatesStack.size()+" incoming updates");
+        }
         while (!this.incomingUpdatesStack.isEmpty()) {
             this.handleUpdate(this.incomingUpdatesStack.pop());
         }
@@ -194,6 +197,7 @@ public class LocationServer {
     }
     
     public void addServerUpdate(Object o) {
+        if (o == null) return;
         this.outgoingUpdateStack.push(o);
     }
     
@@ -202,6 +206,9 @@ public class LocationServer {
     }
     
     private void sendObjectUpdates() {
+        if (!this.outgoingUpdateStack.isEmpty()) {
+            Mists.logger.info("Sending "+this.outgoingUpdateStack.size()+" outgoing updates");
+        }
         while (!this.outgoingUpdateStack.empty()) {
             this.server.sendToAllTCP(outgoingUpdateStack.pop());
         }

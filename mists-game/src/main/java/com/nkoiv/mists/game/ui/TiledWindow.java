@@ -43,7 +43,7 @@ public class TiledWindow extends UIComponent{
     }
     
     public void close() {
-        this.parent.removeUIComponent(this.name);
+        this.parent.removeUIComponent(this);
     }
     
     public void addSubComponent(UIComponent uiComp) {
