@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.networking;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.nkoiv.mists.game.AI.Task;
+import com.nkoiv.mists.game.world.TileMap;
 
 /**
  *
@@ -22,28 +23,30 @@ public class LocationNetwork {
 		kryo.register(Login.class);
 		kryo.register(RegistrationRequired.class);
 		kryo.register(Register.class);
-		kryo.register(Task.class);
                 kryo.register(CreatureAct.class);
                 kryo.register(AddMapObject.class);
 		kryo.register(UpdateMapObject.class);
 		kryo.register(RemoveMapObject.class);
 		kryo.register(MoveMapObject.class);
+                //Kryo-serialized generic classes:
+                kryo.register(Task.class);
+                kryo.register(TileMap.class);
 	}
 
 	static public class Login {
-		public String name;
+            public String name;
 	}
 
 	static public class RegistrationRequired {
 	}
 
 	static public class Register {
-		public String name;
-		public String otherStuff;
+            public String name;
+            public String otherStuff;
 	}
         
         static public class CreatureAct {
-                public Task task;
+            public Task task;
         }
 
 	static public class UpdateMapObject {
@@ -61,6 +64,6 @@ public class LocationNetwork {
 	}
 
 	static public class MoveMapObject {
-		public int x, y;
+            public int x, y;
 	}
 }

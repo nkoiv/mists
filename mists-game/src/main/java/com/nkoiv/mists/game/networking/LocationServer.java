@@ -214,8 +214,13 @@ public class LocationServer {
         }
     }
     
+    private void sendMap(PlayerConnection c) {
+        this.server.sendToTCP(c.player.id, this.location.getMap());
+    }
+    
     private void loggedIn (PlayerConnection c, Player player) {
         c.player = player;
+        sendMap(c);
         //TODO: Load players character and place it in the world
         //Use either loadCharacter() or pick from characterLibrary?
     }

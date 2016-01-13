@@ -174,7 +174,7 @@ public class Wall extends Structure {
     
     private Image composeImage() {
         
-        Image[] extraImages = new Image[8];
+        Image[] extraImages = new Image[9];
         extraImages[0] = Mists.graphLibrary.getImage("black");
         int n = 1;
         for (int i = 0; i < this.neighbours.length; i++) {

@@ -9,10 +9,13 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.nkoiv.mists.game.AI.GenericTasks;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Game;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.networking.LocationNetwork.*;
+import com.nkoiv.mists.game.world.TileMap;
 import java.io.IOException;
 import java.util.Stack;
 
@@ -59,27 +62,8 @@ public class LocationClient {
                     Register register = new Register();
                     register.name = name;
                     client.sendTCP(register);
-                }
-
-                if (object instanceof AddMapObject) {
-                    AddMapObject msg = (AddMapObject)object;
-                    //TODO: Location.addMapObject...
-                    return;
-                }
-
-                if (object instanceof UpdateMapObject) {
-                    //TODO: Location.getMapObject.set...
-                    return;
-                }
-
-                if (object instanceof RemoveMapObject) {
-                    RemoveMapObject msg = (RemoveMapObject)object;
-                    //TODO: Location.removeMapObject...
-                    return;
-                }
-
-                if (object instanceof Task) {
-
+                } else {
+                    addServerUpdate(object);
                 }
             }
 
@@ -93,6 +77,7 @@ public class LocationClient {
         
         try {
                 client.connect(5000, host, LocationNetwork.PORT);
+                Mists.logger.info("Trying to connect...");
                 // Server communication after connection can go here, or in Listener#connected().
         } catch (IOException ex) {
                 ex.printStackTrace();
@@ -103,14 +88,42 @@ public class LocationClient {
         login.name = name;
         client.sendTCP(login);
     }
+    
+    public void tick(double time) {
+        this.sendObjectUpdates();
+        this.handleServerUpdates(time);
+    }
 
     private void addServerUpdate(Object o) {
         this.incomingUpdatesStack.push(o);
     }
     
-    private void handleServerUpdates() {
+    private void handleServerUpdates(double time) {
         while (!this.incomingUpdatesStack.isEmpty()) {
-            
+            Object object = this.incomingUpdatesStack.pop();
+            if (object instanceof TileMap) {
+                this.location.loadMap((TileMap)object);
+            }
+            if (object instanceof AddMapObject) {
+                AddMapObject msg = (AddMapObject)object;
+                //TODO: Location.addMapObject...
+                return;
+            }
+
+            if (object instanceof UpdateMapObject) {
+                //TODO: Location.getMapObject.set...
+                return;
+            }
+
+            if (object instanceof RemoveMapObject) {
+                RemoveMapObject msg = (RemoveMapObject)object;
+                //TODO: Location.removeMapObject...
+                return;
+            }
+
+            if (object instanceof Task) {
+                GenericTasks.performTask(location, (Task)object, time);
+            }
         }
     }
 

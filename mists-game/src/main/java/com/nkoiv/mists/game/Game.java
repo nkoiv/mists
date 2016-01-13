@@ -80,8 +80,8 @@ public class Game {
         currentState = gameStates.get(MAINMENU);
         currentState.enter();
         //Temp TODO:
-        currentLocation = new Location(pocplayer);
-        currentLocation.enterLocation(player);
+        //currentLocation = new Location(pocplayer);
+        //currentLocation.enterLocation(player);
     }
     
     public void setGameMode(GameMode gamemode) {
@@ -121,7 +121,7 @@ public class Game {
     */
 
     public void moveToLocation(Location l) {
-        currentLocation.exitLocation();
+        if (currentLocation != null) currentLocation.exitLocation();
         l.enterLocation(player);
         currentLocation = l;
     }

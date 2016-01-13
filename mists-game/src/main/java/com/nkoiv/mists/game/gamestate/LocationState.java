@@ -69,6 +69,7 @@ public class LocationState implements GameState {
     private InventoryPanel playerInventory;
     
     public LocationState (Game game, GameMode gamemode) {
+        Mists.logger.info("Generating locationstate for "+gamemode);
         this.game = game;
         uiComponents = new HashMap<>();
         this.drawOrder = new TreeSet<>();
@@ -272,6 +273,7 @@ public class LocationState implements GameState {
     }
     
     private void tickClient(double time) {
+        this.client.tick(time);
         
     }
     
@@ -329,6 +331,7 @@ public class LocationState implements GameState {
         UIComponent uic = this.getUIComponentAtCoordinates(me.getX(), me.getY());
         if (uic != null) {
             uic.handleMouseEvent(me);
+            me.consume();
             return true;
         }
         return false;

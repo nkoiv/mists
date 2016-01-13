@@ -121,6 +121,7 @@ public class MainMenuState implements GameState {
             if (clickX >= uicX && clickX <= (uicX + uicWidth)) {
                 if (clickY >= uicY && clickY <= uicY + uicHeight) {
                     entry.getValue().handleMouseEvent(me);
+                    me.consume();
                     return true;
                 }
             }

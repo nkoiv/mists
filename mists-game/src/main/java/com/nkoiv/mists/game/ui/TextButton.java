@@ -107,7 +107,10 @@ public class TextButton extends UIComponent{
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
-        if ((me.getEventType() == MouseEvent.MOUSE_CLICKED) && me.getButton() == MouseButton.PRIMARY) this.buttonPress();
+        if ((me.getEventType() == MouseEvent.MOUSE_CLICKED) && me.getButton() == MouseButton.PRIMARY) {
+            this.buttonPress();
+            me.consume();
+        }
         
     }
     

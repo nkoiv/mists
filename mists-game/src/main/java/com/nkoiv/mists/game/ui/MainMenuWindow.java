@@ -157,7 +157,7 @@ public class MainMenuWindow extends TiledPanel {
             @Override
             protected void buttonPress() {
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-                //this.game.setGameMode(GameMode.CLIENT);
+                this.game.setGameMode(GameMode.CLIENT);
                 parent.close();
             }
         }
