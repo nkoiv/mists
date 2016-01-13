@@ -46,7 +46,7 @@ public class LocationServer {
     private Stack<Object> incomingUpdatesStack;
     
     public LocationServer(Game game) throws Exception {
-        server = new Server() {
+        server = new Server(16384,16384) {
             @Override
             protected Connection newConnection () {
                     // By providing our own connection implementation, we can store per
@@ -64,15 +64,18 @@ public class LocationServer {
         server.addListener(new Listener() {
             @Override
             public void received(Connection c, Object object) {
+                Mists.logger.info("Received connection");
                 PlayerConnection connection = (PlayerConnection)c;
                 Player player = connection.player;
                 if (object instanceof Login) {
+                    Mists.logger.info("Received Login");
                     // Ignore if already logged in.
                     if (player != null) return;
 
                     // Reject if the name is invalid.
                     String name = ((Login)object).name;
                     if (!isValid(name)) {
+                        Mists.logger.info("Name invalid, closing connection");
                         c.close();
                         return;
                     }
@@ -80,6 +83,7 @@ public class LocationServer {
                     // Reject if already logged in.
                     for (Player other : loggedIn) {
                         if (other.name.equals(name)) {
+                            Mists.logger.info("Same name player found, closing connection");
                             c.close();
                             return;
                         }
@@ -89,15 +93,16 @@ public class LocationServer {
 
                     // Reject if couldn't load character.
                     if (player == null) {
-                            c.sendTCP(new RegistrationRequired());
-                            return;
+                        Mists.logger.info("Asking for registration");
+                        c.sendTCP(new RegistrationRequired());
+                        return;
                     }
-
                     loggedIn(connection, player);
                     return;
-            }
+                }
 
-            if (object instanceof Register) {
+                if (object instanceof Register) {
+                    Mists.logger.info("Received Register");
                     // Ignore if already logged in.
                     if (player != null) return;
 
@@ -105,12 +110,9 @@ public class LocationServer {
 
                     // Reject if the login is invalid.
                     if (!isValid(register.name)) {
-                            c.close();
-                            return;
-                    }
-                    if (!isValid(register.otherStuff)) {
-                            c.close();
-                            return;
+                        Mists.logger.info("Name invalid, closing connection");
+                        c.close();
+                        return;
                     }
 
                     // Reject if character alread exists.
@@ -131,10 +133,10 @@ public class LocationServer {
                     */
                     loggedIn(connection, player);
                     return;
+                }
+                //addClientUpdate(c, object);
             }
-                
-                addClientUpdate(c, object);
-            }
+            
             private boolean isValid (String value) {
                 if (value == null) return false;
                 value = value.trim();
@@ -146,6 +148,7 @@ public class LocationServer {
             public void disconnected (Connection c) {
                 PlayerConnection connection = (PlayerConnection)c;
                 if (connection.player != null) {
+                    Mists.logger.info("Player "+connection.player.name+" disconnected");
                     loggedIn.remove(connection.player);
                     /*
                     RemoveMapObject removePlayer = new RemoveMapObject();
@@ -170,11 +173,11 @@ public class LocationServer {
         this.sendUpdates();
     }
     
-    public void sendLocationBase() {
-        if (this.location.getMap() instanceof TileMap) {
-            this.server.sendToAllTCP(this.location.getMap());
-        }
+    private void sendMap(PlayerConnection c) {
+        Mists.logger.info("Sending map for location to "+c.player.name);
+        this.server.sendToTCP(c.getID(), this.location.getMap());
     }
+
     
     private void addClientUpdate(Connection c, Object o) {
         this.incomingUpdatesStack.add(o);
@@ -202,12 +205,12 @@ public class LocationServer {
     }
     
     private void sendUpdates() {
-        this.sendObjectUpdates();
+        //this.sendObjectUpdates();
     }
     
     private void sendObjectUpdates() {
         if (!this.outgoingUpdateStack.isEmpty()) {
-            Mists.logger.info("Sending "+this.outgoingUpdateStack.size()+" outgoing updates");
+            //Mists.logger.info("Sending "+this.outgoingUpdateStack.size()+" outgoing updates to "+this.loggedIn.size()+" clients");
         }
         while (!this.outgoingUpdateStack.empty()) {
             this.server.sendToAllTCP(outgoingUpdateStack.pop());
@@ -221,12 +224,11 @@ public class LocationServer {
         }
     }
     
-    private void sendMap(PlayerConnection c) {
-        this.server.sendToTCP(c.player.id, this.location.getMap());
-    }
     
     private void loggedIn (PlayerConnection c, Player player) {
         c.player = player;
+        this.loggedIn.add(player);
+        Mists.logger.info(player.name+" logged in");
         sendMap(c);
         //TODO: Load players character and place it in the world
         //Use either loadCharacter() or pick from characterLibrary?

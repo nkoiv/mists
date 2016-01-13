@@ -123,7 +123,7 @@ public class MainMenuWindow extends TiledPanel {
                 this.parent = parent;
             }
             
-             private void newGame() {
+            private void newGame() {
                 PlayerCharacter pocplayer = new PlayerCharacter();
                 Creature companion = Mists.creatureLibrary.create("Himmu");
                 System.out.println(companion.toString());
@@ -154,11 +154,26 @@ public class MainMenuWindow extends TiledPanel {
                 this.parent = parent;
             }
             
+            private void joinGame() {
+                PlayerCharacter pocplayer = new PlayerCharacter();
+                Creature companion = Mists.creatureLibrary.create("Himmu");
+                System.out.println(companion.toString());
+                pocplayer.addCompanion(companion);
+                pocplayer.addAction(new MeleeWeaponAttack());
+                game.setPlayer(pocplayer);
+                /*
+                Location newLoc = new Location(this.game.getPlayer());
+                this.game.moveToLocation(newLoc);
+                */
+                this.game.moveToState(Game.LOCATION);
+            }
+            
             @Override
             protected void buttonPress() {
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 this.game.setGameMode(GameMode.CLIENT);
                 parent.close();
+                this.joinGame();
             }
         }
         

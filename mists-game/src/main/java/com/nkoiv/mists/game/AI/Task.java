@@ -48,6 +48,10 @@ import java.util.Arrays;
         public int argumentCount;
         public int arguments[];
         
+        public Task() {
+            
+        }
+        
         public Task(int taskID, int actorID, int[] arguments) {
             this.taskID = taskID;
             this.actorID = actorID;
@@ -64,7 +68,7 @@ import java.util.Arrays;
             output.writeInt(this.taskID);
             output.writeInt(this.actorID);
             output.writeInt(this.argumentCount);
-            output.writeInts(this.arguments);
+            if (this.arguments!=null)output.writeInts(this.arguments);
         }
 
         @Override
@@ -72,7 +76,7 @@ import java.util.Arrays;
             this.taskID = input.readInt();
             this.actorID = input.readInt();
             this.argumentCount = input.readInt();
-            this.arguments = input.readInts(this.argumentCount);
+            if(this.argumentCount>0)this.arguments = input.readInts(this.argumentCount);
         }
         
         @Override

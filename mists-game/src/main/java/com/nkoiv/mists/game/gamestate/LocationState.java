@@ -161,10 +161,11 @@ public class LocationState implements GameState {
             gc.clearRect(0, 0, screenWidth, screenHeight);
             if (game.getCurrentLocation() != null) {
                 game.getCurrentLocation().render(gc);
+                //Render Location overlay
+                Overlay.drawAllHPBars(gc, game.getCurrentLocation().getLastRenderedMobs());
             }
         }
-        //Render Location overlay
-        Overlay.drawAllHPBars(gc, game.getCurrentLocation().getLastRenderedMobs());
+        
         //Render the UI
         this.renderUI(uiCanvas);
         
@@ -176,13 +177,16 @@ public class LocationState implements GameState {
         double screenHeight = uiCanvas.getHeight();
         //Render the UI
         uigc.clearRect(0, 0, screenWidth, screenHeight);
-        this.updateInfoBox();
-        this.contextAction.update();
-        if (this.contextAction.getCurrentTrigger() != null) {
-            Overlay.drawHighlightRectangle(uigc, this.contextAction.getTriggerObjects());
-            Overlay.drawHandCursor(uigc, this.contextAction.getCurrentTrigger().getTarget());
+        if (this.game.getCurrentLocation() != null) {
+            this.updateInfoBox();
+            this.contextAction.update();
+            if (this.contextAction.getCurrentTrigger() != null) {
+                Overlay.drawHighlightRectangle(uigc, this.contextAction.getTriggerObjects());
+                Overlay.drawHandCursor(uigc, this.contextAction.getCurrentTrigger().getTarget());
+            }
+            //if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(uigc, infobox, game.getCurrentLocation().getTargets().get(0));
         }
-        //if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(uigc, infobox, game.getCurrentLocation().getTargets().get(0));
+        
         if (gameMenuOpen){
             try {
                 Image controls = new Image("/images/controls.png");
@@ -287,7 +291,7 @@ public class LocationState implements GameState {
         this.lastDragX = 0; this.lastDragY = 0;
         if(!mouseClickOnUI(me)){
             //If not, give the click to the underlying gameLocation
-            Mists.logger.info("Click didnt land on an UI button");
+            //Mists.logger.info("Click didnt land on an UI button");
             this.mouseClickOnLocation(me);
         }
     }
@@ -337,10 +341,11 @@ public class LocationState implements GameState {
     }
     
     private boolean mouseClickOnLocation(MouseEvent me) {
+        if (game.getCurrentLocation() == null) return false;
         double clickX = me.getX();
         double clickY = me.getY();
         if (me.getButton() == MouseButton.SECONDARY  && me.getEventType() == MouseEvent.MOUSE_RELEASED) {
-            Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
+            //Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
             double xOffset = this.game.getCurrentLocation().getLastxOffset();
             double yOffset = this.game.getCurrentLocation().getLastyOffset();
             this.game.getCurrentLocation().getPlayer().setCenterPosition(clickX+xOffset, clickY+yOffset);

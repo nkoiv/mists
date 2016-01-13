@@ -253,7 +253,7 @@ public class Wall extends Structure {
         wallparts.setViewport(new Rectangle2D(96,32,this.graphics.getWidth(),this.graphics.getHeight()));
         WritableImage uprightWall = wallparts.snapshot(parameters, snapshot);
         
-        this.wallimages = new Image[]{upleftWall, upWall, uprightWall, leftWall, rightWall, downleftWall, downWall, downrightWall};
+        this.wallimages =  new Image[]{upleftWall, upWall, uprightWall, leftWall, rightWall, downleftWall, downWall, downrightWall};
         
     }
     

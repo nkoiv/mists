@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.networking.LocationNetwork.*;
 import com.nkoiv.mists.game.world.TileMap;
 import java.io.IOException;
 import java.util.Stack;
+import javafx.application.Platform;
 
 /**
  * Client doesnt run AI routines or do cleanup.
@@ -37,7 +38,7 @@ public class LocationClient {
     private Stack<Object> incomingUpdatesStack;
 
     public LocationClient (Game game) {
-        client = new Client();
+        client = new Client(16384,16384);
         this.game = game;
         client.start();
 
@@ -58,26 +59,31 @@ public class LocationClient {
 
             @Override
             public void received (Connection connection, Object object) {
+                Mists.logger.info("Got "+object.getClass());
                 if (object instanceof RegistrationRequired) {
+                    Mists.logger.info("Registering...");
                     Register register = new Register();
                     register.name = name;
                     client.sendTCP(register);
-                } else {
+                } else if (object instanceof TileMap) {
+                    Mists.logger.info("Received a new map from server, processing...");
+                    handleTileMap(object);
+                }   else {
                     addServerUpdate(object);
                 }
             }
 
             @Override
             public void disconnected (Connection connection) {
-                    System.exit(0);
+                    //System.exit(0);
             }
         }));
         
         String host = "localhost"; //TODO: Obviously input for this
         
         try {
-                client.connect(5000, host, LocationNetwork.PORT);
                 Mists.logger.info("Trying to connect...");
+                client.connect(5000, host, LocationNetwork.PORT);
                 // Server communication after connection can go here, or in Listener#connected().
         } catch (IOException ex) {
                 ex.printStackTrace();
@@ -98,12 +104,28 @@ public class LocationClient {
         this.incomingUpdatesStack.push(o);
     }
     
+    private void handleTileMap(Object object) {
+        final TileMap t = (TileMap)object;
+        final Game g = this.game;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+               t.buildMap();
+               Location l = new Location("ServerMap", t);
+               g.moveToLocation(l);
+            }
+        });
+
+        
+    }
+    
     private void handleServerUpdates(double time) {
+        if (!this.incomingUpdatesStack.isEmpty()) {
+            //Mists.logger.info("Handling "+this.incomingUpdatesStack.size()+" server updates");
+        }
         while (!this.incomingUpdatesStack.isEmpty()) {
             Object object = this.incomingUpdatesStack.pop();
-            if (object instanceof TileMap) {
-                this.location.loadMap((TileMap)object);
-            }
+            
             if (object instanceof AddMapObject) {
                 AddMapObject msg = (AddMapObject)object;
                 //TODO: Location.addMapObject...

@@ -30,9 +30,9 @@ import javafx.scene.image.Image;
 public class TileMap implements GameMap, KryoSerializable {
 
    
-    int tilesize;
-    int tileWidth;
-    int tileHeight;
+    private int tilesize;
+    private int tileWidth;
+    private int tileHeight;
     
     private int[][] intMap;
     
@@ -43,6 +43,20 @@ public class TileMap implements GameMap, KryoSerializable {
     private static final int FLOOR = 1;
     private static final int WALL = 2;
     private static final int DOOR = 4;
+    
+    public TileMap() {
+        
+    }
+    
+    public void buildMap() {
+        if (this.intMap == null) return;
+        Mists.logger.log(Level.INFO, "Got a {0}x{1} intMap for mapgeneration. Generating tiles...", new Object[]{intMap.length, intMap[0].length});
+        this.tileMap = new Tile[tileWidth][tileHeight];
+        initializeTileGraphics();
+        Mists.logger.info("Tile graphics initialized");
+        this.generateTilesFromIntMap();
+        Mists.logger.info("Tiles generated");
+    }
     
     public TileMap (String filename) {
         this.tilesize = Global.TILESIZE;
@@ -221,6 +235,9 @@ public class TileMap implements GameMap, KryoSerializable {
     
     //use the intMap to generate the tiles
     private void generateTilesFromIntMap() {
+        Mists.logger.info("Generating tiles");
+        Mists.logger.info("IntMap: "+this.intMap.length+"x"+this.intMap[0].length);
+        Mists.logger.info("TileMap: "+this.tileMap.length+"x"+this.tileMap[0].length);
         for (int x=0; x<this.tileWidth; x++) {
             for (int y=0; y<this.tileHeight; y++) {
                //TODO: Check the intMap value against tilesheet
@@ -273,8 +290,8 @@ public class TileMap implements GameMap, KryoSerializable {
         output.writeInt(this.tilesize);
         output.writeInt(this.tileWidth);
         output.writeInt(this.tileHeight);
-        for (int[] intRow : this.intMap) {
-            output.writeInts(intRow);
+        for (int[] intColumn : this.intMap) {
+            output.writeInts(intColumn);
         }
         kryo.writeClassAndObject(output, this.tilecodes);
     }
@@ -285,8 +302,8 @@ public class TileMap implements GameMap, KryoSerializable {
         this.tileWidth = input.readInt();
         this.tileHeight = input.readInt();
         this.intMap = new int[tileWidth][tileHeight];
-        for (int i = 0; i < this.tileHeight; i++) {
-            this.intMap[i] = input.readInts(tileWidth);
+        for (int i = 0; i < this.tileWidth; i++) {
+            this.intMap[i] = input.readInts(tileHeight);
         }
         this.tilecodes = (HashMap<Integer, String>)kryo.readClassAndObject(input);
     }

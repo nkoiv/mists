@@ -39,11 +39,13 @@ public class GenericTasks {
      * @param l Location the task is performed at (MobID's are based on this)
      * @param task Task-object to parse
      * @param time Time available for performing the task
+     * @return Returns true if task was performed successfully. False means object IDs might be out of sync.
      */
-    public static void performTask(Location l, Task task, double time) {
-        if (task == null || l == null) return;
-        Creature actor = (Creature)l.getMapObject(task.actorID);
-        if (actor == null) return;
+    public static boolean performTask(Location l, Task task, double time) {
+        if (task == null || l == null) return false;
+        MapObject mob = l.getMapObject(task.actorID);
+        if (!(mob instanceof Creature)) return false;
+        Creature actor = (Creature)mob;
         switch (task.taskID) {
             case ID_IDLE: break;
             case ID_CONTINUE_MOVEMENT: actor.applyMovement(time); break;
@@ -55,7 +57,7 @@ public class GenericTasks {
             case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]); break;
             default: break;
         }
-        
+        return true;
     }
     
     public static void turnTowardsMapObject(Creature actor, int targetID) {

@@ -61,6 +61,7 @@ public class LocationNetwork {
 	static public class RemoveMapObject {
             public int id;
             public RemoveMapObject(int id) {this.id = id;}
+            public RemoveMapObject(){}
 	}
 
 	static public class MoveMapObject {
