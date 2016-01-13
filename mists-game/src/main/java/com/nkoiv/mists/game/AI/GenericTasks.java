@@ -28,6 +28,7 @@ public class GenericTasks {
     public static final int ID_MOVE_TOWARDS_DIRECTION = 2; //1 argument: the direction
     public static final int ID_MOVE_TOWARDS_TARGET = 3; // 1 argument: targetID
     public static final int ID_MOVE_TOWARDS_COORDINATES = 4; //2 arguments: x and y coordinates
+    public static final int ID_CHECK_COORDINATES = 8; //2 arguments: x and y coordinates
     public static final int ID_STOP_MOVEMENT = 9; //no arguments
     public static final int ID_TURN_TOWARDS_MOB = 11; //1 argument: MobID
     public static final int ID_USE_MELEE_TOWARDS_MOB = 21; // 1 argument: MobID
@@ -52,12 +53,19 @@ public class GenericTasks {
             case ID_MOVE_TOWARDS_DIRECTION: moveTowardsDirection(actor, task.arguments[0]); actor.applyMovement(time);break;
             case ID_MOVE_TOWARDS_TARGET: moveTowardsTarget(actor, task.arguments[0]); actor.applyMovement(time); break;
             case ID_MOVE_TOWARDS_COORDINATES: moveTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); actor.applyMovement(time); break;
+            case ID_CHECK_COORDINATES: checkCoordinates(actor, task.arguments[0], task.arguments[1]); break;
             case ID_STOP_MOVEMENT: actor.stopMovement(); break;
             case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, task.arguments[0]); break;
             case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]); break;
             default: break;
         }
         return true;
+    }
+    
+    public static void checkCoordinates (MapObject actor, double xCoordinate, double yCoordinate) {
+        if (Math.abs(actor.getXPos()-xCoordinate) > 20 || Math.abs(actor.getYPos()-yCoordinate) > 20) {
+            actor.setPosition(xCoordinate, yCoordinate);
+        }
     }
     
     public static void turnTowardsMapObject(Creature actor, int targetID) {

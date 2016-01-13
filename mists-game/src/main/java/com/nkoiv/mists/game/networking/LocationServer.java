@@ -14,8 +14,12 @@ import com.esotericsoftware.kryonet.Server;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
 import com.nkoiv.mists.game.networking.LocationNetwork.Login;
+import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectUpdate;
 import com.nkoiv.mists.game.networking.LocationNetwork.Register;
 import com.nkoiv.mists.game.networking.LocationNetwork.RegistrationRequired;
 import com.nkoiv.mists.game.networking.LocationNetwork.RemoveMapObject;
@@ -26,6 +30,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -123,18 +129,20 @@ public class LocationServer {
                     }
                     */
                     player = new Player();
-                    player.name = register.name;
-                    player.id = 0;
+                    
                     /*
                     if (!saveCharacter(player)) {
                             c.close();
                             return;
                     }
                     */
+                    player.name = register.name;
                     loggedIn(connection, player);
                     return;
                 }
-                //addClientUpdate(c, object);
+                if (object instanceof Task || object instanceof MapObjectUpdate) {
+                    addClientUpdate(c, object);
+                }
             }
             
             private boolean isValid (String value) {
@@ -177,13 +185,42 @@ public class LocationServer {
         Mists.logger.info("Sending map for location to "+c.player.name);
         this.server.sendToTCP(c.getID(), this.location.getMap());
     }
-
+    
+    private int giveConnectedPlayerCompanion(String name) {
+        PlayerCharacter companion = new PlayerCharacter(name);
+        location.addMapObject(companion);
+        companion.setCenterPosition(location.getPlayer().getXPos()+50, location.getPlayer().getYPos()+50);
+        Mists.logger.info("Gave the connecting player: "+companion.getName()+" id: "+companion.getID());
+        addMapObject(companion);
+        return companion.getID();
+    }
+    
+    private void sendAllMobs(PlayerConnection c) {
+        Object[] a = this.location.getAllMobsIDs().toArray();
+        for (Object o : a) {
+            MapObject mob = location.getMapObject((Integer)o);
+            this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+        }
+    }
+    
+    private void sendAllCreatures(PlayerConnection c) {  
+        Object[] a = this.location.getAllMobsIDs().toArray();
+        for (Object o : a) {
+            MapObject mob = location.getMapObject((Integer)o);
+            if (mob instanceof Creature) this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+        }
+    }
+    
+    public void addMapObject(MapObject mob) {
+        this.addServerUpdate(new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+    }
     
     private void addClientUpdate(Connection c, Object o) {
         this.incomingUpdatesStack.add(o);
     }
     
     private void handleClientUpdates() {
+        //Mists.logger.info("Client updates in stack: "+this.incomingUpdatesStack.size());
         if (!this.incomingUpdatesStack.isEmpty()) {
             Mists.logger.info("Handling "+this.incomingUpdatesStack.size()+" incoming updates");
         }
@@ -197,6 +234,10 @@ public class LocationServer {
         if (o instanceof Task) {
             
         }
+        if (o instanceof MapObjectUpdate) {
+            MapObject m = location.getMapObject(((MapObjectUpdate)o).id);
+            if (m!=null) m.setPosition(((MapObjectUpdate)o).x, ((MapObjectUpdate)o).y);
+        }
     }
     
     public void addServerUpdate(Object o) {
@@ -205,7 +246,7 @@ public class LocationServer {
     }
     
     private void sendUpdates() {
-        //this.sendObjectUpdates();
+        this.sendObjectUpdates();
     }
     
     private void sendObjectUpdates() {
@@ -230,6 +271,12 @@ public class LocationServer {
         this.loggedIn.add(player);
         Mists.logger.info(player.name+" logged in");
         sendMap(c);
+        sendAllCreatures(c);
+        Register register = new Register();
+        register.name = player.name;
+        player.locationID = giveConnectedPlayerCompanion(player.name);
+        register.locationID = player.locationID;
+        c.sendTCP(register);
         //TODO: Load players character and place it in the world
         //Use either loadCharacter() or pick from characterLibrary?
     }
@@ -251,7 +298,7 @@ public class LocationServer {
         try {
             input = new Input(new FileInputStream(file));
             Player player = new Player();
-            player.id = input.readInt();
+            player.locationID = input.readInt();
             player.name = name;
             player.character = kryo.readObject(input, PlayerCharacter.class);
             input.close();
@@ -274,16 +321,16 @@ public class LocationServer {
         File file = new File("characters", player.name.toLowerCase());
         file.getParentFile().mkdirs();
         Kryo kryo = server.getKryo();
-        if (player.id == 0) {
+        if (player.locationID == 0) {
                 String[] children = file.getParentFile().list();
                 if (children == null) return false;
-                player.id = children.length + 1;
+                player.locationID = children.length + 1;
         }
 
         Output output = null;
         try {
                 output = new Output(new FileOutputStream(file));
-                output.writeInt(player.id);
+                output.writeInt(player.locationID);
                 kryo.writeObject(output, player.character);
                 return true;
         } catch (IOException ex) {

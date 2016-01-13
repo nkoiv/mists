@@ -25,7 +25,7 @@ public class LocationNetwork {
 		kryo.register(Register.class);
                 kryo.register(CreatureAct.class);
                 kryo.register(AddMapObject.class);
-		kryo.register(UpdateMapObject.class);
+		kryo.register(MapObjectUpdate.class);
 		kryo.register(RemoveMapObject.class);
 		kryo.register(MoveMapObject.class);
                 //Kryo-serialized generic classes:
@@ -42,20 +42,30 @@ public class LocationNetwork {
 
 	static public class Register {
             public String name;
-            public String otherStuff;
+            public int locationID;
 	}
         
         static public class CreatureAct {
             public Task task;
         }
 
-	static public class UpdateMapObject {
-		public int id, x, y;
+	static public class MapObjectUpdate {
+            public int id;
+            public double x, y;
+            public MapObjectUpdate(){}
+            public MapObjectUpdate(int id, double x, double y) {this.id = id; this.x = x; this.y = y;}
 	}
         
         static public class AddMapObject {
             public int id;
-            public AddMapObject(int id){this.id = id;}
+            public String templateName;
+            public String type;
+            public double xPos;
+            public double yPos;
+            public AddMapObject(int id, String templateName, String type, double xPos, double yPos){
+                this.id = id; this.templateName = templateName; this.type = type; this.xPos = xPos; this.yPos = yPos;
+            }
+            public AddMapObject(){}
         }
 
 	static public class RemoveMapObject {

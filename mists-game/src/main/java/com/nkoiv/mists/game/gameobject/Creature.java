@@ -38,10 +38,11 @@ public class Creature extends MapObject implements Combatant {
     
     private CreatureAI ai;
     private Task lastTask;
+    private Task nextTask;
     
     private Direction facing;
     private Direction lastFacing = null;
-    private HashMap<String, SpriteAnimation> spriteAnimations;
+    protected HashMap<String, SpriteAnimation> spriteAnimations;
     protected Inventory inventory;
     protected Weapon equippedWeapon; //TODO: Proper inventorymanagement isntead of this
     
@@ -256,16 +257,26 @@ public class Creature extends MapObject implements Combatant {
         this.updateGraphics();
     }
     
+    public void updateByClient (double time, Task task) {
+        if (task != null) this.lastTask = task;
+        if (this.nextTask != null) {
+            this.lastTask = this.nextTask;
+            this.stopMovement();
+        }
+        if (this.lastTask != null) GenericTasks.performTask(location, lastTask, time);
+        this.updateGraphics();
+    }
+    
     public Task getLastTask() {
         return this.lastTask;
     }
     
+    public void setNextTask(Task t) {
+        this.nextTask = t;
+    }
+
     public void update (double time, LocationServer server) {
         
-        
-    }
-    
-    public void update (double time, Task task) {
         
     }
 

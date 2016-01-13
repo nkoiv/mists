@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
@@ -354,6 +355,14 @@ public class Location extends Flags implements Global {
         //TODO: Inform possible clients that ID's have changed.
     }
     
+    public int peekNextID() {
+        return this.nextID;
+    }
+    
+    public void setNextID(int id) {
+        this.nextID = id;
+    }
+    
     /**
      * Generic MapObject insertion.
      * @param mob MapObject to insert in the map
@@ -375,6 +384,11 @@ public class Location extends Flags implements Global {
     
     public void removeMapObject(MapObject mob) {
         if (mob instanceof Structure) {
+            if (mob instanceof Wall) {
+                double xPos = mob.getCenterXPos();
+                double yPos = mob.getCenterYPos();
+                updateWallsAt(xPos, yPos);
+            }
             this.structures.remove(mob);
         }
         if (mob instanceof Creature) {
@@ -452,6 +466,10 @@ public class Location extends Flags implements Global {
     
     public DungeonGenerator getMapGen() {
         return this.mapGen;
+    }
+    
+    public Set<Integer> getAllMobsIDs() {
+        return this.mobs.keySet();
     }
     
     public List<Creature> getCreatures() {
@@ -570,6 +588,12 @@ public class Location extends Flags implements Global {
         }
         
         //Cleaup removable objects
+        creatureCleanup();
+        structureCleanup();
+        effectCleanup();
+    }
+    
+    public void fullCleanup() {
         creatureCleanup();
         structureCleanup();
         effectCleanup();

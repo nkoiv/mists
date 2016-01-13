@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,18 +30,7 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     public PlayerCharacter() {
         //Dummy player for testing
-        /* Himmu
-        super ("Himmu",new Image("/images/himmu.png"));
-        this.spriteAnimations = new HashMap<>();
-        this.setAnimation("downMovement", new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 0, 0, 64, 64 );
-        this.setAnimation("upMovement", new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 0, 0, 64, 64 );       
-        this.setAnimation("leftMovement", new ImageView("/images/himmu_walk_left.png"), 4, 0, 0, 0, 0, 64, 64 );
-        this.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
-        this.setFlag("alive", 1);
-        this.setMaxHealth(100);
-        this.setHealth(this.getMaxHealth());
-        this.setSpeed(50);
-        */
+ 
         super ("Lini",new Image("/images/himmutoy.png"));
         SpriteSkeleton playerSkeleton = new SpriteSkeleton();
         playerSkeleton.addPart("body", new Sprite(new Image("/images/lini_test.png"),0,0));
@@ -59,8 +49,23 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
         this.setAttribute("Strength", 50);
-        
+        this.companions = new ArrayList<>();
     }
+    
+    public PlayerCharacter(String name) {
+        super (name,new Image("/images/himmu.png"));
+        this.spriteAnimations = new HashMap<>();
+        this.setAnimation("downMovement", new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 0, 0, 64, 64 );
+        this.setAnimation("upMovement", new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 0, 0, 64, 64 );       
+        this.setAnimation("leftMovement", new ImageView("/images/himmu_walk_left.png"), 4, 0, 0, 0, 0, 64, 64 );
+        this.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
+        this.setFlag("alive", 1);
+        this.setMaxHealth(100);
+        this.setHealth(this.getMaxHealth());
+        this.setSpeed(50);
+        this.companions = new ArrayList<>();
+    }
+    
     
     private static SpriteSkeleton generatePlayerSkeleton() {
         return null;
@@ -74,6 +79,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setMaxHealth(100);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
+        this.companions = new ArrayList<>();
     }
     
     public void addCompanion (Creature comp) {

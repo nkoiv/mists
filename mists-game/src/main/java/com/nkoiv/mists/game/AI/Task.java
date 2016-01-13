@@ -27,7 +27,7 @@ import java.util.Arrays;
         "UNSPECIFIED",
         "UNSPECIFIED",
         "UNSPECIFIED",
-        "UNSPECIFIED",
+        "ID_CHECK_COORDINATES",
         "STOP_MOVEMENT",
         "UNSPECIFIED",
         "TURN_TOWARDS_MOB",

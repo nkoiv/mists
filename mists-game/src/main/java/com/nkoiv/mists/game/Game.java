@@ -124,6 +124,8 @@ public class Game {
         if (currentLocation != null) currentLocation.exitLocation();
         l.enterLocation(player);
         currentLocation = l;
+        GameState s = this.gameStates.get(LOCATION);
+        if (s!=null) if (((LocationState)s).gamemode == GameMode.CLIENT) ((LocationState)s).getClient().setLocation(l);
     }
     
     public void updateUI() {

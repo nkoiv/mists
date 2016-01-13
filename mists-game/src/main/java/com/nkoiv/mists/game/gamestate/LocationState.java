@@ -513,6 +513,14 @@ public class LocationState implements GameState {
         return this.gamemode;
     }
     
+    public LocationClient getClient() {
+        return this.client;
+    }
+    
+    public LocationServer getServer() {
+        return this.server;
+    }
+    
     @Override
     public Game getGame() {
         return this.game;
