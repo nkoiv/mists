@@ -1,1 +1,1 @@
-java -jar mists-game-0.2-PANDARIN_MANDARIN.jar
+java -jar mists-game-0.3-PANDARIN_VINES.jar
