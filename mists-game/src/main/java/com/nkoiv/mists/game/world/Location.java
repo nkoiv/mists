@@ -598,12 +598,25 @@ public class Location extends Flags implements Global {
         effectCleanup();
     }
     
-    public void fullCleanup() {
+    public void fullCleanup(boolean cleanCreatures, boolean cleanStructures, boolean cleanEffects) {
         this.updateSpatials();
         this.collisionMap.updateCollisionLevels();
-        creatureCleanup();
-        structureCleanup();
-        effectCleanup();
+        if (cleanCreatures) creatureCleanup();
+        if (cleanStructures) structureCleanup();
+        if (cleanEffects) effectCleanup();
+    }
+    
+    public void updateEffects(double time) {
+        if (!this.effects.isEmpty()) {
+            //Mists.logger.info("Effects NOT empty");
+            for (Effect e : this.effects) { //Handle effects landing on something
+                e.update(time);
+                ArrayList<MapObject> collisions = this.checkCollisions(e);
+                if (!collisions.isEmpty()) {       
+                    e.getOwner().hitOn(collisions);
+                }
+            }
+        }
     }
     
     /**

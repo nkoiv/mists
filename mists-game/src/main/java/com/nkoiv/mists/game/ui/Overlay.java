@@ -193,6 +193,7 @@ public class Overlay {
         if (mob instanceof Creature) {
             sb.append("\n");
             sb.append(((Creature) mob).getHealth()).append(" / ").append(((Creature) mob).getMaxHealth());
+            sb.append(" facing: ").append(((Creature)mob).getFacing());
             sb.append("\n");
             sb.append("Crossable terrain: ").append(((Creature) mob).getCrossableTerrain());
             sb.append("\n");

@@ -30,4 +30,6 @@ public interface Global {
     public static boolean DRAW_COLLISIONS = false;
     public static boolean DRAW_GRID = false;
     
+    public static String serverAddress = "localhost";
+    
 }

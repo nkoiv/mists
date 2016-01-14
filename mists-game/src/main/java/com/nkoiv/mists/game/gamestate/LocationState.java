@@ -75,7 +75,8 @@ public class LocationState implements GameState {
         this.gamemode = gamemode;
         if (gamemode == GameMode.SERVER) {
             try {    
-                this.server = new LocationServer(game);                    
+                this.server = new LocationServer(game);
+                game.locControls.setLocationServer(server);
             } catch (Exception e) {
                 Mists.logger.warning("Error starting server: "+e.getMessage());
                 Mists.logger.warning("Changing to Singleplayer");
@@ -84,7 +85,8 @@ public class LocationState implements GameState {
         }
         if (gamemode == GameMode.CLIENT) {
             try {    
-                this.client = new LocationClient(game);                    
+                this.client = new LocationClient(game);
+                game.locControls.setLocationClient(client);
             } catch (Exception e) {
                 Mists.logger.warning("Error starting client: "+e.getMessage());
                 Mists.logger.warning("Changing to Singleplayer");
@@ -349,7 +351,7 @@ public class LocationState implements GameState {
             //Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
             double xOffset = this.game.getCurrentLocation().getLastxOffset();
             double yOffset = this.game.getCurrentLocation().getLastyOffset();
-            this.game.getCurrentLocation().getPlayer().setCenterPosition(clickX+xOffset, clickY+yOffset);
+            game.locControls.teleportPlayer(clickX+xOffset, clickY+yOffset);
             return true;
         }
         if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_RELEASED) {

@@ -281,6 +281,7 @@ public class Creature extends MapObject implements Combatant {
     }
     */
     public void updateByClient(double time, LocationClient client) {
+        this.stopMovement();
         if (this.nextTask!=null) {
             if (this.nextTask.taskID != GenericTasks.ID_IDLE) {
                 GenericTasks.performTask(location, nextTask, time);

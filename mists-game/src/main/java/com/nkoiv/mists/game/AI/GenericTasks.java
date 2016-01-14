@@ -37,6 +37,7 @@ public class GenericTasks {
     public static final int ID_TURN_TOWARDS_MOB = 11; //1 argument: MobID
     public static final int ID_USE_MELEE_TOWARDS_MOB = 21; // 1 argument: MobID
     public static final int ID_USE_MELEE_TOWARDS_COORDINATES = 22; // 2 argument: Mob X and Y
+    public static final int ID_USE_MELEE_TOWARDS_DIRECTION = 23; // 1 argument: direction number
     
     /**
      * PerformTask is the core of task-processing.
@@ -63,6 +64,7 @@ public class GenericTasks {
             case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, task.arguments[0]); break;
             case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]); break;
             case ID_USE_MELEE_TOWARDS_COORDINATES: useMeleeTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); break;
+            case ID_USE_MELEE_TOWARDS_DIRECTION: useMeleeTowardsDirection(actor, task.arguments[0]); break;
             default: break;
         }
         return true;
@@ -81,12 +83,14 @@ public class GenericTasks {
         actor.setFacing(d);
     }
     
+    
     public static void stopMovement(Creature creature) {
         creature.moveTowards(Direction.STAY);
     }
     
+    
     public static void moveTowardsDirection(Creature creature, int direction) {
-        switch (direction) {
+            switch (direction) {
             case 1: creature.moveTowards(Direction.UP); break;
             case 2: creature.moveTowards(Direction.UPRIGHT); break;
             case 3: creature.moveTowards(Direction.RIGHT); break;
@@ -110,8 +114,28 @@ public class GenericTasks {
             case UPLEFT: creature.moveTowards(Direction.UPLEFT);break;
             case DOWNRIGHT: creature.moveTowards(Direction.DOWNRIGHT);break;
             case DOWNLEFT: creature.moveTowards(Direction.DOWNLEFT);break;
-            default: break;
+            case STAY: creature.moveTowards(Direction.STAY); break;
+            default: creature.moveTowards(Direction.STAY); break;
         } 
+    }
+    
+    public static void moveTowardsFacing(Creature creature) {
+        creature.moveTowards(creature.getFacing());
+    }
+    
+    public static void turnTowardsDirection(Creature creature, int direction)  {
+        switch (direction) {
+            case 1: creature.setFacing(Direction.UP); break;
+            case 2: creature.setFacing(Direction.UPRIGHT); break;
+            case 3: creature.setFacing(Direction.RIGHT); break;
+            case 4: creature.setFacing(Direction.DOWNRIGHT); break;
+            case 5: creature.setFacing(Direction.DOWN); break;
+            case 6: creature.setFacing(Direction.DOWNLEFT); break;
+            case 7: creature.setFacing(Direction.LEFT); break;
+            case 8: creature.setFacing(Direction.UPLEFT); break;
+            case 0: creature.setFacing(Direction.STAY); break;
+            default: creature.setFacing(Direction.STAY); break;
+        }
     }
     
     public static void moveTowardsCoordinates(Creature actor, int xCoor, int yCoor) {
@@ -122,6 +146,16 @@ public class GenericTasks {
         MapObject target = actor.getLocation().getMapObject(targetID);
         if (target == null) return;
         actor.moveTowards(target.getCenterXPos(), target.getCenterYPos());
+    }
+    
+    public static void useMeleeTowardsDirection(Creature actor, int d) {
+        Action meleeAttack = actor.getAttack(ActionType.MELEE_ATTACK);
+        if (meleeAttack != null) {
+            turnTowardsDirection(actor, d);
+            actor.useAction(meleeAttack.getName());
+        } else {
+            Mists.logger.log(Level.INFO, "{0} tried to use melee, but it wasn''t available", actor.getName());
+        }
     }
     
     public static void useMeleeTowardsCoordinates(Creature actor, int xCoor, int yCoor) {

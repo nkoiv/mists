@@ -94,9 +94,9 @@ public class MainMenuWindow extends TiledPanel {
             
             private void newGame() {
                 PlayerCharacter pocplayer = new PlayerCharacter();
-                //Creature companion = Mists.creatureLibrary.create("Himmu");
-                //System.out.println(companion.toString());
-                //pocplayer.addCompanion(companion);
+                Creature companion = Mists.creatureLibrary.create("Himmu");
+                System.out.println(companion.toString());
+                pocplayer.addCompanion(companion);
                 pocplayer.addAction(new MeleeWeaponAttack());
                 game.setPlayer(pocplayer);
                 Location newLoc = new Location(this.game.getPlayer());

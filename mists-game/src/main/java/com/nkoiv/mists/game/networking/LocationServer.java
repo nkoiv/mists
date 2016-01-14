@@ -14,9 +14,12 @@ import com.esotericsoftware.kryonet.Server;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
 import com.nkoiv.mists.game.networking.LocationNetwork.Login;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectRequest;
@@ -189,6 +192,7 @@ public class LocationServer {
         PlayerCharacter companion = new PlayerCharacter(name);
         location.addMapObject(companion);
         companion.setCenterPosition(location.getPlayer().getXPos()+50, location.getPlayer().getYPos()+50);
+        companion.addAction(new MeleeAttack());
         Mists.logger.info("Gave the connecting player: "+companion.getName()+" id: "+companion.getID());
         addMapObject(companion);
         return companion.getID();
@@ -207,6 +211,14 @@ public class LocationServer {
         for (Object o : a) {
             MapObject mob = location.getMapObject((Integer)o);
             if (mob instanceof Creature) this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+        }
+    }
+    
+    private void sendAllNonWalls(PlayerConnection c) {
+        Object[] a = this.location.getAllMobsIDs().toArray();
+        for (Object o : a) {
+            MapObject mob = location.getMapObject((Integer)o);
+            if (!(mob instanceof Wall)) this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
         }
     }
     
@@ -283,7 +295,7 @@ public class LocationServer {
         this.loggedIn.add(player);
         Mists.logger.info(player.name+" logged in");
         sendMap(c);
-        sendAllCreatures(c);
+        sendAllNonWalls(c);
         Register register = new Register();
         register.name = player.name;
         player.locationID = giveConnectedPlayerCompanion(player.name);

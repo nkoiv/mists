@@ -12,7 +12,10 @@ import com.esotericsoftware.kryonet.Listener;
 import com.nkoiv.mists.game.AI.GenericTasks;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Game;
+import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -88,7 +91,7 @@ public class LocationClient {
             }
         }));
         
-        String host = "localhost"; //TODO: Obviously input for this
+        String host = Global.serverAddress; //TODO: Obviously input for this
         
         try {
                 Mists.logger.info("Trying to connect...");
@@ -111,7 +114,8 @@ public class LocationClient {
             for (Creature c : this.location.getCreatures()) {
                 c.updateByClient (time, this);
             }
-            location.fullCleanup();
+            location.updateEffects(time);
+            location.fullCleanup(false, false, true);
         }
         if (this.locationID != 0) addObjectUpdate(new MapObjectUpdate(this.locationID, game.getPlayer().getXPos(), game.getPlayer().getYPos()));
     }
@@ -147,14 +151,21 @@ public class LocationClient {
             
         }
         if (mob.type.equals(PlayerCharacter.class.toString())) {
-            if (mob.templateName.equals("Lini")) m = new PlayerCharacter();
-            else m = new PlayerCharacter(mob.templateName);
+            if (mob.templateName.equals("Lini")) {
+                m = new PlayerCharacter();
+                ((PlayerCharacter)m).addAction(new MeleeWeaponAttack());
+            }
+            else {
+                m = new PlayerCharacter(mob.templateName);
+                ((PlayerCharacter)m).addAction(new MeleeAttack());
+            }
             if (mob.id == this.locationID) {
                 Mists.logger.info("Got a character to control: "+mob.id);
                 game.setPlayer((PlayerCharacter)m);
                 location.setPlayer((PlayerCharacter)m);
                 location.setScreenFocus(m);
             }
+            
         }
         if (m == null) return;
         if (this.location.getMapObject(mob.id) != null) this.location.removeMapObject(mob.id);
@@ -207,7 +218,7 @@ public class LocationClient {
 
     public void addObjectUpdate(Object o) {
         //TODO: sanitize
-        this.outgoingUpdateStack.push(o);
+        if (o != null) this.outgoingUpdateStack.push(o);
     }
     
     private void sendUpdates() {
