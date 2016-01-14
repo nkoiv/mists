@@ -6,6 +6,9 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.actions.ActionType;
+import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.world.Location;
 
 /**
@@ -19,6 +22,8 @@ public interface Combatant {
 
 	int getAV();
 	
+        Action getAttack(ActionType actionType);
+        
 	void takeDamage(int damage);
 	
 	void healHealth(int healing);

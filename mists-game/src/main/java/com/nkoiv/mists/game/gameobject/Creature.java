@@ -13,6 +13,8 @@ import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.actions.ActionType;
+import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
@@ -210,6 +212,16 @@ public class Creature extends MapObject implements Combatant {
     
     public HashMap<String, Action> getAvailableActions(){
         return this.availableActions;
+    }
+    
+    @Override
+    public Action getAttack(ActionType actionType) {
+        if (this.availableActions == null) return null;
+        for (String actionName : this.availableActions.keySet()) {
+            Action a = this.availableActions.get(actionName);
+            if (a.getActionType() == actionType && a instanceof AttackAction) return a;
+        }
+        return null;
     }
     
     /* setAnimations is used to easily set all movement animations

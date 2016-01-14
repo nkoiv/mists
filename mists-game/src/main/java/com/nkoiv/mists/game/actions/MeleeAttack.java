@@ -30,7 +30,7 @@ public class MeleeAttack extends Action implements AttackAction {
     private long lastUsed;
     
     public MeleeAttack() {
-        super("melee");
+        super("melee", ActionType.MELEE_ATTACK);
         this.attackAnimation = new SpriteAnimation(new ImageView("/images/attackAnimations.png"), 4, 32, 0, 0, 0, 32, 32);
         this.attackAnimation.setAnimationSpeed(100);
         this.setFlag("range", 0);

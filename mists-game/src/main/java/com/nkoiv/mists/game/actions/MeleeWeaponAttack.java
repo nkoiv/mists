@@ -30,7 +30,7 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
     private long lastUsed;
     
     public MeleeWeaponAttack() {
-        super("weaponmelee");
+        super("weaponmelee", ActionType.MELEE_ATTACK);
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
         this.setFlag("cooldown", 500);

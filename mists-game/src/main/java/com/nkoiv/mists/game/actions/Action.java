@@ -24,6 +24,7 @@ import java.util.logging.Level;
  * @author nkoiv
  */
 public class Action extends Flags implements Serializable {
+    protected ActionType actionType;
     private static int nextId = 0;
     protected String name;
     protected int id;
@@ -33,12 +34,13 @@ public class Action extends Flags implements Serializable {
     
     
     public Action(String name) {
-        this(name, nextId++);
+        this(name, ActionType.SELF_CAST);
     }
     
-    public Action(String name, int id) {
+    public Action(String name, ActionType actionType) {
         this.name = name;
-        this.id = id;
+        this.actionType = actionType;
+        this.id = nextId++;
         this.flags = new HashMap<>();
     }
     
@@ -93,6 +95,10 @@ public class Action extends Flags implements Serializable {
         return this.name;
     }
 
+    public ActionType getActionType() {
+        return this.actionType;
+    }
+    
     public Action createFromTemplate() {
         Action a = new Action(this.name);
         for (String flag : this.flags.keySet()) {

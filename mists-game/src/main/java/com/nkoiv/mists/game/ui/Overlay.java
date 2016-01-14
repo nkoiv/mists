@@ -198,6 +198,11 @@ public class Overlay {
             sb.append("\n");
             sb.append("Available actions: ");
             sb.append(((Creature) mob).getAvailableActionNames());
+            if (((Creature)mob).getLastTask() != null) {
+                sb.append("\n");
+                sb.append("Last task: ");
+                sb.append(((Creature)mob).getLastTask().toString());
+            }
             text = sb.toString();
             return text;
         }

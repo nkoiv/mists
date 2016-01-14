@@ -109,14 +109,14 @@ public class CreatureAI extends Flags{
             */
             //Mists.logger.info("Got a short path or no path");
             this.pathToMoveOn = null;
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{mob.getID()});
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{((int)mob.getCenterXPos()), ((int)mob.getCenterYPos())});
         }
         if (pathToMob.getLength() == 2) {
             /* We're next to target
             *  Try to get even closer (TODO: Is this the right course of action?)
             */
             //Mists.logger.info("Next to target");
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{mob.getID()});
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{((int)mob.getCenterXPos()), ((int)mob.getCenterYPos())});
         }
         else { //if (pathToMob.getLength() > 2)
             /* There's tiles between us and the target
@@ -126,7 +126,7 @@ public class CreatureAI extends Flags{
             int nextTileX = pathToMob.getNode(1).getX();//*pathToMob.getNode(0).getSize();
             int nextTileY = pathToMob.getNode(1).getY();//*pathToMob.getNode(0).getSize();
 
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{nextTileX, nextTileY});
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{nextTileX*Mists.TILESIZE, nextTileY*Mists.TILESIZE});
         }
     }
     

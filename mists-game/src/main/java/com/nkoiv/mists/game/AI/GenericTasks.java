@@ -7,9 +7,13 @@ package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.actions.ActionType;
+import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.logging.Level;
 
 /**
@@ -32,6 +36,7 @@ public class GenericTasks {
     public static final int ID_STOP_MOVEMENT = 9; //no arguments
     public static final int ID_TURN_TOWARDS_MOB = 11; //1 argument: MobID
     public static final int ID_USE_MELEE_TOWARDS_MOB = 21; // 1 argument: MobID
+    public static final int ID_USE_MELEE_TOWARDS_COORDINATES = 22; // 2 argument: Mob X and Y
     
     /**
      * PerformTask is the core of task-processing.
@@ -57,6 +62,7 @@ public class GenericTasks {
             case ID_STOP_MOVEMENT: actor.stopMovement(); break;
             case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, task.arguments[0]); break;
             case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]); break;
+            case ID_USE_MELEE_TOWARDS_COORDINATES: useMeleeTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); break;
             default: break;
         }
         return true;
@@ -108,10 +114,8 @@ public class GenericTasks {
         } 
     }
     
-    public static void moveTowardsCoordinates(Creature actor, int locationXTile, int locationYTile) {
-        double nextTileX = locationXTile*Mists.TILESIZE;
-        double nextTileY = locationYTile*Mists.TILESIZE;
-        actor.moveTowards(nextTileX, nextTileY);
+    public static void moveTowardsCoordinates(Creature actor, int xCoor, int yCoor) {
+        actor.moveTowards(xCoor, yCoor);
     }
     
     public static void moveTowardsTarget(Creature actor, int targetID) {
@@ -120,26 +124,22 @@ public class GenericTasks {
         actor.moveTowards(target.getCenterXPos(), target.getCenterYPos());
     }
     
+    public static void useMeleeTowardsCoordinates(Creature actor, int xCoor, int yCoor) {
+        //Mists.logger.log(Level.INFO, "{0} uses melee towards {1}", new Object[]{creep.getName(), target.getName()});
+        Action meleeAttack = actor.getAttack(ActionType.MELEE_ATTACK);
+        if (meleeAttack != null) {
+            actor.setFacing(Toolkit.getDirection(actor.getCenterXPos(), actor.getCenterYPos(), xCoor, yCoor));
+            actor.useAction(meleeAttack.getName());
+        } else {
+            Mists.logger.log(Level.INFO, "{0} tried to use melee, but it wasn''t available", actor.getName());
+        }
+    }
+    
     public static void useMeleeTowardsMob(Creature actor, int targetID) {
         //Mists.logger.log(Level.INFO, "{0} uses melee towards {1}", new Object[]{creep.getName(), target.getName()});
-        MapObject target = actor.getLocation().getMapObject(targetID);
-        if (target == null) return;
-        if (actor.getAvailableActions() == null) {
-            Mists.logger.log(Level.INFO, "No available actions for {0}", actor.getName());
-            return;
-        }
-        if (!actor.getAvailableActions().isEmpty()) {
-            GenericTasks.turnTowardsMapObject(actor, targetID);
-            if (actor.getAvailableActionNames().contains("melee")) {
-                //Try to use "melee" ability if possible
-                actor.useAction("melee");
-            } else {
-                //If not available, use first available action
-                //TODO: Is this necessary?
-                Mists.logger.log(Level.INFO, "{0} tried to use melee, but it wasn''t available", actor.getName());
-                actor.useAction(actor.getAvailableActionNames().get(0));
-            }
-        }
+        int xCoor = (int)actor.getLocation().getMapObject(targetID).getCenterXPos();
+        int yCoor = (int)actor.getLocation().getMapObject(targetID).getCenterYPos();
+        useMeleeTowardsCoordinates(actor, xCoor, yCoor);
     }
     
     
