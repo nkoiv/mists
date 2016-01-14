@@ -10,8 +10,12 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.ActionType;
 import com.nkoiv.mists.game.actions.AttackAction;
+import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.items.Inventory;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.logging.Level;
@@ -38,7 +42,9 @@ public class GenericTasks {
     public static final int ID_USE_MELEE_TOWARDS_MOB = 21; // 1 argument: MobID
     public static final int ID_USE_MELEE_TOWARDS_COORDINATES = 22; // 2 argument: Mob X and Y
     public static final int ID_USE_MELEE_TOWARDS_DIRECTION = 23; // 1 argument: direction number
-    
+    public static final int ID_DROP_ITEM = 31; //1 argument: inventoryslotID of the actor dropping the item
+    public static final int ID_TAKE_ITEM = 32; //2 arguments: inventoryholder ID and inventoryslotID
+    public static final int ID_USE_TRIGGER = 41; //1 argument: id of the mapobject to toggle (TODO: and ID of the trigger)
     /**
      * PerformTask is the core of task-processing.
      * It takes the Task object and processes it into
@@ -65,6 +71,9 @@ public class GenericTasks {
             case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]); break;
             case ID_USE_MELEE_TOWARDS_COORDINATES: useMeleeTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); break;
             case ID_USE_MELEE_TOWARDS_DIRECTION: useMeleeTowardsDirection(actor, task.arguments[0]); break;
+            case ID_DROP_ITEM: dropItem(actor, task.arguments[0]); break;
+            case ID_TAKE_ITEM: pickupItem(actor, task.arguments[0], task.arguments[1]); break;
+            case ID_USE_TRIGGER: useMapObjectTrigger(actor, task.arguments[0]); break;
             default: break;
         }
         return true;
@@ -176,6 +185,27 @@ public class GenericTasks {
         useMeleeTowardsCoordinates(actor, xCoor, yCoor);
     }
     
+    public static void dropItem (Creature actor, int itemID) {
+        Inventory.dropItem(actor.getInventory(), itemID);
+    }
     
-   
+    public static void pickupItem (Creature actor, int itemContainerID, int itemID) {
+        MapObject mob = actor.getLocation().getMapObject(itemContainerID);
+        if (mob instanceof Creature) {
+            Item i = ((Creature) mob).getInventory().removeItem(itemID);
+            actor.giveItem(i);
+        }
+        if (mob instanceof ItemContainer) {
+            Item i = ((ItemContainer) mob).getInventory().removeItem(itemID);
+            actor.giveItem(i);
+        }
+    }
+    
+    public static void useMapObjectTrigger(Creature actor, int targetMobID) {
+        MapObject mob = actor.getLocation().getMapObject(targetMobID);
+        if (mob != null) {
+            Trigger t = mob.getTriggers()[0]; //TODO: Add support for multiple triggers per mob
+            if (t != null) t.toggle();
+        }
+    }
 }

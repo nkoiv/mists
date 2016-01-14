@@ -5,13 +5,15 @@
  */
 package com.nkoiv.mists.game.controls;
 
+import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
@@ -25,14 +27,16 @@ import javafx.scene.image.Image;
  */
 public class ContextAction {
     private final ArrayList<Trigger> availableTriggers;
+    private final HashMap<Trigger, MapObject> triggerSource;
     private ArrayList<MapObject> nearbyObjects;
     private MapObject triggerRadius;
     int currentTrigger;
-    MapObject actor; //Usually the player?
+    Creature actor; //Usually the player?
     
-    public ContextAction(MapObject actor) {
+    public ContextAction(Creature actor) {
         this.actor = actor;
         this.availableTriggers = new ArrayList<>();
+        this.triggerSource = new HashMap<>();
         this.generateTriggerRange();
     }
     
@@ -61,10 +65,18 @@ public class ContextAction {
      */
     private void refreshObjectTriggers() {
         this.availableTriggers.clear();
+        this.triggerSource.clear();
         if (this.nearbyObjects == null) refreshNearbyObjects();
         if (this.nearbyObjects.isEmpty()) return;
         for (MapObject mob : this.nearbyObjects) {
-            this.availableTriggers.addAll(Arrays.asList(mob.getTriggers()));
+            List<Trigger> triggers = Arrays.asList(mob.getTriggers());
+            if (!triggers.isEmpty()) {
+                this.availableTriggers.addAll(triggers);
+                for (Trigger t : triggers) {
+                    this.triggerSource.put(t, mob);
+                }
+            }
+            
         }
     }
     
@@ -87,7 +99,10 @@ public class ContextAction {
         }
         if (availableTriggers.isEmpty()) return false;
         if (currentTrigger < 0 || currentTrigger >= availableTriggers.size()) currentTrigger = 0;
-        this.availableTriggers.get(currentTrigger).toggle();
+        //
+        Trigger t = this.availableTriggers.get(currentTrigger);
+        Task task = new Task(GenericTasks.ID_USE_TRIGGER, actor.getID(), new int[]{this.triggerSource.get(t).getID()});
+        actor.setNextTask(task);
         return true;
     }
     

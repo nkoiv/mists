@@ -41,7 +41,16 @@ import java.util.Arrays;
         "UNSPECIFIED",
         "UNSPECIFIED",
         "USE_MELEE_TOWADS_MOB",
-        "ID_USE_MELEE_TOWARDS_COORDINATES"
+        "ID_USE_MELEE_TOWARDS_COORDINATES",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "ID_DROP_ITEM",
+        "ID_TAKE_ITEM"
     };
     
         public int taskID;

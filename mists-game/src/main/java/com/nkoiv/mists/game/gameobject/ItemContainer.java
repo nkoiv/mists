@@ -60,6 +60,10 @@ public class ItemContainer extends Structure {
         super.render(xOffset, yOffset, gc);
     }
     
+    public Inventory getInventory() {
+        return this.inv;
+    }
+    
     public void addItem(Item i) {
         if (this.inv.isFull()) this.inv.expand(10);
         this.inv.addItem(i);
