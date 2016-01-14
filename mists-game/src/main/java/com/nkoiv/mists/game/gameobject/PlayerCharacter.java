@@ -62,7 +62,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setAnimation("leftMovement", new ImageView("/images/himmu_walk_left.png"), 4, 0, 0, 0, 0, 64, 64 );
         this.setAnimation("rightMovement", new ImageView("/images/himmu_walk_right.png"), 4, 0, 0, 0, 0, 64, 64 );
         this.setFlag("alive", 1);
-        this.setMaxHealth(100);
+        this.setMaxHealth(1000);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
         this.companions = new ArrayList<>();

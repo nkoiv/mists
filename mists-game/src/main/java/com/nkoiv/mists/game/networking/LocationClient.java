@@ -218,7 +218,7 @@ public class LocationClient {
 
     public void addObjectUpdate(Object o) {
         //TODO: sanitize
-        if (o != null) this.outgoingUpdateStack.push(o);
+        if (o instanceof Task) this.outgoingUpdateStack.push(o);
     }
     
     private void sendUpdates() {

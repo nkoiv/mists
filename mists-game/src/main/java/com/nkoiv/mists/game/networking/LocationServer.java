@@ -11,6 +11,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.nkoiv.mists.game.AI.GenericTasks;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
@@ -237,7 +238,7 @@ public class LocationServer {
     private void handleClientUpdates() {
         //Mists.logger.info("Client updates in stack: "+this.incomingUpdatesStack.size());
         if (!this.incomingUpdatesStack.isEmpty()) {
-            Mists.logger.info("Handling "+this.incomingUpdatesStack.size()+" incoming updates");
+            //Mists.logger.info("Handling "+this.incomingUpdatesStack.size()+" incoming updates");
         }
         while (!this.incomingUpdatesStack.isEmpty()) {
             this.handleUpdate(this.incomingUpdatesStack.pop());
@@ -247,7 +248,9 @@ public class LocationServer {
     private void handleUpdate(Object o) {
         //TODO: Actually handle the update
         if (o instanceof Task) {
-            
+            //TODO: Ensure the client has the right to push this task
+            int actorID = ((Task)o).actorID;
+            ((Creature)location.getMapObject(actorID)).setNextTask((Task)o);
         }
         if (o instanceof MapObjectUpdateRequest) {
             MapObject m = location.getMapObject(((MapObjectUpdateRequest)o).id);
@@ -285,7 +288,7 @@ public class LocationServer {
     public void compileRemovals(Stack<Integer> removedMobIDs) {
         if (removedMobIDs.isEmpty()) return;
         for (Integer i : removedMobIDs) {
-            this.outgoingUpdateStack.add(new RemoveMapObject(i));
+            addServerUpdate(new RemoveMapObject(i));
         }
     }
     
