@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
+import com.nkoiv.mists.game.networking.LocationClient;
 import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
@@ -39,8 +40,8 @@ import javafx.scene.image.ImageView;
 public class Creature extends MapObject implements Combatant {
     
     private CreatureAI ai;
-    private Task lastTask;
-    private Task nextTask;
+    protected Task lastTask;
+    protected Task nextTask;
     
     private Direction facing;
     private Direction lastFacing = null;
@@ -268,15 +269,30 @@ public class Creature extends MapObject implements Combatant {
         GenericTasks.performTask(location, lastTask, time);
         this.updateGraphics();
     }
-    
-    public void updateByClient (double time, Task task) {
-        if (task != null) this.lastTask = task;
+    /*
+    public void updateByClient (double time, LocationClient client) {
         if (this.nextTask != null) {
             this.lastTask = this.nextTask;
             this.stopMovement();
+            client.askMapObjectUpdate(this.IDinLocation);
         }
         if (this.lastTask != null) GenericTasks.performTask(location, lastTask, time);
         this.updateGraphics();
+    }
+    */
+    public void updateByClient(double time, LocationClient client) {
+        if (this.nextTask!=null) {
+            if (this.nextTask.taskID != GenericTasks.ID_IDLE) {
+                GenericTasks.performTask(location, nextTask, time);
+                this.lastTask = nextTask;
+                this.nextTask = new Task(GenericTasks.ID_IDLE, this.IDinLocation, null);
+            } else {
+                this.lastTask = this.nextTask;
+                this.nextTask = null;
+            }
+        }
+        this.updateGraphics();
+        //this.applyMovement(time);  
     }
     
     public Task getLastTask() {

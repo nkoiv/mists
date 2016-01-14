@@ -69,7 +69,7 @@ public class GenericTasks {
     }
     
     public static void checkCoordinates (MapObject actor, double xCoordinate, double yCoordinate) {
-        if (Math.abs(actor.getXPos()-xCoordinate) > 20 || Math.abs(actor.getYPos()-yCoordinate) > 20) {
+        if (Math.abs(actor.getXPos()-xCoordinate) > 10 || Math.abs(actor.getYPos()-yCoordinate) > 10) {
             actor.setPosition(xCoordinate, yCoordinate);
         }
     }
@@ -87,15 +87,15 @@ public class GenericTasks {
     
     public static void moveTowardsDirection(Creature creature, int direction) {
         switch (direction) {
-            case 0: creature.moveTowards(Direction.UP); break;
-            case 1: creature.moveTowards(Direction.UPRIGHT); break;
-            case 2: creature.moveTowards(Direction.RIGHT); break;
-            case 3: creature.moveTowards(Direction.DOWNRIGHT); break;
-            case 4: creature.moveTowards(Direction.DOWN); break;
-            case 5: creature.moveTowards(Direction.DOWNLEFT); break;
-            case 6: creature.moveTowards(Direction.LEFT); break;
-            case 7: creature.moveTowards(Direction.UPLEFT); break;
-            case 8: creature.moveTowards(Direction.STAY); break;
+            case 1: creature.moveTowards(Direction.UP); break;
+            case 2: creature.moveTowards(Direction.UPRIGHT); break;
+            case 3: creature.moveTowards(Direction.RIGHT); break;
+            case 4: creature.moveTowards(Direction.DOWNRIGHT); break;
+            case 5: creature.moveTowards(Direction.DOWN); break;
+            case 6: creature.moveTowards(Direction.DOWNLEFT); break;
+            case 7: creature.moveTowards(Direction.LEFT); break;
+            case 8: creature.moveTowards(Direction.UPLEFT); break;
+            case 0: creature.moveTowards(Direction.STAY); break;
             default: creature.moveTowards(Direction.STAY); break;
         }
     }

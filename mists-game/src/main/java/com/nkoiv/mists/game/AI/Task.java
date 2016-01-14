@@ -40,7 +40,8 @@ import java.util.Arrays;
         "UNSPECIFIED",
         "UNSPECIFIED",
         "UNSPECIFIED",
-        "USE_MELEE_TOWADS_MOB"
+        "USE_MELEE_TOWADS_MOB",
+        "ID_USE_MELEE_TOWARDS_COORDINATES"
     };
     
         public int taskID;
@@ -81,6 +82,7 @@ import java.util.Arrays;
         
         @Override
         public String toString() {
+            if (taskID>=ID_CODE.length) return "UNSPECIFIED";
             String s = "["+ID_CODE[taskID]+":"+actorID+"]:"+Arrays.toString(arguments);
             return s;
         }

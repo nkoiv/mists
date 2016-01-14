@@ -24,7 +24,9 @@ public class LocationNetwork {
 		kryo.register(RegistrationRequired.class);
 		kryo.register(Register.class);
                 kryo.register(CreatureAct.class);
+                kryo.register(MapObjectRequest.class);
                 kryo.register(AddMapObject.class);
+                kryo.register(MapObjectUpdateRequest.class);
 		kryo.register(MapObjectUpdate.class);
 		kryo.register(RemoveMapObject.class);
 		kryo.register(MoveMapObject.class);
@@ -49,12 +51,24 @@ public class LocationNetwork {
             public Task task;
         }
 
+        static public class MapObjectUpdateRequest {
+            public int id;
+            public MapObjectUpdateRequest(){}
+            public MapObjectUpdateRequest(int id){this.id=id;}
+        }
+        
 	static public class MapObjectUpdate {
             public int id;
             public double x, y;
             public MapObjectUpdate(){}
             public MapObjectUpdate(int id, double x, double y) {this.id = id; this.x = x; this.y = y;}
 	}
+        
+        static public class MapObjectRequest {
+            public int id;
+            public MapObjectRequest(){}
+            public MapObjectRequest(int id){this.id=id;}
+        }
         
         static public class AddMapObject {
             public int id;

@@ -6,15 +6,11 @@
 package com.nkoiv.mists.game.world.util;
 
 import com.nkoiv.mists.game.Direction;
-import java.awt.Point;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -118,6 +114,21 @@ public abstract class Toolkit {
             case DOWNLEFT: return new double[]{-0.71,0.71};
             case STAY: return new double[]{0,0};
             default: return new double[]{0,0};
+        }
+    }
+    
+    public static int getDirectionNumber(Direction d) {
+        switch (d) {
+            case UP: return 1;
+            case UPRIGHT: return 2;
+            case RIGHT: return 3;
+            case DOWNRIGHT: return 4;
+            case DOWN: return 5;
+            case DOWNLEFT: return 6;
+            case LEFT: return 7;
+            case UPLEFT: return 8;
+            case STAY: return 0;
+            default: return 0;
         }
     }
     

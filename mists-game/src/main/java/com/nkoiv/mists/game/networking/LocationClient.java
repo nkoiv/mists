@@ -18,7 +18,6 @@ import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.networking.LocationNetwork.*;
 import com.nkoiv.mists.game.world.TileMap;
@@ -110,7 +109,7 @@ public class LocationClient {
         this.handleServerUpdates(time);
         if (this.location !=null ) {
             for (Creature c : this.location.getCreatures()) {
-                c.updateByClient (time, null);
+                c.updateByClient (time, this);
             }
             location.fullCleanup();
         }
@@ -158,6 +157,7 @@ public class LocationClient {
             }
         }
         if (m == null) return;
+        if (this.location.getMapObject(mob.id) != null) this.location.removeMapObject(mob.id);
         this.location.setNextID(mob.id);
         this.location.addMapObject(m);
         this.location.getMapObject(mob.id).setPosition(mob.xPos, mob.yPos);
@@ -173,14 +173,15 @@ public class LocationClient {
             Object object = this.incomingUpdatesStack.pop();
             
             if (object instanceof AddMapObject) {
-                AddMapObject mob = (AddMapObject)object;
-                handleIncomingMob(mob);
+                AddMapObject mobPackage = (AddMapObject)object;
+                handleIncomingMob(mobPackage);
                 return;
             }
 
             if (object instanceof MapObjectUpdate) {
-                //TODO: Location.getMapObject.set...
-                return;
+                MapObject m = location.getMapObject(((MapObjectUpdate)object).id);
+                if (m!=null) GenericTasks.checkCoordinates(m,((MapObjectUpdate)object).x, ((MapObjectUpdate)object).y);
+                else this.outgoingUpdateStack.add(new MapObjectRequest(((MapObjectUpdate)object).id));
             }
 
             if (object instanceof RemoveMapObject) {
@@ -198,6 +199,10 @@ public class LocationClient {
                 if (c instanceof Creature) ((Creature) c).setNextTask((Task) object);
             }
         }
+    }
+    
+    public void askMapObjectUpdate(int MapObjectID) {
+        
     }
 
     public void addObjectUpdate(Object o) {

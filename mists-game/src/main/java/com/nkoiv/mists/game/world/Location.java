@@ -382,6 +382,11 @@ public class Location extends Flags implements Global {
         mob.setLocation(this);
     }
     
+    public void removeMapObject(int mobID) {
+        MapObject mob = this.mobs.get(mobID);
+        if (mob!=null)this.removeMapObject(mob);
+    }
+    
     public void removeMapObject(MapObject mob) {
         if (mob instanceof Structure) {
             if (mob instanceof Wall) {
@@ -594,6 +599,8 @@ public class Location extends Flags implements Global {
     }
     
     public void fullCleanup() {
+        this.updateSpatials();
+        this.collisionMap.updateCollisionLevels();
         creatureCleanup();
         structureCleanup();
         effectCleanup();
@@ -613,14 +620,12 @@ public class Location extends Flags implements Global {
         this.updateSpatials();
         this.collisionMap.updateCollisionLevels();
         
-        
         //AI-stuff
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) { //Mobs do whatever mobs do
                 mob.update(time);
-                if (mob instanceof Creature) {
-                    server.addServerUpdate(mob.getLastTask());
-                }
+                server.addServerUpdate(mob.getLastTask());
+                server.addMapObjectUpdate(mob);
             }
         }
         

@@ -91,6 +91,7 @@ public class LocationState implements GameState {
                 this.gamemode = GameMode.SINGLEPLAYER;
             }
         }
+        game.locControls.setGameMode(gamemode);
     }
     
     @Override
@@ -131,7 +132,7 @@ public class LocationState implements GameState {
         actionBar.setRenderZ(-10);
         this.addUIComponent(actionBar);
         
-        this.infobox = new TextPanel(this, "InfoBox", 350, 150, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
+        this.infobox = new TextPanel(this, "InfoBox", 250, 150, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
         this.playerInventory = new InventoryPanel(this, game.getPlayer().getInventory());
         this.playerInventory.setName("PlayerInventory");
         this.contextAction = new ContextAction(game.getPlayer());

@@ -6,17 +6,22 @@
 package com.nkoiv.mists.game.controls;
 
 import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
+import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.networking.LocationClient;
+import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.Random;
@@ -33,9 +38,13 @@ import javafx.scene.image.ImageView;
 public class LocationControls {
     
     private final Game game;
+    private GameMode gameMode;
+    private LocationServer server;
+    private LocationClient client;
     
     public LocationControls(Game game) {
         this.game = game;
+        this.gameMode = GameMode.SINGLEPLAYER;
     }
     
     private Location currentLoc() {
@@ -46,6 +55,17 @@ public class LocationControls {
         return this.game;
     }
     
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+    
+    public void setLocationServer(LocationServer server) {
+        this.server = server;
+    }
+    
+    public void setLocationClient(LocationClient client) {
+        this.client = client;
+    }
     
     /**
      * Trigger is used for interpreting a command,
@@ -100,7 +120,8 @@ public class LocationControls {
     }
     
     public void playerMove(Direction direction) {
-        GenericTasks.moveTowardsDirection(game.getPlayer(), direction);
+        Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(direction)});
+        game.getPlayer().setNextTask(move);
     }
     
     public void toggleInventory(InventoryPanel inv) {

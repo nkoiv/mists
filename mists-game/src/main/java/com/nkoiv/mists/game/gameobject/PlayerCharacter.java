@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.items.Inventory;
@@ -93,8 +95,18 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     @Override
     public void update(double time) {
+        if (this.nextTask!=null) {
+            if (this.nextTask.taskID != GenericTasks.ID_IDLE) {
+                GenericTasks.performTask(location, nextTask, time);
+                this.lastTask = nextTask;
+                this.nextTask = new Task(GenericTasks.ID_IDLE, this.IDinLocation, null);
+            } else {
+                this.lastTask = this.nextTask;
+                this.nextTask = null;
+            }
+        }
         this.updateGraphics();
-        this.applyMovement(time);  
+        //this.applyMovement(time);  
     }
      
     @Override

@@ -201,7 +201,12 @@ public class Overlay {
             if (((Creature)mob).getLastTask() != null) {
                 sb.append("\n");
                 sb.append("Last task: ");
-                sb.append(((Creature)mob).getLastTask().toString());
+                sb.append("\n");
+                String s = ((Creature)mob).getLastTask().toString();
+                int b = s.indexOf("]");
+                sb.append(s.substring(0, b+1));
+                sb.append("\n");
+                sb.append(s.substring(b+1, s.length()));
             }
             text = sb.toString();
             return text;

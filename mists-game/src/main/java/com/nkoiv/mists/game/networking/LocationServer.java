@@ -19,19 +19,18 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
 import com.nkoiv.mists.game.networking.LocationNetwork.Login;
+import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectRequest;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectUpdate;
+import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectUpdateRequest;
 import com.nkoiv.mists.game.networking.LocationNetwork.Register;
 import com.nkoiv.mists.game.networking.LocationNetwork.RegistrationRequired;
 import com.nkoiv.mists.game.networking.LocationNetwork.RemoveMapObject;
 import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.TileMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -140,7 +139,7 @@ public class LocationServer {
                     loggedIn(connection, player);
                     return;
                 }
-                if (object instanceof Task || object instanceof MapObjectUpdate) {
+                if (object instanceof Task || object instanceof MapObjectUpdateRequest || object instanceof MapObjectUpdate) {
                     addClientUpdate(c, object);
                 }
             }
@@ -211,6 +210,10 @@ public class LocationServer {
         }
     }
     
+    public void addMapObjectUpdate(MapObject mob) {
+        this.addServerUpdate(new MapObjectUpdate(mob.getID(), mob.getXPos(), mob.getYPos()));
+    }
+    
     public void addMapObject(MapObject mob) {
         this.addServerUpdate(new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
     }
@@ -233,6 +236,15 @@ public class LocationServer {
         //TODO: Actually handle the update
         if (o instanceof Task) {
             
+        }
+        if (o instanceof MapObjectUpdateRequest) {
+            MapObject m = location.getMapObject(((MapObjectUpdateRequest)o).id);
+            if (m == null) this.addServerUpdate(new RemoveMapObject(((MapObjectUpdateRequest)o).id));
+            else this.addServerUpdate(new MapObjectUpdate(m.getID(), m.getXPos(), m.getYPos()));
+        }
+        if (o instanceof MapObjectRequest) {
+            MapObject mob = location.getMapObject(((MapObjectRequest)o).id);
+            if (mob != null) addMapObject(mob);
         }
         if (o instanceof MapObjectUpdate) {
             MapObject m = location.getMapObject(((MapObjectUpdate)o).id);
