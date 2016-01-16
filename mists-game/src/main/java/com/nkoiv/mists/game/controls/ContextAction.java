@@ -5,7 +5,7 @@
  */
 package com.nkoiv.mists.game.controls;
 
-import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Trigger;

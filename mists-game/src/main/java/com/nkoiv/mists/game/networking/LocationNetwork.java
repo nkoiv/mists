@@ -24,12 +24,16 @@ public class LocationNetwork {
 		kryo.register(RegistrationRequired.class);
 		kryo.register(Register.class);
                 kryo.register(CreatureAct.class);
+                //MapObject related classes
                 kryo.register(MapObjectRequest.class);
                 kryo.register(AddMapObject.class);
                 kryo.register(MapObjectUpdateRequest.class);
 		kryo.register(MapObjectUpdate.class);
 		kryo.register(RemoveMapObject.class);
 		kryo.register(MoveMapObject.class);
+                //Item classes
+                kryo.register(AddItem.class);
+                kryo.register(RequestAllItems.class);
                 //Kryo-serialized generic classes:
                 kryo.register(Task.class);
                 kryo.register(TileMap.class);
@@ -50,7 +54,8 @@ public class LocationNetwork {
         static public class CreatureAct {
             public Task task;
         }
-
+        
+        //--- MapObjects---
         static public class MapObjectUpdateRequest {
             public int id;
             public MapObjectUpdateRequest(){}
@@ -91,4 +96,19 @@ public class LocationNetwork {
 	static public class MoveMapObject {
             public int x, y;
 	}
+        
+        
+        //--- Items and Inventory ----
+        
+        static public class AddItem {
+            public int inventoryOwnerID;
+            public int slotID;
+            public String itemType;
+            //TODO: Possible item variables
+        }
+        
+        static public class RequestAllItems {
+            public int inventoryID;
+        }
+
 }

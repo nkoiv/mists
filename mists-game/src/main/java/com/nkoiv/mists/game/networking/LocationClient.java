@@ -9,7 +9,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
@@ -18,11 +18,14 @@ import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.networking.LocationNetwork.*;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.TileMap;
 import java.io.IOException;
 import java.util.Stack;
@@ -150,6 +153,12 @@ public class LocationClient {
         if (mob.type.equals(Effect.class.toString())) {
             
         }
+        if (mob.type.equals(ItemContainer.class.toString())) {
+            ItemContainer itemPile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
+            itemPile.setRenderContent(true);
+            m = itemPile;
+        }
+        
         if (mob.type.equals(PlayerCharacter.class.toString())) {
             if (mob.templateName.equals("Lini")) {
                 m = new PlayerCharacter();
@@ -219,6 +228,18 @@ public class LocationClient {
     public void addObjectUpdate(Object o) {
         //TODO: sanitize
         if (o instanceof Task) this.outgoingUpdateStack.push(o);
+        if (o instanceof AddItem) {
+            Item i = Mists.itemLibrary.create(((AddItem)o).itemType);
+            if (i != null) {
+                MapObject owner = location.getMapObject(((AddItem)o).inventoryOwnerID);
+                if (owner instanceof Creature) {
+                    ((Creature) owner).giveItem(i);
+                }
+                if (owner instanceof ItemContainer) {
+                    ((ItemContainer) owner).addItem(i);
+                }
+            }
+        }
     }
     
     private void sendUpdates() {

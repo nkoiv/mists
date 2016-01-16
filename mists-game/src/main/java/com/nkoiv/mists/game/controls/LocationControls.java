@@ -5,7 +5,7 @@
  */
 package com.nkoiv.mists.game.controls;
 
-import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
@@ -13,7 +13,9 @@ import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
+import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.networking.LocationClient;
 import com.nkoiv.mists.game.networking.LocationServer;
@@ -137,6 +139,26 @@ public class LocationControls {
             game.currentState.addUIComponent(inv); 
             Mists.logger.log(Level.INFO, "Inventory size: {0} items, capacity {1}", new Object[]{inv.getInventory().getSize(), inv.getInventory().getCapacity()});
         }
+    }
+    
+    public void takeItem(MapObject targetInventory, int slot) {
+        Task take = new Task(GenericTasks.ID_TAKE_ITEM, game.getPlayer().getID(), new int[]{targetInventory.getID(), slot});
+        game.getPlayer().setNextTask(take);
+    }
+    
+    public void dropItem(int slot) {
+        Task drop = new Task(GenericTasks.ID_DROP_ITEM, game.getPlayer().getID(), new int[]{slot});
+        game.getPlayer().setNextTask(drop);
+    }
+    
+    public void equipItem(int slot) {
+        Task equip = new Task(GenericTasks.ID_EQUIP_ITEM, game.getPlayer().getID(), new int[]{slot});
+        game.getPlayer().setNextTask(equip);
+    }
+    
+    public void useItem(Inventory inventory, int slot) {
+        Task use = new Task(GenericTasks.ID_USE_ITEM, game.getPlayer().getID(), new int[]{slot});
+        game.getPlayer().setNextTask(use);
     }
     
     

@@ -50,7 +50,16 @@ import java.util.Arrays;
         "UNSPECIFIED",
         "UNSPECIFIED",
         "ID_DROP_ITEM",
-        "ID_TAKE_ITEM"
+        "ID_TAKE_ITEM",
+        "ID_EQUIP_ITEM",
+        "ID_USE_ITEM",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "UNSPECIFIED",
+        "ID_USE_TRIGGER"
     };
     
         public int taskID;

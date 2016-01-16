@@ -11,7 +11,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;

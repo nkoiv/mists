@@ -6,7 +6,7 @@
 package AITests;
 
 import TestTools.JavaFXThreadingRule;
-import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.world.BGMap;

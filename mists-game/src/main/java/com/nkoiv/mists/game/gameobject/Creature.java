@@ -7,7 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.AI.CreatureAI;
-import com.nkoiv.mists.game.AI.GenericTasks;
+import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Direction;
