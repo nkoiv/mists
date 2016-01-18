@@ -6,8 +6,6 @@
 package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.Action;
-import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import java.util.HashMap;
@@ -19,21 +17,36 @@ import java.util.logging.Level;
  * @param <E> Type of items stored in the library
  */
 public class ItemLibrary <E extends Item> {
-    private HashMap<String, E> lib;
+    private final HashMap<String, E> libByName;
+    private final HashMap<Integer, E> lib;
     
     public ItemLibrary() {
         this.lib = new HashMap<>();
+        this.libByName = new HashMap<>();
+    }
+    
+    public E getTemplate(int itemID) {
+        return this.lib.get(itemID);
     }
     
     public E getTemplate(String itemname) {
         String lowercase = itemname.toLowerCase();
-        return this.lib.get(lowercase);
+        return this.libByName.get(lowercase);
     }
     
     public E create(String itemname) {
         String lowercase = itemname.toLowerCase();
-        if (this.lib.keySet().contains(lowercase)) {
-            return (E)this.lib.get(lowercase).createFromTemplate();
+        if (this.libByName.keySet().contains(lowercase)) {
+            return (E)this.libByName.get(lowercase).createFromTemplate();
+        }
+        else {
+            return null;
+        }
+    }
+    
+    public E create(int itemID) {
+        if (this.lib.keySet().contains(itemID)) {
+            return (E)this.lib.get(itemID).createFromTemplate();
         }
         else {
             return null;
@@ -43,7 +56,9 @@ public class ItemLibrary <E extends Item> {
     public void addTemplate(E e) {
         prepareAdd(e);
         String lowercasename = e.getName().toLowerCase();
-        this.lib.put(lowercasename, e);
+        int itemID = e.getBaseID();
+        this.libByName.put(lowercasename, e);
+        this.lib.put(itemID, e);
         Mists.logger.log(Level.INFO, "{0} added into library", e.getName());
     }
     

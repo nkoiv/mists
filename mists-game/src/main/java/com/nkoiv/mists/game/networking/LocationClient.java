@@ -222,6 +222,16 @@ public class LocationClient {
                 MapObject c = location.getMapObject(((Task) object).actorID);
                 if (c instanceof Creature) ((Creature) c).setNextTask((Task) object);
             }
+            if (object instanceof AddItem) {
+                Item i = Mists.itemLibrary.create(((AddItem)object).itemBaseID);
+                if (i != null) {
+                    //TODO: get the data needed from the AddItem.item and update the item i
+                    MapObject owner = location.getMapObject(((AddItem)object).inventoryOwnerID);
+                    if (owner instanceof HasInventory) {
+                        ((HasInventory) owner).addItem(i);
+                    }
+                }
+            }
         }
     }
     
@@ -232,15 +242,7 @@ public class LocationClient {
     public void addObjectUpdate(Object o) {
         //TODO: sanitize
         if (o instanceof Task) this.outgoingUpdateStack.push(o);
-        if (o instanceof AddItem) {
-            Item i = Mists.itemLibrary.create(((AddItem)o).itemType);
-            if (i != null) {
-                MapObject owner = location.getMapObject(((AddItem)o).inventoryOwnerID);
-                if (owner instanceof HasInventory) {
-                    ((HasInventory) owner).addItem(i);
-                }
-            }
-        }
+        if (o instanceof AddItem) this.outgoingUpdateStack.push(o);
     }
     
     private void sendUpdates() {

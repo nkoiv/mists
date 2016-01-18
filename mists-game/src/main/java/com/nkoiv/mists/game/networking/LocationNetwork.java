@@ -8,6 +8,8 @@ package com.nkoiv.mists.game.networking;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.nkoiv.mists.game.actions.Task;
+import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.world.TileMap;
 
 /**
@@ -37,6 +39,8 @@ public class LocationNetwork {
                 //Kryo-serialized generic classes:
                 kryo.register(Task.class);
                 kryo.register(TileMap.class);
+                kryo.register(Item.class);
+                kryo.register(Weapon.class);
 	}
 
 	static public class Login {
@@ -101,9 +105,10 @@ public class LocationNetwork {
         //--- Items and Inventory ----
         
         static public class AddItem {
+            public int itemBaseID;
             public int inventoryOwnerID;
             public int slotID;
-            public String itemType;
+            public Item item;
             //TODO: Possible item variables
         }
         

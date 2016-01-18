@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.items;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import javafx.geometry.Rectangle2D;
@@ -20,7 +24,8 @@ import javafx.scene.paint.Color;
  * Items are generally always generated via subclasses (?)
  * @author nikok
  */
-public class Item {
+public class Item implements KryoSerializable {
+    protected int baseID;
     protected String name;
     protected String description;
     protected ItemType itype;
@@ -28,7 +33,8 @@ public class Item {
     protected Image image;
     protected Image[] equippedImages;
     
-    public Item(String name, ItemType itype, Image image) {
+    public Item(int baseID, String name, ItemType itype, Image image) {
+        this.baseID = baseID;
         this.name = name;
         this.image = image;
         this.description = "";
@@ -59,6 +65,10 @@ public class Item {
             WritableImage snapshottedImage = images.snapshot(parameters, snapshot);
             this.equippedImages[i] = snapshottedImage;
         }
+    }
+    
+    public int getBaseID() {
+        return this.baseID;
     }
     
     public String getName() {
@@ -98,11 +108,33 @@ public class Item {
     }
     
     public Item createFromTemplate() {
-        Item i = new Item(this.name, this.itype, this.image);
+        Item i = new Item(this.baseID,this.name, this.itype, this.image);
         i.description = this.description;
         i.weight = this.weight;
         
         return i;
     }
-    
+
+    @Override
+    public void write(Kryo kryo, Output output) {
+        output.writeInt(baseID);
+        output.writeString(name);
+        output.writeString(description);
+        output.writeInt(weight);
+    }
+
+    @Override
+    public void read(Kryo kryo, Input input) {
+        int id = input.readInt();
+        String n = input.readString();
+        String d = input.readString();
+        int w = input.readInt();
+
+        //-----
+        this.baseID = id;
+        this.name = n;
+        this.image = Mists.itemLibrary.getTemplate(id).getImage();
+        this.description = d;
+        this.weight = w;
+    }
 }

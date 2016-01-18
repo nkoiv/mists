@@ -102,14 +102,16 @@ public class LibLoader {
     }
     
     public static void initializeItemLibrary(ItemLibrary lib) {
-        Weapon sword = new Weapon("Sword", ItemType.WEAPON_1H, "a simple sword", 12, new Image("/images/sword.png"));
+        int itemID = 0;
+        Weapon sword = new Weapon(itemID, "Sword", ItemType.WEAPON_1H, "a simple sword", 12, new Image("/images/sword.png"));
         lib.addTemplate(sword);
-     
-        Weapon axe = new Weapon("Axe", ItemType.WEAPON_1H, "a fugly axe", 5, new Image("/images/axe.png"));
+        itemID++;
+        Weapon axe = new Weapon(itemID, "Axe", ItemType.WEAPON_1H, "a fugly axe", 5, new Image("/images/axe.png"));
         lib.addTemplate(axe);
-        
-        Item himmutoy = new Item("Himmutoy", ItemType.MISC, new Image("/images/himmuToyMini.png"));
+        itemID++;
+        Item himmutoy = new Item(itemID, "Himmutoy", ItemType.MISC, new Image("/images/himmuToyMini.png"));
         lib.addTemplate(himmutoy);
+        itemID++;
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {

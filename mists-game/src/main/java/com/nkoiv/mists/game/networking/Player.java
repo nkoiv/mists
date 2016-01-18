@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
  * @author nikok
  */
 public class Player {
+    public int playerID;
     public String name;
     public int locationID;
     public PlayerCharacter character;

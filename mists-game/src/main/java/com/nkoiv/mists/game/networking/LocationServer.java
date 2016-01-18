@@ -52,10 +52,12 @@ public class LocationServer {
     private boolean paused;
     private int port;
     
+    private static final int playerCap = 4;
+    
     HashSet<Player> loggedIn = new HashSet();
     
-    private Stack<Object> outgoingUpdateStack;
-    private Stack<Object> incomingUpdatesStack;
+    private final Stack<Object> outgoingUpdateStack;
+    private final Stack<Object>[] incomingUpdateStacks  = new Stack[playerCap];; 
     
     public LocationServer(Game game) throws Exception {
         server = new Server(16384,16384) {
@@ -71,7 +73,9 @@ public class LocationServer {
         this.game = game;
         this.location = game.getCurrentLocation();
         this.outgoingUpdateStack = new Stack<>();
-        this.incomingUpdatesStack = new Stack<>();
+        for (int i = 0; i < incomingUpdateStacks.length; i++) {
+            this.incomingUpdateStacks[i] = new Stack<>();
+        }
         Kryo kryo = server.getKryo();
         server.addListener(new Listener() {
             @Override
@@ -109,6 +113,7 @@ public class LocationServer {
                         c.sendTCP(new RegistrationRequired());
                         return;
                     }
+                    player.playerID = nextFreePlayerID();
                     loggedIn(connection, player);
                     return;
                 }
@@ -143,6 +148,7 @@ public class LocationServer {
                     }
                     */
                     player.name = register.name;
+                    player.playerID = nextFreePlayerID();
                     loggedIn(connection, player);
                     return;
                 }
@@ -223,6 +229,7 @@ public class LocationServer {
         for (Object o : a) {
             MapObject mob = location.getMapObject((Integer)o);
             if (!(mob instanceof Wall)) this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+            //if (mob instanceof HasInventory)
         }
     }
     
@@ -235,16 +242,23 @@ public class LocationServer {
     }
     
     private void addClientUpdate(Connection c, Object o) {
-        this.incomingUpdatesStack.add(o);
+        int id = ((PlayerConnection)c).player.playerID;
+        this.incomingUpdateStacks[id].add(o);
     }
     
     private void handleClientUpdates() {
-        //Mists.logger.info("Client updates in stack: "+this.incomingUpdatesStack.size());
-        if (!this.incomingUpdatesStack.isEmpty()) {
-            //Mists.logger.info("Handling "+this.incomingUpdatesStack.size()+" incoming updates");
+        for (int i = 0; i < this.incomingUpdateStacks.length; i++) {
+            handleClientUpdates(i);
         }
-        while (!this.incomingUpdatesStack.isEmpty()) {
-            this.handleUpdate(this.incomingUpdatesStack.pop());
+    }
+    
+    private void handleClientUpdates(int playerID) {
+        //Mists.logger.info("Client updates in stack: "+this.incomingUpdatesStack.size());
+        if (!this.incomingUpdateStacks[playerID].isEmpty()) {
+            //Mists.logger.info("Handling "+this.incomingUpdateStacks[playerID].size()+" incoming updates");
+        }
+        while (!this.incomingUpdateStacks[playerID].isEmpty()) {
+            this.handleUpdate(this.incomingUpdateStacks[playerID].pop());
         }
     }
     
@@ -279,7 +293,8 @@ public class LocationServer {
                         AddItem ai = new AddItem();
                         ai.inventoryOwnerID = ((RequestAllItems)o).inventoryOwnerID;
                         ai.slotID=slot;
-                        ai.itemType=it.getName(); //TODO: Proper Item creation!
+                        ai.itemBaseID=it.getBaseID(); //TODO:
+                        ai.item=it;
                     }
                 }
             }
@@ -312,6 +327,16 @@ public class LocationServer {
         }
     }
     
+    private int nextFreePlayerID() {
+        boolean[] b = new boolean[playerCap];
+        for (Player p : this.loggedIn) {
+            b[p.playerID] = true;
+        }
+        for (int i = 0; i < b.length; i++) {
+            if (b[i]==false) return i;
+        }
+        return -1;
+    }
     
     private void loggedIn (PlayerConnection c, Player player) {
         c.player = player;
