@@ -37,7 +37,7 @@ import javafx.scene.image.ImageView;
  * As such, they get (at least some) AI-routines
  * @author nkoiv
  */
-public class Creature extends MapObject implements Combatant {
+public class Creature extends MapObject implements Combatant, HasInventory {
     
     private CreatureAI ai;
     protected Task lastTask;
@@ -601,11 +601,13 @@ public class Creature extends MapObject implements Combatant {
         this.facing = d;
     }
     
+    @Override
     public Inventory getInventory() {
         return this.inventory;
     }
     
-    public boolean giveItem(Item i) {
+    @Override
+    public boolean addItem(Item i) {
         Mists.logger.info("Attempted to give "+this.getName()+" "+i.getName());
         return this.inventory.addItem(i);
     }

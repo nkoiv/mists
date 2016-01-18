@@ -202,11 +202,11 @@ public class GenericTasks {
         MapObject mob = actor.getLocation().getMapObject(itemContainerID);
         if (mob instanceof Creature) {
             Item i = ((Creature) mob).getInventory().removeItem(itemID);
-            actor.giveItem(i);
+            actor.addItem(i);
         }
         if (mob instanceof ItemContainer) {
             Item i = ((ItemContainer) mob).getInventory().removeItem(itemID);
-            actor.giveItem(i);
+            actor.addItem(i);
         }
     }
     

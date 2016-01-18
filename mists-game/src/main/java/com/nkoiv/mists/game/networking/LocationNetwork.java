@@ -108,7 +108,7 @@ public class LocationNetwork {
         }
         
         static public class RequestAllItems {
-            public int inventoryID;
+            public int inventoryOwnerID;
         }
 
 }

@@ -11,16 +11,18 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
-import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.items.Inventory;
+import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.networking.LocationNetwork.AddItem;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
 import com.nkoiv.mists.game.networking.LocationNetwork.Login;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectRequest;
@@ -29,6 +31,7 @@ import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectUpdateRequest;
 import com.nkoiv.mists.game.networking.LocationNetwork.Register;
 import com.nkoiv.mists.game.networking.LocationNetwork.RegistrationRequired;
 import com.nkoiv.mists.game.networking.LocationNetwork.RemoveMapObject;
+import com.nkoiv.mists.game.networking.LocationNetwork.RequestAllItems;
 import com.nkoiv.mists.game.world.Location;
 import java.io.File;
 import java.io.FileInputStream;
@@ -265,6 +268,23 @@ public class LocationServer {
             MapObject m = location.getMapObject(((MapObjectUpdate)o).id);
             if (m!=null) m.setPosition(((MapObjectUpdate)o).x, ((MapObjectUpdate)o).y);
         }
+        if (o instanceof RequestAllItems) {
+            MapObject m = location.getMapObject(((RequestAllItems)o).inventoryOwnerID);
+            if (m instanceof HasInventory) {
+                Inventory inv = ((HasInventory)m).getInventory();
+                int invSize = inv.getCapacity();
+                for (int slot = 0; slot < invSize; slot++) {
+                    Item it = inv.getItem(slot);
+                    if (it!=null) {
+                        AddItem ai = new AddItem();
+                        ai.inventoryOwnerID = ((RequestAllItems)o).inventoryOwnerID;
+                        ai.slotID=slot;
+                        ai.itemType=it.getName(); //TODO: Proper Item creation!
+                    }
+                }
+            }
+        }
+        
     }
     
     public void addServerUpdate(Object o) {

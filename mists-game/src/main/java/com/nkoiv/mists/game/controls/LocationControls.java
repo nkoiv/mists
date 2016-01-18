@@ -192,7 +192,7 @@ public class LocationControls {
             else targetCreature = game.getCurrentLocation().getCreatureByName(target);
             Item itemToGive = Mists.itemLibrary.create(item);
             if (targetCreature == null || itemToGive == null) Mists.logger.warning ("Could not parse giveItem. Item was: "+item+ " Target was: "+target);
-            else targetCreature.giveItem(itemToGive);
+            else targetCreature.addItem(itemToGive);
         } else Mists.logger.warning ("Could not parse giveItem");
     }
     

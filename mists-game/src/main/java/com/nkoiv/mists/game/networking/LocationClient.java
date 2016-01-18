@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
@@ -157,6 +158,9 @@ public class LocationClient {
             ItemContainer itemPile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
             itemPile.setRenderContent(true);
             m = itemPile;
+            RequestAllItems r = new RequestAllItems();
+            r.inventoryOwnerID = m.getID();
+            this.addObjectUpdate(r);
         }
         
         if (mob.type.equals(PlayerCharacter.class.toString())) {
@@ -232,11 +236,8 @@ public class LocationClient {
             Item i = Mists.itemLibrary.create(((AddItem)o).itemType);
             if (i != null) {
                 MapObject owner = location.getMapObject(((AddItem)o).inventoryOwnerID);
-                if (owner instanceof Creature) {
-                    ((Creature) owner).giveItem(i);
-                }
-                if (owner instanceof ItemContainer) {
-                    ((ItemContainer) owner).addItem(i);
+                if (owner instanceof HasInventory) {
+                    ((HasInventory) owner).addItem(i);
                 }
             }
         }

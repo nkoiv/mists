@@ -5,11 +5,8 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
-import com.nkoiv.mists.game.actions.GenericTasks;
-import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Trigger;
-import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
@@ -17,10 +14,6 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
 
 /**
  * ItemContainer is a MapObject representation
@@ -28,7 +21,7 @@ import javafx.scene.paint.Color;
  * on the ground
  * @author nikok
  */
-public class ItemContainer extends Structure {
+public class ItemContainer extends Structure implements HasInventory {
     private Inventory inv;
     private int oldInvHash;
     private boolean renderContent;
@@ -62,13 +55,15 @@ public class ItemContainer extends Structure {
         super.render(xOffset, yOffset, gc);
     }
     
+    @Override
     public Inventory getInventory() {
         return this.inv;
     }
     
-    public void addItem(Item i) {
+    public boolean addItem(Item i) {
         if (this.inv.isFull()) this.inv.expand(10);
         this.inv.addItem(i);
+        return true;
     }
     
     public Item peekTopItem() {
@@ -148,7 +143,7 @@ public class ItemContainer extends Structure {
         @Override
         public void toggle() {
             if (!ic.getLocation().getPlayer().getInventory().isFull()) {
-                ic.getLocation().getPlayer().giveItem(ic.takeTopItem());
+                ic.getLocation().getPlayer().addItem(ic.takeTopItem());
             }
         }
 
