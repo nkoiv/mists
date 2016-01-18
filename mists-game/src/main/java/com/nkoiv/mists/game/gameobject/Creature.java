@@ -9,7 +9,7 @@ import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.AI.MonsterAI;
-import com.nkoiv.mists.game.AI.Task;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;

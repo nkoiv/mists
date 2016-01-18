@@ -6,7 +6,7 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.actions.GenericTasks;
-import com.nkoiv.mists.game.AI.Task;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;

@@ -7,7 +7,7 @@ package com.nkoiv.mists.game.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import com.nkoiv.mists.game.AI.Task;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.world.TileMap;
 
 /**

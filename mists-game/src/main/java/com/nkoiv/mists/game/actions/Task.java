@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game.AI;
+package com.nkoiv.mists.game.actions;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
@@ -15,6 +15,8 @@ import java.util.Arrays;
  * Task is a ToDo for creatures. It's simple and fundamental
  * action meant to be transferred over network instead of
  * mirroring actual creature states.
+ * The actual executions of a task are handled mainly by
+ * actions.GenericTasks.java
  * @author nikok
  */
  public class Task implements KryoSerializable {

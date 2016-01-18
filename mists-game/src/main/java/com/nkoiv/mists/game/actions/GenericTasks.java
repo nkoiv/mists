@@ -6,7 +6,6 @@
 package com.nkoiv.mists.game.actions;
 
 import com.nkoiv.mists.game.AI.AIutil;
-import com.nkoiv.mists.game.AI.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -20,7 +19,7 @@ import java.util.logging.Level;
 
 /**
  * GenericTasks is meant to ease sever->client communication.
- * While the creaturetype specific AI-classes handle decisionmaking (serverside),
+ * While the creaturetype specific AI-classes handle decision making (serverside),
  * the actual executable tasks can be chopped down to GenericTasks.
  * These GenericTasks can then be transferred over network with simple IDs.
  * 

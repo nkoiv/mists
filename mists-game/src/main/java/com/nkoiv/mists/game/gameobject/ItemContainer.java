@@ -6,7 +6,7 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.actions.GenericTasks;
-import com.nkoiv.mists.game.AI.Task;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.gamestate.GameState;

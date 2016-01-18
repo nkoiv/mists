@@ -10,7 +10,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.nkoiv.mists.game.actions.GenericTasks;
-import com.nkoiv.mists.game.AI.Task;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;

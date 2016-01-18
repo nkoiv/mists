@@ -6,7 +6,7 @@
 package com.nkoiv.mists.game.controls;
 
 import com.nkoiv.mists.game.actions.GenericTasks;
-import com.nkoiv.mists.game.AI.Task;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;

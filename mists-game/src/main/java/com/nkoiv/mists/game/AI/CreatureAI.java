@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.AI;
 
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
