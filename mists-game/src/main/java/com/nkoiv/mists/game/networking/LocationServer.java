@@ -56,8 +56,10 @@ public class LocationServer {
     
     HashSet<Player> loggedIn = new HashSet();
     
-    private final Stack<Object> outgoingUpdateStack;
-    private final Stack<Object>[] incomingUpdateStacks  = new Stack[playerCap];; 
+    
+    private final Stack<Object> outgoingUpdateStack; //Sent to everyone
+    private final Stack<Object>[] outgoingUpdateStacks = new Stack[playerCap]; //Sent to a single player
+    private final Stack<Object>[] incomingUpdateStacks  = new Stack[playerCap];; //Incoming from given player
     
     public LocationServer(Game game) throws Exception {
         server = new Server(16384,16384) {
@@ -73,6 +75,9 @@ public class LocationServer {
         this.game = game;
         this.location = game.getCurrentLocation();
         this.outgoingUpdateStack = new Stack<>();
+        for (int i = 0; i < outgoingUpdateStacks.length; i++) {
+            this.incomingUpdateStacks[i] = new Stack<>();
+        }
         for (int i = 0; i < incomingUpdateStacks.length; i++) {
             this.incomingUpdateStacks[i] = new Stack<>();
         }
@@ -247,6 +252,8 @@ public class LocationServer {
     }
     
     private void handleClientUpdates() {
+        
+        
         for (int i = 0; i < this.incomingUpdateStacks.length; i++) {
             handleClientUpdates(i);
         }
@@ -295,6 +302,7 @@ public class LocationServer {
                         ai.slotID=slot;
                         ai.itemBaseID=it.getBaseID(); //TODO:
                         ai.item=it;
+                        
                     }
                 }
             }
@@ -308,15 +316,29 @@ public class LocationServer {
     }
     
     private void sendUpdates() {
-        this.sendObjectUpdates();
+        this.sendGlobalUpdates();
+        this.sendIndividualUpdates();
     }
     
-    private void sendObjectUpdates() {
+    private void sendGlobalUpdates() {
         if (!this.outgoingUpdateStack.isEmpty()) {
             //Mists.logger.info("Sending "+this.outgoingUpdateStack.size()+" outgoing updates to "+this.loggedIn.size()+" clients");
         }
         while (!this.outgoingUpdateStack.empty()) {
             this.server.sendToAllTCP(outgoingUpdateStack.pop());
+        }
+    }
+    
+    private void sendIndividualUpdates() {
+        PlayerConnection[] cons = (PlayerConnection[])server.getConnections();
+        for (PlayerConnection p : cons) {
+            sendUpdatesToPlayer(p.player, p.getID());
+        }
+    }
+    
+    private void sendUpdatesToPlayer(Player player, int connectionID) {
+        while (!this.outgoingUpdateStacks[player.playerID].isEmpty()) {
+            this.server.sendToTCP(connectionID, outgoingUpdateStacks[player.playerID].pop());
         }
     }
     
