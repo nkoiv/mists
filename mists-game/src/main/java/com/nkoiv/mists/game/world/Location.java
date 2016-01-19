@@ -596,8 +596,13 @@ public class Location extends Flags implements Global {
             }
         }
         this.updateEffects(time);
-    
-        this.fullCleanup(true, true, true);
+        if (server!=null) {
+            server.compileRemovals(creatureCleanup());
+            server.compileRemovals(structureCleanup());
+            server.compileRemovals(effectCleanup());
+            this.updateSpatials();
+            this.collisionMap.updateCollisionLevels();
+        } else this.fullCleanup(true, true, true);
     }
     
     

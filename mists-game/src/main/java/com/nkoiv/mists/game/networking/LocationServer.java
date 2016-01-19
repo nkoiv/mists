@@ -85,7 +85,7 @@ public class LocationServer {
         server.addListener(new Listener() {
             @Override
             public void received(Connection c, Object object) {
-                Mists.logger.info("Received connection");
+                //Mists.logger.info("Received connection");
                 PlayerConnection connection = (PlayerConnection)c;
                 Player player = connection.player;
                 if (object instanceof Login) {
@@ -345,9 +345,10 @@ public class LocationServer {
     }
     
     public void compileRemovals(Stack<Integer> removedMobIDs) {
-        if (removedMobIDs.isEmpty()) return;
-        for (Integer i : removedMobIDs) {
-            addServerUpdate(new RemoveMapObject(i));
+        while (!removedMobIDs.empty()) {
+            int id = removedMobIDs.pop();
+            addServerUpdate(new RemoveMapObject(id));
+            Mists.logger.info("Added removal for "+id);
         }
     }
     

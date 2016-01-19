@@ -209,11 +209,8 @@ public class LocationClient {
 
             if (object instanceof RemoveMapObject) {
                 RemoveMapObject mob = (RemoveMapObject)object;
-                MapObject m = location.getMapObject(mob.id);
-                if (m != null) {
-                    Mists.logger.info(m.getName()+" removed");
-                    location.removeMapObject(location.getMapObject(mob.id));
-                }
+                Mists.logger.info("removing mobID "+mob.id);
+                location.removeMapObject(mob.id);
                 return;
             }
 
