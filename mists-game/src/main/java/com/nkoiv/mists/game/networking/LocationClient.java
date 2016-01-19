@@ -44,8 +44,7 @@ public class LocationClient {
     private Client client;
     private String name;
     private int locationID;
-    private boolean paused;
-    private int port;
+    private boolean paused;    
 
     private Stack<Object> outgoingUpdateStack;
     private Stack<Object> incomingUpdatesStack;
@@ -105,7 +104,7 @@ public class LocationClient {
                 ex.printStackTrace();
         }
 
-        name = "Player"; //TODO: input for this
+        name = "Player "+client.getID(); //TODO: input for this
         Login login = new Login();
         login.name = name;
         client.sendTCP(login);

@@ -76,7 +76,7 @@ public class LocationServer {
         this.location = game.getCurrentLocation();
         this.outgoingUpdateStack = new Stack<>();
         for (int i = 0; i < outgoingUpdateStacks.length; i++) {
-            this.incomingUpdateStacks[i] = new Stack<>();
+            this.outgoingUpdateStacks[i] = new Stack<>();
         }
         for (int i = 0; i < incomingUpdateStacks.length; i++) {
             this.incomingUpdateStacks[i] = new Stack<>();
@@ -194,8 +194,10 @@ public class LocationServer {
         if(this.paused == false) {
             game.getCurrentLocation().update(time, this);
         }
-        this.handleClientUpdates();
-        this.sendUpdates();
+        if (server.getConnections().length > 0) {
+            this.handleClientUpdates();
+            this.sendUpdates();
+        }
     }
     
     private void sendMap(PlayerConnection c) {
@@ -330,9 +332,9 @@ public class LocationServer {
     }
     
     private void sendIndividualUpdates() {
-        PlayerConnection[] cons = (PlayerConnection[])server.getConnections();
-        for (PlayerConnection p : cons) {
-            sendUpdatesToPlayer(p.player, p.getID());
+
+        for (Connection c : server.getConnections()) {
+            if (c instanceof PlayerConnection) sendUpdatesToPlayer(((PlayerConnection)c).player, c.getID());
         }
     }
     
