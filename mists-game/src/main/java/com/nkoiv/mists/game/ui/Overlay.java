@@ -7,11 +7,8 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
-import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.gameobject.Wall;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -164,74 +161,8 @@ public class Overlay {
     public static void drawToggleIcon(GraphicsContext gc, MapObject mob) {
             gc.drawImage(Mists.graphLibrary.getImage("buttonSelectSmallbeige"), mob.getXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset());
     }
-    
-    
-    /**
-     * OUTDATED
-     * InfoBox displaying info about the mob that's currently targeted
-     * @param gc
-     * @param infobox
-     * @param mob
-     
-    public static void drawInfoBox(GraphicsContext gc, TextPanel infobox, MapObject mob) {
-        infobox.setText(generateInfoBoxText(mob));
-        infobox.render(gc, 0, 0);
-        //TODO: Snapshot for MOB image
-        gc.drawImage(mob.getSnapshot(), infobox.xPosition+infobox.getWidth()-mob.getWidth()-10, infobox.yPosition+10);
-    }
-    */
-    
-    public static String generateInfoBoxText(MapObject mob) {
-        /*
-        if (mob == null) return text;
-        StringBuilder sb = new StringBuilder();
-        sb.append(mob.toString());
-        sb.append("\n");
-        sb.append("LocationID: ").append(mob.getID());
-        if (mob instanceof Creature) {
-            sb.append("\n");
-            sb.append(((Creature) mob).getHealth()).append(" / ").append(((Creature) mob).getMaxHealth());
-            sb.append(" facing: ").append(((Creature)mob).getFacing());
-            sb.append("\n");
-            sb.append("Crossable terrain: ").append(((Creature) mob).getCrossableTerrain());
-            sb.append("\n");
-            sb.append("Available actions: ");
-            sb.append(((Creature) mob).getAvailableActionNames());
-            if (((Creature)mob).getLastTask() != null) {
-                sb.append("\n");
-                sb.append("Last task: ");
-                sb.append("\n");
-                String s = ((Creature)mob).getLastTask().toString();
-                int b = s.indexOf("]");
-                sb.append(s.substring(0, b+1));
-                sb.append("\n");
-                sb.append(s.substring(b+1, s.length()));
-            }
-            text = sb.toString();
-            return text;
-        }
-        if (mob instanceof ItemContainer) {
-            sb.append("\n");
-            sb.append("Collision level: ").append(((Structure) mob).getCollisionLevel());
-            sb.append("\n");
-            sb.append("Containing:");
-            sb.append("\n");
-        }
-        if (mob instanceof Structure) {
-            sb.append("\n");
-            sb.append("Collision level: ").append(((Structure) mob).getCollisionLevel());
-            text = sb.toString();
-            return text;
-        }
-        if (mob instanceof Wall) {
-            sb.append("\n");
-            sb.append("Neighbours: ").append(((Wall) mob).getNeighbours());
-            text = sb.toString();
-            return text;
-        }
         
-        text = sb.toString();
-        */
+    public static String generateInfoBoxText(MapObject mob) {
         StringBuilder sb = new StringBuilder();
         for (String s : mob.getInfoText()) {
             sb.append(s);

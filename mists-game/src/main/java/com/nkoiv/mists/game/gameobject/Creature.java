@@ -731,6 +731,17 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
     
     @Override
+    public String[] getInfoText() {
+        String[] s = new String[]{
+            this.name,
+            this.IDinLocation+" @ "+this.location.getName(),
+            this.getHealth() + "/"+this.getMaxHealth()+" hp",
+            this.getLastTask().toString()
+        };
+        return s;
+    }
+    
+    @Override
     public String toString() {
         String n = this.name + " @ "+"|"+(int)this.getCenterXPos()+"x"+(int)this.getCenterYPos()+"|";
         return n;

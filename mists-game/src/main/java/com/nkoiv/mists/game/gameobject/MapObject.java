@@ -7,7 +7,6 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
-import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
