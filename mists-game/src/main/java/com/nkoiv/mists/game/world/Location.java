@@ -362,7 +362,32 @@ public class Location extends Flags implements Global {
     public void setNextID(int id) {
         this.nextID = id;
     }
+
     
+    public void removeMapObject(int mobID) {
+        MapObject mob = this.mobs.get(mobID);
+        if (mob!=null)this.removeMapObject(mob);
+    }
+    
+    public void removeMapObject(MapObject mob) {
+        if (mob instanceof Structure) {
+            if (mob instanceof Wall) {
+                double xPos = mob.getCenterXPos();
+                double yPos = mob.getCenterYPos();
+                updateWallsAt(xPos, yPos);
+            }
+            this.structures.remove((Structure)mob);
+        }
+        if (mob instanceof Creature) {
+            this.creatures.remove((Creature)mob);
+        }
+        if (mob instanceof Effect) {
+            this.effects.remove((Effect)mob);
+        }
+        this.mobs.remove(mob.getID());
+    }
+    
+        
     /**
      * Generic MapObject insertion.
      * @param mob MapObject to insert in the map
@@ -381,31 +406,6 @@ public class Location extends Flags implements Global {
         this.mobs.put(mob.getID(), mob);
         mob.setLocation(this);
     }
-    
-    public void removeMapObject(int mobID) {
-        MapObject mob = this.mobs.get(mobID);
-        if (mob!=null)this.removeMapObject(mob);
-    }
-    
-    public void removeMapObject(MapObject mob) {
-        if (mob instanceof Structure) {
-            if (mob instanceof Wall) {
-                double xPos = mob.getCenterXPos();
-                double yPos = mob.getCenterYPos();
-                updateWallsAt(xPos, yPos);
-            }
-            this.structures.remove(mob);
-        }
-        if (mob instanceof Creature) {
-            this.creatures.remove(mob);
-        }
-        if (mob instanceof Effect) {
-            this.effects.remove(mob);
-        }
-        this.mobs.remove(mob.getID());
-    }
-    
-    
     
     /**
     * Adds a Structure to the location
@@ -566,44 +566,47 @@ public class Location extends Flags implements Global {
     
     /**
     * Update is the main "tick" of the Location.
-    * Movement, combat and triggers should all be handled here
+    * Movement, combat and triggers should all be handled here.
+    * If no server is given (=working in singleplayer), this uses
+    * update(time, server) with Null as server.
     * TODO: Not everything needs to happen on every tick. Mobs should make new decisions only ever so often
     * @param time Time since the last update
     */
     public void update (double time) {
-        this.updateSpatials();
-        this.collisionMap.updateCollisionLevels();
-        
+        this.update(time, null);
+    }
+    
+    /**
+     * Update is the main "tick" of the Location.
+     * Movement, combat and triggers should all be handled here
+     * 
+     * If a Server is given as argument, the update operations
+     * done are pushed to the servers update stack, to be relayed
+     * to clients.
+     * @param time Time since the last update
+     * @param server Server to relay the updates to
+     */
+    public void update (double time, LocationServer server) {
+        //AI-stuff
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) { //Mobs do whatever mobs do
                 mob.update(time);
+                if (server!=null)server.addServerUpdate(mob.getLastTask());
+                if (server!=null)server.addMapObjectUpdate(mob);
             }
         }
-        
-        //Check collisions
-        if (!this.effects.isEmpty()) {
-            //Mists.logger.info("Effects NOT empty");
-            for (Effect e : this.effects) { //Handle effects landing on something
-                e.update(time);
-                ArrayList<MapObject> collisions = this.checkCollisions(e);
-                if (!collisions.isEmpty()) {       
-                    e.getOwner().hitOn(collisions);
-                }
-            }
-        }
-        
-        //Cleaup removable objects
-        creatureCleanup();
-        structureCleanup();
-        effectCleanup();
+        this.updateEffects(time);
+    
+        this.fullCleanup(true, true, true);
     }
     
+    
     public void fullCleanup(boolean cleanCreatures, boolean cleanStructures, boolean cleanEffects) {
-        this.updateSpatials();
-        this.collisionMap.updateCollisionLevels();
         if (cleanCreatures) creatureCleanup();
         if (cleanStructures) structureCleanup();
         if (cleanEffects) effectCleanup();
+        this.updateSpatials();
+        this.collisionMap.updateCollisionLevels();
     }
     
     public void updateEffects(double time) {
@@ -619,46 +622,7 @@ public class Location extends Flags implements Global {
         }
     }
     
-    /**
-     * Update is the main "tick" of the Location.
-     * Movement, combat and triggers should all be handled here
-     * 
-     * If a Server is given as argument, the update operations
-     * done are pushed to the servers update stack, to be relayed
-     * to clients.
-     * @param time Time since the last update
-     * @param server Server to relay the updates to
-     */
-    public void update (double time, LocationServer server) {
-        this.updateSpatials();
-        this.collisionMap.updateCollisionLevels();
-        
-        //AI-stuff
-        if (!this.creatures.isEmpty()) {
-            for (Creature mob : this.creatures) { //Mobs do whatever mobs do
-                mob.update(time);
-                server.addServerUpdate(mob.getLastTask());
-                server.addMapObjectUpdate(mob);
-            }
-        }
-        
-        //Check collisions
-        if (!this.effects.isEmpty()) {
-            //Mists.logger.info("Effects NOT empty");
-            for (Effect e : this.effects) { //Handle effects landing on something
-                e.update(time);
-                ArrayList<MapObject> collisions = this.checkCollisions(e);
-                if (!collisions.isEmpty()) {       
-                    e.getOwner().hitOn(collisions);
-                }
-            }
-        }
-        
-        //Cleaup removable objects
-        server.compileRemovals(creatureCleanup());
-        server.compileRemovals(structureCleanup());
-        server.compileRemovals(effectCleanup());
-    }
+    
     
     /**
      * structureCleanup cleans all the "removable"
