@@ -12,8 +12,6 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
-import com.nkoiv.mists.game.world.Location;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -184,7 +182,7 @@ public class Overlay {
     */
     
     public static String generateInfoBoxText(MapObject mob) {
-        String text = "";
+        /*
         if (mob == null) return text;
         StringBuilder sb = new StringBuilder();
         sb.append(mob.toString());
@@ -233,6 +231,13 @@ public class Overlay {
         }
         
         text = sb.toString();
+        */
+        StringBuilder sb = new StringBuilder();
+        for (String s : mob.getInfoText()) {
+            sb.append(s);
+            sb.append("\n");
+        }
+        String text = sb.toString();
         return text;
     }
 }

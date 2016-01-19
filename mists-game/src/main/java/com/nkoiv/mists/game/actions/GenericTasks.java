@@ -181,8 +181,10 @@ public class GenericTasks {
     
     public static void useMeleeTowardsMob(Creature actor, int targetID) {
         //Mists.logger.log(Level.INFO, "{0} uses melee towards {1}", new Object[]{creep.getName(), target.getName()});
-        int xCoor = (int)actor.getLocation().getMapObject(targetID).getCenterXPos();
-        int yCoor = (int)actor.getLocation().getMapObject(targetID).getCenterYPos();
+        MapObject target = actor.getLocation().getMapObject(targetID);
+        if (target == null) return;
+        int xCoor = (int)target.getCenterXPos();
+        int yCoor = (int)target.getCenterYPos();
         useMeleeTowardsCoordinates(actor, xCoor, yCoor);
     }
     
