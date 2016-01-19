@@ -45,7 +45,7 @@ public class LocationClient {
     private String name;
     private int locationID;
     private boolean paused;    
-
+    
     private Stack<Object> outgoingUpdateStack;
     private Stack<Object> incomingUpdatesStack;
 

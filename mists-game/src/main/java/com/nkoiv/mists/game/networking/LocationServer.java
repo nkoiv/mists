@@ -49,8 +49,10 @@ public class LocationServer {
     private Game game;
     private Location location;
     private Server server;
-    private boolean paused;
     private int port;
+
+    private boolean paused;
+    private double lastEnforce;
     
     private static final int playerCap = 4;
     
@@ -197,7 +199,13 @@ public class LocationServer {
         if (server.getConnections().length > 0) {
             this.handleClientUpdates();
             this.sendUpdates();
+            lastEnforce+=time;
         }
+        if (lastEnforce >= 1) {
+            updateAllCreatures();
+            lastEnforce = 0;
+        }
+        this.outgoingUpdateStack.clear();
     }
     
     private void sendMap(PlayerConnection c) {
@@ -213,6 +221,17 @@ public class LocationServer {
         Mists.logger.info("Gave the connecting player: "+companion.getName()+" id: "+companion.getID());
         addMapObject(companion);
         return companion.getID();
+    }
+    
+    /**
+     * Push updated status on all creatures to
+     * all clients.
+     */
+    private void updateAllCreatures() {
+        Mists.logger.info("Sending full creature update");
+        for (Creature c : this.location.getCreatures()) {
+            this.addMapObjectUpdate(c);
+        }
     }
     
     private void sendAllMobs(PlayerConnection c) {
@@ -339,6 +358,8 @@ public class LocationServer {
     }
     
     private void sendUpdatesToPlayer(Player player, int connectionID) {
+        if (player == null) return;
+        Mists.logger.info("Sending updates to player "+player.playerID);
         while (!this.outgoingUpdateStacks[player.playerID].isEmpty()) {
             this.server.sendToTCP(connectionID, outgoingUpdateStacks[player.playerID].pop());
         }
