@@ -51,7 +51,7 @@ public class LibLoader {
     public static void initializeCreatureLibrary(MobLibrary<Creature> lib) {
         Mists.logger.info("Loading up creature data");
         //TODO: Load the data from a file
-        
+        int creatureID = 0;
         //Companions
         
         Creature himmu = new Creature("Himmu",new Image("/images/himmu.png"));
@@ -65,6 +65,10 @@ public class LibLoader {
         MeleeAttack himmumelee = new MeleeAttack();
         himmumelee.setFlag("cooldown", 2000);
         himmu.addAction(himmumelee);
+        
+        himmu.setTemplateID(creatureID);
+        creatureID++;
+        
         lib.addTemplate(himmu);
         
         //Monsters
@@ -72,27 +76,40 @@ public class LibLoader {
         MonsterAI wormAI = new MonsterAI(worm);
         worm.setAI(wormAI);
         worm.addAction(new MeleeAttack());
+        worm.setTemplateID(creatureID);
+        creatureID++;
         lib.addTemplate(worm);
         
         Creature rabbit = new Creature("Rabbit", new ImageView("/images/monster_small.png"), 3, 0, 4, 4, 0, 36, 32);
         MonsterAI rabbitAI = new MonsterAI(rabbit);
         rabbit.setAI(rabbitAI);
         rabbit.addAction(new MeleeAttack());
+        rabbit.setTemplateID(creatureID);
+        creatureID++;
         lib.addTemplate(rabbit);
         
         Creature eggy = new Creature("Eggy", new ImageView("/images/monster_small.png"), 3, 3, 0, 4, 0, 36, 32);
         MonsterAI eggyAI = new MonsterAI(eggy);
         eggy.setAI(eggyAI);
         eggy.addAction(new MeleeAttack());
+        eggy.setTemplateID(creatureID);
+        creatureID++;
         lib.addTemplate(eggy);
         
         Creature swampy = new Creature("Swampy", new ImageView("/images/monster_small.png"), 3, 3, 4, 4, 0, 36, 32);
-        MonsterAI swampyAI = new MonsterAI(eggy);
+        MonsterAI swampyAI = new MonsterAI(swampy);
         swampy.setAI(swampyAI);
         swampy.addAction(new MeleeAttack());
+        swampy.setTemplateID(creatureID);
+        creatureID++;
         lib.addTemplate(swampy);
         
-        
+        Creature blob = new Creature("Blob", new ImageView("/images/blob.png"), 3, 0, 0, 84, 84);
+        MonsterAI blobAI = new MonsterAI(blob);
+        blob.setAI(blobAI);
+        blob.setTemplateID(creatureID);
+        creatureID++;
+        lib.addTemplate(blob);
     }
     
     public static void initializeActionLibrary(ActionLibrary lib) {

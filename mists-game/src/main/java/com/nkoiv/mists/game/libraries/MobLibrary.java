@@ -30,11 +30,18 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     //ArrayList for storing all the individual libraries
     //private static final ArrayList<AssetLibrary> libraries = new ArrayList<>();
     
-    private final HashMap<String, E> lib;
+    private final HashMap<String, E> libByName;
+    private final HashMap<Integer, E> lib;
     
     
     public MobLibrary() {
-        lib = (HashMap<String, E>) new HashMap();
+        lib = (HashMap<Integer, E>) new HashMap();
+        libByName = (HashMap<String, E>) new HashMap();
+    }
+    
+    public E create(int baseID) {
+        E template = getTemplate(baseID);
+        return (E)template.createFromTemplate();
     }
     
     public E create(String name) {
@@ -46,16 +53,19 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     public E create(String name, Location l, int xCoor, int yCoor) {
         E template = create(name);
         E thing = (E)template.createFromTemplate();
-        thing.setLocation(l);
-        thing.setPosition(xCoor, yCoor);
+        if (l!=null) {
+            l.addMapObject(thing);
+            thing.setCenterPosition(xCoor, yCoor);
+        }
         return thing;
     }
     
     public void addTemplate(E e) {
         prepareAdd(e);
         String lowercasename = e.getName().toLowerCase();
-        this.lib.put(lowercasename, e);
-        Mists.logger.log(Level.INFO, "{0} added into library", e.getName());
+        this.libByName.put(lowercasename, e);
+        this.lib.put(e.getTemplateID(), e);
+        Mists.logger.log(Level.INFO, "{0}:{1} added to library", new Object[]{e.getTemplateID(), lowercasename});
     }
     
     /**
@@ -97,7 +107,11 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
      */
     public E getTemplate(String name) {
         String lowercasename = name.toLowerCase();
-        return this.lib.get(lowercasename);
+        return this.libByName.get(lowercasename);
+    }
+    
+    public E getTemplate(int baseID) {
+        return this.lib.get(baseID);
     }
     
     @Override

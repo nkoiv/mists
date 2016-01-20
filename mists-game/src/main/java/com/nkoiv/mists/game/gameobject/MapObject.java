@@ -24,7 +24,7 @@ import javafx.scene.shape.Shape;
  * @author nkoiv
  */
 public class MapObject extends Flags implements Global, Templatable {
-    
+    protected int templateID;
     protected final String name;
     protected MovingGraphics graphics;
     
@@ -167,6 +167,14 @@ public class MapObject extends Flags implements Global, Templatable {
     
     protected MovingGraphics getGraphics() {
         return this.graphics;
+    }
+    
+    public int getTemplateID() {
+        return this.templateID;
+    }
+    
+    public void setTemplateID(int baseID) {
+        this.templateID = baseID;
     }
     
     public String getName() {

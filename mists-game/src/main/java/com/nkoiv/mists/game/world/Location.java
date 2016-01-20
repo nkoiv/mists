@@ -1170,7 +1170,9 @@ public class Location extends Flags implements Global {
         if (!renderedMOBs.isEmpty()) {
             for (MapObject struct : renderedMOBs) {
                 if (struct instanceof Structure) {
-                    lightlevel = lights.lightmap[(int)struct.getXPos()/Mists.TILESIZE][(int)struct.getCenterYPos()/Mists.TILESIZE];
+                    int structX = Math.min((int)struct.getXPos()/Mists.TILESIZE, lights.lightmap.length);
+                    int structY = Math.min((int)struct.getCenterYPos()/Mists.TILESIZE, lights.lightmap[0].length);
+                    lightlevel = lights.lightmap[structX][structY];
                     lightlevel = lightlevel-1;
                     lightmap.setBrightness(lightlevel); gc.setEffect(lightmap);
                     ((Structure)struct).renderExtras(xOffset, yOffset, gc); //Draw extra frill (leaves on trees etc)

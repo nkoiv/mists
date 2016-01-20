@@ -166,11 +166,15 @@ public class LocationControls {
     //-------- Mob creation ------
     
     public void addCreature(String mobTemplate) {
-        if ("".equals(mobTemplate)) addCreature(); 
-        else {
-            if ("blob".equals(mobTemplate)) addBlob();
+        int mobID;
+        try {
+            mobID = Integer.parseInt(mobTemplate);
+        } catch (NumberFormatException e) {
+            //ParseInt failed, so we probably got a template name instead
+            Creature mob = Mists.creatureLibrary.getTemplate(mobTemplate);
+            if (mob!=null) mobID = mob.getTemplateID();
+            else mobID = -1;
         }
-        
     }
     
     public void createItemPile(Item item, double xCoor, double yCoor) {
@@ -198,8 +202,13 @@ public class LocationControls {
     
     /**
      * Create a random mob at spot mouse cursor is at
+     * @param baseID the baseID of the creature to create
      */
-    public void addCreature() {
+    public void addCreature(int baseID) {
+        if (baseID < 0 ) {
+            Mists.logger.warning("Tried to create creature with templateID of "+baseID+", aborted!");
+            return;
+        }
         Point p = MouseInfo.getPointerInfo().getLocation();
         double x = p.x - Mists.primaryStage.getX();
         double y = p.y - Mists.primaryStage.getY();
@@ -207,7 +216,8 @@ public class LocationControls {
         int startX = rnd.nextInt(1);
         int startY = rnd.nextInt(1);
         Mists.logger.log(Level.INFO, "Creating monster from sprite sheet position {0},{1} at coordinates {2}+{3}x{4}+{5}", new Object[]{startX, startY, x, game.getCurrentLocation().getLastxOffset(), y, game.getCurrentLocation().getLastyOffset()});
-        Creature monster = new Creature("Otus", new ImageView("/images/monster_small.png"), 3, startX*3, startY*4, 32, 32);
+        Creature monster = Mists.creatureLibrary.create(baseID);
+        if (monster == null) monster = Mists.creatureLibrary.create("Worm");
         game.getCurrentLocation().addCreature(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
     }
     

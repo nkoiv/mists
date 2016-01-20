@@ -63,6 +63,7 @@ public class Console extends TextWindow{
             if (k == KeyCode.UP) {
                 previousRow();
             }
+ 
             
         }
         

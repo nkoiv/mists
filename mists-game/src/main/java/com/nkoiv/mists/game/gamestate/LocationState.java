@@ -245,7 +245,8 @@ public class LocationState implements GameState {
     }
     
     public void openConsole() {
-        uiComponents.put("Console", new Console(this));
+        Console console = new Console(this);
+        this.addUIComponent(console);
         this.inConsole = true;
     }
 
