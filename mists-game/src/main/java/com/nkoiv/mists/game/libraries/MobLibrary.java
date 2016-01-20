@@ -41,12 +41,14 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     
     public E create(int baseID) {
         E template = getTemplate(baseID);
+        if (template == null) return null;
         return (E)template.createFromTemplate();
     }
     
     public E create(String name) {
         String lowercasename = name.toLowerCase();
         E template = getTemplate(lowercasename);
+        if (template == null) return null;
         return (E)template.createFromTemplate();
     }
     

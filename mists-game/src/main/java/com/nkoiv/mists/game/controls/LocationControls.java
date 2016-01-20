@@ -175,6 +175,7 @@ public class LocationControls {
             if (mob!=null) mobID = mob.getTemplateID();
             else mobID = -1;
         }
+        addCreature(mobID);
     }
     
     public void createItemPile(Item item, double xCoor, double yCoor) {

@@ -45,7 +45,9 @@ public class Console extends TextWindow{
                 if (pressedButtons.contains(KeyCode.SHIFT)) {
                     this.current = this.current+k.toString();
                 } else {
-                    char c = Character.toLowerCase(k.toString().charAt(0));
+                    char c;
+                    if (k.isDigitKey()) c = Character.toLowerCase(k.toString().charAt(5));
+                    else c = Character.toLowerCase(k.toString().charAt(0));
                     this.current = this.current+c;
                 }
                 
