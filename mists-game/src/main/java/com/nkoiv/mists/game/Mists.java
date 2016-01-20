@@ -131,7 +131,15 @@ public class Mists extends Application implements Global {
        /*
         * Game main loop
         */
-        new AnimationTimer()
+        new AnimationTimer() //Render loop
+        {
+            @Override
+            public void handle(long currentNanoTime)
+            {
+                MistsGame.render(gameCanvas, uiCanvas);
+            } 
+        }.start();
+        new AnimationTimer() //Logic loop
         {
             final double startNanoTime = System.nanoTime();
             double previousNanoTime = 0;
@@ -148,11 +156,10 @@ public class Mists extends Application implements Global {
                 previousNanoTime = currentNanoTime;
                 //Do things:
                 MistsGame.tick(elapsedSeconds, pressedButtons, releasedButtons); 
-                //Show things:
-                MistsGame.render(gameCanvas, uiCanvas);
             } 
-         }.start();
-    } 
+        }.start();
+        
+    }
  
     
     public static void main (String[] args) {

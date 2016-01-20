@@ -24,7 +24,7 @@ import javafx.scene.shape.Polygon;
 public class LightsRenderer {
     Location loc;
     Polygon[] obstacles;
-    public double[][] lightmap;
+    public final double[][] lightmap;
     public boolean[][] explored;
     double minLightLevel;
     
@@ -35,6 +35,7 @@ public class LightsRenderer {
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
         int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
         this.explored = new boolean[tileWidth][tileHeight];
+        this.lightmap = new double[tileWidth][tileHeight];
         clearLightmap();
         Mists.logger.log(Level.INFO, "Generated Lightmap ({0}x{1})", new Object[]{tileWidth, tileHeight});
     }
@@ -75,7 +76,7 @@ public class LightsRenderer {
     private void clearLightmap() {
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
         int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
-        this.lightmap = new double[tileWidth][tileHeight];
+        //this.lightmap = new double[tileWidth][tileHeight];
         
         for (int column = 0; column < this.lightmap.length; column ++) {
             for (int row = 0; row < this.lightmap[0].length; row ++) {
