@@ -120,13 +120,13 @@ public class LocationControls {
     public void playerAttack() {
         Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(game.getPlayer().getFacing())});
         game.getPlayer().setNextTask(attack);
-        if (this.gameMode == GameMode.CLIENT) this.client.addObjectUpdate(attack);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(attack);
     }
     
     public void playerMove(Direction direction) {
         Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(direction)});
         game.getPlayer().setNextTask(move);
-        if (this.gameMode == GameMode.CLIENT) this.client.addObjectUpdate(move);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(move);
     }
     
     public void teleportPlayer(double xCoor, double yCoor) {

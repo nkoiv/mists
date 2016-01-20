@@ -52,7 +52,7 @@ public class LocationClient {
     public LocationClient (Game game) {
         client = new Client(16384,16384);
         this.game = game;
-        client.start();
+        new Thread(client).start();
 
         // For consistency, the classes to be sent over the network are
         // registered by the same method for both the client and server.
@@ -79,6 +79,7 @@ public class LocationClient {
                     client.sendTCP(register);
                 } else if (object instanceof Register) {
                     Mists.logger.info("Got ID for register");
+                    name = ((Register)object).name;
                     locationID = ((Register)object).locationID;
                 } else if (object instanceof TileMap) {
                     Mists.logger.info("Received a new map from server, processing...");
@@ -120,7 +121,7 @@ public class LocationClient {
             location.updateEffects(time);
             location.fullCleanup(false, false, true);
         }
-        if (this.locationID != 0) addObjectUpdate(new MapObjectUpdate(this.locationID, game.getPlayer().getXPos(), game.getPlayer().getYPos()));
+        //if (this.locationID != 0) addObjectUpdate(new MapObjectUpdate(this.locationID, game.getPlayer().getXPos(), game.getPlayer().getYPos()));
     }
 
     private void addServerUpdate(Object o) {
@@ -156,10 +157,6 @@ public class LocationClient {
         if (mob.type.equals(ItemContainer.class.toString())) {
             ItemContainer itemPile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
             itemPile.setRenderContent(true);
-            m = itemPile;
-            RequestAllItems r = new RequestAllItems();
-            r.inventoryOwnerID = m.getID();
-            this.addObjectUpdate(r);
         }
         
         if (mob.type.equals(PlayerCharacter.class.toString())) {
@@ -184,7 +181,7 @@ public class LocationClient {
         this.location.setNextID(mob.id);
         this.location.addMapObject(m);
         this.location.getMapObject(mob.id).setPosition(mob.xPos, mob.yPos);
-        Mists.logger.info("Mob succesfully placed at "+mob.xPos+","+mob.yPos);
+        Mists.logger.info(m.getName()+" succesfully placed at "+mob.xPos+","+mob.yPos);
     }
     
     private void handleServerUpdates(double time) {
@@ -204,7 +201,10 @@ public class LocationClient {
             if (object instanceof MapObjectUpdate) {
                 MapObject m = location.getMapObject(((MapObjectUpdate)object).id);
                 if (m!=null) GenericTasks.checkCoordinates(m,((MapObjectUpdate)object).x, ((MapObjectUpdate)object).y);
-                else this.outgoingUpdateStack.add(new MapObjectRequest(((MapObjectUpdate)object).id));
+                else {
+                    Mists.logger.info("Tried updating Mob that doesn't exist - requesting mob (id:"+(((MapObjectUpdate)object).id)+")");
+                    this.addOutgoingUpdate(new MapObjectRequest(((MapObjectUpdate)object).id));
+                }
             }
 
             if (object instanceof RemoveMapObject) {
@@ -235,10 +235,30 @@ public class LocationClient {
         
     }
 
-    public void addObjectUpdate(Object o) {
+    public void addOutgoingUpdate(Object o) {
         //TODO: sanitize
-        if (o instanceof Task) this.outgoingUpdateStack.push(o);
-        if (o instanceof AddItem) this.outgoingUpdateStack.push(o);
+        if (o instanceof MapObjectUpdate) {
+            this.outgoingUpdateStack.push(o);
+            return;
+        }
+        if (o instanceof Task) {
+            this.outgoingUpdateStack.push(o);
+            return;
+        }
+        if (o instanceof AddItem) {
+            this.outgoingUpdateStack.push(o);
+            return;
+        }
+        if (o instanceof MapObjectRequest) {
+            this.outgoingUpdateStack.push(o);
+            return;
+        }
+        if (o instanceof RequestAllItems) {
+            this.outgoingUpdateStack.push(o);
+            return;
+        }
+        
+        Mists.logger.info("Unknown object update discarded ("+o.getClass()+")");
     }
     
     private void sendUpdates() {

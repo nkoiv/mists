@@ -42,6 +42,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     private CreatureAI ai;
     protected Task lastTask;
     protected Task nextTask;
+    protected long lastTaskSet; //For networking purposes
     
     private Direction facing;
     private Direction lastFacing = null;
@@ -93,6 +94,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this.ai = new CreatureAI(this);
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
+        
     }
     
     public Creature (String name, ImageView imageView, int frameCount, int startingXTile, int startingYTile, int frameWidth, int frameHeight) {
@@ -264,8 +266,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     @Override
     public void update (double time) {
         this.lastTask = this.ai.act(time);
-        //Mists.logger.info(this.name+" doing "+lastTask.toString());
-        this.stopMovement();
+        //Mists.logger.info(this.name+" doing "+lastTask.toString());        
+        if ((System.currentTimeMillis()-this.lastTaskSet)>1500) this.stopMovement();
         GenericTasks.performTask(location, lastTask, time);
         this.updateGraphics();
     }
@@ -302,6 +304,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     public void setNextTask(Task t) {
         this.nextTask = t;
+        this.lastTaskSet = System.currentTimeMillis();
     }
 
     public void update (double time, LocationServer server) {
@@ -343,6 +346,29 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     private void updateSpriteSkeleton() {
         
     }
+    
+        
+    /**
+    * Render draws the Sprite of the Creature on a given GraphicsContext
+    * This overrides the normal MapObject render, because Creatures might have some
+    * extra stuff to draw (like pathfinding path for demo/testing purposes)
+    * @param gc GraphicsContext where the object is drawn
+    * @param xOffset Used to shift the objects xCoordinate so its drawn where the screen is
+    * @param yOffset Used to shift the objects yCoordinate so its drawn where the screen is
+    */
+    @Override
+    public void render(double xOffset, double yOffset, GraphicsContext gc) {
+        if (this.isFlagged("visible")) {
+            if (this.graphics instanceof SpriteSkeleton) ((SpriteSkeleton)this.graphics).render(xOffset, yOffset, gc, this.facing);
+            else this.graphics.render(xOffset, yOffset, gc);
+            if (this.ai.getPath()!=null && this.getLocation().isFlagged("drawPaths")) {
+                this.ai.getPath().drawPath(gc, TILESIZE, xOffset, yOffset);
+            }
+        }
+    } 
+    
+    
+    //-------------movement-----------
     
     /**
      * Apply movement to the creature.
@@ -514,25 +540,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         
         return false;
     }
-    
-        /**
-    * Render draws the Sprite of the Creature on a given GraphicsContext
-    * This overrides the normal MapObject render, because Creatures might have some
-    * extra stuff to draw (like pathfinding path for demo/testing purposes)
-    * @param gc GraphicsContext where the object is drawn
-    * @param xOffset Used to shift the objects xCoordinate so its drawn where the screen is
-    * @param yOffset Used to shift the objects yCoordinate so its drawn where the screen is
-    */
-    @Override
-    public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
-            if (this.graphics instanceof SpriteSkeleton) ((SpriteSkeleton)this.graphics).render(xOffset, yOffset, gc, this.facing);
-            else this.graphics.render(xOffset, yOffset, gc);
-            if (this.ai.getPath()!=null && this.getLocation().isFlagged("drawPaths")) {
-                this.ai.getPath().drawPath(gc, TILESIZE, xOffset, yOffset);
-            }
-        }
-    } 
+
     
     private boolean moveUp() {
         this.facing = Direction.UP;
@@ -601,6 +609,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this.facing = d;
     }
     
+    //---------------inventory--------------
+    
     @Override
     public Inventory getInventory() {
         return this.inventory;
@@ -626,7 +636,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         }
     }
     
-    //-------------------------------------------------------
+    //------------------------combat-------------------
     
     
     //TODO: Calculate attack and defense values from their sources
@@ -683,6 +693,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         if(this.getHealth()>this.getMaxHealth()){this.setHealth(this.getMaxHealth());} 
     }
     
+    
+    //-------------------initializing, serializing, etc--------------------
     @Override
     public Creature createFromTemplate() {
         Creature nc = new Creature(this.name, this.graphics.getImage());
@@ -732,6 +744,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     @Override
     public String[] getInfoText() {
+        if (this.lastTask == null) this.lastTask = new Task(GenericTasks.ID_IDLE, this.IDinLocation, null);
         String[] s = new String[]{
             this.name,
             this.IDinLocation+" @ "+this.location.getName(),

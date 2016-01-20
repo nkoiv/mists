@@ -163,6 +163,10 @@ public class Inventory {
         return this.itemSize >= this.items.length;
     }
     
+    public boolean isEmpty() {
+        return this.itemSize == 0;
+    }
+    
     public int getSize() {
         return itemSize;
     }

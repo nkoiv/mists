@@ -53,6 +53,7 @@ public class LocationServer {
 
     private boolean paused;
     private double lastEnforce;
+    private int lastMobID;
     
     private static final int playerCap = 4;
     
@@ -76,6 +77,7 @@ public class LocationServer {
         LocationNetwork.register(server);
         this.game = game;
         this.location = game.getCurrentLocation();
+        this.lastMobID = this.location.peekNextID()-1;
         this.outgoingUpdateStack = new Stack<>();
         for (int i = 0; i < outgoingUpdateStacks.length; i++) {
             this.outgoingUpdateStacks[i] = new Stack<>();
@@ -159,9 +161,9 @@ public class LocationServer {
                     loggedIn(connection, player);
                     return;
                 }
-                if (object instanceof Task || object instanceof MapObjectUpdateRequest || object instanceof MapObjectUpdate) {
+                //if (object instanceof Task || object instanceof MapObjectUpdateRequest || object instanceof MapObjectUpdate || object instanceof RequestAllItems) {
                     addClientUpdate(c, object);
-                }
+                //}
             }
             
             private boolean isValid (String value) {
@@ -200,12 +202,23 @@ public class LocationServer {
             this.handleClientUpdates();
             this.sendUpdates();
             lastEnforce+=time;
+        } else {
+            this.outgoingUpdateStack.clear();
         }
         if (lastEnforce >= 1) {
             updateAllCreatures();
             lastEnforce = 0;
         }
-        this.outgoingUpdateStack.clear();
+        if (this.lastMobID+1 < this.location.peekNextID()) {
+            Mists.logger.info("MobID out of date, sending updates");
+            for (int i = this.lastMobID+1; i < this.location.peekNextID(); i++) {
+                MapObject mob = this.location.getMapObject(i);
+                if (mob!=null) this.outgoingUpdateStack.push(new MapObjectUpdate(i, mob.getXPos(), mob.getYPos()));
+                this.lastMobID++;
+            }
+            
+        }
+        
     }
     
     private void sendMap(PlayerConnection c) {
@@ -219,7 +232,7 @@ public class LocationServer {
         companion.setCenterPosition(location.getPlayer().getXPos()+50, location.getPlayer().getYPos()+50);
         companion.addAction(new MeleeAttack());
         Mists.logger.info("Gave the connecting player: "+companion.getName()+" id: "+companion.getID());
-        addMapObject(companion);
+        sendMapObject(companion);
         return companion.getID();
     }
     
@@ -228,7 +241,7 @@ public class LocationServer {
      * all clients.
      */
     private void updateAllCreatures() {
-        Mists.logger.info("Sending full creature update");
+        //Mists.logger.info("Sending full creature update");
         for (Creature c : this.location.getCreatures()) {
             this.addMapObjectUpdate(c);
         }
@@ -246,7 +259,10 @@ public class LocationServer {
         Object[] a = this.location.getAllMobsIDs().toArray();
         for (Object o : a) {
             MapObject mob = location.getMapObject((Integer)o);
-            if (mob instanceof Creature) this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+            if (mob instanceof Creature) {
+                this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+                if (!((Creature)mob).getInventory().isEmpty()) sendInventory(mob.getID(), c.player.playerID);
+            }
         }
     }
     
@@ -263,7 +279,8 @@ public class LocationServer {
         this.addServerUpdate(new MapObjectUpdate(mob.getID(), mob.getXPos(), mob.getYPos()));
     }
     
-    public void addMapObject(MapObject mob) {
+    public void sendMapObject(MapObject mob) {
+        Mists.logger.info("Sending "+mob.getName()+", a "+mob.getClass().toString());
         this.addServerUpdate(new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
     }
     
@@ -272,9 +289,7 @@ public class LocationServer {
         this.incomingUpdateStacks[id].add(o);
     }
     
-    private void handleClientUpdates() {
-        
-        
+    private void handleClientUpdates() { 
         for (int i = 0; i < this.incomingUpdateStacks.length; i++) {
             handleClientUpdates(i);
         }
@@ -286,11 +301,12 @@ public class LocationServer {
             //Mists.logger.info("Handling "+this.incomingUpdateStacks[playerID].size()+" incoming updates");
         }
         while (!this.incomingUpdateStacks[playerID].isEmpty()) {
-            this.handleUpdate(this.incomingUpdateStacks[playerID].pop());
+            this.handleUpdate(this.incomingUpdateStacks[playerID].pop(), playerID);
         }
     }
     
-    private void handleUpdate(Object o) {
+    private void handleUpdate(Object o, int playerID) {
+        Mists.logger.info("Handling update "+o.getClass()+" from "+playerID);
         //TODO: Actually handle the update
         if (o instanceof Task) {
             //TODO: Ensure the client has the right to push this task
@@ -299,41 +315,57 @@ public class LocationServer {
         }
         if (o instanceof MapObjectUpdateRequest) {
             MapObject m = location.getMapObject(((MapObjectUpdateRequest)o).id);
-            if (m == null) this.addServerUpdate(new RemoveMapObject(((MapObjectUpdateRequest)o).id));
-            else this.addServerUpdate(new MapObjectUpdate(m.getID(), m.getXPos(), m.getYPos()));
+            if (m == null) this.addServerUpdate(new RemoveMapObject(((MapObjectUpdateRequest)o).id), playerID);
+            else this.addServerUpdate(new MapObjectUpdate(m.getID(), m.getXPos(), m.getYPos()), playerID);
         }
         if (o instanceof MapObjectRequest) {
+            Mists.logger.info("Got mapobject request for "+((MapObjectRequest)o).id);
             MapObject mob = location.getMapObject(((MapObjectRequest)o).id);
-            if (mob != null) addMapObject(mob);
+            if (mob != null) sendMapObject(mob);
         }
         if (o instanceof MapObjectUpdate) {
             MapObject m = location.getMapObject(((MapObjectUpdate)o).id);
             if (m!=null) m.setPosition(((MapObjectUpdate)o).x, ((MapObjectUpdate)o).y);
         }
         if (o instanceof RequestAllItems) {
+            Mists.logger.info("Got request for items for " +((RequestAllItems)o).inventoryOwnerID);
             MapObject m = location.getMapObject(((RequestAllItems)o).inventoryOwnerID);
-            if (m instanceof HasInventory) {
-                Inventory inv = ((HasInventory)m).getInventory();
-                int invSize = inv.getCapacity();
-                for (int slot = 0; slot < invSize; slot++) {
-                    Item it = inv.getItem(slot);
-                    if (it!=null) {
-                        AddItem ai = new AddItem();
-                        ai.inventoryOwnerID = ((RequestAllItems)o).inventoryOwnerID;
-                        ai.slotID=slot;
-                        ai.itemBaseID=it.getBaseID(); //TODO:
-                        ai.item=it;
-                        
-                    }
-                }
-            }
+            if (m!=null) sendInventory(m.getID(), playerID);
+            else this.addServerUpdate(new RemoveMapObject(((RequestAllItems)o).inventoryOwnerID), playerID);
         }
         
+    }
+    
+    private void sendInventory(int mobID, int playerID) {
+        MapObject m = location.getMapObject(mobID);
+        if (m instanceof HasInventory) {
+            Inventory inv = ((HasInventory)m).getInventory();
+            if (!inv.isEmpty()) {
+            Mists.logger.info("Sending inventory of "+mobID+" to "+playerID);
+            int invSize = inv.getCapacity();
+            for (int slot = 0; slot < invSize; slot++) {
+                Item it = inv.getItem(slot);
+                if (it!=null) {
+                    Mists.logger.info("Sending item");
+                    AddItem additem = new AddItem();
+                    additem.inventoryOwnerID = mobID;
+                    additem.slotID=slot;
+                    additem.itemBaseID=it.getBaseID(); //TODO:
+                    additem.item=it;
+                    this.addServerUpdate(additem, playerID);
+                }
+            }}
+        }
     }
     
     public void addServerUpdate(Object o) {
         if (o == null) return;
         this.outgoingUpdateStack.push(o);
+    }
+    
+    public void addServerUpdate(Object o, int playerID) {
+        if (o == null) return;
+        this.outgoingUpdateStacks[playerID].push(o);
     }
     
     private void sendUpdates() {
@@ -359,7 +391,7 @@ public class LocationServer {
     
     private void sendUpdatesToPlayer(Player player, int connectionID) {
         if (player == null) return;
-        Mists.logger.info("Sending updates to player "+player.playerID);
+        //Mists.logger.info("Sending updates to player "+player.playerID);
         while (!this.outgoingUpdateStacks[player.playerID].isEmpty()) {
             this.server.sendToTCP(connectionID, outgoingUpdateStacks[player.playerID].pop());
         }
