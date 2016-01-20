@@ -97,6 +97,19 @@ public class LocationControls {
         game.getCurrentLocation().getPathFinder().printClearanceMapIntoConsole(0);
     }
     
+    public void printMobInfo(String mobid) {
+        Mists.logger.info("WHOIS for "+mobid);
+        int id = -1;
+        try {
+            id = Integer.parseInt(mobid);
+        } catch (NumberFormatException e) {
+            Mists.logger.warning("Tried to printMobInfo on invalid mobID");
+            return;
+        }
+        MapObject mob = game.getCurrentLocation().getMapObject(id);
+        if (mob!=null) Mists.logger.info("WHOIS : "+mob.toString());
+    }
+    
     public void printCollisionMapIntoConsole() {
         game.getCurrentLocation().getPathFinder().printCollisionMapIntoConsole();
     }

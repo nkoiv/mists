@@ -420,7 +420,7 @@ public class LocationState implements GameState {
         
         if (inConsole) {
             if (releasedButtons.contains(KeyCode.F1)) {
-               this.uiComponents.remove("Console");
+               this.removeUIComponent("console");
                this.inConsole = false;
             } else {
                 Console c = (Console)this.uiComponents.get("Console");
