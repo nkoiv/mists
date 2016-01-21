@@ -265,45 +265,17 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     public void think(double time) {
         this.lastTask = this.nextTask;
-        this.nextTask = this.ai.think(time);
+        this.setNextTask(this.ai.think(time));
     }
     
     @Override
     public void update (double time) {
         //Mists.logger.info(this.name+" doing "+lastTask.toString());        
         if ((System.currentTimeMillis()-this.lastTaskSet)>1500) this.stopMovement();
-        GenericTasks.performTask(location, lastTask, time);
+        GenericTasks.performTask(location, nextTask, time);
         this.updateGraphics();
     }
-    /*
-    public void updateByClient (double time, LocationClient client) {
-        if (this.nextTask != null) {
-            this.lastTask = this.nextTask;
-            this.stopMovement();
-            client.askMapObjectUpdate(this.IDinLocation);
-        }
-        if (this.lastTask != null) GenericTasks.performTask(location, lastTask, time);
-        this.updateGraphics();
-    }
-    */
-    
-    //TODO: Separate into "Think" and "Act"
-    public void updateByClient(double time, LocationClient client) {
-        this.stopMovement();
-        if (this.nextTask!=null) {
-            if (this.nextTask.taskID != GenericTasks.ID_IDLE) {
-                GenericTasks.performTask(location, nextTask, time);
-                this.lastTask = nextTask;
-                this.nextTask = new Task(GenericTasks.ID_IDLE, this.IDinLocation, null);
-            } else {
-                this.lastTask = this.nextTask;
-                this.nextTask = null;
-            }
-        }
-        this.updateGraphics();
-        //this.applyMovement(time);  
-    }
-    
+
     public Task getLastTask() {
         return this.lastTask;
     }
@@ -456,6 +428,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     
     public boolean moveTowards (double xCoor, double yCoor) {
+        this.getGraphics().setVelocity(0, 0);
         //Mists.logger.log(Level.INFO, "{0} moving from {1},{2} to {3},{4}", new Object[]{this.getName(), this.getCenterXPos(), this.getCenterYPos(), xCoor, yCoor});
         double xDifference = xCoor - this.getCenterXPos();
         double yDifference = yCoor - this.getCenterYPos();

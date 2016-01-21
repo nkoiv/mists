@@ -116,7 +116,8 @@ public class LocationClient {
         this.handleServerUpdates(time);
         if (this.location !=null ) {
             for (Creature c : this.location.getCreatures()) {
-                c.updateByClient (time, this);
+                c.update(time);
+                //c.updateByClient (time, this);
             }
             location.updateEffects(time);
             location.fullCleanup(false, false, true);
