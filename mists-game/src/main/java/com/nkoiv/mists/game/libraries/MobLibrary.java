@@ -57,7 +57,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         E thing = (E)template.createFromTemplate();
         if (l!=null) {
             l.addMapObject(thing);
-            thing.setCenterPosition(xCoor, yCoor);
+            thing.setPosition(xCoor, yCoor);
         }
         return thing;
     }

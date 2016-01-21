@@ -202,7 +202,10 @@ public class MapObject extends Flags implements Global, Templatable {
     }
     
     public String[] getInfoText() {
-        String[] s = new String[]{this.name, this.IDinLocation+" @ "+this.location.getName()};
+        String[] s = new String[]{
+            this.name,
+            "ID "+this.IDinLocation+" @ "+this.location.getName(),
+            "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos())};
         return s;
     }
     

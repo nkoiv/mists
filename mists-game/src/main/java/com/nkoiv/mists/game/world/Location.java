@@ -366,10 +366,10 @@ public class Location extends Flags implements Global {
     
     public void removeMapObject(int mobID) {
         MapObject mob = this.mobs.get(mobID);
-        if (mob!=null)this.removeMapObject(mob);
+        if (mob!=null) this.removeMapObject(mob);            
     }
     
-    public void removeMapObject(MapObject mob) {
+    private void removeMapObject(MapObject mob) {
         if (mob instanceof Structure) {
             if (mob instanceof Wall) {
                 double xPos = mob.getCenterXPos();
@@ -432,7 +432,7 @@ public class Location extends Flags implements Global {
             this.addMapObject(c);
         }
         c.setLocation(this);
-        c.setCenterPosition(xPos, yPos);
+        c.setPosition(xPos, yPos);
     }
     
     /** Adds an Effect to the location
@@ -649,6 +649,7 @@ public class Location extends Flags implements Global {
                         //this.updateWallsAt(mob.getCenterXPos(), mob.getCenterYPos());   
                     }
                     structureIterator.remove();
+                    this.mobs.remove(mob.getID());
                     removedStructureIDs.add(mob.getID());
                     this.pathFinder.setMapOutOfDate(true);
                 }

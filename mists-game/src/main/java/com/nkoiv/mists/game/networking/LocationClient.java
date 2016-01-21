@@ -120,7 +120,7 @@ public class LocationClient {
                 //c.updateByClient (time, this);
             }
             location.updateEffects(time);
-            location.fullCleanup(false, false, true);
+            location.fullCleanup(false, false, true); //False for creatures, False for structures, true for effects. Server tells when to remove creatures/structures
         }
         //if (this.locationID != 0) addObjectUpdate(new MapObjectUpdate(this.locationID, game.getPlayer().getXPos(), game.getPlayer().getYPos()));
     }

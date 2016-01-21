@@ -726,7 +726,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         if (this.lastTask == null) this.lastTask = new Task(GenericTasks.ID_IDLE, this.IDinLocation, null);
         String[] s = new String[]{
             this.name,
-            this.IDinLocation+" @ "+this.location.getName(),
+            "ID "+this.IDinLocation+" @ "+this.location.getName(),
+            "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
             this.getHealth() + "/"+this.getMaxHealth()+" hp",
             this.getLastTask().toString()
         };
