@@ -39,7 +39,7 @@ public class Game {
     public boolean toggleScale = true;
     
     public DungeonGenerator mapGen;
-
+    
     private HashMap<Integer,GameState> gameStates;
     public GameState currentState;
     public static final int MAINMENU = 0;

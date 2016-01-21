@@ -590,6 +590,7 @@ public class Location extends Flags implements Global {
         //AI-stuff
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) { //Mobs do whatever mobs do
+                mob.think(time);
                 mob.update(time);
                 if (server!=null)server.addServerUpdate(mob.getLastTask());
                 //if (server!=null)server.addMapObjectUpdate(mob); //Handled by LocationServer now (by lastEnforce)

@@ -263,9 +263,13 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         }    
     }
     
+    public void think(double time) {
+        this.lastTask = this.nextTask;
+        this.nextTask = this.ai.think(time);
+    }
+    
     @Override
     public void update (double time) {
-        this.lastTask = this.ai.act(time);
         //Mists.logger.info(this.name+" doing "+lastTask.toString());        
         if ((System.currentTimeMillis()-this.lastTaskSet)>1500) this.stopMovement();
         GenericTasks.performTask(location, lastTask, time);
@@ -282,6 +286,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this.updateGraphics();
     }
     */
+    
+    //TODO: Separate into "Think" and "Act"
     public void updateByClient(double time, LocationClient client) {
         this.stopMovement();
         if (this.nextTask!=null) {

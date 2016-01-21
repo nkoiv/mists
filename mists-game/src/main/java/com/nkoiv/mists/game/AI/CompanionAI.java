@@ -25,10 +25,10 @@ public class CompanionAI extends CreatureAI {
     
     
     @Override
-    protected Task pickNewAction(double time) {
-        Task t = this.attackNearbyEnemies(time);
+    protected Task pickNewAction() {
+        Task t = this.attackNearbyEnemies();
         if (t.taskID == GenericTasks.ID_IDLE) {
-            return distanceBasedFollow(time, creep.getLocation().getPlayer());
+            return distanceBasedFollow(creep.getLocation().getPlayer());
         }
         else {
             return t;
@@ -41,13 +41,13 @@ public class CompanionAI extends CreatureAI {
      * @param time Time given for acting
      * @return Return true if there was something to go and attack
      */
-    private Task attackNearbyEnemies(double time) {
+    private Task attackNearbyEnemies() {
         ArrayList<Creature> nearbyMobs = this.surroundingCreatures(creep.getCenterXPos(), creep.getCenterYPos(), Mists.TILESIZE*8);
         //TODO: Filter only hostile mobs from the list. For now remove itself and player.
         nearbyMobs.remove(creep); //Creature is always near itself
         if (nearbyMobs.contains(creep.getLocation().getPlayer())) nearbyMobs.remove(creep.getLocation().getPlayer());
         //Pick the first (effectively random) mob from the list
-        return this.attackNearest(nearbyMobs, time);
+        return this.attackNearest(nearbyMobs);
     }
     
     

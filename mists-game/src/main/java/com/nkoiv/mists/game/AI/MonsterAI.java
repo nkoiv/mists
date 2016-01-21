@@ -21,7 +21,7 @@ public class MonsterAI extends CreatureAI{
     }
     
     @Override
-    protected Task pickNewAction(double time) {
+    protected Task pickNewAction() {
         if (!this.active) {
             if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), creep.getLocation().getPlayer().getCenterXPos(), creep.getLocation().getPlayer().getCenterYPos())
                     < 10 * 32) {
@@ -32,7 +32,7 @@ public class MonsterAI extends CreatureAI{
             return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         }
         else {
-            return this.goMelee(creep.getLocation().getPlayer(), time);
+            return this.goMelee(creep.getLocation().getPlayer());
         }
     }
     

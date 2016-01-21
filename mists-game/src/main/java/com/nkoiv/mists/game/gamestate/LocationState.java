@@ -49,7 +49,7 @@ public class LocationState implements GameState {
     public GameMode gamemode;
     private LocationServer server;
     private LocationClient client;
-    
+
     private final Game game;
     private UIComponent currentMenu;
     public boolean gameMenuOpen;

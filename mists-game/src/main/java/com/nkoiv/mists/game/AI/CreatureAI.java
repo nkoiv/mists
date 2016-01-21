@@ -46,13 +46,13 @@ public class CreatureAI extends Flags{
     * @param time Time passed since the last action
     * @return Returns the task the creature decided to perform
     */
-    public Task act(double time) {
+    public Task think(double time) {
         //TODO: For now all creatures just want to home in on player
         //TODO: Adjust the action-picking speed dynamically based on AI load?
         if (this.timeSinceAction > 0.3 || creep.getLastTask() == null) { //Acting thrice per second
             //Mists.logger.info(this.getCreature().getName()+" decided to act!");
             this.timeSinceAction = 0;
-            return this.pickNewAction(time);
+            return this.pickNewAction();
         } else {
             //TODO: Continue current chosen action. Atm this means just movement
             this.timeSinceAction = this.timeSinceAction+time;
@@ -65,7 +65,7 @@ public class CreatureAI extends Flags{
      * @param time Time used on the action //TODO: Actually unneeded for AI
      * @return Task the AI deicided to perform next
      */
-    protected Task pickNewAction(double time) {
+    protected Task pickNewAction() {
         if (creep.getLocation().getPlayer() == null) return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         if (!this.active) {
             if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), creep.getLocation().getPlayer().getCenterXPos(), creep.getLocation().getPlayer().getCenterYPos())
@@ -77,7 +77,7 @@ public class CreatureAI extends Flags{
             return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         }
         else {
-            return this.goMelee(creep.getLocation().getPlayer(), time);
+            return this.goMelee(creep.getLocation().getPlayer());
         }
     }
 
@@ -90,7 +90,7 @@ public class CreatureAI extends Flags{
      * @param time Time we can spend on moving
      * @return Task on what the creature is doing (for networking)
      */
-    protected Task moveTowardsMob(MapObject mob, double time) {
+    protected Task moveTowardsMob(MapObject mob) {
         //Drop fractions for collisionssize for now
         //TODO: Make monster collisionboxes adher to pixelsize
         double collisionSize = (int)(creep.getWidth()/Mists.TILESIZE) * Mists.TILESIZE;
@@ -131,13 +131,13 @@ public class CreatureAI extends Flags{
         }
     }
     
-    protected Task goMelee(MapObject target, double time) {
+    protected Task goMelee(MapObject target) {
         if (AIutil.inRange(creep, 0, target)) {
             //Mists.logger.log(Level.INFO, "{0} in range to hit {1}", new Object[]{creep.getName(), target.getName()});
             return new Task(GenericTasks.ID_USE_MELEE_TOWARDS_MOB, creep.getID(), new int[]{target.getID()});
         } else {
             //return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{target.getID()});
-            return this.moveTowardsMob(target, time);
+            return this.moveTowardsMob(target);
         }
     }
     
@@ -148,7 +148,7 @@ public class CreatureAI extends Flags{
      * @param time time spent moving
      * @return the movement done as a task
      */
-    protected Task moveRandomly(double time) {
+    protected Task moveRandomly() {
         Random rnd = new Random();
         int randomint = rnd.nextInt(9);  
         return new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, creep.getID(), new int[]{randomint});
@@ -206,25 +206,25 @@ public class CreatureAI extends Flags{
      * @param target target to follow
      * @return the task the creature decided to perform
      */
-    protected Task distanceBasedFollow(double time, MapObject target) {
+    protected Task distanceBasedFollow(MapObject target) {
         //creep.stopMovement(); //clear old movement
         Random rnd = new Random();
         if (AIutil.distanceToMob(creep, target.getID()) > 10 * Mists.TILESIZE) {
             //Mists.logger.log(Level.INFO, "{0} too far to follow {1}", new Object[]{creep.getName(), creep.getLocation().getPlayer().getName()});
             return new Task(GenericTasks.ID_IDLE, this.creep.getID(), null);
         } else if (AIutil.distanceToMob(creep, target.getID()) > 2 * Mists.TILESIZE) {
-            return this.moveTowardsMob(target, time);
+            return this.moveTowardsMob(target);
             //Mists.logger.log(Level.INFO, "{0} moving towards {1}", new Object[]{creep.getName(), creep.getLocation().getPlayer().getName()});
         } else {
             int r = rnd.nextInt(10); //50% chance to move around
-            if (r < 5) return this.moveRandomly(time);
+            if (r < 5) return this.moveRandomly();
             else return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         } 
     }
     
     
     
-    protected Task attackNearest(ArrayList<Creature> nearbyMobs, double time) {
+    protected Task attackNearest(ArrayList<Creature> nearbyMobs) {
         if (!nearbyMobs.isEmpty()) {
             Creature target = null;
             double distanceToNearest = Double.MAX_VALUE;
@@ -238,7 +238,7 @@ public class CreatureAI extends Flags{
             if (target == null) return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
             else {
                 //Mists.logger.log(Level.INFO, "{0} trying to attack {1}", new Object[]{creep.getName(), target.getName()});
-                return this.goMelee(target, time);
+                return this.goMelee(target);
             }
         }
         return new Task(GenericTasks.ID_IDLE, creep.getID(), null);

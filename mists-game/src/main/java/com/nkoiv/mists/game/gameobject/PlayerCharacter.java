@@ -9,9 +9,7 @@ import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Weapon;
-import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +89,11 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     public ArrayList<Creature> getCompanions() {
         return this.companions;
+    }
+    
+    @Override
+    public void think(double time) {
+        //dont call any AI subroutine
     }
     
     @Override
