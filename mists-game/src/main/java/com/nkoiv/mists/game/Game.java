@@ -31,6 +31,7 @@ public class Game {
     public boolean running = false;
     public final ArrayList<String> inputLog = new ArrayList<>();
     public Scene currentScene;
+    public LoadingScreen loadingScreen;
     
     public double WIDTH; //Dimensions of the screen (render area)
     public double HEIGHT; //Dimensions of the screen (render area)
@@ -175,7 +176,8 @@ public class Game {
     */
     public void render(Canvas centerCanvas, Canvas uiCanvas) {
         //TODO: Consider sorting out UI here instead of handing it all to currentState
-        currentState.render(centerCanvas, uiCanvas);
+        if (this.loadingScreen != null) this.loadingScreen.render(centerCanvas, uiCanvas);
+        else currentState.render(centerCanvas, uiCanvas);
         //Mists.logger.info("Rendered current state on canvas");
         if (toggleScale) {
             //toggleScale(centerCanvas.getGraphicsContext2D());
@@ -188,5 +190,17 @@ public class Game {
         //Pass the mouse event to the current gamestate
         currentState.handleMouseEvent(me);
     }
-
+    
+    public void setLoadingScreen(LoadingScreen loadingScreen) {
+        this.loadingScreen = loadingScreen;
+    }
+    
+    public void clearLoadingScreen() {
+        this.loadingScreen = null;
+    }
+    
+    public LoadingScreen getLoadingScreen() {
+        return this.loadingScreen;
+    }
+    
 }

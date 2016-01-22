@@ -8,14 +8,13 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.GameState;
+import com.nkoiv.mists.game.gamestate.SplashScreen;
 import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
-import javafx.scene.input.MouseEvent;
 
 /**
  * MainMenuWindow is the actual Main Menu displayed by
@@ -109,7 +108,10 @@ public class MainMenuWindow extends TiledPanel {
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 this.game.setGameMode(GameMode.SINGLEPLAYER);
                 parent.close();
+                SplashScreen ss = new SplashScreen();
+                this.game.setLoadingScreen(ss);
                 this.newGame();
+                this.game.clearLoadingScreen();
             }
             
         }
