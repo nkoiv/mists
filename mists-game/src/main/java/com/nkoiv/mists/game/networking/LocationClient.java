@@ -9,13 +9,13 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.nkoiv.mists.game.actions.GenericTasks;
-import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.HasInventory;
@@ -24,9 +24,17 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.items.Item;
-import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.networking.LocationNetwork.*;
+import com.nkoiv.mists.game.networking.LocationNetwork.AddItem;
+import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
+import com.nkoiv.mists.game.networking.LocationNetwork.Login;
+import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectRequest;
+import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectUpdate;
+import com.nkoiv.mists.game.networking.LocationNetwork.Register;
+import com.nkoiv.mists.game.networking.LocationNetwork.RegistrationRequired;
+import com.nkoiv.mists.game.networking.LocationNetwork.RemoveMapObject;
+import com.nkoiv.mists.game.networking.LocationNetwork.RequestAllItems;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import java.io.IOException;
 import java.util.Stack;
@@ -52,7 +60,7 @@ public class LocationClient {
     public LocationClient (Game game) {
         client = new Client(16384,16384);
         this.game = game;
-        new Thread(client).start();
+        client.start();
 
         // For consistency, the classes to be sent over the network are
         // registered by the same method for both the client and server.
