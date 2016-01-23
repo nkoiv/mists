@@ -93,8 +93,6 @@ public class MainMenuWindow extends TiledPanel {
             }
             
             private void newGame() {
- 
-                ls.render(game.getGameCanvas(), game.getUICanvas());
                 PlayerCharacter pocplayer = new PlayerCharacter();
                 Creature companion = Mists.creatureLibrary.create("Himmu");
                 System.out.println(companion.toString());
@@ -104,8 +102,7 @@ public class MainMenuWindow extends TiledPanel {
                 Location newLoc = new Location(game.getPlayer());
                 game.clearLoadingScreen();
                 game.moveToLocation(newLoc);
-                game.moveToState(Game.LOCATION);
-                
+                game.moveToState(Game.LOCATION);       
             }
             
             @Override
