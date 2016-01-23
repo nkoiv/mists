@@ -12,8 +12,10 @@ import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.GameState;
+import com.nkoiv.mists.game.gamestate.LoadingScreen;
 import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
+import javafx.concurrent.Task;
 
 /**
  * MainMenuWindow is the actual Main Menu displayed by
@@ -91,15 +93,19 @@ public class MainMenuWindow extends TiledPanel {
             }
             
             private void newGame() {
+ 
+                ls.render(game.getGameCanvas(), game.getUICanvas());
                 PlayerCharacter pocplayer = new PlayerCharacter();
                 Creature companion = Mists.creatureLibrary.create("Himmu");
                 System.out.println(companion.toString());
                 pocplayer.addCompanion(companion);
                 pocplayer.addAction(new MeleeWeaponAttack());
                 game.setPlayer(pocplayer);
-                Location newLoc = new Location(this.game.getPlayer());
-                this.game.moveToLocation(newLoc);
-                this.game.moveToState(Game.LOCATION);
+                Location newLoc = new Location(game.getPlayer());
+                game.clearLoadingScreen();
+                game.moveToLocation(newLoc);
+                game.moveToState(Game.LOCATION);
+                
             }
             
             @Override

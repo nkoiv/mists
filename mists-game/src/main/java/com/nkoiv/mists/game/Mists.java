@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.audio.SoundManager;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gamestate.LoadingScreen;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.ActionLibrary;
 import com.nkoiv.mists.game.libraries.GraphLibrary;
@@ -28,7 +29,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
@@ -59,6 +59,7 @@ public class Mists extends Application implements Global {
     public final ArrayList<KeyCode> releasedButtons = new ArrayList<>();
     public final double[] mouseClickCoordinates = new double[2];
     public Scene currentScene;
+    
     public static SoundManager soundManager;
     public static GraphLibrary graphLibrary;
     public static HashMap<String, Font> fonts;
@@ -94,28 +95,20 @@ public class Mists extends Application implements Global {
         logger.info("Scene initialized");
         setupSoundManager();
         logger.info("SoundManager initialized");
-        setupGraphLibrary();
-        logger.info("Graphics library initialized");
         loadFonts();
         logger.info("Fonts loaded");
-        setupActionLibrary();
-        logger.info("Action library initialized");
-        setupItemLibrary();
-        logger.info("Item library initialized");
-        setupStructureLibrary();
-        logger.info("Structure library initialized");
-        setupCreatureLibrary();
-        logger.info("Creature library initialized");
-        
         primaryStage.setScene(launchScene);
         setupKeyHandlers(primaryStage);
         setupMouseHandles(root);
         setupWindowResizeListeners(launchScene);
-        MistsGame = new Game();
+        logger.info("Game set up");
+        MistsGame = new Game(gameCanvas, uiCanvas);
         MistsGame.WIDTH = primaryStage.getWidth();
         MistsGame.HEIGHT = primaryStage.getHeight();
-        logger.info("Game set up");
         primaryStage.show();
+        
+        this.loadLibraries(gameCanvas, uiCanvas);
+        MistsGame.start();
         running = true;
         
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -131,18 +124,11 @@ public class Mists extends Application implements Global {
        /*
         * Game main loop
         */
-        new AnimationTimer() //Render loop
-        {
-            @Override
-            public void handle(long currentNanoTime)
-            {
-                MistsGame.render(gameCanvas, uiCanvas);
-            } 
-        }.start();
         new AnimationTimer() //Logic loop
         {
             final double startNanoTime = System.nanoTime();
             double previousNanoTime = 0;
+            
             @Override
             public void handle(long currentNanoTime)
             {
@@ -156,11 +142,12 @@ public class Mists extends Application implements Global {
                 previousNanoTime = currentNanoTime;
                 //Do things:
                 MistsGame.tick(elapsedSeconds, pressedButtons, releasedButtons); 
+                MistsGame.render();
             } 
         }.start();
         
     }
- 
+    
     
     public static void main (String[] args) {
         logger.info("Mists game launching...");
@@ -189,6 +176,33 @@ public class Mists extends Application implements Global {
                 MistsGame.updateUI();
             }
         });
+    }
+    
+    private void loadLibraries(Canvas gameCanvas, Canvas uiCanvas) {
+        LoadingScreen loadingScreen = new LoadingScreen("Loading game assets",6);
+        MistsGame.setLoadingScreen(loadingScreen);
+        loadingScreen.updateProgress(1, "Initializing graphics");   
+        setupGraphLibrary();
+        logger.info("Graphics library initialized");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        loadingScreen.updateProgress(1, "Creating actions");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        setupActionLibrary();
+        logger.info("Action library initialized");
+        loadingScreen.updateProgress(1, "Loading items");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        setupItemLibrary();
+        logger.info("Item library initialized");
+        loadingScreen.updateProgress(1, "Generating structures");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        setupStructureLibrary();
+        logger.info("Structure library initialized");
+        loadingScreen.updateProgress(1, "Spawning creatures");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        setupCreatureLibrary();
+        logger.info("Creature library initialized");
+        loadingScreen.updateProgress(1, "Done");
+        MistsGame.clearLoadingScreen();
     }
        
     private void setupSoundManager() {
@@ -290,4 +304,6 @@ public class Mists extends Application implements Global {
                 }
             });
     }
+
+
 }

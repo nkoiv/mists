@@ -5,31 +5,48 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
-import com.nkoiv.mists.game.Game;
-import com.nkoiv.mists.game.ui.UIComponent;
-import java.util.ArrayList;
+import com.nkoiv.mists.game.Mists;
+import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 /**
  *
  * @author daedra
  */
-public class LoadingScreen implements GameState {
-
+public class LoadingScreen {
+    private String title;
     private double maxProgress;
     private double currentProgress;
+    private String currentText;
     private boolean ready;
     
-    public LoadingScreen() {
-        
+    public LoadingScreen(String loadingScreenTitle, double maxProgress) {
+        this.maxProgress = maxProgress;
+    }
+    
+    public void updateProgress(double progress, String loadingText) {
+        this.addProgress(progress);
+        this.currentText = loadingText;
+        Mists.logger.log(Level.INFO, "Loading screen progress at {0}/{1}: ''{2}''", new Object[]{currentProgress, maxProgress, currentText});
     }
     
     public void addProgress(double progress) {
         this.currentProgress+=progress;
+        if (this.currentProgress>=this.maxProgress) {
+            this.currentProgress = this.maxProgress;
+            this.ready = true;
+        }
+    }
+    
+    public void setLoadingText(String loadingText) {
+        this.currentText = loadingText;
+    }
+    
+    public String getLoadingText() {
+        return this.currentText;
     }
     
     public void setReady(boolean ready) {
@@ -40,79 +57,54 @@ public class LoadingScreen implements GameState {
         return this.ready;
     }
     
-    @Override
-    public void addUIComponent(UIComponent uic) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public UIComponent getUIComponent(String uicname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeUIComponent(String uicname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeUIComponent(UIComponent uic) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Game getGame() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void render(Canvas gameCanvas, Canvas uiCanvas) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
         GraphicsContext uigc = uiCanvas.getGraphicsContext2D();
         double screenWidth = gameCanvas.getWidth();
-        double screenHeight = gameCanvas.getHeight();
+        double screenHeight = gameCanvas.getHeight();        
         gc.clearRect(0, 0, screenWidth, screenHeight);
-        uigc.clearRect(0, 0, screenWidth, screenWidth);
-        gc.save();
+        uigc.clearRect(0, 0, screenWidth, screenHeight);
+        uigc.save();
+        uigc.setGlobalAlpha(1);
+        uigc.setFill(Color.WHITESMOKE);
+        uigc.fillRect(0, 0, screenWidth, screenHeight);
+        this.drawTitleText(uigc, screenWidth, screenHeight);
+        this.drawLoadingText(uigc, screenWidth, screenHeight);
+        this.drawLoadingBar(uigc, screenWidth, screenHeight);
+        uigc.restore();
+    }
+    
+    private void drawTitleText(GraphicsContext gc, double screenWidth, double screenHeight) {
+        if (this.currentText == null) return;
+        Text text = new Text(this.currentText);
+        text.setFont(Mists.fonts.get("alagard"));
+        double textWidth = text.getWrappingWidth();
+        gc.setFont(Mists.fonts.get("alagard"));
+        gc.setFill(Color.CADETBLUE);
+        gc.fillText(this.currentText, 50, screenHeight-210);
+    }
+    
+    private void drawLoadingText(GraphicsContext gc, double screenWidth, double screenHeight) {
+        if (this.title == null) return;
+        Text text = new Text(this.title);
+        text.setFont(Mists.fonts.get("alagard"));
+        double textWidth = text.getWrappingWidth();
+        gc.setFont(Mists.fonts.get("alagard"));
+        gc.setFill(Color.CADETBLUE);
+        gc.fillText(this.title, (screenWidth/2)-(textWidth/2), 100);
         
-        this.drawLoadingBar(gc, screenWidth, screenHeight);
-        gc.restore();
     }
 
     private void drawLoadingBar(GraphicsContext gc, double screenWidth, double screenHeight) {
         //TODO:Actually make a progressbar
         double barStart = 50;
-        double barEnd = screenWidth-50;
+        double barWidth = screenWidth-100;
         gc.setFill(Color.BLUEVIOLET);
-        gc.fillRect(barStart, screenHeight-80, barEnd, screenHeight-50);
-        gc.setFill(Color.DARKMAGENTA);
-        double barCurrent = 50+((barEnd-barStart)*(currentProgress/maxProgress));
-        gc.fillRect(barStart, screenHeight-80, barCurrent, screenHeight-50);
+        gc.fillRect(barStart, screenHeight-200, barWidth, 50);
+        gc.setFill(Color.DARKCYAN);
+        double barCurrent = barWidth*(this.currentProgress/this.maxProgress);
+        gc.fillRect(barStart, screenHeight-200, barCurrent, 50);
     }
     
-    @Override
-    public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
-        
-    }
-
-    @Override
-    public void handleMouseEvent(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateUI() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void exit() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void enter() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

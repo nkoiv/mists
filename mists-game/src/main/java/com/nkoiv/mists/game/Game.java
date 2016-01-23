@@ -31,8 +31,11 @@ public class Game {
     public boolean running = false;
     public final ArrayList<String> inputLog = new ArrayList<>();
     public Scene currentScene;
-    public LoadingScreen loadingScreen;
+    private LoadingScreen loadingScreen;
+    private boolean loading;
     
+    private Canvas gameCanvas;
+    private Canvas uiCanvas;
     public double WIDTH; //Dimensions of the screen (render area)
     public double HEIGHT; //Dimensions of the screen (render area)
     public double xOffset; //Offsets are used control which part of the map is drawn
@@ -56,14 +59,26 @@ public class Game {
     * Initialize a new game
     * Call in the character generator, set the location to start.
     * TODO: Game states
+     * @param gameCanvas Canvas to render the game on
+     * @param uiCanvas Canvas to render the UI on
     */
-    public Game () {
+    public Game (Canvas gameCanvas, Canvas uiCanvas) {
         //Initialize the screen size
-        WIDTH = Global.WIDTH;
-        HEIGHT = Global.HEIGHT;
+        this.gameCanvas = gameCanvas;
+        this.uiCanvas = uiCanvas;
+        WIDTH = gameCanvas.getWidth();
+        HEIGHT = uiCanvas.getHeight();
         
         //Setup controls
         this.locControls = new LocationControls(this);
+        
+        //Initialize GameStates
+        this.gameStates = new HashMap<>();
+    }
+    
+    public void start() {
+        gameStates.put(MAINMENU, new MainMenuState(this));
+        currentState = gameStates.get(MAINMENU);
         
         //POC player:
         PlayerCharacter pocplayer = new PlayerCharacter();
@@ -72,15 +87,8 @@ public class Game {
         pocplayer.addCompanion(companion);
         pocplayer.addAction(new MeleeWeaponAttack());
         this.player = pocplayer;
-        //Initialize GameStates
-        this.gameStates = new HashMap<>();
-        gameStates.put(MAINMENU, new MainMenuState(this));
-        //gameStates.add(new LocationState(this, GameMode.SINGLEPLAYER));
-        currentState = gameStates.get(MAINMENU);
         currentState.enter();
-        //Temp TODO:
-        //currentLocation = new Location(pocplayer);
-        //currentLocation.enterLocation(player);
+        this.running = true;
     }
     
     public void setGameMode(GameMode gamemode) {
@@ -128,8 +136,18 @@ public class Game {
     }
     
     public void updateUI() {
-        Mists.logger.info("Updating UI");
-        currentState.updateUI();
+        if (this.running) {
+            Mists.logger.info("Updating UI");
+            currentState.updateUI();
+        }
+    }
+    
+    public Canvas getGameCanvas() {
+        return this.gameCanvas;
+    }
+    
+    public Canvas getUICanvas() {
+        return this.uiCanvas;
     }
     
     public PlayerCharacter getPlayer() {
@@ -171,13 +189,16 @@ public class Game {
     /**
     * Render handles updating the game window, and should be called every time something needs refreshed.
     * By default render is called 60 times per second (or as close to as possible) by AnimationTimer -thread.
-    * @param centerCanvas The Canvas to draw the game on
-    * @param uiCanvas the Canvas to draw UI on 
+
     */
-    public void render(Canvas centerCanvas, Canvas uiCanvas) {
+    public void render() {
+        if (this.loading) {
+            this.loadingScreen.render(gameCanvas, uiCanvas);
+            if (this.loadingScreen.isReady()) this.loading=false;
+            return;
+        }
         //TODO: Consider sorting out UI here instead of handing it all to currentState
-        if (this.loadingScreen != null) this.loadingScreen.render(centerCanvas, uiCanvas);
-        else currentState.render(centerCanvas, uiCanvas);
+        currentState.render(gameCanvas, uiCanvas);
         //Mists.logger.info("Rendered current state on canvas");
         if (toggleScale) {
             //toggleScale(centerCanvas.getGraphicsContext2D());
@@ -188,15 +209,18 @@ public class Game {
     
     public void handleMouseEvent(MouseEvent me) {
         //Pass the mouse event to the current gamestate
+        if (!this.running) return;
         currentState.handleMouseEvent(me);
     }
     
     public void setLoadingScreen(LoadingScreen loadingScreen) {
         this.loadingScreen = loadingScreen;
+        this.loading = true;
     }
     
     public void clearLoadingScreen() {
         this.loadingScreen = null;
+        this.loading = false;
     }
     
     public LoadingScreen getLoadingScreen() {
