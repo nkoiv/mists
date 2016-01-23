@@ -12,7 +12,6 @@ import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.GameState;
-import com.nkoiv.mists.game.gamestate.SplashScreen;
 import com.nkoiv.mists.game.world.Location;
 import java.util.logging.Level;
 
@@ -108,10 +107,7 @@ public class MainMenuWindow extends TiledPanel {
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 this.game.setGameMode(GameMode.SINGLEPLAYER);
                 parent.close();
-                SplashScreen ss = new SplashScreen();
-                this.game.setLoadingScreen(ss);
                 this.newGame();
-                this.game.clearLoadingScreen();
             }
             
         }
