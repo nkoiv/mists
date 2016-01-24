@@ -26,6 +26,8 @@ public class LocationNetwork {
 		kryo.register(RegistrationRequired.class);
 		kryo.register(Register.class);
                 kryo.register(CreatureAct.class);
+                kryo.register(RequestLocationClear.class);
+                kryo.register(LocationClear.class);
                 //MapObject related classes
                 kryo.register(MapObjectRequest.class);
                 kryo.register(AddMapObject.class);
@@ -46,6 +48,14 @@ public class LocationNetwork {
 	static public class Login {
             public String name;
 	}
+        
+        static public class RequestLocationClear {
+            public int creatureCount;
+        }
+        
+        static public class LocationClear {
+            public boolean clear;
+        }
 
 	static public class RegistrationRequired {
 	}

@@ -95,7 +95,7 @@ public class MainMenuWindow extends TiledPanel {
             private void newGame() {
                 Task task = new Task<Void>() {
                     @Override public Void call() {
-                        game.setLoadingScreen(new LoadingScreen("Generating location", 10));
+                        game.setLoadingScreen(new LoadingScreen("Starting game", 10));
                         PlayerCharacter pocplayer = new PlayerCharacter();
                         Creature companion = Mists.creatureLibrary.create("Himmu");
                         System.out.println(companion.toString());
@@ -133,15 +133,23 @@ public class MainMenuWindow extends TiledPanel {
             }
             
             private void newGame() {
-                PlayerCharacter pocplayer = new PlayerCharacter();
-                //Creature companion = Mists.creatureLibrary.create("Himmu");
-                //System.out.println(companion.toString());
-                //pocplayer.addCompanion(companion);
-                pocplayer.addAction(new MeleeWeaponAttack());
-                game.setPlayer(pocplayer);
-                Location newLoc = new Location(this.game.getPlayer());
-                this.game.moveToLocation(newLoc);
-                this.game.moveToState(Game.LOCATION);
+                Task task = new Task<Void>() {
+                    @Override public Void call() {
+                    game.setLoadingScreen(new LoadingScreen("Starting server", 10));
+                    PlayerCharacter pocplayer = new PlayerCharacter();
+                    //Creature companion = Mists.creatureLibrary.create("Himmu");
+                    //System.out.println(companion.toString());
+                    //pocplayer.addCompanion(companion);
+                    pocplayer.addAction(new MeleeWeaponAttack());
+                    game.setPlayer(pocplayer);
+                    Location newLoc = new Location(game.getPlayer());
+                    game.moveToLocation(newLoc);
+                    game.moveToState(Game.LOCATION);
+                    game.clearLoadingScreen();
+                    return null;
+                }
+                };
+                new Thread(task).start();
             }
             
             @Override
@@ -164,14 +172,21 @@ public class MainMenuWindow extends TiledPanel {
             }
             
             private void joinGame() {
-                PlayerCharacter secondPlayer = new PlayerCharacter("Himmu");
-                secondPlayer.addAction(new MeleeWeaponAttack());
-                game.setPlayer(secondPlayer);
-                /*
-                Location newLoc = new Location(this.game.getPlayer());
-                this.game.moveToLocation(newLoc);
-                */
-                this.game.moveToState(Game.LOCATION);
+                Task task = new Task<Void>() {
+                    @Override public Void call() {
+                    game.setLoadingScreen(new LoadingScreen("Connecting to server", 10));
+                    PlayerCharacter secondPlayer = new PlayerCharacter("Himmu");
+                    secondPlayer.addAction(new MeleeWeaponAttack());
+                    game.setPlayer(secondPlayer);
+                    /*
+                    Location newLoc = new Location(this.game.getPlayer());
+                    this.game.moveToLocation(newLoc);
+                    */
+                    game.moveToState(Game.LOCATION);
+                    return null;
+                    }
+                };
+                new Thread(task).start();
             }
             
             @Override

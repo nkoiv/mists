@@ -94,8 +94,8 @@ public class LoadingScreen {
 
     private void drawLoadingBar(GraphicsContext gc, double screenWidth, double screenHeight) {
         //TODO:Actually make a progressbar
-        double barStart = 50;
-        double barWidth = screenWidth-100;
+        double barStart = 100;
+        double barWidth = screenWidth-200;
         gc.setFill(Color.BLUEVIOLET);
         gc.fillRect(barStart, screenHeight-200, barWidth, 50);
         gc.setFill(Color.DARKCYAN);

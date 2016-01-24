@@ -24,6 +24,7 @@ import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddItem;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
+import com.nkoiv.mists.game.networking.LocationNetwork.LocationClear;
 import com.nkoiv.mists.game.networking.LocationNetwork.Login;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectRequest;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectUpdate;
@@ -32,6 +33,7 @@ import com.nkoiv.mists.game.networking.LocationNetwork.Register;
 import com.nkoiv.mists.game.networking.LocationNetwork.RegistrationRequired;
 import com.nkoiv.mists.game.networking.LocationNetwork.RemoveMapObject;
 import com.nkoiv.mists.game.networking.LocationNetwork.RequestAllItems;
+import com.nkoiv.mists.game.networking.LocationNetwork.RequestLocationClear;
 import com.nkoiv.mists.game.world.Location;
 import java.io.File;
 import java.io.FileInputStream;
@@ -161,6 +163,13 @@ public class LocationServer {
                     loggedIn(connection, player);
                     return;
                 }
+                
+                if (object instanceof RequestLocationClear) {
+                    LocationClear lc = new LocationClear();
+                    lc.clear = ((RequestLocationClear)object).creatureCount == location.getCreatures().size();
+                    addServerUpdate(lc, player.playerID);
+                } 
+                
                 //if (object instanceof Task || object instanceof MapObjectUpdateRequest || object instanceof MapObjectUpdate || object instanceof RequestAllItems) {
                     addClientUpdate(c, object);
                 //}

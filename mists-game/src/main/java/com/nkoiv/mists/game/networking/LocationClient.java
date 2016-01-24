@@ -26,6 +26,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddItem;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
+import com.nkoiv.mists.game.networking.LocationNetwork.LocationClear;
 import com.nkoiv.mists.game.networking.LocationNetwork.Login;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectRequest;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectUpdate;
@@ -33,6 +34,7 @@ import com.nkoiv.mists.game.networking.LocationNetwork.Register;
 import com.nkoiv.mists.game.networking.LocationNetwork.RegistrationRequired;
 import com.nkoiv.mists.game.networking.LocationNetwork.RemoveMapObject;
 import com.nkoiv.mists.game.networking.LocationNetwork.RequestAllItems;
+import com.nkoiv.mists.game.networking.LocationNetwork.RequestLocationClear;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
@@ -52,7 +54,8 @@ public class LocationClient {
     private Client client;
     private String name;
     private int locationID;
-    private boolean paused;    
+    private boolean ready;
+    private double lastReadyCheck;
     
     private Stack<Object> outgoingUpdateStack;
     private Stack<Object> incomingUpdatesStack;
@@ -70,7 +73,7 @@ public class LocationClient {
         this.outgoingUpdateStack = new Stack<>();
         this.incomingUpdatesStack = new Stack<>();
         Kryo kryo = client.getKryo();
-
+        client.setKeepAliveTCP(4000);
         // ThreadedListener runs the listener methods on a different thread.
         client.addListener(new Listener.ThreadedListener(new Listener() {
             @Override
@@ -120,7 +123,7 @@ public class LocationClient {
     }
     
     public void tick(double time) {
-        this.sendObjectUpdates();
+        this.sendUpdates();
         this.handleServerUpdates(time);
         if (this.location !=null ) {
             for (Creature c : this.location.getCreatures()) {
@@ -129,6 +132,15 @@ public class LocationClient {
             }
             location.updateEffects(time);
             location.fullCleanup(false, false, true); //False for creatures, False for structures, true for effects. Server tells when to remove creatures/structures
+        }
+        
+        if (!this.ready && location != null) { //Not yet running
+            lastReadyCheck += time;
+            if (lastReadyCheck > 1) {
+                RequestLocationClear rlc = new RequestLocationClear();
+                rlc.creatureCount = location.getCreatures().size();
+                this.addOutgoingUpdate(rlc);
+            }
         }
         //if (this.locationID != 0) addObjectUpdate(new MapObjectUpdate(this.locationID, game.getPlayer().getXPos(), game.getPlayer().getYPos()));
     }
@@ -201,6 +213,13 @@ public class LocationClient {
         while (!this.incomingUpdatesStack.isEmpty()) {
             Object object = this.incomingUpdatesStack.pop();
             
+            if (object instanceof LocationClear) {
+                if (((LocationClear)object).clear == true) {
+                    ready = true;
+                    game.clearLoadingScreen();
+                }
+            }
+            
             if (object instanceof AddMapObject) {
                 AddMapObject mobPackage = (AddMapObject)object;
                 handleIncomingMob(mobPackage);
@@ -246,6 +265,11 @@ public class LocationClient {
 
     public void addOutgoingUpdate(Object o) {
         //TODO: sanitize
+        if (o instanceof RequestLocationClear) {
+            this.outgoingUpdateStack.push(o);
+            return;
+        }
+        
         if (o instanceof MapObjectUpdate) {
             this.outgoingUpdateStack.push(o);
             return;
