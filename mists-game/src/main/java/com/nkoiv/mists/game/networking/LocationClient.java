@@ -73,7 +73,7 @@ public class LocationClient {
         this.outgoingUpdateStack = new Stack<>();
         this.incomingUpdatesStack = new Stack<>();
         Kryo kryo = client.getKryo();
-        client.setKeepAliveTCP(4000);
+        client.setKeepAliveTCP(2000);
         // ThreadedListener runs the listener methods on a different thread.
         client.addListener(new Listener.ThreadedListener(new Listener() {
             @Override
@@ -178,6 +178,7 @@ public class LocationClient {
         if (mob.type.equals(ItemContainer.class.toString())) {
             ItemContainer itemPile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
             itemPile.setRenderContent(true);
+            m = itemPile;
         }
         
         if (mob.type.equals(PlayerCharacter.class.toString())) {

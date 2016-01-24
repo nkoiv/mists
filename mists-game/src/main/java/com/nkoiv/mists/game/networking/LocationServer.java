@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
@@ -276,11 +277,18 @@ public class LocationServer {
     }
     
     private void sendAllNonWalls(PlayerConnection c) {
+        ArrayList<Integer> inventories = new ArrayList<>();
         Object[] a = this.location.getAllMobsIDs().toArray();
         for (Object o : a) {
             MapObject mob = location.getMapObject((Integer)o);
-            if (!(mob instanceof Wall)) this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+            if (!(mob instanceof Wall)) {
+                this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+                if (mob instanceof HasInventory) inventories.add(mob.getID());
+            }
             //if (mob instanceof HasInventory)
+        }
+        for (Integer invID : inventories) {
+            sendInventory(invID, c.player.playerID);
         }
     }
     
@@ -315,7 +323,7 @@ public class LocationServer {
     }
     
     private void handleUpdate(Object o, int playerID) {
-        Mists.logger.info("Handling update "+o.getClass()+" from "+playerID);
+        //Mists.logger.info("Handling update "+o.getClass()+" from "+playerID);
         //TODO: Actually handle the update
         if (o instanceof Task) {
             //TODO: Ensure the client has the right to push this task
@@ -339,7 +347,10 @@ public class LocationServer {
         if (o instanceof RequestAllItems) {
             Mists.logger.info("Got request for items for " +((RequestAllItems)o).inventoryOwnerID);
             MapObject m = location.getMapObject(((RequestAllItems)o).inventoryOwnerID);
-            if (m!=null) sendInventory(m.getID(), playerID);
+            if (m!=null) {
+                Mists.logger.info("Sending inventory of "+m.getID()+" to "+playerID);
+                sendInventory(m.getID(), playerID);
+            }
             else this.addServerUpdate(new RemoveMapObject(((RequestAllItems)o).inventoryOwnerID), playerID);
         }
         
@@ -360,7 +371,7 @@ public class LocationServer {
                     additem.inventoryOwnerID = mobID;
                     additem.slotID=slot;
                     additem.itemBaseID=it.getBaseID(); //TODO:
-                    additem.item=it;
+                    //additem.item=it;
                     this.addServerUpdate(additem, playerID);
                 }
             }}
