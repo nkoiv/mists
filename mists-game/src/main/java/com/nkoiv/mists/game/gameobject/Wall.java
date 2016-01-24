@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.util.Toolkit;
+import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -233,28 +234,27 @@ public class Wall extends Structure {
         WritableImage snapshot = null;
         SnapshotParameters parameters = new SnapshotParameters();
         parameters.setFill(Color.TRANSPARENT);
-       
-        //Cardinal
-        wallparts.setViewport(new Rectangle2D(0,0,this.graphics.getWidth(),this.graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(0,0,graphics.getWidth(),graphics.getHeight()));            
         WritableImage downWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(32,0,this.graphics.getWidth(),this.graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(32,0,graphics.getWidth(),graphics.getHeight()));
         WritableImage upWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(64,0,this.graphics.getWidth(),this.graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(64,0,graphics.getWidth(),graphics.getHeight()));
         WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(96,0,this.graphics.getWidth(),this.graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(96,0,graphics.getWidth(),graphics.getHeight()));
         WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
         //Diagonal
-        wallparts.setViewport(new Rectangle2D(0,32,this.graphics.getWidth(),this.graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(0,32,graphics.getWidth(),graphics.getHeight()));
         WritableImage upleftWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(32,32,this.graphics.getWidth(),this.graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(32,32,graphics.getWidth(),graphics.getHeight()));
         WritableImage downleftWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(64,32,this.graphics.getWidth(),this.graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(64,32,graphics.getWidth(),graphics.getHeight()));
         WritableImage downrightWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(96,32,this.graphics.getWidth(),this.graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(96,32,graphics.getWidth(),graphics.getHeight()));
         WritableImage uprightWall = wallparts.snapshot(parameters, snapshot);
+        wallimages =  new Image[]{upleftWall, upWall, uprightWall, leftWall, rightWall, downleftWall, downWall, downrightWall};
+        //Cardinal
         
-        this.wallimages =  new Image[]{upleftWall, upWall, uprightWall, leftWall, rightWall, downleftWall, downWall, downrightWall};
-        
+        Mists.logger.info("Done with wallimages");
     }
     
     @Override

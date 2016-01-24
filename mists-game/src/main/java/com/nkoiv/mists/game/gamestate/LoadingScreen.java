@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -24,6 +25,7 @@ public class LoadingScreen {
     private boolean ready;
     
     public LoadingScreen(String loadingScreenTitle, double maxProgress) {
+        this.title = loadingScreenTitle;
         this.maxProgress = maxProgress;
     }
     
@@ -75,23 +77,18 @@ public class LoadingScreen {
     }
     
     private void drawTitleText(GraphicsContext gc, double screenWidth, double screenHeight) {
-        if (this.currentText == null) return;
-        Text text = new Text(this.currentText);
-        text.setFont(Mists.fonts.get("alagard"));
-        double textWidth = text.getWrappingWidth();
-        gc.setFont(Mists.fonts.get("alagard"));
+        if (this.title == null) return;
+        gc.setFont(Font.font("Verdana", 50));
         gc.setFill(Color.CADETBLUE);
-        gc.fillText(this.currentText, 50, screenHeight-210);
+        gc.fillText(this.title, 100, 100);
+        
     }
     
     private void drawLoadingText(GraphicsContext gc, double screenWidth, double screenHeight) {
-        if (this.title == null) return;
-        Text text = new Text(this.title);
-        text.setFont(Mists.fonts.get("alagard"));
-        double textWidth = text.getWrappingWidth();
+        if (this.currentText == null) return;
         gc.setFont(Mists.fonts.get("alagard"));
         gc.setFill(Color.CADETBLUE);
-        gc.fillText(this.title, (screenWidth/2)-(textWidth/2), 100);
+        gc.fillText(this.currentText, 50, screenHeight-210);
         
     }
 

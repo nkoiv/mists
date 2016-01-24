@@ -93,16 +93,24 @@ public class MainMenuWindow extends TiledPanel {
             }
             
             private void newGame() {
-                PlayerCharacter pocplayer = new PlayerCharacter();
-                Creature companion = Mists.creatureLibrary.create("Himmu");
-                System.out.println(companion.toString());
-                pocplayer.addCompanion(companion);
-                pocplayer.addAction(new MeleeWeaponAttack());
-                game.setPlayer(pocplayer);
-                Location newLoc = new Location(game.getPlayer());
-                game.clearLoadingScreen();
-                game.moveToLocation(newLoc);
-                game.moveToState(Game.LOCATION);       
+                Task task = new Task<Void>() {
+                    @Override public Void call() {
+                        game.setLoadingScreen(new LoadingScreen("Generating location", 10));
+                        PlayerCharacter pocplayer = new PlayerCharacter();
+                        Creature companion = Mists.creatureLibrary.create("Himmu");
+                        System.out.println(companion.toString());
+                        pocplayer.addCompanion(companion);
+                        pocplayer.addAction(new MeleeWeaponAttack());
+                        game.setPlayer(pocplayer);
+                        Location newLoc = new Location(game.getPlayer());
+                        game.moveToLocation(newLoc);
+                        game.moveToState(Game.LOCATION);  
+                        game.clearLoadingScreen();
+                        return null;
+                    }
+                };
+                new Thread(task).start();
+                
             }
             
             @Override

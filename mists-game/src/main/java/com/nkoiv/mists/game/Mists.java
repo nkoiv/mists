@@ -106,7 +106,6 @@ public class Mists extends Application implements Global {
         MistsGame.WIDTH = primaryStage.getWidth();
         MistsGame.HEIGHT = primaryStage.getHeight();
         primaryStage.show();
-        
         this.loadLibraries(gameCanvas, uiCanvas);
         MistsGame.start();
         running = true;

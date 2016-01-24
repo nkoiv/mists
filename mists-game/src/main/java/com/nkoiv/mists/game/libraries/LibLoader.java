@@ -34,6 +34,7 @@ public class LibLoader {
         //Dungeon walls
         ImageView wallimages = new ImageView("/images/structures/dwall.png");
         Wall dungeonwall = new Wall("DungeonWall", new Image("/images/structures/blank.png"), 1, wallimages);
+        dungeonwall.generateWallImages(wallimages);
         lib.addTemplate(dungeonwall);
         //Dungeon stuff
         Door dungeondoor = new Door("DungeonDoor", new Image("/images/structures/ddoor.png"), new Image("/images/structures/ddoor_open.png"), 1);
