@@ -265,11 +265,6 @@ public class LocationClient {
 
     public void addOutgoingUpdate(Object o) {
         //TODO: sanitize
-        if (o instanceof RequestLocationClear) {
-            this.outgoingUpdateStack.push(o);
-            return;
-        }
-        
         if (o instanceof MapObjectUpdate) {
             this.outgoingUpdateStack.push(o);
             return;
@@ -287,6 +282,10 @@ public class LocationClient {
             return;
         }
         if (o instanceof RequestAllItems) {
+            this.outgoingUpdateStack.push(o);
+            return;
+        }
+        if (o instanceof RequestLocationClear) {
             this.outgoingUpdateStack.push(o);
             return;
         }
