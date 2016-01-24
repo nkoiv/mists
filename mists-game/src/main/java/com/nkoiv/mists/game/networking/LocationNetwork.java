@@ -50,7 +50,7 @@ public class LocationNetwork {
 	}
         
         static public class RequestLocationClear {
-            public int creatureCount;
+            public int mobCount;
         }
         
         static public class LocationClear {

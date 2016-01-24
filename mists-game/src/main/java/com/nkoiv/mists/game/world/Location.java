@@ -215,6 +215,9 @@ public class Location extends Flags implements Global {
         Mists.logger.log(Level.INFO, "{0} structures generated", addedStructures);
     }
     
+    public int getMobCount() {
+        return this.mobs.size();
+    }
     
     /**
      * Pull the creature by ID from the general MOBs table

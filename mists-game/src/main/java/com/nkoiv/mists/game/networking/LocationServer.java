@@ -167,7 +167,7 @@ public class LocationServer {
                 
                 if (object instanceof RequestLocationClear) {
                     LocationClear lc = new LocationClear();
-                    lc.clear = ((RequestLocationClear)object).creatureCount == location.getCreatures().size();
+                    lc.clear = ((RequestLocationClear)object).mobCount == location.getMobCount();
                     addServerUpdate(lc, player.playerID);
                 } 
                 

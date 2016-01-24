@@ -138,7 +138,7 @@ public class LocationClient {
             lastReadyCheck += time;
             if (lastReadyCheck > 1) {
                 RequestLocationClear rlc = new RequestLocationClear();
-                rlc.creatureCount = location.getCreatures().size();
+                rlc.mobCount = location.getMobCount();
                 this.addOutgoingUpdate(rlc);
             }
         }
