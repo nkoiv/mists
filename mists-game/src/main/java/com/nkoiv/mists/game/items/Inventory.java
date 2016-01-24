@@ -49,6 +49,17 @@ public class Inventory {
     }
     
     /**
+     * Force an item into given slot, expanding inventory if needed.
+     * Whatever was in that slot gets overwritten.
+     */
+    public void forceItemIntoSlot(Item i, int slot) {
+        if (slot == -1) return;
+        if (items.length < slot) expand(slot-items.length);
+        if (items[slot] == null) itemSize++;
+        items[slot] = i;
+    }
+    
+    /**
      * Add item to the inventory
      * @param i Item to add
      * @return True if item was added successfully, False if there was no room

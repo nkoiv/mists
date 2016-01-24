@@ -282,13 +282,13 @@ public class LocationServer {
         for (Object o : a) {
             MapObject mob = location.getMapObject((Integer)o);
             if (!(mob instanceof Wall)) {
-                this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
-                if (mob instanceof HasInventory) inventories.add(mob.getID());
+                AddMapObject addMob = new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos());
+                if (mob instanceof HasInventory ){
+                    if (!((HasInventory) mob).getInventory().isEmpty()) addMob.hasItems = true;
+                }
+                this.server.sendToTCP(c.getID(), addMob);
             }
             //if (mob instanceof HasInventory)
-        }
-        for (Integer invID : inventories) {
-            sendInventory(invID, c.player.playerID);
         }
     }
     
@@ -298,7 +298,11 @@ public class LocationServer {
     
     public void sendMapObject(MapObject mob) {
         Mists.logger.info("Sending "+mob.getName()+", a "+mob.getClass().toString());
-        this.addServerUpdate(new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
+        AddMapObject addMob = new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos());
+        if (mob instanceof HasInventory) {
+            if (!((HasInventory) mob).getInventory().isEmpty()) addMob.hasItems = true;
+        }
+        this.addServerUpdate(addMob);
     }
     
     private void addClientUpdate(Connection c, Object o) {

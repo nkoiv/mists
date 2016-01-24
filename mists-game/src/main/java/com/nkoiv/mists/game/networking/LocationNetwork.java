@@ -95,6 +95,7 @@ public class LocationNetwork {
             public String type;
             public double xPos;
             public double yPos;
+            public boolean hasItems;
             public AddMapObject(int id, String templateName, String type, double xPos, double yPos){
                 this.id = id; this.templateName = templateName; this.type = type; this.xPos = xPos; this.yPos = yPos;
             }
@@ -118,12 +119,13 @@ public class LocationNetwork {
             public int itemBaseID;
             public int inventoryOwnerID;
             public int slotID;
-            public Item item;
             //TODO: Possible item variables
         }
         
         static public class RequestAllItems {
             public int inventoryOwnerID;
+            public RequestAllItems(){}
+            public RequestAllItems(int inventoryOwnerID){this.inventoryOwnerID = inventoryOwnerID;}
         }
 
 }

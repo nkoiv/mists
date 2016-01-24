@@ -164,7 +164,7 @@ public class LocationClient {
     
     private void handleIncomingMob(AddMapObject mob) {
         if (this.location == null || mob == null) return;
-        Mists.logger.info("Received a mob: "+mob.templateName);
+        Mists.logger.info("Received a mob: "+mob.templateName+" id:"+mob.id);
         MapObject m = null;
         if (mob.type.equals(Creature.class.toString())) {
             m = Mists.creatureLibrary.create(mob.templateName);
@@ -199,6 +199,7 @@ public class LocationClient {
             
         }
         if (m == null) return;
+        if (mob.hasItems) addOutgoingUpdate(new RequestAllItems(mob.id));
         if (this.location.getMapObject(mob.id) != null) this.location.removeMapObject(mob.id);
         this.location.setNextID(mob.id);
         this.location.addMapObject(m);
@@ -248,12 +249,15 @@ public class LocationClient {
                 if (c instanceof Creature) ((Creature) c).setNextTask((Task) object);
             }
             if (object instanceof AddItem) {
-                Item i = Mists.itemLibrary.create(((AddItem)object).itemBaseID);
+                AddItem ai = (AddItem)object;
+                Mists.logger.info("Got AddItem ID:"+ai.itemBaseID+", ownerID: "+ai.inventoryOwnerID+" slot:"+ai.slotID);
+                Item i = Mists.itemLibrary.create(ai.itemBaseID);
                 if (i != null) {
                     //TODO: get the data needed from the AddItem.item and update the item i
-                    MapObject owner = location.getMapObject(((AddItem)object).inventoryOwnerID);
+                    MapObject owner = location.getMapObject(ai.inventoryOwnerID);
+                    Mists.logger.info("Giving "+i.getName()+" to "+owner.getName());
                     if (owner instanceof HasInventory) {
-                        ((HasInventory) owner).addItem(i);
+                        ((HasInventory) owner).getInventory().forceItemIntoSlot(i, ai.slotID);
                     }
                 }
             }
