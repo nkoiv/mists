@@ -284,6 +284,10 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         return this.lastTask;
     }
     
+    public Task getNextTask() {
+        return this.nextTask;
+    }
+    
     public void setNextTask(Task t) {
         this.nextTask = t;
         this.lastTaskSet = System.currentTimeMillis();

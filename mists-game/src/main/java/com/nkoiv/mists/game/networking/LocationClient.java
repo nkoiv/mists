@@ -124,6 +124,7 @@ public class LocationClient {
     }
     
     public void tick(double time) {
+        if (game.getPlayer().getNextTask() != null) addOutgoingUpdate(game.getPlayer().getNextTask());
         this.sendUpdates();
         this.handleServerUpdates(time);
         if (this.location !=null ) {
@@ -286,7 +287,7 @@ public class LocationClient {
             return;
         }
         if (o instanceof Task) {
-            Mists.logger.info("Pushed Task to outgoing stack: "+ ((Task)o).taskID);
+            //Mists.logger.info("Pushed Task to outgoing stack: "+ ((Task)o).taskID);
             this.outgoingUpdateStack.push(o);
             return;
         }

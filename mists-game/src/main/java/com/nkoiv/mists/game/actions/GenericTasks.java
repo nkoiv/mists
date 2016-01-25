@@ -216,7 +216,9 @@ public class GenericTasks {
         MapObject mob = actor.getLocation().getMapObject(targetMobID);
         if (mob != null) {
             Mists.logger.info(actor.getName()+" used trigger on "+mob.getName());
-            Trigger t = mob.getTriggers()[triggerID]; //TODO: Add support for multiple triggers per mob
+            Trigger[] triggers = mob.getTriggers();
+            if (triggerID < 0 || triggerID >= triggers.length) return;
+            Trigger t = triggers[triggerID];
             if (t != null) t.toggle(actor);
             Mists.logger.info("Trigger toggled");
         }
