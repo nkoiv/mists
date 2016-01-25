@@ -373,6 +373,7 @@ public class Location extends Flags implements Global {
     }
     
     private void removeMapObject(MapObject mob) {
+        Mists.logger.info("removeMapObject "+mob.getName());
         if (mob instanceof Structure) {
             if (mob instanceof Wall) {
                 double xPos = mob.getCenterXPos();
@@ -596,7 +597,6 @@ public class Location extends Flags implements Global {
                 mob.think(time);
                 mob.update(time);
                 if (server!=null)server.addServerUpdate(mob.getLastTask());
-                //if (server!=null)server.addMapObjectUpdate(mob); //Handled by LocationServer now (by lastEnforce)
             }
         }
         this.updateEffects(time);

@@ -14,6 +14,6 @@ import com.nkoiv.mists.game.gameobject.MapObject;
  */
 public interface Trigger {
     public String getDescription();
-    public void toggle();
+    public void toggle(MapObject toggler);
     public MapObject getTarget();
 }

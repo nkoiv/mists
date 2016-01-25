@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -158,6 +159,14 @@ public class LocationControls {
             game.currentState.addUIComponent(inv); 
             Mists.logger.log(Level.INFO, "Inventory size: {0} items, capacity {1}", new Object[]{inv.getInventory().getSize(), inv.getInventory().getCapacity()});
         }
+    }
+
+    public void useTrigger(int triggersourceID, int triggerID) {
+        //Trigger t = triggersource.getTriggers()[triggerID];
+        Task task = new Task(GenericTasks.ID_USE_TRIGGER, game.getPlayer().getID(), new int[]{triggersourceID, triggerID});
+        game.getPlayer().setNextTask(task);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(task);
+
     }
     
     public void takeItem(MapObject targetInventory, int slot) {

@@ -74,7 +74,7 @@ public class GenericTasks {
             case ID_TAKE_ITEM: takeItem(actor, task.arguments[0], task.arguments[1]); break;
             case ID_EQUIP_ITEM: equipItem(actor, task.arguments[0]); break;
             case ID_USE_ITEM: useItem(actor, task.arguments[0]); break;
-            case ID_USE_TRIGGER: useMapObjectTrigger(actor, task.arguments[0]); break;
+            case ID_USE_TRIGGER: useMapObjectTrigger(actor, task.arguments[0], task.arguments[1]); break;
             default: break;
         }
         return true;
@@ -212,12 +212,12 @@ public class GenericTasks {
         }
     }
     
-    public static void useMapObjectTrigger(Creature actor, int targetMobID) {
+    public static void useMapObjectTrigger(Creature actor, int targetMobID, int triggerID) {
         MapObject mob = actor.getLocation().getMapObject(targetMobID);
-        Mists.logger.info(actor.getName()+" used trigger on "+mob.getName());
         if (mob != null) {
-            Trigger t = mob.getTriggers()[0]; //TODO: Add support for multiple triggers per mob
-            if (t != null) t.toggle();
+            Mists.logger.info(actor.getName()+" used trigger on "+mob.getName());
+            Trigger t = mob.getTriggers()[triggerID]; //TODO: Add support for multiple triggers per mob
+            if (t != null) t.toggle(actor);
             Mists.logger.info("Trigger toggled");
         }
     }

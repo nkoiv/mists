@@ -99,7 +99,6 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     @Override
     public void update(double time) {
-        
         if (this.nextTask!=null) {
             if (this.nextTask.taskID != GenericTasks.ID_IDLE) {
                 GenericTasks.performTask(location, nextTask, time);

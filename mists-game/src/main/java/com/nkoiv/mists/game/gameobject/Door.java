@@ -70,7 +70,7 @@ public class Door  extends Structure {
         }
         
         @Override
-        public void toggle() {
+        public void toggle(MapObject toggler) {
             this.door.toggle();
         }
 

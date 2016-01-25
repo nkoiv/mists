@@ -438,7 +438,8 @@ public class LocationState implements GameState {
         
         if (releasedButtons.contains(KeyCode.E)) {
             Mists.logger.info("E pressed for context action");
-            this.contextAction.useTrigger();
+            int triggerTarget = this.contextAction.getSelectedTriggerSourceID();
+            game.locControls.useTrigger(triggerTarget, 0);
         }
         
         if (releasedButtons.contains(KeyCode.I)) {

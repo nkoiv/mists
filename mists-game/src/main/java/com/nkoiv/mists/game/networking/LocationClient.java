@@ -132,7 +132,7 @@ public class LocationClient {
                 //c.updateByClient (time, this);
             }
             location.updateEffects(time);
-            location.fullCleanup(false, false, true); //False for creatures, False for structures, true for effects. Server tells when to remove creatures/structures
+            location.fullCleanup(true, true, true);
         }
         
         if (!this.ready && location != null) { //Not yet running
@@ -250,8 +250,9 @@ public class LocationClient {
             if (object instanceof RemoveMapObject) {
                 RemoveMapObject mob = (RemoveMapObject)object;
                 Mists.logger.info("removing mobID "+mob.id);
-                location.removeMapObject(mob.id);
-                return;
+                //location.removeMapObject(mob.id);
+                if (location.getMapObject(mob.id) == null) return;
+                location.getMapObject(mob.id).setRemovable();
             }
 
             if (object instanceof Task) {
@@ -285,6 +286,7 @@ public class LocationClient {
             return;
         }
         if (o instanceof Task) {
+            Mists.logger.info("Pushed Task to outgoing stack: "+ ((Task)o).taskID);
             this.outgoingUpdateStack.push(o);
             return;
         }

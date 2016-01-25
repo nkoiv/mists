@@ -107,11 +107,18 @@ public class ContextAction {
         }
     }
     
+    public int getSelectedTriggerSourceID() {
+        int sourceID = -1;
+        Trigger t = this.availableTriggers.get(currentTrigger);
+        if (t!=null) sourceID = this.triggerSource.get(t).getID();
+        return sourceID;
+    }
+    
     /**
      * Use the currently selected action
      * @return True if action was performed
      */
-    public boolean useTrigger() {
+    private boolean useTrigger() {
         Mists.logger.log(Level.INFO, "Context trigger used. Trigger list size: {0}. Nearby objects: {1}", new Object[]{this.availableTriggers.size(), this.nearbyObjects.size()});
         for (MapObject mob : this.nearbyObjects) {
             Mists.logger.info(mob.toString());
@@ -123,7 +130,7 @@ public class ContextAction {
         if (currentTrigger < 0 || currentTrigger >= availableTriggers.size()) currentTrigger = 0;
         //
         Trigger t = this.availableTriggers.get(currentTrigger);
-        Task task = new Task(GenericTasks.ID_USE_TRIGGER, actor.getID(), new int[]{this.triggerSource.get(t).getID()});
+        Task task = new Task(GenericTasks.ID_USE_TRIGGER, actor.getID(), new int[]{this.triggerSource.get(t).getID(), 0});
         actor.setNextTask(task);
         if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(task);
         return true;

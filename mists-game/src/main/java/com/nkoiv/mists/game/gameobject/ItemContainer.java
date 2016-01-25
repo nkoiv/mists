@@ -6,6 +6,8 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.GenericTasks;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
@@ -141,10 +143,18 @@ public class ItemContainer extends Structure implements HasInventory {
         }
         
         @Override
-        public void toggle() {
-            if (!ic.getLocation().getPlayer().getInventory().isFull()) {
-                ic.getLocation().getPlayer().addItem(ic.takeTopItem());
+        public void toggle(MapObject toggler) {
+            if (!(toggler instanceof Creature)) {
+                Mists.logger.info(toggler.getName()+" tried to toggle "+ic.getName()+" but is not a creature");
+                return;
             }
+            //int topItemID = ic.topItemID();
+            //((Creature)toggler).setNextTask(new Task(GenericTasks.ID_TAKE_ITEM, toggler.getID(), new int[]{ic.getID(), topItemID}));
+            
+            if (!((Creature)toggler).getInventory().isFull()) {
+                ((Creature)toggler).addItem(ic.takeTopItem());
+            }
+            
         }
 
         @Override
