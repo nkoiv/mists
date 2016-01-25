@@ -333,6 +333,7 @@ public class LocationServer {
             //TODO: Ensure the client has the right to push this task
             int actorID = ((Task)o).actorID;
             ((Creature)location.getMapObject(actorID)).setNextTask((Task)o);
+            //Mists.logger.info("Player "+playerID+" placed task on "+actorID+" (TID:"+((Task)o).taskID+")");
         }
         if (o instanceof MapObjectUpdateRequest) {
             MapObject m = location.getMapObject(((MapObjectUpdateRequest)o).id);

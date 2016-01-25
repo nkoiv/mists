@@ -271,8 +271,12 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     @Override
     public void update (double time) {
         //Mists.logger.info(this.name+" doing "+lastTask.toString());        
-        if ((System.currentTimeMillis()-this.lastTaskSet)>1500) this.stopMovement();
+        if ((System.currentTimeMillis()-this.lastTaskSet)>1500) {
+            this.stopMovement();
+            setNextTask(new Task(GenericTasks.ID_IDLE, this.IDinLocation, null));
+        }
         GenericTasks.performTask(location, nextTask, time);
+        if (nextTask.taskID > 20) setNextTask(new Task(GenericTasks.ID_IDLE, this.IDinLocation, null));
         this.updateGraphics();
     }
 
@@ -283,11 +287,6 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     public void setNextTask(Task t) {
         this.nextTask = t;
         this.lastTaskSet = System.currentTimeMillis();
-    }
-
-    public void update (double time, LocationServer server) {
-        
-        
     }
 
     protected void updateGraphics() {
@@ -729,7 +728,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
             "ID "+this.IDinLocation+" @ "+this.location.getName(),
             "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
             this.getHealth() + "/"+this.getMaxHealth()+" hp",
-            this.getLastTask().toString()
+            "Last: "+this.getLastTask().toString()
         };
         return s;
     }

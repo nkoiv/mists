@@ -5,12 +5,15 @@
  */
 package com.nkoiv.mists.game.controls;
 
+import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.networking.LocationClient;
+import com.nkoiv.mists.game.networking.LocationServer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,12 +35,28 @@ public class ContextAction {
     private MapObject triggerRadius;
     int currentTrigger;
     Creature actor; //Usually the player?
+    private GameMode gameMode;
+    private LocationServer server;
+    private LocationClient client;
     
     public ContextAction(Creature actor) {
         this.actor = actor;
         this.availableTriggers = new ArrayList<>();
         this.triggerSource = new HashMap<>();
         this.generateTriggerRange();
+        this.gameMode = GameMode.SINGLEPLAYER;
+    }
+    
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+    
+    public void setLocationServer(LocationServer server) {
+        this.server = server;
+    }
+    
+    public void setLocationClient(LocationClient client) {
+        this.client = client;
     }
     
     /**
@@ -97,12 +116,16 @@ public class ContextAction {
         for (MapObject mob : this.nearbyObjects) {
             Mists.logger.info(mob.toString());
         }
-        if (availableTriggers.isEmpty()) return false;
+        if (availableTriggers.isEmpty()) {
+            Mists.logger.info("No triggers found");
+            return false;
+        }
         if (currentTrigger < 0 || currentTrigger >= availableTriggers.size()) currentTrigger = 0;
         //
         Trigger t = this.availableTriggers.get(currentTrigger);
         Task task = new Task(GenericTasks.ID_USE_TRIGGER, actor.getID(), new int[]{this.triggerSource.get(t).getID()});
         actor.setNextTask(task);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(task);
         return true;
     }
     

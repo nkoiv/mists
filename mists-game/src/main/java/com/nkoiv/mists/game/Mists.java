@@ -141,6 +141,7 @@ public class Mists extends Application implements Global {
                 previousNanoTime = currentNanoTime;
                 //Do things:
                 MistsGame.tick(elapsedSeconds, pressedButtons, releasedButtons); 
+                releasedButtons.clear();
                 MistsGame.render();
             } 
         }.start();

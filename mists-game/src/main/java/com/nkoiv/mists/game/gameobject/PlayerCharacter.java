@@ -95,9 +95,11 @@ public class PlayerCharacter extends Creature implements Combatant {
     public void think(double time) {
         //dont call any AI subroutine
     }
+
     
     @Override
     public void update(double time) {
+        
         if (this.nextTask!=null) {
             if (this.nextTask.taskID != GenericTasks.ID_IDLE) {
                 GenericTasks.performTask(location, nextTask, time);
@@ -111,7 +113,8 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.updateGraphics();
         //this.applyMovement(time);  
     }
-     
+    
+
     @Override
     public void useAction(String action ) {
         if (this.getAvailableActions() != null) {

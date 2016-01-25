@@ -213,7 +213,7 @@ public class MapObject extends Flags implements Global, Templatable {
     public String toString(){
         String s;
         if (this.location == null) s = this.name+" at Limbo";
-        else s = this.name + " @ |"  + this.graphics.getXPos()+","+this.graphics.getYPos()+"|";
+        else s = this.name + " (ID:"+this.IDinLocation+") @ |"  + this.graphics.getXPos()+","+this.graphics.getYPos()+"|";
         return s;
     }
 

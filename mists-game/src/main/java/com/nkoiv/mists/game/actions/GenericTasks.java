@@ -214,9 +214,11 @@ public class GenericTasks {
     
     public static void useMapObjectTrigger(Creature actor, int targetMobID) {
         MapObject mob = actor.getLocation().getMapObject(targetMobID);
+        Mists.logger.info(actor.getName()+" used trigger on "+mob.getName());
         if (mob != null) {
             Trigger t = mob.getTriggers()[0]; //TODO: Add support for multiple triggers per mob
             if (t != null) t.toggle();
+            Mists.logger.info("Trigger toggled");
         }
     }
 }

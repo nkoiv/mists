@@ -115,7 +115,8 @@ public class LocationState implements GameState {
         
     }
     
-    private void loadDefaultUI() {
+    public void loadDefaultUI() {
+        this.uiComponents.clear();
         TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
         TextButton attackButton = new ActionButton(game.getPlayer(), "Smash!",  80, 60);
         TextButton pathsButton = new LocationButtons.DrawPathsButton("Paths Off", 80, 60, this.game);
@@ -137,7 +138,13 @@ public class LocationState implements GameState {
         this.infobox = new TextPanel(this, "InfoBox", 250, 150, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
         this.playerInventory = new InventoryPanel(this, game.getPlayer().getInventory());
         this.playerInventory.setName("PlayerInventory");
-        this.contextAction = new ContextAction(game.getPlayer());
+        ContextAction ca = new ContextAction(game.getPlayer());
+        if (gamemode == GameMode.SINGLEPLAYER) {
+            ca.setGameMode(this.gamemode);
+            ca.setLocationClient(client);
+        }
+        this.contextAction = ca;
+        
     }
 
     /**
@@ -407,7 +414,6 @@ public class LocationState implements GameState {
     private void handleLocationKeyPress(ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         //TODO: External loadable configfile for keybindings
         //(probably via a class of its own)
-        game.getPlayer().stopMovement();
         if (pressedButtons.isEmpty() && releasedButtons.isEmpty()) {
             return;
         }
@@ -441,7 +447,7 @@ public class LocationState implements GameState {
         }
         
         if (releasedButtons.contains(KeyCode.R)) {
-            Mists.logger.info("RE pressed for next context action");
+            Mists.logger.info("R pressed for next context action");
             this.contextAction.nextAction();
         }
         
@@ -506,7 +512,6 @@ public class LocationState implements GameState {
         
         }
         
-        releasedButtons.clear(); //Button releases are handled only once
     }
     
     public void setGameMode(GameMode gamemode) {

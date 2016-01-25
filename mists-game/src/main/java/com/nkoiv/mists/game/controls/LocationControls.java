@@ -130,6 +130,12 @@ public class LocationControls {
     
     //----------Player controls-----
     
+    public void playerStop() {
+        Task stop = new Task(GenericTasks.ID_IDLE, game.getPlayer().getID(), null);
+        game.getPlayer().setNextTask(stop);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(stop);
+    }
+    
     public void playerAttack() {
         Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(game.getPlayer().getFacing())});
         game.getPlayer().setNextTask(attack);
@@ -157,21 +163,25 @@ public class LocationControls {
     public void takeItem(MapObject targetInventory, int slot) {
         Task take = new Task(GenericTasks.ID_TAKE_ITEM, game.getPlayer().getID(), new int[]{targetInventory.getID(), slot});
         game.getPlayer().setNextTask(take);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(take);
     }
     
     public void dropItem(int slot) {
         Task drop = new Task(GenericTasks.ID_DROP_ITEM, game.getPlayer().getID(), new int[]{slot});
         game.getPlayer().setNextTask(drop);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(drop);
     }
     
     public void equipItem(int slot) {
         Task equip = new Task(GenericTasks.ID_EQUIP_ITEM, game.getPlayer().getID(), new int[]{slot});
         game.getPlayer().setNextTask(equip);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(equip);
     }
     
     public void useItem(Inventory inventory, int slot) {
         Task use = new Task(GenericTasks.ID_USE_ITEM, game.getPlayer().getID(), new int[]{slot});
         game.getPlayer().setNextTask(use);
+        if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(use);
     }
     
     

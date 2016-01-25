@@ -23,6 +23,7 @@ import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddItem;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
@@ -160,6 +161,10 @@ public class LocationClient {
                g.moveToLocation(l);
             }
         });
+        if (!this.ready) {
+            game.getLoadingScreen().addProgress(0.2);
+            game.getLoadingScreen().setLoadingText("Map built");
+        }
     }
     
     private void handleIncomingMob(AddMapObject mob) {
@@ -205,6 +210,10 @@ public class LocationClient {
         this.location.addMapObject(m);
         this.location.getMapObject(mob.id).setPosition(mob.xPos, mob.yPos);
         Mists.logger.info(m.getName()+" succesfully placed at "+mob.xPos+","+mob.yPos);
+        if (!this.ready) {
+            game.getLoadingScreen().addProgress(0.05);
+            game.getLoadingScreen().setLoadingText("Placing creatures");
+        }
     }
     
     private void handleServerUpdates(double time) {
@@ -219,6 +228,7 @@ public class LocationClient {
                 if (((LocationClear)object).clear == true) {
                     ready = true;
                     game.clearLoadingScreen();
+                    ((LocationState)game.currentState).loadDefaultUI();
                 }
             }
             
@@ -246,7 +256,7 @@ public class LocationClient {
 
             if (object instanceof Task) {
                 MapObject c = location.getMapObject(((Task) object).actorID);
-                if (c instanceof Creature) ((Creature) c).setNextTask((Task) object);
+                if (c instanceof Creature && c.getID() != game.getPlayer().getID()) ((Creature) c).setNextTask((Task) object);
             }
             if (object instanceof AddItem) {
                 AddItem ai = (AddItem)object;
