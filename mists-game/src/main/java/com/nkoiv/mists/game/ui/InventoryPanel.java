@@ -7,6 +7,8 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.GenericTasks;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
@@ -188,10 +190,12 @@ public class InventoryPanel extends TiledPanel {
                     } return false;
                 }
                 case DROP_ITEM: {
-                    if (Inventory.dropItem(this.inv, slot)) {
+                    //if (Inventory.dropItem(this.inv, slot)) {
+                        Task drop = new Task(GenericTasks.ID_DROP_ITEM, inv.getOwner().getID(), new int[]{slot});
+                        inv.getOwner().setNextTask(drop);
                         this.parent.close();
                         return true;
-                    } return false;
+                    //} return false;
                 }
                 default: break;
             }
