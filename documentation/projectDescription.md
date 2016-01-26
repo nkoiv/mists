@@ -68,6 +68,11 @@ as action is considered.
 * GameState for Town
 Towns are mainly composed of menus (taverns, shops, etc). MainMenu is selfexplanatory.
 
+###Loading screens
+
+While not a GameState itself, LoadingScreen sort of behaves like one. Called with a javafx.concurrent.Task, LoadingScreen is rendered instead of the normal GameState graphics whenever considerable background work is done. LoadingScreen should be instantiated and discarded on per-case basis. 
+
+
 ##MainMenu
 From the main menu a player can either start a new game, load an existing one,
 edit game options, or close the game.
