@@ -27,7 +27,7 @@ import java.util.logging.Level;
  * for debugging use.
  * @author nikok
  */
-public class GenericTasks {
+public abstract class GenericTasks {
     public static final int ID_IDLE = 0; //no arguments
     public static final int ID_CONTINUE_MOVEMENT = 1; //no arguments
     public static final int ID_MOVE_TOWARDS_DIRECTION = 2; //1 argument: the direction
