@@ -52,7 +52,7 @@ public class CreatureAITest {
        testLocation.enterLocation(testPlayer);
        testPlayer.setPosition(200, 200);
        testCreature = new Creature("AITest", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
-       testLocation.addCreature(testCreature, 100, 100);
+       testLocation.addMapObject(testCreature, 100, 100);
     }
     
     @Test

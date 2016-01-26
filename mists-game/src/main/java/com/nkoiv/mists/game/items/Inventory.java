@@ -222,7 +222,7 @@ public class Inventory {
             ItemContainer itemPile = new ItemContainer(droppedItem.getName(), new Sprite(Mists.graphLibrary.getImage("blank")));
             itemPile.addItem(droppedItem);
             itemPile.setRenderContent(true);
-            inv.owner.getLocation().addStructure(itemPile, inv.owner.getXPos(), inv.owner.getYPos());
+            inv.owner.getLocation().addMapObject(itemPile, inv.owner.getXPos(), inv.owner.getYPos());
             return true;
         }
     

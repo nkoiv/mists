@@ -46,7 +46,6 @@ import javafx.scene.input.MouseEvent;
  */
 public class LocationState implements GameState {
     
-    public GameMode gamemode;
     private LocationServer server;
     private LocationClient client;
 
@@ -66,34 +65,39 @@ public class LocationState implements GameState {
     private ContextAction contextAction;
     private InventoryPanel playerInventory;
     
-    public LocationState (Game game, GameMode gamemode) {
-        Mists.logger.info("Generating locationstate for "+gamemode);
+    public LocationState (Game game) {
+        Mists.logger.info("Generating locationstate for "+Mists.gameMode);
         this.game = game;
         uiComponents = new HashMap<>();
         this.drawOrder = new TreeSet<>();
         this.loadDefaultUI();
-        this.gamemode = gamemode;
-        if (gamemode == GameMode.SERVER) {
-            try {    
-                this.server = new LocationServer(game);
-                game.locControls.setLocationServer(server);
-            } catch (Exception e) {
-                Mists.logger.warning("Error starting server: "+e.getMessage());
-                Mists.logger.warning("Changing to Singleplayer");
-                this.gamemode = GameMode.SINGLEPLAYER;
-            }
+        if (Mists.gameMode == GameMode.SERVER) {
+            setToServer();
         }
-        if (gamemode == GameMode.CLIENT) {
-            try {    
+        if (Mists.gameMode == GameMode.CLIENT) {
+            setToClient();
+        }
+        
+    }
+    
+    private void setToClient() {
+        try {    
                 this.client = new LocationClient(game);
                 game.locControls.setLocationClient(client);
             } catch (Exception e) {
                 Mists.logger.warning("Error starting client: "+e.getMessage());
                 Mists.logger.warning("Changing to Singleplayer");
-                this.gamemode = GameMode.SINGLEPLAYER;
             }
-        }
-        game.locControls.setGameMode(gamemode);
+    }
+    
+    private void setToServer() {
+        try {    
+                this.server = new LocationServer(game);
+                game.locControls.setLocationServer(server);
+            } catch (Exception e) {
+                Mists.logger.warning("Error starting server: "+e.getMessage());
+                Mists.logger.warning("Changing to Singleplayer");
+            }
     }
     
     @Override
@@ -139,8 +143,7 @@ public class LocationState implements GameState {
         this.playerInventory = new InventoryPanel(this, game.getPlayer().getInventory());
         this.playerInventory.setName("PlayerInventory");
         ContextAction ca = new ContextAction(game.getPlayer());
-        if (gamemode == GameMode.SINGLEPLAYER) {
-            ca.setGameMode(this.gamemode);
+        if (Mists.gameMode == GameMode.CLIENT) {;
             ca.setLocationClient(client);
         }
         this.contextAction = ca;
@@ -268,7 +271,7 @@ public class LocationState implements GameState {
     @Override
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         handleLocationKeyPress(pressedButtons, releasedButtons);
-        switch (this.gamemode) {
+        switch (Mists.gameMode) {
             case SINGLEPLAYER: this.tickSinglePlayer(time); break;
             case SERVER: this.tickServer(time); break;
             case CLIENT: this.tickClient(time); break;
@@ -282,10 +285,12 @@ public class LocationState implements GameState {
     }
     
     private void tickServer(double time) {
+        if (this.server == null) setToServer();
         this.server.tick(time);
     }
     
     private void tickClient(double time) {
+        if (this.client == null) setToClient();
         this.client.tick(time);
         
     }
@@ -513,14 +518,6 @@ public class LocationState implements GameState {
         
         }
         
-    }
-    
-    public void setGameMode(GameMode gamemode) {
-        this.gamemode = gamemode;
-    }
-    
-    public GameMode getGameMod() {
-        return this.gamemode;
     }
     
     public LocationClient getClient() {

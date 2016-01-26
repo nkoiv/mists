@@ -5,10 +5,9 @@
  */
 package com.nkoiv.mists.game.world;
 
-import com.nkoiv.mists.game.actions.GenericTasks;
-import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -48,7 +47,6 @@ import javafx.scene.shape.Line;
  * @author nkoiv
  */
 public class Location extends Flags implements Global {
-    
     //private QuadTree mobQuadTree; //Used for collision detection //retired idea for now
     private HashMap<Integer, HashSet> spatial; //New idea for lessening collision detection load
     private ArrayList<Creature> creatures;
@@ -411,13 +409,20 @@ public class Location extends Flags implements Global {
         mob.setLocation(this);
     }
     
+    public void addMapObject(MapObject mob, double xPos, double yPos) {
+        if (mob == null) return;
+        addMapObject(mob);
+        mob.setPosition(xPos, yPos);
+        if (this.pathFinder != null && mob instanceof Structure) this.pathFinder.setMapOutOfDate(true);
+    }
+    
     /**
     * Adds a Structure to the location
     * @param s The structure to be added
     * @param xPos Position for the structure on the X-axis
     * @param yPos Position for the structure on the Y-axis
     */
-    public void addStructure(Structure s, double xPos, double yPos) {
+    private void addStructure(Structure s, double xPos, double yPos) {
         if (!this.structures.contains(s)) {
             this.addMapObject(s);
         }
@@ -431,7 +436,7 @@ public class Location extends Flags implements Global {
     * @param xPos Position for the creature on the X-axis
     * @param yPos Position for the creature on the Y-axis
     */
-    public void addCreature(Creature c, double xPos, double yPos) {
+    private void addCreature(Creature c, double xPos, double yPos) {
         if (!this.creatures.contains(c)) {
             this.addMapObject(c);
         }
@@ -444,7 +449,7 @@ public class Location extends Flags implements Global {
     * @param xPos Position for the effect on the X-axis
     * @param yPos Position for the effect on the Y-axis
     */
-    public void addEffect(Effect e, double xPos, double yPos) {
+    private void addEffect(Effect e, double xPos, double yPos) {
         if (!this.effects.contains(e)) {
             this.addMapObject(e);
         }

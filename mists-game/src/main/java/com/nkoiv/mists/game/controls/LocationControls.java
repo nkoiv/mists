@@ -41,13 +41,11 @@ import javafx.scene.image.ImageView;
 public class LocationControls {
     
     private final Game game;
-    private GameMode gameMode;
     private LocationServer server;
     private LocationClient client;
     
     public LocationControls(Game game) {
         this.game = game;
-        this.gameMode = GameMode.SINGLEPLAYER;
     }
     
     private Location currentLoc() {
@@ -56,10 +54,6 @@ public class LocationControls {
     
     public Game getGame() {
         return this.game;
-    }
-    
-    public void setGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
     }
     
     public void setLocationServer(LocationServer server) {
@@ -150,7 +144,7 @@ public class LocationControls {
     }
     
     public void teleportPlayer(double xCoor, double yCoor) {
-        if (this.gameMode != GameMode.CLIENT) this.game.getCurrentLocation().getPlayer().setCenterPosition(xCoor, yCoor);
+        if (Mists.gameMode != GameMode.CLIENT) this.game.getCurrentLocation().getPlayer().setCenterPosition(xCoor, yCoor);
     }
     
     public void toggleInventory(InventoryPanel inv) {
@@ -213,7 +207,7 @@ public class LocationControls {
         ItemContainer itemPile = new ItemContainer(item.getName(), new Sprite(Mists.graphLibrary.getImage("blank")));
         itemPile.addItem(item);
         itemPile.setRenderContent(true);
-        this.currentLoc().addStructure(itemPile, xCoor, yCoor);
+        this.currentLoc().addMapObject(itemPile, xCoor, yCoor);
     }
     
     //------- Inventory manipulation ------
@@ -250,7 +244,7 @@ public class LocationControls {
         Mists.logger.log(Level.INFO, "Creating monster from sprite sheet position {0},{1} at coordinates {2}+{3}x{4}+{5}", new Object[]{startX, startY, x, game.getCurrentLocation().getLastxOffset(), y, game.getCurrentLocation().getLastyOffset()});
         Creature monster = Mists.creatureLibrary.create(baseID);
         if (monster == null) monster = Mists.creatureLibrary.create("Worm");
-        game.getCurrentLocation().addCreature(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
+        game.getCurrentLocation().addMapObject(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
     }
     
     public void addBlob() {
@@ -258,7 +252,7 @@ public class LocationControls {
         double x = p.x - Mists.primaryStage.getX();
         double y = p.y - Mists.primaryStage.getY();
         Creature monster = new Creature("Blob", new ImageView("/images/blob.png"), 3, 0, 0, 84, 84);
-        game.getCurrentLocation().addCreature(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
+        game.getCurrentLocation().addMapObject(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
     }
     
     //----------Location creation------------

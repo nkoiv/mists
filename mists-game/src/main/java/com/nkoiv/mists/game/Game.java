@@ -51,8 +51,6 @@ public class Game {
     public static final int WORLDMAP = 2;
     public static final int LOADSCREEN = 9;
     
-    private GameMode currentGameMode = GameMode.SINGLEPLAYER;
-    
     public LocationControls locControls;
     
     /**
@@ -92,11 +90,7 @@ public class Game {
     }
     
     public void setGameMode(GameMode gamemode) {
-        this.currentGameMode = gamemode;
-    }
-    
-    public GameMode getGameMode() {
-        return this.currentGameMode;
+        Mists.gameMode = gamemode;
     }
     
     public void moveToState(int gameStateNumber) {
@@ -104,9 +98,7 @@ public class Game {
         currentState.exit();
         if (gameStates.get(gameStateNumber) == null) {
             buildNewState(gameStateNumber);
-        } else if (gameStateNumber == LOCATION) {
-            if (((LocationState)gameStates.get(LOCATION)).gamemode != this.currentGameMode) buildNewState(LOCATION);
-        }
+        } 
         currentState = gameStates.get(gameStateNumber);
         currentState.enter();
         updateUI();
@@ -115,7 +107,7 @@ public class Game {
     private void buildNewState(int gameStateNumber) {
         switch (gameStateNumber) {
             case MAINMENU: gameStates.put(MAINMENU, new MainMenuState(this)) ;break;
-            case LOCATION: gameStates.put(LOCATION, new LocationState(this, this.currentGameMode)); break;
+            case LOCATION: gameStates.put(LOCATION, new LocationState(this)); break;
             case WORLDMAP: Mists.logger.warning("Tried to enter worldmap!"); break;
             case LOADSCREEN: Mists.logger.warning("Tried to enter loadscreen!"); break;
             default: Mists.logger.warning("Unknown gamestate!") ;break;
@@ -132,7 +124,7 @@ public class Game {
         l.enterLocation(player);
         currentLocation = l;
         GameState s = this.gameStates.get(LOCATION);
-        if (s!=null) if (((LocationState)s).gamemode == GameMode.CLIENT) ((LocationState)s).getClient().setLocation(l);
+        if (s!=null) if (Mists.gameMode == GameMode.CLIENT) ((LocationState)s).getClient().setLocation(l);
     }
     
     public void updateUI() {

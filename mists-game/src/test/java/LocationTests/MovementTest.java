@@ -57,7 +57,7 @@ public class MovementTest extends Application {
        testPlayer.setLocation(testLocation);
        testLocation.addPlayerCharacter(testPlayer, 300, 200);
        testCreature = new Creature("MovementTester", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
-       testLocation.addCreature(testCreature, 500, 500);
+       testLocation.addMapObject(testCreature, 500, 500);
     }
     
     @Test
@@ -137,7 +137,7 @@ public class MovementTest extends Application {
         System.out.println("Testing Player collisions on Structures");
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
         testRock.setLocation(testLocation);
-        testLocation.addStructure(testRock, 500 , 200);
+        testLocation.addMapObject(testRock, 500 , 200);
         testPlayer.setPosition(300, 200); //Same Y as testRock, just 200 to the left
         testPlayer.setSpeed(50); //Should move 50 per tick
         for (int i=0;i<10;i++) {

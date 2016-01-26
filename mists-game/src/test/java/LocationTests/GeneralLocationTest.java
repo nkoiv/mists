@@ -72,7 +72,7 @@ public class GeneralLocationTest extends Application {
     @Test
     public void addedStructuresShouldBeInMOBList() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
-        testLocation.addStructure(testRock, 500 , 200);
+        testLocation.addMapObject(testRock, 500 , 200);
         assert(testLocation.getStructures().contains(testRock));
     }
     /*
@@ -94,10 +94,10 @@ public class GeneralLocationTest extends Application {
     @Test
     public void updatingLocationCleansDeadMobs() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
-        testLocation.addStructure(testRock, 500 , 200);
+        testLocation.addMapObject(testRock, 500 , 200);
         PlayerCharacter testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
         testLocation.addPlayerCharacter(testPlayer, 500, 500);
-        testLocation.addCreature(testCreature, 300, 300);
+        testLocation.addMapObject(testCreature, 300, 300);
         testCreature.setRemovable();
         testLocation.update(0.15f);
         assert(testLocation.getCreatures().contains(testCreature) == false);
@@ -113,7 +113,7 @@ public class GeneralLocationTest extends Application {
     @Test
     public void creaturesCanBeFoundByName() {
         Creature rotta = new Creature("Rotta", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
-        testLocation.addCreature(rotta, 500, 500);
+        testLocation.addMapObject(rotta, 500, 500);
         assert(testLocation.getCreatureByName("Rotta").getName().equals("Rotta"));  
     }
     
@@ -121,7 +121,7 @@ public class GeneralLocationTest extends Application {
     public void structureExtrasMoveWithStructure() {
         Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), 1);
         tree.addExtra(new Image("/images/tree.png"), -35, -96);
-        testLocation.addStructure(tree, 200 , 200);
+        testLocation.addMapObject(tree, 200 , 200);
         double startX = tree.getExtras().get(0).getXPos();
         tree.setPosition(500, 500);
         
@@ -133,7 +133,7 @@ public class GeneralLocationTest extends Application {
     public void removableFlaggedMobsShouldBeRemovedOnUpdate() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
         testRock.setRemovable();
-        testLocation.addStructure(testRock, 500 , 200);
+        testLocation.addMapObject(testRock, 500 , 200);
         testLocation.update(1);
         assert(testLocation.getStructures().isEmpty());
     }
@@ -145,8 +145,8 @@ public class GeneralLocationTest extends Application {
         Creature testCreature1 = new Creature("TestCreature", new Image("/images/himmu.png"));
         Creature testCreature2 = new Creature("TestCreature", new Image("/images/himmu.png"));
         
-        testLocation.addCreature(testCreature1, 250, 250);
-        testLocation.addCreature(testCreature2, 280, 250);
+        testLocation.addMapObject(testCreature1, 250, 250);
+        testLocation.addMapObject(testCreature2, 280, 250);
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
@@ -158,8 +158,8 @@ public class GeneralLocationTest extends Application {
         Creature testCreature1 = new Creature("TestCreature", new Image("/images/himmu.png"));
         Creature testCreature2 = new Creature("TestCreature", new Image("/images/himmu.png"));
         
-        testLocation.addCreature(testCreature1, 250, 250);
-        testLocation.addCreature(testCreature2, 230, 250);
+        testLocation.addMapObject(testCreature1, 250, 250);
+        testLocation.addMapObject(testCreature2, 230, 250);
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
@@ -171,8 +171,8 @@ public class GeneralLocationTest extends Application {
         Creature testCreature1 = new Creature("TestCreature", new Image("/images/himmu.png"));
         Creature testCreature2 = new Creature("TestCreature", new Image("/images/himmu.png"));
         
-        testLocation.addCreature(testCreature1, 250, 250);
-        testLocation.addCreature(testCreature2, 250, 230);
+        testLocation.addMapObject(testCreature1, 250, 250);
+        testLocation.addMapObject(testCreature2, 250, 230);
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
@@ -184,8 +184,8 @@ public class GeneralLocationTest extends Application {
         Creature testCreature1 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         
-        testLocation.addCreature(testCreature1, 250, 250);
-        testLocation.addCreature(testCreature2, 250, 270);
+        testLocation.addMapObject(testCreature1, 250, 250);
+        testLocation.addMapObject(testCreature2, 250, 270);
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
@@ -198,10 +198,10 @@ public class GeneralLocationTest extends Application {
         Creature testCreature2 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         Creature testCreature3 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         Creature testCreature4 = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
-        testLocation.addCreature(testCreature1, 50, 50);
-        testLocation.addCreature(testCreature2, 50, 50);
-        testLocation.addCreature(testCreature3, 150, 50);
-        testLocation.addCreature(testCreature4, 250, 50);
+        testLocation.addMapObject(testCreature1, 50, 50);
+        testLocation.addMapObject(testCreature2, 50, 50);
+        testLocation.addMapObject(testCreature3, 150, 50);
+        testLocation.addMapObject(testCreature4, 250, 50);
         int mobsAtLocation = testLocation.getCreatures().size();
         testCreature1.setRemovable();
         testCreature2.setRemovable();
@@ -220,14 +220,14 @@ public class GeneralLocationTest extends Application {
     
     @Test
     public void addedCreaturesKnowTheirLocation() {
-        testLocation.addCreature(testCreature, 7, 8);
+        testLocation.addMapObject(testCreature, 7, 8);
         assert(testCreature.getLocation()==testLocation);
     }
     
     @Test
     public void addedStructuresKnowTheirLocation() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
-        testLocation.addStructure(testRock, 300 , 200);
+        testLocation.addMapObject(testRock, 300 , 200);
         assert(testRock.getLocation() == testLocation);
     }
     
@@ -239,7 +239,7 @@ public class GeneralLocationTest extends Application {
    
     @Test
     public void removableMobsAreRemovedOnUpdate() {
-        testLocation.addCreature(testCreature, 50, 70);
+        testLocation.addMapObject(testCreature, 50, 70);
         testCreature.setRemovable();
         testLocation.update(1);
         assert(testLocation.getCreatures().isEmpty());

@@ -51,10 +51,10 @@ public class GeneralCombatTest {
         
         combatant1 = new Creature("Combatant 1", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         combatant1.addAction(new MeleeAttack());
-        testLocation.addCreature(combatant1, 380, 400);
+        testLocation.addMapObject(combatant1, 380, 400);
         combatant2 = new Creature("Combatant 2", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         combatant2.addAction(new MeleeAttack());
-        testLocation.addCreature(combatant2, 380, 400);
+        testLocation.addMapObject(combatant2, 380, 400);
     }
     
     @Test

@@ -5,13 +5,11 @@
  */
 package com.nkoiv.mists.game.ui;
 
-import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.items.Inventory;
-import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.ui.PopUpMenu.MenuButton;
 import java.util.logging.Level;
@@ -19,7 +17,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Rectangle;
 
 /**
  * InventoryPanel is a panel linked to an inventory.
@@ -179,23 +176,22 @@ public class InventoryPanel extends TiledPanel {
         protected boolean click() {
             switch (this.actionType) {
                 case USE_ITEM: {
-                    this.inv.getItem(slot).use();
+                    Task use = new Task(GenericTasks.ID_USE_ITEM, inv.getOwner().getID(), new int[]{slot});
+                    inv.getOwner().setNextTask(use);
                     this.parent.close();
                     return true;
                 } 
                 case EQUIP_ITEM: {
-                    if (Inventory.equipItem(this.inv, slot)) {
-                        this.parent.close();
-                        return true;
-                    } return false;
+                    Task use = new Task(GenericTasks.ID_EQUIP_ITEM, inv.getOwner().getID(), new int[]{slot});
+                    inv.getOwner().setNextTask(use);
+                    this.parent.close();
+                    return true;
                 }
                 case DROP_ITEM: {
-                    //if (Inventory.dropItem(this.inv, slot)) {
-                        Task drop = new Task(GenericTasks.ID_DROP_ITEM, inv.getOwner().getID(), new int[]{slot});
-                        inv.getOwner().setNextTask(drop);
-                        this.parent.close();
-                        return true;
-                    //} return false;
+                    Task drop = new Task(GenericTasks.ID_DROP_ITEM, inv.getOwner().getID(), new int[]{slot});
+                    inv.getOwner().setNextTask(drop);
+                    this.parent.close();
+                    return true;
                 }
                 default: break;
             }

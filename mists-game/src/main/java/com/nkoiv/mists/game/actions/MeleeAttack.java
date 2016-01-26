@@ -72,7 +72,7 @@ public class MeleeAttack extends Action implements AttackAction {
                     this, "meleeattack",
                     this.getSprite(actor),400);
             //Put the effect on the actor
-            actor.getLocation().addEffect(attackEffect,
+            actor.getLocation().addMapObject(attackEffect,
                     (attackPointX-(this.attackAnimation.getFrameWidth()/2)),
                     (attackPointY-(this.attackAnimation.getFrameHeight()/2)));
             //Link the effect so it moves with actor
