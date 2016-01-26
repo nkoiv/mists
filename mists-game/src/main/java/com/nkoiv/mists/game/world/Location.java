@@ -53,6 +53,7 @@ public class Location extends Flags implements Global {
     private ArrayList<Structure> structures;
     private List<Effect> effects;
     
+    private boolean loading;
     private final HashMap<Integer, MapObject> mobs = new HashMap<>();
     private int nextID = 1;
     
@@ -202,6 +203,7 @@ public class Location extends Flags implements Global {
     * @param map Map to load
     */
     public void loadMap(GameMap map) {
+        this.loading = true;
         this.map = map;
         // Add in all the static structures from the selected map
         int addedStructures = 0;
@@ -211,6 +213,7 @@ public class Location extends Flags implements Global {
             addedStructures++;
         }
         Mists.logger.log(Level.INFO, "{0} structures generated", addedStructures);
+        this.loading = false;
     }
     
     public int getMobCount() {
@@ -389,12 +392,32 @@ public class Location extends Flags implements Global {
         this.mobs.remove(mob.getID());
     }
     
+    public void clientAddMapObject(MapObject mob, int mobID) {
+        if (mob == null) return;
+        mob.setID(mobID);
+        if (mob instanceof Structure) {
+            this.structures.add((Structure)mob);
+        }
+        if (mob instanceof Creature) {
+            this.creatures.add((Creature)mob);
+        }
+        if (mob instanceof Effect) {
+            this.effects.add((Effect)mob);
+        }
+        this.mobs.put(mob.getID(), mob);
+        mob.setLocation(this);
+    }
         
     /**
      * Generic MapObject insertion.
      * @param mob MapObject to insert in the map
      */
     public void addMapObject(MapObject mob) {
+        if (Mists.gameMode == GameMode.CLIENT && this.loading == false) {
+            //Clientmode should use ClientAddMapObject
+            Mists.logger.warning("Client mode tried to add a map object directly ("+mob.toString()+")");
+            return;
+        } 
         this.giveID(mob);
         if (mob instanceof Structure) {
             this.structures.add((Structure)mob);

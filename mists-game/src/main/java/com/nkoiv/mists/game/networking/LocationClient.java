@@ -207,8 +207,7 @@ public class LocationClient {
         if (m == null) return;
         if (mob.hasItems) addOutgoingUpdate(new RequestAllItems(mob.id));
         if (this.location.getMapObject(mob.id) != null) this.location.removeMapObject(mob.id);
-        this.location.setNextID(mob.id);
-        this.location.addMapObject(m);
+        this.location.clientAddMapObject(m, mob.id);
         this.location.getMapObject(mob.id).setPosition(mob.xPos, mob.yPos);
         Mists.logger.info(m.getName()+" succesfully placed at "+mob.xPos+","+mob.yPos);
         if (!this.ready) {
