@@ -88,6 +88,7 @@ MapObjects, or MOBs for short, are a myriad bunch. However when it comes to repr
 ##Tasks and Actions
 
 Tasks are the main thing dictating how Creatures (themselves a type of MapObject) move and act. When it is a creatures turn to act (called in generally by the Location.tick()), it consumes the next task it has, acting accordingly. Generally the PlayerCharacter has it's NextTask set by keyboard and mouse input, whereas computer controlled Creatures get their Tasks from their AI routine. The reason Creatures are given Tasks rather than allowed to act directly, is because Tasks are easy to serialize and transport over network in a multiplayer game. In general most creatures have access to most tasks, and the list of available tasks is maintained in ([GenericTasks.java](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/actions/GenericTasks.java)).
+
 Actions are more complicated and generally more focused than tasks. They're also instantiable and thus customizable per owner. While Tasks govern basic things such as moving and handling items, Actions contain various combat manouvres, spells and the sort. Available Actions per Creature are stored with the creature, along with their cooldowns, resource costs etc. Using an Action is a Task itself.
 
 ###Pathfinding
