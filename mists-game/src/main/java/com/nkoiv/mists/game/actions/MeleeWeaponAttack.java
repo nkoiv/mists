@@ -68,7 +68,7 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
             //attackEffect.getSprite().addVelocity(swingTarget[0]*speed, swingTarget[1]*speed);
             attackEffect.getSprite().setSpin(400);
             Mists.logger.info("Swinging towards: "+Toolkit.clockwise(actor.getFacing()));
-            actor.getLocation().addMapObject(attackEffect,
+            actor.getLocation().addEffect(attackEffect,
                     (attackPoint[0]-attackEffect.getSprite().getRotationPointX()),
                     (attackPoint[1]-attackEffect.getSprite().getRotationPointY()));
             attackEffect.setLinkedObject(actor);

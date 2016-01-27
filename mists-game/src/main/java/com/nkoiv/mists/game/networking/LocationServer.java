@@ -24,6 +24,7 @@ import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddItem;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
+import com.nkoiv.mists.game.networking.LocationNetwork.FullMapObjectIDList;
 import com.nkoiv.mists.game.networking.LocationNetwork.LocationClear;
 import com.nkoiv.mists.game.networking.LocationNetwork.Login;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectRequest;
@@ -41,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -166,9 +168,23 @@ public class LocationServer {
                 }
                 
                 if (object instanceof RequestLocationClear) {
-                    LocationClear lc = new LocationClear();
-                    lc.clear = ((RequestLocationClear)object).mobCount == location.getMobCount();
-                    addServerUpdate(lc, player.playerID);
+                    int mobsOnClient = ((RequestLocationClear)object).mobCount;
+                    int mobsOnServer = location.getMobCount();
+                    if (mobsOnClient == mobsOnServer) {
+                        LocationClear lc = new LocationClear();
+                        lc.clear = true;//((RequestLocationClear)object).mobCount == location.getMobCount();
+                        addServerUpdate(lc, player.playerID);
+                    } else {
+                        FullMapObjectIDList fullMobList = new FullMapObjectIDList();
+                        Object[] mobIDObjects = location.getAllMobsIDs().toArray();
+                        fullMobList.mobCount = mobIDObjects.length;
+                        int[] mobIDs = new int[fullMobList.mobCount];
+                        for (int i = 0; i<mobIDObjects.length; i++) {
+                            mobIDs[i] = (Integer)mobIDObjects[i];
+                        }
+                        fullMobList.mobIDList = mobIDs;
+                        addServerUpdate(fullMobList, player.playerID);
+                    }
                 } 
                 
                 //if (object instanceof Task || object instanceof MapObjectUpdateRequest || object instanceof MapObjectUpdate || object instanceof RequestAllItems) {

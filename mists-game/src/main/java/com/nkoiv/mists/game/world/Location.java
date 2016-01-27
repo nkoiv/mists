@@ -413,12 +413,12 @@ public class Location extends Flags implements Global {
      * @param mob MapObject to insert in the map
      */
     public void addMapObject(MapObject mob) {
-        if (Mists.gameMode == GameMode.CLIENT && this.loading == false) {
+        if (Mists.gameMode == GameMode.CLIENT && (this.loading == false && (!(mob instanceof Effect)))) {
             //Clientmode should use ClientAddMapObject
             Mists.logger.warning("Client mode tried to add a map object directly ("+mob.toString()+")");
             return;
         } 
-        this.giveID(mob);
+        if (!(mob instanceof Effect)) this.giveID(mob);
         if (mob instanceof Structure) {
             this.structures.add((Structure)mob);
         }
@@ -428,7 +428,7 @@ public class Location extends Flags implements Global {
         if (mob instanceof Effect) {
             this.effects.add((Effect)mob);
         }
-        this.mobs.put(mob.getID(), mob);
+        if (!(mob instanceof Effect)) this.mobs.put(mob.getID(), mob);
         mob.setLocation(this);
     }
     
@@ -468,11 +468,13 @@ public class Location extends Flags implements Global {
     }
     
     /** Adds an Effect to the location
+    * Effects do not use location based mobID,
+    * so they're safe handled totally clientside
     * @param e The effect to be added
     * @param xPos Position for the effect on the X-axis
     * @param yPos Position for the effect on the Y-axis
     */
-    private void addEffect(Effect e, double xPos, double yPos) {
+    public void addEffect(Effect e, double xPos, double yPos) {
         if (!this.effects.contains(e)) {
             this.addMapObject(e);
         }

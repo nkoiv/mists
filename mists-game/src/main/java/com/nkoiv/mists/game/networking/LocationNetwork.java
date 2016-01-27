@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.world.TileMap;
+import java.util.Set;
 
 /**
  *
@@ -22,6 +23,7 @@ public class LocationNetwork {
 	// This registers objects that are going to be sent over the network.
 	static public void register (EndPoint endPoint) {
 		Kryo kryo = endPoint.getKryo();
+                kryo.register(int[].class);
 		kryo.register(Login.class);
 		kryo.register(RegistrationRequired.class);
 		kryo.register(Register.class);
@@ -29,6 +31,7 @@ public class LocationNetwork {
                 kryo.register(RequestLocationClear.class);
                 kryo.register(LocationClear.class);
                 //MapObject related classes
+                kryo.register(FullMapObjectIDList.class);
                 kryo.register(MapObjectRequest.class);
                 kryo.register(AddMapObject.class);
                 kryo.register(MapObjectUpdateRequest.class);
@@ -70,6 +73,11 @@ public class LocationNetwork {
         }
         
         //--- MapObjects---
+        static public class FullMapObjectIDList {
+            int mobCount;
+            int[] mobIDList;
+        }
+        
         static public class MapObjectUpdateRequest {
             public int id;
             public MapObjectUpdateRequest(){}

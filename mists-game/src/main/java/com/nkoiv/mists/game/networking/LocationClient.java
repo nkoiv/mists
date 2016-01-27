@@ -27,6 +27,7 @@ import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddItem;
 import com.nkoiv.mists.game.networking.LocationNetwork.AddMapObject;
+import com.nkoiv.mists.game.networking.LocationNetwork.FullMapObjectIDList;
 import com.nkoiv.mists.game.networking.LocationNetwork.LocationClear;
 import com.nkoiv.mists.game.networking.LocationNetwork.Login;
 import com.nkoiv.mists.game.networking.LocationNetwork.MapObjectRequest;
@@ -40,7 +41,10 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Stack;
+import java.util.logging.Level;
 import javafx.application.Platform;
 
 /**
@@ -230,12 +234,13 @@ public class LocationClient {
                     game.clearLoadingScreen();
                     ((LocationState)game.currentState).loadDefaultUI();
                 }
+                continue;
             }
             
             if (object instanceof AddMapObject) {
                 AddMapObject mobPackage = (AddMapObject)object;
                 handleIncomingMob(mobPackage);
-                return;
+                continue;
             }
 
             if (object instanceof MapObjectUpdate) {
@@ -245,6 +250,7 @@ public class LocationClient {
                     Mists.logger.info("Tried updating Mob that doesn't exist - requesting mob (id:"+(((MapObjectUpdate)object).id)+")");
                     this.addOutgoingUpdate(new MapObjectRequest(((MapObjectUpdate)object).id));
                 }
+                continue;
             }
 
             if (object instanceof RemoveMapObject) {
@@ -253,6 +259,7 @@ public class LocationClient {
                 //location.removeMapObject(mob.id);
                 if (location.getMapObject(mob.id) == null) return;
                 location.getMapObject(mob.id).setRemovable();
+                continue;
             }
 
             if (object instanceof Task) {
@@ -270,6 +277,45 @@ public class LocationClient {
                     if (owner instanceof HasInventory) {
                         ((HasInventory) owner).getInventory().forceItemIntoSlot(i, ai.slotID);
                     }
+                }
+                continue;
+            }
+            
+            if (object instanceof FullMapObjectIDList) {
+                FullMapObjectIDList fl = ((FullMapObjectIDList)object);
+                Mists.logger.log(Level.INFO, "Got FullMapObjectIDList, size {0} Currently mobs in loc: {1}", new Object[]{fl.mobIDList.length, location.getAllMobsIDs().size()});
+                syncMobsWithServer(fl);
+                continue;
+            }
+            
+        }
+    }
+    
+    private void syncMobsWithServer(FullMapObjectIDList fullMobList) {
+        HashSet<Integer> mobsOnServer = new HashSet<>();
+        for (int i : fullMobList.mobIDList) {
+            mobsOnServer.add(i);
+        }
+        
+        HashSet<Integer> mobsOnClient = new HashSet<>();
+        for (int i : location.getAllMobsIDs()) {
+            mobsOnClient.add(i);
+        }
+        
+        for (int mobID : mobsOnClient) {
+            if (!(mobsOnServer.contains(mobID))) {
+                Mists.logger.info("mobID "+mobID+" was not found on server, removing");
+                location.removeMapObject(mobID);
+            }
+        }
+        if (fullMobList.mobIDList.length == location.getMobCount()) return;
+        else {
+            for (int mobID : fullMobList.mobIDList) {
+                if (!(mobsOnClient.contains(mobID))) {
+                    Mists.logger.info("mobID "+mobID+" was not found on client, requesting from server");
+                    MapObjectRequest mobRequest = new MapObjectRequest();
+                    mobRequest.id = mobID;
+                    addOutgoingUpdate(mobRequest);
                 }
             }
         }
