@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.AI;
 
+import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -24,7 +26,7 @@ public class MonsterAI extends CreatureAI{
     protected Task pickNewAction() {
         if (!this.active) {
             if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), creep.getLocation().getPlayer().getCenterXPos(), creep.getLocation().getPlayer().getCenterYPos())
-                    < 10 * 32) {
+                    < 10 * Mists.TILESIZE) {
                 if (this.isInLineOfSight(creep.getLocation().getPlayer())) {
                     this.active = true;
                 }

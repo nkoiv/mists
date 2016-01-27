@@ -6,6 +6,8 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class PathFinder {
     public PathFinder (Location l) {
         this.location = l;
         this.maxSearchDepth = 10;
-        this.nodeSize = 32; //size of nodes in map pixels - usually same as tilesize
+        this.nodeSize = Mists.TILESIZE; //size of nodes in map pixels - usually same as tilesize
         //First we'll convert map to tiles, even if it's BGMap
         mapTileWidth = (int)(l.getMap().getWidth() / nodeSize);
         mapTileHeight = (int)(l.getMap().getHeight() / nodeSize); 

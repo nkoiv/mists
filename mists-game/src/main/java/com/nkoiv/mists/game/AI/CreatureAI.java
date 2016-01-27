@@ -69,7 +69,7 @@ public class CreatureAI extends Flags{
         if (creep.getLocation().getPlayer() == null) return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         if (!this.active) {
             if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), creep.getLocation().getPlayer().getCenterXPos(), creep.getLocation().getPlayer().getCenterYPos())
-                    < 10 * 32) {
+                    < 10 * Mists.TILESIZE) {
                 if (this.isInLineOfSight(creep.getLocation().getPlayer())) {
                     this.active = true;
                 }

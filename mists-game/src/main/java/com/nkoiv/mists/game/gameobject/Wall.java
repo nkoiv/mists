@@ -232,20 +232,20 @@ public class Wall extends Structure {
         parameters.setFill(Color.TRANSPARENT);
         wallparts.setViewport(new Rectangle2D(0,0,graphics.getWidth(),graphics.getHeight()));            
         WritableImage downWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(32,0,graphics.getWidth(),graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(Mists.TILESIZE,0,graphics.getWidth(),graphics.getHeight()));
         WritableImage upWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(64,0,graphics.getWidth(),graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(Mists.TILESIZE*2,0,graphics.getWidth(),graphics.getHeight()));
         WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(96,0,graphics.getWidth(),graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(Mists.TILESIZE*3,0,graphics.getWidth(),graphics.getHeight()));
         WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
         //Diagonal
-        wallparts.setViewport(new Rectangle2D(0,32,graphics.getWidth(),graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(0,Mists.TILESIZE,graphics.getWidth(),graphics.getHeight()));
         WritableImage upleftWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(32,32,graphics.getWidth(),graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(Mists.TILESIZE,Mists.TILESIZE,graphics.getWidth(),graphics.getHeight()));
         WritableImage downleftWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(64,32,graphics.getWidth(),graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(Mists.TILESIZE*2,Mists.TILESIZE,graphics.getWidth(),graphics.getHeight()));
         WritableImage downrightWall = wallparts.snapshot(parameters, snapshot);
-        wallparts.setViewport(new Rectangle2D(96,32,graphics.getWidth(),graphics.getHeight()));
+        wallparts.setViewport(new Rectangle2D(Mists.TILESIZE*3,Mists.TILESIZE,graphics.getWidth(),graphics.getHeight()));
         WritableImage uprightWall = wallparts.snapshot(parameters, snapshot);
         wallimages =  new Image[]{upleftWall, upWall, uprightWall, leftWall, rightWall, downleftWall, downWall, downrightWall};
         //Cardinal

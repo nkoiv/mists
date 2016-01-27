@@ -6,6 +6,7 @@
 package LocationTests;
 
 import TestTools.JavaFXThreadingRule;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
@@ -54,7 +55,7 @@ public class PathFinderTest {
     public void setUp() {
         testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
         testLocation.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
-        testCollisionMap = new CollisionMap(testLocation, 32);
+        testCollisionMap = new CollisionMap(testLocation, Mists.TILESIZE);
         testPathFinder = new PathFinder(testCollisionMap, 50, true);
         crossableTerrain = new ArrayList<>();
         crossableTerrain.add(0);

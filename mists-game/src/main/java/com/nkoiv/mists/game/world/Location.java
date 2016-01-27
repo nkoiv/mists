@@ -186,7 +186,7 @@ public class Location extends Flags implements Global {
      * the map playable (collisionmaps, lights...)
      */
     private void localizeMap() {
-        this.collisionMap = new CollisionMap(this, 32);
+        this.collisionMap = new CollisionMap(this, Mists.TILESIZE);
         this.collisionMap.setStructuresOnly(true);
         this.collisionMap.updateCollisionLevels();
         this.collisionMap.printMapToConsole();
