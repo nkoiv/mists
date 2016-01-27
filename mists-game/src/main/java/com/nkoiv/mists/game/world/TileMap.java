@@ -195,9 +195,14 @@ public class TileMap implements GameMap, KryoSerializable {
                 boolean[] wallneighbours = getNeighbouringWalls((int)s.getXPos()/this.tilesize, (int)s.getYPos()/this.tilesize);
                 Wall w = (Wall)s;
                 w.setNeighbours(wallneighbours);
-                w.updateNeighbours();
             }
         }
+        for (Structure s: staticStructures) {
+            if (s instanceof Wall) {
+                ((Wall)s).updateNeighbours();
+            }
+        }
+        
         Mists.logger.info("Done generating static structures");
         return staticStructures;
     }
