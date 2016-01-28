@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 /**
@@ -84,9 +85,35 @@ public class WorldmapState implements GameState {
         return this.uiComponents.get(uicName);
     }
 
-    @Override
+   @Override
     public void render(Canvas gameCanvas, Canvas uiCanvas) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GraphicsContext gc = gameCanvas.getGraphicsContext2D();
+        double screenWidth = gameCanvas.getWidth();
+        double screenHeight = gameCanvas.getHeight();
+
+        gc.clearRect(0, 0, screenWidth, screenHeight);
+        if (game.getCurrentWorldMap() != null) {
+            game.getCurrentWorldMap().render(gc);
+        }
+        
+        //Render the UI
+        this.renderUI(uiCanvas);
+        
+    }
+    
+    private void renderUI(Canvas uiCanvas) {
+        GraphicsContext uigc = uiCanvas.getGraphicsContext2D();
+        double screenWidth = uiCanvas.getWidth();
+        double screenHeight = uiCanvas.getHeight();
+        //Render the UI
+        uigc.clearRect(0, 0, screenWidth, screenHeight);
+
+        if (this.drawOrder != null) {
+            for (UIComponent uic : this.drawOrder) {
+                uic.render(uigc, 0, 0);
+            }
+        }
+        
     }
 
     @Override
