@@ -21,7 +21,7 @@ import javafx.scene.paint.Color;
  * things that rely on location-specific info to function.
  * @author nikok
  */
-public class Overlay {
+public abstract class Overlay {
     
     private Overlay() {
         //Dont subclass this static class

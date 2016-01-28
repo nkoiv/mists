@@ -9,7 +9,6 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.ui.UIComponent;
-import com.nkoiv.mists.game.world.WorldMap;
 import com.nkoiv.mists.game.world.WorldMap.MapLocation;
 import java.util.ArrayList;
 import java.util.HashMap;
