@@ -229,7 +229,20 @@ A neighbouring node is added to the list of current neighbours if and only if:
 Once the node gets on the list of possible neighbours, it can be ranked and considered as per normal. A path is constructed and returned at the end, though it's somewhat redundant considering the nodes themselves have the capability to act as a linked list (getNextNode()).
 
 ##WorldMap
-TODO, probably cut out
+
+WorldMap is the part of the game where player(s) moves between locations. In essence this means that worldmap is a network of mapnodes, mosts containing a transition to the location it represents. Some nodes can also serve other purposes, such as simply provide an empty space to move through. The actual map behind the nodes is purely graphical and serves no purpose beyond aesthetics.
+
+WorldMap, as opposed to the Location, is a turn-based affair. Things happen on worldmap after player presses a button, not before.
+
+A small worldmap might look something like this:
+[CASTLE]----[MOUNTAINS]---[LAIR]
+ |
+[ ]--[TOWN]
+ |
+[HARBOR]--[SHIP]
+
+Each mapnode contains a list of adjacent nodes, which governs the possible movement routes. A node cannot be hopped over with normal movement, and each node is entered and exited individually. These enter and exit -functions provide an opportunity for turn-based events.
+	
 
 ##Town
 TODO, probably cut out

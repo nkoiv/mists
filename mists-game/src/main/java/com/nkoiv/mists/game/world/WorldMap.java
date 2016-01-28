@@ -5,7 +5,9 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -57,17 +59,26 @@ public class WorldMap {
         return null;
     }
     
-    
-    public class MapLocation {
-        private String name;
-        private Location location; //if already created
-        private int locationSeed; //if random generated
-        private Image imageOnMap;
-        private double xPos;
-        private double yPos;
+    public class MapNode {
+        protected String name;
+        protected Image imageOnMap;
+        protected double xPos;
+        protected double yPos;
+        ArrayList<MapNode> neighbours;
         
-        public MapLocation(String name) {
+        public MapNode(String name) {
             this.name = name;
+        }
+        
+        public MapNode getNeighbour(Direction d) {
+            double dir[] = Toolkit.getDirectionXY(d);
+            
+            
+            return null;
+        }
+        
+        public ArrayList<MapNode> getNeighbours() {
+            return this.neighbours;
         }
         
         public String getName() {
@@ -106,6 +117,21 @@ public class WorldMap {
             this.xPos = xPos;
             this.yPos = yPos;
         }
+        
+        
+    }
+    
+    
+    public class MapLocation extends MapNode {
+        
+        private Location location; //if already created
+        private int locationSeed; //if random generated
+        
+        
+        public MapLocation(String name) {
+            super(name);
+        }
+        
         
     }
     
