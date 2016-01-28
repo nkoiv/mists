@@ -235,11 +235,13 @@ WorldMap is the part of the game where player(s) moves between locations. In ess
 WorldMap, as opposed to the Location, is a turn-based affair. Things happen on worldmap after player presses a button, not before.
 
 A small worldmap might look something like this:
+<pre>
 [CASTLE]----[MOUNTAINS]---[LAIR]
  |
 [ ]--[TOWN]
  |
 [HARBOR]--[SHIP]
+</pre>
 
 Each mapnode contains a list of adjacent nodes, which governs the possible movement routes. A node cannot be hopped over with normal movement, and each node is entered and exited individually. These enter and exit -functions provide an opportunity for turn-based events.
 	
