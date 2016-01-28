@@ -27,10 +27,10 @@ public class DungeonGenerator implements Global{
     private static final int FLOOR = 1;
     private static final int WALL = 2;
     private static final int DOOR = 4;
-    private static final Random rnd = new Random();
+    private static Random rnd = new Random();
 
     public DungeonGenerator() {
-
+        this.rnd = new Random(); //Create a new random seed every time a DungeonGen is initialized
 
     }
     
@@ -38,13 +38,13 @@ public class DungeonGenerator implements Global{
         rnd.setSeed(seed);
     }
 
-    public static TileMap generateDungeon(Location l, int xSize, int ySize) {
+    public static TileMap generateDungeon(DungeonGenerator mapGen, int xSize, int ySize) {
             int totalAreas  = 20; //TODO: Make these into parameters
             int minAreaSize = 6;
             boolean treeMode = true;
-            ArrayList<BSParea> BSPareas = BSPdungeon(l.getMapGen(), xSize, ySize, totalAreas, 0.3f, 0.7f, minAreaSize, treeMode);
+            ArrayList<BSParea> BSPareas = BSPdungeon(mapGen, xSize, ySize, totalAreas, 0.3f, 0.7f, minAreaSize, treeMode);
             int[][] randomStructures = dungeonStructures(BSPareas, xSize, ySize, minAreaSize);
-            TileMap dungeon =  new TileMap (xSize, ySize, randomStructures);
+            TileMap dungeon =  new TileMap (xSize, ySize, Mists.TILESIZE, randomStructures);
             //TODO: make the floor uneven, use different tiles and that stuff
             return dungeon;
     }

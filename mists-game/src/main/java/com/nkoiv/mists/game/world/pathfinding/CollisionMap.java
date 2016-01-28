@@ -35,11 +35,14 @@ public class CollisionMap {
         Mists.logger.info("Generating collisionmap for "+l.getName());
         double startTime = System.currentTimeMillis();
         //First we'll convert map to tiles, even if it's BGMap
+        Mists.logger.info("Map width: "+l.getMap().getWidth()+" Map height: "+l.getMap().getHeight());
         this.mapTileWidth = (int)(l.getMap().getWidth() / nodeSize)+1;
-        this.mapTileHeight = (int)(l.getMap().getHeight() / nodeSize)+1; 
+        this.mapTileHeight = (int)(l.getMap().getHeight() / nodeSize)+1;
+        Mists.logger.info("NodeMap: "+mapTileWidth+"x"+mapTileHeight);
         nodeMap = new Node[mapTileWidth][mapTileHeight];
         //visited = new Boolean[mapTileWidth][mapTileHeight];
         //Then populate a nodemap with empty (=collisionLevel 0) nodes
+        Mists.logger.info("Nodemap initialized. Going through the nodes... ("+this.mapTileHeight+"x"+this.mapTileWidth+")");
         for (int row = 0; row < this.mapTileHeight;row++) {
             for (int column = 0; column < this.mapTileWidth; column++) {
                 this.nodeMap[column][row] = new Node(column, row, nodeSize, 0);

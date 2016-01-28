@@ -58,27 +58,40 @@ public class WorldMap {
         }
         return null;
     }
-    
+    /**
+     * 
+     */
     public class MapNode {
         protected String name;
         protected Image imageOnMap;
         protected double xPos;
         protected double yPos;
-        ArrayList<MapNode> neighbours;
+        MapNode[] neighboursByDirection; //0 is left empty, as the direction would be Direction.STAY
+        /* Neighbours by direction
+        * [8][1][2]
+        * [7]   [3]
+        * [6][5][4]
+        */
         
         public MapNode(String name) {
             this.name = name;
+            this.neighboursByDirection = new MapNode[9];
         }
         
         public MapNode getNeighbour(Direction d) {
-            double dir[] = Toolkit.getDirectionXY(d);
-            
-            
-            return null;
+            return neighboursByDirection[Toolkit.getDirectionNumber(d)];
         }
         
-        public ArrayList<MapNode> getNeighbours() {
-            return this.neighbours;
+        public void addNeighbour(MapNode neighbour, Direction d) {
+            this.neighboursByDirection[Toolkit.getDirectionNumber(d)] = neighbour;
+        }
+        
+        public ArrayList<MapNode> getNeighboursAsAList() {
+            ArrayList<MapNode> n = new ArrayList<>();
+            for (int i = 1; i < neighboursByDirection.length; i++) {
+                if (neighboursByDirection[i] != null) n.add(neighboursByDirection[i]);
+            }
+            return n;
         }
         
         public String getName() {

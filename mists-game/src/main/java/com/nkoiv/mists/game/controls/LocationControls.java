@@ -259,9 +259,12 @@ public class LocationControls {
     
     public void createLoc(String location) {
         if (location.equals("testmap")) {
+            //TODO: Rewrite this to adhere to LocationLibrary
             //game.moveToState(0);
             Location newlocation = new Location ("ConsoleLoc", new TileMap("/mapdata/pathfinder_test.map"));
-            game.moveToLocation(newlocation);
+            int locationID = game.takeNextFreeLocationID();
+            game.addLocation(locationID, newlocation);
+            game.moveToLocation(locationID);
             //game.moveToState(1);
         }
         

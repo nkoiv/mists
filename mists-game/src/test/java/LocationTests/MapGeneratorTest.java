@@ -61,7 +61,7 @@ public class MapGeneratorTest {
         Random rng = new Random();
         int randomXSize = rng.nextInt(30)+30;
         int randomYSize = rng.nextInt(30)+30;
-        TileMap generatedTilemap = DungeonGenerator.generateDungeon(testLocation, randomXSize, randomYSize);
+        TileMap generatedTilemap = DungeonGenerator.generateDungeon(testLocation.getMapGen(), randomXSize, randomYSize);
         System.out.println("Randomed size was "+randomXSize+","+randomYSize);
         
         assert(generatedTilemap.getWidth() == randomXSize*generatedTilemap.getTileSize() && generatedTilemap.getHeight()==randomYSize*generatedTilemap.getTileSize()); 

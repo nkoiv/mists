@@ -243,7 +243,7 @@ A small worldmap might look something like this:
 [HARBOR]--[SHIP]
 </pre>
 
-Each mapnode contains a list of adjacent nodes, which governs the possible movement routes. A node cannot be hopped over with normal movement, and each node is entered and exited individually. These enter and exit -functions provide an opportunity for turn-based events.
+Each mapnode contains a list of adjacent nodes, which governs the possible movement routes. A node cannot be hopped over with normal movement, and each node is entered and exited individually. These enter and exit -functions provide an opportunity for turn-based events. The adjacent nodes are stored in an array which also denotes the direction they are from the given node. This is both to allow movement via keyboard commands and to make it possible to do non-euclidean maps. The X and Y position the node has on the map are in no way related to the "direction" it is from other nodes.
 	
 
 ##Town

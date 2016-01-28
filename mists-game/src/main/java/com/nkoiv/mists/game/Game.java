@@ -28,6 +28,9 @@ import javafx.scene.input.MouseEvent;
  */
 public class Game {
     private PlayerCharacter player;
+    private HashMap<Integer, Location> generatedLocations = new HashMap<>();
+    private int nextFreeLocationID; //Free ID:s start from 10000. First 9999 are reserved.
+    
     private Location currentLocation;
     private WorldMap currentWorldMap;
     public boolean running = false;
@@ -116,12 +119,35 @@ public class Game {
         }
     }
     
+    public int peekNextFreeLocationID() {
+        return this.nextFreeLocationID;
+    }
+    
+    public int takeNextFreeLocationID() {
+        int id = this.nextFreeLocationID;
+        this.nextFreeLocationID++;
+        return id;
+    }
+    
+    public void addLocation(int locationID, Location location) {
+        this.generatedLocations.put(locationID, location);
+    }
+    
+    public Location getLocation(int locationID) {
+        return this.generatedLocations.get(locationID);
+    }
+    
     /**
     * Move the player (and the game) to a new location
-    * @param l The location to be moved to
+    * @param locationID ID of the Location to move to
     */
-
+    public void moveToLocation(int locationID) {
+        Location l = this.generatedLocations.get(locationID);
+        moveToLocation(l);
+    }
+    
     public void moveToLocation(Location l) {
+        Mists.logger.info("Moving into location "+l.getName());
         if (currentLocation != null) currentLocation.exitLocation();
         l.enterLocation(player);
         currentLocation = l;

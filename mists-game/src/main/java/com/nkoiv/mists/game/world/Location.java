@@ -12,13 +12,11 @@ import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
-import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.networking.LocationServer;
-import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
@@ -48,12 +46,13 @@ import javafx.scene.shape.Line;
  */
 public class Location extends Flags implements Global {
     //private QuadTree mobQuadTree; //Used for collision detection //retired idea for now
+    private int baseLocationID;
     private HashMap<Integer, HashSet> spatial; //New idea for lessening collision detection load
     private ArrayList<Creature> creatures;
     private ArrayList<Structure> structures;
     private List<Effect> effects;
     
-    private boolean loading;
+    public boolean loading;
     private final HashMap<Integer, MapObject> mobs = new HashMap<>();
     private int nextID = 1;
     
@@ -92,15 +91,18 @@ public class Location extends Flags implements Global {
     }
     
     public Location(String name, GameMap map) {
+        Mists.logger.info("Generating location "+name+"...");
         this.name = name;
         this.creatures = new ArrayList<>();
-        this.structures = new ArrayList<>();
-        //---Quad Tree stuff----
-        //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
-        //----------------------
+        this.structures = new ArrayList<>();        
         this.effects = new ArrayList<>();
+        this.mapGen = new DungeonGenerator();
+        Mists.logger.info("Generating new BSP dungeon...");
         this.loadMap(map);
+        Mists.logger.info("Dungeon generated");
+        Mists.logger.info("Localizing map...");
         this.localizeMap();
+        Mists.logger.info("Map localized");
     }
     
     
@@ -111,12 +113,8 @@ public class Location extends Flags implements Global {
     public Location(PlayerCharacter player) {
         Mists.logger.info("Generating POC location...");
         this.name = "POCmap";
-        //this.mapObjects = new ArrayList<>();
         this.creatures = new ArrayList<>();
-        this.structures = new ArrayList<>();
-        //---Quad Tree stuff----
-        //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));
-        //----------------------
+        this.structures = new ArrayList<>();        
         this.effects = new ArrayList<>();
         this.mapGen = new DungeonGenerator();
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
@@ -124,16 +122,13 @@ public class Location extends Flags implements Global {
         //Mists.logger.info("Setting generation seed to 123456789");
         //DungeonGenerator.setRandomSeed(123456789l);
         Mists.logger.info("Generating new BSP dungeon...");
-        this.loadMap(DungeonGenerator.generateDungeon(this, 60, 40));
+        this.loadMap(DungeonGenerator.generateDungeon(this.mapGen, 60, 40));
         Mists.logger.info("Dungeon generated");
         Mists.logger.info("Localizing map...");
         this.localizeMap();
         Mists.logger.info("Map localized");
-        this.setPlayer(player);
-        this.addCreature(player, 8*TILESIZE, 6*TILESIZE); // <-TODO: Replace with putting player to start
-        this.screenFocus = player;
-        //TODO: Create structures from structure library once its finished
         Mists.logger.info("Generating random structures and creatures");
+        /*
         Structure rock = Mists.structureLibrary.create("Rock", this, 0, 0);
 
         this.setMobInRandomOpenSpot(rock);
@@ -177,10 +172,10 @@ public class Location extends Flags implements Global {
         
         Mists.logger.info("Location generation complete");
         
-        this.setMobInRandomOpenSpot(player);
+        //this.setMobInRandomOpenSpot(player);
         
         this.lights.setMinLightLevel(0);
-        
+        */
     }
     
     /**
@@ -189,8 +184,11 @@ public class Location extends Flags implements Global {
      */
     private void localizeMap() {
         this.collisionMap = new CollisionMap(this, Mists.TILESIZE);
+        Mists.logger.info("Collisionmap generated");
         this.collisionMap.setStructuresOnly(true);
+        Mists.logger.info("CollisionMap set to structures only");
         this.collisionMap.updateCollisionLevels();
+        Mists.logger.info("Collisionlevels updated");
         this.collisionMap.printMapToConsole();
         this.pathFinder = new PathFinder(this.collisionMap, 100, true);
         this.lights = new LightsRenderer(this);
@@ -205,17 +203,21 @@ public class Location extends Flags implements Global {
     * @param map Map to load
     */
     public void loadMap(GameMap map) {
-        this.loading = true;
+        boolean wasLoading  = false;
+        if (this.loading) wasLoading = true;
+        else this.loading = true;
         this.map = map;
         // Add in all the static structures from the selected map
         int addedStructures = 0;
         ArrayList<Structure> staticStructures = map.getStaticStructures(this);
+        Mists.logger.info("Map has "+staticStructures.size()+" static structures");
         for (Structure s : staticStructures) {
+            //Mists.logger.info(addedStructures +" structures added");
             this.addStructure(s, s.getXPos(), s.getYPos());
             addedStructures++;
         }
         Mists.logger.log(Level.INFO, "{0} structures generated", addedStructures);
-        this.loading = false;
+        if (!wasLoading) this.loading = false;
     }
     
     public int getMobCount() {
@@ -1296,6 +1298,14 @@ public class Location extends Flags implements Global {
     
     public String getName() {
         return this.name;
+    }
+    
+    public void setBaseID(int ID) {
+        this.baseLocationID = ID;
+    }
+    
+    public int getBaseID() {
+        return this.baseLocationID;
     }
     
     @Override

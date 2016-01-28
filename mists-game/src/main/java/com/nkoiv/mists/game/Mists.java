@@ -17,6 +17,7 @@ import com.nkoiv.mists.game.libraries.ActionLibrary;
 import com.nkoiv.mists.game.libraries.GraphLibrary;
 import com.nkoiv.mists.game.libraries.ItemLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
+import com.nkoiv.mists.game.libraries.LocationLibrary;
 import com.nkoiv.mists.game.libraries.MobLibrary;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +69,7 @@ public class Mists extends Application implements Global {
     public static ItemLibrary<Item> itemLibrary;
     public static MobLibrary<Structure> structureLibrary;
     public static MobLibrary<Creature> creatureLibrary;
+    public static LocationLibrary locationLibrary;
     public static Stage primaryStage;
     /**
     * start(), coming from the Application that Mists extends, is the call to launch the game.
@@ -202,8 +204,12 @@ public class Mists extends Application implements Global {
         loadingScreen.render(gameCanvas, uiCanvas);
         setupCreatureLibrary();
         logger.info("Creature library initialized");
+        loadingScreen.updateProgress(1, "Generating location templates");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        setupLocationLibrary();
         loadingScreen.updateProgress(1, "Done");
         MistsGame.clearLoadingScreen();
+        
     }
        
     private void setupSoundManager() {
@@ -233,6 +239,11 @@ public class Mists extends Application implements Global {
     private void setupCreatureLibrary() {
         Mists.creatureLibrary = new MobLibrary<>();
         LibLoader.initializeCreatureLibrary(creatureLibrary);
+    }
+    
+    private void setupLocationLibrary() {
+        Mists.locationLibrary = new LocationLibrary();
+        LibLoader.initializeLocationLibrary(locationLibrary);
     }
     
     private void loadFonts() {

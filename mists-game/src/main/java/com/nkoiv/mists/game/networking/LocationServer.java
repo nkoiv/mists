@@ -205,6 +205,7 @@ public class LocationServer {
                 if (connection.player != null) {
                     Mists.logger.info("Player "+connection.player.name+" disconnected");
                     loggedIn.remove(connection.player);
+                    location.getMapObject(connection.player.locationID).setRemovable();
                     /*
                     RemoveMapObject removePlayer = new RemoveMapObject();
                     removePlayer.id = connection.player.id;

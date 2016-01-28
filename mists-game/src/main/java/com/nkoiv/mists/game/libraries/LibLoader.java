@@ -11,11 +11,15 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.ItemType;
 import com.nkoiv.mists.game.items.Weapon;
+import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
+import com.nkoiv.mists.game.sprites.Sprite;
+import java.util.Random;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -199,7 +203,40 @@ public class LibLoader {
         
         //Icons
         
+    }
+    
+    public static void initializeLocationLibrary(LocationLibrary lib) {
+        LocationTemplate testDungeon = new LocationTemplate(0, "TestDungeon", 60*Mists.TILESIZE, 40*Mists.TILESIZE);
+        for (int i = 0; i<10;i++) {
+            //Make a bunch of trees
+            Structure tree = Mists.structureLibrary.create("Tree");
+            testDungeon.mobs.add(tree);
+        }
         
+        for (int i = 0; i<10;i++) {
+            //Make a bunch of itempiles
+            ItemContainer pile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
+            pile.setRenderContent(true);
+            pile.addItem(Mists.itemLibrary.create("sword"));
+            pile.addItem(Mists.itemLibrary.create("himmutoy"));
+            testDungeon.mobs.add(pile);
+        }
+        
+        for (int i = 0; i < 20; i++) {
+            Random rnd = new Random();
+            int randomMob = rnd.nextInt(4);
+            Creature monster;
+            switch (randomMob) {
+                case 0: monster = Mists.creatureLibrary.create("worm"); break;
+                case 1: monster = Mists.creatureLibrary.create("swampy"); break;
+                case 2: monster = Mists.creatureLibrary.create("eggy"); break;
+                case 3: monster = Mists.creatureLibrary.create("rabbit"); break;
+                default: monster = Mists.creatureLibrary.create("worm");
+            }
+            testDungeon.mobs.add(monster);
+        }
+        
+        lib.addTemplate(testDungeon);
         
     }
 }

@@ -65,8 +65,8 @@ public class TileMap implements GameMap, KryoSerializable {
         this.generateTilesFromIntMap();
     }
     
-    public TileMap (int tileWidth, int tileHeight, int[][] intMap) {
-        this.tilesize = Global.TILESIZE;
+    public TileMap (int tileWidth, int tileHeight, int tilesize, int[][] intMap) {
+        this.tilesize = tilesize;
         this.intMap = intMap;
         this.tileWidth=intMap.length;
         this.tileHeight=intMap[0].length;
