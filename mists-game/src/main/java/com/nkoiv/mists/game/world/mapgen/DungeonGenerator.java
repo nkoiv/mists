@@ -33,6 +33,10 @@ public class DungeonGenerator implements Global{
 
 
     }
+    
+    public static void setRandomSeed(long seed) {
+        rnd.setSeed(seed);
+    }
 
     public static TileMap generateDungeon(Location l, int xSize, int ySize) {
             int totalAreas  = 20; //TODO: Make these into parameters

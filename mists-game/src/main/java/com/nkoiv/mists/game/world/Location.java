@@ -121,6 +121,8 @@ public class Location extends Flags implements Global {
         this.mapGen = new DungeonGenerator();
         //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
         //this.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
+        //Mists.logger.info("Setting generation seed to 123456789");
+        //DungeonGenerator.setRandomSeed(123456789l);
         Mists.logger.info("Generating new BSP dungeon...");
         this.loadMap(DungeonGenerator.generateDungeon(this, 60, 40));
         Mists.logger.info("Dungeon generated");

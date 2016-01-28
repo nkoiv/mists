@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.controls.LocationControls;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.WorldMap;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 public class Game {
     private PlayerCharacter player;
     private Location currentLocation;
+    private WorldMap currentWorldMap;
     public boolean running = false;
     public final ArrayList<String> inputLog = new ArrayList<>();
     public Scene currentScene;
@@ -152,6 +154,10 @@ public class Game {
     
     public Location getCurrentLocation() {
         return this.currentLocation;
+    }
+    
+    public WorldMap getCurrentWorldMap() {
+        return this.currentWorldMap;
     }
     
     /*
