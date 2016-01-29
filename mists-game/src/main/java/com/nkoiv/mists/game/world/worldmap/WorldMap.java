@@ -51,7 +51,7 @@ public class WorldMap {
     public void render(GraphicsContext gc) {
         double xOffset = this.getxOffset(gc, playerNode.getXPos());
         double yOffset = this.getyOffset(gc, playerNode.getYPos());
-        gc.drawImage(backgroundImage, xOffset, yOffset);
+        gc.drawImage(backgroundImage, -xOffset, -yOffset);
         for (MapNode mn : this.nodesOnMap) {
             mn.render(gc, xOffset, yOffset);
         }

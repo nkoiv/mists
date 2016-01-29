@@ -105,7 +105,13 @@ public class Game {
         MapNode boat = new MapNode("Boat", new Image("/images/boat.png"));
         MapNode roadToCave = new MapNode("Road", null);
         MapNode byTheWoods = new MapNode("Road to woods", null);
+        MapNode sea1 = new MapNode("Out on the sea", null);
+        MapNode sea2 = new MapNode("Out on the sea", null);
         
+        boat.setNeighbour(sea1, Direction.DOWN);
+        sea1.setNeighbour(boat, Direction.UP);
+        sea1.setNeighbour(sea2, Direction.RIGHT);
+        sea2.setNeighbour(sea1, Direction.LEFT);
         
         boat.setNeighbour(roadToCave, Direction.RIGHT);
         boat.setNeighbour(byTheWoods, Direction.UP);
@@ -113,6 +119,9 @@ public class Game {
         roadToCave.setNeighbour(cave, Direction.RIGHT);
         roadToCave.setNeighbour(boat, Direction.LEFT);
         byTheWoods.setNeighbour(boat, Direction.DOWN);
+        
+        wm.addNode(sea1, 180, 450);
+        wm.addNode(sea2, 550, 550);
         
         wm.addNode(cave, 260, 260);
         wm.addNode(boat, 150, 280);
