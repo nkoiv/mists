@@ -202,7 +202,8 @@ public class LibLoader {
         lib.addImage("buttonSelectSmallbeige", new Image("/images/ui/buttonSquareSelectSmall_beige.png"));
         
         //Icons
-        
+        lib.addImage("circle64", new Image("/images/circle_64.png"));
+        lib.addImage("circle32", new Image("/images/circle_32.png"));
     }
     
     public static void initializeLocationLibrary(LocationLibrary lib) {

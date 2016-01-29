@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world.worldmap;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,6 +19,7 @@ import javafx.scene.image.Image;
 public class MapNode {
         protected String name;
         protected Image imageOnMap;
+        protected boolean bigNode;
         protected double xPos;
         protected double yPos;
         MapNode[] neighboursByDirection; //0 is left empty, as the direction would be Direction.STAY
@@ -29,8 +31,11 @@ public class MapNode {
         
         public MapNode(String name, Image image) {
             this.name = name;
-            this.imageOnMap = image;
             this.neighboursByDirection = new MapNode[9];
+            if (image != null) {
+                this.imageOnMap = image;
+                if (image.getWidth() > 32) bigNode = true;
+            }
         }
         
         public MapNode getNeighbour(Direction d) {
@@ -62,7 +67,9 @@ public class MapNode {
         }
         
         public void render(GraphicsContext gc, double xOffset, double yOffset) {
-            gc.drawImage(imageOnMap, xPos - xOffset, yPos - yOffset);
+            if (bigNode) gc.drawImage(Mists.graphLibrary.getImage("circle64"), xPos - xOffset, yPos - yOffset);
+            if (!bigNode) gc.drawImage(Mists.graphLibrary.getImage("circle32"), xPos - xOffset, yPos - yOffset);
+            if (imageOnMap!=null) gc.drawImage(imageOnMap, xPos - xOffset, yPos - yOffset);
         }
         
         public double getXPos() {
