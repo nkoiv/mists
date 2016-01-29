@@ -49,6 +49,7 @@ public class LocationLibrary  {
             LocationTemplate t = this.lib.get(locationID);
             if (t!=null) return this.generateLocation(t);
         }
+        Mists.logger.warning("Could not generate location");
         return null;
         
     }

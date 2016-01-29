@@ -11,12 +11,15 @@ import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.controls.LocationControls;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.WorldMap;
+import com.nkoiv.mists.game.world.worldmap.WorldMap;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
+import com.nkoiv.mists.game.world.worldmap.LocationNode;
+import com.nkoiv.mists.game.world.worldmap.MapNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
@@ -28,7 +31,8 @@ import javafx.scene.input.MouseEvent;
  */
 public class Game {
     private PlayerCharacter player;
-    private HashMap<Integer, Location> generatedLocations = new HashMap<>();
+    private HashMap<Integer, Location> generatedLocations;
+    private HashMap<Integer, WorldMap> generatedWorldMaps;
     private int nextFreeLocationID; //Free ID:s start from 10000. First 9999 are reserved.
     
     private Location currentLocation;
@@ -77,10 +81,14 @@ public class Game {
         
         //Initialize GameStates
         this.gameStates = new HashMap<>();
+        this.generatedLocations = new HashMap<>();
+        this.generatedWorldMaps = new HashMap<>();
+        
     }
     
     public void start() {
         gameStates.put(MAINMENU, new MainMenuState(this));
+        gameStates.put(WORLDMAP, new WorldMapState(this));
         currentState = gameStates.get(MAINMENU);
         
         //POC player:
@@ -89,7 +97,20 @@ public class Game {
         System.out.println(companion.toString());
         pocplayer.addCompanion(companion);
         pocplayer.addAction(new MeleeWeaponAttack());
-        this.player = pocplayer;
+        setPlayer(pocplayer);
+        
+        //POC worldmap
+        WorldMap wm = new WorldMap("Himmu island", new Image("/images/himmu_island.png"));
+        LocationNode cave = new LocationNode("Cave", new Image("/images/mountain_cave.png"), 1);
+        MapNode boat = new MapNode("Boat", new Image("/images/boat.png"));
+        cave.setNeighbour(boat, Direction.LEFT);
+        boat.setNeighbour(cave, Direction.RIGHT);
+        wm.addNode(cave, 250, 260);
+        wm.addNode(boat, 150, 280);
+        wm.setPlayerNode(boat);
+        wm.setPlayerCharacter(player);
+        this.generatedWorldMaps.put(1, wm);
+        this.currentWorldMap = wm;
         currentState.enter();
         this.running = true;
     }
@@ -113,39 +134,96 @@ public class Game {
         switch (gameStateNumber) {
             case MAINMENU: gameStates.put(MAINMENU, new MainMenuState(this)) ;break;
             case LOCATION: gameStates.put(LOCATION, new LocationState(this)); break;
-            case WORLDMAP: Mists.logger.warning("Tried to enter worldmap!"); break;
+            case WORLDMAP: gameStates.put(WORLDMAP, new WorldMapState(this)); break;
             case LOADSCREEN: Mists.logger.warning("Tried to enter loadscreen!"); break;
             default: Mists.logger.warning("Unknown gamestate!") ;break;
         }
     }
     
+    public void moveToWorldMap(int worldMapID) {
+        WorldMap wm = getWorldMap(worldMapID);
+        moveToWorldMap(wm);
+    }
+    
+    public WorldMap getWorldMap(int worldMapID) {
+        return this.generatedWorldMaps.get(worldMapID);
+    }
+    
+    public void moveToWorldMap(WorldMap wm) {
+        currentWorldMap = wm;
+    }
+    
+    /**
+     * Peek which ID will be given to the next location
+     * that's stored in the generatedLocations.
+     * @return next free LocationID
+     */
     public int peekNextFreeLocationID() {
         return this.nextFreeLocationID;
     }
     
+    /**
+     * Take the next free LocationID number, and
+     * increase the counter by one, reserving the number.
+     * @return next free LocationID
+     */
     public int takeNextFreeLocationID() {
         int id = this.nextFreeLocationID;
         this.nextFreeLocationID++;
         return id;
     }
     
+    /**
+     * Get the next free LocationID in the Game and
+     * add the Location to generatedLocations with it.
+     * @param location The location to store in generatedLocations
+     */
+    public void addLocation(Location location) {
+        this.generatedLocations.put(takeNextFreeLocationID(), location);
+    }
+    
+    /**
+     * Add the Location to generatedLocations with a
+     * specific location ID
+     * @param locationID Location ID to use for the location
+     * @param location The location to store in generatedLocations
+     */
     public void addLocation(int locationID, Location location) {
         this.generatedLocations.put(locationID, location);
     }
     
+    /**
+     * Retreive the location tied to the given locationID
+     * If the locationID results in a null location, a new
+     * location is generated from Mists.LocationLibrary with
+     * the given locationID;
+     * @param locationID
+     * @return 
+     */
     public Location getLocation(int locationID) {
-        return this.generatedLocations.get(locationID);
+        Location l = this.generatedLocations.get(locationID);
+        if (l == null) {
+            l = Mists.locationLibrary.create(locationID);
+            this.generatedLocations.put(locationID, l);
+        }
+        return l;
     }
+    
     
     /**
     * Move the player (and the game) to a new location
     * @param locationID ID of the Location to move to
     */
     public void moveToLocation(int locationID) {
-        Location l = this.generatedLocations.get(locationID);
+        Location l = getLocation(locationID);
         moveToLocation(l);
     }
     
+    /**
+     * Move directly to a location without further consulting
+     * the generatedLocations. For use in multiplayer fex.
+     * @param l Location to move to
+     */
     public void moveToLocation(Location l) {
         Mists.logger.info("Moving into location "+l.getName());
         if (currentLocation != null) currentLocation.exitLocation();

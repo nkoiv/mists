@@ -5,11 +5,14 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
+import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.ui.Console;
 import com.nkoiv.mists.game.ui.UIComponent;
-import com.nkoiv.mists.game.world.WorldMap.MapLocation;
+import com.nkoiv.mists.game.world.worldmap.LocationNode;
+import com.nkoiv.mists.game.world.worldmap.MapNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -21,7 +24,7 @@ import javafx.scene.input.MouseEvent;
  *
  * @author nikok
  */
-public class WorldmapState implements GameState {
+public class WorldMapState implements GameState {
     private HashMap<String, UIComponent> uiComponents;
     private final TreeSet<UIComponent> drawOrder;
     private final Game game;
@@ -30,7 +33,7 @@ public class WorldmapState implements GameState {
     private double lastDragX;
     private double lastDragY;
     
-    public WorldmapState(Game game) {
+    public WorldMapState(Game game) {
         Mists.logger.info("Generating worldmapstate for "+Mists.gameMode);
         this.game = game;
         uiComponents = new HashMap<>();
@@ -118,7 +121,8 @@ public class WorldmapState implements GameState {
 
     @Override
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        handleWorldMapKeyPress(pressedButtons, releasedButtons);
+        game.getCurrentWorldMap().tick(time);
     }
 
 @Override
@@ -146,10 +150,10 @@ public class WorldmapState implements GameState {
         double clickX = me.getX();
         double clickY = me.getY();
         MapObject mob = game.getCurrentWorldMap().mobAtCoordinates(clickX, clickY);
-        MapLocation ml = game.getCurrentWorldMap().locationAtCoordinates(clickX, clickY);
+        MapNode mn = game.getCurrentWorldMap().nodeAtCoordinates(clickX, clickY);
         if (mob != null) Mists.logger.info("Click landed on "+mob.getName());
-        if (ml != null) Mists.logger.info("Click landed on "+ml.getName());
-        if (ml == null && mob == null) Mists.logger.info("Click didn't land on anything");
+        if (mn != null) Mists.logger.info("Click landed on "+mn.getName());
+        if (mn == null && mob == null) Mists.logger.info("Click didn't land on anything");
     }
     
     private void handleMouseDrags(MouseEvent me) {
@@ -195,11 +199,71 @@ public class WorldmapState implements GameState {
         return false;
         
     }
+    
+    private void handleWorldMapKeyPress(ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
+        //TODO: External loadable configfile for keybindings
+        //(probably via a class of its own)
+        if (pressedButtons.isEmpty() && releasedButtons.isEmpty()) {
+            return;
+        }
+        
+        if (releasedButtons.contains(KeyCode.ENTER)) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode();
+            if (mn instanceof LocationNode) {
+                game.moveToLocation(((LocationNode)mn).getLocationID());
+                game.moveToState(Game.LOCATION);
+            }    
+        }
+        
+        //Movement controls
+        if (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W)) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UP);
+            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+        }
+        if (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S)) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWN);
+            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+        }
+        if (pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.LEFT);
+            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+        }
+        if (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D)) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.RIGHT);
+            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+        }
+        if ((pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))
+            && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UPRIGHT);
+            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);         
+        }
+        if ((pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))
+            && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWNRIGHT);
+            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+        }
+        if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A))
+                && (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UPLEFT);
+            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+        }
+        if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) 
+                && (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))) {
+            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWNLEFT);
+            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+        }
+        
+        
+        
+        if (pressedButtons.contains(KeyCode.SPACE)) {
+            
+        }
+
+    }
 
     @Override
     public void updateUI() {
-        //Move the actionbar to where it should be
-        Mists.logger.info("Updating UI. Game dimensions: "+game.WIDTH+"x"+game.HEIGHT);
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

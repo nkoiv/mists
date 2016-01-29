@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game.world;
+package com.nkoiv.mists.game.world.worldmap;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,52 +15,7 @@ import javafx.scene.image.Image;
  *
  * @author nikok
  */
-public class WorldMap {
-    private Image backgroundImage;
-    private ArrayList<MapLocation> locationsOnMap;
-    private ArrayList<MapObject> mobsOnMap;
-    private double xOffset;
-    private double yOffset;
-    
-    public WorldMap(Image backgroundImage) {
-        this.locationsOnMap = new ArrayList<>();
-    }
-    
-     public void render(GraphicsContext gc) {
-        gc.drawImage(backgroundImage, xOffset, yOffset);
-        for (MapLocation ml : this.locationsOnMap) {
-            ml.render(gc, xOffset, yOffset);
-        }
-        for (MapObject mob : this.mobsOnMap) {
-            mob.render(xOffset, yOffset, gc);
-        }
-    }
-    
-    public MapObject mobAtCoordinates(double xCoor, double yCoor) {
-        for (MapObject mob : this.mobsOnMap) {
-            boolean b = true;
-            if (xCoor < mob.getXPos() && xCoor > (mob.getXPos()+mob.getWidth())) b = false;
-            if (yCoor < mob.getYPos() && yCoor > (mob.getYPos()+mob.getHeight())) b = false;
-            
-            if (b) return mob;
-        }
-        return null;
-    }
-    
-    public MapLocation locationAtCoordinates (double xCoor, double yCoor) {
-        for (MapLocation ml : this.locationsOnMap) {
-            boolean b = true;
-            if (xCoor < ml.getXPos() && xCoor > (ml.getXPos()+ml.getImage().getWidth())) b = false;
-            if (yCoor < ml.getYPos() && yCoor > (ml.getYPos()+ml.getImage().getHeight())) b = false;
-            
-            if (b) return ml;
-        }
-        return null;
-    }
-    /**
-     * 
-     */
-    public class MapNode {
+public class MapNode {
         protected String name;
         protected Image imageOnMap;
         protected double xPos;
@@ -73,8 +27,9 @@ public class WorldMap {
         * [6][5][4]
         */
         
-        public MapNode(String name) {
+        public MapNode(String name, Image image) {
             this.name = name;
+            this.imageOnMap = image;
             this.neighboursByDirection = new MapNode[9];
         }
         
@@ -82,7 +37,7 @@ public class WorldMap {
             return neighboursByDirection[Toolkit.getDirectionNumber(d)];
         }
         
-        public void addNeighbour(MapNode neighbour, Direction d) {
+        public void setNeighbour(MapNode neighbour, Direction d) {
             this.neighboursByDirection[Toolkit.getDirectionNumber(d)] = neighbour;
         }
         
@@ -107,7 +62,7 @@ public class WorldMap {
         }
         
         public void render(GraphicsContext gc, double xOffset, double yOffset) {
-            gc.drawImage(imageOnMap, xOffset, yOffset);
+            gc.drawImage(imageOnMap, xPos - xOffset, yPos - yOffset);
         }
         
         public double getXPos() {
@@ -133,20 +88,3 @@ public class WorldMap {
         
         
     }
-    
-    
-    public class MapLocation extends MapNode {
-        
-        private Location location; //if already created
-        private int locationSeed; //if random generated
-        
-        
-        public MapLocation(String name) {
-            super(name);
-        }
-        
-        
-    }
-    
-   
-}
