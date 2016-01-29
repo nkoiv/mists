@@ -5,11 +5,9 @@
  */
 package com.nkoiv.mists.game.world.worldmap;
 
-import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
-import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -25,14 +23,14 @@ public class WorldMap {
     private ArrayList<MapObject> mobsOnMap;
     private MapNode playerNode;
     private PlayerCharacter player;
-    private double xOffset;
-    private double yOffset;
+    private double lastOffsets[];
     
     public WorldMap(String name, Image backgroundImage) {
         this.name = name;
         this.backgroundImage = backgroundImage;
         this.nodesOnMap = new ArrayList<>();
         this.mobsOnMap = new ArrayList<>();
+        lastOffsets = new double[2];
     }
     
     public void addNode(MapNode node, double xCoordinate, double yCoordinate) {
@@ -51,6 +49,8 @@ public class WorldMap {
     }
     
     public void render(GraphicsContext gc) {
+        double xOffset = this.getxOffset(gc, playerNode.getXPos());
+        double yOffset = this.getyOffset(gc, playerNode.getYPos());
         gc.drawImage(backgroundImage, xOffset, yOffset);
         for (MapNode mn : this.nodesOnMap) {
             mn.render(gc, xOffset, yOffset);
@@ -61,7 +61,8 @@ public class WorldMap {
     }
     
     public void tick(double time) {
-        this.player.setPosition(playerNode.getXPos(), playerNode.getYPos());
+        if (playerNode.bigNode) this.player.setPosition(playerNode.getXPos()+16, playerNode.getYPos()+16);
+        else this.player.setPosition(playerNode.getXPos(), playerNode.getYPos());
         this.player.update(time);
         
     }
@@ -87,6 +88,53 @@ public class WorldMap {
         }
         return null;
     }
+    
+    /**
+     * xOffset is calculated from the position of the target in
+     * regards to the current window width. If the target would be
+     * outside viewable area, it's given offset to keep it inside the bounds
+     * @param gc GraphicsContext for window bounds
+     * @param xPos the xCoordinate of the target we're following
+     * @return xOffset for the current screen position
+     */
+    public double getxOffset(GraphicsContext gc, double xPos){
+        double windowWidth = gc.getCanvas().getWidth();
+        windowWidth = windowWidth / Mists.graphicScale;
+	//Calculate Offset to ensure Player is centered on the screen
+        double xOffset = xPos - (windowWidth / 2);
+        //Prevent leaving the screen
+        if (xOffset < 0) {
+            xOffset = 0;
+        } else if (xOffset > backgroundImage.getWidth() -(windowWidth)) {
+            xOffset = backgroundImage.getWidth() - (windowWidth);
+        }
+        this.lastOffsets[0] = xOffset;
+        return xOffset;
+	}
+
+     /**
+     * yOffset is calculated from the position of the target in
+     * regards to the current window width. If the target would be
+     * outside viewable area, it's given offset to keep it inside the bounds
+     * @param gc GraphicsContext for window bounds
+     * @param yPos the yCoordinate of the target we're following
+     * @return yOffset for the current screen position
+     */
+    public double getyOffset(GraphicsContext gc, double yPos){
+        double windowHeight = gc.getCanvas().getHeight();
+        windowHeight = windowHeight / Mists.graphicScale;
+        //Calculate Offset to ensure Player is centered on the screen
+        double yOffset = yPos - (windowHeight / 2);
+        //Prevent leaving the screen
+        if (yOffset < 0) {
+            yOffset = 0;
+        } else if (yOffset > backgroundImage.getHeight() -(windowHeight)) {
+            yOffset = backgroundImage.getHeight() - (windowHeight);
+        }
+        this.lastOffsets[1] = yOffset;
+        return yOffset;
+    }
+    
     
     public MapNode getPlayerNode() {
         return this.playerNode;

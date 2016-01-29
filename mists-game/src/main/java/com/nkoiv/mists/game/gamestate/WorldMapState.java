@@ -216,41 +216,74 @@ public class WorldMapState implements GameState {
         }
         
         //Movement controls
-        if (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W)) {
+        if (releasedButtons.contains(KeyCode.UP) || releasedButtons.contains(KeyCode.W)) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UP);
-            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+            if (mn != null) {
+                game.getCurrentWorldMap().getPlayerNode().exitNode();
+                game.getCurrentWorldMap().setPlayerNode(mn);
+                game.getCurrentWorldMap().getPlayerNode().enterNode();
+            }
+            
         }
-        if (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S)) {
+        if (releasedButtons.contains(KeyCode.DOWN) || releasedButtons.contains(KeyCode.S)) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWN);
-            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+            if (mn != null) {
+                game.getCurrentWorldMap().getPlayerNode().exitNode();
+                game.getCurrentWorldMap().setPlayerNode(mn);
+                game.getCurrentWorldMap().getPlayerNode().enterNode();
+            }
         }
-        if (pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) {
+        if (releasedButtons.contains(KeyCode.LEFT) || releasedButtons.contains(KeyCode.A)) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.LEFT);
-            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+            if (mn != null) {
+                game.getCurrentWorldMap().getPlayerNode().exitNode();
+                game.getCurrentWorldMap().setPlayerNode(mn);
+                game.getCurrentWorldMap().getPlayerNode().enterNode();
+            }
         }
-        if (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D)) {
+        if (releasedButtons.contains(KeyCode.RIGHT) || releasedButtons.contains(KeyCode.D)) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.RIGHT);
-            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+            if (mn != null) {
+                game.getCurrentWorldMap().getPlayerNode().exitNode();
+                game.getCurrentWorldMap().setPlayerNode(mn);
+                game.getCurrentWorldMap().getPlayerNode().enterNode();
+            }
         }
-        if ((pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))
-            && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
+        if ((releasedButtons.contains(KeyCode.UP) || releasedButtons.contains(KeyCode.W))
+            && (releasedButtons.contains(KeyCode.RIGHT) || releasedButtons.contains(KeyCode.D))) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UPRIGHT);
-            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);         
+            if (mn != null) {
+                game.getCurrentWorldMap().getPlayerNode().exitNode();
+                game.getCurrentWorldMap().setPlayerNode(mn);
+                game.getCurrentWorldMap().getPlayerNode().enterNode();
+            }
         }
-        if ((pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))
-            && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
+        if ((releasedButtons.contains(KeyCode.DOWN) || releasedButtons.contains(KeyCode.S))
+            && (releasedButtons.contains(KeyCode.RIGHT) || releasedButtons.contains(KeyCode.D))) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWNRIGHT);
-            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+            if (mn != null) {
+                game.getCurrentWorldMap().getPlayerNode().exitNode();
+                game.getCurrentWorldMap().setPlayerNode(mn);
+                game.getCurrentWorldMap().getPlayerNode().enterNode();
+            }
         }
-        if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A))
-                && (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))) {
+        if ((releasedButtons.contains(KeyCode.LEFT) || releasedButtons.contains(KeyCode.A))
+                && (releasedButtons.contains(KeyCode.UP) || releasedButtons.contains(KeyCode.W))) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UPLEFT);
-            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+            if (mn != null) {
+                game.getCurrentWorldMap().getPlayerNode().exitNode();
+                game.getCurrentWorldMap().setPlayerNode(mn);
+                game.getCurrentWorldMap().getPlayerNode().enterNode();
+            }
         }
-        if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) 
-                && (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))) {
+        if ((releasedButtons.contains(KeyCode.LEFT) || releasedButtons.contains(KeyCode.A)) 
+                && (releasedButtons.contains(KeyCode.DOWN) || releasedButtons.contains(KeyCode.S))) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWNLEFT);
-            if (mn != null) game.getCurrentWorldMap().setPlayerNode(mn);
+            if (mn != null) {
+                game.getCurrentWorldMap().getPlayerNode().exitNode();
+                game.getCurrentWorldMap().setPlayerNode(mn);
+                game.getCurrentWorldMap().getPlayerNode().enterNode();
+            }
         }
         
         

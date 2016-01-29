@@ -43,8 +43,8 @@ public class Game {
     private LoadingScreen loadingScreen;
     private boolean loading;
     
-    private Canvas gameCanvas;
-    private Canvas uiCanvas;
+    private final Canvas gameCanvas;
+    private final Canvas uiCanvas;
     public double WIDTH; //Dimensions of the screen (render area)
     public double HEIGHT; //Dimensions of the screen (render area)
     public double xOffset; //Offsets are used control which part of the map is drawn
@@ -103,10 +103,21 @@ public class Game {
         WorldMap wm = new WorldMap("Himmu island", new Image("/images/himmu_island.png"));
         LocationNode cave = new LocationNode("Cave", new Image("/images/mountain_cave.png"), 1);
         MapNode boat = new MapNode("Boat", new Image("/images/boat.png"));
-        cave.setNeighbour(boat, Direction.LEFT);
-        boat.setNeighbour(cave, Direction.RIGHT);
-        wm.addNode(cave, 250, 260);
+        MapNode roadToCave = new MapNode("Road", null);
+        MapNode byTheWoods = new MapNode("Road to woods", null);
+        
+        
+        boat.setNeighbour(roadToCave, Direction.RIGHT);
+        boat.setNeighbour(byTheWoods, Direction.UP);
+        cave.setNeighbour(roadToCave, Direction.LEFT);
+        roadToCave.setNeighbour(cave, Direction.RIGHT);
+        roadToCave.setNeighbour(boat, Direction.LEFT);
+        byTheWoods.setNeighbour(boat, Direction.DOWN);
+        
+        wm.addNode(cave, 260, 260);
         wm.addNode(boat, 150, 280);
+        wm.addNode(roadToCave, 220, 290);
+        wm.addNode(byTheWoods, 140, 230);
         wm.setPlayerNode(boat);
         wm.setPlayerCharacter(player);
         this.generatedWorldMaps.put(1, wm);

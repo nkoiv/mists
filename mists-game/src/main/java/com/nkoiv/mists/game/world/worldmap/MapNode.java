@@ -38,6 +38,14 @@ public class MapNode {
             }
         }
         
+        public void enterNode() {
+            Mists.logger.info("Node "+this.name+" entered");
+        }
+        
+        public void exitNode() {
+            Mists.logger.info("Node "+this.name+" exited");
+        }
+        
         public MapNode getNeighbour(Direction d) {
             return neighboursByDirection[Toolkit.getDirectionNumber(d)];
         }
