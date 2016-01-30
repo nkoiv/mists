@@ -116,6 +116,7 @@ public class TileMap implements GameMap, KryoSerializable {
         //TODO Should also take in a "HashMap<Integer,String> structureSheet"
         //if (tileCode == CLEAR) return null;
         //Lets make Clear into Wall, for testing
+        Mists.logger.info("Generating structure for tilecode: "+tileCode);
         if (tileCode == CLEAR || tileCode == WALL) {
             Wall dungeonwall = (Wall)Mists.structureLibrary.create("dungeonwall", l, xCoor*tilesize, yCoor*tilesize);
             return dungeonwall;

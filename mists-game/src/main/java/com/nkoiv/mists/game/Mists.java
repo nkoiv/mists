@@ -181,6 +181,15 @@ public class Mists extends Application implements Global {
         });
     }
     
+    public static void loadLibraries() {
+        setupGraphLibrary();
+        setupActionLibrary();
+        setupItemLibrary();
+        setupStructureLibrary();
+        setupCreatureLibrary();
+        setupLocationLibrary();
+    }
+    
     private void loadLibraries(Canvas gameCanvas, Canvas uiCanvas) {
         LoadingScreen loadingScreen = new LoadingScreen("Loading game assets",6);
         MistsGame.setLoadingScreen(loadingScreen);
@@ -208,40 +217,39 @@ public class Mists extends Application implements Global {
         loadingScreen.render(gameCanvas, uiCanvas);
         setupLocationLibrary();
         loadingScreen.updateProgress(1, "Done");
-        MistsGame.clearLoadingScreen();
-        
+        MistsGame.clearLoadingScreen();   
     }
        
-    private void setupSoundManager() {
+    private static void setupSoundManager() {
         Mists.soundManager = new SoundManager(5);
     }
     
-    private void setupGraphLibrary() {
+    private static void setupGraphLibrary() {
         Mists.graphLibrary = new GraphLibrary();
         LibLoader.initializeGraphLibrary(graphLibrary);
     }
     
-    private void setupStructureLibrary() {
+    private static void setupStructureLibrary() {
         Mists.structureLibrary = new MobLibrary<>();
         LibLoader.initializeStructureLibrary(structureLibrary);
     }
     
-    private void setupActionLibrary() {
+    private static void setupActionLibrary() {
         Mists.actionLibrary = new ActionLibrary<>();
         LibLoader.initializeActionLibrary(actionLibrary);
     }
     
-    private void setupItemLibrary() {
+    private static void setupItemLibrary() {
         Mists.itemLibrary = new ItemLibrary<>();
         LibLoader.initializeItemLibrary(itemLibrary);
     }
     
-    private void setupCreatureLibrary() {
+    private static void setupCreatureLibrary() {
         Mists.creatureLibrary = new MobLibrary<>();
         LibLoader.initializeCreatureLibrary(creatureLibrary);
     }
     
-    private void setupLocationLibrary() {
+    private static void setupLocationLibrary() {
         Mists.locationLibrary = new LocationLibrary();
         LibLoader.initializeLocationLibrary(locationLibrary);
     }
