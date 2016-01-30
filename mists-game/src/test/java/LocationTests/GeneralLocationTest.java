@@ -106,7 +106,7 @@ public class GeneralLocationTest extends Application {
     @Test
     public void movingIntoLocationUpdatesCurrentPlayer() {
         PlayerCharacter testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
-        testLocation.enterLocation(testPlayer);
+        testLocation.enterLocation(testPlayer, null);
         assert(testLocation.getPlayer()==testPlayer);
     }
     

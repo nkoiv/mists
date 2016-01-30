@@ -238,9 +238,9 @@ public class Game {
     * Move the player (and the game) to a new location
     * @param locationID ID of the Location to move to
     */
-    public void moveToLocation(int locationID) {
+    public void moveToLocation(int locationID, MapNode entranceNode) {
         Location l = getLocation(locationID);
-        moveToLocation(l);
+        moveToLocation(l, entranceNode);
     }
     
     /**
@@ -248,10 +248,10 @@ public class Game {
      * the generatedLocations. For use in multiplayer fex.
      * @param l Location to move to
      */
-    public void moveToLocation(Location l) {
+    public void moveToLocation(Location l, MapNode entranceNode) {
         Mists.logger.info("Moving into location "+l.getName());
         if (currentLocation != null) currentLocation.exitLocation();
-        l.enterLocation(player);
+        l.enterLocation(player, entranceNode); //Don't give entranceNode as a parameter.
         currentLocation = l;
         GameState s = this.gameStates.get(LOCATION);
         if (s!=null) if (Mists.gameMode == GameMode.CLIENT) ((LocationState)s).getClient().setLocation(l);

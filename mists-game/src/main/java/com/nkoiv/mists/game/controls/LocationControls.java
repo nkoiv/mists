@@ -264,7 +264,7 @@ public class LocationControls {
             Location newlocation = new Location ("ConsoleLoc", new TileMap("/mapdata/pathfinder_test.map"));
             int locationID = game.takeNextFreeLocationID();
             game.addLocation(locationID, newlocation);
-            game.moveToLocation(locationID);
+            game.moveToLocation(locationID, null);
             //game.moveToState(1);
         }
         

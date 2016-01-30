@@ -1351,12 +1351,12 @@ public class Location extends Flags implements Global {
      *  EnterLocation should prepare the location for player
      * @param p PlayerCharacter entering the location
      */
-    public void enterLocation(PlayerCharacter p) {
+    public void enterLocation(PlayerCharacter p, MapNode entranceNode) {
         Mists.logger.info("Location "+this.getName()+" entered. Preparing area...");
         this.setPlayer(p);
-        if (this.getEntrace() != null) {
-            Mists.logger.info("Setting exit node to "+Mists.MistsGame.getCurrentWorldMap().getPlayerNode().getName());
-            if (this.getEntrace().getExitNode() == null) this.getEntrace().setExitNode(Mists.MistsGame.getCurrentWorldMap().getPlayerNode());
+        if (this.getEntrace() != null && entranceNode != null) {
+            Mists.logger.info("Setting exit node to "+entranceNode.getName());
+            if (this.getEntrace().getExitNode() == null) this.getEntrace().setExitNode(entranceNode);
         }
         double[] entryPoint = this.getEntryPoint();
         this.addPlayerCharacter(p, entryPoint[0], entryPoint[1]);

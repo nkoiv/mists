@@ -211,7 +211,7 @@ public class WorldMapState implements GameState {
         if (releasedButtons.contains(KeyCode.ENTER)) {
             MapNode mn = game.getCurrentWorldMap().getPlayerNode();
             if (mn instanceof LocationNode) {
-                game.moveToLocation(((LocationNode)mn).getLocationID());
+                game.moveToLocation(((LocationNode)mn).getLocationID(), mn);
                 game.moveToState(Game.LOCATION);
             }    
         }

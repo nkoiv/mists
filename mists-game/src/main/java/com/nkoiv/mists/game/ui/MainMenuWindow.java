@@ -107,7 +107,7 @@ public class MainMenuWindow extends TiledPanel {
                         Location newLoc = Mists.locationLibrary.create(0);
                         Mists.logger.info("Location "+newLoc.getName()+" generated");
                         game.addLocation(1, newLoc);
-                        game.moveToLocation(1);
+                        //game.moveToLocation(1, null);
                         //game.moveToState(Game.LOCATION);  
                         game.moveToState(Game.WORLDMAP);
                         game.clearLoadingScreen();

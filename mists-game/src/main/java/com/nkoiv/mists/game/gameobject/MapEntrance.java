@@ -33,6 +33,7 @@ public class MapEntrance extends Structure {
     
     @Override
     public Trigger[] getTriggers() {
+        if (this.exitNode == null) return new Trigger[1];
         Trigger[] a = new Trigger[]{new EntranceTrigger(this, this.exitNode)};
         return a;
     }

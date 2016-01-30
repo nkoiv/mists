@@ -163,7 +163,7 @@ public class LocationClient {
             public void run() {
                t.buildMap();
                Location l = new Location("ServerMap", t);
-               g.moveToLocation(l);
+               g.moveToLocation(l, null);
             }
         });
         if (!this.ready) {
