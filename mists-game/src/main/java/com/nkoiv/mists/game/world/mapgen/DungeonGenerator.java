@@ -24,9 +24,9 @@ import java.util.Random;
  */
 public class DungeonGenerator implements Global{
     private static final int CLEAR = 0;
-    private static final int FLOOR = 1;
-    private static final int WALL = 2;
-    private static final int DOOR = 4;
+    private static final int FLOOR = 46;
+    private static final int WALL = 35;
+    private static final int DOOR = 43;
     private static Random rnd = new Random();
 
     public DungeonGenerator() {

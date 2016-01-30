@@ -254,7 +254,10 @@ public class Game {
         l.enterLocation(player, entranceNode); //Don't give entranceNode as a parameter.
         currentLocation = l;
         GameState s = this.gameStates.get(LOCATION);
-        if (s!=null) if (Mists.gameMode == GameMode.CLIENT) ((LocationState)s).getClient().setLocation(l);
+        if (s!=null) {
+            if (Mists.gameMode == GameMode.CLIENT) ((LocationState)s).getClient().setLocation(l);
+            if (Mists.gameMode == GameMode.SERVER) ((LocationState)s).getServer().setLocation(l, entranceNode);
+        }
     }
     
     public void updateUI() {
@@ -319,6 +322,7 @@ public class Game {
     */
     public void render() {
         if (this.loading) {
+            if (this.loadingScreen == null) return;
             this.loadingScreen.render(gameCanvas, uiCanvas);
             if (this.loadingScreen.isReady()) this.loading=false;
             return;

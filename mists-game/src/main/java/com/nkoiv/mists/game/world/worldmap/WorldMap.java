@@ -13,7 +13,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
- *
+ * Worldmap is a background image with a bunch of
+ * Nodes that player can move in.
  * @author nikok
  */
 public class WorldMap {
@@ -79,6 +80,7 @@ public class WorldMap {
     }
     
     public MapNode nodeAtCoordinates (double xCoor, double yCoor) {
+        //TODO: Results nullpointer on mapnodes without image. Should we target the circle rather?
         for (MapNode ln : this.nodesOnMap) {
             boolean b = true;
             if (xCoor < ln.getXPos() || xCoor > (ln.getXPos()+ln.getImage().getWidth())) b = false;

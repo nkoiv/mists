@@ -259,6 +259,11 @@ public class LocationState implements GameState {
         this.addUIComponent(console);
         this.inConsole = true;
     }
+    
+    public void closeConsole() {
+        this.inConsole = false;
+        this.removeUIComponent("Console");
+    }
 
     /**
      * The Tick command parses user input and sends an update(time) command to the

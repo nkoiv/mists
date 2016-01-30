@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.util.Toolkit;
+import java.util.Arrays;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -251,6 +252,18 @@ public class Wall extends Structure {
         //Cardinal
         
         Mists.logger.info("Done with wallimages");
+    }
+    
+    @Override
+    public String[] getInfoText() {
+        String[] s = new String[]{
+            this.name,
+            "ID "+this.IDinLocation+" @ "+this.location.getName(),
+            "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
+            "Neighbours: ",
+            Arrays.toString(neighbours)
+        };
+        return s;
     }
     
     @Override

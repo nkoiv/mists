@@ -265,6 +265,7 @@ public class LocationControls {
             int locationID = game.takeNextFreeLocationID();
             game.addLocation(locationID, newlocation);
             game.moveToLocation(locationID, null);
+            ((LocationState)game.getGameState(Game.LOCATION)).closeConsole();
             //game.moveToState(1);
         }
         

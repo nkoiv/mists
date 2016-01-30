@@ -36,6 +36,7 @@ import com.nkoiv.mists.game.networking.LocationNetwork.RemoveMapObject;
 import com.nkoiv.mists.game.networking.LocationNetwork.RequestAllItems;
 import com.nkoiv.mists.game.networking.LocationNetwork.RequestLocationClear;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.worldmap.MapNode;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -52,7 +53,9 @@ import java.util.Stack;
  */
 public class LocationServer {
     private Game game;
-    private Location location;
+    private Location mainLocation;
+    private ArrayList<Location> secondaryLocations;
+    
     private Server server;
     private int port;
 
@@ -81,8 +84,7 @@ public class LocationServer {
         this.port = LocationNetwork.PORT;
         LocationNetwork.register(server);
         this.game = game;
-        this.location = game.getCurrentLocation();
-        this.lastMobID = this.location.peekNextID()-1;
+        this.enterLocation(game.getCurrentLocation());
         this.outgoingUpdateStack = new Stack<>();
         for (int i = 0; i < outgoingUpdateStacks.length; i++) {
             this.outgoingUpdateStacks[i] = new Stack<>();
@@ -169,14 +171,14 @@ public class LocationServer {
                 
                 if (object instanceof RequestLocationClear) {
                     int mobsOnClient = ((RequestLocationClear)object).mobCount;
-                    int mobsOnServer = location.getMobCount();
+                    int mobsOnServer = mainLocation.getMobCount();
                     if (mobsOnClient == mobsOnServer) {
                         LocationClear lc = new LocationClear();
                         lc.clear = true;//((RequestLocationClear)object).mobCount == location.getMobCount();
                         addServerUpdate(lc, player.playerID);
                     } else {
                         FullMapObjectIDList fullMobList = new FullMapObjectIDList();
-                        Object[] mobIDObjects = location.getAllMobsIDs().toArray();
+                        Object[] mobIDObjects = mainLocation.getAllMobsIDs().toArray();
                         fullMobList.mobCount = mobIDObjects.length;
                         int[] mobIDs = new int[fullMobList.mobCount];
                         for (int i = 0; i<mobIDObjects.length; i++) {
@@ -205,7 +207,7 @@ public class LocationServer {
                 if (connection.player != null) {
                     Mists.logger.info("Player "+connection.player.name+" disconnected");
                     loggedIn.remove(connection.player);
-                    location.getMapObject(connection.player.locationID).setRemovable();
+                    mainLocation.getMapObject(connection.player.locationID).setRemovable();
                     /*
                     RemoveMapObject removePlayer = new RemoveMapObject();
                     removePlayer.id = connection.player.id;
@@ -236,10 +238,10 @@ public class LocationServer {
             updateAllCreatures();
             lastEnforce = 0;
         }
-        if (this.lastMobID+1 < this.location.peekNextID()) {
+        if (this.lastMobID+1 < this.mainLocation.peekNextID()) {
             Mists.logger.info("MobID out of date, sending updates");
-            for (int i = this.lastMobID+1; i < this.location.peekNextID(); i++) {
-                MapObject mob = this.location.getMapObject(i);
+            for (int i = this.lastMobID+1; i < this.mainLocation.peekNextID(); i++) {
+                MapObject mob = this.mainLocation.getMapObject(i);
                 if (mob!=null) this.outgoingUpdateStack.push(new MapObjectUpdate(i, mob.getXPos(), mob.getYPos()));
                 this.lastMobID++;
             }
@@ -248,15 +250,24 @@ public class LocationServer {
         
     }
     
+    public void setLocation(Location l, MapNode mn) {
+        this.enterLocation(l);
+    }
+    
+    private void enterLocation(Location l) {
+        this.mainLocation = l;
+        this.lastMobID = l.peekNextID()-1;
+    }
+    
     private void sendMap(PlayerConnection c) {
         Mists.logger.info("Sending map for location to "+c.player.name);
-        this.server.sendToTCP(c.getID(), this.location.getMap());
+        this.server.sendToTCP(c.getID(), this.mainLocation.getMap());
     }
     
     private int giveConnectedPlayerCompanion(String name) {
         PlayerCharacter companion = new PlayerCharacter(name);
-        location.addMapObject(companion);
-        companion.setCenterPosition(location.getPlayer().getXPos()+50, location.getPlayer().getYPos()+50);
+        mainLocation.addMapObject(companion);
+        companion.setCenterPosition(mainLocation.getPlayer().getXPos()+50, mainLocation.getPlayer().getYPos()+50);
         companion.addAction(new MeleeAttack());
         Mists.logger.info("Gave the connecting player: "+companion.getName()+" id: "+companion.getID());
         sendMapObject(companion);
@@ -269,23 +280,23 @@ public class LocationServer {
      */
     private void updateAllCreatures() {
         //Mists.logger.info("Sending full creature update");
-        for (Creature c : this.location.getCreatures()) {
+        for (Creature c : this.mainLocation.getCreatures()) {
             this.addMapObjectUpdate(c);
         }
     }
     
     private void sendAllMobs(PlayerConnection c) {
-        Object[] a = this.location.getAllMobsIDs().toArray();
+        Object[] a = this.mainLocation.getAllMobsIDs().toArray();
         for (Object o : a) {
-            MapObject mob = location.getMapObject((Integer)o);
+            MapObject mob = mainLocation.getMapObject((Integer)o);
             this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
         }
     }
     
     private void sendAllCreatures(PlayerConnection c) {  
-        Object[] a = this.location.getAllMobsIDs().toArray();
+        Object[] a = this.mainLocation.getAllMobsIDs().toArray();
         for (Object o : a) {
-            MapObject mob = location.getMapObject((Integer)o);
+            MapObject mob = mainLocation.getMapObject((Integer)o);
             if (mob instanceof Creature) {
                 this.server.sendToTCP(c.getID(), new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos()));
                 if (!((Creature)mob).getInventory().isEmpty()) sendInventory(mob.getID(), c.player.playerID);
@@ -295,9 +306,9 @@ public class LocationServer {
     
     private void sendAllNonWalls(PlayerConnection c) {
         ArrayList<Integer> inventories = new ArrayList<>();
-        Object[] a = this.location.getAllMobsIDs().toArray();
+        Object[] a = this.mainLocation.getAllMobsIDs().toArray();
         for (Object o : a) {
-            MapObject mob = location.getMapObject((Integer)o);
+            MapObject mob = mainLocation.getMapObject((Integer)o);
             if (!(mob instanceof Wall)) {
                 AddMapObject addMob = new AddMapObject(mob.getID(), mob.getName(), mob.getClass().toString(), mob.getXPos(), mob.getYPos());
                 if (mob instanceof HasInventory ){
@@ -349,26 +360,26 @@ public class LocationServer {
         if (o instanceof Task) {
             //TODO: Ensure the client has the right to push this task
             int actorID = ((Task)o).actorID;
-            ((Creature)location.getMapObject(actorID)).setNextTask((Task)o);
+            ((Creature)mainLocation.getMapObject(actorID)).setNextTask((Task)o);
             //Mists.logger.info("Player "+playerID+" placed task on "+actorID+" (TID:"+((Task)o).taskID+")");
         }
         if (o instanceof MapObjectUpdateRequest) {
-            MapObject m = location.getMapObject(((MapObjectUpdateRequest)o).id);
+            MapObject m = mainLocation.getMapObject(((MapObjectUpdateRequest)o).id);
             if (m == null) this.addServerUpdate(new RemoveMapObject(((MapObjectUpdateRequest)o).id), playerID);
             else this.addServerUpdate(new MapObjectUpdate(m.getID(), m.getXPos(), m.getYPos()), playerID);
         }
         if (o instanceof MapObjectRequest) {
             Mists.logger.info("Got mapobject request for "+((MapObjectRequest)o).id);
-            MapObject mob = location.getMapObject(((MapObjectRequest)o).id);
+            MapObject mob = mainLocation.getMapObject(((MapObjectRequest)o).id);
             if (mob != null) sendMapObject(mob);
         }
         if (o instanceof MapObjectUpdate) {
-            MapObject m = location.getMapObject(((MapObjectUpdate)o).id);
+            MapObject m = mainLocation.getMapObject(((MapObjectUpdate)o).id);
             if (m!=null) m.setPosition(((MapObjectUpdate)o).x, ((MapObjectUpdate)o).y);
         }
         if (o instanceof RequestAllItems) {
             Mists.logger.info("Got request for items for " +((RequestAllItems)o).inventoryOwnerID);
-            MapObject m = location.getMapObject(((RequestAllItems)o).inventoryOwnerID);
+            MapObject m = mainLocation.getMapObject(((RequestAllItems)o).inventoryOwnerID);
             if (m!=null) {
                 Mists.logger.info("Sending inventory of "+m.getID()+" to "+playerID);
                 sendInventory(m.getID(), playerID);
@@ -379,7 +390,7 @@ public class LocationServer {
     }
     
     private void sendInventory(int mobID, int playerID) {
-        MapObject m = location.getMapObject(mobID);
+        MapObject m = mainLocation.getMapObject(mobID);
         if (m instanceof HasInventory) {
             Inventory inv = ((HasInventory)m).getInventory();
             if (!inv.isEmpty()) {

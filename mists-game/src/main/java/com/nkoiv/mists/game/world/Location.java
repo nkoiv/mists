@@ -83,13 +83,12 @@ public class Location extends Flags implements Global {
         this.name = name;
         this.creatures = new ArrayList<>();
         this.structures = new ArrayList<>();
-        //---Quad Tree stuff----
-        //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,800,600));        
-        //----------------------
         this.effects = new ArrayList<>();
+        Mists.logger.info("Loading map");
         if (maptype == 0) this.loadMap(new BGMap(new Image(mapPath)));
         if (maptype == 1) this.loadMap(new TileMap(mapPath));
         this.localizeMap();
+        Mists.logger.info("Map localized");
     }
     
     public Location(String name, GameMap map) {
@@ -98,86 +97,13 @@ public class Location extends Flags implements Global {
         this.creatures = new ArrayList<>();
         this.structures = new ArrayList<>();        
         this.effects = new ArrayList<>();
-        this.mapGen = new DungeonGenerator();
-        Mists.logger.info("Generating new BSP dungeon...");
+        //this.mapGen = new DungeonGenerator();
+        //Mists.logger.info("Generating new BSP dungeon...");
         this.loadMap(map);
         Mists.logger.info("Dungeon generated");
         Mists.logger.info("Localizing map...");
         this.localizeMap();
         Mists.logger.info("Map localized");
-    }
-    
-    
-    /**TODO: This general constructor is just for the Proof of Concept -map
-    * and should be removed later to avoid misuse
-    * @param player Player to construct the (TEST)location around
-    */
-    public Location(PlayerCharacter player) {
-        Mists.logger.info("Generating POC location...");
-        this.name = "POCmap";
-        this.creatures = new ArrayList<>();
-        this.structures = new ArrayList<>();        
-        this.effects = new ArrayList<>();
-        this.mapGen = new DungeonGenerator();
-        //this.loadMap(new BGMap(new Image("/images/pocmap.png")));
-        //this.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
-        //Mists.logger.info("Setting generation seed to 123456789");
-        //DungeonGenerator.setRandomSeed(123456789l);
-        Mists.logger.info("Generating new BSP dungeon...");
-        this.loadMap(DungeonGenerator.generateDungeon(this.mapGen, 60, 40));
-        Mists.logger.info("Dungeon generated");
-        Mists.logger.info("Localizing map...");
-        this.localizeMap();
-        Mists.logger.info("Map localized");
-        Mists.logger.info("Generating random structures and creatures");
-        /*
-        Structure rock = Mists.structureLibrary.create("Rock", this, 0, 0);
-
-        this.setMobInRandomOpenSpot(rock);
-        
-        for (int i = 0; i<10;i++) {
-            //Make a bunch of trees
-            Structure tree = Mists.structureLibrary.create("Tree");
-            this.addStructure(tree, 2*TILESIZE, 10*TILESIZE);   
-            this.setMobInRandomOpenSpot(tree);
-            Mists.logger.info("Created a "+tree.getName()+" at "+(int)tree.getCenterXPos()+"x"+(int)tree.getCenterYPos());
-        }
-        
-        for (int i = 0; i<10;i++) {
-            //Make a bunch of itempiles
-            ItemContainer pile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
-            pile.setRenderContent(true);
-            pile.addItem(Mists.itemLibrary.create("sword"));
-            pile.addItem(Mists.itemLibrary.create("himmutoy"));
-            this.addStructure(pile, 0, 0);
-            this.setMobInRandomOpenSpot(pile);
-            Mists.logger.info("Created a "+pile.getName()+" at "+(int)pile.getCenterXPos()+"x"+(int)pile.getCenterYPos());
-        }
-        
-        for (int i = 0; i < 20; i++) {
-            //Make a bunch of monsters
-            //Random graphic from sprite sheet
-            Random rnd = new Random();
-            int randomMob = rnd.nextInt(4);
-            Creature monster;
-            switch (randomMob) {
-                case 0: monster = Mists.creatureLibrary.create("worm"); break;
-                case 1: monster = Mists.creatureLibrary.create("swampy"); break;
-                case 2: monster = Mists.creatureLibrary.create("eggy"); break;
-                case 3: monster = Mists.creatureLibrary.create("rabbit"); break;
-                default: monster = Mists.creatureLibrary.create("worm");
-            }
-            
-            this.addCreature(monster, 2*TILESIZE, 10*TILESIZE);   
-            this.setMobInRandomOpenSpot(monster);
-        }
-        
-        Mists.logger.info("Location generation complete");
-        
-        //this.setMobInRandomOpenSpot(player);
-        
-        this.lights.setMinLightLevel(0);
-        */
     }
     
     /**
@@ -213,12 +139,17 @@ public class Location extends Flags implements Global {
         int addedStructures = 0;
         ArrayList<Structure> staticStructures = map.getStaticStructures(this);
         Mists.logger.info("Map has "+staticStructures.size()+" static structures");
+        ArrayList<Wall> walls = new ArrayList<>();
         for (Structure s : staticStructures) {
             //Mists.logger.info(addedStructures +" structures added");
             this.addStructure(s, s.getXPos(), s.getYPos());
             addedStructures++;
+            if (s instanceof Wall) walls.add((Wall)s);
         }
-        Mists.logger.log(Level.INFO, "{0} structures generated", addedStructures);
+        for (Wall w : walls) {
+            w.updateNeighbours();
+        }
+        Mists.logger.info("Walls updated");
         if (!wasLoading) this.loading = false;
     }
     

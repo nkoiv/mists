@@ -103,12 +103,9 @@ public class MainMenuWindow extends TiledPanel {
                         pocplayer.addCompanion(companion);
                         pocplayer.addAction(new MeleeWeaponAttack());
                         game.setPlayer(pocplayer);
-                        //Location newLoc = new Location(game.getPlayer());
                         Location newLoc = Mists.locationLibrary.create(0);
                         Mists.logger.info("Location "+newLoc.getName()+" generated");
                         game.addLocation(1, newLoc);
-                        //game.moveToLocation(1, null);
-                        //game.moveToState(Game.LOCATION);  
                         game.moveToState(Game.WORLDMAP);
                         game.clearLoadingScreen();
                         ((LocationState)game.getGameState(Game.LOCATION)).loadDefaultUI();
@@ -148,10 +145,9 @@ public class MainMenuWindow extends TiledPanel {
                     //pocplayer.addCompanion(companion);
                     pocplayer.addAction(new MeleeWeaponAttack());
                     game.setPlayer(pocplayer);
-                    //Location newLoc = new Location(game.getPlayer());
                     Location newLoc = Mists.locationLibrary.create(0);
                     game.addLocation(1, newLoc);
-                    game.moveToLocation(1);
+                    game.moveToLocation(1, null);
                     game.moveToState(Game.LOCATION);
                     game.clearLoadingScreen();
                     return null;

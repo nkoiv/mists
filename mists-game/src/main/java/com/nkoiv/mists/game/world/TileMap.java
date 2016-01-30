@@ -40,9 +40,9 @@ public class TileMap implements GameMap, KryoSerializable {
     private HashMap<Integer, String> tilecodes;
     
     private static final int CLEAR = 0;
-    private static final int FLOOR = 1;
-    private static final int WALL = 2;
-    private static final int DOOR = 4;
+    private static final int FLOOR = 46;
+    private static final int WALL = 35;
+    private static final int DOOR = 43;
     
     public TileMap() {
         
@@ -179,6 +179,8 @@ public class TileMap implements GameMap, KryoSerializable {
     public ArrayList<Structure> getStaticStructures(Location l) {
         //Generate structures and return them
         Mists.logger.info("Generating structures");
+        
+        
         ArrayList<Structure> staticStructures = new ArrayList<>();
         for (int x=0; x<this.tileWidth; x++) {
             for (int y=0; y<this.tileHeight; y++) {
@@ -273,21 +275,25 @@ public class TileMap implements GameMap, KryoSerializable {
             this.tileWidth = Integer.parseInt(line);
             line = scanner.nextLine();
             this.tileHeight = Integer.parseInt(line);
-
+            Mists.logger.info("Parsing map: "+this.tileWidth+"x"+this.tileHeight);
             // load map data
             intMap = new int[(int)this.tileWidth][(int)this.tileHeight];
             for (int y=0; y<this.tileHeight; y++) {
                 line = scanner.nextLine();
+                String lines = line.toString();
+                Mists.logger.info("Parsing line: "+line);
                 for (int x=0; x<this.tileWidth; x++) {
-                    char tilecode = line.charAt(x);
+                    int tilecode = lines.charAt(x);
                     this.intMap[x][y] = tilecode;
                 }
             }
         }
-
+        
         catch (Exception e) {
             e.printStackTrace();
         }
+        Mists.logger.info("loadMap complete on "+filename);
+        this.printIntMapToConsole();
     }
 
     @Override
