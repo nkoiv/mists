@@ -20,6 +20,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
+import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -181,6 +182,9 @@ public class LocationClient {
         if (mob.type.equals(Structure.class.toString())) {
             m = Mists.structureLibrary.create(mob.templateName);
         }
+        if (mob.type.equals(MapEntrance.class.toString())) {
+            m = Mists.structureLibrary.create(mob.templateName);
+        }
         if (mob.type.equals(Effect.class.toString())) {
             
         }
@@ -202,17 +206,21 @@ public class LocationClient {
             if (mob.id == this.locationID) {
                 Mists.logger.info("Got a character to control: "+mob.id);
                 game.setPlayer((PlayerCharacter)m);
+                ((LocationState)game.getGameState(Game.LOCATION)).loadDefaultUI();
                 location.setPlayer((PlayerCharacter)m);
                 location.setScreenFocus(m);
             }
             
         }
-        if (m == null) return;
+        if (m == null) {
+            Mists.logger.log(Level.WARNING, "Was unable to generate mob. Template: {0}, id: {1}", new Object[]{mob.templateName, mob.id});
+            return;
+        }
         if (mob.hasItems) addOutgoingUpdate(new RequestAllItems(mob.id));
         if (this.location.getMapObject(mob.id) != null) this.location.removeMapObject(mob.id);
         this.location.clientAddMapObject(m, mob.id);
         this.location.getMapObject(mob.id).setPosition(mob.xPos, mob.yPos);
-        Mists.logger.info(m.getName()+" succesfully placed at "+mob.xPos+","+mob.yPos);
+        Mists.logger.log(Level.INFO, "{0} succesfully placed at {1},{2}", new Object[]{m.getName(), mob.xPos, mob.yPos});
         if (!this.ready) {
             game.getLoadingScreen().addProgress(0.05);
             game.getLoadingScreen().setLoadingText("Placing creatures");
