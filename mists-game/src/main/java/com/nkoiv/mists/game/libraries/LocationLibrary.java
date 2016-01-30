@@ -6,7 +6,9 @@
 package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
@@ -14,6 +16,7 @@ import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
+import javafx.scene.image.Image;
 
 /**
  * LocationLibrary houses all the premade locations in the game.
@@ -87,6 +90,10 @@ public class LocationLibrary  {
             l.addMapObject(mob);
             if (mob.getXPos() == 0 && mob.getYPos() == 0) l.setMobInRandomOpenSpot(mob);
         }
+        
+        MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
+        l.addMapObject(stairs);
+        l.setMobInRandomOpenSpot(stairs);
         
         l.loading = false;
         return l;

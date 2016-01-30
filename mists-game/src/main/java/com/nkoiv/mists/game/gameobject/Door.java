@@ -29,6 +29,7 @@ public class Door  extends Structure {
         this.open = false;
     }
     
+    @Override
     public Sprite getSprite() {
         return (Sprite)this.graphics;
     }

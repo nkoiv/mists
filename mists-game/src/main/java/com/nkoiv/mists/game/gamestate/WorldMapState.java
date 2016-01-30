@@ -123,6 +123,7 @@ public class WorldMapState implements GameState {
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
         handleWorldMapKeyPress(pressedButtons, releasedButtons);
         game.getCurrentWorldMap().tick(time);
+        //Mists.logger.info("PlayerNode is now "+game.getCurrentWorldMap().getPlayerNode().getName());
     }
 
 @Override

@@ -50,7 +50,7 @@ public class Mists extends Application implements Global {
      
     public static final Logger logger = Logger.getLogger(Mists.class.getName());
     
-    public Game MistsGame;
+    public static Game MistsGame;
     public static GameMode gameMode = GameMode.SINGLEPLAYER;
     
     public static int graphicScale = 1;

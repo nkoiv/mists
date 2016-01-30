@@ -139,6 +139,10 @@ public class Game {
         Mists.gameMode = gamemode;
     }
     
+    public GameState getGameState(int gameStateNumber) {
+        return this.gameStates.get(gameStateNumber);
+    }
+    
     public void moveToState(int gameStateNumber) {
         //TODO: Do some fancy transition?
         currentState.exit();

@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
+import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.items.Item;
@@ -43,6 +44,8 @@ public class LibLoader {
         //Dungeon stuff
         Door dungeondoor = new Door("DungeonDoor", new Image("/images/structures/ddoor.png"), new Image("/images/structures/ddoor_open.png"), 1);
         lib.addTemplate(dungeondoor);
+        MapEntrance stairs = new MapEntrance("dungeonStairs", new Sprite(new Image("/images/structures/stairs.png")), 0, null);
+        lib.addTemplate(stairs);
         
         //Outdoor stuff
         Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), 1);

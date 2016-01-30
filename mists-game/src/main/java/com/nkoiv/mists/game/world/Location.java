@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -21,6 +22,7 @@ import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import com.nkoiv.mists.game.world.util.Flags;
+import com.nkoiv.mists.game.world.worldmap.MapNode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -295,10 +297,20 @@ public class Location extends Flags implements Global {
         mob.setPosition(openSpot[0], openSpot[1]);
     }
     
+    private MapEntrance getEntrace() {
+        for (Structure s : this.structures) {
+            if (s instanceof MapEntrance) return (MapEntrance)s;
+        }
+        return null;
+    }
+    
     private double[] getEntryPoint() {
         /*TODO: use the HashMap entryPoints to select
         * where the player lands when he first enters the location
         */
+        for (Structure s : this.structures) {
+            if (s instanceof MapEntrance) return new double[]{s.getXPos(), s.getYPos()};
+        }
         return this.getRandomOpenSpot(this.getPlayer().getWidth());
     }
             
@@ -1315,14 +1327,26 @@ public class Location extends Flags implements Global {
                 +this.creatures.size()+" creatures and "+this.structures.size()+" structures";
         return s;
     }
+    
+    /**
+     * Exit from the location and go to a specific exitNode on the worldmap.
+     * @param exitNode 
+     */
+    public void exitLocation(MapNode exitNode) {
+        exitLocation();
+        Mists.MistsGame.getCurrentWorldMap().setPlayerNode(exitNode);
+        Mists.MistsGame.moveToState(Mists.MistsGame.WORLDMAP);
+        //TODO: This doesn't feel like the clean way to do this. Rethink!
+    }
 
     /**
      *  ExitLocation should clean up the location for re-entry later on
      */
     public void exitLocation() {
         Mists.logger.log(Level.INFO, "Location {0} exited, cleaning up...", this.getName());
+        //TODO: The cleanup
     }
-
+    
     /**
      *  EnterLocation should prepare the location for player
      * @param p PlayerCharacter entering the location
@@ -1330,6 +1354,10 @@ public class Location extends Flags implements Global {
     public void enterLocation(PlayerCharacter p) {
         Mists.logger.info("Location "+this.getName()+" entered. Preparing area...");
         this.setPlayer(p);
+        if (this.getEntrace() != null) {
+            Mists.logger.info("Setting exit node to "+Mists.MistsGame.getCurrentWorldMap().getPlayerNode().getName());
+            if (this.getEntrace().getExitNode() == null) this.getEntrace().setExitNode(Mists.MistsGame.getCurrentWorldMap().getPlayerNode());
+        }
         double[] entryPoint = this.getEntryPoint();
         this.addPlayerCharacter(p, entryPoint[0], entryPoint[1]);
         //Add companions)
