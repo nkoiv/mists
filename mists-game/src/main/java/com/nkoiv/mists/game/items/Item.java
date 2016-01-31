@@ -75,6 +75,10 @@ public class Item implements KryoSerializable {
         return this.name;
     }
     
+    public void setDescription(String desc) {
+        this.description = desc;
+    }
+    
     public String getDescription() {
         return this.description;
     }

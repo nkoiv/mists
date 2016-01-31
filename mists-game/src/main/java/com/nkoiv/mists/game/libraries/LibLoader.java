@@ -111,6 +111,8 @@ public class LibLoader {
     }
     
     public static void initializeItemLibrary(ItemLibrary lib) {
+        initializeLibraryFromYAML(lib, "src/main/resources/libdata/items.yml");
+        /*
         int itemID = 0;
         Weapon sword = new Weapon(itemID, "Sword", ItemType.WEAPON_1H, "a simple sword", 12, new Image("/images/sword.png"));
         lib.addTemplate(sword);
@@ -121,6 +123,7 @@ public class LibLoader {
         Item himmutoy = new Item(itemID, "Himmutoy", ItemType.MISC, new Image("/images/himmuToyMini.png"));
         lib.addTemplate(himmutoy);
         itemID++;
+        */
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {

@@ -1,13 +1,13 @@
 id: 1
 name: "Sword"
-type: "1h weapon"
+type: "Weapon 1h"
 description: "a simple sword"
 image: "/images/sword.png"
 damage: 12
 ---
 id: 2
 name: "Axe"
-type: "1h weapon"
+type: "Weapon 1h"
 description: "an ugly axe"
 image: "/images/axe.png"
 damage: 12
