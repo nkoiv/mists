@@ -5,7 +5,9 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Effect;
@@ -81,12 +83,13 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     
     public static MapObject generateFromYAML(Map mobData) {
         String mobtype = (String)mobData.get("type");
-        String mobname = (String)mobData.get("name");
         switch (mobtype) {
-            case "Wall": Mists.logger.info("Generating a WALL");
-                return generateWallFromYAML(mobData);
-            case "GenericStructure": Mists.logger.info("Generating a GENERIC STRUCTURE");
+            case "Creature": Mists.logger.info("Generating CREATURE");
+                return generateCreatureFromYAML(mobData);
+            case "GenericStructure": Mists.logger.info("Generating GENERIC STRUCTURE");
                 return generateStructureFromYAML(mobData);
+            case "Wall": Mists.logger.info("Generating WALL");
+                return generateWallFromYAML(mobData);
             case "MapEntrance": Mists.logger.info("Generating MAP ENTRANCE");
                 return generateMapEntranceFromYAML(mobData);
             case "Door": Mists.logger.info("Generating DOOR");
@@ -95,18 +98,58 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return null;
     }
     
-    private static Wall generateWallFromYAML(Map wallData) {
-        String mobtype = (String)wallData.get("type");
-        String mobname = (String)wallData.get("name");
-        String collisionLevel = (String)wallData.get("collisionLevel");
-        ImageView wallImages = new ImageView((String)wallData.get("image"));
-        Wall wall = new Wall(mobname, new Image("/images/structures/blank.png"), Integer.parseInt(collisionLevel), wallImages);
-        wall.generateWallImages(wallImages);
-        return wall;
+    private static Creature generateCreatureFromYAML(Map creatureData) {
+        Creature creep;
+        int monsterID = Integer.parseInt((String)creatureData.get("monsterID"));
+        String mobname = (String)creatureData.get("name");
+        String spriteType = (String)creatureData.get("spriteType");
+        if (spriteType.equals("static")) {
+            Image monsterImage = new Image((String)creatureData.get("image"));
+            creep = new Creature(mobname, monsterImage);
+        } else {
+            ImageView monsterSprites = new ImageView((String)creatureData.get("spritesheet"));
+            Mists.logger.info("Spritesheet loaded: "+monsterSprites.getImage().getWidth()+"x"+monsterSprites.getImage().getHeight());
+            List<String> p = (List<String>)creatureData.get("spritesheetParameters");
+            Mists.logger.info("Parameters loaded: "+p.toString());
+            creep = new Creature(mobname, monsterSprites,
+                    Integer.parseInt(p.get(0)),
+                    Integer.parseInt(p.get(1)),
+                    Integer.parseInt(p.get(2)),
+                    Integer.parseInt(p.get(3)),
+                    Integer.parseInt(p.get(4)),
+                    Integer.parseInt(p.get(5)),
+                    Integer.parseInt(p.get(6)));
+        }
+        Mists.logger.info("Creature base generated, adding attributes and flags");
+        
+        Map attributes = (Map)creatureData.get("attributes");
+        for (Object a : attributes.keySet()) {
+            String attributeName = (String)a;
+            int attributeValue = Integer.parseInt((String)attributes.get(attributeName));
+            creep.setAttribute(attributeName, attributeValue);
+        }
+        
+        Map flags = (Map)creatureData.get("flags");
+        for (Object f : flags.keySet()) {
+            String flagName = (String)f;
+            int flagValue = Integer.parseInt((String)flags.get(flagName));
+            creep.setAttribute(flagName, flagValue);
+        }
+        
+        String aiType = (String)creatureData.get("aiType");
+        switch (aiType){
+            case "monster": creep.setAI(new MonsterAI(creep));
+                break;
+        }
+        
+        //TODO: Add actions to YAML
+        creep.addAction(new MeleeAttack());
+        
+        creep.setTemplateID(monsterID);
+        return creep;
     }
     
     private static Structure generateStructureFromYAML(Map structureData) {
-        String mobtype = (String)structureData.get("type");
         String mobname = (String)structureData.get("name");
         int collisionLevel = Integer.parseInt((String)structureData.get("collisionLevel"));
         Image image = new Image((String)structureData.get("image"));
@@ -125,8 +168,17 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return struct;
     }
     
+    private static Wall generateWallFromYAML(Map wallData) {
+        String mobname = (String)wallData.get("name");
+        String collisionLevel = (String)wallData.get("collisionLevel");
+        ImageView wallImages = new ImageView((String)wallData.get("image"));
+        Wall wall = new Wall(mobname, new Image("/images/structures/blank.png"), Integer.parseInt(collisionLevel), wallImages);
+        wall.generateWallImages(wallImages);
+        return wall;
+    }
+    
+    
     private static MapEntrance generateMapEntranceFromYAML(Map entranceData) {
-        String mobtype = (String)entranceData.get("type");
         String mobname = (String)entranceData.get("name");
         int collisionLevel = Integer.parseInt((String)entranceData.get("collisionLevel"));
         Image image = new Image((String)entranceData.get("image"));

@@ -1,0 +1,79 @@
+monsterID: 1
+name: "Worm"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 0, 0, 4, 0, 36, 32]
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+flags:
+ collisionLevel: 5
+---
+monsterID: 2
+name: "Rabbit"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 0, 4, 4, 0, 36, 32]
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+flags:
+ collisionLevel: 5
+---
+monsterID: 3
+name: "Eggy"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 3, 0, 4, 0, 36, 32]
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+flags:
+ collisionLevel: 5
+---
+monsterID: 4
+name: "Swampy"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 3, 4, 4, 0, 36, 32]
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+flags:
+ collisionLevel: 5
+---
+monsterID: 5
+name: "Blob"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/blob.png"
+spritesheetParameters: [3, 0, 0, 4, 0, 84, 84]
+attributes:
+ Strength: 10
+ Dexterity: 1
+ Intelligence: 1
+ Speed: 30
+ MaxHealth: 250
+flags:
+ collisionLevel: 5

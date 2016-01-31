@@ -58,6 +58,35 @@ public class LibLoader {
         }
         
     }
+    
+    private static void initializeCreatureLibraryFromYAML(MobLibrary<Creature> lib) {
+        File structuresYAML = new File("src/main/resources/libdata/creatures.yml");
+        int creaturesCreated = 0;
+        try {
+            Mists.logger.info("Attempting to read YAML from "+structuresYAML.getCanonicalPath());
+            YamlReader reader = new YamlReader(new FileReader(structuresYAML));
+            while (true) {
+                Object object = reader.read();
+                if (object == null) break;
+                try {
+                    Map creatureData = (Map)object;
+                    Creature mob = (Creature)MobLibrary.generateFromYAML(creatureData);
+                    Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
+                    lib.addTemplate(mob);
+                    creaturesCreated++;
+                } catch (Exception e) {
+                    Mists.logger.warning("Failed parsing "+object.toString());
+                    Mists.logger.warning(e.toString());
+                }
+                
+            }
+
+        } catch (Exception e) {
+            Mists.logger.warning("Was unable to read creature data! "+(creaturesCreated)+" creatures were generated");
+            Mists.logger.warning(e.toString());
+        }
+        
+    }
 
     public static void initializeStructureLibrary(MobLibrary<Structure> lib) {
         Mists.logger.info("Loading up structure data");
@@ -69,6 +98,7 @@ public class LibLoader {
     public static void initializeCreatureLibrary(MobLibrary<Creature> lib) {
         Mists.logger.info("Loading up creature data");
         //TODO: Load the data from a file
+        
         int creatureID = 0;
         //Companions
         
@@ -89,45 +119,8 @@ public class LibLoader {
         
         lib.addTemplate(himmu);
         
-        //Monsters
-        Creature worm = new Creature("Worm", new ImageView("/images/monster_small.png"), 3, 0, 0, 4, 0, 36, 32);
-        MonsterAI wormAI = new MonsterAI(worm);
-        worm.setAI(wormAI);
-        worm.addAction(new MeleeAttack());
-        worm.setTemplateID(creatureID);
-        creatureID++;
-        lib.addTemplate(worm);
+        initializeCreatureLibraryFromYAML(lib);
         
-        Creature rabbit = new Creature("Rabbit", new ImageView("/images/monster_small.png"), 3, 0, 4, 4, 0, 36, 32);
-        MonsterAI rabbitAI = new MonsterAI(rabbit);
-        rabbit.setAI(rabbitAI);
-        rabbit.addAction(new MeleeAttack());
-        rabbit.setTemplateID(creatureID);
-        creatureID++;
-        lib.addTemplate(rabbit);
-        
-        Creature eggy = new Creature("Eggy", new ImageView("/images/monster_small.png"), 3, 3, 0, 4, 0, 36, 32);
-        MonsterAI eggyAI = new MonsterAI(eggy);
-        eggy.setAI(eggyAI);
-        eggy.addAction(new MeleeAttack());
-        eggy.setTemplateID(creatureID);
-        creatureID++;
-        lib.addTemplate(eggy);
-        
-        Creature swampy = new Creature("Swampy", new ImageView("/images/monster_small.png"), 3, 3, 4, 4, 0, 36, 32);
-        MonsterAI swampyAI = new MonsterAI(swampy);
-        swampy.setAI(swampyAI);
-        swampy.addAction(new MeleeAttack());
-        swampy.setTemplateID(creatureID);
-        creatureID++;
-        lib.addTemplate(swampy);
-        
-        Creature blob = new Creature("Blob", new ImageView("/images/blob.png"), 3, 0, 0, 84, 84);
-        MonsterAI blobAI = new MonsterAI(blob);
-        blob.setAI(blobAI);
-        blob.setTemplateID(creatureID);
-        creatureID++;
-        lib.addTemplate(blob);
     }
     
     public static void initializeActionLibrary(ActionLibrary lib) {

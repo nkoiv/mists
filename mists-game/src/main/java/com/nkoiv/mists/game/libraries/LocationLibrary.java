@@ -96,7 +96,7 @@ public class LocationLibrary  {
             if (mob.getXPos() == 0 && mob.getYPos() == 0) l.setMobInRandomOpenSpot(mob);
         }
         Mists.logger.info("Template mobs added, generating stairs");
-        MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("DungeonStairs");
+        MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
         l.addMapObject(stairs);
         l.setMobInRandomOpenSpot(stairs);
         
