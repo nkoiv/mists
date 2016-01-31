@@ -3,7 +3,9 @@ Copyright (c) 2015 Niko Koivumäki
 This software (code) is free to use as it is, as long as it's not used for commercial purposes and as long as you credit the author accordingly. For commercial purposes please contact the author.
 The software is provided "as is" with absolutely no warranty of any kind. Using this software is entirely up to you, and the author is in no way responsible for anything you do with it.
 
-Kryonet licence:
+----LICENCES FOR EXTERNAL CODE---
+
+----Kryonet licence----
 (https://github.com/EsotericSoftware/kryonet/blob/master/license.txt 3th of January 2016)
 Copyright (c) 2008, Nathan Sweet
 All rights reserved.
@@ -16,7 +18,7 @@ Redistribution and use in source and binary forms, with or without modification,
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-YAMLBeans licence:
+----YAMLBeans licence----
 (https://github.com/EsotericSoftware/yamlbeans 31st of January 2016)
 Copyright (c) 2008 Nathan Sweet, Copyright (c) 2006 Ola Bini
 
