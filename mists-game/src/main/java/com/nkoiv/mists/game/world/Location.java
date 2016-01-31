@@ -88,7 +88,7 @@ public class Location extends Flags implements Global {
         if (maptype == 0) this.loadMap(new BGMap(new Image(mapPath)));
         if (maptype == 1) this.loadMap(new TileMap(mapPath));
         this.localizeMap();
-        Mists.logger.info("Map localized");
+        Mists.logger.info("Map localized, mapgeneration done");
     }
     
     public Location(String name, GameMap map) {
@@ -103,7 +103,7 @@ public class Location extends Flags implements Global {
         Mists.logger.info("Dungeon generated");
         Mists.logger.info("Localizing map...");
         this.localizeMap();
-        Mists.logger.info("Map localized");
+        Mists.logger.info("Map localized, map generation done");
     }
     
     /**

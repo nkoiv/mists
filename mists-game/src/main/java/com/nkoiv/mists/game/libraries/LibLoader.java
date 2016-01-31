@@ -5,21 +5,22 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
-import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.ItemType;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
+import java.io.File;
+import java.io.FileReader;
+import java.util.Map;
 import java.util.Random;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,29 +31,38 @@ import javafx.scene.image.ImageView;
  * @author nikok
  */
 public class LibLoader {
-    
+
+    private static void initializeStructureLibraryFromYAML(MobLibrary<Structure> lib) {
+        File structuresYAML = new File("src/main/resources/libdata/structures.yml");
+        try {
+            Mists.logger.info("Attempting to read YAML from "+structuresYAML.getCanonicalPath());
+            YamlReader reader = new YamlReader(new FileReader(structuresYAML));
+            while (true) {
+                Object object = reader.read();
+                if (object == null) break;
+                try {
+                    Map structureData = (Map)object;
+                    Structure mob = (Structure)MobLibrary.generateFromYAML(structureData);
+                    Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
+                    lib.addTemplate(mob);
+                } catch (Exception e) {
+                    Mists.logger.warning("Failed parsing "+object.toString());
+                    Mists.logger.warning(e.toString());
+                }
+                
+            }
+
+        } catch (Exception e) {
+            Mists.logger.warning("Was unable to read structure data!");
+            Mists.logger.warning(e.toString());
+        }
+        
+    }
 
     public static void initializeStructureLibrary(MobLibrary<Structure> lib) {
         Mists.logger.info("Loading up structure data");
         //TODO: Load the data from a file
-        
-        //Dungeon walls
-        ImageView wallimages = new ImageView("/images/structures/dwall.png");
-        Wall dungeonwall = new Wall("DungeonWall", new Image("/images/structures/blank.png"), 1, wallimages);
-        dungeonwall.generateWallImages(wallimages);
-        lib.addTemplate(dungeonwall);
-        //Dungeon stuff
-        Door dungeondoor = new Door("DungeonDoor", new Image("/images/structures/ddoor.png"), new Image("/images/structures/ddoor_open.png"), 1);
-        lib.addTemplate(dungeondoor);
-        MapEntrance stairs = new MapEntrance("dungeonStairs", new Sprite(new Image("/images/structures/stairs.png")), 0, null);
-        lib.addTemplate(stairs);
-        
-        //Outdoor stuff
-        Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), 1);
-        tree.addExtra(new Image("/images/tree.png"), -35, -96);
-        lib.addTemplate(tree);
-        Structure rock = new Structure("Rock", new Image("/images/block.png"), 1);
-        lib.addTemplate(rock);
+        initializeStructureLibraryFromYAML(lib);
         
     }
     

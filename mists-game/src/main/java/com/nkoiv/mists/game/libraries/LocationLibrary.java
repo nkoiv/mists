@@ -49,8 +49,12 @@ public class LocationLibrary  {
     
     public Location create(int locationID) {
         if (this.lib.keySet().contains(locationID)) {
+            Mists.logger.info("Creating location from LocationLibrary for ID "+locationID);
             LocationTemplate t = this.lib.get(locationID);
-            if (t!=null) return this.generateLocation(t);
+            if (t!=null) {
+                Mists.logger.info("ID found, generating...");
+                return this.generateLocation(t);
+            }
         }
         Mists.logger.warning("Could not generate location");
         return null;
@@ -78,20 +82,21 @@ public class LocationLibrary  {
                 DungeonGenerator.setRandomSeed(template.randomSeed);
             }
             TileMap tmap = DungeonGenerator.generateDungeon(dgen, tileWidth, tileHeight);
+            Mists.logger.info("Random dungeonmap generated, constructing location...");
             l = new Location (template.name, tmap);
         } 
         else {
             Mists.logger.info("Template map was found: "+template.map.toString());
             l = new Location(template.name, template.map);
         }
-        
+        Mists.logger.info("Location map generated, mobing to template mobs");
         l.loading = true;
         for (MapObject mob : template.mobs) {
             l.addMapObject(mob);
             if (mob.getXPos() == 0 && mob.getYPos() == 0) l.setMobInRandomOpenSpot(mob);
         }
-        
-        MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
+        Mists.logger.info("Template mobs added, generating stairs");
+        MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("DungeonStairs");
         l.addMapObject(stairs);
         l.setMobInRandomOpenSpot(stairs);
         

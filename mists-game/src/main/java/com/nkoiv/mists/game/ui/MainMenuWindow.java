@@ -147,9 +147,12 @@ public class MainMenuWindow extends TiledPanel {
                     game.setPlayer(pocplayer);
                     Location newLoc = Mists.locationLibrary.create(0);
                     game.addLocation(1, newLoc);
+                    Mists.logger.info("Starting Location added");
                     game.moveToLocation(1, null);
+                    Mists.logger.info("Starting Location added");
                     game.moveToState(Game.LOCATION);
                     game.clearLoadingScreen();
+                    Mists.logger.info("Game loading done - loading screen removed");
                     return null;
                 }
                 };
