@@ -7,7 +7,6 @@ package com.nkoiv.mists.game.libraries;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.AI.CompanionAI;
-import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -15,10 +14,9 @@ import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.items.Item;
-import com.nkoiv.mists.game.items.ItemType;
-import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.world.BGMap;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Map;
@@ -112,18 +110,6 @@ public class LibLoader {
     
     public static void initializeItemLibrary(ItemLibrary lib) {
         initializeLibraryFromYAML(lib, "src/main/resources/libdata/items.yml");
-        /*
-        int itemID = 0;
-        Weapon sword = new Weapon(itemID, "Sword", ItemType.WEAPON_1H, "a simple sword", 12, new Image("/images/sword.png"));
-        lib.addTemplate(sword);
-        itemID++;
-        Weapon axe = new Weapon(itemID, "Axe", ItemType.WEAPON_1H, "a fugly axe", 5, new Image("/images/axe.png"));
-        lib.addTemplate(axe);
-        itemID++;
-        Item himmutoy = new Item(itemID, "Himmutoy", ItemType.MISC, new Image("/images/himmuToyMini.png"));
-        lib.addTemplate(himmutoy);
-        itemID++;
-        */
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {
@@ -197,7 +183,8 @@ public class LibLoader {
     }
     
     public static void initializeLocationLibrary(LocationLibrary lib) {
-        LocationTemplate testDungeon = new LocationTemplate(0, "TestDungeon", 60*Mists.TILESIZE, 40*Mists.TILESIZE);
+        //--TestDungeon--
+        LocationTemplate testDungeon = new LocationTemplate(1, "TestDungeon", 60*Mists.TILESIZE, 40*Mists.TILESIZE);
         for (int i = 0; i<10;i++) {
             //Make a bunch of trees
             Structure tree = Mists.structureLibrary.create("Tree");
@@ -228,6 +215,35 @@ public class LibLoader {
         }
         
         lib.addTemplate(testDungeon);
+        
+        //--TestVillage--
+        Image villageBackground = new Image("/images/pocmap.png");
+        LocationTemplate testVillage = new LocationTemplate(2, "TestVillage", villageBackground.getWidth(), villageBackground.getHeight());
+        testVillage.map = new BGMap(villageBackground);
+        for (int i = 0; i<10;i++) {
+            //Make a bunch of trees
+            Structure tree = Mists.structureLibrary.create("Tree");
+            testVillage.mobs.add(tree);
+        }
+        
+        lib.addTemplate(testVillage);
+        
+         //--Woods--
+        Image woodsBackground = new Image("/images/pocmap.png");
+        LocationTemplate woods = new LocationTemplate(3, "Woods", woodsBackground.getWidth(), woodsBackground.getHeight());
+        woods.map = new BGMap(woodsBackground);
+        for (int i = 0; i<25;i++) {
+            //Make a bunch of trees
+            Structure tree = Mists.structureLibrary.create("Tree");
+            woods.mobs.add(tree);
+        }
+        for (int i = 0; i<10;i++) {
+            //Make a bunch of trees
+            Structure rock = Mists.structureLibrary.create("Rock");
+            woods.mobs.add(rock);
+        }
+        
+        lib.addTemplate(woods);
         
     }
 }

@@ -104,9 +104,11 @@ public class Game {
         LocationNode cave = new LocationNode("Cave", new Image("/images/mountain_cave.png"), 1);
         MapNode boat = new MapNode("Boat", new Image("/images/boat.png"));
         MapNode roadToCave = new MapNode("Road", null);
-        MapNode byTheWoods = new MapNode("Road to woods", null);
+        LocationNode village = new LocationNode("Village", new Image("/images/village.png"), 2);
+        LocationNode byTheWoods = new LocationNode("Road to woods", new Image("/images/woods.png"), 3);
         MapNode sea1 = new MapNode("Out on the sea", null);
         MapNode sea2 = new MapNode("Out on the sea", null);
+        
         
         boat.setNeighbour(sea1, Direction.DOWN);
         sea1.setNeighbour(boat, Direction.UP);
@@ -116,17 +118,20 @@ public class Game {
         boat.setNeighbour(roadToCave, Direction.RIGHT);
         boat.setNeighbour(byTheWoods, Direction.UP);
         cave.setNeighbour(roadToCave, Direction.LEFT);
+        village.setNeighbour(roadToCave, Direction.DOWN);
         roadToCave.setNeighbour(cave, Direction.RIGHT);
+        roadToCave.setNeighbour(village, Direction.UP);
         roadToCave.setNeighbour(boat, Direction.LEFT);
         byTheWoods.setNeighbour(boat, Direction.DOWN);
         
         wm.addNode(sea1, 180, 450);
         wm.addNode(sea2, 550, 550);
         
-        wm.addNode(cave, 260, 260);
+        wm.addNode(cave, 290, 280);
         wm.addNode(boat, 150, 280);
-        wm.addNode(roadToCave, 220, 290);
-        wm.addNode(byTheWoods, 140, 230);
+        wm.addNode(roadToCave, 230, 290);
+        wm.addNode(village, 250, 220);
+        wm.addNode(byTheWoods, 140, 200);
         wm.setPlayerNode(boat);
         wm.setPlayerCharacter(player);
         this.generatedWorldMaps.put(1, wm);
