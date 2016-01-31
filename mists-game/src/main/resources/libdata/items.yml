@@ -1,0 +1,20 @@
+id: 1
+name: "Sword"
+type: "1h weapon"
+description: "a simple sword"
+image: "/images/sword.png"
+damage: 12
+---
+id: 2
+name: "Axe"
+type: "1h weapon"
+description: "an ugly axe"
+image: "/images/axe.png"
+damage: 12
+---
+id: 3
+name: "Himmutoy"
+type: "Misc"
+description: "It's so fluffy!"
+image: "/images/himmuToyMini.png"
+ 

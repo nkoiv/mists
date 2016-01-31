@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -62,7 +63,13 @@ public class ItemLibrary <E extends Item> {
         Mists.logger.log(Level.INFO, "{0} added into library", e.getName());
     }
     
-       /**
+    public static Item generateFromYAML(Map itemData) {
+     
+        
+        return null;
+    }
+    
+     /**
      * PrepareAdd makes sure no broken stuff gets in the library
      * Also cleans up unneeded values from them. 
      * 

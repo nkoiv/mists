@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
+import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.ItemType;
@@ -31,20 +32,27 @@ import javafx.scene.image.ImageView;
  * @author nikok
  */
 public class LibLoader {
-
-    private static void initializeStructureLibraryFromYAML(MobLibrary<Structure> lib) {
-        File structuresYAML = new File("src/main/resources/libdata/structures.yml");
+    
+    private static void initializeLibraryFromYAML(Object library, String libFile) {
+        File libraryYAML = new File(libFile);
         try {
-            Mists.logger.info("Attempting to read YAML from "+structuresYAML.getCanonicalPath());
-            YamlReader reader = new YamlReader(new FileReader(structuresYAML));
+            Mists.logger.info("Attempting to read YAML from "+libraryYAML.getCanonicalPath());
+            YamlReader reader = new YamlReader(new FileReader(libraryYAML));
             while (true) {
                 Object object = reader.read();
                 if (object == null) break;
                 try {
-                    Map structureData = (Map)object;
-                    Structure mob = (Structure)MobLibrary.generateFromYAML(structureData);
-                    Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
-                    lib.addTemplate(mob);
+                    Map libraryObjectData = (Map)object;
+                    if (library instanceof MobLibrary) {
+                        MapObject mob = ((MobLibrary)library).generateFromYAML(libraryObjectData);
+                        Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
+                        ((MobLibrary)library).addTemplate(mob);
+                    }
+                    if (library instanceof ItemLibrary) {
+                        Item item = ((ItemLibrary)library).generateFromYAML(libraryObjectData);
+                        Mists.logger.info("Got "+item.getName()+ " from YAML parsing");
+                        ((ItemLibrary)library).addTemplate(item);
+                    }
                 } catch (Exception e) {
                     Mists.logger.warning("Failed parsing "+object.toString());
                     Mists.logger.warning(e.toString());
@@ -59,39 +67,11 @@ public class LibLoader {
         
     }
     
-    private static void initializeCreatureLibraryFromYAML(MobLibrary<Creature> lib) {
-        File structuresYAML = new File("src/main/resources/libdata/creatures.yml");
-        int creaturesCreated = 0;
-        try {
-            Mists.logger.info("Attempting to read YAML from "+structuresYAML.getCanonicalPath());
-            YamlReader reader = new YamlReader(new FileReader(structuresYAML));
-            while (true) {
-                Object object = reader.read();
-                if (object == null) break;
-                try {
-                    Map creatureData = (Map)object;
-                    Creature mob = (Creature)MobLibrary.generateFromYAML(creatureData);
-                    Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
-                    lib.addTemplate(mob);
-                    creaturesCreated++;
-                } catch (Exception e) {
-                    Mists.logger.warning("Failed parsing "+object.toString());
-                    Mists.logger.warning(e.toString());
-                }
-                
-            }
-
-        } catch (Exception e) {
-            Mists.logger.warning("Was unable to read creature data! "+(creaturesCreated)+" creatures were generated");
-            Mists.logger.warning(e.toString());
-        }
-        
-    }
-
     public static void initializeStructureLibrary(MobLibrary<Structure> lib) {
         Mists.logger.info("Loading up structure data");
         //TODO: Load the data from a file
-        initializeStructureLibraryFromYAML(lib);
+        initializeLibraryFromYAML(lib, "src/main/resources/libdata/structures.yml");
+        //initializeStructureLibraryFromYAML(lib);
         
     }
     
@@ -119,7 +99,8 @@ public class LibLoader {
         
         lib.addTemplate(himmu);
         
-        initializeCreatureLibraryFromYAML(lib);
+        //initializeCreatureLibraryFromYAML(lib);
+        initializeLibraryFromYAML(lib, "src/main/resources/libdata/creatures.yml");
         
     }
     
