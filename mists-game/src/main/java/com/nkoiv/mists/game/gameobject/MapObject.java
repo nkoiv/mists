@@ -169,6 +169,10 @@ public class MapObject extends Flags implements Global, Templatable {
         return this.graphics;
     }
     
+    public java.awt.Shape getBoundary() {
+        return this.graphics.getShape();
+    }
+    
     public int getTemplateID() {
         return this.templateID;
     }

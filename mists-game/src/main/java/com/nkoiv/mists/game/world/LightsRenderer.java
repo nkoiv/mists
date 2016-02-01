@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.logging.Level;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -159,7 +160,7 @@ public class LightsRenderer {
     }
     
     public void renderLight(GraphicsContext gc, double xCoordinate, double yCoordinate, double intensity, double size) {
-        
+        Point2D lightPosition = new Point2D(xCoordinate, yCoordinate);
         
         
     }
