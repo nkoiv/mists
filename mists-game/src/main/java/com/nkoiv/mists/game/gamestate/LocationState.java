@@ -147,7 +147,7 @@ public class LocationState implements GameState {
             ca.setLocationClient(client);
         }
         this.contextAction = ca;
-        
+        this.inConsole = false;
     }
 
     /**
@@ -436,8 +436,7 @@ public class LocationState implements GameState {
         
         if (inConsole) {
             if (releasedButtons.contains(KeyCode.F1)) {
-               this.removeUIComponent("console");
-               this.inConsole = false;
+               this.closeConsole();
             } else {
                 Console c = (Console)this.uiComponents.get("Console");
                 c.input(pressedButtons, releasedButtons);

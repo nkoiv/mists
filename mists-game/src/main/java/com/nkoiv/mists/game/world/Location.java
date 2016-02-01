@@ -1029,8 +1029,6 @@ public class Location extends Flags implements Global {
         this.renderLights(gc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderStructureExtras(gc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderExtras(gc, xOffset, yOffset);
-        
-        
     }
     
 
@@ -1045,12 +1043,12 @@ public class Location extends Flags implements Global {
             if (mob instanceof Structure) StructuresOnScreen.add((Structure)mob);
             //if (mob instanceof Creature) CreaturesOnScreen.add((Creature)mob);
         }
-        MapObject[] structures = new MapObject[StructuresOnScreen.size()];
+        MapObject[] structureArray = new MapObject[StructuresOnScreen.size()];
         for (int i = 0; i < StructuresOnScreen.size(); i++) {
-            structures[i] = StructuresOnScreen.get(i);
+            structureArray[i] = StructuresOnScreen.get(i);
         }
-        lights.updateObstacles(structures, xOffset, yOffset);
-        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), 8);
+        lights.updateObstacles(structureArray, xOffset, yOffset);
+        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
         lights.renderLightMap(gc, xOffset, yOffset);
         //lights.renderLight(gc, player.getXPos()-xOffset, player.getYPos()-yOffset, 1, 1);
         
@@ -1104,7 +1102,7 @@ public class Location extends Flags implements Global {
     }
     
     private List<MapObject> renderStructures(GraphicsContext gc, double xOffset, double yOffset) {
-         /*
+        /*
         * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
         */
         List<MapObject> renderedMOBs = new ArrayList<>();
@@ -1155,10 +1153,14 @@ public class Location extends Flags implements Global {
                     int structX = (int)struct.getXPos()/Mists.TILESIZE;
                     int structY = (int)struct.getYPos()/Mists.TILESIZE;
                     if (structX >= lights.lightmap.length || structY >= lights.lightmap[0].length) lightlevel = 1;
-                    else lightlevel = lights.lightmap[structX][structY];
+                    lightlevel = lights.lightmap[structX][structY];
                     lightlevel = lightlevel-1;
+                    
                     lightmap.setBrightness(lightlevel); gc.setEffect(lightmap);
-                    ((Structure)struct).renderExtras(xOffset, yOffset, gc); //Draw extra frill (leaves on trees etc)
+                    if (lightlevel!=-1) {
+                        //Don't render stuff that is in total darkness
+                        ((Structure)struct).renderExtras(xOffset, yOffset, gc);
+                    }
                 }
             }
         }
@@ -1229,6 +1231,18 @@ public class Location extends Flags implements Global {
         if (ll>1.0) ll=1.0;
         if (ll<0.0) ll=0.0;
         this.lights.setMinLightLevel(ll);
+    }
+    
+    public double getLightLevel(double xCoor, double yCoor) {
+        double lightlevel = 0;
+        int xTile = (int)xCoor/Mists.TILESIZE;
+        int yTile = (int)yCoor/Mists.TILESIZE;
+        if (xTile < lights.lightmap.length || yTile < lights.lightmap[0].length) lightlevel = lights.lightmap[xTile][yTile];
+        return lightlevel;
+    }
+    
+    public void printLightMapIntoConsole() {
+        this.lights.printLightMapToConsole();
     }
     
     public double getMinLightLevel() {

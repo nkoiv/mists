@@ -225,7 +225,7 @@ public class LibLoader {
             Structure tree = Mists.structureLibrary.create("Tree");
             testVillage.mobs.add(tree);
         }
-        
+        testVillage.lightlevel=0.5;
         lib.addTemplate(testVillage);
         
          //--Woods--
@@ -242,7 +242,7 @@ public class LibLoader {
             Structure rock = Mists.structureLibrary.create("Rock");
             woods.mobs.add(rock);
         }
-        
+        woods.lightlevel = 0.3;
         lib.addTemplate(woods);
         
     }

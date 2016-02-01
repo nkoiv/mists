@@ -109,17 +109,21 @@ public class LocationControls {
         game.getCurrentLocation().getPathFinder().printCollisionMapIntoConsole();
     }
     
+    public void printLightMapIntoConsole() {
+        game.getCurrentLocation().printLightMapIntoConsole();
+    }
+    
     public void toggleLocationMenu() {
         LocationState LS = (LocationState)this.game.currentState;
         LS.toggleGameMenu();
     }
     
     public void increseLightLevel() {
-        this.game.getCurrentLocation().setMinLightLevel(this.game.getCurrentLocation().getMinLightLevel()+0.1);
+        this.game.getPlayer().setVisionRange(this.game.getPlayer().getVisionRange()+1);
     }
     
     public void reduceLightLevel() {
-        this.game.getCurrentLocation().setMinLightLevel(this.game.getCurrentLocation().getMinLightLevel()-0.1);
+        this.game.getPlayer().setVisionRange(this.game.getPlayer().getVisionRange()-1);
     }
     
     

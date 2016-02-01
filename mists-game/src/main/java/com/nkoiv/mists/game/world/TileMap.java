@@ -282,7 +282,6 @@ public class TileMap implements GameMap, KryoSerializable {
             for (int y=0; y<this.tileHeight; y++) {
                 line = scanner.nextLine();
                 String lines = line.toString();
-                Mists.logger.info("Parsing line: "+line);
                 for (int x=0; x<this.tileWidth; x++) {
                     int tilecode = lines.charAt(x);
                     this.intMap[x][y] = tilecode;

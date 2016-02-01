@@ -95,6 +95,18 @@ public class Structure extends MapObject {
         this.setPosition(xPos+(this.getSprite().getWidth()/2), yPos+(this.getSprite().getHeight()/2));
     }
     
+    public String[] getInfoText() {
+        double lightlevel = 0;
+        if (this.location != null) lightlevel = location.getLightLevel(this.getCenterXPos(), this.getCenterYPos());
+        String[] s = new String[]{
+            this.name,
+            "ID "+this.IDinLocation+" @ "+this.location.getName(),
+            "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
+            "LightLevel:"+lightlevel
+        };
+        return s;
+    }
+    
     @Override
     public Structure createFromTemplate() {
         Structure ns = new Structure(this.name, this.getSprite().getImage(), this.collisionLevel);

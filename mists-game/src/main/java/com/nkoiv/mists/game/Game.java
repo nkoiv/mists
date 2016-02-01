@@ -327,10 +327,14 @@ public class Game {
     */
     public void render() {
         if (this.loading) {
-            if (this.loadingScreen == null) return;
-            this.loadingScreen.render(gameCanvas, uiCanvas);
-            if (this.loadingScreen.isReady()) this.loading=false;
-            return;
+            try {
+                this.loadingScreen.render(gameCanvas, uiCanvas);
+                if (this.loadingScreen.isReady()) this.loading=false;
+                return;
+            } catch (Exception e) {
+                Mists.logger.warning("Loading screen got removed mid-render");
+                return;
+            }
         }
         //TODO: Consider sorting out UI here instead of handing it all to currentState
         currentState.render(gameCanvas, uiCanvas);

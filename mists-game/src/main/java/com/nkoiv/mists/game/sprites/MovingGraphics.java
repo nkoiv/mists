@@ -224,7 +224,7 @@ public abstract class MovingGraphics {
         if (rotation >= 360 || rotation <= -360) rotation = rotation%360;
         this.refreshCollisionBox();
     }
-    
+  
     /**
      * render() needs to be overridden for anything to be drawn
      * @param xOffset xOffset for screen position on the (location) map

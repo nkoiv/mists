@@ -8,6 +8,8 @@ package com.nkoiv.mists.game.world;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -63,25 +65,25 @@ public class LightsRenderer {
             for (int column = (int)(xStart/Mists.TILESIZE); column <= (int)(xEnd/Mists.TILESIZE); column++) {
                 gc.setFill(Color.BLACK);
                 //gc.setStroke(Color.BLACK);
-                if(column< lightmap.length && row < lightmap[0].length)gc.setGlobalAlpha(1 - lightmap[column][row]);
+                if(column< lightmap.length && row < lightmap[0].length) gc.setGlobalAlpha(1 - lightmap[column][row]);
                 gc.fillRect((column*Mists.TILESIZE)-(int)xOffset, (row*Mists.TILESIZE)-(int)yOffset, Mists.TILESIZE, Mists.TILESIZE);
                 //gc.strokeRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE, Mists.TILESIZE);
             }
         }
+        gc.setGlobalAlpha(0);
         //Mists.logger.log(Level.INFO, "Drawing shadows around{0}-{1}/{2}-{3}", new Object[]{xStart, xEnd, yStart, yEnd});
         gc.restore();
     }
     
     
     private void clearLightmap() {
-        int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
-        int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
+        //int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
+        //int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
         //this.lightmap = new double[tileWidth][tileHeight];
-        
-        for (int column = 0; column < this.lightmap.length; column ++) {
+        for (double[] column : this.lightmap) {
             for (int row = 0; row < this.lightmap[0].length; row ++) {
-                if (explored[column][row]) lightmap[column][row] = Math.max(0.1, minLightLevel);
-                else lightmap[column][row] = this.getMinLightLevel();
+                //if (explored[column][row]) lightmap[column][row] = Math.max(0.1, minLightLevel);
+                column[row] = minLightLevel; //TODO: Explored is causing issues with lightning structure extras: rethink!
             }
         }
         
@@ -238,9 +240,23 @@ public class LightsRenderer {
     
     public void setMinLightLevel(double lightlevel) {
         this.minLightLevel = lightlevel;
+        //if (this.minLightLevel > 0.8) this.minLightLevel = 0.8;
     }
     
     public double getMinLightLevel() {
         return this.minLightLevel;
+    }
+    
+    public void printLightMapToConsole() {
+        NumberFormat formatter = new DecimalFormat("#0.0");
+        System.out.println();
+        for (double[] column : lightmap){
+            for (int i = 0; i < column.length; i ++) {
+                double d = column[i];
+                formatter.format(i);
+                System.out.print(d);
+            }
+            System.out.println();
+        }
     }
 }

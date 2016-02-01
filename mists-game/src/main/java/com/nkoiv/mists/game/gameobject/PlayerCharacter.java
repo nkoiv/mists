@@ -24,13 +24,10 @@ import javafx.scene.image.ImageView;
  * @author nkoiv
  */
 public class PlayerCharacter extends Creature implements Combatant {
-    
-    
     private ArrayList<Creature> companions;
     
     public PlayerCharacter() {
         //Dummy player for testing
- 
         super ("Lini",new Image("/images/himmutoy.png"));
         //SpriteSkeleton playerSkeleton = new SpriteSkeleton();
         //playerSkeleton.addPart("body", new Sprite(new Image("/images/lini_test.png"),0,0));

@@ -55,7 +55,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     * Would be too easy to accidentally make walls alive if they were
     * TODO: Consider if the above would be awesome
     */
-    
+    private int visionRange;
     private HashMap<String, Integer> attributes;
     private HashMap<String, Integer> effects;
     //TODO: Consider if effects should be used for MapObjects (can a wall or a rock get debuffs/buffs?)
@@ -118,6 +118,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     //TODO: Make this load stats from creature library
     private void initializeAttributes() {
+        this.visionRange = 10;
         this.attributes = new HashMap<>();
         this.setAttribute("Strength", 1);
         this.setAttribute("Agility", 1);
@@ -131,6 +132,18 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this.setFlag("visible", 1);
         this.setCollisionLevel(5);
     }
+    
+     
+    public void setVisionRange(int visionRange) {
+        if (visionRange < 0) visionRange = 0;
+        if (visionRange > 20) visionRange = 20;
+        this.visionRange = visionRange;
+    }
+    
+    public int getVisionRange() {
+        return this.visionRange;
+    }
+    
     
     public void setAttribute (String attribute, int value) {
         if (this.attributes.containsKey(attribute)) {

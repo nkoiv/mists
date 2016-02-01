@@ -99,7 +99,7 @@ public class LocationLibrary  {
         MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
         l.addMapObject(stairs);
         l.setMobInRandomOpenSpot(stairs);
-        
+        l.setMinLightLevel(template.lightlevel);
         l.loading = false;
         return l;
     }
@@ -125,6 +125,7 @@ public class LocationLibrary  {
         public double width;
         public double height;
         public ArrayList<MapObject> mobs;
+        public double lightlevel;
         
         public LocationTemplate(int ID, String name, double width, double height) {
             this.baseID = ID; this.name = name;
