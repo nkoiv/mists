@@ -51,6 +51,7 @@ public class LightsRenderer {
      * @param yOffset position of the screen on the map
      */
     public void renderLightMap(GraphicsContext gc, double xOffset, double yOffset) {
+        
         gc.save();
         double xStart = xOffset;
         double xEnd = xOffset + gc.getCanvas().getWidth();
