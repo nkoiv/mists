@@ -6,8 +6,6 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.gameobject.Structure;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.logging.Level;
@@ -16,6 +14,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Scale;
 
 /**
  * LightsRenderer takes in a bunch of mapObjects
@@ -78,11 +78,20 @@ public class LightsRenderer {
         gc.restore();
     }
     
-    public void renderLightSource(GraphicsContext shadowCanvas, double xCoor, double yCoor) {
+    public void renderLightSource(GraphicsContext shadowCanvas, double xCoor, double yCoor, double lightscale) {
+        shadowCanvas.save();
         Image light = Mists.graphLibrary.getImage("lightspot");
-        double drawX = xCoor-(light.getWidth()/2);
-        double drawY = yCoor-(light.getHeight()/2);
+        Scale s = new Scale(lightscale, lightscale);
+        Affine a = new Affine();
+        a.append(s);
+        shadowCanvas.setTransform(a);
+        //shadowCanvas.setTransform(0,0,0,lightscale, lightscale,0);
+        double scalemod = ((light.getWidth()*lightscale/2));//*lightscale);
+        double drawX = xCoor-scalemod;
+        double drawY = yCoor-scalemod;
         shadowCanvas.drawImage(light, drawX, drawY);
+        Mists.logger.log(Level.INFO, "Rendering light (size{0}) at {1}x{2} scalemod {3}", new Object[]{lightscale, xCoor, yCoor, scalemod});
+        shadowCanvas.restore();
     }
     
     private void clearLightmap() {

@@ -1050,7 +1050,7 @@ public class Location extends Flags implements Global {
         
         sc.setFill(Color.BLACK);
         sc.fillRect(0, 0, sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
-        lights.renderLightSource(sc, player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset);
+        lights.renderLightSource(sc, player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset,1.1);
         
         /*
         shadows.setLight(player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset);
