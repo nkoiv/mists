@@ -9,7 +9,6 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.ui.Console;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.world.worldmap.LocationNode;
 import com.nkoiv.mists.game.world.worldmap.MapNode;

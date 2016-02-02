@@ -202,20 +202,6 @@ public abstract class MovingGraphics {
         return corner;
     }
 
-    /**
-     * getShape() is intended for drawing shadows
-     * and calculating geometrics.
-     * TODO: Currently returns only boxes for testing purposes
-     * TODO: Kinda redundant with the getBoundary
-     * TODO: -> merge the use of these two
-     * @return java.awt.Shape for shadows 
-     */
-    public java.awt.Shape getShape() {
-        java.awt.Rectangle box = new java.awt.Rectangle();
-        box.setRect(positionX, positionY, width, height);
-        return box;
-    }
-    
     public Shape getBoundary() {        
         Shape s =  new Rectangle(positionX,positionY,width,height);
         Rotate r = new Rotate(0, 0, this.rotation);

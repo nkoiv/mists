@@ -5,7 +5,7 @@
  */
 package com.nkoiv.mists.game.world;
 
-import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.Structure;
 import java.awt.Shape;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
@@ -13,16 +13,17 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.Comparator;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 
 
 /**
- *
+ * Based on http://ncase.me/sight-and-light/
  * @author daedra
  */
 public class VectorShadows {
@@ -39,19 +40,20 @@ public class VectorShadows {
         shapesLineSegments = new ArrayList<>();
     }
     
-    public void paintLights(GraphicsContext gc) {
+    public void paintLights(GraphicsContext gc, double xOffset, double yOffset) {
         gc.save();
-        gc.setFill(new Color(0,0,0,200));
+        /*
+        gc.setFill(new Color(0,0,0,0.8));
         gc.fillRect(0, 0, screenWidth, screenHeight);
+        */
         
         gc.setStroke(Color.BLACK);
         for (Shape s : shapes)
         {
             gc.strokeRect(
-                    s.getBounds().x, s.getBounds().y,
+                    s.getBounds().x, s.getBounds().y-yOffset,
                     s.getBounds().width, s.getBounds().height);
         }
-        
         List<Line2D> rays = createRays(lightPosition);
         //paintRays(g, rays);
 
@@ -70,11 +72,13 @@ public class VectorShadows {
             pointsX[i] = closestIntersections.get(i).getX();
             pointsY[i] = closestIntersections.get(i).getY();
         }
-        gc.setFill(Color.WHITE);
+        
+        gc.setFill(new Color(0,0,0,0.5));
+        
         gc.fillPolygon(pointsX, pointsY, closestIntersections.size());
         
         gc.setFill(Color.YELLOW);
-        double r = 10; //TODO: Light size!
+        double r = 10; //TODO: LightPoint indicator size
         gc.fillOval(lightPosition.getX(), lightPosition.getY(), r, r);
         //fill(new Ellipse2D.Double(lightPosition.getX()-r, lightPosition.getY()-r, r+r, r+r));
         
@@ -207,15 +211,53 @@ public class VectorShadows {
     }
 
     
-    public void updateStructures(List<MapObject> structures) {
+    public void updateStructures(List<Structure> structures, double xOffset, double yOffset) {
         shapesLineSegments.clear();
-        for (MapObject mob : structures) {
-            Shape s = mob.getBoundary();
-            shapes.add(s);
-            shapesLineSegments.add(
-                    Shapes.computeLineSegments(s, 1));
+        for (Structure mob : structures) {
+            Shape r = new Rectangle2D.Double(mob.getXPos()-xOffset, mob.getYPos()-yOffset, mob.getWidth(), mob.getHeight());
+            shapes.add(r);
+            List<Line2D> l = Shapes.computeLineSegments(r, 1);
+            
+            shapesLineSegments.add(l);
         }
         shapesLineSegments.add(addBorderLines(screenWidth, screenHeight));
+    }
+    
+    private void mergeLineSegmentsIntoExisting(List<Line2D> newSegments, List<Line2D> oldSegments) {
+        Iterator lit = newSegments.iterator();
+        while (lit.hasNext()) {
+            boolean merged = false;
+            Line2D l = (Line2D)lit.next();
+            Point2D p1 = new Point2D.Double(l.getX1(), l.getY1());
+            Point2D p2 = new Point2D.Double(l.getX2(), l.getY2());
+            for (Line2D ol : oldSegments) {
+                Point2D op1 = new Point2D.Double(ol.getX1(), ol.getY1());
+                Point2D op2 = new Point2D.Double(ol.getX2(), ol.getY2());
+                if (p1.equals(op1)) {
+                    if (p2.getX() == op2.getX() || p2.getY() == op2.getY()) {
+                        op1.setLocation(p2.getX(), p2.getY());
+                        merged = true;
+                    }
+                } else if (p1.equals(op2)) {
+                    if (p2.getX() == op1.getX() || p2.getY() == op1.getY()) {
+                        op2.setLocation(p2.getX(), p2.getY());
+                        merged = true;
+                    }
+                } else if (p2.equals(op1)) {
+                    if (p1.getX() == op2.getX() || p1.getY() == op2.getY()) {
+                        op1.setLocation(p1.getX(), p1.getY());
+                        merged = true;
+                    }
+                } else if (p2.equals(op2)) {
+                    if (p1.getX() == op1.getX() || p1.getY() == op1.getY()) {
+                        op1.setLocation(p1.getX(), p1.getY());
+                        merged = true;
+                    }
+                }
+                if (merged) break;
+            }
+            if (merged) lit.remove();
+        }
     }
     
     private List<Line2D> addBorderLines(double screenWidth, double screenHeight) {
@@ -462,9 +504,8 @@ class Shapes
      * @param flatness The allowed flatness
      * @return The list of line segments
      */
-    static List<Line2D> computeLineSegments(Shape shape, double flatness)
-    {
-        List<Line2D> result = new ArrayList<Line2D>();
+    static List<Line2D> computeLineSegments(Shape shape, double flatness) {
+        List<Line2D> result = new ArrayList<>();
         PathIterator pi =
             new FlatteningPathIterator(
                 shape.getPathIterator(null), flatness);

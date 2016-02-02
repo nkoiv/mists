@@ -65,6 +65,7 @@ public class Location extends Flags implements Global {
     private PathFinder pathFinder;
     private DungeonGenerator mapGen;
     private LightsRenderer lights;
+    private VectorShadows shadows;
     private final double[] lastOffsets = new double[2];
     private List<MapObject> lastRenderedMapObjects = new ArrayList<>();
     private MapObject screenFocus;
@@ -120,6 +121,7 @@ public class Location extends Flags implements Global {
         this.collisionMap.printMapToConsole();
         this.pathFinder = new PathFinder(this.collisionMap, 100, true);
         this.lights = new LightsRenderer(this);
+        this.shadows = new VectorShadows();
         this.targets = new ArrayList<>();
         this.spatial = new HashMap<>();
         //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
@@ -1024,7 +1026,6 @@ public class Location extends Flags implements Global {
         double yOffset = getyOffset(gc, screenFocus.getYPos());
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.renderMap(gc, xOffset, yOffset);
-        
         this.lastRenderedMapObjects = this.renderMobs(gc, xOffset, yOffset);
         this.renderLights(gc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderStructureExtras(gc, lastRenderedMapObjects, xOffset, yOffset);
@@ -1047,11 +1048,15 @@ public class Location extends Flags implements Global {
         for (int i = 0; i < StructuresOnScreen.size(); i++) {
             structureArray[i] = StructuresOnScreen.get(i);
         }
-        lights.updateObstacles(structureArray, xOffset, yOffset);
-        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
-        lights.renderLightMap(gc, xOffset, yOffset);
+        //lights.updateObstacles(structureArray, xOffset, yOffset);
+        //lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
+        //lights.renderLightMap(gc, xOffset, yOffset);
         //lights.renderLight(gc, player.getXPos()-xOffset, player.getYPos()-yOffset, 1, 1);
         
+        shadows.setLight(player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset);
+        shadows.setScreenSize(gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        shadows.updateStructures(StructuresOnScreen, xOffset, yOffset);
+        shadows.paintLights(gc, xOffset, yOffset);
     }
     
     /**
@@ -1153,7 +1158,7 @@ public class Location extends Flags implements Global {
                     int structX = (int)struct.getXPos()/Mists.TILESIZE;
                     int structY = (int)struct.getYPos()/Mists.TILESIZE;
                     if (structX >= lights.lightmap.length || structY >= lights.lightmap[0].length) lightlevel = 1;
-                    lightlevel = lights.lightmap[structX][structY];
+                    else lightlevel = lights.lightmap[structX][structY];
                     lightlevel = lightlevel-1;
                     
                     lightmap.setBrightness(lightlevel); gc.setEffect(lightmap);
