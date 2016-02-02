@@ -65,7 +65,7 @@ public class Location extends Flags implements Global {
     private PathFinder pathFinder;
     private DungeonGenerator mapGen;
     private LightsRenderer lights;
-    private VectorShadows shadows;
+    private RayShadows shadows;
     private final double[] lastOffsets = new double[2];
     private List<MapObject> lastRenderedMapObjects = new ArrayList<>();
     private MapObject screenFocus;
@@ -121,7 +121,7 @@ public class Location extends Flags implements Global {
         this.collisionMap.printMapToConsole();
         this.pathFinder = new PathFinder(this.collisionMap, 100, true);
         this.lights = new LightsRenderer(this);
-        this.shadows = new VectorShadows();
+        this.shadows = new RayShadows();
         this.targets = new ArrayList<>();
         this.spatial = new HashMap<>();
         //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
@@ -1044,21 +1044,20 @@ public class Location extends Flags implements Global {
             if (mob instanceof Structure) StructuresOnScreen.add((Structure)mob);
             //if (mob instanceof Creature) CreaturesOnScreen.add((Creature)mob);
         }
-        /*
-        MapObject[] structureArray = new MapObject[StructuresOnScreen.size()];
-        for (int i = 0; i < StructuresOnScreen.size(); i++) {
-            structureArray[i] = StructuresOnScreen.get(i);
-        }
-        */
-        //lights.updateObstacles(structureArray, xOffset, yOffset);
-        //lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
-        //lights.renderLightMap(gc, xOffset, yOffset);
-        //lights.renderLight(gc, player.getXPos()-xOffset, player.getYPos()-yOffset, 1, 1);
         
+        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
+        lights.renderLightMap(sc, xOffset, yOffset);
+        
+        sc.setFill(Color.BLACK);
+        sc.fillRect(0, 0, sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
+        lights.renderLightSource(sc, player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset);
+        
+        /*
         shadows.setLight(player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset);
         shadows.setScreenSize(sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
         shadows.updateStructures(StructuresOnScreen, xOffset, yOffset);
         shadows.paintLights(sc, xOffset, yOffset);
+        */
     }
     
     /**

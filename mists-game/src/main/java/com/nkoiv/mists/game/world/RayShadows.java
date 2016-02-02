@@ -30,7 +30,7 @@ import javafx.scene.shape.FillRule;
  * Most code taken and implemented from Marco13s helpful answer at StackOverflow
  * @author daedra
  */
-public class VectorShadows {
+public class RayShadows {
     private List<Shape> shapes;
     private List<Point2D> lightPositions;
     private Point2D lightPosition;
@@ -38,7 +38,7 @@ public class VectorShadows {
     private double screenWidth;
     private double screenHeight;
     
-    public VectorShadows() {
+    public RayShadows() {
         lightPositions = new ArrayList<>();
         shapes = new ArrayList<>();
         shapesLineSegments = new ArrayList<>();

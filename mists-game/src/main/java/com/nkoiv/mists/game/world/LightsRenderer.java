@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 import java.util.logging.Level;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
@@ -52,7 +53,6 @@ public class LightsRenderer {
      * @param yOffset position of the screen on the map
      */
     public void renderLightMap(GraphicsContext gc, double xOffset, double yOffset) {
-        
         gc.save();
         double xStart = xOffset;
         double xEnd = xOffset + gc.getCanvas().getWidth();
@@ -68,6 +68,7 @@ public class LightsRenderer {
                 gc.setFill(Color.BLACK);
                 //gc.setStroke(Color.BLACK);
                 if(column< lightmap.length && row < lightmap[0].length) gc.setGlobalAlpha(1 - lightmap[column][row]);
+                if (gc.getGlobalAlpha()<1) gc.setGlobalAlpha(0); //discard gradient values
                 gc.fillRect((column*Mists.TILESIZE)-(int)xOffset, (row*Mists.TILESIZE)-(int)yOffset, Mists.TILESIZE, Mists.TILESIZE);
                 //gc.strokeRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE, Mists.TILESIZE);
             }
@@ -77,6 +78,12 @@ public class LightsRenderer {
         gc.restore();
     }
     
+    public void renderLightSource(GraphicsContext shadowCanvas, double xCoor, double yCoor) {
+        Image light = Mists.graphLibrary.getImage("lightspot");
+        double drawX = xCoor-(light.getWidth()/2);
+        double drawY = yCoor-(light.getHeight()/2);
+        shadowCanvas.drawImage(light, drawX, drawY);
+    }
     
     private void clearLightmap() {
         //int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
@@ -162,7 +169,7 @@ public class LightsRenderer {
     public void renderLight(GraphicsContext gc, double xCoordinate, double yCoordinate, double intensity, double size) {
         Point2D lightPosition = new Point2D(xCoordinate, yCoordinate);
         
-        
+  
     }
     
     public double getLightLevel(int x, int y) {

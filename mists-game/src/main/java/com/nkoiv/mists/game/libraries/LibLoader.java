@@ -117,6 +117,8 @@ public class LibLoader {
         lib.addImage("blank", new Image("/images/blank.png"));
         lib.addImage("black", new Image("/images/black.png"));
         
+        lib.addImage("lightspot", new Image("/images/light.png"));
+        
         //---UI elements----
         //Panels
         lib.addImageSet("panelBeige", new ImageView("/images/ui/panel_beige.png"), 4, 4, 25, 25);
