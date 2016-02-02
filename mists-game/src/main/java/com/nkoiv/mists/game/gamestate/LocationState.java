@@ -157,10 +157,12 @@ public class LocationState implements GameState {
      * TODO: Consider separating gameplay into several layers (ground, structures, creatures, (structure)frill, overhead?)
      * @param gameCanvas Canvas to draw the actual gameplay on
      * @param uiCanvas Canvas to draw the UI on
+     * @param shadowCanvas Canvas for shadows
      */
     @Override
-    public void render(Canvas gameCanvas, Canvas uiCanvas) {
+    public void render(Canvas gameCanvas, Canvas uiCanvas, Canvas shadowCanvas) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
+        GraphicsContext sc = shadowCanvas.getGraphicsContext2D();
         double screenWidth = gameCanvas.getWidth();
         double screenHeight = gameCanvas.getHeight();
         
@@ -172,8 +174,9 @@ public class LocationState implements GameState {
         //Render the current Location unless paused
         if (this.paused == false) {
             gc.clearRect(0, 0, screenWidth, screenHeight);
+            sc.clearRect(0, 0, screenWidth, screenHeight);
             if (game.getCurrentLocation() != null) {
-                game.getCurrentLocation().render(gc);
+                game.getCurrentLocation().render(gc, sc);
                 //Render Location overlay
                 Overlay.drawAllHPBars(gc, game.getCurrentLocation().getLastRenderedMobs());
             }

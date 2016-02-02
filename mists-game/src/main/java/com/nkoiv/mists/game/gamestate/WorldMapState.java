@@ -88,7 +88,7 @@ public class WorldMapState implements GameState {
     }
 
    @Override
-    public void render(Canvas gameCanvas, Canvas uiCanvas) {
+    public void render(Canvas gameCanvas, Canvas uiCanvas, Canvas shadowCanvas) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
         double screenWidth = gameCanvas.getWidth();
         double screenHeight = gameCanvas.getHeight();

@@ -34,7 +34,7 @@ public interface GameState {
     public Game getGame();
     
     //Draw things
-    public void render(Canvas gameCanvas, Canvas uiCanvas);
+    public void render(Canvas gameCanvas, Canvas uiCanvas, Canvas shadowCanvas);
     
     //Do things
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons);

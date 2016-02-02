@@ -47,7 +47,7 @@ public class MainMenuState implements GameState {
     }
     
     @Override
-    public void render(Canvas gameCanvas, Canvas uiCanvas) {
+    public void render(Canvas gameCanvas, Canvas uiCanvas, Canvas shadowCanvas) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
         
         GraphicsContext uigc = uiCanvas.getGraphicsContext2D();

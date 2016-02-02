@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Structure;
 import java.awt.Shape;
 import java.awt.geom.FlatteningPathIterator;
@@ -19,18 +20,21 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.FillRule;
 
 
 /**
  * Based on http://ncase.me/sight-and-light/
+ * Most code taken and implemented from Marco13s helpful answer at StackOverflow
  * @author daedra
  */
 public class VectorShadows {
     private List<Shape> shapes;
     private List<Point2D> lightPositions;
     private Point2D lightPosition;
-    private List<List<Line2D>> shapesLineSegments;
+    private List<Line2D> shapesLineSegments;
     private double screenWidth;
     private double screenHeight;
     
@@ -46,7 +50,7 @@ public class VectorShadows {
         gc.setFill(new Color(0,0,0,0.8));
         gc.fillRect(0, 0, screenWidth, screenHeight);
         */
-        
+        /*
         gc.setStroke(Color.BLACK);
         for (Shape s : shapes)
         {
@@ -54,16 +58,18 @@ public class VectorShadows {
                     s.getBounds().x, s.getBounds().y-yOffset,
                     s.getBounds().width, s.getBounds().height);
         }
+        */
+        
         List<Line2D> rays = createRays(lightPosition);
-        //paintRays(g, rays);
+        //paintRays(gc, rays);
 
         List<Point2D> closestIntersections = 
             computeClosestIntersections(rays);
         Collections.sort(closestIntersections, 
             Points.byAngleComparator(lightPosition));
 
-        //paintClosestIntersections(g, closestIntersections);
-        //paintLinesToIntersections(g, closestIntersections);
+        paintClosestIntersections(gc, closestIntersections);
+        paintLinesToIntersections(gc, lightPosition, closestIntersections);
 
         
         double[] pointsX = new double[closestIntersections.size()];
@@ -72,9 +78,11 @@ public class VectorShadows {
             pointsX[i] = closestIntersections.get(i).getX();
             pointsY[i] = closestIntersections.get(i).getY();
         }
+        gc.setFill(new Color(0,0,0,0.8));
+        gc.fillRect(0, 0, screenWidth, screenHeight);
         
-        gc.setFill(new Color(0,0,0,0.5));
-        
+        gc.setFill(new Color(1,1,1,1));  
+       
         gc.fillPolygon(pointsX, pointsY, closestIntersections.size());
         
         gc.setFill(Color.YELLOW);
@@ -141,7 +149,7 @@ public class VectorShadows {
         for (Line2D ray : rays)
         {
             Point2D closestIntersection =
-                computeClosestIntersection(ray);
+                computeClosestIntersection(ray, 1);
             if (closestIntersection != null)
             {
                 closestIntersections.add(closestIntersection);
@@ -155,9 +163,8 @@ public class VectorShadows {
     {
         final double deltaRad = 0.0001;
         List<Line2D> rays = new ArrayList<Line2D>();
-        for (List<Line2D> shapeLineSegments : shapesLineSegments)
-        {
-            for (Line2D line : shapeLineSegments)
+        
+            for (Line2D line : shapesLineSegments)
             {
                 Line2D ray0 = new Line2D.Double(lightPosition, line.getP1());
                 Line2D ray1 = new Line2D.Double(lightPosition, line.getP2());
@@ -169,44 +176,39 @@ public class VectorShadows {
                 rays.add(Lines.rotate(ray1, +deltaRad, null));
                 rays.add(Lines.rotate(ray1, -deltaRad, null));
             }
-        }
+        
         return rays;
     }
 
 
-    private Point2D computeClosestIntersection(Line2D ray)
-    {
+    private Point2D computeClosestIntersection(Line2D ray, int pierceLevel) {
         final double EPSILON = 1e-6;
         Point2D relativeLocation = new Point2D.Double();
         Point2D absoluteLocation = new Point2D.Double();
         Point2D closestIntersection = null;
         double minRelativeDistance = Double.MAX_VALUE;
-        for (List<Line2D> lineSegments : shapesLineSegments)
+        
+        
+        for (Line2D lineSegment : shapesLineSegments)
         {
-            for (Line2D lineSegment : lineSegments)
+            boolean intersect =
+                Intersection.intersectLineLine(
+                    ray, lineSegment, relativeLocation, absoluteLocation);
+            if (intersect)
             {
-                boolean intersect =
-                    Intersection.intersectLineLine(
-                        ray, lineSegment, relativeLocation, absoluteLocation);
-                if (intersect)
+                if (relativeLocation.getY() >= -EPSILON &&
+                    relativeLocation.getY() <= 1+EPSILON)
                 {
-                    if (relativeLocation.getY() >= -EPSILON &&
-                        relativeLocation.getY() <= 1+EPSILON)
+                    if (relativeLocation.getX() >= -EPSILON &&
+                        relativeLocation.getX() < minRelativeDistance)
                     {
-                        if (relativeLocation.getX() >= -EPSILON &&
-                            relativeLocation.getX() < minRelativeDistance)
-                        {
-                            minRelativeDistance =
-                                relativeLocation.getX();
-                            closestIntersection = 
-                                new Point2D.Double(
-                                    absoluteLocation.getX(),
-                                    absoluteLocation.getY());
-                        }
+                        minRelativeDistance = relativeLocation.getX();
+                        closestIntersection = new Point2D.Double(absoluteLocation.getX(),absoluteLocation.getY());
                     }
                 }
             }
         }
+        
         return closestIntersection;
     }
 
@@ -214,15 +216,30 @@ public class VectorShadows {
     public void updateStructures(List<Structure> structures, double xOffset, double yOffset) {
         shapesLineSegments.clear();
         for (Structure mob : structures) {
+            if (mob.getCollisionLevel() == 0) continue;
             Shape r = new Rectangle2D.Double(mob.getXPos()-xOffset, mob.getYPos()-yOffset, mob.getWidth(), mob.getHeight());
             shapes.add(r);
             List<Line2D> l = Shapes.computeLineSegments(r, 1);
-            
-            shapesLineSegments.add(l);
+            mergeLineSegmentsIntoExisting(l, shapesLineSegments);
+            for (Line2D ls : l) {
+                shapesLineSegments.add(ls);
+            }
         }
-        shapesLineSegments.add(addBorderLines(screenWidth, screenHeight));
+        for (Line2D bl : addBorderLines(screenWidth, screenHeight)) {
+            shapesLineSegments.add(bl);
+        }
+        Mists.logger.info("ShapesLineSegment size: "+shapesLineSegments.size());
     }
     
+    /**
+     * Walls tend to be placed next to another,
+     * so line segments can be merged into a longer wall,
+     * instead of using several small segments.
+     * This saves CPU quite a bit.
+     * TODO:remove horizontal breaks in vertical walls and vice versa
+     * @param newSegments Segments to add to the line list
+     * @param oldSegments Existing list of lines
+     */
     private void mergeLineSegmentsIntoExisting(List<Line2D> newSegments, List<Line2D> oldSegments) {
         Iterator lit = newSegments.iterator();
         while (lit.hasNext()) {
@@ -233,31 +250,48 @@ public class VectorShadows {
             for (Line2D ol : oldSegments) {
                 Point2D op1 = new Point2D.Double(ol.getX1(), ol.getY1());
                 Point2D op2 = new Point2D.Double(ol.getX2(), ol.getY2());
-                if (p1.equals(op1)) {
-                    if (p2.getX() == op2.getX() || p2.getY() == op2.getY()) {
+                if ((closeEnough(p1, op1, 2) && closeEnough(p2, op2, 2)) || ((closeEnough(p1, op2, 2) && closeEnough(p2, op1, 2)))) {
+                    //Line is identical to one we already have
+                    merged=true; break;
+                }
+                
+                if (closeEnough(p1, op1, 2)) {
+                    if (closeEnough(p2.getX(),op2.getX(),2)  || closeEnough(p2.getY(), op2.getY(),2)) {
                         op1.setLocation(p2.getX(), p2.getY());
                         merged = true;
                     }
-                } else if (p1.equals(op2)) {
-                    if (p2.getX() == op1.getX() || p2.getY() == op1.getY()) {
+                } else if (closeEnough(p1, op2, 2)) {
+                    if (closeEnough(p2.getX(), op1.getX(),2) || closeEnough(p2.getY(), op1.getY(), 2)) {
                         op2.setLocation(p2.getX(), p2.getY());
                         merged = true;
                     }
-                } else if (p2.equals(op1)) {
-                    if (p1.getX() == op2.getX() || p1.getY() == op2.getY()) {
+                } else if (closeEnough(p2, op1, 2)) {
+                    if (closeEnough(p1.getX(), op2.getX(),2) || closeEnough(p1.getY(), op2.getY(),2)) {
                         op1.setLocation(p1.getX(), p1.getY());
                         merged = true;
                     }
-                } else if (p2.equals(op2)) {
-                    if (p1.getX() == op1.getX() || p1.getY() == op1.getY()) {
-                        op1.setLocation(p1.getX(), p1.getY());
+                } else if (closeEnough(p2, op2, 2)) {
+                    if (closeEnough(p1.getX(), op1.getX(),2)  || closeEnough(p1.getY(), op1.getY(),2)) {
+                        op2.setLocation(p1.getX(), p1.getY());
                         merged = true;
                     }
                 }
-                if (merged) break;
+                
+                if (merged) {
+                    ol.setLine(op1, op2);
+                    break;
+                }
             }
             if (merged) lit.remove();
         }
+    }
+    
+    private boolean closeEnough(double x1, double x2, int margin) {
+        return (Math.abs(x1 - x2)<margin);
+    }
+    
+    private boolean closeEnough(Point2D p1, Point2D p2, int margin) {
+        return (Math.abs(p1.getX() - p2.getX()) < margin && Math.abs(p1.getY() - p2.getY()) < margin);
     }
     
     private List<Line2D> addBorderLines(double screenWidth, double screenHeight) {

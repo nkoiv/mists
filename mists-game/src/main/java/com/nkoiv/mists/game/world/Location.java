@@ -1018,7 +1018,7 @@ public class Location extends Flags implements Global {
         return collidedDirections;
     }
     
-    public void render (GraphicsContext gc) {
+    public void render (GraphicsContext gc, GraphicsContext sc) {
         /*
         * Update Offsets first to know which parts of the location are drawn
         */
@@ -1027,7 +1027,7 @@ public class Location extends Flags implements Global {
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.renderMap(gc, xOffset, yOffset);
         this.lastRenderedMapObjects = this.renderMobs(gc, xOffset, yOffset);
-        this.renderLights(gc, lastRenderedMapObjects, xOffset, yOffset);
+        this.renderLights(sc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderStructureExtras(gc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderExtras(gc, xOffset, yOffset);
     }
@@ -1036,7 +1036,7 @@ public class Location extends Flags implements Global {
     
     
     //TODO: Move this to a separate class
-    private void renderLights(GraphicsContext gc, List<MapObject> MOBsOnScreen, double xOffset, double yOffset) {
+    private void renderLights(GraphicsContext sc, List<MapObject> MOBsOnScreen, double xOffset, double yOffset) {
         //Raycast from player to all screen corners and to corners of all visible structures
         List<Structure> StructuresOnScreen = new ArrayList<>();
         //List<Creature> CreaturesOnScreen = new ArrayList<>();
@@ -1044,19 +1044,21 @@ public class Location extends Flags implements Global {
             if (mob instanceof Structure) StructuresOnScreen.add((Structure)mob);
             //if (mob instanceof Creature) CreaturesOnScreen.add((Creature)mob);
         }
+        /*
         MapObject[] structureArray = new MapObject[StructuresOnScreen.size()];
         for (int i = 0; i < StructuresOnScreen.size(); i++) {
             structureArray[i] = StructuresOnScreen.get(i);
         }
+        */
         //lights.updateObstacles(structureArray, xOffset, yOffset);
         //lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
         //lights.renderLightMap(gc, xOffset, yOffset);
         //lights.renderLight(gc, player.getXPos()-xOffset, player.getYPos()-yOffset, 1, 1);
         
         shadows.setLight(player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset);
-        shadows.setScreenSize(gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        shadows.setScreenSize(sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
         shadows.updateStructures(StructuresOnScreen, xOffset, yOffset);
-        shadows.paintLights(gc, xOffset, yOffset);
+        shadows.paintLights(sc, xOffset, yOffset);
     }
     
     /**

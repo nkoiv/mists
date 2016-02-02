@@ -44,6 +44,7 @@ public class Game {
     private boolean loading;
     
     private final Canvas gameCanvas;
+    private final Canvas shadowCanvas;
     private final Canvas uiCanvas;
     public double WIDTH; //Dimensions of the screen (render area)
     public double HEIGHT; //Dimensions of the screen (render area)
@@ -68,11 +69,13 @@ public class Game {
     * TODO: Game states
      * @param gameCanvas Canvas to render the game on
      * @param uiCanvas Canvas to render the UI on
+     * @param shadowCanvas Canvas for shadow overlay
     */
-    public Game (Canvas gameCanvas, Canvas uiCanvas) {
+    public Game (Canvas gameCanvas, Canvas uiCanvas, Canvas shadowCanvas) {
         //Initialize the screen size
         this.gameCanvas = gameCanvas;
         this.uiCanvas = uiCanvas;
+        this.shadowCanvas = shadowCanvas;
         WIDTH = gameCanvas.getWidth();
         HEIGHT = uiCanvas.getHeight();
         
@@ -337,7 +340,7 @@ public class Game {
             }
         }
         //TODO: Consider sorting out UI here instead of handing it all to currentState
-        currentState.render(gameCanvas, uiCanvas);
+        currentState.render(gameCanvas, uiCanvas, shadowCanvas);
         //Mists.logger.info("Rendered current state on canvas");
         if (toggleScale) {
             //toggleScale(centerCanvas.getGraphicsContext2D());
