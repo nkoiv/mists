@@ -38,8 +38,13 @@ public class TextPanel extends TextWindow {
     
     @Override
     public void render(GraphicsContext gc, double xOffset, double yOffset) {
+        gc.save();
+        gc.setGlobalAlpha(this.bgOpacity);
         this.renderBackground(gc);
+        gc.restore();
         this.renderText(gc, xPosition, yPosition);
+        if (this.closeButton != null) this.closeButton.render(gc, xPosition+closeButton.xPosition, yPosition+closeButton.yPosition);
+        
     }
     
     private void renderBackground(GraphicsContext gc) {

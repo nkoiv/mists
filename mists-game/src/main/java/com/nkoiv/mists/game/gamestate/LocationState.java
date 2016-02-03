@@ -140,7 +140,9 @@ public class LocationState implements GameState {
         this.addUIComponent(actionBar);
         
         this.infobox = new TextPanel(this, "InfoBox", 250, 150, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
+        this.infobox.addCloseButton();
         this.playerInventory = new InventoryPanel(this, game.getPlayer().getInventory());
+        this.playerInventory.setBgOpacity(0.8);
         this.playerInventory.setName("PlayerInventory");
         ContextAction ca = new ContextAction(game.getPlayer());
         if (Mists.gameMode == GameMode.CLIENT) {;

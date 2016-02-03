@@ -48,14 +48,17 @@ public class TiledPanel extends TiledWindow {
     public void render(GraphicsContext gc, double xOffset, double yOffset) {
         //Optional resize
         //this.resizeToFit(gc);
-        
+        gc.save();
         //Draw the background
+        gc.setGlobalAlpha(this.bgOpacity);
         this.renderBackground(gc);
         //Render all the subcomponents so that they are tiled in the window area
+        gc.setGlobalAlpha(1);
         tileSubComponentPositions(xOffset, yOffset);
         for (UIComponent sc : this.subComponents) {
             sc.render(gc, sc.getXPosition(), sc.getYPosition());
         }       
+        gc.restore();
     }
     
     protected void renderBackground(GraphicsContext gc) {

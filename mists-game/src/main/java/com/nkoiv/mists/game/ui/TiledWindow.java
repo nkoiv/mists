@@ -37,9 +37,14 @@ public class TiledWindow extends UIComponent{
         this.yPosition = yPos;
         this.subComponents = new ArrayList<>();
         this.margin = 10;
-        this.bgOpacity = 0.3;
+        this.bgOpacity = 1;
         this.bgColor = Color.BLACK;
         
+    }
+    
+    public void setBgOpacity(double opacity) {
+        if (opacity > 1 || opacity < 0) return;
+        this.bgOpacity = opacity;
     }
     
     public void close() {

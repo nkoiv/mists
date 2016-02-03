@@ -39,6 +39,8 @@ public class IconButton extends UIComponent {
     
     public IconButton(String name, double width, double height, double xPosition, double yPosition, Image icon, Image altIcon) {
         this.name = name;
+        super.width = width;
+        super.height = height;
         background = new Rectangle(width, height);
         background.setOpacity(0.6);
         background.setFill(Color.BLACK);

@@ -79,7 +79,11 @@ public class InventoryPanel extends TiledPanel {
     public void render(GraphicsContext gc, double xOffset, double yOffset) {
         if (this.oldInvHash != this.inv.contentHash()) this.populateItemsIntoButtons();
         //this.populateItemsIntoButtons();
+        gc.save();
+        //Draw the background
+        gc.setGlobalAlpha(this.bgOpacity);
         this.renderBackground(gc);
+        gc.restore();
         //Render all the subcomponents so that they are tiled in the window area
         //tileSubComponentPositions(xOffset, yOffset);
         for (UIComponent sc : this.subComponents) {
