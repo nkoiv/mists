@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 
 /**
  * LightsRenderer takes in a bunch of mapObjects
@@ -68,7 +69,7 @@ public class LightsRenderer {
                 gc.setFill(Color.BLACK);
                 //gc.setStroke(Color.BLACK);
                 if(column< lightmap.length && row < lightmap[0].length) gc.setGlobalAlpha(1 - lightmap[column][row]);
-                if (gc.getGlobalAlpha()<1) gc.setGlobalAlpha(0); //discard gradient values
+                //if (gc.getGlobalAlpha()<1) gc.setGlobalAlpha(0); //discard gradient values
                 gc.fillRect((column*Mists.TILESIZE)-(int)xOffset, (row*Mists.TILESIZE)-(int)yOffset, Mists.TILESIZE, Mists.TILESIZE);
                 //gc.strokeRect((column*Mists.TILESIZE)-xOffset, (row*Mists.TILESIZE)-yOffset, Mists.TILESIZE, Mists.TILESIZE);
             }
@@ -81,16 +82,16 @@ public class LightsRenderer {
     public void renderLightSource(GraphicsContext shadowCanvas, double xCoor, double yCoor, double lightscale) {
         shadowCanvas.save();
         Image light = Mists.graphLibrary.getImage("lightspot");
-        Scale s = new Scale(lightscale, lightscale);
+        
+        Scale s = new Scale(lightscale, lightscale, light.getWidth()/2, light.getHeight()/2);
         Affine a = new Affine();
         a.append(s);
+        
         shadowCanvas.setTransform(a);
-        //shadowCanvas.setTransform(0,0,0,lightscale, lightscale,0);
-        double scalemod = ((light.getWidth()*lightscale/2));//*lightscale);
-        double drawX = xCoor-scalemod;
-        double drawY = yCoor-scalemod;
+        
+        double drawX = (xCoor/lightscale)-light.getWidth()/(lightscale*2);
+        double drawY = (yCoor/lightscale)-light.getHeight()/(lightscale*2);
         shadowCanvas.drawImage(light, drawX, drawY);
-        Mists.logger.log(Level.INFO, "Rendering light (size{0}) at {1}x{2} scalemod {3}", new Object[]{lightscale, xCoor, yCoor, scalemod});
         shadowCanvas.restore();
     }
     
