@@ -195,7 +195,7 @@ public class TileMap implements GameMap, KryoSerializable {
         Mists.logger.info("Updating walls");
         for (Structure s : staticStructures) {
             if (s instanceof Wall) {
-                boolean[] wallneighbours = getNeighbouringWalls((int)s.getXPos()/this.tilesize, (int)s.getYPos()/this.tilesize);
+                boolean[] wallneighbours = getNeighbouringWalls((int)s.getCenterXPos()/this.tilesize, (int)s.getCenterYPos()/this.tilesize);
                 Wall w = (Wall)s;
                 w.setNeighbours(wallneighbours);
             }
