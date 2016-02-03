@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.nkoiv</groupId>
   <artifactId>mists-game</artifactId>
-  <version>0.3-PANDARIN_VINES</version>
+  <version>0.4-PANDARIN_GRAPES</version>
   <build>
     <plugins>
       <plugin>
