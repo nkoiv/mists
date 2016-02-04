@@ -299,23 +299,23 @@ Testing the game is done from two directions: Unit tests inside the Maven projec
 ##Licenced assets in use
 
 ###Libraries/sourcecode:
-KryoNet by EsotericSoftware (full licence information in LICENCE.txt)
-YAML by EsotericSoftware (full licence information in LICENCE.txt)
+* KryoNet by EsotericSoftware (full licence information in LICENCE.txt)
+* YAML by EsotericSoftware (full licence information in LICENCE.txt)
 
 ###Game assets
 Some game sprites are from:
-*Humble Bundle pack:
+* Humble Bundle pack:
 Old School Modern 2 [Copyright](C) Jason Perry
 
 Some game tiles are from
-*Humble Bundle -pack: 
+* Humble Bundle -pack: 
 Adventure Tile Starter - Celianna [Copyright](C) Celianna
 
 Game sounds are from OpenGameArt.org
-*Weapon blow, (c) spookymodem
+* Weapon blow, (c) spookymodem
 
 The Game music is from:
-*JDB Artists Humble Bundle -pack:
+* JDB Artists Humble Bundle -pack:
 MADNESS - ROYALTY FREE MUSIC BY JDB ARTIST www.jdbartist.net [Copyright](C) JDB Artist
 
 And:
