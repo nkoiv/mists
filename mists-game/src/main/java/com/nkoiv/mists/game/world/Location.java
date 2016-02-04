@@ -1047,7 +1047,7 @@ public class Location extends Flags implements Global {
         shadows.paintLights(sc, xOffset, yOffset);
         */
         
-        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
+        //lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
         //lights.renderLightMap(gc, xOffset, yOffset);
         
         sc.setFill(Color.BLACK);
@@ -1149,6 +1149,8 @@ public class Location extends Flags implements Global {
          // Render extras should be called whenever the structure is rendered
         // This paints them on top of everything again, creatures go "behind" trees
         gc.save();
+        
+        gc.setGlobalAlpha(1);
         double lightlevel;
         ColorAdjust lightmap = new ColorAdjust();
         if (!renderedMOBs.isEmpty()) {

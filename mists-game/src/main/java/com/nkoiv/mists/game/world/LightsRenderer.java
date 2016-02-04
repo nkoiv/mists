@@ -34,7 +34,7 @@ public class LightsRenderer {
     double minLightLevel;
     
     public LightsRenderer(Location loc) {
-        this.minLightLevel=0;
+        this.minLightLevel=1;
         this.loc = loc;
         this.obstacles = new Polygon[0];
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);

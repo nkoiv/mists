@@ -69,6 +69,23 @@ public class Wall extends Structure {
         if (this.useExtrasForWalls == false) {
             if (this.wallimages == null) this.generateWallImages(this.wallparts);
             this.getSprite().setImage(this.composeImage());
+            //Still always use the extra for [1], aka top wall
+            //so creatures can move behind it!
+            this.removeExtras();
+            WritableImage snapshot = null;
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setFill(Color.TRANSPARENT);
+            if (neighbours[1] ==false) {
+                Sprite s;
+                if (this.wallimages[1]!=null) {
+                    s = new Sprite(this.wallimages[1]);
+                } else {
+                    wallparts.setViewport(new Rectangle2D(this.getWidth(),0,this.getWidth(),this.getHeight()));
+                    WritableImage upWall = wallparts.snapshot(parameters, snapshot);
+                    s = new Sprite(upWall);
+                }
+                this.addExtra(s, 0, 0);
+            }
         } else {
             this.removeExtras();
             WritableImage snapshot = null;
