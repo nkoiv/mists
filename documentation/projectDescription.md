@@ -298,28 +298,28 @@ Testing the game is done from two directions: Unit tests inside the Maven projec
 
 ##Licenced assets in use
 
+###Libraries/sourcecode:
+KryoNet by EsotericSoftware (full licence information in LICENCE.txt)
+YAML by EsotericSoftware (full licence information in LICENCE.txt)
+
+###Game assets
 Some game sprites are from:
-Humble Bundle pack:
-Old School Modern 2
-[Copyright](C) Jason Perry
+*Humble Bundle pack:
+Old School Modern 2 [Copyright](C) Jason Perry
 
 Some game tiles are from
-Humble Bundle -pack:
-Adventure Tile Starter - Celianna
-[Copyright](C) Celianna
+*Humble Bundle -pack: 
+Adventure Tile Starter - Celianna [Copyright](C) Celianna
 
 Game sounds are from OpenGameArt.org
-Weapon blow, (c) spookymodem
+*Weapon blow, (c) spookymodem
 
 The Game music is from:
-JDB Artists Humble Bundle -pack:
-MADNESS - ROYALTY FREE MUSIC BY JDB ARTIST
-www.jdbartist.net
-[Copyright](C) JDB Artist
+*JDB Artists Humble Bundle -pack:
+MADNESS - ROYALTY FREE MUSIC BY JDB ARTIST www.jdbartist.net [Copyright](C) JDB Artist
 
 And:
 Joe Steudler Music Sampler Humble Bundle:
-[Copyright](C) 2014 DEGICA Co., LTD; Enterbrain, INC;
-Artist: Joel Steudler
+[Copyright](C) 2014 DEGICA Co., LTD; Enterbrain, INC; Artist: Joel Steudler
 
 Fonts (Alagard and Romulus) are by Pix3M from OpenGameArt.Org
