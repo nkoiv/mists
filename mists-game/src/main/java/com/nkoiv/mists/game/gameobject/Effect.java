@@ -5,9 +5,9 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
-import com.nkoiv.mists.game.world.Location;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -19,8 +19,8 @@ import javafx.scene.canvas.GraphicsContext;
 public class Effect extends MapObject {
 
     protected Action owner;
-    protected long startTime;
-    protected long endTime;
+    protected double elapsedTime;
+    protected double endTime;
     
     protected MapObject linkedObject;
     protected boolean linkedLocation;
@@ -37,8 +37,8 @@ public class Effect extends MapObject {
         this.graphics = sprite;
         this.setFlag("durationMS", durationMS);
         this.setFlag("startdurationMS", durationMS);
-        this.startTime = System.currentTimeMillis();
-        this.endTime = startTime + (durationMS);
+        this.elapsedTime = 0;
+        this.endTime = durationMS;
     }
     
     /**
@@ -65,6 +65,9 @@ public class Effect extends MapObject {
     @Override
     public void update(double time) {
         this.graphics.update(time);
+        this.elapsedTime = elapsedTime+(time*1000);
+        if (endTime < 0) return;
+        if(elapsedTime > endTime)this.setRemovable();
     }
     
     @Override
@@ -73,7 +76,6 @@ public class Effect extends MapObject {
             if (this.linkedLocation) this.updatePosition();
             this.getSprite().render(xOffset, yOffset, gc);
         }
-        if(System.currentTimeMillis() > this.endTime)this.setRemovable();
     }   
     
     private void updatePosition() {

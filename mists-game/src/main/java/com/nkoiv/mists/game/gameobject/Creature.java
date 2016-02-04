@@ -18,8 +18,6 @@ import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
-import com.nkoiv.mists.game.networking.LocationClient;
-import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
