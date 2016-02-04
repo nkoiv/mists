@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
+import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -41,8 +42,12 @@ public class Effect extends MapObject {
         this.endTime = durationMS;
     }
     
+    public void setOwner(Action owner) {
+        this.owner = owner;
+    }
+    
     /**
-     * Effects are Owned by actions.
+     * Effects can be Owned by actions.
      * These actions dictate what happens when effect
      * lands on something.
      * @return Action that's reponsible for this effect
@@ -68,6 +73,15 @@ public class Effect extends MapObject {
         this.elapsedTime = elapsedTime+(time*1000);
         if (endTime < 0) return;
         if(elapsedTime > endTime)this.setRemovable();
+        if (!isRemovable()) doCollisions();
+    }
+    
+    private void doCollisions() {
+        if (this.owner==null) return;
+        ArrayList<MapObject> collisions = this.location.checkCollisions(this);
+        if (!collisions.isEmpty()) {       
+            this.getOwner().hitOn(collisions);
+        }
     }
     
     @Override

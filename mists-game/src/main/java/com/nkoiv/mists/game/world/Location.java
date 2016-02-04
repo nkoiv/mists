@@ -602,10 +602,6 @@ public class Location extends Flags implements Global {
             //Mists.logger.info("Effects NOT empty");
             for (Effect e : this.effects) { //Handle effects landing on something
                 e.update(time);
-                ArrayList<MapObject> collisions = this.checkCollisions(e);
-                if (!collisions.isEmpty()) {       
-                    e.getOwner().hitOn(collisions);
-                }
             }
         }
     }
