@@ -3,8 +3,9 @@ Unlike in most roguelikes, the player character in Mists is accompanied by a hel
 
 **Keywords:** Graphic interface, helpful companion, procedurally generated maps
 
-**Users:** Mists is a single player game. On the broad spectrum, the player should be able to:
+**Users:** Mists is a ~~single~~multiplayer game. On the broad spectrum, the player should be able to:
 * Start a new game
+* Join existing games
 * Play the game
  (Move around)
  (Attack enemies)
@@ -93,6 +94,27 @@ MapObjects, or MOBs for short, are a myriad bunch. However when it comes to repr
 ###Tasks and Actions
 
 Tasks are the main thing dictating how Creatures (themselves a type of MapObject) move and act. When it is a creatures turn to act (called in generally by the Location.tick()), it consumes the next task it has, acting accordingly. Generally the PlayerCharacter has it's NextTask set by keyboard and mouse input, whereas computer controlled Creatures get their Tasks from their AI routine. The reason Creatures are given Tasks rather than allowed to act directly, is because Tasks are easy to serialize and transport over network in a multiplayer game. In general most creatures have access to most tasks, and the list of available tasks is maintained in ([GenericTasks.java](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/actions/GenericTasks.java)).
+
+A list of some of the triggers, as example:
+<pre>
+ID_IDLE = 0; //no arguments
+ID_CONTINUE_MOVEMENT = 1; //no arguments
+ID_MOVE_TOWARDS_DIRECTION = 2; //1 argument: the direction
+ID_MOVE_TOWARDS_TARGET = 3; // 1 argument: targetID
+ID_MOVE_TOWARDS_COORDINATES = 4; //2 arguments: x and y coordinates
+ID_CHECK_COORDINATES = 8; //2 arguments: x and y coordinates
+ID_STOP_MOVEMENT = 9; //no arguments
+ID_TURN_TOWARDS_MOB = 11; //1 argument: MobID
+ID_USE_MELEE_TOWARDS_MOB = 21; // 1 argument: MobID
+ID_USE_MELEE_TOWARDS_COORDINATES = 22; // 2 argument: Mob X and Y
+ID_USE_MELEE_TOWARDS_DIRECTION = 23; // 1 argument: direction number
+ID_DROP_ITEM = 31; //1 argument: inventoryslotID of the actor dropping the item
+ID_TAKE_ITEM = 32; //2 arguments: inventoryholder ID and inventoryslotID
+ID_EQUIP_ITEM = 33; //1 arguments: inventoryslotID
+ID_USE_ITEM = 34; //1 arguments: inventoryslotID
+ID_USE_TRIGGER = 41; //1 argument: id of the mapobject to toggle
+</pre>
+
 
 Actions are more complicated and generally more focused than tasks. They're also instantiable and thus customizable per owner. While Tasks govern basic things such as moving and handling items, Actions contain various combat manouvres, spells and the sort. Available Actions per Creature are stored with the creature, along with their cooldowns, resource costs etc. Using an Action is a Task itself.
 
