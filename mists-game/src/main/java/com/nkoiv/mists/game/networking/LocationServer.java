@@ -42,8 +42,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -54,7 +54,7 @@ import java.util.Stack;
 public class LocationServer {
     private Game game;
     private Location mainLocation;
-    private ArrayList<Location> secondaryLocations;
+    private HashMap<Integer, Location> openLocations;
     
     private Server server;
     private int port;
@@ -63,14 +63,15 @@ public class LocationServer {
     private double lastEnforce;
     private int lastMobID;
     
-    private static final int playerCap = 4;
+    private static final int PLAYERCAP = 4;
     
     HashSet<Player> loggedIn = new HashSet();
     
+    private final HashMap<Integer, Stack<Object>> outgoingLocalUpdateStacks; //int: locationBaseID, stack:updateStack
     
     private final Stack<Object> outgoingUpdateStack; //Sent to everyone
-    private final Stack<Object>[] outgoingUpdateStacks = new Stack[playerCap]; //Sent to a single player
-    private final Stack<Object>[] incomingUpdateStacks  = new Stack[playerCap];; //Incoming from given player
+    private final Stack<Object>[] outgoingUpdateStacks = new Stack[PLAYERCAP]; //Sent to a single player
+    private final Stack<Object>[] incomingUpdateStacks  = new Stack[PLAYERCAP];; //Incoming from given player
     
     public LocationServer(Game game) throws Exception {
         server = new Server(16384,16384) {
@@ -85,6 +86,7 @@ public class LocationServer {
         LocationNetwork.register(server);
         this.game = game;
         this.enterLocation(game.getCurrentLocation());
+        outgoingLocalUpdateStacks = new HashMap<>();
         this.outgoingUpdateStack = new Stack<>();
         for (int i = 0; i < outgoingUpdateStacks.length; i++) {
             this.outgoingUpdateStacks[i] = new Stack<>();
@@ -165,6 +167,7 @@ public class LocationServer {
                     */
                     player.name = register.name;
                     player.playerID = nextFreePlayerID();
+                    player.currentLocationNumber = mainLocation.getBaseID();
                     loggedIn(connection, player);
                     return;
                 }
@@ -247,6 +250,16 @@ public class LocationServer {
             }
             
         }
+        
+    }
+    
+    public void openLocation(Location l) {
+        if (openLocations.containsKey(l.getBaseID())) {
+            Mists.logger.warning("Tried to open a location that was already open");
+            return;
+        } 
+        openLocations.put(l.getBaseID(), l);
+        outgoingLocalUpdateStacks.put(l.getBaseID(), new Stack<>());
         
     }
     
@@ -459,7 +472,7 @@ public class LocationServer {
     }
     
     private int nextFreePlayerID() {
-        boolean[] b = new boolean[playerCap];
+        boolean[] b = new boolean[PLAYERCAP];
         for (Player p : this.loggedIn) {
             b[p.playerID] = true;
         }

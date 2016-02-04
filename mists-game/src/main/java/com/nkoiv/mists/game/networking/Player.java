@@ -14,6 +14,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 public class Player {
     public int playerID;
     public String name;
+    public int currentLocationNumber;
     public int locationID;
     public PlayerCharacter character;
 }
