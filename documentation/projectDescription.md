@@ -3,8 +3,9 @@ Unlike in most roguelikes, the player character in Mists is accompanied by a hel
 
 **Keywords:** Graphic interface, helpful companion, procedurally generated maps
 
-**Users:** Mists is a single player game. On the broad spectrum, the player should be able to:
+**Users:** Mists is a ~~single~~multiplayer game. On the broad spectrum, the player should be able to:
 * Start a new game
+* Join existing games
 * Play the game
  (Move around)
  (Attack enemies)
