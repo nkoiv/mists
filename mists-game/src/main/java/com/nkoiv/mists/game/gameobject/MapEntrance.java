@@ -49,8 +49,9 @@ public class MapEntrance extends Structure {
 
         
         @Override
-        public void toggle(MapObject toggler) {
+        public boolean toggle(MapObject toggler) {
             toggler.getLocation().exitLocation(exitNode);
+            return true;
         }
 
         @Override

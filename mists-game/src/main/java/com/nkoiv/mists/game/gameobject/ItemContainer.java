@@ -141,17 +141,19 @@ public class ItemContainer extends Structure implements HasInventory {
         }
         
         @Override
-        public void toggle(MapObject toggler) {
+        public boolean toggle(MapObject toggler) {
             if (!(toggler instanceof Creature)) {
                 Mists.logger.info(toggler.getName()+" tried to toggle "+ic.getName()+" but is not a creature");
-                return;
+                return false;
             }
             //int topItemID = ic.topItemID();
             //((Creature)toggler).setNextTask(new Task(GenericTasks.ID_TAKE_ITEM, toggler.getID(), new int[]{ic.getID(), topItemID}));
             
             if (!((Creature)toggler).getInventory().isFull()) {
                 ((Creature)toggler).addItem(ic.takeTopItem());
+                return true;
             }
+            return false;
             
         }
 
