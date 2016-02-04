@@ -259,6 +259,14 @@ Everything involved in the combat should implement the "Combant" interface. As c
 ###Combat mechanics
 TODO: Plan and implement mechanics for how damage is calculated. Is there armour? Can mobs dodge/parry attacks?
 
+##Multiplayer
+Multiplayer is done by client-server model, where one player hosts the game and others join in on it. The player hosting the game handles all the AI-routines and random elements, and relays the deterministic results to the connected players. The actual networking is handled by KryoNet (https://github.com/EsotericSoftware/kryonet), for which the licence information is included in the LICENCE.txt
+
+Players (including the Server-player) can assign Tasks to their character (fex. "Move right" or "Toggle object with ID 10001"), which the server the validates, mimics and performs. To reduce input latency, the tasks players do are executed before validation, and the rollbacked if the server refuses to perform them. In practice this might result in some "ghosting" or "rubberbanding" if for example player on a slow connection thinks he can move through a doorway that just got blocked by another creature.
+
+All the sent objects are registered for Kryo inside the LocationNetwork.java. On rough level they're mainly split between various game objects (which the server sends to client when it spawns or updates one) and actions, mostly composed of Task-class objects. Identifying map objects and tasks is done with LocationID identifier, which is also the key for handling Location specific objects in general (location.getMapObject(int locationID), etc).
+
+
 ##Testing
 Testing the game is done from two directions: Unit tests inside the Maven project, performing GUI testing by playing the game.
 * Unit tests are enhanced by PIT mutation, documentation for which can be found under the [mists/documentation/pit-reports/ -folder](https://github.com/nkoiv/mists/tree/master/documentation/pit-reports).

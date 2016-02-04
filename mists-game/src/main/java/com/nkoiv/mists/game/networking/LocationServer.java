@@ -67,8 +67,12 @@ public class LocationServer {
     
     HashSet<Player> loggedIn = new HashSet();
     
+    /*
+    TODO: Running multiple locations at once
     private final HashMap<Integer, Stack<Object>> outgoingLocalUpdateStacks; //int: locationBaseID, stack:updateStack
     
+    
+    */ 
     private final Stack<Object> outgoingUpdateStack; //Sent to everyone
     private final Stack<Object>[] outgoingUpdateStacks = new Stack[PLAYERCAP]; //Sent to a single player
     private final Stack<Object>[] incomingUpdateStacks  = new Stack[PLAYERCAP];; //Incoming from given player
@@ -86,7 +90,11 @@ public class LocationServer {
         LocationNetwork.register(server);
         this.game = game;
         this.enterLocation(game.getCurrentLocation());
+        /*
+        TODO: Run multiple locations at once
         outgoingLocalUpdateStacks = new HashMap<>();
+        
+        */
         this.outgoingUpdateStack = new Stack<>();
         for (int i = 0; i < outgoingUpdateStacks.length; i++) {
             this.outgoingUpdateStacks[i] = new Stack<>();
@@ -253,6 +261,8 @@ public class LocationServer {
         
     }
     
+    /*
+    TODO: Running multiple locations at once
     public void openLocation(Location l) {
         if (openLocations.containsKey(l.getBaseID())) {
             Mists.logger.warning("Tried to open a location that was already open");
@@ -260,8 +270,8 @@ public class LocationServer {
         } 
         openLocations.put(l.getBaseID(), l);
         outgoingLocalUpdateStacks.put(l.getBaseID(), new Stack<>());
-        
     }
+    */
     
     public void setLocation(Location l, MapNode mn) {
         this.enterLocation(l);
