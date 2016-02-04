@@ -272,7 +272,7 @@ Testing the game is done from two directions: Unit tests inside the Maven projec
 * Unit tests are enhanced by PIT mutation, documentation for which can be found under the [mists/documentation/pit-reports/ -folder](https://github.com/nkoiv/mists/tree/master/documentation/pit-reports).
 * GUI testing is documented in [/mists/documentation/game_testing.md](https://github.com/nkoiv/mists/blob/master/documentation/game_testing.md)
 
-##Project plan
+##Original project plan for the school project:
 
 ###Weekly plan (TiraLab)
 * Week 1: Plan the tiralab angle to the project (Pathfinding)
@@ -295,31 +295,3 @@ Testing the game is done from two directions: Unit tests inside the Maven projec
 * Inventory-system
 * Libraries for MOBs
 * Random game generation (beyond maps)
-
-##Licenced assets in use
-
-###Libraries/sourcecode:
-* KryoNet by EsotericSoftware (full licence information in LICENCE.txt)
-* YAML by EsotericSoftware (full licence information in LICENCE.txt)
-
-###Game assets
-Some game sprites are from:
-* Humble Bundle pack:
-Old School Modern 2 [Copyright](C) Jason Perry
-
-Some game tiles are from
-* Humble Bundle -pack: 
-Adventure Tile Starter - Celianna [Copyright](C) Celianna
-
-Game sounds are from OpenGameArt.org
-* Weapon blow, (c) spookymodem
-
-The Game music is from:
-* JDB Artists Humble Bundle -pack:
-MADNESS - ROYALTY FREE MUSIC BY JDB ARTIST www.jdbartist.net [Copyright](C) JDB Artist
-
-And:
-Joe Steudler Music Sampler Humble Bundle:
-[Copyright](C) 2014 DEGICA Co., LTD; Enterbrain, INC; Artist: Joel Steudler
-
-Fonts (Alagard and Romulus) are by Pix3M from OpenGameArt.Org
