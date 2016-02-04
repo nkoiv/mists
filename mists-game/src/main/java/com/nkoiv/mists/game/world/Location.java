@@ -1051,13 +1051,13 @@ public class Location extends Flags implements Global {
         shadows.paintLights(sc, xOffset, yOffset);
         */
         
-        //lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
+        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
         //lights.renderLightMap(gc, xOffset, yOffset);
         
         sc.setFill(Color.BLACK);
         sc.fillRect(0, 0, sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
         lights.renderLightSource(sc, player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset,2);
-        
+        if (!player.getCompanions().isEmpty()) lights.renderLightSource(sc, player.getCompanions().get(0).getCenterXPos()-xOffset, player.getCompanions().get(0).getCenterYPos()-yOffset,1);
         
         
     }
