@@ -44,6 +44,8 @@ public class Wall extends Structure {
     private ImageView wallparts;
     private Image[] wallimages;
     private boolean useExtrasForWalls;
+    private double topWallAdjustX;
+    private double topWallAdjustY;
     
     private boolean[] neighbours = new boolean[8];
     /* Neighbours is the list of walls that affect the looks of this wall
@@ -64,7 +66,20 @@ public class Wall extends Structure {
         this.useExtrasForWalls = false;
     }
     
- 
+    /**
+     * TopWallAdjust is the X and Y by which the top wall 
+     * component adjusted when layered on the composite wall-image.
+     * This exists because sometimes the wall is needed
+     * to be a bit "higher" than it actually blocks, so that
+     * it can be walked "behind".
+     * @param topWallAdjustX
+     * @param topWallAdjustY 
+     */
+    public void setTopWallAdjust(double topWallAdjustX, double topWallAdjustY) {
+        this.topWallAdjustX = topWallAdjustX;
+        this.topWallAdjustY = topWallAdjustY;
+    }
+    
     public void updateNeighbours() {
         if (this.useExtrasForWalls == false) {
             if (this.wallimages == null) this.generateWallImages(this.wallparts);
@@ -84,7 +99,7 @@ public class Wall extends Structure {
                     WritableImage upWall = wallparts.snapshot(parameters, snapshot);
                     s = new Sprite(upWall);
                 }
-                this.addExtra(s, 0, 0);
+                this.addExtra(s, topWallAdjustX, topWallAdjustY);
             }
         } else {
             this.removeExtras();
@@ -101,7 +116,7 @@ public class Wall extends Structure {
                     WritableImage upWall = wallparts.snapshot(parameters, snapshot);
                     s = new Sprite(upWall);
                 }
-                this.addExtra(s, 0, -4);
+                this.addExtra(s, topWallAdjustX, topWallAdjustY);
             }
             if (neighbours[3] ==false) {
                 Sprite s;
@@ -287,6 +302,7 @@ public class Wall extends Structure {
     public Wall createFromTemplate() {
         if (this.wallimages == null) this.generateWallImages(this.wallparts);
         Wall newWall = new Wall(this.name, this.getSprite().getImage(), this.getCollisionLevel(), this.wallimages);
+        newWall.setTopWallAdjust(topWallAdjustX, topWallAdjustY);
         return newWall;
     }
 }
