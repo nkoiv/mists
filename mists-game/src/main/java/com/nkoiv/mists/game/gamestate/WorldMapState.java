@@ -90,9 +90,10 @@ public class WorldMapState implements GameState {
    @Override
     public void render(Canvas gameCanvas, Canvas uiCanvas, Canvas shadowCanvas) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
+        GraphicsContext sc = shadowCanvas.getGraphicsContext2D();
         double screenWidth = gameCanvas.getWidth();
         double screenHeight = gameCanvas.getHeight();
-
+        sc.clearRect(0, 0, screenWidth, screenHeight);
         gc.clearRect(0, 0, screenWidth, screenHeight);
         if (game.getCurrentWorldMap() != null) {
             game.getCurrentWorldMap().render(gc);
