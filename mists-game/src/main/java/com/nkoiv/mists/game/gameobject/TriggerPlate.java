@@ -63,4 +63,34 @@ public class TriggerPlate extends Effect {
         return this.touchTrigger;
     }
     
+    public class ToggleTrigger implements Trigger {
+
+        private MapObject targetMob;
+        
+        public ToggleTrigger(MapObject mob) {
+            this.targetMob = mob;
+        }
+        
+        @Override
+        public String getDescription() {
+            String s = "Trigger to toggle "+targetMob.getName();
+            return s;
+        }
+
+        @Override
+        public boolean toggle(MapObject toggler) {
+            Trigger[] targetTriggers = targetMob.getTriggers();
+            if (targetTriggers.length > 0) { 
+                targetTriggers[0].toggle(toggler);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public MapObject getTarget() {
+            return targetMob;
+        }
+        
+    }
 }
