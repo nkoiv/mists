@@ -10,9 +10,11 @@ import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
@@ -227,6 +229,13 @@ public class LibLoader {
             Structure tree = Mists.structureLibrary.create("Tree");
             testVillage.mobs.add(tree);
         }
+        Door door = (Door)Mists.structureLibrary.create("dungeonDoor");
+        TriggerPlate tp = new TriggerPlate("Door opener", 32, 32, 2000, door);
+        tp.setSprite(new Sprite(Mists.graphLibrary.getImage("circle32")));
+        
+        testVillage.mobs.add(door);
+        testVillage.mobs.add(tp);
+        
         testVillage.lightlevel=0.5;
         lib.addTemplate(testVillage);
         

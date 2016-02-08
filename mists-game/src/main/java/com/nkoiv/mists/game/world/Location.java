@@ -1052,7 +1052,7 @@ public class Location extends Flags implements Global {
         
         sc.setFill(Color.BLACK);
         sc.fillRect(0, 0, sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
-        lights.renderLightSource(sc, player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset,2);
+        lights.renderLightSource(sc, player.getCenterXPos()-xOffset, player.getCenterYPos()-yOffset,player.getLightSize());
         if (!player.getCompanions().isEmpty()) lights.renderLightSource(sc, player.getCompanions().get(0).getCenterXPos()-xOffset, player.getCompanions().get(0).getCenterYPos()-yOffset,1);
         
         

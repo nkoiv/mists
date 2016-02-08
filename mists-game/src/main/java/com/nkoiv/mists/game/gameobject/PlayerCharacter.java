@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
  */
 public class PlayerCharacter extends Creature implements Combatant {
     private ArrayList<Creature> companions;
+    private double lightSize = 2.0;
     
     public PlayerCharacter() {
         //Dummy player for testing
@@ -110,6 +111,13 @@ public class PlayerCharacter extends Creature implements Combatant {
         //this.applyMovement(time);  
     }
     
+    public double getLightSize() {
+        return this.lightSize;
+    }
+    
+    public void setLightSize(double lightSize) {
+        this.lightSize = lightSize;
+    }
 
     @Override
     public void useAction(String action ) {

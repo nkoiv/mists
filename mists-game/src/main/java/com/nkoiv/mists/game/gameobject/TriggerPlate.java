@@ -20,6 +20,13 @@ public class TriggerPlate extends Effect {
     private Trigger touchTrigger;
     private double triggerCooldown;
     private double onCooldown;
+    private boolean requireReEntry;
+    private boolean clear;
+    
+    public TriggerPlate(String name, double width, double height, double triggerCooldown, MapObject target) {
+        this(name,width, height, triggerCooldown);
+        this.touchTrigger = new ToggleTrigger(target);
+    }
     
     public TriggerPlate(String name, double width, double height, double triggerCooldown) {
         super(null, name, new Sprite(Mists.graphLibrary.getImage("blank")), -1);
@@ -32,15 +39,30 @@ public class TriggerPlate extends Effect {
     public void update(double time) {
         if (this.touchTrigger == null) return;
         if (this.onCooldown>0) this.onCooldown = onCooldown - (time*1000);
-        if (onCooldown <=0) touch(getLocation().checkCollisions(this));
+        if (onCooldown <=0) {
+            touch(getLocation().checkCollisions(this));
+        }
     }
 
     private void touch(ArrayList<MapObject> touchedMobs) {
+        if (touchedMobs.isEmpty()) this.clear = true;
+        if (this.requireReEntry && !this.clear) return;
         for (MapObject mob : touchedMobs) {
             if (touchTrigger.toggle(mob)) {
                 this.onCooldown = this.triggerCooldown;
+                this.clear = false;
             }
         }
+    }
+    
+    /**
+     * If requireReEntry is set, a mob standing
+     * on trigger will no re-trigger it before moving
+     * in and out again
+     * @param requireReEntry 
+     */
+    public void setRequireReEntry(boolean requireReEntry) {
+        this.requireReEntry = requireReEntry;
     }
     
     public void setCooldown(double cooldown) {
@@ -67,9 +89,13 @@ public class TriggerPlate extends Effect {
     @Override
     public TriggerPlate createFromTemplate() {
         TriggerPlate tp = new TriggerPlate(this.name, this.getWidth(), this.getHeight(), this.triggerCooldown);
-        Trigger tr = this.touchTrigger.createFromTemplate();
-        tr.setTarget(tp);
-        tp.setTouchTrigger(tr);
+        tp.setSprite(new Sprite(this.getSprite().getImage()));
+        tp.setRequireReEntry(this.requireReEntry);
+        if (this.touchTrigger!=null) {
+            Trigger tr = this.touchTrigger.createFromTemplate();
+            tr.setTarget(tp);
+            tp.setTouchTrigger(tr);
+        }
         return tp;
     }
     

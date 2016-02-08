@@ -119,11 +119,13 @@ public class LocationControls {
     }
     
     public void increseLightLevel() {
-        this.game.getPlayer().setVisionRange(this.game.getPlayer().getVisionRange()+1);
+        //this.game.getPlayer().setVisionRange(this.game.getPlayer().getVisionRange()+1);
+        this.game.getPlayer().setLightSize(this.game.getPlayer().getLightSize()+0.2);
     }
     
     public void reduceLightLevel() {
-        this.game.getPlayer().setVisionRange(this.game.getPlayer().getVisionRange()-1);
+        //this.game.getPlayer().setVisionRange(this.game.getPlayer().getVisionRange()-1);
+        this.game.getPlayer().setLightSize(this.game.getPlayer().getLightSize()-0.2);
     }
     
     
