@@ -71,6 +71,10 @@ public class TriggerPlate extends Effect {
             this.targetMob = mob;
         }
         
+        public void setTargetMob(MapObject target) {
+            this.targetMob = target;
+        }
+        
         @Override
         public String getDescription() {
             String s = "Trigger to toggle "+targetMob.getName();
