@@ -38,7 +38,10 @@ public class TriggerPlate extends Effect {
     @Override
     public void update(double time) {
         if (this.touchTrigger == null) return;
-        if (this.onCooldown>0) this.onCooldown = onCooldown - (time*1000);
+        if (this.onCooldown>0) {
+            this.onCooldown = onCooldown - (time*1000);
+            Mists.logger.info(name+" cooldown "+onCooldown);
+        }
         if (onCooldown <=0) {
             touch(getLocation().checkCollisions(this));
         }
@@ -49,6 +52,7 @@ public class TriggerPlate extends Effect {
         if (this.requireReEntry && !this.clear) return;
         for (MapObject mob : touchedMobs) {
             if (touchTrigger.toggle(mob)) {
+                //Mists.logger.info("Wasn't on cooldown, toggling "+name);
                 this.onCooldown = this.triggerCooldown;
                 this.clear = false;
             }

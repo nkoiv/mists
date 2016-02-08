@@ -231,6 +231,7 @@ public class LibLoader {
         }
         Door door = (Door)Mists.structureLibrary.create("dungeonDoor");
         TriggerPlate tp = new TriggerPlate("Door opener", 32, 32, 2000, door);
+        tp.setRequireReEntry(true);
         tp.setSprite(new Sprite(Mists.graphLibrary.getImage("circle32")));
         
         testVillage.mobs.add(door);
