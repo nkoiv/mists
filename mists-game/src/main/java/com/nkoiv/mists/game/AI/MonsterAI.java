@@ -34,7 +34,12 @@ public class MonsterAI extends CreatureAI{
             return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         }
         else {
-            return this.goMelee(creep.getLocation().getPlayer());
+            Task t = this.goMelee(creep.getLocation().getPlayer());
+            if (t.taskID == GenericTasks.ID_MOVE_TOWARDS_COORDINATES && this.pathToMoveOn == null) {
+                //Not in melee range and no path found to target;
+                this.active = false;
+                return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
+            } else return t;
         }
     }
     
