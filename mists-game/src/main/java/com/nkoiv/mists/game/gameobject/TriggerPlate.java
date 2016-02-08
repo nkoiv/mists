@@ -63,16 +63,22 @@ public class TriggerPlate extends Effect {
         return this.touchTrigger;
     }
     
+    
+    @Override
+    public TriggerPlate createFromTemplate() {
+        TriggerPlate tp = new TriggerPlate(this.name, this.getWidth(), this.getHeight(), this.triggerCooldown);
+        Trigger tr = this.touchTrigger.createFromTemplate();
+        tr.setTarget(tp);
+        tp.setTouchTrigger(tr);
+        return tp;
+    }
+    
     public class ToggleTrigger implements Trigger {
 
         private MapObject targetMob;
         
         public ToggleTrigger(MapObject mob) {
             this.targetMob = mob;
-        }
-        
-        public void setTargetMob(MapObject target) {
-            this.targetMob = target;
         }
         
         @Override
@@ -90,10 +96,21 @@ public class TriggerPlate extends Effect {
             }
             return false;
         }
+        
+        @Override
+        public ToggleTrigger createFromTemplate() {
+            ToggleTrigger tt = new ToggleTrigger(this.targetMob);
+            return tt;
+        }
 
         @Override
         public MapObject getTarget() {
-            return targetMob;
+            return this.targetMob;
+        }
+
+        @Override
+        public void setTarget(MapObject mob) {
+            this.targetMob = mob;
         }
         
     }

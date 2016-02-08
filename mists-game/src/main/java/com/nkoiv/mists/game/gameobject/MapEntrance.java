@@ -39,14 +39,21 @@ public class MapEntrance extends Structure {
     }
     
     private class EntranceTrigger implements Trigger {
-        private final MapEntrance entrance;
-        private final MapNode exitNode;
+        private MapEntrance entrance;
+        private MapNode exitNode;
         
         public EntranceTrigger(MapEntrance entrance, MapNode exitNode) {
             this.entrance = entrance;
             this.exitNode = exitNode;
         }
-
+        
+        public void setEntrance(MapEntrance entrance) {
+            this.entrance = entrance;
+        }
+        
+        public void setExit(MapNode exit) {
+            this.exitNode = exit;
+        }
         
         @Override
         public boolean toggle(MapObject toggler) {
@@ -60,8 +67,19 @@ public class MapEntrance extends Structure {
         }
         
         @Override
+        public void setTarget(MapObject mob) {
+            if(mob instanceof MapEntrance) this.entrance = (MapEntrance)mob;
+        }
+        
+        @Override
         public String getDescription() {
             return "Map entrance to...";
+        }
+        
+        @Override
+        public EntranceTrigger createFromTemplate() {
+            EntranceTrigger et = new EntranceTrigger(this.entrance, this.exitNode);
+            return et;
         }
         
     }

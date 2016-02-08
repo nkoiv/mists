@@ -59,14 +59,14 @@ public class Door  extends Structure {
     
     @Override
     public Trigger[] getTriggers() {
-        Trigger[] a = new Trigger[]{new doorTrigger(this)};
+        Trigger[] a = new Trigger[]{new DoorTrigger(this)};
         return a;
     }
     
-    private class doorTrigger implements Trigger {
-        private final Door door;
+    private class DoorTrigger implements Trigger {
+        private Door door;
         
-        public doorTrigger(Door d) {
+        public DoorTrigger(Door d) {
             this.door = d;
         }
         
@@ -82,9 +82,20 @@ public class Door  extends Structure {
         }
         
         @Override
+        public void setTarget(MapObject mob) {
+            if (mob instanceof Door) this.door = (Door)mob;
+        }
+        
+        @Override
         public String getDescription() {
             if (this.door.open) return "Close door";
             else return "Open door";
+        }
+        
+        @Override
+        public DoorTrigger createFromTemplate() {
+            DoorTrigger d = new DoorTrigger(this.door);
+            return d;
         }
         
     }

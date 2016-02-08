@@ -16,4 +16,6 @@ public interface Trigger {
     public String getDescription();
     public boolean toggle(MapObject toggler);
     public MapObject getTarget();
+    public void setTarget(MapObject mob);
+    public Trigger createFromTemplate();
 }

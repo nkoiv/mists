@@ -125,7 +125,7 @@ public class ItemContainer extends Structure implements HasInventory {
     
     @Override
     public Trigger[] getTriggers() {
-        Trigger[] a = new Trigger[]{new lootTrigger(this)};
+        Trigger[] a = new Trigger[]{new LootTrigger(this)};
         return a;
     }
     
@@ -133,10 +133,10 @@ public class ItemContainer extends Structure implements HasInventory {
      * LootTrigger, when toggled, gives the player the
      * top item from the pile.
      */
-    private class lootTrigger implements Trigger {
-        private final ItemContainer ic;
+    private class LootTrigger implements Trigger {
+        private ItemContainer ic;
 
-        public lootTrigger(ItemContainer itemContainer) {
+        public LootTrigger(ItemContainer itemContainer) {
             this.ic = itemContainer;
         }
         
@@ -156,6 +156,11 @@ public class ItemContainer extends Structure implements HasInventory {
             return false;
             
         }
+        
+        @Override
+        public void setTarget(MapObject ic) {
+            if (ic instanceof ItemContainer) this.ic = (ItemContainer)ic;
+        }
 
         @Override
         public MapObject getTarget() {
@@ -167,6 +172,12 @@ public class ItemContainer extends Structure implements HasInventory {
             Item i = this.ic.peekTopItem();
             if (i == null) return "Empty";
             else return ("Take "+i.getName());
+        }
+        
+        @Override
+        public LootTrigger createFromTemplate() {
+            LootTrigger lt = new LootTrigger(this.ic);
+            return lt;
         }
         
     }
