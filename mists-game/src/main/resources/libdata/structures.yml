@@ -14,6 +14,16 @@ extras:
   xOffset: -35
   yOffset: -96
 ---
+name: "Tree1"
+type: "GenericStructure"
+image: "/images/structures/tree1_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/structures/tree1_frill.png"
+  xOffset: -25
+  yOffset: -95
+---
 name: "Rock"
 type: "GenericStructure"
 image: "/images/block.png"

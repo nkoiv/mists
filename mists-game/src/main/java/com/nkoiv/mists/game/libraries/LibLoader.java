@@ -246,7 +246,7 @@ public class LibLoader {
         woods.map = new BGMap(woodsBackground);
         for (int i = 0; i<25;i++) {
             //Make a bunch of trees
-            Structure tree = Mists.structureLibrary.create("Tree");
+            Structure tree = Mists.structureLibrary.create("Tree1");
             woods.mobs.add(tree);
         }
         for (int i = 0; i<10;i++) {
