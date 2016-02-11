@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -101,7 +102,7 @@ public class CollisionMap {
      * 
      */
     private void updateMobsOnNodeMap() {
-        List<Structure> mobs = this.location.getStructures();
+        ArrayList<Structure> mobs = this.location.getStructures();
         //Mists.logger.info("Moblist has " +mobs.size()+" objects");
         for (MapObject mob : mobs) {
             //Mists.logger.info("Doing collisionmapstuff for "+mob.getName());

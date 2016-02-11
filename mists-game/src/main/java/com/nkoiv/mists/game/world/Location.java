@@ -346,6 +346,7 @@ public class Location extends Flags implements Global {
         mob.setID(mobID);
         if (mob instanceof Structure) {
             this.structures.add((Structure)mob);
+            this.structures.sort(new StructureYComparator());
         }
         if (mob instanceof Creature) {
             this.creatures.add((Creature)mob);
@@ -370,6 +371,7 @@ public class Location extends Flags implements Global {
         if (!(mob instanceof Effect)) this.giveID(mob);
         if (mob instanceof Structure) {
             this.structures.add((Structure)mob);
+            this.structures.sort(new StructureYComparator());
         }
         if (mob instanceof Creature) {
             this.creatures.add((Creature)mob);
@@ -464,7 +466,7 @@ public class Location extends Flags implements Global {
         return this.creatures;
     }
     
-    public List<Structure> getStructures() {
+    public ArrayList<Structure> getStructures() {
         return this.structures;
     }
     

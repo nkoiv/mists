@@ -249,9 +249,19 @@ public class LibLoader {
             Structure tree = Mists.structureLibrary.create("Tree1");
             woods.mobs.add(tree);
         }
-        for (int i = 0; i<10;i++) {
+        for (int i = 0; i<5;i++) {
             //Make a bunch of trees
             Structure tree = Mists.structureLibrary.create("Tree2");
+            woods.mobs.add(tree);
+        }
+        for (int i = 0; i<5;i++) {
+            //Make a bunch of trees
+            Structure tree = Mists.structureLibrary.create("Tree3a");
+            woods.mobs.add(tree);
+        }
+        for (int i = 0; i<5;i++) {
+            //Make a bunch of trees
+            Structure tree = Mists.structureLibrary.create("Tree3b");
             woods.mobs.add(tree);
         }
         for (int i = 0; i<10;i++) {

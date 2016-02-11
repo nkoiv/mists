@@ -34,6 +34,26 @@ extras:
   xOffset: -18
   yOffset: -100
 ---
+name: "Tree3a"
+type: "GenericStructure"
+image: "/images/structures/tree3_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/structures/tree3a_frill.png"
+  xOffset: -43
+  yOffset: -143
+---
+name: "Tree3b"
+type: "GenericStructure"
+image: "/images/structures/tree3_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/structures/tree3b_frill.png"
+  xOffset: -43
+  yOffset: -143
+---
 name: "Rock"
 type: "GenericStructure"
 image: "/images/block.png"
