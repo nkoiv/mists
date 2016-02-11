@@ -244,9 +244,14 @@ public class LibLoader {
         Image woodsBackground = new Image("/images/pocmap.png");
         LocationTemplate woods = new LocationTemplate(3, "Woods", woodsBackground.getWidth(), woodsBackground.getHeight());
         woods.map = new BGMap(woodsBackground);
-        for (int i = 0; i<25;i++) {
+        for (int i = 0; i<10;i++) {
             //Make a bunch of trees
             Structure tree = Mists.structureLibrary.create("Tree1");
+            woods.mobs.add(tree);
+        }
+        for (int i = 0; i<10;i++) {
+            //Make a bunch of trees
+            Structure tree = Mists.structureLibrary.create("Tree2");
             woods.mobs.add(tree);
         }
         for (int i = 0; i<10;i++) {

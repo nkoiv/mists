@@ -21,8 +21,18 @@ collisionLevel: 1
 extras:
  tree:
   image: "/images/structures/tree1_frill.png"
-  xOffset: -25
-  yOffset: -95
+  xOffset: -20
+  yOffset: -105
+---
+name: "Tree2"
+type: "GenericStructure"
+image: "/images/structures/tree2_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/structures/tree2_frill.png"
+  xOffset: -18
+  yOffset: -100
 ---
 name: "Rock"
 type: "GenericStructure"
