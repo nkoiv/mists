@@ -15,13 +15,13 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.libraries.LocationLibrary;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 /**
  *
@@ -37,7 +37,7 @@ public class TileMap implements GameMap, KryoSerializable {
     protected int[][] intMap;
     
     protected Tile[][] tileMap;
-    protected HashMap<Integer, String> tilecodes;
+    protected HashMap<Integer, Structure> structureCodes;
     
     protected static final int CLEAR = 0;
     protected static final int FLOOR = 46;
@@ -58,9 +58,9 @@ public class TileMap implements GameMap, KryoSerializable {
         Mists.logger.info("Tiles generated");
     }
     
-    public TileMap (String filename) {
+    public TileMap (String mapFileName) {
         this.tilesize = Global.TILESIZE;
-        this.loadMap(filename);
+        this.loadMap(mapFileName);
         this.tileMap = new Tile[tileWidth][tileHeight];
         this.generateTilesFromIntMap();
     }
@@ -103,6 +103,20 @@ public class TileMap implements GameMap, KryoSerializable {
         
     }
     
+    private void loadDefaultStructCodes() {
+        this.structureCodes = LocationLibrary.loadLocationStructureCodes("src/main/resources/libdata/defaultStructCodes.yml");
+        Mists.logger.info("Default structure codes loaded");
+    }
+    
+    /**
+     * Supply the TileMap with pairs of character and structure,
+     * used when generating actual MapObject Structures from a tilemap
+     * @param structureCodes 
+     */
+    public void setStructureCodes(HashMap<Integer, Structure> structureCodes) {
+        this.structureCodes = structureCodes;
+    }
+    
     /*
     * generateStructure takes a tileCode and generates the Structure from it
     * TODO: Fix the class to use a StructureSheet (repository for the structureCodes)
@@ -110,21 +124,16 @@ public class TileMap implements GameMap, KryoSerializable {
     * because structures should have "floor" under them
     */
     private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
+        if (this.structureCodes == null) this.loadDefaultStructCodes();
+        if (tileCode == CLEAR) tileCode = WALL;
         if (xCoor < 0 || xCoor > tileWidth-1 || yCoor < 0 || yCoor > tileHeight-1) return null;
-        //TODO Should also take in a "HashMap<Integer,String> structureSheet"
-        //if (tileCode == CLEAR) return null;
-        //Lets make Clear into Wall, for testing
-        //Mists.logger.info("Generating structure for tilecode: "+tileCode);
-        if (tileCode == CLEAR || tileCode == WALL) {
-            Wall dungeonwall = (Wall)Mists.structureLibrary.create("dungeonwall", l, xCoor*tilesize, yCoor*tilesize);
-            return dungeonwall;
+        Mists.logger.info("Structure Codes: "+this.structureCodes.keySet().toString());
+        if (this.structureCodes.keySet().contains(tileCode)) {
+            Structure s = this.structureCodes.get(tileCode).createFromTemplate();
+            s.setPosition(xCoor*this.tilesize, yCoor*this.tilesize);
+            return s;
         }
-        if (tileCode == FLOOR) return null;
-        if (tileCode == DOOR) {
-            Door dungeondoor = (Door)Mists.structureLibrary.create("dungeondoor", l, xCoor*tilesize, yCoor*tilesize);
-            return dungeondoor;
-        }
-        return null;
+        else return null;
     }
 
     public void clearTile(int tileX, int tileY) {
@@ -176,10 +185,9 @@ public class TileMap implements GameMap, KryoSerializable {
     //TODO: Structures should have their own map, and not just intMap
     @Override
     public ArrayList<Structure> getStaticStructures(Location l) {
+        if (this.structureCodes == null) this.loadDefaultStructCodes();
         //Generate structures and return them
         Mists.logger.info("Generating structures");
-        
-        
         ArrayList<Structure> staticStructures = new ArrayList<>();
         for (int x=0; x<this.tileWidth; x++) {
             for (int y=0; y<this.tileHeight; y++) {
@@ -302,7 +310,7 @@ public class TileMap implements GameMap, KryoSerializable {
         for (int[] intColumn : this.intMap) {
             output.writeInts(intColumn);
         }
-        kryo.writeClassAndObject(output, this.tilecodes);
+        kryo.writeClassAndObject(output, this.structureCodes);
     }
 
     @Override
@@ -314,7 +322,7 @@ public class TileMap implements GameMap, KryoSerializable {
         for (int i = 0; i < this.tileWidth; i++) {
             this.intMap[i] = input.readInts(tileHeight);
         }
-        this.tilecodes = (HashMap<Integer, String>)kryo.readClassAndObject(input);
+        this.structureCodes = (HashMap<Integer, Structure>)kryo.readClassAndObject(input);
     }
 
 }

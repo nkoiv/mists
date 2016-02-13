@@ -122,7 +122,8 @@ public class LocationLibrary  {
     */
     
     
-      private static void loadLocationStructureCodes(HashMap<Character, Structure> structureMap, String codeFile) {
+    public static HashMap<Integer,Structure> loadLocationStructureCodes(String codeFile) {
+        HashMap<Integer, Structure> structureMap = new HashMap<>();
         File codeYAML = new File(codeFile);
         try {
             Mists.logger.info("Attempting to read YAML from "+codeYAML.getCanonicalPath());
@@ -130,12 +131,14 @@ public class LocationLibrary  {
             while (true) {
                 Object object = reader.read();
                 if (object == null) break;
+                Mists.logger.info(object.toString());
                 try {
                     Map structureDataMap = (Map)object;
-                    Character symbol = ((String)structureDataMap.get("symbol")).charAt(0);
+                    int tileCode = (int)((String)structureDataMap.get("symbol")).charAt(0);
                     Structure structure = generateStructureFromYAML(structureDataMap);
                     if (structure !=null) {
-                        structureMap.put(symbol, structure);
+                        structureMap.put(tileCode, structure);
+                        Mists.logger.info("Added "+structure.getName()+" on tileCode "+tileCode);
                     }
                 } catch (Exception e) {
                     Mists.logger.warning("Failed parsing "+object.toString());
@@ -148,7 +151,7 @@ public class LocationLibrary  {
             Mists.logger.warning("Was unable to read structure code data!");
             Mists.logger.warning(e.toString());
         }
-        
+        return structureMap;
     }
       
     private static Structure generateStructureFromYAML(Map structureDataMap) {
@@ -159,7 +162,6 @@ public class LocationLibrary  {
         } catch (Exception e) {
             Mists.logger.warning("Error generating structure from StructureDataMap");
         }
-        
         return s;
     }
 

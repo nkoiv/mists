@@ -80,14 +80,14 @@ public class Location extends Flags implements Global {
     */
     
     
-    public Location(String name, String mapPath, int maptype) {
+    public Location(String name, String mapFileName, int maptype) {
         this.name = name;
         this.creatures = new ArrayList<>();
         this.structures = new ArrayList<>();
         this.effects = new ArrayList<>();
         Mists.logger.info("Loading map");
-        if (maptype == 0) this.loadMap(new BGMap(new Image(mapPath)));
-        if (maptype == 1) this.loadMap(new TileMap(mapPath));
+        if (maptype == 0) this.loadMap(new BGMap(new Image(mapFileName)));
+        if (maptype == 1) this.loadMap(new TileMap(mapFileName));
         this.localizeMap();
         Mists.logger.info("Map localized, mapgeneration done");
     }
