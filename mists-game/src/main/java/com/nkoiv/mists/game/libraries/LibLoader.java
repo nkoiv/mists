@@ -121,6 +121,13 @@ public class LibLoader {
         
         lib.addImage("lightspot", new Image("/images/light.png"));
         
+        //---Floor tiles---
+        
+        lib.addImage("isoDungeonFloor", new Image("/images/iso_dungeonfloor.png"));
+        lib.addImage("isoDungeonDarkFloor", new Image("/images/iso_dungeondarkfloor.png"));
+        lib.addImage("dungeonFloor", new Image("/images/dungeonfloor.png"));
+        lib.addImage("dungeonDarkFloor", new Image("/images/dungeondarkfloor.png"));
+        
         //---UI elements----
         //Panels
         lib.addImageSet("panelBeige", new ImageView("/images/ui/panel_beige.png"), 4, 4, 25, 25);

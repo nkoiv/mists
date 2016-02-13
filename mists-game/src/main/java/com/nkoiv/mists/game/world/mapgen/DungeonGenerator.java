@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.world.mapgen;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.world.IsometricTileMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class DungeonGenerator implements Global{
             ArrayList<BSParea> BSPareas = BSPdungeon(mapGen, xSize, ySize, totalAreas, 0.3f, 0.7f, minAreaSize, treeMode);
             int[][] randomStructures = dungeonStructures(BSPareas, xSize, ySize, minAreaSize);
             TileMap dungeon =  new TileMap (xSize, ySize, Mists.TILESIZE, randomStructures);
+            //IsometricTileMap dungeon =  new IsometricTileMap (xSize, ySize, Mists.TILESIZE, randomStructures);
             //TODO: make the floor uneven, use different tiles and that stuff
             return dungeon;
     }

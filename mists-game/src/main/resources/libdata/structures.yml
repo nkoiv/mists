@@ -22,7 +22,7 @@ extras:
  tree:
   image: "/images/structures/tree1_frill.png"
   xOffset: -20
-  yOffset: -105
+  yOffset: -106
 ---
 name: "Tree2"
 type: "GenericStructure"

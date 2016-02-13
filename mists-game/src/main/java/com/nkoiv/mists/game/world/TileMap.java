@@ -30,19 +30,19 @@ import javafx.scene.image.Image;
 public class TileMap implements GameMap, KryoSerializable {
 
    
-    private int tilesize;
-    private int tileWidth;
-    private int tileHeight;
+    protected int tilesize;
+    protected int tileWidth;
+    protected int tileHeight;
     
-    private int[][] intMap;
+    protected int[][] intMap;
     
-    private Tile[][] tileMap;
-    private HashMap<Integer, String> tilecodes;
+    protected Tile[][] tileMap;
+    protected HashMap<Integer, String> tilecodes;
     
-    private static final int CLEAR = 0;
-    private static final int FLOOR = 46;
-    private static final int WALL = 35;
-    private static final int DOOR = 43;
+    protected static final int CLEAR = 0;
+    protected static final int FLOOR = 46;
+    protected static final int WALL = 35;
+    protected static final int DOOR = 43;
     
     public TileMap() {
         
@@ -94,9 +94,7 @@ public class TileMap implements GameMap, KryoSerializable {
                 //gc.strokeText(column+","+row, this.tileMap[column][row].getSprite().getXPos()-xOffset, this.tileMap[column][row].getSprite().getYPos()-yOffset);
                 }
             }
-        }
-        
-        
+        } 
     }
     
     private void initializeTileGraphics() {
@@ -242,7 +240,7 @@ public class TileMap implements GameMap, KryoSerializable {
     }
     
     //use the intMap to generate the tiles
-    private void generateTilesFromIntMap() {
+    protected void generateTilesFromIntMap() {
         Mists.logger.info("Generating tiles");
         Mists.logger.info("IntMap: "+this.intMap.length+"x"+this.intMap[0].length);
         Mists.logger.info("TileMap: "+this.tileMap.length+"x"+this.tileMap[0].length);
@@ -252,11 +250,11 @@ public class TileMap implements GameMap, KryoSerializable {
                //For now, everything is floor
                if (this.intMap[x][y]==1) {
                    this.tileMap[x][y] = new Tile(1, "Floor", this.tilesize, 
-                    new Sprite(new Image("/images/dungeonfloor.png"),
+                    new Sprite(Mists.graphLibrary.getImage("dungeonFloor"),
                     x*this.tilesize, y*this.tilesize)); 
                } else {
                    this.tileMap[x][y] = new Tile(0, "DarkFloor", this.tilesize, 
-                    new Sprite(new Image("/images/dungeondarkfloor.png"),
+                    new Sprite(Mists.graphLibrary.getImage("dungeonDarkFloor"),
                     x*this.tilesize, y*this.tilesize)); 
                }
                

@@ -1152,7 +1152,7 @@ public class Location extends Flags implements Global {
         // This paints them on top of everything again, creatures go "behind" trees
         gc.save();
         
-        gc.setGlobalAlpha(1);
+        gc.setGlobalAlpha(0.8);
         double lightlevel;
         ColorAdjust lightmap = new ColorAdjust();
         if (!renderedMOBs.isEmpty()) {

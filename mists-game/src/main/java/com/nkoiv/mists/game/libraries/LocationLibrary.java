@@ -8,15 +8,14 @@ package com.nkoiv.mists.game.libraries;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.GameMap;
+import com.nkoiv.mists.game.world.IsometricTileMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
-import javafx.scene.image.Image;
 
 /**
  * LocationLibrary houses all the premade locations in the game.
