@@ -127,7 +127,6 @@ public class TileMap implements GameMap, KryoSerializable {
         if (this.structureCodes == null) this.loadDefaultStructCodes();
         if (tileCode == CLEAR) tileCode = WALL;
         if (xCoor < 0 || xCoor > tileWidth-1 || yCoor < 0 || yCoor > tileHeight-1) return null;
-        Mists.logger.info("Structure Codes: "+this.structureCodes.keySet().toString());
         if (this.structureCodes.keySet().contains(tileCode)) {
             Structure s = this.structureCodes.get(tileCode).createFromTemplate();
             s.setPosition(xCoor*this.tilesize, yCoor*this.tilesize);
