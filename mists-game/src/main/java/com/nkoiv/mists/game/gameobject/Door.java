@@ -102,7 +102,7 @@ public class Door  extends Structure {
     
     @Override
     public Door createFromTemplate() {
-        Door nd = new Door(this.name, this.openImage, this.closedImage, this.collisionLevel);
+        Door nd = new Door(this.name, this.closedImage, this.openImage, this.collisionLevel);
         if (!this.extraSprites.isEmpty()) {
             for (Sprite s : this.extraSprites) {
                 double xOffset = s.getXPos() - this.getXPos();

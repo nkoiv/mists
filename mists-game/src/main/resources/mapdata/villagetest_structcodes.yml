@@ -1,0 +1,10 @@
+---
+symbol: "#"
+structure: "DungeonWall"
+---
+symbol: "+"
+structure: "DungeonDoor"
+---
+symbol: "T"
+structure: "Tree1"
+---

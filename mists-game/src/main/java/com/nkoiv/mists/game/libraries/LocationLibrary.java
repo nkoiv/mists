@@ -5,16 +5,21 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.world.GameMap;
-import com.nkoiv.mists.game.world.IsometricTileMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -115,6 +120,48 @@ public class LocationLibrary  {
         return this.libByName.get(lowercase);
     }
     */
+    
+    
+      private static void loadLocationStructureCodes(HashMap<Character, Structure> structureMap, String codeFile) {
+        File codeYAML = new File(codeFile);
+        try {
+            Mists.logger.info("Attempting to read YAML from "+codeYAML.getCanonicalPath());
+            YamlReader reader = new YamlReader(new FileReader(codeYAML));
+            while (true) {
+                Object object = reader.read();
+                if (object == null) break;
+                try {
+                    Map structureDataMap = (Map)object;
+                    Character symbol = ((String)structureDataMap.get("symbol")).charAt(0);
+                    Structure structure = generateStructureFromYAML(structureDataMap);
+                    if (structure !=null) {
+                        structureMap.put(symbol, structure);
+                    }
+                } catch (Exception e) {
+                    Mists.logger.warning("Failed parsing "+object.toString());
+                    Mists.logger.warning(e.toString());
+                }
+                
+            }
+
+        } catch (Exception e) {
+            Mists.logger.warning("Was unable to read structure code data!");
+            Mists.logger.warning(e.toString());
+        }
+        
+    }
+      
+    private static Structure generateStructureFromYAML(Map structureDataMap) {
+        Structure s = null;
+        try {
+            String templateName = (String)structureDataMap.get("structure");
+            s = Mists.structureLibrary.getTemplate(templateName);
+        } catch (Exception e) {
+            Mists.logger.warning("Error generating structure from StructureDataMap");
+        }
+        
+        return s;
+    }
 
     public static class LocationTemplate {
         public int baseID;
