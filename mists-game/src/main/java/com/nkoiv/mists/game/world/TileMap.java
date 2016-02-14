@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.libraries.LocationLibrary;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class TileMap implements GameMap, KryoSerializable {
     }
     
     private void loadDefaultStructCodes() {
-        this.structureCodes = LocationLibrary.loadLocationStructureCodes("src/main/resources/libdata/defaultStructCodes.yml");
+        this.structureCodes = LibLoader.loadLocationStructureCodes("src/main/resources/libdata/defaultStructCodes.yml");
         Mists.logger.info("Default structure codes loaded");
     }
     

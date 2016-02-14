@@ -21,6 +21,7 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.BGMap;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import javafx.scene.image.Image;
@@ -65,6 +66,45 @@ public class LibLoader {
             Mists.logger.warning(e.toString());
         }
         
+    }
+    
+    /**
+     * Structure codes are Character-representations for structures in
+     * a map. Each ASCII character can be linked to a different structure,
+     * and by doing so a map for a location can be drawn with same
+     * characters, but with different structures.
+     * @param codeFile Path to the file with the structure codes
+     * @return HashMap with the ASCII value of a character mapped to a Structure
+     */
+    public static HashMap<Integer,Structure> loadLocationStructureCodes(String codeFile) {
+        HashMap<Integer, Structure> structureMap = new HashMap<>();
+        File codeYAML = new File(codeFile);
+        try {
+            Mists.logger.info("Attempting to read YAML from "+codeYAML.getCanonicalPath());
+            YamlReader reader = new YamlReader(new FileReader(codeYAML));
+            while (true) {
+                Object object = reader.read();
+                if (object == null) break;
+                try {
+                    Map structureDataMap = (Map)object;
+                    int tileCode = (int)((String)structureDataMap.get("symbol")).charAt(0);
+                    Structure structure = LocationLibrary.generateStructureFromYAML(structureDataMap);
+                    if (structure !=null) {
+                        structureMap.put(tileCode, structure);
+                        Mists.logger.info("Added "+structure.getName()+" on tileCode "+tileCode);
+                    }
+                } catch (Exception e) {
+                    Mists.logger.warning("Failed parsing "+object.toString());
+                    Mists.logger.warning(e.toString());
+                }
+                
+            }
+
+        } catch (Exception e) {
+            Mists.logger.warning("Was unable to read structure code data!");
+            Mists.logger.warning(e.toString());
+        }
+        return structureMap;
     }
     
     public static void initializeStructureLibrary(MobLibrary<Structure> lib) {
