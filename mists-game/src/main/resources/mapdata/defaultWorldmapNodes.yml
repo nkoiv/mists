@@ -1,0 +1,78 @@
+---
+id: 1
+name: "Cave"
+enterLocationID: 1
+image: "images/mountain_cave.png"
+xCoordinate: 290
+yCoordinate: 280
+links:
+ Up:
+ UpRight:
+ Right:
+ DownRight:
+ Down:
+ DownLeft:
+ Left:
+ UpLeft:
+---
+id: 2
+name: "Village"
+enterLocationID: 2
+image: "images/village.png"
+xCoordinate: 250
+yCoordinate: 220
+links:
+ Up:
+ UpRight:
+ Right:
+ DownRight:
+ Down:
+ DownLeft:
+ Left:
+ UpLeft:
+---
+id: 3
+name: "Road to woods"
+enterLocationID: 3
+image: "images/woods.png"
+xCoordinate: 140
+yCoordinate: 200
+links:
+ Up:
+ UpRight:
+ Right:
+ DownRight:
+ Down:
+ DownLeft:
+ Left:
+ UpLeft:
+---
+id: 4
+name: "Boat"
+image: "images/boat.png"
+xCoordinate: 150
+yCoordinate: 280
+links:
+ Up: 
+ UpRight:
+ Right: 5
+ DownRight:
+ Down:
+ DownLeft:
+ Left:
+ UpLeft:
+---
+id: 10
+name: "Road to cave"
+xCoordinate: 230
+yCoordinate: 290
+---
+id: 11
+name: "Sea"
+xCoordinate: 180
+yCoordinate: 450
+---
+id: 12
+name: "Sea"
+xCoordinate: 550
+yCoordinate: 550

@@ -34,6 +34,13 @@ import javafx.scene.image.ImageView;
  */
 public class LibLoader {
     
+    /**
+     * Initializing a library from YAML is done pretty by supplying the
+     * YAMLs Map Objects to the corresponding Library for parsing.
+     * Resulting library objects are then placed in the supplied library.
+     * @param library Library to store the objects in. Parsing style dictated by type of library supplied.
+     * @param libFile filename of the library file to load
+     */
     private static void initializeLibraryFromYAML(Object library, String libFile) {
         File libraryYAML = new File(libFile);
         try {
