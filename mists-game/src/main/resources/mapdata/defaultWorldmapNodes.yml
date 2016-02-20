@@ -1,19 +1,23 @@
 ---
+#"id" is used to identify the nodes within this file
+#for linking and such
 id: 1
+#"name" is descriptor for ingame
 name: "Cave"
+#"enterLocationID", if supplied, signals which
+#location this worldmapnode links to
 enterLocationID: 1
+#"image" is optional. if it's not supplied,
+#the node is drawn as an empty circle
 image: "images/mountain_cave.png"
+#X and Y coordinates for the node on the worldmap
+#are essentially pixels on the screen.
 xCoordinate: 290
 yCoordinate: 280
+#"links" list which other nodes the player
+#can go to from this node. Supplied as "id".
 links:
- Up:
- UpRight:
- Right:
- DownRight:
- Down:
- DownLeft:
- Left:
- UpLeft:
+ Left: 10
 ---
 id: 2
 name: "Village"
@@ -22,14 +26,7 @@ image: "images/village.png"
 xCoordinate: 250
 yCoordinate: 220
 links:
- Up:
- UpRight:
- Right:
- DownRight:
- Down:
- DownLeft:
- Left:
- UpLeft:
+ Down: 10
 ---
 id: 3
 name: "Road to woods"
@@ -38,14 +35,7 @@ image: "images/woods.png"
 xCoordinate: 140
 yCoordinate: 200
 links:
- Up:
- UpRight:
- Right:
- DownRight:
- Down:
- DownLeft:
- Left:
- UpLeft:
+ Down: 4
 ---
 id: 4
 name: "Boat"
@@ -53,26 +43,30 @@ image: "images/boat.png"
 xCoordinate: 150
 yCoordinate: 280
 links:
- Up: 
- UpRight:
- Right: 5
- DownRight:
- Down:
- DownLeft:
- Left:
- UpLeft:
+ Up: 3
+ Right: 10
+ Down: 11
 ---
 id: 10
 name: "Road to cave"
 xCoordinate: 230
 yCoordinate: 290
+links:
+ Right: 1
+ Up: 2
+ Left: 4
 ---
 id: 11
-name: "Sea"
+name: "Sea 1"
 xCoordinate: 180
 yCoordinate: 450
+links:
+ Up: 4
+ Right: 12
 ---
 id: 12
-name: "Sea"
+name: "Sea 2"
 xCoordinate: 550
 yCoordinate: 550
+links:
+ Left: 11

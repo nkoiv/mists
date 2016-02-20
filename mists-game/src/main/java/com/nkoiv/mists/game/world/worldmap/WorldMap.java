@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -137,9 +138,19 @@ public class WorldMap {
         return yOffset;
     }
     
+    public List<MapNode> getNodes() {
+        return this.nodesOnMap;
+    }
     
     public MapNode getPlayerNode() {
+        if (this.playerNode == null) this.playerNode = this.nodesOnMap.get(0);
         return this.playerNode;
+    }
+    
+    public void setPlayerNode(String nodeName) {
+        for (MapNode node : this.nodesOnMap) {
+            if (node.name.equals(nodeName)) this.playerNode = node;
+        }
     }
     
     public void setPlayerNode(MapNode node) {

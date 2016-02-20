@@ -5,18 +5,14 @@
  */
 package com.nkoiv.mists.game.libraries;
 
-import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

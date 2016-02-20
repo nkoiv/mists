@@ -122,25 +122,32 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
         Mists.logger.info("Creature base generated, adding attributes and flags");
         
-        Map attributes = (Map)creatureData.get("attributes");
-        for (Object a : attributes.keySet()) {
-            String attributeName = (String)a;
-            int attributeValue = Integer.parseInt((String)attributes.get(attributeName));
-            creep.setAttribute(attributeName, attributeValue);
+        if (creatureData.containsKey("attributes")) {
+            Map attributes = (Map)creatureData.get("attributes");
+            for (Object a : attributes.keySet()) {
+                String attributeName = (String)a;
+                int attributeValue = Integer.parseInt((String)attributes.get(attributeName));
+                creep.setAttribute(attributeName, attributeValue);
+            }
         }
         
-        Map flags = (Map)creatureData.get("flags");
-        for (Object f : flags.keySet()) {
-            String flagName = (String)f;
-            int flagValue = Integer.parseInt((String)flags.get(flagName));
-            creep.setAttribute(flagName, flagValue);
+        if (creatureData.containsKey("flags")) {
+            Map flags = (Map)creatureData.get("flags");
+            for (Object f : flags.keySet()) {
+                String flagName = (String)f;
+                int flagValue = Integer.parseInt((String)flags.get(flagName));
+                creep.setAttribute(flagName, flagValue);
+            }
         }
         
-        String aiType = (String)creatureData.get("aiType");
-        switch (aiType){
-            case "monster": creep.setAI(new MonsterAI(creep));
-                break;
+        if (creatureData.containsKey("aiType")) {
+            String aiType = (String)creatureData.get("aiType");
+            switch (aiType){
+                case "monster": creep.setAI(new MonsterAI(creep));
+                    break;
+            }
         }
+        
         
         //TODO: Add actions to YAML
         creep.addAction(new MeleeAttack());

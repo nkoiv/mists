@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.controls.LocationControls;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.libraries.WorldMapLibrary;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
@@ -104,6 +105,8 @@ public class Game {
         
         //POC worldmap
         WorldMap wm = new WorldMap("Himmu island", new Image("/images/himmu_island.png"));
+        WorldMapLibrary.populateWorldMapWithNodesFromYAML(wm, "src/main/resources/mapdata/defaultWorldmapNodes.yml");
+        /*
         LocationNode cave = new LocationNode("Cave", new Image("/images/mountain_cave.png"), 1);
         MapNode boat = new MapNode("Boat", new Image("/images/boat.png"));
         MapNode roadToCave = new MapNode("Road", null);
@@ -135,8 +138,10 @@ public class Game {
         wm.addNode(roadToCave, 230, 290);
         wm.addNode(village, 250, 220);
         wm.addNode(byTheWoods, 140, 200);
-        wm.setPlayerNode(boat);
+        */
+        wm.setPlayerNode("Boat");
         wm.setPlayerCharacter(player);
+        
         this.generatedWorldMaps.put(1, wm);
         this.currentWorldMap = wm;
         currentState.enter();
