@@ -296,8 +296,8 @@ MapObjects are handled by MobLibrary and the classes that extend it. Due to simi
 
 In YAML, all MapObjects have the folowing fields:
 <pre>
-name: <name of the mob> #ie. "Goblin" or "DungeonWall"
-type: <MapObject type of the mob> #ie. "GenericStructure", "Wall" or "Creature"
+name: "name of the mob" #ie. "Goblin" or "DungeonWall"
+type: "MapObject type of the mob" #ie. "GenericStructure", "Wall" or "Creature"
 </pre>
 
 ####Creature Library
