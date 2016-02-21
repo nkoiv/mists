@@ -281,6 +281,100 @@ Everything involved in the combat should implement the "Combant" interface. As c
 ###Combat mechanics
 TODO: Plan and implement mechanics for how damage is calculated. Is there armour? Can mobs dodge/parry attacks?
 
+##Asset Libraries
+Libraries are used to store templates of game assets. With the exception of Graphics Library (which just houses images in various formats), each library stores a number of asset templates in a HashMap, allowing the program to create additional copies of those on demand. The methods "addTemplate(object)", "getTemplate(id)" and "create(id)" are the bread and butter of asset libraries.
+
+While templates can be added and modified on the fly (via the addTemplate() and getTemplate()), most of them are loaded from an external file. These files are mainly stored in YAML-format, for human readability and easy editing. Esoteric Softwares [YamlBeans](https://github.com/EsotericSoftware/yamlbeans) (full licence at the LICENCE.md) is used to facilitate the saving and loading of the assets. These files are mainly stored in /resources/libdata and /resources/mapdata, but additional assets should be loadable from an external folder (as with the music and sound effects) for modding purposes (TODO).
+
+###Graphics Library
+Graphics Library is an exception as far as game libraries are concerned. While individual map objects have their sprite images stored within the template-objects, generic graphics such as UI elements, lightmaps, etc are kept in a separate library.
+
+Graphics Library does not currently utilize YAML for loading its content. It's built entirely by the LibLoader class upon launching the game.
+
+###MapObject Library
+MapObjects are handled by MobLibrary and the classes that extend it. Due to similiarities between structures, creatures, and effects, they can be mostly handled with the same methods. This does require the YAML objects to store the object type however, as that's how various types of mobs can be differentiated.
+
+In YAML, all MapObjects have the folowing fields:
+<pre>
+name: <name of the mob> #ie. "Goblin" or "DungeonWall"
+type: <MapObject type of the mob> #ie. "GenericStructure", "Wall" or "Creature"
+</pre>
+
+####Creature Library
+
+Example creature from creatures.yml:
+<pre>
+---
+#"monsterID" is mandatory and unique identifier
+monsterID: 1
+#"name" is mandatory, but doesn't need to be unique (though probably it should be)
+name: "Worm"
+#"type" is mandatory and used to differentiate various MapObject types.
+type: "Creature"
+#"aiType" can be left blank, resulting in a creature that doesnt move
+aiType: "monster"
+#"spriteType" can be either "spritesheet" or "static". 
+#Spritesheets have four rows: Down, Left, Right and Up.
+#Frames per direction may vary.
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 0, 0, 4, 0, 36, 32]
+#Unless attributes are specified, they default to 1.
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+#Default flags for creatures are:
+#visible: 1
+#collisionLevel: 5
+flags:
+ collisionLevel: 5
+---
+</pre>
+
+####Structure Library
+
+Example strucutre from structures.yml
+<pre>
+---
+name: "Tree"
+type: "GenericStructure"
+image: "/images/tree_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/tree.png"
+  xOffset: -35
+  yOffset: -96
+---
+</pre>
+
+###Action Library
+
+###Item Library
+
+###Location Library
+
+Example of a StructCodes YAML:
+<pre>
+---
+symbol: "#"
+structure: "DungeonWall"
+---
+symbol: "+"
+structure: "DungeonDoor"
+---
+symbol: "^"
+structure: "DungeonStairs"
+---
+symbol: "T"
+structure: "Tree1"
+</pre>
+
+###WorldMap Library
+
 ##Multiplayer
 Multiplayer is done by client-server model, where one player hosts the game and others join in on it. The player hosting the game handles all the AI-routines and random elements, and relays the deterministic results to the connected players. The actual networking is handled by KryoNet (https://github.com/EsotericSoftware/kryonet), for which the licence information is included in the LICENCE.txt
 
