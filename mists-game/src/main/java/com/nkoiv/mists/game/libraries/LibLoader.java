@@ -53,12 +53,12 @@ public class LibLoader {
                     Map libraryObjectData = (Map)object;
                     if (library instanceof MobLibrary) {
                         MapObject mob = ((MobLibrary)library).generateFromYAML(libraryObjectData);
-                        Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
+                        //Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
                         ((MobLibrary)library).addTemplate(mob);
                     }
                     if (library instanceof ItemLibrary) {
                         Item item = ((ItemLibrary)library).generateFromYAML(libraryObjectData);
-                        Mists.logger.info("Got "+item.getName()+ " from YAML parsing");
+                        //Mists.logger.info("Got "+item.getName()+ " from YAML parsing");
                         ((ItemLibrary)library).addTemplate(item);
                     }
                 } catch (Exception e) {

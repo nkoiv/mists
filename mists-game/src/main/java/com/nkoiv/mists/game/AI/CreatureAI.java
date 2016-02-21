@@ -104,7 +104,7 @@ public class CreatureAI extends Flags{
         double targetYCoordinate = mob.getCenterYPos();
         Path pathToMob = this.creep.getLocation().getPathFinder().findPath(collisionSize,this.creep.getCrossableTerrain(),creep.getXPos()+offset, creep.getYPos()+offset, targetXCoordinate, targetYCoordinate);
         this.pathToMoveOn = pathToMob;
-        if (pathToMob.getLength() <= 1) {
+        if (pathToMob.getLength() <= 0) {
             /* No path was found to target 
             *  just move in the general direction of target
             */
@@ -112,7 +112,7 @@ public class CreatureAI extends Flags{
             this.pathToMoveOn = null;
             return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{((int)mob.getCenterXPos()), ((int)mob.getCenterYPos())});
         }
-        if (pathToMob.getLength() == 2) {
+        if (pathToMob.getLength() == 1) {
             /* We're next to target
             *  Try to get even closer (TODO: Is this the right course of action?)
             */
