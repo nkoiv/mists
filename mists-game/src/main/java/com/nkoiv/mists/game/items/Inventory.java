@@ -134,6 +134,15 @@ public class Inventory {
         return this.getItem(id);
     }
     
+    public Item getItemByID(int itemID) {
+        for (Item i : this.items) {
+            if (i != null) {
+                if (i.baseID == itemID) return i;
+            }
+        }
+        return null;
+    }
+    
     public Item getItemByName(String itemname) {
         for (Item i : this.items) {
             if (i != null) {
@@ -168,6 +177,20 @@ public class Inventory {
             }
         }
         return null;
+    }
+    
+    public boolean containsItem(int itemID) {
+        for (Item i : this.items) {
+            if (i !=null) if (i.baseID == itemID) return true;
+        }
+        return false;
+    }
+    
+    public boolean containsItem(String itemName) {
+        for (Item i : this.items) {
+            if (i !=null) if (i.name.equals(itemName)) return true;
+        }
+        return false;
     }
     
     public boolean isFull() {

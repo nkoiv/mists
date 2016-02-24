@@ -1,0 +1,29 @@
+---
+dialogueID: 1
+cards:
+ - cardID: 1
+  text: "Hello, this is card number one"
+  links:
+   - linkID: 1
+    linkText: "Link to Card#2"
+	linkDestination: 2
+   - linkID: 2
+    linkText: "Link to Card#3"   
+	linkDestination: 3
+ - cardID: 2
+  text: "Card number two"
+  links:
+   - linkID: 1
+    linkText: "Back to Card#1"
+	linkDestination: 1
+   - linkID: 2
+    linkText: "Onwards to card #3"
+	linkDestination: 3
+ - cardID: 3
+  text: "Card number three"
+  links:
+   - linkID: 1
+    linkText: "Back to Card#1"
+	linkDestination: 1
+	linkText: "End of Dialogue"
+	linkDestination: -1

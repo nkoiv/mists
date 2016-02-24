@@ -10,7 +10,7 @@ import java.util.Random;
 
 /**
  * Testbench is used for testing the performance and utility of the
- * various node-storages used in pathfinding.
+ * various subcomponents of the game
  * @author daedra
  */
 public class TestBench {
@@ -93,41 +93,14 @@ public class TestBench {
         return mean(cqTimes);
     }
     
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int nodeAmount = 100;
-        int runtimes = 100;
-        Node[] nodes = createNodes(nodeAmount);
-        MinHeap testHeap = new MinHeap();
         
-        Node tn1 = new Node(5, 3);
-        tn1.setCostEstimate(50);
-        Node tn2 = new Node(4, 1);
-        tn2.setCostEstimate(90);
-        Node tn3 = new Node(2, 5);
-        tn3.setCostEstimate(15);
-        Node tn4 = new Node(4, 9);
-        tn4.setCostEstimate(26);
         
-        testHeap.add(tn1);
-        System.out.println("Heap: "+testHeap.toString());
-        testHeap.add(tn2);
-        testHeap.add(tn3);
-        testHeap.add(tn4);
-        System.out.println("Heap: "+testHeap.toString());
-        testHeap.remove(tn3);
-        System.out.println("Heap: "+testHeap.toString());
-        addIntoMinHeap(testHeap, nodes);
-        System.out.println("Heap: "+testHeap.toString());
-        addIntoMinHeap(testHeap, nodes);
-        addIntoMinHeap(testHeap, nodes);
-        addIntoMinHeap(testHeap, nodes);
-        System.out.println("Heap: "+testHeap.toString());
-        testHeap.remove(tn4);
-        testHeap.add(tn2);
-        System.out.println("Heap: "+testHeap.toString());
+        
     }
     
 }
