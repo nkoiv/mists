@@ -23,7 +23,7 @@ public abstract class LocalizableText {
     protected boolean localized;
     
     public String getText() {
-        if (this.localized) return originalText;
+        if (!this.localized) return originalText;
         else return localizedText;
     }
     
@@ -34,6 +34,7 @@ public abstract class LocalizableText {
      * @param talker The MapObject (probably player) talking to the card holder
      */
     public void localizeText(MapObject owner, MapObject talker) {
+        localizedText = originalText;
         if (owner!=null) {
             localizedText = originalText.replaceAll("OWNER_NAME", owner.getName());
             localizedText = originalText.replaceAll("LOCATION_NAME", owner.getLocation().getName());
@@ -46,5 +47,9 @@ public abstract class LocalizableText {
     
     public boolean isLocalized() {
         return this.localized;
+    }
+    
+    public void setLocalized(boolean localized) {
+        this.localized = localized;
     }
 }

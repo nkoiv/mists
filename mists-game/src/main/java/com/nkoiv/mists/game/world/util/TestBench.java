@@ -5,8 +5,12 @@
  */
 package com.nkoiv.mists.game.world.util;
 
+import com.nkoiv.mists.game.dialogue.Card;
+import com.nkoiv.mists.game.dialogue.Dialogue;
+import com.nkoiv.mists.game.dialogue.Link;
 import com.nkoiv.mists.game.world.pathfinding.Node;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Testbench is used for testing the performance and utility of the
@@ -98,9 +102,48 @@ public class TestBench {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Dialogue d = buildTestDialogue();
+        Scanner sc = new Scanner(System.in);
+        while (d.getCardNumber() > 0) {
+            System.out.println("-------CARD--------");
+            System.out.println(d.getCurrentCard().getText());
+            System.out.println("-------LINKS-------");
+            int i = 1;
+            for (Link l : d.getCurrentCard().getLinks()) {
+                System.out.println("["+i+"] "+l.getText());
+                i++;
+            }
+            System.out.println("--------------------");
+            String s = sc.nextLine();
+            i = Integer.parseInt(s);
+            if (d.moveToCard(d.getCurrentCard().getLinkDestination(i-1)) == false) break;
+        }
         
+    }
+    
+    private static Dialogue buildTestDialogue() {
+        Dialogue d = new Dialogue();
         
+        Link linkToFirstCard = new Link("Move to the first card", 1);
+        Link linkToSecondCard = new Link("Move to second card", 2);
+        Link linkToThirdCard = new Link("Move to third card", 3);
+        Link linkToEndDialogue = new Link("End dialogue", -1);
         
+        Card firstCard = new Card("This is the first card\nMake your choice:");
+        firstCard.addLink(linkToSecondCard);
+        firstCard.addLink(linkToThirdCard);
+        Card secondCard = new Card("Welcome to the second card.\nChoose again");
+        secondCard.addLink(linkToThirdCard);
+        secondCard.addLink(linkToFirstCard);
+        Card thirdCard = new Card("This is the third card\nand contains conversation exit");
+        thirdCard.addLink(linkToFirstCard);
+        thirdCard.addLink(linkToEndDialogue);
+        
+        d.addCard(1, firstCard);
+        d.addCard(2, secondCard);
+        d.addCard(3, thirdCard);
+        
+        return d;
     }
     
 }

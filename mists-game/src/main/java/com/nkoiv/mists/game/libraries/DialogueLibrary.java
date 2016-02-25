@@ -7,6 +7,7 @@ package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -15,5 +16,13 @@ import java.util.HashMap;
 public class DialogueLibrary {
     
     private HashMap<Integer, Dialogue> lib;
+    
+    public DialogueLibrary() {
+        this.lib = new HashMap<>();
+    }
+        
+    public static void generateDialogueFromYAML(Map object) {
+        
+    }
     
 }

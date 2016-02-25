@@ -18,6 +18,7 @@ public class Card extends LocalizableText {
     
     public Card(String dialogueText) {
         this.originalText = dialogueText;
+        this.dialogueLinks = new ArrayList<>();
     }
     
     public void addLink(Link dialogueLink) {
@@ -31,6 +32,11 @@ public class Card extends LocalizableText {
     
     public ArrayList<Link> getLinks() {
         return this.dialogueLinks;
+    }
+    
+    public int getLinkDestination(int linkNumber) {
+        if (linkNumber < 0 || linkNumber >= this.dialogueLinks.size()) return -1;
+        return this.dialogueLinks.get(linkNumber).destinationCardID;
     }
     
     public Card createFromTemplate() {
