@@ -9,6 +9,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
@@ -41,7 +42,7 @@ public class LibLoader {
      * @param library Library to store the objects in. Parsing style dictated by type of library supplied.
      * @param libFile filename of the library file to load
      */
-    private static void initializeLibraryFromYAML(Object library, String libFile) {
+    public static void initializeLibraryFromYAML(Object library, String libFile) {
         File libraryYAML = new File(libFile);
         try {
             Mists.logger.info("Attempting to read YAML from "+libraryYAML.getCanonicalPath());
@@ -52,14 +53,19 @@ public class LibLoader {
                 try {
                     Map libraryObjectData = (Map)object;
                     if (library instanceof MobLibrary) {
-                        MapObject mob = ((MobLibrary)library).generateFromYAML(libraryObjectData);
+                        MapObject mob = MobLibrary.generateFromYAML(libraryObjectData);
                         //Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
                         ((MobLibrary)library).addTemplate(mob);
                     }
                     if (library instanceof ItemLibrary) {
-                        Item item = ((ItemLibrary)library).generateFromYAML(libraryObjectData);
+                        Item item = ItemLibrary.generateFromYAML(libraryObjectData);
                         //Mists.logger.info("Got "+item.getName()+ " from YAML parsing");
                         ((ItemLibrary)library).addTemplate(item);
+                    }
+                    if (library instanceof DialogueLibrary) {
+                        Dialogue dialogue = DialogueLibrary.generateDialogueFromYAML(libraryObjectData);
+                        int dialogueID = Integer.parseInt((String)libraryObjectData.get("dialogueID"));
+                        ((DialogueLibrary)library).addTemplate(dialogue, dialogueID);
                     }
                 } catch (Exception e) {
                     Mists.logger.warning("Failed parsing "+object.toString());
@@ -69,7 +75,7 @@ public class LibLoader {
             }
 
         } catch (Exception e) {
-            Mists.logger.warning("Was unable to read structure data!");
+            Mists.logger.warning("Was unable to read YAML data!");
             Mists.logger.warning(e.toString());
         }
         
@@ -151,6 +157,11 @@ public class LibLoader {
         
     }
     
+    public static void initializeDialogueLibrary(DialogueLibrary lib) {
+        Mists.logger.info("Loading up dialogue data");
+        initializeLibraryFromYAML(lib, "src/main/resources/libdata/dialogueTest.yml");
+    }
+    
     public static void initializeActionLibrary(ActionLibrary lib) {
         Mists.logger.info("Loading up action data");
         MeleeAttack melee = new MeleeAttack();
@@ -158,6 +169,7 @@ public class LibLoader {
     }
     
     public static void initializeItemLibrary(ItemLibrary lib) {
+        Mists.logger.info("Loading up item data");
         initializeLibraryFromYAML(lib, "src/main/resources/libdata/items.yml");
     }
     

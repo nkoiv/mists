@@ -55,7 +55,7 @@ public class Mists extends Application implements Global {
     public static GameMode gameMode = GameMode.SINGLEPLAYER;
     
     public static int graphicScale = 1;
-    public static Image pixel = new Image("/images/blackpixel.png");
+    //public static Image pixel = new Image("/images/blackpixel.png");
     
     public boolean running = false;
     public final ArrayList<KeyCode> pressedButtons = new ArrayList<>();

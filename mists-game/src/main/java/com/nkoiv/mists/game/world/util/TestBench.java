@@ -8,6 +8,8 @@ package com.nkoiv.mists.game.world.util;
 import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
+import com.nkoiv.mists.game.libraries.DialogueLibrary;
+import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.world.pathfinding.Node;
 import java.util.Random;
 import java.util.Scanner;
@@ -102,7 +104,11 @@ public class TestBench {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Dialogue d = buildTestDialogue();
+        DialogueLibrary dl = new DialogueLibrary();
+        //LibLoader.initializeLibraryFromYAML(dl, "src/main/resources/libdata/dialogueTest.yml");
+        LibLoader.initializeDialogueLibrary(dl);
+        //Dialogue d = buildTestDialogue();
+        Dialogue d = dl.getDialogue(1);
         Scanner sc = new Scanner(System.in);
         while (d.getCardNumber() > 0) {
             System.out.println("-------CARD--------");

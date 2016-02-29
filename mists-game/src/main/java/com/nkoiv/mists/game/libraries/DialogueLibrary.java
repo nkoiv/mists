@@ -5,12 +5,22 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
+import com.nkoiv.mists.game.dialogue.Link;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
 
 /**
- *
+ * DialogueLibrary stores the game dialogues in "unlocalized" state.
+ * This means that variables such as PLAYER_NAME or LOCATION_NAME
+ * on the cards will not locked down to game-specific formats.
+ * As such the Dialogue(and the cards within) maybe be reused to
+ * some extent.
  * @author nikok
  */
 public class DialogueLibrary {
@@ -20,9 +30,71 @@ public class DialogueLibrary {
     public DialogueLibrary() {
         this.lib = new HashMap<>();
     }
+    
+    public void addTemplate(Dialogue d, int dialogueID) {
+        lib.put(dialogueID, d);
+    }
+    
+    public Dialogue getTemplate(int dialogueID) {
+        return lib.get(dialogueID);
+    }
+    
+    public Dialogue getDialogue(int dialogueID) {
+        return lib.get(dialogueID).createFromTemplate();
+    }
         
-    public static void generateDialogueFromYAML(Map object) {
+    public static Dialogue generateDialogueFromYAML(Map object) {
+        Mists.logger.info("Generating dialogue...");
+        Dialogue d = new Dialogue();
+        Set cardSet = (Set)object.get("cards");
+        Mists.logger.info(cardSet.size()+" cards in dialogue");
+        for (Object c : cardSet) {
+            Map cardData = (Map)c;
+            Card card = generateCardFromYAML(cardData);
+            int cardID = Integer.parseInt((String)cardData.get("id"));
+            d.addCard(cardID, card);
+        }
+        return d;
+    }
+    
+    private static Card generateCardFromYAML(Map cardData) {
+        int cardID = Integer.parseInt((String)cardData.get("id"));
+        String cardText = (String)cardData.get("text");
+        ArrayList<Link> cardLinks = new ArrayList<>();
+        if (cardData.keySet().contains("links")) {
+            Set linkSet = (Set)cardData.get("links");
+            for (Object linkData : linkSet) {
+                Link l = generateLinkFromYAML((Map)linkData);
+                if (l!=null)cardLinks.add(l);
+            }
+        }
         
+        //Generate the card
+        Mists.logger.log(Level.INFO, "Generating card: [{0}] ''{1}'', {2} links", new Object[]{cardID, cardText, cardLinks.size()});
+        Card card = new Card(cardText);
+        if (!cardLinks.isEmpty()) {
+            for (Link l : cardLinks) {
+                card.addLink(l);
+            }
+        } else {
+            //No links on card, add EndOfConversation -link
+            card.addLink(generateEndOfConversationLink());
+        }
+        
+        return card;
+    }
+    
+    private static Link generateLinkFromYAML(Map linkData) {
+        //TODO: utilize link requirements
+        String linkText = (String)linkData.get("linkText");
+        int linkDestination = Integer.parseInt((String)linkData.get("linkDestination"));
+        Link l = new Link(linkText, linkDestination);
+        return l;
+    }
+    
+    private static Link generateEndOfConversationLink() {
+        Link l = new Link("[End conversation]", -1);
+        return l;
     }
     
 }
