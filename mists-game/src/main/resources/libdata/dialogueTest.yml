@@ -3,38 +3,28 @@
 dialogueID: 1
 #"cards" is mandatory. Without cards, Dialogue would be empty
 cards:
-#Cards are stored in a set
- - card:
-  #"id" is a mandatory field, used to interlink the cards in dialogue
-  id: 1
-  #"text" is a mandatory field - it's what's displayed on the card
-  text: "Hello, this is card number one"
-  #links are stored in a set
-  #if no "links" are supplied, a static "end conversation" link is added
-  links:
-   - link:
-    linkText: "Link to Card#2"
-    linkDestination: 2
-   - link:
-    linkText: "Link to Card#3"   
-    linkDestination: 3
- - card:
-  id: 2
-  text: "Card number two"
-  links:
-   - link:
-    linkText: "Back to Card#1"
-    linkDestination: 1
-   - link:
-    linkText: "Onwards to card #3"
-    linkDestination: 3
- - card:
-  id: 3
-  text: "Card number three"
-  links:
-   - link:
-    linkText: "Back to Card#1"
-    linkDestination: 1
-   - link:
-    linkText: "End of Dialogue"
-    linkDestination: -1
+ #"id" is a mandatory field, used to interlink the cards in dialogue
+ - id: 1
+   #"text" is a mandatory field - it's what's displayed on the card
+   text: "Hello, this is card number one"
+   #links are stored in a set
+   #if no "links" are supplied, a static "end conversation" link is added
+   links:
+    - linkText: "Link to Card#2"
+      linkDestination: 2
+    - linkText: "Link to Card#3"   
+      linkDestination: 3
+ - id: 2
+   text: "Card number two"
+   links:
+    - linkText: "Back to Card#1"
+      linkDestination: 1
+    - linkText: "Onwards to card #3"
+      linkDestination: 3
+ - id: 3
+   text: "Card number three"
+   links:
+    - linkText: "Back to Card#1"
+      linkDestination: 1
+    - linkText: "End of Dialogue"
+      linkDestination: -1

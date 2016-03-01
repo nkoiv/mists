@@ -46,12 +46,16 @@ public class DialogueLibrary {
     public static Dialogue generateDialogueFromYAML(Map object) {
         Mists.logger.info("Generating dialogue...");
         Dialogue d = new Dialogue();
-        Set cardSet = (Set)object.get("cards");
-        Mists.logger.info(cardSet.size()+" cards in dialogue");
-        for (Object c : cardSet) {
-            Map cardData = (Map)c;
-            Card card = generateCardFromYAML(cardData);
+        //Set cardSet = (Set)object.get("cards");
+        ArrayList cardList = (ArrayList)object.get("cards");
+        Mists.logger.log(Level.INFO, "{0} cards in dialogue", cardList.size());
+        Mists.logger.info(cardList.toString());
+        for (Object c : cardList) {
+            System.out.println(c);
+            HashMap cardData = (HashMap)c;
             int cardID = Integer.parseInt((String)cardData.get("id"));
+            Mists.logger.info("Generating card" +cardID);
+            Card card = generateCardFromYAML(cardData);
             d.addCard(cardID, card);
         }
         return d;
@@ -61,9 +65,10 @@ public class DialogueLibrary {
         int cardID = Integer.parseInt((String)cardData.get("id"));
         String cardText = (String)cardData.get("text");
         ArrayList<Link> cardLinks = new ArrayList<>();
+        Mists.logger.log(Level.INFO, "Creating card {0} : {1}", new Object[]{cardID, cardText});
         if (cardData.keySet().contains("links")) {
-            Set linkSet = (Set)cardData.get("links");
-            for (Object linkData : linkSet) {
+            ArrayList linkList = (ArrayList)cardData.get("links");
+            for (Object linkData : linkList) {
                 Link l = generateLinkFromYAML((Map)linkData);
                 if (l!=null)cardLinks.add(l);
             }
