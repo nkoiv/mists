@@ -105,10 +105,9 @@ public class TestBench {
      */
     public static void main(String[] args) {
         DialogueLibrary dl = new DialogueLibrary();
-        //LibLoader.initializeLibraryFromYAML(dl, "src/main/resources/libdata/dialogueTest.yml");
         LibLoader.initializeDialogueLibrary(dl);
-        //Dialogue d = buildTestDialogue();
         Dialogue d = dl.getDialogue(1);
+        
         Scanner sc = new Scanner(System.in);
         while (d.getCardNumber() > 0) {
             System.out.println("-------CARD--------");

@@ -44,17 +44,16 @@ public class DialogueLibrary {
     }
         
     public static Dialogue generateDialogueFromYAML(Map object) {
-        Mists.logger.info("Generating dialogue...");
+        //Mists.logger.info("Generating dialogue...");
         Dialogue d = new Dialogue();
         //Set cardSet = (Set)object.get("cards");
         ArrayList cardList = (ArrayList)object.get("cards");
-        Mists.logger.log(Level.INFO, "{0} cards in dialogue", cardList.size());
-        Mists.logger.info(cardList.toString());
+        //Mists.logger.log(Level.INFO, "{0} cards in dialogue", cardList.size());
+        //Mists.logger.info(cardList.toString());
         for (Object c : cardList) {
-            System.out.println(c);
             HashMap cardData = (HashMap)c;
             int cardID = Integer.parseInt((String)cardData.get("id"));
-            Mists.logger.info("Generating card" +cardID);
+            //Mists.logger.info("Generating card" +cardID);
             Card card = generateCardFromYAML(cardData);
             d.addCard(cardID, card);
         }
@@ -65,7 +64,7 @@ public class DialogueLibrary {
         int cardID = Integer.parseInt((String)cardData.get("id"));
         String cardText = (String)cardData.get("text");
         ArrayList<Link> cardLinks = new ArrayList<>();
-        Mists.logger.log(Level.INFO, "Creating card {0} : {1}", new Object[]{cardID, cardText});
+        //Mists.logger.log(Level.INFO, "Creating card {0} : {1}", new Object[]{cardID, cardText});
         if (cardData.keySet().contains("links")) {
             ArrayList linkList = (ArrayList)cardData.get("links");
             for (Object linkData : linkList) {
@@ -75,7 +74,7 @@ public class DialogueLibrary {
         }
         
         //Generate the card
-        Mists.logger.log(Level.INFO, "Generating card: [{0}] ''{1}'', {2} links", new Object[]{cardID, cardText, cardLinks.size()});
+        //Mists.logger.log(Level.INFO, "Generating card: [{0}] ''{1}'', {2} links", new Object[]{cardID, cardText, cardLinks.size()});
         Card card = new Card(cardText);
         if (!cardLinks.isEmpty()) {
             for (Link l : cardLinks) {
