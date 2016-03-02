@@ -169,8 +169,16 @@ public class Inventory {
         return removeItem(id);
     }
     
+    public Item removeItemByID(int itemID) {
+        for (int i = 0; i< this.items.length; i++) {
+            if (this.items[i] != null) {
+                if (this.items[i].getBaseID() == itemID) return this.removeItem(i);
+            }
+        }
+        return null;
+    }
+    
     public Item removeItemByName(String itemname) {
-        int id = -1;
         for (int i = 0; i< this.items.length; i++) {
             if (this.items[i] != null) {
                 if (this.items[i].getName().equals(itemname)) return this.removeItem(i);
@@ -199,6 +207,10 @@ public class Inventory {
     
     public boolean isEmpty() {
         return this.itemSize == 0;
+    }
+    
+    public int getFreeSpace() {
+        return (this.items.length - this.itemSize);
     }
     
     public int getSize() {
