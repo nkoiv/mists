@@ -5,10 +5,16 @@
  */
 package com.nkoiv.mists.game.dialogue;
 
+import com.nkoiv.mists.game.gameobject.MapObject;
+
 /**
- *
+ * LinkTriggers are something that manipulate the game world
+ * when a link is clicked.
  * @author nikok
  */
-public class LinkTrigger {
+public interface LinkTrigger {
+    
+    public boolean toggle(MapObject owner, MapObject talker);
     
 }
+
