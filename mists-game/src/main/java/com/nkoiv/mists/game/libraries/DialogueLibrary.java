@@ -5,15 +5,12 @@
  */
 package com.nkoiv.mists.game.libraries;
 
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
 
 /**
  * DialogueLibrary stores the game dialogues in "unlocalized" state.

@@ -42,9 +42,9 @@ public class Dialogue {
                 this.cards.get(id).setLocalized(false);
             }
         }
-        this.currentCard = startingCard;
         this.owner = owner;
         this.talker = talker;
+        this.moveToCard(startingCard);
     }
     
     /**

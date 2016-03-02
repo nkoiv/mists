@@ -36,11 +36,11 @@ public abstract class LocalizableText {
     public void localizeText(MapObject owner, MapObject talker) {
         localizedText = originalText;
         if (owner!=null) {
-            localizedText = originalText.replaceAll("OWNER_NAME", owner.getName());
-            localizedText = originalText.replaceAll("LOCATION_NAME", owner.getLocation().getName());
+            localizedText = localizedText.replaceAll("OWNER_NAME", owner.getName());
+            if (owner.getLocation()!=null) localizedText = localizedText.replaceAll("LOCATION_NAME", owner.getLocation().getName());
         }
         if (talker!=null) {
-            localizedText = originalText.replaceAll("TALKER_NAME", talker.getName());
+            localizedText = localizedText.replaceAll("TALKER_NAME", talker.getName());
         }
         this.localized = true;
     }
