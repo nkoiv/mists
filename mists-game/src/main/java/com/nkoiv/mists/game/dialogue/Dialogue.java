@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.dialogue;
 
+import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.HashMap;
 
@@ -94,5 +95,45 @@ public class Dialogue {
             d.addCard(i, cn);
         }
         return d;
+    }
+    
+    class DialogueTrigger implements Trigger {
+        private Dialogue dialogue;
+        private MapObject owner;
+        
+        public DialogueTrigger(MapObject owner, Dialogue dialogue) {
+            this.owner = owner;
+            this.dialogue = dialogue;
+        }
+        
+        @Override
+        public String getDescription() {
+            String s = "Talk with " + owner.getName();
+            return s;
+        }
+
+        @Override
+        public boolean toggle(MapObject toggler) {
+            dialogue.initiateDialogue(owner, toggler);
+            //TODO: Open the UI window for dialogue
+            throw new UnsupportedOperationException("This should open the UI window for dialogue");
+        }
+
+        @Override
+        public MapObject getTarget() {
+            return this.owner;
+        }
+
+        @Override
+        public void setTarget(MapObject mob) {
+            this.owner = mob;
+        }
+
+        @Override
+        public Trigger createFromTemplate() {
+            DialogueTrigger t = new DialogueTrigger(this.owner, this.dialogue);
+            return t;
+        }
+        
     }
 }
