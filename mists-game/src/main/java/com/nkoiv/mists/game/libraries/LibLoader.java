@@ -240,6 +240,13 @@ public class LibLoader {
         lib.addImage("iconCircleBlue", new Image("/images/ui/iconCircle_blue.png"));
         lib.addImage("iconCircleronze", new Image("/images/ui/iconCircle_bronze.png"));
         
+        //Button bars
+        lib.addImageSet("buttonLongBeige", new ImageView("/images/ui/buttonLong_beige.png"), 4, 1, 45, 49);
+        lib.addImageSet("buttonLongBrown", new ImageView("/images/ui/buttonLong_brown.png"), 4, 1, 45, 49);
+        lib.addImageSet("buttonLongBeigeLight", new ImageView("/images/ui/buttonLong_beigeLight.png"), 4, 1, 45, 49);
+        lib.addImageSet("buttonLongBlue", new ImageView("/images/ui/buttonLong_blue.png"), 4, 1, 45, 49);
+        
+        
         //Icons
         lib.addImage("musicOnIcon", new Image("/images/ui/musicOn.png"));
         lib.addImage("musicOffIcon", new Image("/images/ui/musicOff.png"));

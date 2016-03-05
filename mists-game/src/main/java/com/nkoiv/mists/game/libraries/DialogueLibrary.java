@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.libraries;
 import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
+import com.nkoiv.mists.game.dialogue.LinkTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,6 +92,11 @@ public class DialogueLibrary {
         int linkDestination = Integer.parseInt((String)linkData.get("linkDestination"));
         Link l = new Link(linkText, linkDestination);
         return l;
+    }
+    
+    private static LinkTrigger generateLinkTriggersFromYAML(Map linkData) {
+        
+        return null;
     }
     
     private static Link generateEndOfConversationLink() {

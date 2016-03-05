@@ -47,7 +47,7 @@ public class TextPanel extends TextWindow {
         
     }
     
-    private void renderBackground(GraphicsContext gc) {
+    protected void renderBackground(GraphicsContext gc) {
         double currentX = 0;
         double currentY = 0;
         //First row

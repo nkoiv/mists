@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world.util;
 
 import com.nkoiv.mists.game.Direction;
+import java.util.StringTokenizer;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -225,6 +226,40 @@ public abstract class Toolkit {
         double euclideanDistance = Math.sqrt(Math.pow(fromX - toX, 2)
                             + Math.pow(fromX - toX, 2));
         return euclideanDistance;
+    }
+    
+    /**
+     * Split string into several lines, each capped at max char length.
+     * From Stackoverflow (Rakesh Soni)
+     * http://stackoverflow.com/questions/7528045/large-string-split-into-lines-with-maximum-length-in-java
+     * @param input
+     * @param maxCharInLine
+     * @return 
+     */
+    public static String[] splitStringIntoLines(String input, int maxCharInLine){
+        StringTokenizer tok = new StringTokenizer(input, " ");
+        StringBuilder output = new StringBuilder(input.length());
+        int lineLen = 0;
+        while (tok.hasMoreTokens()) {
+            String word = tok.nextToken();
+
+            while(word.length() > maxCharInLine){
+                output.append(word.substring(0, maxCharInLine-lineLen) + "\n");
+                word = word.substring(maxCharInLine-lineLen);
+                lineLen = 0;
+            }
+
+            if (lineLen + word.length() > maxCharInLine) {
+                output.append("\n");
+                lineLen = 0;
+            }
+            output.append(word + " ");
+
+            lineLen += word.length() + 1;
+        }
+        // output.split();
+        // return output.toString();
+        return output.toString().split("\n");
     }
  
     /**
