@@ -230,36 +230,37 @@ public abstract class Toolkit {
     
     /**
      * Split string into several lines, each capped at max char length.
-     * From Stackoverflow (Rakesh Soni)
      * http://stackoverflow.com/questions/7528045/large-string-split-into-lines-with-maximum-length-in-java
+     * by StackOverflow user Saad Benbouzid
      * @param input
      * @param maxCharInLine
      * @return 
      */
-    public static String[] splitStringIntoLines(String input, int maxCharInLine){
-        StringTokenizer tok = new StringTokenizer(input, " ");
+    private static final char NEWLINE = '\n';
+    private static final String SPACE_SEPARATOR = " ";
+    //if text has \n, \r or \t symbols it's better to split by \s+
+    private static final String SPLIT_REGEXP= "\\s+";
+    public static String breakLines(String input, int maxLineLength) {
+        String[] tokens = input.split(SPLIT_REGEXP);
         StringBuilder output = new StringBuilder(input.length());
         int lineLen = 0;
-        while (tok.hasMoreTokens()) {
-            String word = tok.nextToken();
+        for (int i = 0; i < tokens.length; i++) {
+            String word = tokens[i];
 
-            while(word.length() > maxCharInLine){
-                output.append(word.substring(0, maxCharInLine-lineLen) + "\n");
-                word = word.substring(maxCharInLine-lineLen);
+            if (lineLen + (SPACE_SEPARATOR + word).length() > maxLineLength) {
+                if (i > 0) {
+                    output.append(NEWLINE);
+                }
                 lineLen = 0;
             }
-
-            if (lineLen + word.length() > maxCharInLine) {
-                output.append("\n");
-                lineLen = 0;
+            if (i < tokens.length - 1 && (lineLen + (word + SPACE_SEPARATOR).length() + tokens[i + 1].length() <=
+                    maxLineLength)) {
+                word += SPACE_SEPARATOR;
             }
-            output.append(word + " ");
-
-            lineLen += word.length() + 1;
+            output.append(word);
+            lineLen += word.length();
         }
-        // output.split();
-        // return output.toString();
-        return output.toString().split("\n");
+        return output.toString();
     }
  
     /**

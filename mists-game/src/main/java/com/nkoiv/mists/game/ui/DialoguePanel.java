@@ -6,11 +6,11 @@
 package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.gamestate.LocationState;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.logging.Level;
@@ -27,10 +27,11 @@ import javafx.scene.paint.Color;
 public class DialoguePanel extends TextPanel {
     private Dialogue dialogue;
     private double maxRowCount;
-    private int maxCharWidth;
+    private int maxCharWidth = 60;
     private double textHeight = 20.0; //pixelheight for text...
     
     private ArrayList<DialogueLinkButton> linkButtons;
+    private String currentCardText;
     
     private static double defaultWidth = Mists.WIDTH - 200;
     private static double defaultHeight = (Mists.HEIGHT/2)-100;
@@ -49,17 +50,24 @@ public class DialoguePanel extends TextPanel {
     public void setDialogue(Dialogue dialogue) {
         this.dialogue = dialogue;
         this.generateLinks();
+        this.formatCurrentCardText();
     }
     
     public void moveToCard(int cardNumber) {
         if (this.dialogue.moveToCard(cardNumber) == true)  {
             this.generateLinks();
+            this.formatCurrentCardText();
         } else {
             if (this.parent instanceof LocationState) {
                 ((LocationState)this.parent).closeDialogue();
             }
         }
         
+    }
+    
+    private void formatCurrentCardText() {
+        if (this.dialogue == null) return;
+        this.currentCardText = Toolkit.breakLines(this.dialogue.getCurrentCard().getText(), maxCharWidth);
     }
     
     private void generateLinks() {
@@ -77,23 +85,7 @@ public class DialoguePanel extends TextPanel {
     }
     
     private void renderCard(GraphicsContext gc, double xOffset, double yOffset) {
-        Card c = dialogue.getCurrentCard();
-        String newTextLine = c.getText();
-        /*
-        Mists.logger.info("got card, rendering text: "+newTextLine);
-        if (newTextLine.length() > maxCharWidth) {
-            Mists.logger.info("Text was too long, splitting");
-            String[] newText = Toolkit.splitStringIntoLines(newTextLine, maxCharWidth);
-            Mists.logger.info("Text was split into "+newText.length+" lines");
-            int y = 15;
-            for (int i = 0; i < newText.length; i++) {
-                if (i>=this.maxRowCount) break;
-                gc.fillText(newText[i], xPosition+this.margin, yPosition+this.margin+y);
-                y+=15;
-            }
-        } else {
-        */
-        gc.fillText(newTextLine, xPosition+this.margin, yPosition+this.margin+15);
+        gc.fillText(this.currentCardText, xPosition+this.margin, yPosition+this.margin+15);
         
     }
     
