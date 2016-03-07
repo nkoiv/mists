@@ -191,6 +191,7 @@ public class Mists extends Application implements Global {
     
     public static void loadLibraries() {
         setupGraphLibrary();
+        setupDialogueLibrary();
         setupActionLibrary();
         setupItemLibrary();
         setupStructureLibrary();
