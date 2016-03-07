@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.controls.ContextAction;
+import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.networking.LocationClient;
 import com.nkoiv.mists.game.networking.LocationServer;
@@ -17,6 +18,7 @@ import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
 import com.nkoiv.mists.game.ui.Console;
+import com.nkoiv.mists.game.ui.DialoguePanel;
 import com.nkoiv.mists.game.ui.GoMainMenuButton;
 import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.ui.LocationButtons;
@@ -64,6 +66,7 @@ public class LocationState implements GameState {
     private TextPanel infobox;
     private ContextAction contextAction;
     private InventoryPanel playerInventory;
+    private DialoguePanel dialoguePanel;
     
     public LocationState (Game game) {
         Mists.logger.info("Generating locationstate for "+Mists.gameMode);
@@ -151,6 +154,22 @@ public class LocationState implements GameState {
         }
         this.contextAction = ca;
         this.inConsole = false;
+        
+        DialoguePanel dp = new DialoguePanel(this);
+        this.dialoguePanel = dp;
+        dp.setPosition(100, 200);
+        
+    }
+    
+    public void openDialogue(Dialogue dialogue) {
+        Mists.logger.info("Opening dialogue: "+dialogue.getCurrentCard().getText());
+        this.dialoguePanel.setDialogue(dialogue);
+        this.addUIComponent(this.dialoguePanel);
+    }
+    
+    public void closeDialogue() {
+        this.removeUIComponent(this.dialoguePanel);
+        this.dialoguePanel.setDialogue(null);
     }
 
     /**

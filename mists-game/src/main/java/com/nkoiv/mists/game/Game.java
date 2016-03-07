@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.controls.LocationControls;
+import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.libraries.WorldMapLibrary;
 import com.nkoiv.mists.game.world.Location;
@@ -102,6 +103,8 @@ public class Game {
         pocplayer.addCompanion(companion);
         pocplayer.addAction(new MeleeWeaponAttack());
         setPlayer(pocplayer);
+        
+        //POC Dialogue
         
         //POC worldmap
         WorldMap wm = new WorldMap("Himmu island", new Image("/images/himmu_island.png"));

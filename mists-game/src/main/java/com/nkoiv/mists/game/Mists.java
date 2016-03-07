@@ -14,6 +14,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gamestate.LoadingScreen;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.ActionLibrary;
+import com.nkoiv.mists.game.libraries.DialogueLibrary;
 import com.nkoiv.mists.game.libraries.GraphLibrary;
 import com.nkoiv.mists.game.libraries.ItemLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
@@ -71,6 +72,7 @@ public class Mists extends Application implements Global {
     public static MobLibrary<Structure> structureLibrary;
     public static MobLibrary<Creature> creatureLibrary;
     public static LocationLibrary locationLibrary;
+    public static DialogueLibrary dialogueLibrary;
     public static Stage primaryStage;
     /**
     * start(), coming from the Application that Mists extends, is the call to launch the game.
@@ -206,6 +208,9 @@ public class Mists extends Application implements Global {
         loadingScreen.updateProgress(1, "Creating actions");
         loadingScreen.render(gameCanvas, uiCanvas);
         setupActionLibrary();
+        loadingScreen.updateProgress(1, "Generating dialogue library");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        setupDialogueLibrary();
         logger.info("Action library initialized");
         loadingScreen.updateProgress(1, "Loading items");
         loadingScreen.render(gameCanvas, uiCanvas);
@@ -222,6 +227,7 @@ public class Mists extends Application implements Global {
         loadingScreen.updateProgress(1, "Generating location templates");
         loadingScreen.render(gameCanvas, uiCanvas);
         setupLocationLibrary();
+        logger.info("Location templates initialized");
         loadingScreen.updateProgress(1, "Done");
         MistsGame.clearLoadingScreen();   
     }
@@ -258,6 +264,11 @@ public class Mists extends Application implements Global {
     private static void setupLocationLibrary() {
         Mists.locationLibrary = new LocationLibrary();
         LibLoader.initializeLocationLibrary(locationLibrary);
+    }
+    
+    private static void setupDialogueLibrary() {
+        Mists.dialogueLibrary = new DialogueLibrary();
+        LibLoader.initializeDialogueLibrary(dialogueLibrary);
     }
     
     private void loadFonts() {

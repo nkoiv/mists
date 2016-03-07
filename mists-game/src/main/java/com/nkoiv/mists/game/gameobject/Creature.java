@@ -15,6 +15,9 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.ActionType;
 import com.nkoiv.mists.game.actions.AttackAction;
+import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.dialogue.Dialogue;
+import com.nkoiv.mists.game.dialogue.DialogueTrigger;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
@@ -47,6 +50,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     protected HashMap<String, SpriteAnimation> spriteAnimations;
     protected Inventory inventory;
     protected Weapon equippedWeapon; //TODO: Proper inventorymanagement isntead of this
+    
+    protected Dialogue currentDialogue;
     
     /*Attributes are stored in a separate HashMap
     * These are not Flags because they're limited to creatures
@@ -277,6 +282,28 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     public void think(double time) {
         this.lastTask = this.nextTask;
         this.setNextTask(this.ai.think(time));
+    }
+    
+    public void setCurrentDialogue(Dialogue d) {
+        this.currentDialogue = d;
+    }
+    
+    public Dialogue getCurrentDialogue() {
+        return this.currentDialogue;
+    }
+    
+    /**
+     * Get the list of triggers that can be performed on
+     * this MapObject;
+     * @return 
+     */
+    @Override
+    public Trigger[] getTriggers() {
+        if (this.currentDialogue != null) {
+            DialogueTrigger dt = new DialogueTrigger(this, this.currentDialogue);
+            return new Trigger[]{dt};
+        }
+        else return new Trigger[0];
     }
     
     @Override
@@ -723,6 +750,10 @@ public class Creature extends MapObject implements Combatant, HasInventory {
             }
         }
         nc.availableActions = newActions;
+        
+        if (this.currentDialogue != null) {
+            nc.setCurrentDialogue(currentDialogue.createFromTemplate());
+        }
         
         //AI should be the same type as Template
         //TODO: This needs rethinking

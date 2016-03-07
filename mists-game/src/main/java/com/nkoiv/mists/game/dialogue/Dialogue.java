@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.dialogue;
 
-import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.HashMap;
 
@@ -60,7 +59,12 @@ public class Dialogue {
         if (cardID < 0) return false;
         if (!this.cards.containsKey(cardID)) return false;
         Card c = this.cards.get(cardID);
-        if (!c.isLocalized()) c.localizeText(owner, talker);
+        if (!c.isLocalized()) {
+            c.localizeText(owner, talker);
+            for (Link l : c.getLinks()) {
+                l.localizeText(owner, talker);
+            }
+        }
         this.currentCard = cardID;
         return true;
     }
@@ -85,6 +89,12 @@ public class Dialogue {
         this.initiateDialogue(this.owner, this.talker);
     }
     
+    public MapObject getOwner() {
+        return this.owner;
+    }
+    public MapObject getTalker() {
+        return this.talker;
+    }
     
     public Dialogue createFromTemplate() {
         Dialogue d = new Dialogue();
@@ -97,43 +107,4 @@ public class Dialogue {
         return d;
     }
     
-    class DialogueTrigger implements Trigger {
-        private Dialogue dialogue;
-        private MapObject owner;
-        
-        public DialogueTrigger(MapObject owner, Dialogue dialogue) {
-            this.owner = owner;
-            this.dialogue = dialogue;
-        }
-        
-        @Override
-        public String getDescription() {
-            String s = "Talk with " + owner.getName();
-            return s;
-        }
-
-        @Override
-        public boolean toggle(MapObject toggler) {
-            dialogue.initiateDialogue(owner, toggler);
-            //TODO: Open the UI window for dialogue
-            throw new UnsupportedOperationException("This should open the UI window for dialogue");
-        }
-
-        @Override
-        public MapObject getTarget() {
-            return this.owner;
-        }
-
-        @Override
-        public void setTarget(MapObject mob) {
-            this.owner = mob;
-        }
-
-        @Override
-        public Trigger createFromTemplate() {
-            DialogueTrigger t = new DialogueTrigger(this.owner, this.dialogue);
-            return t;
-        }
-        
     }
-}
