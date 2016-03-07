@@ -185,7 +185,7 @@ public class DialoguePanel extends TextPanel {
          * @param link Link this button represents
          */
         public DialogueLinkButton(DialoguePanel parent, Link link) {
-            this(parent, link, parent.getWidth()-100, Mists.graphLibrary.getImageSet("buttonLongBeige"), Mists.graphLibrary.getImageSet("buttonLongBeige"));
+            this(parent, link, parent.getWidth()-100, Mists.graphLibrary.getImageSet("buttonLongBeige"), Mists.graphLibrary.getImageSet("buttonLongBeigePressed"));
         }
         
         public DialogueLinkButton(DialoguePanel parent, Link link, double width, Image[] bgImages, Image[] bgImagesPressed) {

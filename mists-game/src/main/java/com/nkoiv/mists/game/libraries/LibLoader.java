@@ -241,15 +241,15 @@ public class LibLoader {
         lib.addImage("iconCircleronze", new Image("/images/ui/iconCircle_bronze.png"));
         
         //Button bars
-        lib.addImageSet("buttonLongBeige", new ImageView("/images/ui/buttonLong_beige.png"), 4, 1, 45, 49);
-        lib.addImageSet("buttonLongBrown", new ImageView("/images/ui/buttonLong_brown.png"), 4, 1, 45, 49);
-        lib.addImageSet("buttonLongGrey", new ImageView("/images/ui/buttonLong_grey.png"), 4, 1, 45, 49);
-        lib.addImageSet("buttonLongBlue", new ImageView("/images/ui/buttonLong_blue.png"), 4, 1, 45, 49);
+        lib.addImageSet("buttonLongBeige", new ImageView("/images/ui/buttonLong_beige.png"), 4, 1, 48, 49);
+        lib.addImageSet("buttonLongBrown", new ImageView("/images/ui/buttonLong_brown.png"), 4, 1, 48, 49);
+        lib.addImageSet("buttonLongGrey", new ImageView("/images/ui/buttonLong_grey.png"), 4, 1, 48, 49);
+        lib.addImageSet("buttonLongBlue", new ImageView("/images/ui/buttonLong_blue.png"), 4, 1, 48, 49);
         
-        lib.addImageSet("buttonLongBeigePressed", new ImageView("/images/ui/buttonLong_beige_pressed.png"), 4, 1, 45, 49);
-        lib.addImageSet("buttonLongBrownPressed", new ImageView("/images/ui/buttonLong_brown_pressed.png"), 4, 1, 45, 49);
-        lib.addImageSet("buttonLongGreyPressed", new ImageView("/images/ui/buttonLong_grey_pressed.png"), 4, 1, 45, 49);
-        lib.addImageSet("buttonLongBluePressed", new ImageView("/images/ui/buttonLong_blue_pressed.png"), 4, 1, 45, 49);
+        lib.addImageSet("buttonLongBeigePressed", new ImageView("/images/ui/buttonLong_beige_pressed.png"), 4, 1, 48, 45);
+        lib.addImageSet("buttonLongBrownPressed", new ImageView("/images/ui/buttonLong_brown_pressed.png"), 4, 1, 48, 45);
+        lib.addImageSet("buttonLongGreyPressed", new ImageView("/images/ui/buttonLong_grey_pressed.png"), 4, 1, 48, 45);
+        lib.addImageSet("buttonLongBluePressed", new ImageView("/images/ui/buttonLong_blue_pressed.png"), 4, 1, 48, 45);
         
         
         //Icons
