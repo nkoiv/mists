@@ -351,6 +351,41 @@ extras:
 ---
 </pre>
 
+###Dialogue Library
+Example of dialogue from dialogueTest.yml
+<pre>
+---
+#"dialogueID" is both mandatory and unique. Duplicate dialogueIDs are overwritten.
+dialogueID: 1
+dialogueName: "Chat with Himmu"
+#"cards" is mandatory. Without cards, Dialogue would be empty
+cards:
+ #"id" is a mandatory field, used to interlink the cards in dialogue
+ - id: 1
+   #"text" is a mandatory field - it's what's displayed on the card
+   text: "Hello, TALKER_NAME, my name is OWNER_NAME"
+   #links are stored in a set
+   #if no "links" are supplied, a static "end conversation" link is added
+   links:
+    - linkText: "Hi OWNER_NAME! Do you like hamburgers?"
+      linkDestination: 2
+    - linkText: "OWNER_NAME? What a weird name! Where are we?"   
+      linkDestination: 3
+ - id: 2
+   text: "I love hamburgers! Should we go look for some?"
+   links:
+    - linkText: "Did I say hamburgers? Let me rephrase myself."
+      linkDestination: 1
+    - linkText: "Sounds awesome, but where would that lead us?"
+      linkDestination: 3
+ - id: 3
+   text: "Well TALKER_NAME, we're currently at the LOCATION_NAME. I guess we could head onwards and try to find a dungeon entrance?"
+   links:
+    - linkText: "Let's talk a little bit more first..."
+      linkDestination: 1
+    - linkText: "Sure, lets go! [End of Dialogue]"
+      linkDestination: -1
+</pre>
 ###Action Library
 
 ###Item Library
@@ -374,6 +409,31 @@ structure: "Tree1"
 </pre>
 
 ###WorldMap Library
+
+
+##Dialogue
+![](https://github.com/nkoiv/mists/blob/master/documentation/dialogue_ingame.png "Conversing via dialogue")
+The dialogue system in the game is handled with dialogue maps, composed of Cards and Links.
+Each individual piece of conversation is handled by presenting the user with (A) dialogue text and (B) a number of choices with which to navigate the dialogue.
+
+<pre>
++---------+
+| TALKER  |
++---------------------------------------+
+| (A) Hello PLAYER, it is nice to meet  |
+|     you! Would you like to learn the  |
+|     game basics?                      |
+|                                       |
+| (B) 1: Please tell me more            |
+| (B) 2: Goodbye! [END CONVERSATION]    |
++---------------------------------------+
+</pre>
+
+Cards are stored in a map in the dialogue. Each card has an ID, which is referred to when a player selects an option to move forward in the dialogue. The choices are loaded from a list of Links that reside in with the card. Each link contains not only the next card to move to, but also the requirements for the player to choose that link and the effects of choosing it.
+
+Variables in text are handled by a set list of conversion rules, all of which reside in the LocalizableText.java. Since a fresh localization of the text is called every time a participant in the dialogue changes, it's possible to reuse the same dialogue in different environments.
+
+The dialogues are stored in YAML, loaded with the libloader class.
 
 ##Multiplayer
 Multiplayer is done by client-server model, where one player hosts the game and others join in on it. The player hosting the game handles all the AI-routines and random elements, and relays the deterministic results to the connected players. The actual networking is handled by KryoNet (https://github.com/EsotericSoftware/kryonet), for which the licence information is included in the LICENCE.txt
