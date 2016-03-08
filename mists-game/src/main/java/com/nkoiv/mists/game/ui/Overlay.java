@@ -6,6 +6,8 @@
 package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.dialogue.DialogueTrigger;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
@@ -154,8 +156,15 @@ public abstract class Overlay {
         gc.restore();
     }
     
-    public static void drawHandCursor(GraphicsContext gc, MapObject mob) {
-        gc.drawImage(Mists.graphLibrary.getImage("cursorGauntletSmallbronze"), mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
+    public static void drawTriggerCursor(GraphicsContext gc, Trigger t) {
+        MapObject mob = t.getTarget();
+        Image triggerImage;
+        if (t instanceof DialogueTrigger) {
+            triggerImage = Mists.graphLibrary.getImage("buttonSelectSmallbeige");
+        } else {
+            triggerImage = Mists.graphLibrary.getImage("cursorGauntletSmallbronze");
+        }
+        gc.drawImage(triggerImage, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
     }
     
     public static void drawToggleIcon(GraphicsContext gc, MapObject mob) {

@@ -220,7 +220,7 @@ public class LocationState implements GameState {
             this.contextAction.update();
             if (this.contextAction.getCurrentTrigger() != null) {
                 Overlay.drawHighlightRectangle(uigc, this.contextAction.getTriggerObjects());
-                Overlay.drawHandCursor(uigc, this.contextAction.getCurrentTrigger().getTarget());
+                Overlay.drawTriggerCursor(uigc, this.contextAction.getCurrentTrigger());
             }
             //if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(uigc, infobox, game.getCurrentLocation().getTargets().get(0));
         }
