@@ -413,6 +413,7 @@ structure: "Tree1"
 
 ##Dialogue
 ![](https://github.com/nkoiv/mists/blob/master/documentation/dialogue_ingame.png "Conversing via dialogue")
+
 The dialogue system in the game is handled with dialogue maps, composed of Cards and Links.
 Each individual piece of conversation is handled by presenting the user with (A) dialogue text and (B) a number of choices with which to navigate the dialogue.
 
