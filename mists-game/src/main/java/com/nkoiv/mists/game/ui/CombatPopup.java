@@ -48,15 +48,15 @@ public class CombatPopup {
     public void tick(double time) {
         if (this.currentSCT.isEmpty()) return;
         
-        ArrayList<Integer> removables = new ArrayList<>();
+        ArrayList<ScrollingCombatText> removables = new ArrayList<>();
         for (int i = 0; i < this.currentSCT.size(); i ++) {
             ScrollingCombatText sct = this.currentSCT.get(i);
             sct.tick(time);
-            if (sct.getLifetime() <= 0) removables.add(i);
+            if (sct.getLifetime() <= 0) removables.add(sct);
         }
         
-        for (Integer i : removables) {
-            this.currentSCT.remove(this.currentSCT.get(i));
+        for (ScrollingCombatText sct : removables) {
+            this.currentSCT.remove(sct);
         }
         
     }

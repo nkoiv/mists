@@ -164,6 +164,7 @@ public class LocationControls {
         //Trigger t = triggersource.getTriggers()[triggerID];
         Task task = new Task(GenericTasks.ID_USE_TRIGGER, game.getPlayer().getID(), new int[]{triggersourceID, triggerID});
         game.getPlayer().setNextTask(task);
+        Mists.logger.log(Level.INFO, "Set players next task to: USE_TRIGGER {0} : {1}", new Object[]{triggersourceID, triggerID});
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(task);
     }
     
