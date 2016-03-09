@@ -17,6 +17,7 @@ import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
+import com.nkoiv.mists.game.ui.CombatPopup;
 import com.nkoiv.mists.game.ui.Console;
 import com.nkoiv.mists.game.ui.DialoguePanel;
 import com.nkoiv.mists.game.ui.GoMainMenuButton;
@@ -67,6 +68,7 @@ public class LocationState implements GameState {
     private ContextAction contextAction;
     private InventoryPanel playerInventory;
     private DialoguePanel dialoguePanel;
+    private CombatPopup sct;
     
     public LocationState (Game game) {
         Mists.logger.info("Generating locationstate for "+Mists.gameMode);
@@ -159,6 +161,12 @@ public class LocationState implements GameState {
         this.dialoguePanel = dp;
         dp.setPosition(100, 200);
         
+        this.sct = new CombatPopup();
+        
+    }
+    
+    public void addDamageFloat(int damage, MapObject target) {
+        this.sct.addSCT(target, Integer.toString(damage));
     }
     
     public void openDialogue(Dialogue dialogue) {
@@ -222,7 +230,7 @@ public class LocationState implements GameState {
                 Overlay.drawHighlightRectangle(uigc, this.contextAction.getTriggerObjects());
                 Overlay.drawTriggerCursor(uigc, this.contextAction.getCurrentTrigger());
             }
-            //if (!game.getCurrentLocation().getTargets().isEmpty()) Overlay.drawInfoBox(uigc, infobox, game.getCurrentLocation().getTargets().get(0));
+            this.sct.render(uigc);
         }
         
         if (gameMenuOpen){
@@ -306,6 +314,7 @@ public class LocationState implements GameState {
             case SERVER: this.tickServer(time); break;
             case CLIENT: this.tickClient(time); break;
         }
+        this.sct.tick(time);
     }
     
     private void tickSinglePlayer(double time) {

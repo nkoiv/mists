@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.DialogueTrigger;
+import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
@@ -699,6 +700,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     @Override
     public void takeDamage(int damage) {
+        if (Mists.MistsGame.currentState instanceof LocationState) {
+            ((LocationState)Mists.MistsGame.currentState).addDamageFloat(damage, this);
+        }
         this.setHealth(this.getHealth()-damage);
         Mists.logger.log(Level.INFO,"{0} took {1}"+"points of damage"+" ({2}/{3})",
                 new Object[]{this.getName(), damage, this.getHealth(), this.getMaxHealth()});
