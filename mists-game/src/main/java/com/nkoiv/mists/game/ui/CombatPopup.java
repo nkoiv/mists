@@ -100,6 +100,7 @@ public class CombatPopup {
         
         public void render(GraphicsContext gc) {
             //Mists.logger.info("Rendering SCT");
+            gc.setGlobalAlpha(this.lifetime / 1000);
             gc.setFont(Mists.fonts.get("romulus"));
             gc.setFill(colour);
             gc.fillText(text, xCoor, yCoor);

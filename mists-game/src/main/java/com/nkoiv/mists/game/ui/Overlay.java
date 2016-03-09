@@ -159,12 +159,18 @@ public abstract class Overlay {
     public static void drawTriggerCursor(GraphicsContext gc, Trigger t) {
         MapObject mob = t.getTarget();
         Image triggerImage;
+        double xPos;
+        double yPos;
         if (t instanceof DialogueTrigger) {
             triggerImage = Mists.graphLibrary.getImage("buttonSelectSmallbeige");
+            xPos = mob.getCenterXPos()-mob.getLocation().getLastxOffset()-(triggerImage.getWidth()/2);
+            yPos = mob.getCenterYPos()-mob.getLocation().getLastyOffset()-triggerImage.getHeight();
         } else {
             triggerImage = Mists.graphLibrary.getImage("cursorGauntletSmallbronze");
+            xPos = mob.getCenterXPos()-mob.getLocation().getLastxOffset();
+            yPos = mob.getCenterYPos()-mob.getLocation().getLastyOffset();
         }
-        gc.drawImage(triggerImage, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
+        gc.drawImage(triggerImage, xPos, yPos);
     }
     
     public static void drawToggleIcon(GraphicsContext gc, MapObject mob) {
