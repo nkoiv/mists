@@ -35,16 +35,15 @@ public class CombatPopup {
      * @param number Number to pop
      */
     public void addNumberPopup(MapObject mob, int number) {
-        //Generate a (reddish) random color
-        /*
-        float r = rand.nextFloat();
-        float g = rand.nextFloat() / 2f;
-        float b = rand.nextFloat() / 2f;
-        Color c = new Color(r, g, b, 1);
-        */
         String text = Integer.toString(number);
         Color c = Color.RED;
-        this.addSCT(mob, text, c);
+        ScrollingCombatText sct = new ScrollingCombatText(text, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
+        sct.setColour(c);
+        //Randomize the direction of the text floating
+        double xDir = (rand.nextInt(200))-100;
+        double yDir = Math.abs(xDir) - 100;
+        sct.setDirection(xDir, yDir);
+        this.currentSCT.add(sct);
     }
     
     /**
@@ -54,12 +53,8 @@ public class CombatPopup {
      * @param c Colour for the text
      */
     public void addSCT(MapObject mob, String text, Color c) {
-        ScrollingCombatText sct = new ScrollingCombatText(text, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
+        ScrollingCombatText sct = new ScrollingCombatText(text, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset());
         sct.setColour(c);
-        //Randomize the direction of the text floating
-        double xDir = (rand.nextInt(200))-100;
-        double yDir = Math.abs(xDir) - 100;
-        sct.setDirection(xDir, yDir);
         this.currentSCT.add(sct);
         //Mists.logger.info("Added SCT on: "+mob.getName()+" text: "+text);
     }
