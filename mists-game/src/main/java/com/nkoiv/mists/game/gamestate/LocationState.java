@@ -40,6 +40,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 /**
  * LocationState handles the core of the game: being in Locations.
@@ -166,7 +167,11 @@ public class LocationState implements GameState {
     }
     
     public void addDamageFloat(int damage, MapObject target) {
-        this.sct.addSCT(target, Integer.toString(damage));
+        this.sct.addNumberPopup(target, damage);
+    }
+    
+    public void addTextFloat(String text, MapObject target) {
+        this.sct.addSCT(target, text, Color.CYAN);
     }
     
     public void openDialogue(Dialogue dialogue) {

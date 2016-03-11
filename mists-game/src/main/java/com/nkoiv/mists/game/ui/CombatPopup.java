@@ -32,9 +32,9 @@ public class CombatPopup {
     /**
      * Add a combat text popup with random colour
      * @param mob MapObject to pop the text from
-     * @param text Text to pop
+     * @param number Number to pop
      */
-    public void addSCT(MapObject mob, String text) {
+    public void addNumberPopup(MapObject mob, int number) {
         //Generate a (reddish) random color
         /*
         float r = rand.nextFloat();
@@ -42,6 +42,7 @@ public class CombatPopup {
         float b = rand.nextFloat() / 2f;
         Color c = new Color(r, g, b, 1);
         */
+        String text = Integer.toString(number);
         Color c = Color.RED;
         this.addSCT(mob, text, c);
     }
