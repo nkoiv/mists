@@ -29,13 +29,31 @@ public class CombatPopup {
         this.currentSCT = new ArrayList<>();
     }
     
+    /**
+     * Add a combat text popup with random colour
+     * @param mob MapObject to pop the text from
+     * @param text Text to pop
+     */
     public void addSCT(MapObject mob, String text) {
-        ScrollingCombatText sct = new ScrollingCombatText(text, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
         //Generate a (reddish) random color
+        /*
         float r = rand.nextFloat();
         float g = rand.nextFloat() / 2f;
         float b = rand.nextFloat() / 2f;
         Color c = new Color(r, g, b, 1);
+        */
+        Color c = Color.RED;
+        this.addSCT(mob, text, c);
+    }
+    
+    /**
+     * Add a combat text popup with set colour
+     * @param mob MapObject to pop text from
+     * @param text Text to show
+     * @param c Colour for the text
+     */
+    public void addSCT(MapObject mob, String text, Color c) {
+        ScrollingCombatText sct = new ScrollingCombatText(text, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getCenterYPos()-mob.getLocation().getLastyOffset());
         sct.setColour(c);
         //Randomize the direction of the text floating
         double xDir = (rand.nextInt(200))-100;
@@ -45,6 +63,11 @@ public class CombatPopup {
         //Mists.logger.info("Added SCT on: "+mob.getName()+" text: "+text);
     }
     
+    /**
+     * Tick the currently active combat popups
+     * Each will move and fade accordingly.
+     * @param time Number of seconds to tick forward
+     */
     public void tick(double time) {
         if (this.currentSCT.isEmpty()) return;
         
@@ -61,6 +84,11 @@ public class CombatPopup {
         
     }
     
+    /**
+     * Render all the active combat popups on a
+     * given graphics context
+     * @param gc GraphicsContext to render the combat texts on
+     */
     public void render(GraphicsContext gc) {
         if (this.currentSCT.isEmpty()) return;
         gc.save();
@@ -86,7 +114,7 @@ public class CombatPopup {
             this.xCoor = xCoor;
             this.yCoor = yCoor;
             
-            this.lifetime = 1000; //text duration on screen in milliseconds
+            this.lifetime = 1500; //text duration on screen in milliseconds
         }
         
         public void setDirection(double xDirection, double yDirection) {
@@ -100,7 +128,7 @@ public class CombatPopup {
         
         public void render(GraphicsContext gc) {
             //Mists.logger.info("Rendering SCT");
-            gc.setGlobalAlpha(this.lifetime / 1000);
+            if (lifetime < 1000) gc.setGlobalAlpha(lifetime / 1000);
             gc.setFont(Mists.fonts.get("romulus"));
             gc.setFill(colour);
             gc.fillText(text, xCoor, yCoor);

@@ -72,13 +72,7 @@ public class CollisionMap {
     }
     
     
-    /** isBlocked checks if the given unit can pass through the given node 
-     * returns False if tile is blocked, true if not. Every creature should be able to cross CL 0
-     * @param crossableTerrain List of terrains the mover can cross
-     * @param x xCoordinate of the checked node
-     * @param y yCoordinate of the checked node
-     * @return True if the unit cannot pass to this terrain with given crossableTerrainList
-    */
+
     
         /**
      *  Generate a clear nodemap with 0-node at each spot
@@ -139,6 +133,14 @@ public class CollisionMap {
         //Mists.logger.info("Collisionmap updated in "+(System.currentTimeMillis()-startTime)+"ms");
     }
     
+    
+    /** isBlocked checks if the given unit can pass through the given node 
+     * returns False if tile is blocked, true if not. Every creature should be able to cross CL 0
+     * @param crossableTerrain List of terrains the mover can cross
+     * @param x xCoordinate of the checked node
+     * @param y yCoordinate of the checked node
+     * @return True if the unit cannot pass to this terrain with given crossableTerrainList
+    */
     public boolean isBlocked(List<Integer> crossableTerrain ,int x, int y) {
         if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
         if (x<0 || y<0) return true;

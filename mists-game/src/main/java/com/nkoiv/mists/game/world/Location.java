@@ -256,20 +256,42 @@ public class Location extends Flags implements Global {
     private double[] getRandomOpenSpot(double sizeRequirement) {
         //
         Creature collisionTester = new Creature("CollisionTester", new Image("/images/himmutoy.png"));
+        
         //collisionTester.getSprite().setWidth(sizeRequirement);
         //collisionTester.getSprite().setHeight(sizeRequirement);
         Random rnd = new Random();
         boolean foundSpot = false;
         int openX = 0;
         int openY = 0;
-        while (!foundSpot) {
-            openX = (int)sizeRequirement + rnd.nextInt(((int)(map.getWidth()-sizeRequirement)));
-            openX = (openX / Global.TILESIZE) * Global.TILESIZE;
-            openY = (int)sizeRequirement + rnd.nextInt(((int)(map.getHeight()-sizeRequirement)));
-            openY = (openY / Global.TILESIZE) * Global.TILESIZE;
-            collisionTester.setCenterPosition(openX, openY);
-            if (this.checkCollisions(collisionTester).isEmpty()) foundSpot = true;
+        if (this.getCollisionMap() != null) {
+            //Use the collisionmap to find random spot if possible
+            while (!foundSpot) {
+                openX = rnd.nextInt(this.getCollisionMap().mapTileWidth);
+                openY = rnd.nextInt(this.getCollisionMap().mapTileHeight);
+                if (!this.getCollisionMap().isBlocked(0, openX, openY)) {
+                    if ((sizeRequirement > this.getCollisionMap().nodeSize)
+                            && (this.getCollisionMap().isBlocked(0, openX+1, openY+1))) {
+                        //Bigger things need more space
+                    } else {
+                        foundSpot = true;
+                        openX = openX * this.getCollisionMap().nodeSize;
+                        openY = openY * this.getCollisionMap().nodeSize;
+                    }
+                }
+            }
+        } else {
+            //If no collisionmap was available, just keep poking 'till you find a spot
+            while (!foundSpot) {
+                openX = (int)sizeRequirement + rnd.nextInt(((int)(map.getWidth()-sizeRequirement)));
+                openX = (openX / Global.TILESIZE) * Global.TILESIZE;
+                openY = (int)sizeRequirement + rnd.nextInt(((int)(map.getHeight()-sizeRequirement)));
+                openY = (openY / Global.TILESIZE) * Global.TILESIZE;
+                collisionTester.setCenterPosition(openX, openY);
+                if (this.checkCollisions(collisionTester).isEmpty()) foundSpot = true;
+            }
         }
+        
+        
         return new double[]{openX, openY};
     }
     
