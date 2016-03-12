@@ -12,8 +12,8 @@ enterLocationID: 1
 image: "images/mountain_cave.png"
 #X and Y coordinates for the node on the worldmap
 #are essentially pixels on the screen.
-xCoordinate: 290
-yCoordinate: 280
+xCoordinate: 700
+yCoordinate: 950
 #"links" list which other nodes the player
 #can go to from this node. Supplied as "id".
 links:
@@ -23,8 +23,8 @@ id: 2
 name: "Village"
 enterLocationID: 2
 image: "images/village.png"
-xCoordinate: 250
-yCoordinate: 220
+xCoordinate: 600
+yCoordinate: 900
 links:
  Down: 10
 ---
@@ -32,16 +32,16 @@ id: 3
 name: "Road to woods"
 enterLocationID: 3
 image: "images/woods.png"
-xCoordinate: 140
-yCoordinate: 200
+xCoordinate: 470
+yCoordinate: 850
 links:
  Down: 4
 ---
 id: 4
 name: "Boat"
 image: "images/boat.png"
-xCoordinate: 150
-yCoordinate: 280
+xCoordinate: 470
+yCoordinate: 1000
 links:
  Up: 3
  Right: 10
@@ -49,8 +49,8 @@ links:
 ---
 id: 10
 name: "Road to cave"
-xCoordinate: 230
-yCoordinate: 290
+xCoordinate: 600
+yCoordinate: 1000
 links:
  Right: 1
  Up: 2
@@ -58,15 +58,15 @@ links:
 ---
 id: 11
 name: "Sea 1"
-xCoordinate: 180
-yCoordinate: 450
+xCoordinate: 490
+yCoordinate: 1075
 links:
  Up: 4
  Right: 12
 ---
 id: 12
 name: "Sea 2"
-xCoordinate: 550
-yCoordinate: 550
+xCoordinate: 680
+yCoordinate: 1120
 links:
  Left: 11

@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.AI.AIutil;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.items.Inventory;
@@ -202,12 +203,8 @@ public abstract class GenericTasks {
     
     public static void takeItem (Creature actor, int itemContainerID, int itemID) {
         MapObject mob = actor.getLocation().getMapObject(itemContainerID);
-        if (mob instanceof Creature) {
-            Item i = ((Creature) mob).getInventory().removeItem(itemID);
-            actor.addItem(i);
-        }
-        if (mob instanceof ItemContainer) {
-            Item i = ((ItemContainer) mob).getInventory().removeItem(itemID);
+        if (mob instanceof HasInventory) {
+            Item i = ((HasInventory) mob).getInventory().removeItem(itemID);
             actor.addItem(i);
         }
     }

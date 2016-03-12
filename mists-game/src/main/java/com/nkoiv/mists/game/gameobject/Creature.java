@@ -640,6 +640,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     @Override
     public boolean addItem(Item i) {
         Mists.logger.info("Attempted to give "+this.getName()+" "+i.getName());
+        if (Mists.MistsGame.currentState instanceof LocationState) {
+            ((LocationState)Mists.MistsGame.currentState).addTextFloat("Took "+i.getName(), this);
+        }
         return this.inventory.addItem(i);
     }
     
