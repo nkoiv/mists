@@ -39,6 +39,7 @@ public class GeneralCombatTest {
     
     @BeforeClass
     public static void setUpClass() {
+        
     }
     
     @AfterClass
