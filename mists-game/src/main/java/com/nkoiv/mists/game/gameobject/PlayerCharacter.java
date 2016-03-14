@@ -9,6 +9,8 @@ import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gamestate.LocationState;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import java.util.ArrayList;
@@ -92,6 +94,26 @@ public class PlayerCharacter extends Creature implements Combatant {
     @Override
     public void think(double time) {
         //dont call any AI subroutine
+    }
+
+    /**
+     * TODO: Is this the right way to handle
+     * quest item tracking?
+     * @param i Item to be added
+     * @return True if the item was added successfully
+     */
+    @Override
+    public boolean addItem(Item i) {
+        if (this.inventory == null) return false;
+        Mists.logger.info("Attempted to give "+this.getName()+" "+i.getName());
+        if (Mists.MistsGame.currentState instanceof LocationState) {
+            ((LocationState)Mists.MistsGame.currentState).addTextFloat("Took "+i.getName(), this);
+        }
+        if (this.inventory.addItem(i)) {
+            if (Mists.MistsGame != null) Mists.MistsGame.questManager.registerItemCountInInventory(i, this.inventory.getItemCount(i.getBaseID()));
+            return true;
+        }
+        return false;
     }
 
     

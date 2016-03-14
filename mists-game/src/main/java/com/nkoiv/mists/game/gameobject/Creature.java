@@ -643,7 +643,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         if (Mists.MistsGame.currentState instanceof LocationState) {
             ((LocationState)Mists.MistsGame.currentState).addTextFloat("Took "+i.getName(), this);
         }
-        return this.inventory.addItem(i);
+        return(this.inventory.addItem(i));
     }
     
     //---TEMP methods for testing weapon usage via actions---

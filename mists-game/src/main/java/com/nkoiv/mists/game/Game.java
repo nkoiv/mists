@@ -93,8 +93,10 @@ public class Game {
         this.questManager = new QuestManager();
         //TODO: Stop using this testquest
         //Add TestQuest to openlist:
-        questManager.addQuest(QuestManager.generateTestQuest());
+        questManager.addQuest(QuestManager.generateTestKillQuest());
+        questManager.addQuest(QuestManager.generateTestFetchQuest());
         questManager.openQuest(1);
+        questManager.openQuest(2);
     }
     
     public void start() {

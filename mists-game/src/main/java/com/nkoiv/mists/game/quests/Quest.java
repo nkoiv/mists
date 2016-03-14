@@ -53,6 +53,18 @@ public class Quest {
         return progressAdded;
     }
     
+    public boolean setProgress(QuestTaskType type, int objectiveID, int amount) {
+        boolean progressAdded = false;
+        for (QuestTask t : this.tasks) {  
+            if (t.getType() == type && (t.getObjectiveID()==0 || t.getObjectiveID() == objectiveID )) {
+                t.setCompletion(amount);
+                progressAdded = true;
+            }         
+        }
+        return progressAdded;
+    }
+    
+    
     public HashSet<QuestTaskType> getNeededTaskTypes() {
         HashSet<QuestTaskType> qtts = new HashSet<>();
         for (QuestTask qt : this.tasks) {

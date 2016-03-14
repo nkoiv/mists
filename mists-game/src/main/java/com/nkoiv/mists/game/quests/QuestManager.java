@@ -9,6 +9,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.items.Item;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
@@ -116,6 +117,10 @@ public class QuestManager {
         if (mob instanceof Creature) this.registerQuestEvent(QuestTaskType.CREATUREKILL, mob.getTemplateID(), 1);
     }
     
+    public void registerItemCountInInventory(Item item, int count)     {
+        this.registerQuestEvent(QuestTaskType.ITEMHAVE, item.getBaseID(), count);
+    }
+    
     /**
      * Inform the open quests of the event, possibly
      * updating quest progress as a result
@@ -125,8 +130,17 @@ public class QuestManager {
      */
     public void registerQuestEvent(QuestTaskType tasktype, int objectiveID, int count) {
         if (this.unneededTasks.contains(tasktype)) return; //No need to check quests if we dont track this tasktype
-        for (int qID : this.openQuests.keySet()) {
-            openQuests.get(qID).addProgress(tasktype, objectiveID, count);
+        if (tasktype == QuestTaskType.CREATUREKILL || tasktype == QuestTaskType.ITEMUSE) {
+            //Cumulative tasks
+            for (int qID : this.openQuests.keySet()) {
+                openQuests.get(qID).addProgress(tasktype, objectiveID, count);
+            }
+        }
+        if (tasktype == QuestTaskType.ITEMHAVE) {
+            //Tasks that can go down in value
+            for (int qID : this.openQuests.keySet()) {
+                openQuests.get(qID).setProgress(tasktype, objectiveID, count);
+            }
         }
     }
     
@@ -190,9 +204,16 @@ public class QuestManager {
         return q;
     }
     
-    public static Quest generateTestQuest() {
-        Quest q = new Quest("TestQuest", 1);
+    public static Quest generateTestKillQuest() {
+        Quest q = new Quest("TestKillQuest", 1);
         QuestTask qt = new QuestTask("Kill two worms", QuestTaskType.CREATUREKILL, 1, 2);
+        q.addTask(qt);
+        return q;
+    }
+    
+    public static Quest generateTestFetchQuest() {
+        Quest q = new Quest("TestFetchQuest", 2);
+        QuestTask qt = new QuestTask("Acquire three Himmu-toys", QuestTaskType.ITEMHAVE, 3, 3);
         q.addTask(qt);
         return q;
     }

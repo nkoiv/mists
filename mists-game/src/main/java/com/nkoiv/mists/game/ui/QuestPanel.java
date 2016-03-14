@@ -48,7 +48,7 @@ public class QuestPanel extends TextPanel {
             renderTextLine(title, gc, xPosition, yPosition, currentRow, maxRowCount);
             currentRow++;
             for (QuestTask qt : this.questManager.getOpenQuests().get(questID).getTasks()) {
-                if (qt.isDone()) gc.setFill(Color.DARKGREEN);
+                if (qt.isDone()) gc.setFill(Color.LIME);
                 else gc.setFill(Color.STEELBLUE);
                 gc.setFont(Mists.fonts.get("alagard12"));
                 sb = new StringBuilder();

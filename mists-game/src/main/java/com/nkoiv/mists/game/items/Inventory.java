@@ -126,6 +126,17 @@ public class Inventory {
         return this.items[slotnumber];
     }
     
+    public int getItemCount(int itemID) {
+        if (this.items == null) return 0;
+        int itemCount = 0;
+        for (Item item : this.items) {
+            if (item != null) {
+                if (item.baseID == itemID) itemCount++;
+            }
+        }
+        return itemCount;
+    }
+    
     public Item getItemFromSlot(String slotname) {
         int id = -1;
         for (int i = 0; i < this.slotnames.length; i ++) {
