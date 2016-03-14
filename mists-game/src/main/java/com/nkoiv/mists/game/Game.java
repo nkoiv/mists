@@ -116,7 +116,7 @@ public class Game {
         
         //POC worldmap
         WorldMap wm = new WorldMap("Himmu island", new Image("/images/himmu_island.png"));
-        WorldMapLibrary.populateWorldMapWithNodesFromYAML(wm, "src/main/resources/mapdata/defaultWorldmapNodes.yml");
+        WorldMapLibrary.populateWorldMapWithNodesFromYAML(wm, "libdata/defaultWorldmapNodes.yml");
         /*
         LocationNode cave = new LocationNode("Cave", new Image("/images/mountain_cave.png"), 1);
         MapNode boat = new MapNode("Boat", new Image("/images/boat.png"));

@@ -1,0 +1,91 @@
+---
+#"monsterID" is mandatory and unique identifier
+monsterID: 1
+#"name" is mandatory, but doesn't need to be unique (though probably it should be)
+name: "Worm"
+#"type" is mandatory and used to differentiate various MapObject types.
+type: "Creature"
+#"aiType" can be left blank, resulting in a creature that doesnt move
+aiType: "monster"
+#"spriteType" can be either "spritesheet" or "static". 
+#Spritesheets have four rows: Down, Left, Right and Up.
+#Frames per direction may vary.
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 0, 0, 4, 0, 36, 32]
+#Unless attributes are specified, they default to 1.
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+#Default flags for creatures are:
+#visible: 1
+#collisionLevel: 5
+flags:
+ collisionLevel: 5
+---
+monsterID: 2
+name: "Rabbit"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 0, 4, 4, 0, 36, 32]
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+flags:
+ collisionLevel: 5
+---
+monsterID: 3
+name: "Eggy"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 3, 0, 4, 0, 36, 32]
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+flags:
+ collisionLevel: 5
+---
+monsterID: 4
+name: "Swampy"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/monster_small.png"
+spritesheetParameters: [3, 3, 4, 4, 0, 36, 32]
+attributes:
+ Strength: 1
+ Dexterity: 2
+ Intelligence: 1
+ Speed: 50
+ MaxHealth: 120
+flags:
+ collisionLevel: 5
+---
+monsterID: 5
+name: "Blob"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/blob.png"
+spritesheetParameters: [3, 0, 0, 4, 0, 84, 84]
+attributes:
+ Strength: 10
+ Dexterity: 1
+ Intelligence: 1
+ Speed: 30
+ MaxHealth: 250
+flags:
+ collisionLevel: 5

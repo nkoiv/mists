@@ -21,7 +21,9 @@ import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.BGMap;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -88,8 +90,9 @@ public class LibLoader {
      * characters, but with different structures.
      * @param codeFile Path to the file with the structure codes
      * @return HashMap with the ASCII value of a character mapped to a Structure
+     * @throws java.lang.Exception Throws exception when file is not found
      */
-    public static HashMap<Integer,Structure> loadLocationStructureCodes(String codeFile) {
+    public static HashMap<Integer,Structure> loadLocationStructureCodes(String codeFile) throws Exception {
         HashMap<Integer, Structure> structureMap = new HashMap<>();
         File codeYAML = new File(codeFile);
         try {
@@ -122,9 +125,12 @@ public class LibLoader {
     
     public static void initializeStructureLibrary(MobLibrary<Structure> lib) {
         Mists.logger.info("Loading up structure data");
-        //TODO: Load the data from a file
-        initializeLibraryFromYAML(lib, "src/main/resources/libdata/structures.yml");
-        //initializeStructureLibraryFromYAML(lib);
+        try {
+            initializeLibraryFromYAML(lib, "libdata/structures.yml");
+        } catch (Exception e) {
+            Mists.logger.warning(e.getMessage());
+        }
+        
         
     }
     
@@ -153,13 +159,23 @@ public class LibLoader {
         lib.addTemplate(himmu);
         
         //initializeCreatureLibraryFromYAML(lib);
-        initializeLibraryFromYAML(lib, "src/main/resources/libdata/creatures.yml");
+        try {
+            initializeLibraryFromYAML(lib, "libdata/creatures.yml");
+        } catch (Exception e) {
+            Mists.logger.warning(e.getMessage());
+        }
+        
         
     }
     
     public static void initializeDialogueLibrary(DialogueLibrary lib) {
         Mists.logger.info("Loading up dialogue data");
-        initializeLibraryFromYAML(lib, "src/main/resources/libdata/dialogueTest.yml");
+        try {
+            initializeLibraryFromYAML(lib, "libdata/dialogueTest.yml");
+        } catch (Exception e) {
+            Mists.logger.warning(e.getMessage());
+        }
+        
     }
     
     public static void initializeActionLibrary(ActionLibrary lib) {
@@ -170,7 +186,12 @@ public class LibLoader {
     
     public static void initializeItemLibrary(ItemLibrary lib) {
         Mists.logger.info("Loading up item data");
-        initializeLibraryFromYAML(lib, "src/main/resources/libdata/items.yml");
+        try {
+            initializeLibraryFromYAML(lib, "libdata/items.yml");
+        } catch (Exception e) {
+            Mists.logger.warning(e.getMessage());
+        }
+        
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {

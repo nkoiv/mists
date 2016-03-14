@@ -38,7 +38,8 @@ public class DialogueLibrary {
     }
     
     public Dialogue getDialogue(int dialogueID) {
-        return lib.get(dialogueID).createFromTemplate();
+        if (lib.containsKey(dialogueID)) return lib.get(dialogueID).createFromTemplate();
+        else return null;
     }
         
     public static Dialogue generateDialogueFromYAML(Map object) {

@@ -105,7 +105,13 @@ public class TileMap implements GameMap, KryoSerializable {
     }
     
     private void loadDefaultStructCodes() {
-        this.structureCodes = LibLoader.loadLocationStructureCodes("src/main/resources/libdata/defaultStructCodes.yml");
+        try {
+            this.structureCodes = LibLoader.loadLocationStructureCodes("libdata/defaultStructCodes.yml");
+        } catch (Exception e) {
+            Mists.logger.warning(("Error loading struct codes!"));
+            Mists.logger.warning(e.getMessage());
+        }
+        
         Mists.logger.info("Default structure codes loaded");
     }
     

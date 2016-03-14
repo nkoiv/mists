@@ -1,0 +1,72 @@
+---
+name: "DungeonWall"
+type: "Wall"
+image: "/images/structures/dwall.png"
+collisionLevel: 1
+---
+name: "Tree"
+type: "GenericStructure"
+image: "/images/tree_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/tree.png"
+  xOffset: -35
+  yOffset: -96
+---
+name: "Tree1"
+type: "GenericStructure"
+image: "/images/structures/tree1_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/structures/tree1_frill.png"
+  xOffset: -20
+  yOffset: -106
+---
+name: "Tree2"
+type: "GenericStructure"
+image: "/images/structures/tree2_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/structures/tree2_frill.png"
+  xOffset: -18
+  yOffset: -100
+---
+name: "Tree3a"
+type: "GenericStructure"
+image: "/images/structures/tree3_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/structures/tree3a_frill.png"
+  xOffset: -43
+  yOffset: -143
+---
+name: "Tree3b"
+type: "GenericStructure"
+image: "/images/structures/tree3_stump.png"
+collisionLevel: 1
+extras:
+ tree:
+  image: "/images/structures/tree3b_frill.png"
+  xOffset: -43
+  yOffset: -143
+---
+name: "Rock"
+type: "GenericStructure"
+image: "/images/block.png"
+collisionLevel: 1
+---
+name: "DungeonStairs"
+type: "MapEntrance"
+image: "/images/structures/stairs.png"
+collisionLevel: 0
+---
+name: "DungeonDoor"
+type: "Door"
+imageOpen: "/images/structures/ddoor.png"
+imageClosed: "/images/structures/ddoor_open.png"
+collisionLevel: 1
+
