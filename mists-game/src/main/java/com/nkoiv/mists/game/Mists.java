@@ -34,7 +34,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -276,8 +275,16 @@ public class Mists extends Application implements Global {
         fonts = new HashMap<>();
         Font alagard = Font.loadFont(getClass().getResourceAsStream("/fonts/alagard.ttf"), 20);
         fonts.put("alagard", alagard);
+        Font alagard20 = Font.loadFont(getClass().getResourceAsStream("/fonts/alagard.ttf"), 20);
+        fonts.put("alagard20", alagard20);
+        Font alagard12 = Font.loadFont(getClass().getResourceAsStream("/fonts/alagard.ttf"), 12);
+        fonts.put("alagard12", alagard12);
         Font romulus = Font.loadFont(getClass().getResourceAsStream("/fonts/romulus.ttf"), 20);
         fonts.put("romulus", romulus);   
+        Font romulus20 = Font.loadFont(getClass().getResourceAsStream("/fonts/romulus.ttf"), 20);
+        fonts.put("romulus20", romulus20); 
+        Font romulus12 = Font.loadFont(getClass().getResourceAsStream("/fonts/romulus.ttf"), 12);
+        fonts.put("romulus12", romulus12); 
     }
     
     private void setupMouseHandles(Group root) {

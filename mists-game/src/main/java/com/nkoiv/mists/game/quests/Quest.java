@@ -19,8 +19,15 @@ public class Quest {
     private int questID;
     private ArrayList<QuestTask> tasks;
     
-    public Quest() {
-        
+    public Quest(String title, int ID) {
+        this (title, "QUEST TEXT MISSING", ID, new ArrayList<QuestTask>());
+    }
+    
+    public Quest(String title, String text, int ID, ArrayList<QuestTask> tasks) {
+        this.title = title;
+        this.textEntry = text;
+        this.questID = ID;
+        this.tasks = tasks;
     }
     
     /**
@@ -35,10 +42,10 @@ public class Quest {
         return true;
     }
     
-    public boolean addProgress(QuestTaskType type, int identifier, int amount) {
+    public boolean addProgress(QuestTaskType type, int objectiveID, int amount) {
         boolean progressAdded = false;
         for (QuestTask t : this.tasks) {  
-            if (t.getType() == type) {
+            if (t.getType() == type && (t.getObjectiveID()==0 || t.getObjectiveID() == objectiveID )) {
                 t.addCompletion(amount);
                 progressAdded = true;
             }         
@@ -70,5 +77,21 @@ public class Quest {
     
     public ArrayList<QuestTask> getTasks() {
         return this.tasks;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setID(int id) {
+        this.questID = id;
+    }
+    public void setText(String text) {
+        this.textEntry = text;
+    }
+    public void setTasks(ArrayList<QuestTask> tasks) {
+        this.tasks = tasks;
+    }
+    public void addTask(QuestTask task) {
+        this.tasks.add(task);
     }
 }

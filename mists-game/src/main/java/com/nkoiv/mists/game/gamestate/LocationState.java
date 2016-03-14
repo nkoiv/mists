@@ -24,6 +24,7 @@ import com.nkoiv.mists.game.ui.GoMainMenuButton;
 import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.Overlay;
+import com.nkoiv.mists.game.ui.QuestPanel;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.TextPanel;
@@ -69,6 +70,7 @@ public class LocationState implements GameState {
     private ContextAction contextAction;
     private InventoryPanel playerInventory;
     private DialoguePanel dialoguePanel;
+    private QuestPanel questPanel;
     private CombatPopup sct;
     
     public LocationState (Game game) {
@@ -161,6 +163,8 @@ public class LocationState implements GameState {
         DialoguePanel dp = new DialoguePanel(this);
         this.dialoguePanel = dp;
         dp.setPosition(100, 200);
+        this.questPanel = new QuestPanel(this);
+        questPanel.setPosition(0, 0);
         
         this.sct = new CombatPopup();
         
@@ -183,6 +187,24 @@ public class LocationState implements GameState {
     public void closeDialogue() {
         this.removeUIComponent(this.dialoguePanel);
         this.dialoguePanel.setDialogue(null);
+    }
+    
+    public void toggleQuestPanel() {
+        if (this.drawOrder.contains(this.questPanel)) {
+            this.closeQuestPanel();
+        } else {
+            this.openQuestPanel();
+        }
+    }
+    
+    public void openQuestPanel() {
+        Mists.logger.info("Opening quest panel");
+        this.addUIComponent(this.questPanel);
+    }
+    
+    public void closeQuestPanel() {
+        Mists.logger.info("Closing quest panel");
+        this.removeUIComponent(this.questPanel);
     }
 
     /**
@@ -482,6 +504,11 @@ public class LocationState implements GameState {
             }
             releasedButtons.clear();
             return;
+        }
+        
+        if (releasedButtons.contains(KeyCode.Q)) {
+            Mists.logger.info("Q pressed for QuestPanel");
+            this.toggleQuestPanel();
         }
         
         if (releasedButtons.contains(KeyCode.E)) {

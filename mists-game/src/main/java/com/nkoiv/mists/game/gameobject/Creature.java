@@ -733,6 +733,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     @Override
     public Creature createFromTemplate() {
         Creature nc = new Creature(this.name, this.graphics.getImage());
+        nc.setTemplateID(this.templateID);
         HashMap<String, SpriteAnimation> nanimations = new HashMap<>();
         for (String s : this.spriteAnimations.keySet()) {
             nanimations.put(s, this.spriteAnimations.get(s));
@@ -785,7 +786,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     public String[] getInfoText() {
         if (this.lastTask == null) this.lastTask = new Task(GenericTasks.ID_IDLE, this.IDinLocation, null);
         String[] s = new String[]{
-            this.name,
+            this.name + " - BaseID: "+this.templateID ,
             "ID "+this.IDinLocation+" @ "+this.location.getName(),
             "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
             this.getHealth() + "/"+this.getMaxHealth()+" hp",

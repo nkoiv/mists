@@ -91,6 +91,10 @@ public class Game {
         
         //Initialize QuestManager
         this.questManager = new QuestManager();
+        //TODO: Stop using this testquest
+        //Add TestQuest to openlist:
+        questManager.addQuest(QuestManager.generateTestQuest());
+        questManager.openQuest(1);
     }
     
     public void start() {

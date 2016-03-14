@@ -25,27 +25,32 @@ public class QuestPanel extends TextPanel {
     private static double defaultHeight= 200;
     private static String defaultPanelImages = "panelBlue";
     private final QuestManager questManager;
-    private double rowHeight;
+    private double rowHeight = 20; //TODO: Scale this from font
     
     public QuestPanel(GameState parent, String name, QuestManager questManager, double width, double height, double xPos, double yPos, Image[] images) {
         super(parent, name, width, height, xPos, yPos, images);
         this.questManager = questManager;
+        this.bgOpacity = 0.5;
     }
     
     public QuestPanel(GameState parent) {
-        super(parent, "QuestPanel", defaultWidth, defaultHeight, Mists.WIDTH/2, Mists.HEIGHT/2, Mists.graphLibrary.getImageSet(defaultPanelImages));
-        this.questManager = Mists.MistsGame.questManager;
+        this(parent, "QuestPanel", Mists.MistsGame.questManager, defaultWidth, defaultHeight, Mists.WIDTH/2, Mists.HEIGHT/2, Mists.graphLibrary.getImageSet(defaultPanelImages));
     }
     
     private void renderQuestText(GraphicsContext gc, double xPosition, double yPosition) {
+        gc.setFill(Color.STEELBLUE);
         int maxRowCount = (int)(this.height / this.rowHeight);
         int currentRow = 1;
         StringBuilder sb;
         for (int questID : this.questManager.getOpenQuests().keySet()) {
+            gc.setFont(Mists.fonts.get("alagard20"));
             String title = this.questManager.getOpenQuests().get(questID).getTitle();
             renderTextLine(title, gc, xPosition, yPosition, currentRow, maxRowCount);
             currentRow++;
             for (QuestTask qt : this.questManager.getOpenQuests().get(questID).getTasks()) {
+                if (qt.isDone()) gc.setFill(Color.DARKGREEN);
+                else gc.setFill(Color.STEELBLUE);
+                gc.setFont(Mists.fonts.get("alagard12"));
                 sb = new StringBuilder();
                 sb.append(qt.getDescription());
                 sb.append(": ");

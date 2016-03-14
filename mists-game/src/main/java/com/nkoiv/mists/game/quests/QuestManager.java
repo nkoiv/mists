@@ -5,10 +5,15 @@
  */
 package com.nkoiv.mists.game.quests;
 
+import com.esotericsoftware.yamlbeans.YamlReader;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * QuestManager handles the quests currently active in the game.
@@ -17,6 +22,7 @@ import java.util.HashSet;
  * @author nikok
  */
 public class QuestManager {
+    private HashMap<Integer, Quest> allQuests = new HashMap<>();
     private HashMap<Integer, Quest> openQuests;
     private HashMap<Integer, Quest> closedQuests;
     private HashSet<QuestTaskType> unneededTasks;
@@ -54,12 +60,25 @@ public class QuestManager {
      * Quest is added with the ID set within the quest,
      * possibly overwriting existing quest on the list.
      * @param quest Quest to add to Open list
+     * @return True if quest was successfully opened
      */
-    public void addQuest(Quest quest) {
+    public boolean openQuest(Quest quest) {
         this.openQuests.put(quest.getID(), quest);
         for (QuestTaskType qt : quest.getNeededTaskTypes()) {
             this.unneededTasks.remove(qt);
         }
+        return true;
+    }
+    
+    /**
+     * Find the specified quest (by ID) from the allQuests
+     * map and open it up for the player.
+     * @param questID ID of the Quest to open up
+     * @return True if quest was successfully opened
+     */
+    public boolean openQuest(int questID) {
+        if (!this.allQuests.containsKey(questID)) return false;
+        return this.openQuest(this.allQuests.get(questID));
     }
     
     
@@ -117,6 +136,65 @@ public class QuestManager {
     
     public HashMap<Integer, Quest> getClosedQuests() {
         return this.closedQuests;
+    }
+    
+    /**
+     * Check if the given quest can be found
+     * on the AllQuests listing
+     * @param questID ID of the quest
+     * @return 
+     */
+    public boolean questAvailable(int questID) {
+        return (this.allQuests.keySet().contains(questID));
+    }
+    
+    /**
+     * Add a quest to the AllQuests listing
+     * @param quest Quest to add
+     */
+    public void addQuest(Quest quest) {
+        this.allQuests.put(quest.getID(), quest);
+    }
+    
+    public static void loadQuestsFromYAML(QuestManager questManager, String libFile) {
+        File libraryYAML = new File(libFile);
+        try {
+            Mists.logger.info("Attempting to read Quests YAML from "+libraryYAML.getCanonicalPath());
+            YamlReader reader = new YamlReader(new FileReader(libraryYAML));
+            while (true) {
+                Object object = reader.read();
+                if (object == null) break;
+                try {
+                    Map libraryObjectData = (Map)object;
+                    Quest q = parseQuestFromYAML(libraryObjectData);
+                    questManager.addQuest(q);
+                } catch (Exception e) {
+                    Mists.logger.warning("Failed parsing "+object.toString());
+                    Mists.logger.warning(e.toString());
+                }
+                
+            }
+
+        } catch (Exception e) {
+            Mists.logger.warning("Was unable to read quest YAML data!");
+            Mists.logger.warning(e.toString());
+        }
+        
+    }
+    
+    private static Quest parseQuestFromYAML(Map questData) {
+        String title = "Unnamed quest";
+        int id = -1;
+        
+        Quest q = new Quest(title, id);
+        return q;
+    }
+    
+    public static Quest generateTestQuest() {
+        Quest q = new Quest("TestQuest", 1);
+        QuestTask qt = new QuestTask("Kill two worms", QuestTaskType.CREATUREKILL, 1, 2);
+        q.addTask(qt);
+        return q;
     }
     
 }
