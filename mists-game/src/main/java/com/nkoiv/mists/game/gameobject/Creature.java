@@ -707,12 +707,18 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         Mists.logger.log(Level.INFO,"{0} took {1}"+"points of damage"+" ({2}/{3})",
                 new Object[]{this.getName(), damage, this.getHealth(), this.getMaxHealth()});
         //TODO: Expand death - Himmu cant die
-        if(this.getHealth()<1 && !this.name.equals("Himmu")) this.setRemovable();
+        if(this.getHealth()<1) this.die();
         if (Mists.MistsGame == null) return; //Needed for UnitTests
         if (Mists.MistsGame.currentState instanceof LocationState) {
             ((LocationState)Mists.MistsGame.currentState).addDamageFloat(damage, this);
         }
 
+    }
+    
+    protected void die() {
+        this.setRemovable();
+        if (Mists.MistsGame == null) return;
+        Mists.MistsGame.questManager.registerMobDeath(this);
     }
 	
     @Override

@@ -11,5 +11,8 @@ package com.nkoiv.mists.game.quests;
  * @author nikok
  */
 public enum QuestTaskType {
-    MOBKILL, ITEMHAVE, ITEMUSE;
+    TRIGGERVALUE,   //Integer value
+    CREATUREKILL,   //Deaths of creatures (generally in Locations)
+    ITEMHAVE,       //(Checked on gain/lose of an item)
+    ITEMUSE;        //Checked on use (possibly comsumption) of an item
 }

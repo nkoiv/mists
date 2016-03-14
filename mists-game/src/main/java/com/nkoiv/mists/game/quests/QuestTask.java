@@ -26,6 +26,7 @@ public class QuestTask {
         }
         
         public String getDescription() {
+            if (this.description == null) return "UNSPECIFIED";
             return this.description;
         }
         

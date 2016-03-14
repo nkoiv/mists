@@ -217,6 +217,7 @@ public class LocationClient {
             return;
         }
         if (mob.hasItems) addOutgoingUpdate(new RequestAllItems(mob.id));
+        //If MapObject already exists with the same ID, remove that map object to make room for this new one
         if (this.location.getMapObject(mob.id) != null) this.location.removeMapObject(mob.id);
         this.location.clientAddMapObject(m, mob.id);
         this.location.getMapObject(mob.id).setPosition(mob.xPos, mob.yPos);

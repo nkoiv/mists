@@ -9,13 +9,12 @@ import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.*;
 import com.nkoiv.mists.game.controls.LocationControls;
-import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.libraries.WorldMapLibrary;
+import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
-import com.nkoiv.mists.game.world.worldmap.LocationNode;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,8 +32,8 @@ import javafx.scene.input.MouseEvent;
  */
 public class Game {
     private PlayerCharacter player;
-    private HashMap<Integer, Location> generatedLocations;
-    private HashMap<Integer, WorldMap> generatedWorldMaps;
+    private final HashMap<Integer, Location> generatedLocations;
+    private final HashMap<Integer, WorldMap> generatedWorldMaps;
     private int nextFreeLocationID; //Free ID:s start from 10000. First 9999 are reserved.
     
     private Location currentLocation;
@@ -55,6 +54,7 @@ public class Game {
     public boolean toggleScale = true;
     
     public DungeonGenerator mapGen;
+    public QuestManager questManager;
     
     private HashMap<Integer,GameState> gameStates;
     public GameState currentState;
@@ -89,6 +89,8 @@ public class Game {
         this.generatedLocations = new HashMap<>();
         this.generatedWorldMaps = new HashMap<>();
         
+        //Initialize QuestManager
+        this.questManager = new QuestManager();
     }
     
     public void start() {

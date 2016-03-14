@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.quests;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * A Quest is a task (or a list of tasks) that are tracked
@@ -13,6 +14,7 @@ import java.util.ArrayList;
  * @author nikok
  */
 public class Quest {
+    private String title;
     private String textEntry;
     private int questID;
     private ArrayList<QuestTask> tasks;
@@ -39,13 +41,26 @@ public class Quest {
             if (t.getType() == type) {
                 t.addCompletion(amount);
                 progressAdded = true;
-            }
-            
+            }         
         }
         return progressAdded;
     }
     
+    public HashSet<QuestTaskType> getNeededTaskTypes() {
+        HashSet<QuestTaskType> qtts = new HashSet<>();
+        for (QuestTask qt : this.tasks) {
+            qtts.add(qt.getType());
+        }
+        return qtts;
+    }
+    
+    public String getTitle() {
+        if (this.title == null) return "QUEST ID "+this.questID+" TITLE MISSING";
+        return this.title;
+    }
+    
     public String getQuestText() {
+        if (this.textEntry == null) return "QUEST TEXT MISSING";
         return this.textEntry;
     }
     
