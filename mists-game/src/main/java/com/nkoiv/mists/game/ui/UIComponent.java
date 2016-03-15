@@ -97,5 +97,10 @@ public abstract class UIComponent implements Comparable<UIComponent>{
         return (this.renderZ-uic.renderZ);
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof UIComponent)) return false;
+        return ((UIComponent)object).getName().equals(this.name);
+    }
     
 }

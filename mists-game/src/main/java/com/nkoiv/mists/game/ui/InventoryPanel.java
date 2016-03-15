@@ -38,6 +38,7 @@ public class InventoryPanel extends TiledPanel {
         super(parent, name, width, height, xPos, yPos, images);
         this.inv = inv;
         this.draggable = true;
+        this.renderZ = 10;
     }
     
     public InventoryPanel(GameState parent, Inventory inv) {
@@ -45,6 +46,7 @@ public class InventoryPanel extends TiledPanel {
         this.inv = inv;
         this.populateItemsIntoButtons();
         this.draggable = true;
+        this.renderZ = 10;
     }
     
     private void populateItemsIntoButtons() {
@@ -89,6 +91,12 @@ public class InventoryPanel extends TiledPanel {
         for (UIComponent sc : this.subComponents) {
             sc.render(gc, sc.getXPosition(), sc.getYPosition());
         }       
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof InventoryPanel)) return false;
+        return ((InventoryPanel)object).getName().equals(this.name);
     }
     
     private class ItemButton extends IconButton {

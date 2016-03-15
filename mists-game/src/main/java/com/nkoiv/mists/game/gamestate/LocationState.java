@@ -33,6 +33,7 @@ import com.nkoiv.mists.game.ui.TiledWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
@@ -190,9 +191,12 @@ public class LocationState implements GameState {
     }
     
     public void toggleQuestPanel() {
-        if (this.drawOrder.contains(this.questPanel)) {
+        Mists.logger.info("Toggling quest panel");
+        if (this.uiComponents.containsKey(this.questPanel.getName())) {
+            //Mists.logger.info("Quest panel was already open");
             this.closeQuestPanel();
         } else {
+            //Mists.logger.info("Quest panel was closed, opening...");
             this.openQuestPanel();
         }
     }
@@ -292,7 +296,7 @@ public class LocationState implements GameState {
         Mists.logger.info("Game menu toggled");
         if (!gameMenuOpen) {
             gameMenuOpen = true;
-            TiledPanel gameMenu = new TiledPanel(this, "GameMenu", 220, 300, (game.WIDTH/2 - 110), 150,Mists.graphLibrary.getImageSet("panelBeige"));
+            TiledPanel gameMenu = new TiledPanel(this, "GameMenu", 220, 300, 100, 100,Mists.graphLibrary.getImageSet("panelBeige"));
             TextButton resumeButton = new LocationButtons.ResumeButton("Resume", 200, 60, this.game);
             TextButton optionsButton = new TextButton("Options", 200, 60);
             GoMainMenuButton mainMenuButton = new GoMainMenuButton(this.game, 200, 60);
@@ -508,7 +512,7 @@ public class LocationState implements GameState {
         
         if (releasedButtons.contains(KeyCode.L)) {
             Mists.logger.info("L pressed for QuestPanel");
-            this.toggleQuestPanel();
+            game.locControls.toggleQuestPanel();
         }
         
         if (releasedButtons.contains(KeyCode.Q)) {
@@ -618,6 +622,8 @@ public class LocationState implements GameState {
     public void addUIComponent(UIComponent uic) {
         this.uiComponents.put(uic.getName(), uic);
         this.drawOrder.add(uic);
+        Mists.logger.info("Currently in the UIC-map: "+this.uiComponents.keySet());
+        Mists.logger.info("Currently in the drawOrder: "+this.drawOrder.toString());
     }
     
     @Override

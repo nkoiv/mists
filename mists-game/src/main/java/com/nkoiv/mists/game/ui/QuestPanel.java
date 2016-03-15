@@ -31,6 +31,7 @@ public class QuestPanel extends TextPanel {
         super(parent, name, width, height, xPos, yPos, images);
         this.questManager = questManager;
         this.bgOpacity = 0.5;
+        this.renderZ = 5;
     }
     
     public QuestPanel(GameState parent) {
@@ -82,5 +83,10 @@ public class QuestPanel extends TextPanel {
         gc.restore();
     }
     
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof QuestPanel)) return false;
+        return ((QuestPanel)object).getName().equals(this.name);
+    }
     
 }
