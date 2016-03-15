@@ -82,7 +82,7 @@ public abstract class GenericTasks {
     }
     
     public static void checkCoordinates (MapObject actor, double xCoordinate, double yCoordinate) {
-        if (Math.abs(actor.getXPos()-xCoordinate) > 10 || Math.abs(actor.getYPos()-yCoordinate) > 10) {
+        if (Math.abs(actor.getXPos()-xCoordinate) > 5 || Math.abs(actor.getYPos()-yCoordinate) > 5) {
             actor.setPosition(xCoordinate, yCoordinate);
         }
     }
