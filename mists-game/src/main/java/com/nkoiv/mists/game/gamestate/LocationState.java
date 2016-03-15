@@ -506,9 +506,14 @@ public class LocationState implements GameState {
             return;
         }
         
-        if (releasedButtons.contains(KeyCode.Q)) {
-            Mists.logger.info("Q pressed for QuestPanel");
+        if (releasedButtons.contains(KeyCode.L)) {
+            Mists.logger.info("L pressed for QuestPanel");
             this.toggleQuestPanel();
+        }
+        
+        if (releasedButtons.contains(KeyCode.Q)) {
+            Mists.logger.info("Q pressed for next ContextAction");
+            this.contextAction.nextAction();
         }
         
         if (releasedButtons.contains(KeyCode.E)) {
