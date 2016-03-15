@@ -53,6 +53,8 @@ public class CombatPopup {
      * @param c Colour for the text
      */
     public void addSCT(MapObject mob, String text, Color c) {
+        if (mob == null || text == null || c == null) return;
+        if (mob.getLocation() == null) return;
         ScrollingCombatText sct = new ScrollingCombatText(text, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset());
         sct.setColour(c);
         this.currentSCT.add(sct);

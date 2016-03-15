@@ -316,7 +316,7 @@ public class TileMap implements GameMap, KryoSerializable {
         for (int[] intColumn : this.intMap) {
             output.writeInts(intColumn);
         }
-        kryo.writeClassAndObject(output, this.structureCodes);
+        //kryo.writeClassAndObject(output, this.structureCodes);
     }
 
     @Override
@@ -328,7 +328,8 @@ public class TileMap implements GameMap, KryoSerializable {
         for (int i = 0; i < this.tileWidth; i++) {
             this.intMap[i] = input.readInts(tileHeight);
         }
-        this.structureCodes = (HashMap<Integer, Structure>)kryo.readClassAndObject(input);
+        this.loadDefaultStructCodes();
+        //this.structureCodes = (HashMap<Integer, Structure>)kryo.readClassAndObject(input);
     }
 
 }

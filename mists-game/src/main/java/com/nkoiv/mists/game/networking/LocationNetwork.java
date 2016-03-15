@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.world.TileMap;
+import java.util.HashMap;
 
 /**
  *
@@ -23,6 +24,7 @@ public class LocationNetwork {
 	static public void register (EndPoint endPoint) {
 		Kryo kryo = endPoint.getKryo();
                 kryo.register(int[].class);
+                kryo.register(HashMap.class);
 		kryo.register(Login.class);
 		kryo.register(RegistrationRequired.class);
 		kryo.register(Register.class);
