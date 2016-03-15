@@ -527,11 +527,6 @@ public class LocationState implements GameState {
             game.locControls.toggleInventory(this.playerInventory);
         }
         
-        if (releasedButtons.contains(KeyCode.R)) {
-            Mists.logger.info("R pressed for next context action");
-            this.contextAction.nextAction();
-        }
-        
         if (releasedButtons.contains(KeyCode.ENTER)) {
             game.locControls.printClearanceMapIntoConsole();
             game.locControls.printCollisionMapIntoConsole();
