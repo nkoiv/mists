@@ -13,6 +13,7 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.util.Flags;
 import java.util.HashMap;
+import java.util.Objects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Shape;
@@ -220,6 +221,41 @@ public class MapObject extends Flags implements Global, Templatable {
     @Override
     public Object createFromTemplate() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + this.templateID;
+        hash = 83 * hash + Objects.hashCode(this.location);
+        hash = 83 * hash + this.IDinLocation;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MapObject other = (MapObject) obj;
+        if (this.templateID != other.templateID) {
+            return false;
+        }
+        if (this.IDinLocation != other.IDinLocation) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        return true;
     }
     
 }
