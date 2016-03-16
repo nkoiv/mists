@@ -9,7 +9,8 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.Location;
 
 /**
- *
+ * Monitor a mob (by ID) in a location, and return
+ * true if the mob is gone.
  * @author nikok
  */
 public class MobGoneRequirement extends PuzzleRequirement {
@@ -23,6 +24,7 @@ public class MobGoneRequirement extends PuzzleRequirement {
     
     @Override
     protected boolean isCompleted() {
+        //Should return false if the mob isnt found in the instance, or if the mob found doesnt match the one on file
         return !location.getMapObject(mobToDestroy.getID()).equals(mobToDestroy);
     }
 }
