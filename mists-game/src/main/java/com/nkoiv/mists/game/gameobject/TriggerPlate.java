@@ -66,6 +66,17 @@ public class TriggerPlate extends MapObject {
     }
     
     /**
+     * Force the Trigger effect for the the triggerplate,
+     * for for example initiation of locations and puzzles.
+     */
+    public void forceTrigger() {
+        MapObject tempForcer = new MapObject("TempForcer");
+        for (Trigger touchTrigger : this.touchTriggers) {
+            touchTrigger.toggle(tempForcer);
+        }
+    }
+    
+    /**
      * If requireReEntry is set, a mob standing
      * on trigger will no re-trigger it before moving
      * in and out again

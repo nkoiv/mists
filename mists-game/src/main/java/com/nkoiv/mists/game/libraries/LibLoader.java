@@ -19,6 +19,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
+import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.TileMap;
@@ -381,6 +382,7 @@ public class LibLoader {
         puzzlearea.map = new TileMap("/mapdata/puzzlearea.map");
         MapObject[] puzzle = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 5, Mists.TILESIZE, 20*Mists.TILESIZE, 30*Mists.TILESIZE);
         puzzlearea.mobs.addAll(Arrays.asList(puzzle));
+        Puzzle p = LightsOutPuzzle.generatePuzzleFromTiles(puzzle, true);
         lib.addTemplate(puzzlearea);
         Mists.logger.info("Puzzlemap template added");
     }

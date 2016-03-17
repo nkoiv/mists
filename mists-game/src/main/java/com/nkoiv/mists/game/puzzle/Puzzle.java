@@ -19,13 +19,14 @@ import java.util.ArrayList;
  * @author nikok
  */
 public class Puzzle {
-    private ArrayList<PuzzleRequirement> requirements;
-    private ArrayList<Trigger> triggers;
+    private ArrayList<PuzzleRequirement> requirements; //Requirements for the puzzle to be complete
+    private ArrayList<Trigger> triggers; //Triggers that trigger when puzzle is complete
     boolean lockedComplete = false;
-    boolean locksOnCompletion = false;
+    boolean locksOnCompletion = true;  //Can the puzzle be triggered several times? If locksOnCompletion = true, then it can't be
     
     public Puzzle() {
         this.requirements = new ArrayList<>();
+        this.triggers = new ArrayList<>();
     }
     
     
@@ -43,16 +44,21 @@ public class Puzzle {
         return true;
     }
     
+    public void addRequirement(PuzzleRequirement p) {
+        this.requirements.add(p);
+    }
+    
     /**
      * Do whatever the puzzle is meant to do when
      * it's complete
      * @return True if something triggered
      */
     public boolean trigger() {
-        MapObject PuzzleTriggerer = new MapObject("PuzzleMaster");
+        if (this.triggers.isEmpty()) return false;
+        MapObject puzzletriggerer = new MapObject("PuzzleMaster"); //Temporary MapObject to perform the triggering with
         boolean triggered = false;
         for (Trigger t : this.triggers) {
-            triggered = t.toggle(PuzzleTriggerer); //TODO: This temp-triggerer might not be the best way to ensure we dont get null-pointers
+            if (t.toggle(puzzletriggerer)) triggered = true; //TODO: This temp-triggerer might not be the best way to ensure we dont get null-pointers
         }
         return triggered;
     }

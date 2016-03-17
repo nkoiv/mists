@@ -33,7 +33,6 @@ import com.nkoiv.mists.game.ui.TiledWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
