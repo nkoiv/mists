@@ -6,8 +6,9 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.triggers.ToggleTrigger;
 import java.util.ArrayList;
 
 /**
@@ -122,44 +123,4 @@ public class TriggerPlate extends MapObject {
         return tp;
     }
     
-    public class ToggleTrigger implements Trigger {
-        private MapObject targetMob;
-        
-        public ToggleTrigger(MapObject mob) {
-            this.targetMob = mob;
-        }
-        
-        @Override
-        public String getDescription() {
-            String s = "Trigger to toggle "+targetMob.getName();
-            return s;
-        }
-
-        @Override
-        public boolean toggle(MapObject toggler) {
-            Trigger[] targetTriggers = targetMob.getTriggers();
-            if (targetTriggers.length > 0) { 
-                targetTriggers[0].toggle(toggler);
-                return true;
-            }
-            return false;
-        }
-        
-        @Override
-        public ToggleTrigger createFromTemplate() {
-            ToggleTrigger tt = new ToggleTrigger(this.targetMob);
-            return tt;
-        }
-
-        @Override
-        public MapObject getTarget() {
-            return this.targetMob;
-        }
-
-        @Override
-        public void setTarget(MapObject mob) {
-            this.targetMob = mob;
-        }
-        
-    }
 }

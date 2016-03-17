@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game.actions;
+package com.nkoiv.mists.game.triggers;
 
 import com.nkoiv.mists.game.gameobject.MapObject;
 

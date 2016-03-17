@@ -8,10 +8,11 @@ package com.nkoiv.mists.game.world.mapgen;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
-import com.nkoiv.mists.game.gameobject.PuzzleTile.PuzzleTrigger;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.puzzle.TileLitRequirement;
+import com.nkoiv.mists.game.triggers.FreezeTilesTrigger;
+import com.nkoiv.mists.game.triggers.PuzzleTrigger;
 import java.util.Random;
 import java.util.Stack;
 
@@ -65,9 +66,10 @@ public abstract class LightsOutPuzzle {
      * and generate a Puzzle -object from it
      * @param tiles array of puzzles, first half of which is PuzzleTiles, second half TriggerPlates
      * @param randomizeStart if set to true, randomize the start of the puzzle
+     * @param freezeOnCompletion if set true, the puzzle is frozen upon completion and cant be further manipulated
      * @return 
      */
-    public static Puzzle generatePuzzleFromTiles(MapObject[] tiles, boolean randomizeStart) {
+    public static Puzzle generatePuzzleFromTiles(MapObject[] tiles, boolean randomizeStart, boolean freezeOnCompletion) {
         Puzzle p = new Puzzle();
         int tileCount = tiles.length/2;
         for (int i = 0; i < tileCount; i++) {
@@ -81,6 +83,13 @@ public abstract class LightsOutPuzzle {
                 int spot = rnd.nextInt(tileCount);
                 ((TriggerPlate)tiles[tileCount+spot]).forceTrigger();
             }
+        }
+        if (freezeOnCompletion) {
+            FreezeTilesTrigger ftt = new FreezeTilesTrigger();
+            for (int i = 0; i < tileCount; i++) {
+                ftt.addTile((PuzzleTile)tiles[i]);
+            }
+            p.addTrigger(ftt);
         }
         
         return p;
@@ -139,14 +148,18 @@ public abstract class LightsOutPuzzle {
         int triggertileID;
         Stack<Integer> neighbours = new Stack<>();
         //UpLeft
+        /*
         triggertileID = getTilePosition(rowlength, xPos-1, yPos-1);
         if (triggertileID >= 0) neighbours.push(triggertileID);
+        */
         //Up
         triggertileID = getTilePosition(rowlength, xPos, yPos-1);
         if (triggertileID >= 0) neighbours.push(triggertileID);
+        /*
         //UpRight
         triggertileID = getTilePosition(rowlength, xPos+1, yPos-1);
         if (triggertileID >= 0) neighbours.push(triggertileID);
+        */
         //Left
         triggertileID = getTilePosition(rowlength, xPos-1, yPos);
         if (triggertileID >= 0) neighbours.push(triggertileID);
@@ -157,18 +170,22 @@ public abstract class LightsOutPuzzle {
         triggertileID = getTilePosition(rowlength, xPos+1, yPos);
         if (triggertileID >= 0) neighbours.push(triggertileID);
         //DownLeft
+        /*
         triggertileID = getTilePosition(rowlength, xPos-1, yPos+1);
         if (triggertileID >= 0) neighbours.push(triggertileID);
+        */
         //Down
         triggertileID = getTilePosition(rowlength, xPos, yPos+1);
         if (triggertileID >= 0) neighbours.push(triggertileID);
         //DownRight
+        /*
         triggertileID = getTilePosition(rowlength, xPos+1, yPos+1);
         if (triggertileID >= 0) neighbours.push(triggertileID);
+        */
         //Generate PuzzleTriggers
         while (!neighbours.isEmpty()) {
             triggertileID = neighbours.pop();
-            PuzzleTrigger pt = tiles[tile].new PuzzleTrigger(tiles[triggertileID]);
+            PuzzleTrigger pt = new PuzzleTrigger(tiles[triggertileID]);
             tp.addTouchTrigger(pt);
         }
         

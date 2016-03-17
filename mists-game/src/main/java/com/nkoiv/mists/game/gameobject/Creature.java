@@ -15,7 +15,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.ActionType;
 import com.nkoiv.mists.game.actions.AttackAction;
-import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.DialogueTrigger;
 import com.nkoiv.mists.game.gamestate.LocationState;

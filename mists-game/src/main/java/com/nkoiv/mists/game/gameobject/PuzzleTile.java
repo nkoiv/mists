@@ -5,11 +5,8 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.Trigger;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
-import java.util.logging.Level;
 import javafx.scene.image.Image;
 
 /**
@@ -21,6 +18,7 @@ public class PuzzleTile extends Structure {
     private MovingGraphics litUpGraphics;
     private MovingGraphics unLitGraphics;
     private boolean isLit;
+    private boolean frozen;
     
     public PuzzleTile(String name, MovingGraphics litUpGraphics, MovingGraphics unLitGraphics) {
         super(name, unLitGraphics, 0);
@@ -56,8 +54,16 @@ public class PuzzleTile extends Structure {
     }
     
     public void toggleLit() {
+        if (this.frozen) return;
         if (this.isLit) this.unlit();
         else this.litUp();
+    }
+    
+    public void setFrozen(boolean frozen) {
+        this.frozen = frozen;
+    }
+    public boolean isFrozen() {
+        return this.frozen;
     }
     
     @Override
@@ -71,47 +77,5 @@ public class PuzzleTile extends Structure {
             }
         }
         return pt;
-    }
-    
-    public class PuzzleTrigger implements Trigger {
-        private MapObject targetMob;
-        
-        public PuzzleTrigger(MapObject mob) {
-            this.targetMob = mob;
-        }
-        
-        @Override
-        public String getDescription() {
-            String s = "Trigger to toggle "+targetMob.getName();
-            return s;
-        }
-
-        @Override
-        public boolean toggle(MapObject toggler) {
-            if (targetMob instanceof PuzzleTile) {
-                ((PuzzleTile)targetMob).toggleLit();
-                return true;
-            } else {
-                Mists.logger.log(Level.WARNING, "PuzzleTrigger set to manipulate a non-PuzzleTile mob: {0}", targetMob.toString());
-                return false;
-            }
-        }
-        
-        @Override
-        public PuzzleTrigger createFromTemplate() {
-            PuzzleTrigger tt = new PuzzleTrigger(this.targetMob);
-            return tt;
-        }
-
-        @Override
-        public MapObject getTarget() {
-            return this.targetMob;
-        }
-
-        @Override
-        public void setTarget(MapObject mob) {
-            this.targetMob = mob;
-        }
-        
     }
 }

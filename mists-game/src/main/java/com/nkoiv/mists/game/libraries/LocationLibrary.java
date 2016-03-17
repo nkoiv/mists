@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
@@ -95,6 +96,9 @@ public class LocationLibrary  {
             l.addMapObject(mob);
             if (mob.getXPos() == 0 && mob.getYPos() == 0) l.setMobInRandomOpenSpot(mob);
         }
+        for (Puzzle p : template.puzzles) {
+            l.getPuzzleManager().addPuzzle(p);
+        }
         Mists.logger.info("Template mobs added, generating stairs");
         MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
         l.addMapObject(stairs);
@@ -138,12 +142,14 @@ public class LocationLibrary  {
         public double width;
         public double height;
         public ArrayList<MapObject> mobs;
+        public ArrayList<Puzzle> puzzles;
         public double lightlevel;
         
         public LocationTemplate(int ID, String name, double width, double height) {
             this.baseID = ID; this.name = name;
             this.width = width; this.height = height;
             this.mobs = new ArrayList();
+            this.puzzles = new ArrayList();
         }
 
         

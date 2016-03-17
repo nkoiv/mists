@@ -34,7 +34,7 @@ public class DialoguePanel extends TextPanel {
     private String currentCardText;
     
     private static double defaultWidth = Mists.WIDTH - 200;
-    private static double defaultHeight = (Mists.HEIGHT/2)-100;
+    private static double defaultHeight = (Mists.HEIGHT/2);
     private static String defaultImageSet = "panelBeige";
     private static double defaultFontSize = 20.0;
     
@@ -45,6 +45,8 @@ public class DialoguePanel extends TextPanel {
     public DialoguePanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images) {
         super(parent, name, width, height, xPos, yPos, images);
         this.linkButtons = new ArrayList<>();
+        CloseButton cb = new CloseButton(this, this.width-20, 5);
+        this.closeButton = cb;
     }
     
     public void setDialogue(Dialogue dialogue) {
@@ -115,7 +117,8 @@ public class DialoguePanel extends TextPanel {
             this.renderDialogueOptions(gc, xPosition, yPosition);   
             //Mists.logger.info("options rendered");
         }        
-        if (this.closeButton != null) this.closeButton.render(gc, xPosition+closeButton.xPosition, yPosition+closeButton.yPosition);
+        if (this.closeButton != null)
+            this.closeButton.render(gc, xPosition+closeButton.xPosition, yPosition+closeButton.yPosition);
         //Mists.logger.info("Dialoguepanel rendered");
     }
     

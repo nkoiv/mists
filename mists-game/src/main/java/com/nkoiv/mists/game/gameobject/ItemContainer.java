@@ -6,11 +6,12 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.triggers.LootTrigger;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -128,58 +129,4 @@ public class ItemContainer extends Structure implements HasInventory {
         Trigger[] a = new Trigger[]{new LootTrigger(this)};
         return a;
     }
-    
-    /**
-     * LootTrigger, when toggled, gives the player the
-     * top item from the pile.
-     */
-    private class LootTrigger implements Trigger {
-        private ItemContainer ic;
-
-        public LootTrigger(ItemContainer itemContainer) {
-            this.ic = itemContainer;
-        }
-        
-        @Override
-        public boolean toggle(MapObject toggler) {
-            if (!(toggler instanceof Creature)) {
-                Mists.logger.info(toggler.getName()+" tried to toggle "+ic.getName()+" but is not a creature");
-                return false;
-            }
-            //int topItemID = ic.topItemID();
-            //((Creature)toggler).setNextTask(new Task(GenericTasks.ID_TAKE_ITEM, toggler.getID(), new int[]{ic.getID(), topItemID}));
-            
-            if (!((Creature)toggler).getInventory().isFull()) {
-                ((Creature)toggler).addItem(ic.takeTopItem());
-                return true;
-            }
-            return false;
-            
-        }
-        
-        @Override
-        public void setTarget(MapObject ic) {
-            if (ic instanceof ItemContainer) this.ic = (ItemContainer)ic;
-        }
-
-        @Override
-        public MapObject getTarget() {
-            return this.ic;
-        }
-        
-        @Override
-        public String getDescription() {
-            Item i = this.ic.peekTopItem();
-            if (i == null) return "Empty";
-            else return ("Take "+i.getName());
-        }
-        
-        @Override
-        public LootTrigger createFromTemplate() {
-            LootTrigger lt = new LootTrigger(this.ic);
-            return lt;
-        }
-        
-    }
-    
 }

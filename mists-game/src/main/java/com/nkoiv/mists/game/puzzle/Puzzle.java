@@ -5,7 +5,7 @@
  */
 package com.nkoiv.mists.game.puzzle;
 
-import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.ArrayList;
 
@@ -21,8 +21,10 @@ import java.util.ArrayList;
 public class Puzzle {
     private ArrayList<PuzzleRequirement> requirements; //Requirements for the puzzle to be complete
     private ArrayList<Trigger> triggers; //Triggers that trigger when puzzle is complete
-    boolean lockedComplete = false;
-    boolean locksOnCompletion = true;  //Can the puzzle be triggered several times? If locksOnCompletion = true, then it can't be
+    private boolean lockedComplete = false;
+    private boolean locksOnCompletion = true;
+    private int amountOfPossibleTriggerings = 1;
+    private int timesTriggered = 0;
     
     public Puzzle() {
         this.requirements = new ArrayList<>();
@@ -48,6 +50,18 @@ public class Puzzle {
         this.requirements.add(p);
     }
     
+    public void addTrigger(Trigger t) {
+        this.triggers.add(t);
+    }
+    
+    public void setTriggeringCount(int amountOfPossibleTriggerings) {
+        this.amountOfPossibleTriggerings = amountOfPossibleTriggerings;
+    }
+    
+    public boolean isFinished() {
+        return (this.timesTriggered >= this.amountOfPossibleTriggerings);
+    }
+    
     /**
      * Do whatever the puzzle is meant to do when
      * it's complete
@@ -60,6 +74,7 @@ public class Puzzle {
         for (Trigger t : this.triggers) {
             if (t.toggle(puzzletriggerer)) triggered = true; //TODO: This temp-triggerer might not be the best way to ensure we dont get null-pointers
         }
+        timesTriggered++;
         return triggered;
     }
     

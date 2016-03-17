@@ -6,7 +6,7 @@
 package com.nkoiv.mists.game.dialogue;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.Trigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
 

@@ -88,8 +88,8 @@ public class TextWindow extends UIComponent {
     @Override
     public void handleMouseEvent(MouseEvent me) {
         if ((me.getEventType() == MouseEvent.MOUSE_CLICKED) && me.getButton() == MouseButton.PRIMARY) {
-            Mists.logger.info("Click event at "+this.getName()+", "+me.getX()+"x"+me.getY());
-            Mists.logger.info("X: "+(xPosition+closeButton.xPosition)+" Y:"+(yPosition+closeButton.yPosition));
+            //Mists.logger.info("Click event at "+this.getName()+", "+me.getX()+"x"+me.getY());
+            //Mists.logger.info("X: "+(xPosition+closeButton.xPosition)+" Y:"+(yPosition+closeButton.yPosition));
             if (closeButton == null) return;
             if (me.getX() > xPosition+closeButton.xPosition && me.getX() < xPosition+closeButton.xPosition+closeButton.width
                     && me.getY() > yPosition+closeButton.yPosition && me.getY() < yPosition+closeButton.yPosition+closeButton.height) {

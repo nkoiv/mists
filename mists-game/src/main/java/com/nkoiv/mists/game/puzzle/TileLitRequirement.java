@@ -13,7 +13,7 @@ import com.nkoiv.mists.game.gameobject.PuzzleTile;
  * @author nikok
  */
 public class TileLitRequirement extends PuzzleRequirement {
-    PuzzleTile tile;
+    private PuzzleTile tile;
     
     public TileLitRequirement(PuzzleTile tile) {
         this.tile = tile;

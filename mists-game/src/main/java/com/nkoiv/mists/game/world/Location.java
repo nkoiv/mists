@@ -19,6 +19,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.networking.LocationServer;
+import com.nkoiv.mists.game.puzzle.PuzzleManager;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
@@ -66,6 +67,7 @@ public class Location extends Flags implements Global {
     private CollisionMap collisionMap;
     private PathFinder pathFinder;
     private DungeonGenerator mapGen;
+    private PuzzleManager puzzleManager;
     private LightsRenderer lights;
     private RayShadows shadows;
     private final double[] lastOffsets = new double[2];
@@ -124,6 +126,7 @@ public class Location extends Flags implements Global {
         Mists.logger.info("Collisionlevels updated");
         this.collisionMap.printMapToConsole();
         this.pathFinder = new PathFinder(this.collisionMap, 100, true);
+        this.puzzleManager = new PuzzleManager();
         this.lights = new LightsRenderer(this);
         this.shadows = new RayShadows();
         this.targets = new ArrayList<>();
@@ -157,6 +160,10 @@ public class Location extends Flags implements Global {
         }
         Mists.logger.info("Walls updated");
         if (!wasLoading) this.loading = false;
+    }
+    
+    public PuzzleManager getPuzzleManager() {
+        return this.puzzleManager;
     }
     
     public int getMobCount() {
@@ -621,6 +628,7 @@ public class Location extends Flags implements Global {
         }
         this.updateEffects(time);
         this.updateTriggerPlates(time);
+        this.puzzleManager.tick(time);
         if (server!=null) {
             server.compileRemovals(creatureCleanup());
             server.compileRemovals(structureCleanup());
