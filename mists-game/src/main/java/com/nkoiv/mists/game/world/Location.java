@@ -16,6 +16,7 @@ import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.ui.Overlay;
@@ -52,6 +53,7 @@ public class Location extends Flags implements Global {
     private HashMap<Integer, HashSet> spatial; //New idea for lessening collision detection load
     private ArrayList<Creature> creatures;
     private ArrayList<Structure> structures;
+    private ArrayList<TriggerPlate> triggerPlates;
     private List<Effect> effects;
     
     public boolean loading;
@@ -85,6 +87,7 @@ public class Location extends Flags implements Global {
         this.creatures = new ArrayList<>();
         this.structures = new ArrayList<>();
         this.effects = new ArrayList<>();
+        this.triggerPlates = new ArrayList<>();
         Mists.logger.info("Loading map");
         if (maptype == 0) this.loadMap(new BGMap(new Image(mapFileName)));
         if (maptype == 1) this.loadMap(new TileMap(mapFileName));
@@ -98,6 +101,7 @@ public class Location extends Flags implements Global {
         this.creatures = new ArrayList<>();
         this.structures = new ArrayList<>();        
         this.effects = new ArrayList<>();
+        this.triggerPlates = new ArrayList<>();
         //this.mapGen = new DungeonGenerator();
         //Mists.logger.info("Generating new BSP dungeon...");
         this.loadMap(map);
@@ -309,6 +313,7 @@ public class Location extends Flags implements Global {
      * @param mob MapObject to set the ID to
      */
     private void giveID(MapObject mob) {
+        if (mob == null) return;
         if (nextID == Integer.MAX_VALUE) nextID = Integer.MIN_VALUE;
         mob.setID(this.nextID);
         nextID++;
@@ -360,6 +365,9 @@ public class Location extends Flags implements Global {
         if (mob instanceof Effect) {
             this.effects.remove((Effect)mob);
         }
+        if (mob instanceof TriggerPlate) {
+            this.triggerPlates.remove((TriggerPlate)mob);
+        }
         this.mobs.remove(mob.getID());
     }
     
@@ -376,6 +384,9 @@ public class Location extends Flags implements Global {
         if (mob instanceof Effect) {
             this.effects.add((Effect)mob);
         }
+        if (mob instanceof TriggerPlate) {
+            this.triggerPlates.add((TriggerPlate)mob);
+        }
         this.mobs.put(mob.getID(), mob);
         mob.setLocation(this);
     }
@@ -385,6 +396,9 @@ public class Location extends Flags implements Global {
      * @param mob MapObject to insert in the map
      */
     public void addMapObject(MapObject mob) {
+        if (mob == null) {
+            Mists.logger.warning("Tried to add NULL mob to "+this.getName());
+        }
         if (Mists.gameMode == GameMode.CLIENT && (this.loading == false && (!(mob instanceof Effect)))) {
             //Clientmode should use ClientAddMapObject
             Mists.logger.warning("Client mode tried to add a map object directly ("+mob.toString()+")");
@@ -400,6 +414,9 @@ public class Location extends Flags implements Global {
         }
         if (mob instanceof Effect) {
             this.effects.add((Effect)mob);
+        }
+        if (mob instanceof TriggerPlate) {
+            this.triggerPlates.add((TriggerPlate)mob);
         }
         if (!(mob instanceof Effect)) this.mobs.put(mob.getID(), mob);
         mob.setLocation(this);
@@ -603,6 +620,7 @@ public class Location extends Flags implements Global {
             }
         }
         this.updateEffects(time);
+        this.updateTriggerPlates(time);
         if (server!=null) {
             server.compileRemovals(creatureCleanup());
             server.compileRemovals(structureCleanup());
@@ -630,7 +648,13 @@ public class Location extends Flags implements Global {
         }
     }
     
-    
+    public void updateTriggerPlates(double time) {
+        if (!this.triggerPlates.isEmpty()) {
+            for (TriggerPlate t : this.triggerPlates) {
+                t.update(time);
+            }
+        }
+    }
     
     /**
      * structureCleanup cleans all the "removable"
@@ -837,6 +861,21 @@ public class Location extends Flags implements Global {
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownRight
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(0); w.updateNeighbours();}
 
+    }
+    
+    /**
+     * Check (only) creatures colliding with given map object
+     * @param o The map object to check collisions with
+     * @return List of colliding creatures;
+     */
+    public ArrayList<Creature> checkCreatureCollisions(MapObject o) {
+        ArrayList<Creature> collidingObjects = new ArrayList<>();
+        HashSet<Integer> mobSpatials = getSpatials(o);
+        //Spatials cover the creature collisions
+        for (Integer i : mobSpatials) {
+            addMapObjectCollisions(o, this.spatial.get(i), collidingObjects);
+        }
+        return collidingObjects;
     }
     
     /** CheckCollisions for a given MapObjects

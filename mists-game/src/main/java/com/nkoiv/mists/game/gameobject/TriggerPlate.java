@@ -11,13 +11,13 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
 
 /**
- * TriggerPlate is an invisible Effect that can
+ * TriggerPlate is an invisible MapObject that can
  * be placed on the ground to have something happen
  * when it's touched.
  * @author nikok
  */
-public class TriggerPlate extends Effect {
-    private Trigger touchTrigger;
+public class TriggerPlate extends MapObject {
+    private ArrayList<Trigger> touchTriggers;
     private double triggerCooldown;
     private double onCooldown;
     private boolean requireReEntry;
@@ -25,37 +25,43 @@ public class TriggerPlate extends Effect {
     
     public TriggerPlate(String name, double width, double height, double triggerCooldown, MapObject target) {
         this(name,width, height, triggerCooldown);
-        this.touchTrigger = new ToggleTrigger(target);
+        this.touchTriggers = new ArrayList<>();
+        this.touchTriggers.add(new ToggleTrigger(target));
     }
     
     public TriggerPlate(String name, double width, double height, double triggerCooldown) {
-        super(null, name, new Sprite(Mists.graphLibrary.getImage("blank")), -1);
-        super.getSprite().setWidth(width);
-        super.getSprite().setHeight(height);
+        super(name, Mists.graphLibrary.getImage("circle32"));
+        super.getGraphics().setWidth(width);
+        super.getGraphics().setHeight(height);
+        this.touchTriggers = new ArrayList<>();
         this.triggerCooldown = triggerCooldown;
     }
     
     @Override
     public void update(double time) {
-        if (this.touchTrigger == null) return;
+        //Mists.logger.info("Triggerplate updating at "+this.getXPos()+"x"+this.getYPos());
+        if (this.touchTriggers.isEmpty()) return;
         if (this.onCooldown>0) {
             this.onCooldown = onCooldown - (time*1000);
-            Mists.logger.info(name+" cooldown "+onCooldown);
+            //Mists.logger.info(name+" cooldown "+onCooldown);
         }
         if (onCooldown <=0) {
-            touch(getLocation().checkCollisions(this));
+            touch(getLocation().checkCreatureCollisions(this));
         }
     }
 
-    private void touch(ArrayList<MapObject> touchedMobs) {
+    private void touch(ArrayList<Creature> touchedMobs) {
         if (touchedMobs.isEmpty()) this.clear = true;
         if (this.requireReEntry && !this.clear) return;
         for (MapObject mob : touchedMobs) {
-            if (touchTrigger.toggle(mob)) {
+            //Mists.logger.info("Standing on triggerplate: "+touchedMobs.toString());
+            for (Trigger touchTrigger : this.touchTriggers) {
+                if (touchTrigger.toggle(mob)) {
                 //Mists.logger.info("Wasn't on cooldown, toggling "+name);
                 this.onCooldown = this.triggerCooldown;
                 this.clear = false;
             }
+            }   
         }
     }
     
@@ -81,30 +87,31 @@ public class TriggerPlate extends Effect {
         return (this.onCooldown>0);
     }
     
-    public void setTouchTrigger(Trigger trigger) {
-        this.touchTrigger = trigger;
+    public void addTouchTrigger(Trigger trigger) {
+        this.touchTriggers.add(trigger);
     }
     
-    public Trigger getTouchTrigger() {
-        return this.touchTrigger;
+    public ArrayList<Trigger> getTouchTriggers() {
+        return this.touchTriggers;
     }
     
     
     @Override
     public TriggerPlate createFromTemplate() {
         TriggerPlate tp = new TriggerPlate(this.name, this.getWidth(), this.getHeight(), this.triggerCooldown);
-        tp.setSprite(new Sprite(this.getSprite().getImage()));
+        tp.setSprite(new Sprite(this.getGraphics().getImage()));
         tp.setRequireReEntry(this.requireReEntry);
-        if (this.touchTrigger!=null) {
-            Trigger tr = this.touchTrigger.createFromTemplate();
-            tr.setTarget(tp);
-            tp.setTouchTrigger(tr);
+        if (!this.touchTriggers.isEmpty()) {
+                for (Trigger touchTrigger : this.touchTriggers) {
+                Trigger tr = touchTrigger.createFromTemplate();
+                tr.setTarget(tp);
+                tp.addTouchTrigger(tr);
+            }
         }
         return tp;
     }
     
     public class ToggleTrigger implements Trigger {
-
         private MapObject targetMob;
         
         public ToggleTrigger(MapObject mob) {

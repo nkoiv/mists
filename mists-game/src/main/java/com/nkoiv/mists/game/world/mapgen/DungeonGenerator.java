@@ -8,8 +8,6 @@ package com.nkoiv.mists.game.world.mapgen;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.world.IsometricTileMap;
-import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import java.util.ArrayList;
 import java.util.Random;

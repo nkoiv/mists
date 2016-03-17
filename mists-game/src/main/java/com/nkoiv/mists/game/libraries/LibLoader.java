@@ -14,6 +14,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.items.Item;
@@ -21,10 +22,12 @@ import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.TileMap;
+import com.nkoiv.mists.game.world.mapgen.LightsOutPuzzle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -332,7 +335,6 @@ public class LibLoader {
         Door door = (Door)Mists.structureLibrary.create("dungeonDoor");
         TriggerPlate tp = new TriggerPlate("Door opener", 32, 32, 2000, door);
         tp.setRequireReEntry(true);
-        tp.setSprite(new Sprite(Mists.graphLibrary.getImage("circle32")));
         
         testVillage.mobs.add(door);
         testVillage.mobs.add(tp);
@@ -377,8 +379,9 @@ public class LibLoader {
         Mists.logger.info("Generating template for puzzlemap");
         LocationTemplate puzzlearea = new LocationTemplate(4, "Puzzle Area", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
         puzzlearea.map = new TileMap("/mapdata/puzzlearea.map");
+        MapObject[] puzzle = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 5, Mists.TILESIZE, 20*Mists.TILESIZE, 30*Mists.TILESIZE);
+        puzzlearea.mobs.addAll(Arrays.asList(puzzle));
         lib.addTemplate(puzzlearea);
         Mists.logger.info("Puzzlemap template added");
-        
     }
 }
