@@ -190,6 +190,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
 
     private void addToOpen(Node node) {
             this.openNodes.add(node);
+            if (node.getX() > this.nodeMap.length-1 || node.getX() < 0 || node.getY()> this.nodeMap[0].length-1 || node.getY() < 0) return;
             this.nodeMap[node.getX()][node.getY()] = node;
             this.nodeStatus[node.getX()][node.getY()] = OPEN;
     }
