@@ -57,4 +57,16 @@ public class PuzzleTile extends Structure {
         else this.litUp();
     }
     
+    @Override
+    public Structure createFromTemplate() {
+        PuzzleTile pt = new PuzzleTile(this.name, this.litUpGraphics.getImage(), this.unLitGraphics.getImage());
+        if (!this.extraSprites.isEmpty()) {
+            for (Sprite s : this.extraSprites) {
+                double xOffset = s.getXPos() - this.getSprite().getXPos();
+                double yOffset = s.getYPos() - this.getSprite().getYPos();
+                pt.addExtra(s.getImage(), xOffset, yOffset);
+            }
+        }
+        return pt;
+    }
 }

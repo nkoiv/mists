@@ -69,4 +69,8 @@ type: "Door"
 imageOpen: "/images/structures/ddoor.png"
 imageClosed: "/images/structures/ddoor_open.png"
 collisionLevel: 1
-
+---
+name: "PuzzleRune"
+type: "PuzzleTile"
+imageLit: "/images/structures/puzzletile_lit.png"
+imageUnlit: "/images/structures/puzzletile_unlit.png"

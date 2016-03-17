@@ -13,6 +13,7 @@ import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.sprites.Sprite;
@@ -94,6 +95,8 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                 return generateMapEntranceFromYAML(mobData);
             case "Door": Mists.logger.info("Generating DOOR");
                 return generateDoorFromYAML(mobData);
+            case "PuzzleTile": Mists.logger.info("Generating PUZZLETILE");
+                return generatePuzzleTileFromYAML(mobData);
         }        
         return null;
     }
@@ -161,17 +164,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         int collisionLevel = Integer.parseInt((String)structureData.get("collisionLevel"));
         Image image = new Image((String)structureData.get("image"));
         Structure struct = new Structure(mobname, image, collisionLevel); 
-        Map extras = (Map)structureData.get("extras");
-        if (extras != null) {
-            for (Object key : extras.keySet()) {
-                Map extraValues = (Map)extras.get(key);
-                Image extraImage = new Image((String)extraValues.get("image"));
-                int xOffset = Integer.parseInt(((String)extraValues.get("xOffset")));
-                int yOffset = Integer.parseInt(((String)extraValues.get("yOffset")));
-                struct.addExtra(extraImage, xOffset, yOffset);
-            }
-        }
-        
+        addExtras(structureData, struct);
         return struct;
     }
     
@@ -190,40 +183,44 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         int collisionLevel = Integer.parseInt((String)entranceData.get("collisionLevel"));
         Image image = new Image((String)entranceData.get("image"));
         MapEntrance entrance = new MapEntrance(mobname, new Sprite(image), collisionLevel, null); 
-        Map extras = (Map)entranceData.get("extras");
-        if (extras != null) {
-            for (Object key : extras.keySet()) {
-                Map extraValues = (Map)extras.get(key);
-                Image extraImage = new Image((String)extraValues.get("image"));
-                int xOffset = Integer.parseInt(((String)extraValues.get("xOffset")));
-                int yOffset = Integer.parseInt(((String)extraValues.get("yOffset")));
-                entrance.addExtra(extraImage, xOffset, yOffset);
-            }
-        }
+        addExtras(entranceData, entrance);
         return entrance;
         //MapEntrance stairs = new MapEntrance("dungeonStairs", new Sprite(new Image("/images/structures/stairs.png")), 0, null);
     }
     
+    private static PuzzleTile generatePuzzleTileFromYAML(Map tileData) {
+        String mobname = (String)tileData.get("name");
+        Image imageOpen = new Image((String)tileData.get("imageLit"));
+        Image imageClosed = new Image((String)tileData.get("imageUnlit"));
+        PuzzleTile puzzletile = new PuzzleTile(mobname, imageOpen, imageClosed);
+        addExtras(tileData, puzzletile);
+        return puzzletile;
+    }
+    
     private static Door generateDoorFromYAML(Map doorData) {
-        String mobtype = (String)doorData.get("type");
         String mobname = (String)doorData.get("name");
         int collisionLevel = Integer.parseInt((String)doorData.get("collisionLevel"));
         Image imageOpen = new Image((String)doorData.get("imageOpen"));
         Image imageClosed = new Image((String)doorData.get("imageClosed"));
         Door door = new Door(mobname, imageOpen, imageClosed, collisionLevel); 
         Map extras = (Map)doorData.get("extras");
+        addExtras(doorData, door);
+        return door;
+    }
+    
+    
+    private static void addExtras(Map structureData, Structure structure) {
+        Map extras = (Map)structureData.get("extras");
         if (extras != null) {
             for (Object key : extras.keySet()) {
                 Map extraValues = (Map)extras.get(key);
                 Image extraImage = new Image((String)extraValues.get("image"));
                 int xOffset = Integer.parseInt(((String)extraValues.get("xOffset")));
                 int yOffset = Integer.parseInt(((String)extraValues.get("yOffset")));
-                door.addExtra(extraImage, xOffset, yOffset);
+                structure.addExtra(extraImage, xOffset, yOffset);
             }
         }
-        return door;
     }
-    
     
     /**
      * PrepareAdd makes sure no broken stuff gets in the library
