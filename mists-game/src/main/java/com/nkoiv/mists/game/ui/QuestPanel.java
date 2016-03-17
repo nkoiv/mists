@@ -32,6 +32,8 @@ public class QuestPanel extends TextPanel {
         this.questManager = questManager;
         this.bgOpacity = 0.5;
         this.renderZ = 5;
+        CloseButton cb = new CloseButton(this, this.width-20, 5);
+        this.closeButton = cb;
     }
     
     public QuestPanel(GameState parent) {
