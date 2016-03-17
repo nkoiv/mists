@@ -45,6 +45,7 @@ public class DialoguePanel extends TextPanel {
     public DialoguePanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images) {
         super(parent, name, width, height, xPos, yPos, images);
         this.linkButtons = new ArrayList<>();
+        
         CloseButton cb = new CloseButton(this, this.width-20, 5);
         this.closeButton = cb;
     }
