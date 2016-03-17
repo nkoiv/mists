@@ -27,9 +27,10 @@ xCoordinate: 600
 yCoordinate: 900
 links:
  Down: 10
+ Up: 14
 ---
 id: 3
-name: "Road to woods"
+name: "Woods"
 enterLocationID: 3
 image: "images/woods.png"
 xCoordinate: 470
@@ -70,3 +71,20 @@ xCoordinate: 680
 yCoordinate: 1120
 links:
  Left: 11
+ Right: 13
+---
+id: 13
+name: "Sea 3"
+xCoordinate: 850
+yCoordinate: 1100
+links:
+ Left: 12
+---
+id: 14
+name: "Puzzlearea"
+enterLocationID: 4
+image: "images/structures/puzzletile_lit.png"
+xCoordinate: 620
+yCoordinate: 860
+links:
+ Down: 2

@@ -10,3 +10,6 @@ structure: "DungeonStairs"
 ---
 symbol: "T"
 structure: "Tree1"
+---
+symbol: "R"
+structure: "PuzzleRune"
