@@ -20,6 +20,7 @@ import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.BGMap;
+import com.nkoiv.mists.game.world.TileMap;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -370,6 +371,14 @@ public class LibLoader {
         }
         woods.lightlevel = 0.3;
         lib.addTemplate(woods);
+        
+        
+        //PuzzleArea
+        Mists.logger.info("Generating template for puzzlemap");
+        LocationTemplate puzzlearea = new LocationTemplate(4, "Puzzle Area", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
+        puzzlearea.map = new TileMap("/mapdata/puzzlearea.map");
+        lib.addTemplate(puzzlearea);
+        Mists.logger.info("Puzzlemap template added");
         
     }
 }

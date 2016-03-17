@@ -8,8 +8,6 @@ package com.nkoiv.mists.game.libraries;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.world.worldmap.LocationNode;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;

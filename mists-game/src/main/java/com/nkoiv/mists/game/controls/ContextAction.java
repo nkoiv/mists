@@ -136,6 +136,7 @@ public class ContextAction {
         ArrayList<MapObject> mobs = new ArrayList<>();
         if (this.availableTriggers.isEmpty()) return mobs;
         for (Trigger t : this.availableTriggers) {
+            if (t == null) return mobs;
             if (t.getTarget()!=null) {
                 mobs.add(t.getTarget());
             }
