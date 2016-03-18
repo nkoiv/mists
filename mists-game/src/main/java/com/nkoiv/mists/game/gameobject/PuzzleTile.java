@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
  * and two distinctive graphics: Lit up and un lit.
  * @author nikok
  */
-public class PuzzleTile extends Structure {
+public class PuzzleTile extends Structure implements Shapechanger {
     private MovingGraphics litUpGraphics;
     private MovingGraphics unLitGraphics;
     private boolean isLit;
@@ -35,16 +35,18 @@ public class PuzzleTile extends Structure {
         return this.isLit;
     }
     
-    private void litUp() {
+    private boolean litUp() {
         this.isLit = true;
         this.litUpGraphics.setPosition(this.graphics.getXPos(), this.graphics.getYPos());
         this.graphics = this.litUpGraphics;
+        return true;
     }
     
-    private void unlit() {
+    private boolean unlit() {
         this.isLit = false;
         this.unLitGraphics.setPosition(this.graphics.getXPos(), this.graphics.getYPos());
         this.graphics = this.unLitGraphics;
+        return true;
     }
     
     public void setLit(boolean litUp) {
@@ -53,10 +55,11 @@ public class PuzzleTile extends Structure {
         else this.unlit();
     }
     
-    public void toggleLit() {
-        if (this.frozen) return;
-        if (this.isLit) this.unlit();
-        else this.litUp();
+    @Override
+    public boolean shiftMode() {
+        if (this.frozen) return false;
+        if (this.isLit) return this.unlit();
+        else return this.litUp();
     }
     
     public void setFrozen(boolean frozen) {
