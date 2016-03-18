@@ -27,7 +27,7 @@ import javafx.scene.image.ImageView;
  */
 public class PlayerCharacter extends Creature implements Combatant {
     private ArrayList<Creature> companions;
-    private double lightSize = 2.0;
+    private double lightSize = 3.0;
     
     public PlayerCharacter() {
         //Dummy player for testing
