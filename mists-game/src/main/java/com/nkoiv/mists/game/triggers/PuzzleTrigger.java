@@ -30,7 +30,7 @@ public class PuzzleTrigger implements Trigger {
     @Override
     public boolean toggle(MapObject toggler) {
         if (targetMob instanceof PuzzleTile) {
-            ((PuzzleTile)targetMob).toggleLit();
+            ((PuzzleTile)targetMob).shiftMode();
             return true;
         } else {
             Mists.logger.log(Level.WARNING, "PuzzleTrigger set to manipulate a non-PuzzleTile mob: {0}", targetMob.toString());
