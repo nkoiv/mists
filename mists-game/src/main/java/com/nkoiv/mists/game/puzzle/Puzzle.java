@@ -46,10 +46,21 @@ public class Puzzle {
         return true;
     }
     
+    /**
+     * Add a requirement for the puzzle to flag complete
+     * These are checked by PuzzleManager on default interval
+     * @param p Required parameter for 
+     */
     public void addRequirement(PuzzleRequirement p) {
         this.requirements.add(p);
     }
     
+    /**
+     * Adding a trigger to Puzzle will cause it to do
+     * something when the puzzle is marked complete.
+     * Seriable triggers are allowed
+     * @param t Trigger to proc when the puzzle is complete
+     */
     public void addTrigger(Trigger t) {
         this.triggers.add(t);
     }
@@ -58,6 +69,11 @@ public class Puzzle {
         this.amountOfPossibleTriggerings = amountOfPossibleTriggerings;
     }
     
+    /**
+     * Check if the puzzle has triggered the amount of times allowed
+     * if so, puzzle can be marked as Finished.
+     * @return True if times triggered meets or exceeds amount of possible triggerings
+     */
     public boolean isFinished() {
         return (this.timesTriggered >= this.amountOfPossibleTriggerings);
     }
