@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.libraries;
 import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Effect;
@@ -95,8 +96,10 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                 return generateMapEntranceFromYAML(mobData);
             case "Door": Mists.logger.info("Generating DOOR");
                 return generateDoorFromYAML(mobData);
-            case "PuzzleTile": Mists.logger.info("Generating PUZZLETILE");
+            case "PuzzleTile": Mists.logger.info("Generating PUZZLE TILE");
                 return generatePuzzleTileFromYAML(mobData);
+            case "CircuitTile": Mists.logger.info("Generating CIRCUIT TILE");
+                return generateCircuitTileFromYAML(mobData);
         }        
         return null;
     }
@@ -195,6 +198,24 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         PuzzleTile puzzletile = new PuzzleTile(mobname, imageOpen, imageClosed);
         addExtras(tileData, puzzletile);
         return puzzletile;
+    }
+    
+    private static CircuitTile generateCircuitTileFromYAML(Map tileData) {
+        String mobname = (String)tileData.get("name");
+        String pathsID = (String)tileData.get("circuitPaths");
+        boolean[] openPaths = new boolean[4];
+        switch (pathsID) {
+            case "I": openPaths = new boolean[]{true, false, true, false}; break;
+            case "L": openPaths = new boolean[]{false, true, true, false}; break;
+            case "X": openPaths = new boolean[]{true, true, true, true}; break;
+            case "S": openPaths = new boolean[]{false, false, true, false}; break;
+            case "O": openPaths = new boolean[]{false, false, true, false}; break;
+        }
+        Image imageOpen = new Image((String)tileData.get("imageLit"));
+        Image imageClosed = new Image((String)tileData.get("imageUnlit"));
+        CircuitTile circuittile = new CircuitTile(mobname, openPaths, imageOpen, imageClosed);
+        addExtras(tileData, circuittile);
+        return circuittile;
     }
     
     private static Door generateDoorFromYAML(Map doorData) {

@@ -15,10 +15,10 @@ import javafx.scene.image.Image;
  * @author nikok
  */
 public class PuzzleTile extends Structure implements Shapechanger {
-    private MovingGraphics litUpGraphics;
-    private MovingGraphics unLitGraphics;
-    private boolean isLit;
-    private boolean frozen;
+    protected MovingGraphics litUpGraphics;
+    protected MovingGraphics unLitGraphics;
+    protected boolean isLit;
+    protected boolean frozen;
     
     public PuzzleTile(String name, MovingGraphics litUpGraphics, MovingGraphics unLitGraphics) {
         super(name, unLitGraphics, 0);

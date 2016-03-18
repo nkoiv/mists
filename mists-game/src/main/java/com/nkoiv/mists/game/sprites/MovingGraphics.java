@@ -80,6 +80,10 @@ public abstract class MovingGraphics {
         return rotation;
     }
 
+    /**
+     * Rotation of the graphics, in degrees clockwise
+     * @param rotation how many degrees to rotate the graphics with
+     */
     public void setRotation(double rotation) {
         this.rotation = rotation;
     }
