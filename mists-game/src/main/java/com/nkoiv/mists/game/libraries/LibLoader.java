@@ -381,17 +381,19 @@ public class LibLoader {
         LocationTemplate puzzlearea = new LocationTemplate(4, "Puzzle Area", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
         puzzlearea.map = new TileMap("/mapdata/puzzlearea.map");
         //Puzzle 1
-        /*
-        MapObject[] puzzle1 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 5, Mists.TILESIZE, 20*Mists.TILESIZE, 30*Mists.TILESIZE);
+        
+        MapObject[] puzzle1 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 4, Mists.TILESIZE, 20*Mists.TILESIZE, 30*Mists.TILESIZE);
         puzzlearea.mobs.addAll(Arrays.asList(puzzle1));
         Puzzle p1 = LightsOutPuzzle.generatePuzzleFromTiles(puzzle1, true, true);
         puzzlearea.puzzles.add(p1);
-        */
+        
         //Puzzle 2
+        /*
         MapObject[] puzzle2 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 3, Mists.TILESIZE, 45*Mists.TILESIZE, 25*Mists.TILESIZE);
         puzzlearea.mobs.addAll(Arrays.asList(puzzle2));
         Puzzle p2 = LightsOutPuzzle.generatePuzzleFromTiles(puzzle2, true, true);
         puzzlearea.puzzles.add(p2);
+        */
         lib.addTemplate(puzzlearea);
         Mists.logger.info("Puzzlemap template added");
     }
