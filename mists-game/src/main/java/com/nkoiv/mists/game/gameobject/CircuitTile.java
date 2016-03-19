@@ -8,6 +8,8 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.puzzle.Circuit;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.triggers.RotateTrigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import java.util.Arrays;
 import javafx.scene.image.Image;
 
@@ -94,6 +96,11 @@ public class CircuitTile extends PuzzleTile {
     
     public boolean[] getOpenPaths() {
         return this.openPaths;
+    }
+    
+    @Override
+    public Trigger[] getTriggers() {
+        return new Trigger[]{new RotateTrigger(this)};
     }
     
     @Override
