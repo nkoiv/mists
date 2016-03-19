@@ -112,6 +112,8 @@ public class ContextAction {
     
     /**
      * Use the currently selected action
+     * NOTE: This is currently unused, as triggers
+     * handled via the Tasks, at LocationControls
      * @return True if action was performed
      */
     private boolean useTrigger() {
@@ -142,6 +144,12 @@ public class ContextAction {
             }
         }
         return mobs;
+    }
+    
+    public void setTriggerOnMobIfInRange(MapObject mob) {
+        for (int i = 0; i < this.availableTriggers.size(); i++) {
+            if (availableTriggers.get(i).getTarget().equals(mob)) this.currentTrigger = i;
+        }
     }
     
     public Trigger getCurrentTrigger() {

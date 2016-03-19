@@ -440,6 +440,7 @@ public class LocationState implements GameState {
             MapObject targetMob = game.getCurrentLocation().getMobAtLocation(clickX+game.getCurrentLocation().getLastxOffset(), clickY+game.getCurrentLocation().getLastyOffset());
             if (targetMob!=null) { 
                 if (game.getCurrentLocation().getTargets().contains(targetMob)) {
+                    //There already is the same mob targetted, so reselection should clear the targetting
                     game.getCurrentLocation().clearTarget();
                     this.removeUIComponent("InfoBox");
                 }
@@ -447,6 +448,8 @@ public class LocationState implements GameState {
                     Mists.logger.log(Level.INFO, "Targetted {0}", targetMob.toString());
                     game.getCurrentLocation().setTarget(targetMob);
                     this.addUIComponent(this.infobox);
+                    //If the target has context-action vible triggers, it should be selected for context action
+                    contextAction.setTriggerOnMobIfInRange(targetMob);
                 }
                 return true;
             }
