@@ -128,7 +128,7 @@ PuzzleManager can be set to trigger once (perhaps giving a reward), several time
 
 ![](https://github.com/nkoiv/mists/blob/master/documentation/lightsout_puzzle.png "LightsOut puzzle is about pressing buttons in correct order")
 
-In LightsOut, the player steps on tiles to trigger them on or off. Whenever a tile is tirggered, it also triggers the (up to) four surrounding tiles. Lets assume the game grid is at the following setup (X implying lights are on, O implying they are out) and player steps on tile C3:
+In LightsOut, the player steps on tiles to trigger them on or off. Whenever a tile is triggered, it also triggers the (up to) four surrounding tiles. Lets assume the game grid is at the following setup (X implying lights are on, O implying they are out) and player steps on tile C2:
 <pre>
 +-A--B--C--D--E-+
 1[0][0][0][0][0]|
@@ -139,7 +139,7 @@ In LightsOut, the player steps on tiles to trigger them on or off. Whenever a ti
 6[X][0][X][0][0]|
 +---------------+
 </pre>
-Because C3 is unlit (O), it lights up, but it also triggers the C1, B2, D2 and C3 - everything around it. After the move, the puzzle looks like this:
+Because C2 is unlit (O), it lights up, but it also triggers the C1, B2, D2 and C3 - everything around it. After the move, the puzzle looks like this:
 <pre>
 +-A--B--C--D--E-+
 1[0][0][X][0][0]|
