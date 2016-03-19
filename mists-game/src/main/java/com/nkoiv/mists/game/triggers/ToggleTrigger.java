@@ -8,7 +8,9 @@ package com.nkoiv.mists.game.triggers;
 import com.nkoiv.mists.game.gameobject.MapObject;
 
 /**
- * Toggle a MapObject (trigger ID 0 on the target) upon triggering 
+ * Toggle a MapObject (trigger ID 0 on the target) upon triggering
+ * Basically meant for remote-toggling of things. Like a switch to open
+ * door or whatnot.
  * @author nikok
  */
 public class ToggleTrigger implements Trigger {
@@ -23,7 +25,13 @@ public class ToggleTrigger implements Trigger {
         String s = "Trigger to toggle "+targetMob.getName();
         return s;
     }
-
+    
+    /**
+     * Activate the first (ID 0) trigger on the targets
+     * Available Triggers list.
+     * @param toggler MapObject doing the toggling
+     * @return true if toggling was successful
+     */
     @Override
     public boolean toggle(MapObject toggler) {
         Trigger[] targetTriggers = targetMob.getTriggers();
