@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.dialogue.Dialogue;
+import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
@@ -19,11 +20,12 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
+import com.nkoiv.mists.game.puzzle.CircuitPuzzle;
 import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.TileMap;
-import com.nkoiv.mists.game.world.mapgen.LightsOutPuzzle;
+import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -380,20 +382,24 @@ public class LibLoader {
         Mists.logger.info("Generating template for puzzlemap");
         LocationTemplate puzzlearea = new LocationTemplate(4, "Puzzle Area", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
         puzzlearea.map = new TileMap("/mapdata/puzzlearea.map");
-        //Puzzle 1
+        //LightsOut Puzzle 1
         
         MapObject[] puzzle1 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 4, Mists.TILESIZE, 20*Mists.TILESIZE, 30*Mists.TILESIZE);
         puzzlearea.mobs.addAll(Arrays.asList(puzzle1));
         Puzzle p1 = LightsOutPuzzle.generatePuzzleFromTiles(puzzle1, true, true);
         puzzlearea.puzzles.add(p1);
         
-        //Puzzle 2
+        //LightsOut Puzzle 2
         /*
         MapObject[] puzzle2 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 3, Mists.TILESIZE, 45*Mists.TILESIZE, 25*Mists.TILESIZE);
         puzzlearea.mobs.addAll(Arrays.asList(puzzle2));
         Puzzle p2 = LightsOutPuzzle.generatePuzzleFromTiles(puzzle2, true, true);
         puzzlearea.puzzles.add(p2);
         */
+        
+        //Circuit Puzzle 1
+        CircuitTile[] circuitPuzzle1 = CircuitPuzzle.generateTestPuzzle(10*Mists.TILESIZE, 40*Mists.TILESIZE);
+        puzzlearea.mobs.addAll(Arrays.asList(circuitPuzzle1));
         lib.addTemplate(puzzlearea);
         Mists.logger.info("Puzzlemap template added");
     }

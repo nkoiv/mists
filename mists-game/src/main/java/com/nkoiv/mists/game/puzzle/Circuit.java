@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.puzzle;
 
 import com.nkoiv.mists.game.Direction;
+import java.util.Arrays;
 
 /**
  * Circuit is a part of the Circuit-puzzle.
@@ -35,12 +36,14 @@ public class Circuit {
     */
     private boolean[] poweredFrom;
     
-    private int circuitID; //Identifier within the circuit puzzle
-    
-    public Circuit(int circuitID) {
-        this.circuitID = circuitID;
+    public Circuit(boolean[] openPaths) {
+        this.openPaths = openPaths;
         this.neighbours = new Circuit[4];
         this.poweredFrom = new boolean[4];
+    }
+    
+    public Circuit() {
+        this(new boolean[4]);
     }
     
     /**
@@ -107,17 +110,22 @@ public class Circuit {
         this.poweredFrom[directionNumber] = true;
     }
     
+    /**
+     * Set a neighbour to the selected side.
+     *[ ][N][ ]  [ ][0][ ]
+     *[W][ ][E]  [3][ ][1]
+     *[ ][S][ ]  [ ][2][ ]
+     * @param c
+     * @param side 
+     */
+    public void setNeighbour(Circuit c, int side) {
+        if (side < 0 || side > 3 || c == null) return;
+        this.neighbours[side] = c;
+    }
+    
     public void setInnatePower(boolean alwaysPowered) {
         this.innatePower = alwaysPowered;
         this.hasPower = true;
-    }
-    
-    public void setID(int circuitID) {
-        this.circuitID = circuitID;
-    }
-    
-    public int getID() {
-        return this.circuitID;
     }
     
     public boolean[] getOpenPaths() {
@@ -152,6 +160,34 @@ public class Circuit {
         if (south) openPaths[2] = true;
         if (east) openPaths[1] = true;
         if (west) openPaths[3] = true;
+    }
+    
+    /**
+     * Return the general shape of the circuit
+     * @return 
+     */
+    public String getCircuitShape() {
+        if (Arrays.equals(openPaths,new boolean[]{true, false, true, false})
+            || Arrays.equals(openPaths, new boolean[]{false, true, false, true})) 
+            return "I";
+        if (Arrays.equals(openPaths, new boolean[]{true, true, true, true}))
+            return "X";
+        if (Arrays.equals(openPaths, new boolean[]{true, true, false, false})
+            || Arrays.equals(openPaths, new boolean[]{false, true, true, false})
+            || Arrays.equals(openPaths, new boolean[]{false, false, true, true})
+            || Arrays.equals(openPaths, new boolean[]{true, false, false, true}))
+            return "L";
+        if (Arrays.equals(openPaths, new boolean[]{true, false, true, false})
+            ||Arrays.equals(openPaths, new boolean[]{false, true, true, false})
+            || Arrays.equals(openPaths, new boolean[]{false, false, true, false})
+            || Arrays.equals(openPaths, new boolean[]{false, false, false, true}))
+            return "S";
+        if (Arrays.equals(openPaths, new boolean[]{true, true, true, false})
+            ||Arrays.equals(openPaths, new boolean[]{false, true, true, true})
+            || Arrays.equals(openPaths, new boolean[]{true, false, true, true})
+            || Arrays.equals(openPaths, new boolean[]{true, true, false, true}))
+            return "T";
+        return "S";
     }
     
     /**

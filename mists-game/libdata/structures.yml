@@ -99,6 +99,12 @@ circuitPaths: "S"
 imageLit: "/images/structures/conduit_S_lit.png"
 imageUnlit: "/images/structures/conduit_S_unlit.png"
 ---
+name: "CircuitT"
+type: "CircuitTile"
+circuitPaths: "T"
+imageLit: "/images/structures/conduit_T_lit.png"
+imageUnlit: "/images/structures/conduit_T_unlit.png"
+---
 name: "CircuitO"
 type: "CircuitTile"
 circuitPaths: "O"

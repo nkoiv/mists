@@ -9,8 +9,6 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
-import com.nkoiv.mists.game.puzzle.Puzzle;
-import com.nkoiv.mists.game.puzzle.TileLitRequirement;
 import com.nkoiv.mists.game.triggers.FreezeTilesTrigger;
 import com.nkoiv.mists.game.triggers.PuzzleTrigger;
 import java.util.Random;

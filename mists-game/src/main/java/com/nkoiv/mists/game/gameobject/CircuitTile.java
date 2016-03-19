@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.puzzle.Circuit;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
+import java.util.Arrays;
 import javafx.scene.image.Image;
 
 /**
@@ -63,8 +64,9 @@ public class CircuitTile extends PuzzleTile {
      * @return True if the circuit matched and was added, false if it didn't match.
      */
     public boolean setCircuit(Circuit circuit) {
-        if (circuit.getOpenPaths() == this.openPaths)  {
+        if (Arrays.equals(circuit.getOpenPaths(), this.openPaths))  {
             this.circuit = circuit;
+            if (circuit.isPowered()) this.setLit(true);
             return true;
         } else {
             //The circuit didn't match instantly. Try to rotate around to get it to match
@@ -72,14 +74,20 @@ public class CircuitTile extends PuzzleTile {
         }
     }
     
+    public Circuit getCircuit() {
+        return this.circuit;
+    }
+    
     private boolean rotateAndSetCircuit(Circuit circuit) {
         int tries = 0;
         while (tries < 4) {
             this.rotateCW();
-            if (circuit.getOpenPaths() == this.openPaths) {
+            if (Arrays.equals(circuit.getOpenPaths(),this.openPaths)) {
                 this.circuit = circuit;
+                if (circuit.isPowered()) this.setLit(true);
                 return true;
             }
+            tries++;
         }
         return false;
     }
