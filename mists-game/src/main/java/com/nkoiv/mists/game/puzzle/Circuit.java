@@ -162,7 +162,7 @@ public class Circuit {
         if (this.hasPower) givePowerToNeighbours();
     }
     
-    public void setPaths(boolean north, boolean south, boolean east, boolean west) {
+    public void setPaths(boolean north, boolean east, boolean south, boolean west) {
         this.openPaths = new boolean[4];
         if (north) openPaths[0] = true;
         if (south) openPaths[2] = true;
@@ -195,6 +195,8 @@ public class Circuit {
             || Arrays.equals(openPaths, new boolean[]{true, false, true, true})
             || Arrays.equals(openPaths, new boolean[]{true, true, false, true}))
             return "T";
+        if (Arrays.equals(openPaths, new boolean[]{false, false, false, false}))
+            return "O";
         return "S";
     }
     

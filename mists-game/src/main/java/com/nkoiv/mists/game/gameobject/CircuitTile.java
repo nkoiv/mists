@@ -132,6 +132,10 @@ public class CircuitTile extends PuzzleTile {
         return s;
     }
     
+    public void setPaths(boolean north, boolean east, boolean south, boolean west) {
+        this.openPaths = new boolean[]{north, east, south, west};
+    }
+    
     @Override
     public CircuitTile createFromTemplate() {
         CircuitTile ct = new CircuitTile(this.name, this.openPaths, this.litUpGraphics.getImage(), this.unLitGraphics.getImage());

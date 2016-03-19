@@ -95,7 +95,7 @@ public class CircuitPuzzle {
         //Generate the circuits
         circuits[0][0] = new Circuit(new boolean[]{true, false, true, false});
         circuits[1][0] = new Circuit(new boolean[]{false, true, true, true});
-        circuits[2][0] = new Circuit(new boolean[]{false, false, true, false});
+        circuits[2][0] = new Circuit(new boolean[]{false, false, false, false});
         circuits[0][1] = new Circuit(new boolean[]{true, false, true, false});
         circuits[1][1] = new Circuit(new boolean[]{true, false, true, false});
         circuits[2][1] = new Circuit(new boolean[]{false, true, true, false});
@@ -106,12 +106,11 @@ public class CircuitPuzzle {
         circuits[1][3] = new Circuit(new boolean[]{false, true, true, false});
         circuits[2][3] = new Circuit(new boolean[]{true, false, true, false});
         circuits[0][4] = new Circuit(new boolean[]{false, true, true, false});
-        circuits[1][4] = new Circuit(new boolean[]{false, false, true, false});
+        circuits[1][4] = new Circuit(new boolean[]{false, false, false, false});
         circuits[2][4] = new Circuit(new boolean[]{false, true, true, false});
         
         //Power up the circuit at the bottom row
         circuits[1][4].setInnatePower(true);
-        circuits[2][0].setInnatePower(true);
         linkCircuitsToNeighbours(circuits);
         CircuitTile[] tiles = generateTileArrayFromCircuitMap(circuits, 15);
         for (CircuitTile t : tiles) {
@@ -189,12 +188,21 @@ public class CircuitPuzzle {
             case "S":
                 tile = (CircuitTile)Mists.structureLibrary.create("CircuitS");
                 break;
+            case "O":
+                tile = (CircuitTile)Mists.structureLibrary.create("CircuitO");
+                tile.setPaths(false, false, false, false); //temporarily disable paths to get a match with the circuit
+                break;
             default: 
                 tile = (CircuitTile)Mists.structureLibrary.create("CircuitS");
                 break;
         }
         Mists.logger.info("Generated a tile: "+tile.getName());
         if (!tile.setCircuit(c)) Mists.logger.warning("Failure in connecting a Circuit to Tile in puzzle generation");
+        if (shape.equals("O")) {
+            //O-style starting points default at {false,false,false,false} - give it an extra corridor (south);
+            tile.setPaths(false, false, true, false);
+            c.setPaths(false, false, true, false);
+        }
         return tile;
     }
     
