@@ -6,7 +6,9 @@
 package com.nkoiv.mists.game.puzzle;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * Circuit is a part of the Circuit-puzzle.
@@ -49,13 +51,10 @@ public class Circuit {
     /**
      * Give power to the circuit from a given direction
      * if this circuit has a path to that direction, its powered up.
-     * @param d Direction the power is coming from
+     * @param directionNumber Direction the power is coming from: N=0, E=1, S=2, W=3
      */
-    public void getPowerFrom(Direction d) {
-        if (d == Direction.UP && openPaths[0]) this.powerUp(0);
-        if (d == Direction.RIGHT && openPaths[1]) this.powerUp(1);
-        if (d == Direction.DOWN && openPaths[2]) this.powerUp(2);
-        if (d == Direction.LEFT && openPaths[3]) this.powerUp(3);
+    public void getPowerFrom(int directionNumber) {
+        this.powerUp(directionNumber);
     }
     
     /**
@@ -63,10 +62,11 @@ public class Circuit {
      */
     public void givePowerToNeighbours() {
         if (!hasPower) return;
-        if (neighbours[0] != null && openPaths[0]) neighbours[0].getPowerFrom(Direction.DOWN);
-        if (neighbours[1] != null && openPaths[1]) neighbours[1].getPowerFrom(Direction.LEFT);
-        if (neighbours[2] != null && openPaths[2]) neighbours[2].getPowerFrom(Direction.UP);
-        if (neighbours[3] != null && openPaths[3]) neighbours[3].getPowerFrom(Direction.RIGHT);
+        for (int i = 0; i < this.openPaths.length; i++) {
+            if (openPaths[i] && !poweredFrom[i]) {
+                if (neighbours[i] != null) neighbours[i].getPowerFrom(oppositeSide(i));
+            }
+        }
     }
     
     /**
@@ -74,7 +74,7 @@ public class Circuit {
      */
     private void stopPoweringNeighbours() {
         for (int i = 0; i < neighbours.length; i++) {
-            neighbours[i].powerDown(oppositeSide(i));
+            if (neighbours[i] != null) neighbours[i].powerDown(oppositeSide(i));
         }
     }
     
@@ -93,21 +93,19 @@ public class Circuit {
     }
     
     private void powerDown(int directionNumber) {
+        if (!this.hasPower) return;
         if (this.innatePower) return;
         this.poweredFrom[directionNumber] = false;
-        boolean stillPowered = false;
-        //Loop through the poweredFrom dictions to see if someone is still giving us power
-        for (boolean b : this.poweredFrom) {
-            if (b) stillPowered = true;
-        }
-        this.hasPower = stillPowered;
+        this.hasPower = stillHasPower();
         if (!hasPower) stopPoweringNeighbours();
     }
     
     private void powerUp(int directionNumber) {
+        Mists.logger.info("Circuit "+Arrays.toString(this.openPaths)+" powering up from "+directionNumber);
         if (this.innatePower) return;
-        this.hasPower = true;
         this.poweredFrom[directionNumber] = true;
+        if (this.openPaths[directionNumber]) this.hasPower = true;
+        if (this.hasPower) givePowerToNeighbours();
     }
     
     /**
@@ -132,6 +130,14 @@ public class Circuit {
         return this.openPaths;
     }
     
+    private boolean stillHasPower() {
+        if (this.innatePower) return true;
+        for (int i = 0; i< this.openPaths.length; i++) {
+            if (this.openPaths[i] && this.poweredFrom[i]) return true;
+        }
+        return false;
+    }
+    
     public void rotateCW() {
         boolean[] newPaths = new boolean[4];
         if (openPaths[0]) newPaths[1] = true;
@@ -139,7 +145,8 @@ public class Circuit {
         if (openPaths[2]) newPaths[3] = true;
         if (openPaths[3]) newPaths[0] = true;
         this.openPaths = newPaths;
-        stopPoweringNeighbours();
+        this.hasPower = stillHasPower();
+        if (!this.hasPower) stopPoweringNeighbours();
         if (this.hasPower) givePowerToNeighbours();
     }
     
@@ -150,7 +157,8 @@ public class Circuit {
         if (openPaths[2]) newPaths[1] = true;
         if (openPaths[3]) newPaths[2] = true;
         this.openPaths = newPaths;
-        stopPoweringNeighbours();
+        this.hasPower = stillHasPower();
+        if (!this.hasPower) stopPoweringNeighbours();
         if (this.hasPower) givePowerToNeighbours();
     }
     
@@ -190,6 +198,10 @@ public class Circuit {
         return "S";
     }
     
+    public boolean[] getPowerChart() {
+        return this.poweredFrom;
+    }
+    
     /**
      * Get the side number for the opposite side to the one given
      * [ ][N][ ]  [ ][0][ ]
@@ -204,7 +216,10 @@ public class Circuit {
             case 1: return 3;
             case 2: return 0;
             case 3: return 1;
-            default: return 0;
+            default: {
+                Mists.logger.log(Level.WARNING, "Failure assigning opposite side in circuit puzzle for: {0}", sidenumber);
+                return -1;
+            }
         }
     }
     

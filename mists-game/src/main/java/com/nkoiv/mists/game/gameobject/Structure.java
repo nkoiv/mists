@@ -94,6 +94,7 @@ public class Structure extends MapObject {
         this.setPosition(xPos+(this.getSprite().getWidth()/2), yPos+(this.getSprite().getHeight()/2));
     }
     
+    @Override
     public String[] getInfoText() {
         double lightlevel = 0;
         if (this.location != null) lightlevel = location.getLightLevel(this.getCenterXPos(), this.getCenterYPos());

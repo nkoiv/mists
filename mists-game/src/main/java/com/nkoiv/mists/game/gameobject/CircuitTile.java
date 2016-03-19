@@ -5,12 +5,15 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.puzzle.Circuit;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.RotateTrigger;
 import com.nkoiv.mists.game.triggers.Trigger;
 import java.util.Arrays;
+import java.util.logging.Level;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
@@ -66,6 +69,7 @@ public class CircuitTile extends PuzzleTile {
      * @return True if the circuit matched and was added, false if it didn't match.
      */
     public boolean setCircuit(Circuit circuit) {
+        Mists.logger.log(Level.INFO, "Setting circuit to tile. Tile setup:{0}. Circuit setup: {1}", new Object[]{Arrays.toString(this.openPaths), Arrays.toString(circuit.getOpenPaths())});
         if (Arrays.equals(circuit.getOpenPaths(), this.openPaths))  {
             this.circuit = circuit;
             if (circuit.isPowered()) this.setLit(true);
@@ -101,6 +105,31 @@ public class CircuitTile extends PuzzleTile {
     @Override
     public Trigger[] getTriggers() {
         return new Trigger[]{new RotateTrigger(this)};
+    }
+    
+    @Override
+    public void render(double xOffset, double yOffset, GraphicsContext gc) {
+        if (this.circuit != null) {
+            if (this.isLit && !this.circuit.isPowered()) this.setLit(false);
+            if (!this.isLit && this.circuit.isPowered()) this.setLit(true);
+        } 
+        super.render(xOffset, yOffset, gc);
+    }
+    
+    @Override
+    public String[] getInfoText() {
+        double lightlevel = 0;
+        if (this.location != null) lightlevel = location.getLightLevel(this.getCenterXPos(), this.getCenterYPos());
+        String[] s = new String[]{
+            this.name,
+            "ID "+this.IDinLocation+" @ "+this.location.getName(),
+            "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
+            "LightLevel:"+lightlevel,
+            "Circuit:"+Arrays.toString(this.circuit.getOpenPaths()),
+            "PoweredFrom: "+Arrays.toString(this.circuit.getPowerChart()),
+            "Power: "+this.circuit.isPowered()
+        };
+        return s;
     }
     
     @Override

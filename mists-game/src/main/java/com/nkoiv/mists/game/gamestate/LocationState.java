@@ -441,8 +441,11 @@ public class LocationState implements GameState {
             if (targetMob!=null) { 
                 if (game.getCurrentLocation().getTargets().contains(targetMob)) {
                     //There already is the same mob targetted, so reselection should clear the targetting
-                    game.getCurrentLocation().clearTarget();
-                    this.removeUIComponent("InfoBox");
+                    //... unless it was for contextAction
+                    if (!contextAction.setTriggerOnMobIfInRange(targetMob)) {
+                        game.getCurrentLocation().clearTarget();
+                        this.removeUIComponent("InfoBox");
+                    }
                 }
                 else {
                     Mists.logger.log(Level.INFO, "Targetted {0}", targetMob.toString());

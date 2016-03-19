@@ -208,6 +208,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
             case "I": openPaths = new boolean[]{true, false, true, false}; break;
             case "L": openPaths = new boolean[]{false, true, true, false}; break;
             case "X": openPaths = new boolean[]{true, true, true, true}; break;
+            case "T": openPaths = new boolean[]{false, true, true, true}; break;
             case "S": openPaths = new boolean[]{false, false, true, false}; break;
             case "O": openPaths = new boolean[]{false, false, true, false}; break;
         }

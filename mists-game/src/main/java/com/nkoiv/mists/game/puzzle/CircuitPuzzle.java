@@ -58,7 +58,7 @@ public class CircuitPuzzle {
         if (c.isInnatePowered()) this.innatePoweredCircuits.add(c);
     }
     
-    public static CircuitTile[] generateCircuitPuzzle(int widthInTiles, int heightInTiles) {
+    public static CircuitTile[] generateRandomCircuitPuzzle(int widthInTiles, int heightInTiles) {
         //DrunkenWalk a path that works, then generate random fillers around it
         Random rnd = new Random();
         int circuitsInPuzzle = 0;
@@ -111,6 +111,7 @@ public class CircuitPuzzle {
         
         //Power up the circuit at the bottom row
         circuits[1][4].setInnatePower(true);
+        circuits[2][0].setInnatePower(true);
         linkCircuitsToNeighbours(circuits);
         CircuitTile[] tiles = generateTileArrayFromCircuitMap(circuits, 15);
         for (CircuitTile t : tiles) {
@@ -124,9 +125,9 @@ public class CircuitPuzzle {
         for (int x = 0; x < circuitMap.length; x++) {
             for (int y = 0; y < circuitMap[0].length; y++) {
                 if (circuitMap[x][y] != null) {
-                    if (y<circuitMap[0].length-1) circuitMap[x][y].setNeighbour(circuitMap[x][y+1],0); //Set top neighbour
+                    if (y<circuitMap[0].length-1) circuitMap[x][y].setNeighbour(circuitMap[x][y+1],2); //Set top neighbour
                     if (x<circuitMap.length-1) circuitMap[x][y].setNeighbour(circuitMap[x+1][y],1); //Set right neighbour
-                    if (y>0) circuitMap[x][y].setNeighbour(circuitMap[x][y-1],2); //Set bottom neighbour
+                    if (y>0) circuitMap[x][y].setNeighbour(circuitMap[x][y-1],0); //Set bottom neighbour
                     if (x>0) circuitMap[x][y].setNeighbour(circuitMap[x-1][y],3); //Set left neighbour   
                 }
             }

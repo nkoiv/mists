@@ -146,10 +146,14 @@ public class ContextAction {
         return mobs;
     }
     
-    public void setTriggerOnMobIfInRange(MapObject mob) {
+    public boolean setTriggerOnMobIfInRange(MapObject mob) {
         for (int i = 0; i < this.availableTriggers.size(); i++) {
-            if (availableTriggers.get(i).getTarget().equals(mob)) this.currentTrigger = i;
+            if (availableTriggers.get(i).getTarget().equals(mob)) {
+                this.currentTrigger = i;
+                return true;
+            }
         }
+        return false;
     }
     
     public Trigger getCurrentTrigger() {
