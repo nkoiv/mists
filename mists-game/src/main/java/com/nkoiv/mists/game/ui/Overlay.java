@@ -152,7 +152,7 @@ public abstract class Overlay {
         gc.save();
         gc.setLineDashes(4, 6);
         gc.setStroke(Color.BLUE);
-        gc.strokeRect(xCoor, yCoor, width, height);
+        gc.strokeRect(xCoor*Mists.graphicScale, yCoor*Mists.graphicScale, width*Mists.graphicScale, height*Mists.graphicScale);
         gc.restore();
     }
     
@@ -170,7 +170,7 @@ public abstract class Overlay {
             xPos = mob.getCenterXPos()-mob.getLocation().getLastxOffset();
             yPos = mob.getCenterYPos()-mob.getLocation().getLastyOffset();
         }
-        gc.drawImage(triggerImage, xPos, yPos);
+        gc.drawImage(triggerImage, xPos*Mists.graphicScale, yPos*Mists.graphicScale);
     }
     
     public static void drawToggleIcon(GraphicsContext gc, MapObject mob) {
