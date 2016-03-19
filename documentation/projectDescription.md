@@ -118,6 +118,48 @@ ID_USE_TRIGGER = 41; //1 argument: id of the mapobject to toggle
 
 Actions are more complicated and generally more focused than tasks. They're also instantiable and thus customizable per owner. While Tasks govern basic things such as moving and handling items, Actions contain various combat manouvres, spells and the sort. Available Actions per Creature are stored with the creature, along with their cooldowns, resource costs etc. Using an Action is a Task itself.
 
+###Puzzles
+
+Puzzles in a location are managed by a PuzzleManager instance. This puzzlemanager houses the puzzles, checks them for completion and triggers the effects tied to them when appropriate. The Puzzle Manager is called inside Locations tick(), but it generally acts only 4 times per second (250ms delay) to save CPU. No one solves puzzles faster than that.
+
+PuzzleManager can be set to trigger once (perhaps giving a reward), several times (maybe a number of rewards can be constructed?) or always and every time it's complete - for example to open a door at players behest. These are done by Puzzle-specific "Triggers", with the ability to "Lock on completion" and tracking of "times triggered".
+
+####LightOut puzzle
+
+![](https://github.com/nkoiv/mists/blob/master/documentation/lightsout_puzzle.png "LightsOut puzzle is about pressing buttons in correct order")
+
+In LightsOut, the player steps on tiles to trigger them on or off. Whenever a tile is tirggered, it also triggers the (up to) four surrounding tiles. Lets assume the game grid is at the following setup (X implying lights are on, O implying they are out) and player steps on tile C3:
+<pre>
++-A--B--C--D--E-+
+1[0][0][0][0][0]|
+2[0][X][0][X][X]|
+3[0][X][X][X][0]|
+4[X][0][0][X][0]|
+5[X][0][0][0][0]|
+6[X][0][X][0][0]|
++---------------+
+</pre>
+Because C3 is unlit (O), it lights up, but it also triggers the C1, B2, D2 and C3 - everything around it. After the move, the puzzle looks like this:
+<pre>
++-A--B--C--D--E-+
+1[0][0][X][0][0]|
+2[0][0][X][0][X]|
+3[0][X][0][X][0]|
+4[X][0][0][X][0]|
+5[X][0][0][0][0]|
+6[X][0][X][0][0]|
++---------------+
+</pre>
+
+Goal of the puzzle is generally to either turn everything on, or everything off. However since the puzzle manager can monitor the puzzle status in various ways, it would be possible to require the player to draw a specific shape just as fine. "PuzzleRequirement" objects monitor these requirements, as is the case for "TileLitRequirement" that is generally used for LightsOut puzzle.
+
+####Circuit puzzle
+
+![](https://github.com/nkoiv/mists/blob/master/documentation/circuit_puzzle.png "Circuits puzzle has the player route power through rotating circuits")
+
+In the Circuits puzzle the goal for the player is to route power through the tiles by rotating them. Each tile has a number of entrance points (0-4) and if it gets power from one, it gives it out at the other end.
+Several Puzzles can monitor the same set of tiles, perhaps to give different Triggers depending on which circuits are powered.
+
 ###Pathfinding
 
 PathFinder.java is the class governing the general pathfinding.
