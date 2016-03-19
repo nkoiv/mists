@@ -146,7 +146,7 @@ public class Circuit {
         if (openPaths[3]) newPaths[0] = true;
         this.openPaths = newPaths;
         this.hasPower = stillHasPower();
-        if (!this.hasPower) stopPoweringNeighbours();
+        stopPoweringNeighbours();
         if (this.hasPower) givePowerToNeighbours();
     }
     
@@ -158,7 +158,7 @@ public class Circuit {
         if (openPaths[3]) newPaths[2] = true;
         this.openPaths = newPaths;
         this.hasPower = stillHasPower();
-        if (!this.hasPower) stopPoweringNeighbours();
+        stopPoweringNeighbours();
         if (this.hasPower) givePowerToNeighbours();
     }
     
