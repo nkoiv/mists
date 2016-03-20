@@ -46,6 +46,7 @@ public class CircuitTile extends PuzzleTile {
     
     public void rotateCW() {
         if (this.circuit != null) this.circuit.rotateCW();
+        this.rotatePathsCW();
         this.gRotation = this.gRotation + 90;
         if (this.gRotation >= 360) this.gRotation = 0;
         this.litUpGraphics.setRotation(this.gRotation);
@@ -54,10 +55,29 @@ public class CircuitTile extends PuzzleTile {
     
     public void rotateCCW() {
         if (this.circuit != null) this.circuit.rotateCCW();
+        this.rotatePathsCCW();
         this.gRotation = this.gRotation - 90;
         if (this.gRotation < 0) this.gRotation = 270;
         this.litUpGraphics.setRotation(this.gRotation);
         this.unLitGraphics.setRotation(this.gRotation);
+    }
+    
+     private void rotatePathsCW() {
+        boolean[] newPaths = new boolean[4];
+        if (openPaths[0]) newPaths[1] = true;
+        if (openPaths[1]) newPaths[2] = true;
+        if (openPaths[2]) newPaths[3] = true;
+        if (openPaths[3]) newPaths[0] = true;
+        this.openPaths = newPaths;
+    }
+    
+    private void rotatePathsCCW() {
+        boolean[] newPaths = new boolean[4];
+        if (openPaths[0]) newPaths[3] = true;
+        if (openPaths[1]) newPaths[0] = true;
+        if (openPaths[2]) newPaths[1] = true;
+        if (openPaths[3]) newPaths[2] = true;
+        this.openPaths = newPaths;
     }
     
     /**

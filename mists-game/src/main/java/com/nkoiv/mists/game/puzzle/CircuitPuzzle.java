@@ -80,7 +80,7 @@ public class CircuitPuzzle {
     
     /**
      * Generate a simple test puzzle for testing
-     * [I][T][S]
+     * [L][T][S]
      * [I][I][L]
      * [L][I][X]
      * [S][L][I]
@@ -93,7 +93,7 @@ public class CircuitPuzzle {
         Mists.logger.info("Generating a new Test Puzzle for CircuitPuzzle");
         Circuit[][] circuits = new Circuit[3][5];
         //Generate the circuits
-        circuits[0][0] = new Circuit(new boolean[]{true, false, true, false});
+        circuits[0][0] = new Circuit(new boolean[]{false, true, true, false});
         circuits[1][0] = new Circuit(new boolean[]{false, true, true, true});
         circuits[2][0] = new Circuit(new boolean[]{false, false, false, false});
         circuits[0][1] = new Circuit(new boolean[]{true, false, true, false});
@@ -116,6 +116,8 @@ public class CircuitPuzzle {
         for (CircuitTile t : tiles) {
             t.setPosition(t.getXPos()+xCoordinate, t.getYPos()+yCoordinate);
         }
+        //Randomize the puzzle rotations
+        randomizePuzzleTileRotations(tiles);
         return tiles;
     }
     
@@ -133,6 +135,31 @@ public class CircuitPuzzle {
         }
     }
     
+    /**
+     * Rotate each circuit in a puzzle for a number of times (0-3)
+     * @param circuitMap Array[] with the circuits in it
+     */
+    private static void randomizePuzzleRotations(Circuit[][] circuitMap) {
+        Random rnd = new Random();
+        for (int i = 0; i < circuitMap.length; i++) {
+            for (int j = 0; j < circuitMap[0].length; j++) {
+                int rotations = rnd.nextInt(4);
+                for (int e = 0; e < rotations; e++) {
+                    circuitMap[i][j].rotateCW();
+                }
+            }
+        }   
+    }
+    
+    private static void randomizePuzzleTileRotations(CircuitTile[] circuitTileMap) {
+         Random rnd = new Random();
+        for (CircuitTile tile : circuitTileMap) {
+            int rotations = rnd.nextInt(4);
+            for (int e = 0; e < rotations; e++) {
+                tile.rotateCW();
+            }
+        }  
+    }
     
     /**
      * Take the circuits from a map and generate an array with
