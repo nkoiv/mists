@@ -291,17 +291,19 @@ public abstract class Toolkit {
         PixelWriter pw = compose.getPixelWriter();
         
         for (Image image : images) {
-            int xOffset =0;
-            int yOffset =0;
-            if (centerImages) {
-                if (image.getWidth() < images[0].getWidth()) xOffset = (int)((images[0].getWidth() - image.getWidth())/2);
-                if (image.getHeight() < images[0].getHeight()) yOffset = (int)((images[0].getHeight() - image.getHeight())/2);
-            }
-            PixelReader pr = image.getPixelReader();
-            for(int y=0; y<Math.min(image.getHeight(), images[0].getHeight()); y++){
-                for(int x=0; x<Math.min(image.getWidth(), images[0].getWidth()); x++){
-                    Color color = pr.getColor(x, y);
-                    if (pr.getArgb(x, y) >> 28 != 0) pw.setColor((x+xOffset), (int)(y+yOffset), color);
+            if (image != null) {
+                int xOffset =0;
+                int yOffset =0;
+                if (centerImages) {
+                    if (image.getWidth() < images[0].getWidth()) xOffset = (int)((images[0].getWidth() - image.getWidth())/2);
+                    if (image.getHeight() < images[0].getHeight()) yOffset = (int)((images[0].getHeight() - image.getHeight())/2);
+                }
+                PixelReader pr = image.getPixelReader();
+                for(int y=0; y<Math.min(image.getHeight(), images[0].getHeight()); y++){
+                    for(int x=0; x<Math.min(image.getWidth(), images[0].getWidth()); x++){
+                        Color color = pr.getColor(x, y);
+                        if (pr.getArgb(x, y) >> 28 != 0) pw.setColor((x+xOffset), (int)(y+yOffset), color);
+                    }
                 }
             }
         }

@@ -2,6 +2,9 @@
 symbol: "#"
 structure: "DungeonWall"
 ---
+symbol: "¤"
+structure: "VillageWall"
+---
 symbol: "+"
 structure: "DungeonDoor"
 ---

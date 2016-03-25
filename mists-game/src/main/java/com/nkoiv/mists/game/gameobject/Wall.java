@@ -81,6 +81,7 @@ public class Wall extends Structure {
     }
     
     public void updateNeighbours() {
+        boolean noNeedForLowerDiagonals = false; //Flag if [6] is set, in which case [5] and [7] are not needed
         if (this.useExtrasForWalls == false) {
             if (this.wallimages == null) this.generateWallImages(this.wallparts);
             this.getSprite().setImage(this.composeImage());
@@ -151,6 +152,7 @@ public class Wall extends Structure {
                 }
                 //this.addExtra(s, 0, 0);
                 this.getSprite().setImage(s.getImage());
+                noNeedForLowerDiagonals = true;
             }
             //Diagonals
             
@@ -174,7 +176,7 @@ public class Wall extends Structure {
                     WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
                     s = new Sprite(leftWall);
                 }
-                this.addExtra(s, 0, 0);
+                if (!noNeedForLowerDiagonals) this.addExtra(s, 0, 0);
             }
             if (neighbours[7] ==false) {
                 Sprite s;
@@ -185,7 +187,7 @@ public class Wall extends Structure {
                     WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
                     s = new Sprite(rightWall);
                 }
-                this.addExtra(s, 0, 0);
+                if (!noNeedForLowerDiagonals) this.addExtra(s, 0, 0);
             }
             if (neighbours[2] ==false) {
                 Sprite s;
@@ -207,10 +209,15 @@ public class Wall extends Structure {
         Image[] extraImages = new Image[9];
         extraImages[0] = Mists.graphLibrary.getImage("black");
         int n = 1;
+        boolean noNeedForLowerCardinals = true; //neighbours[6] //TODO: Do we EVER need the lower corners?
         for (int i = 0; i < this.neighbours.length; i++) {
             if (this.neighbours[i] == false) {
-                extraImages[n] = this.wallimages[i];
-                n++;
+                if ((i == 5 || i == 7) && noNeedForLowerCardinals) {
+                    //No need to add lower right or lower left corner if lower center is present
+                } else {
+                    extraImages[n] = this.wallimages[i];
+                    n++;
+                }
             }
         }
         if (n == 0) return Mists.graphLibrary.getImage("blank");

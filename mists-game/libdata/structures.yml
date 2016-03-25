@@ -4,6 +4,11 @@ type: "Wall"
 image: "/images/structures/dwall.png"
 collisionLevel: 1
 ---
+name: "VillageWall"
+type: "Wall"
+image: "/images/structures/villagewall.png"
+collisionLevel: 1
+---
 name: "Tree"
 type: "GenericStructure"
 image: "/images/tree_stump.png"
