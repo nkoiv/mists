@@ -16,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 
 /**
  * LightsRenderer takes in a bunch of mapObjects
@@ -93,6 +92,31 @@ public class LightsRenderer {
         double drawY = (yCoor/lightscale)-light.getHeight()/(lightscale*2);
         shadowCanvas.drawImage(light, drawX, drawY);
         shadowCanvas.restore();
+    }
+    
+    /**
+     * Check if the given area contains any tiles
+     * that have been made visible by the player vision
+     * (via paintVision())
+     * @param xCoor upper left corner
+     * @param yCoor upper left corner
+     * @param width width of the area
+     * @param height height of the area
+     * @return 
+     */
+    public boolean containsVisibleTiles(double xCoor, double yCoor, double width, double height) {
+        int tileXStart = (int)(xCoor / Mists.TILESIZE);
+        int tileYStart = (int)(yCoor / Mists.TILESIZE);
+        int tileXEnd = (int)((xCoor+width) / Mists.TILESIZE);
+        int tileYEnd = (int)((yCoor+height) / Mists.TILESIZE);
+        if (tileXStart < 0 || tileYStart < 0) return false;
+        if (tileXEnd > lightmap.length || tileYEnd > lightmap[0].length) return false;
+        for (int x = tileXStart; x < tileXEnd; x++) {
+            for (int y = tileYStart; y < tileYEnd; y++) {
+                if (lightmap[x][y] > this.minLightLevel) return true;
+            }
+        }
+        return false;
     }
     
     private void clearLightmap() {

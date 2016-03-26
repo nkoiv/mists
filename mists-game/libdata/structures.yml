@@ -1,7 +1,17 @@
 ---
-name: "DungeonWall"
+name: "StoneWall1"
 type: "Wall"
-image: "/images/structures/dwall.png"
+image: "/images/structures/stonewall1.png"
+collisionLevel: 1
+---
+name: "StoneWall2"
+type: "Wall"
+image: "/images/structures/stonewall2.png"
+collisionLevel: 1
+---
+name: "StoneWall3"
+type: "Wall"
+image: "/images/structures/stonewall3.png"
 collisionLevel: 1
 ---
 name: "VillageWall"
@@ -63,6 +73,26 @@ name: "Rock"
 type: "GenericStructure"
 image: "/images/block.png"
 collisionLevel: 1
+---
+name: "Barrel"
+type: "GenericStructure"
+image: "/images/structures/barrel.png"
+collisionLevel: 1
+---
+name: "Chest"
+type: "GenericStructure"
+image: "/images/structures/chest3.png"
+collisionLevel: 1
+---
+name: "Bookcase"
+type: "GenericStructure"
+image: "/images/structures/bookcase_base.png"
+collisionLevel: 1
+extras:
+ graph:
+  image: "/images/structures/bookcase_full.png"
+  xOffset: 0
+  yOffset: -13
 ---
 name: "DungeonStairs"
 type: "MapEntrance"

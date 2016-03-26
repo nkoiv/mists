@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.puzzle.Puzzle;
+import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
@@ -71,6 +72,14 @@ public class LocationLibrary  {
     }
     
 
+    /**
+     * Generate a location out of a template
+     * TODO: Currently the TEMPLATE resources are directly
+     * accessed, resulting in zero reusability for the same template
+     * Start using .createFromTemplate() on things?
+     * @param template
+     * @return 
+     */
     private Location generateLocation(LocationTemplate template) {
         Location l;
         if (template.map == null) {
@@ -96,10 +105,17 @@ public class LocationLibrary  {
             l.addMapObject(mob);
             if (mob.getXPos() == 0 && mob.getYPos() == 0) l.setMobInRandomOpenSpot(mob);
         }
+        Mists.logger.info("Initializing puzzles for the location");
         for (Puzzle p : template.puzzles) {
             l.getPuzzleManager().addPuzzle(p);
         }
-        Mists.logger.info("Template mobs added, generating stairs");
+        Mists.logger.info("Creating roofs on structures");
+        for (Roof r : template.roofs) {
+            l.addRoof(r);
+        }
+        Mists.logger.info("Roofs done, generating stairs");
+        //TODO: Stop randomizing starting location
+        //TODO: Stairs isnt the only way to access locations, right?
         MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
         l.addMapObject(stairs);
         l.setMobInRandomOpenSpot(stairs);
@@ -143,6 +159,7 @@ public class LocationLibrary  {
         public double height;
         public ArrayList<MapObject> mobs;
         public ArrayList<Puzzle> puzzles;
+        public ArrayList<Roof> roofs;
         public double lightlevel;
         
         public LocationTemplate(int ID, String name, double width, double height) {
@@ -150,6 +167,7 @@ public class LocationLibrary  {
             this.width = width; this.height = height;
             this.mobs = new ArrayList();
             this.puzzles = new ArrayList();
+            this.roofs = new ArrayList();
         }
 
         

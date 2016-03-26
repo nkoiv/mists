@@ -1,8 +1,14 @@
 ---
 symbol: "#"
-structure: "DungeonWall"
+structure: "StoneWall1"
 ---
-symbol: "¤"
+symbol: "W"
+structure: "StoneWall2"
+---
+symbol: "w"
+structure: "StoneWall3"
+---
+symbol: "%"
 structure: "VillageWall"
 ---
 symbol: "+"
@@ -13,6 +19,18 @@ structure: "DungeonStairs"
 ---
 symbol: "T"
 structure: "Tree1"
+---
+symbol: "t"
+structure: "Tree2"
+---
+symbol: "B"
+structure: "Bookcase"
+---
+symbol: "b"
+structure: "Barrel"
+---
+symbol: "C"
+structure: "Chest"
 ---
 symbol: "R"
 structure: "PuzzleRune"

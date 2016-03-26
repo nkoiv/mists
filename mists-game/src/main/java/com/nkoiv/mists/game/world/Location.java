@@ -20,6 +20,7 @@ import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.puzzle.PuzzleManager;
+import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
@@ -60,6 +61,8 @@ public class Location extends Flags implements Global {
     public boolean loading;
     private final HashMap<Integer, MapObject> mobs = new HashMap<>();
     private int nextID = 1;
+    
+    private ArrayList<Roof> roofs;
     
     private List<MapObject> targets;
     private String name;
@@ -131,6 +134,7 @@ public class Location extends Flags implements Global {
         this.shadows = new RayShadows();
         this.targets = new ArrayList<>();
         this.spatial = new HashMap<>();
+        this.roofs = new ArrayList<>();
         //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
         Mists.logger.log(Level.INFO, "Map ({0}x{1}) localized", new Object[]{map.getWidth(), map.getHeight()});
     }
@@ -490,6 +494,18 @@ public class Location extends Flags implements Global {
         }
         p.setLocation(this);
         p.setPosition(xPos, yPos);
+    }
+    
+    public void addRoof(Roof r) {
+        this.roofs.add(r);
+    }
+    
+    public ArrayList<Roof> getRoofs() {
+        return this.roofs;
+    }
+    
+    public void clearRoofs() {
+        this.roofs.clear();
     }
     
     private void setMap(GameMap m) {
@@ -1085,6 +1101,14 @@ public class Location extends Flags implements Global {
         return collidedDirections;
     }
     
+    /**
+     * General render method for the location, called 60 times per second
+     * by default. Render only updates the given GraphicsContext with what's
+     * on the current viewport (dictated by xOffset, yOffset and screen width/height)
+     * All the location logic should be handled under tick()
+     * @param gc GraphicsContext for the location graphics
+     * @param sc Shadow layer drawn on top of the graphics
+     */
     public void render (GraphicsContext gc, GraphicsContext sc) {
         /*
         * Update Offsets first to know which parts of the location are drawn
@@ -1097,10 +1121,28 @@ public class Location extends Flags implements Global {
         this.renderLights(gc, sc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderStructureExtras(gc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderExtras(gc, xOffset, yOffset);
+        this.renderRoofs(gc, xOffset, yOffset);
     }
     
 
-    
+    /**
+     * Render the Roof graphics on top of anything that's on the screen
+     * and under a roof. If a player has vision (or resides) under a roof,
+     * the roof should be drawn transparent or translucent
+     * @param gc GraphicsContext the location is being rendered on
+     * @param xOffset xOffset for camera position on the location
+     * @param yOffset yOffset for the camera position on the location
+     */
+    private void renderRoofs(GraphicsContext gc, double xOffset, double yOffset) {
+        for (Roof r : this.roofs) {
+            //No need to render the roof if no part of it is on visible area
+            if (xOffset> (r.getXCoor()+r.getWidth()) || yOffset > (r.getYCoor()+r.getHeigth())) continue;
+            if (xOffset+gc.getCanvas().getWidth() < r.getXCoor() || yOffset+gc.getCanvas().getHeight() < r.getYCoor()) continue;
+            //Continue with rendering the roof
+            boolean v = lights.containsVisibleTiles(r.getHiddenArea().minX, r.getHiddenArea().minY, r.getHiddenArea().maxX - r.getHiddenArea().minX, r.getHiddenArea().maxY -r.getHiddenArea().minY);
+            r.renderWithPlayerVision(v, xOffset, yOffset, gc);
+        }
+    }
     
     //TODO: Move this to a separate class
     private void renderLights(GraphicsContext gc, GraphicsContext sc, List<MapObject> MOBsOnScreen, double xOffset, double yOffset) {
@@ -1118,7 +1160,9 @@ public class Location extends Flags implements Global {
         shadows.paintLights(sc, xOffset, yOffset);
         */
         
-        //lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
+        //Calculate the player vision range to see what's hidden behind walls
+        lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
+        //Render black blocks on top of hidden segments
         //lights.renderLightMap(gc, xOffset, yOffset);
         
         sc.setFill(Color.BLACK);
@@ -1227,6 +1271,7 @@ public class Location extends Flags implements Global {
         if (!renderedMOBs.isEmpty()) {
             for (MapObject struct : renderedMOBs) {
                 if (struct instanceof Structure) {
+                    /*
                     int structX = (int)struct.getXPos()/Mists.TILESIZE;
                     int structY = (int)struct.getYPos()/Mists.TILESIZE;
                     if (structX >= lights.lightmap.length || structY >= lights.lightmap[0].length) lightlevel = 1;
@@ -1234,10 +1279,12 @@ public class Location extends Flags implements Global {
                     lightlevel = lightlevel-1;
                     
                     lightmap.setBrightness(lightlevel); gc.setEffect(lightmap);
+                    
                     if (lightlevel!=-1) {
+                    */
                         //Don't render stuff that is in total darkness
                         ((Structure)struct).renderExtras(xOffset, yOffset, gc);
-                    }
+                    //}
                 }
             }
         }
@@ -1310,12 +1357,34 @@ public class Location extends Flags implements Global {
         this.lights.setMinLightLevel(ll);
     }
     
+    /**
+     * Check the light level (Player vision) on the given tile
+     * @param xCoor xCoordinate of the TILE in question (default width Mists.TILESIZE)
+     * @param yCoor yCoordinate of the TILE in question (default height Mists.TILESIZE)
+     * @return 
+     */
     public double getLightLevel(double xCoor, double yCoor) {
         double lightlevel = 0;
         int xTile = (int)xCoor/Mists.TILESIZE;
         int yTile = (int)yCoor/Mists.TILESIZE;
         if (xTile < lights.lightmap.length || yTile < lights.lightmap[0].length) lightlevel = lights.lightmap[xTile][yTile];
         return lightlevel;
+    }
+    
+    /**
+     * Check if player has explored the given tile on the map
+     * @param xCoor xCoordinate of the TILE in question (default width Mists.TILESIZE)
+     * @param yCoor yCoordinate of the TILE in question (default height Mists.TILESIZE)
+     * @return 
+     */
+    public boolean isExplored(double xCoor, double yCoor) {
+        int xTile = (int)xCoor/Mists.TILESIZE;
+        int yTile = (int)yCoor/Mists.TILESIZE;
+        if (xTile < lights.explored.length || yTile < lights.explored[0].length) {
+            return lights.explored[xTile][yTile];
+        } else {
+            return false;
+        }
     }
     
     public void printLightMapIntoConsole() {

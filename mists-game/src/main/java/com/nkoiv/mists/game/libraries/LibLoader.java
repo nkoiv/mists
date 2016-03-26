@@ -26,6 +26,7 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
+import com.nkoiv.mists.game.sprites.Roof;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -327,22 +328,13 @@ public class LibLoader {
         lib.addTemplate(testDungeon);
         
         //--TestVillage--
-        Image villageBackground = new Image("/images/pocmap.png");
-        LocationTemplate testVillage = new LocationTemplate(2, "TestVillage", villageBackground.getWidth(), villageBackground.getHeight());
-        testVillage.map = new BGMap(villageBackground);
-        for (int i = 0; i<10;i++) {
-            //Make a bunch of trees
-            Structure tree = Mists.structureLibrary.create("Tree");
-            testVillage.mobs.add(tree);
-        }
-        Door door = (Door)Mists.structureLibrary.create("dungeonDoor");
-        TriggerPlate tp = new TriggerPlate("Door opener", 32, 32, 2000, door);
-        tp.setRequireReEntry(true);
-        
-        testVillage.mobs.add(door);
-        testVillage.mobs.add(tp);
-        
-        testVillage.lightlevel=0.5;
+        Mists.logger.info("Generating template for test village");
+        LocationTemplate testVillage =new LocationTemplate(2, "TestVillage", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
+        testVillage.map = new TileMap("/mapdata/villagetest.map");
+        Roof testroof = new Roof(new Image("/images/roof_test.png"));
+        testroof.setPosition(10*Mists.TILESIZE, 18*Mists.TILESIZE);
+        testroof.setHiddenArea(12*Mists.TILESIZE, 21*Mists.TILESIZE, 8*Mists.TILESIZE, 5*Mists.TILESIZE);
+        testVillage.roofs.add(testroof);
         lib.addTemplate(testVillage);
         
          //--Woods--
@@ -374,7 +366,7 @@ public class LibLoader {
             Structure rock = Mists.structureLibrary.create("Rock");
             woods.mobs.add(rock);
         }
-        woods.lightlevel = 0.3;
+        //woods.lightlevel = 0.3;
         lib.addTemplate(woods);
         
         
