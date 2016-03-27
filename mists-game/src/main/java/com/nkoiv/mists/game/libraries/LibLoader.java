@@ -331,10 +331,16 @@ public class LibLoader {
         Mists.logger.info("Generating template for test village");
         LocationTemplate testVillage =new LocationTemplate(2, "TestVillage", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
         testVillage.map = new TileMap("/mapdata/villagetest.map");
-        Roof testroof = new Roof(new Image("/images/roof_test.png"));
-        testroof.setPosition(10*Mists.TILESIZE, 18*Mists.TILESIZE);
-        testroof.setHiddenArea(12*Mists.TILESIZE, 21*Mists.TILESIZE, 8*Mists.TILESIZE, 5*Mists.TILESIZE);
-        testVillage.roofs.add(testroof);
+        
+        Roof roof1 = new Roof(new Image("/images/roof_thatch_10x8.png"));
+        roof1.setPosition(10*Mists.TILESIZE, 18*Mists.TILESIZE);
+        roof1.setHiddenArea(12*Mists.TILESIZE, 21*Mists.TILESIZE, 8*Mists.TILESIZE, 5*Mists.TILESIZE);
+        testVillage.roofs.add(roof1);
+        
+        Roof roof2 = new Roof(new Image("/images/roof_brick_11x7.png"));
+        roof2.setPosition(38*Mists.TILESIZE, 13*Mists.TILESIZE);
+        roof2.setHiddenArea(40*Mists.TILESIZE, 16*Mists.TILESIZE, 9*Mists.TILESIZE, 4*Mists.TILESIZE);
+        testVillage.roofs.add(roof2);
         lib.addTemplate(testVillage);
         
          //--Woods--
