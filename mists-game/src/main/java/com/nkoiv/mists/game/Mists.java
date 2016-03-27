@@ -33,10 +33,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -147,12 +149,14 @@ public class Mists extends Application implements Global {
                 }
                 
                 double elapsedSeconds = (currentNanoTime - previousNanoTime) / 1000000000.0;
-                //System.out.println("FPS : " + (int)(1/elapsedSeconds));
                 previousNanoTime = currentNanoTime;
                 //Do things:
                 MistsGame.tick(elapsedSeconds, pressedButtons, releasedButtons); 
                 releasedButtons.clear();
                 MistsGame.render();
+                //System.out.println("FPS : " + (int)(1/elapsedSeconds));
+                uiCanvas.getGraphicsContext2D().setFill(Color.DARKRED);
+                uiCanvas.getGraphicsContext2D().fillText("FPS : " + (int)(1/elapsedSeconds), 0, 20);
             } 
         }.start();
         
