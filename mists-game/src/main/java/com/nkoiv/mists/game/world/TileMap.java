@@ -12,11 +12,9 @@ import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.libraries.LibLoader;
-import com.nkoiv.mists.game.libraries.LocationLibrary;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -264,11 +262,11 @@ public class TileMap implements GameMap, KryoSerializable {
                //For now, everything is floor
                if (this.intMap[x][y]==1) {
                    this.tileMap[x][y] = new Tile(1, "Floor", this.tilesize, 
-                    new Sprite(Mists.graphLibrary.getImage("dungeonFloor"),
+                    new Sprite(Mists.graphLibrary.getImage("floorDungeonLight"),
                     x*this.tilesize, y*this.tilesize)); 
                } else {
                    this.tileMap[x][y] = new Tile(0, "DarkFloor", this.tilesize, 
-                    new Sprite(Mists.graphLibrary.getImage("dungeonDarkFloor"),
+                    new Sprite(Mists.graphLibrary.getImage("floorDungeonDark"),
                     x*this.tilesize, y*this.tilesize)); 
                }
                

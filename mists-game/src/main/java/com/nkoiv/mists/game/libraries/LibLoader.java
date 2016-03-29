@@ -207,11 +207,11 @@ public class LibLoader {
         lib.addImage("lightspot", new Image("/images/light.png"));
         
         //---Floor tiles---
-        
-        lib.addImage("isoDungeonFloor", new Image("/images/iso_dungeonfloor.png"));
-        lib.addImage("isoDungeonDarkFloor", new Image("/images/iso_dungeondarkfloor.png"));
-        lib.addImage("dungeonFloor", new Image("/images/dungeonfloor.png"));
-        lib.addImage("dungeonDarkFloor", new Image("/images/dungeondarkfloor.png"));
+
+        lib.addImage("floorDungeonLight", new Image("/images/environment/floor_dungeon_light.png"));
+        lib.addImage("floorDungeonDark", new Image("/images/environment/floor_dungeon_dark.png"));
+        lib.addImage("floorWoodDark", new Image("/images/environment/floor_wood_dark.png"));
+        lib.addImage("floorGrass", new Image("/images/environment/floor_grass.png"));
         
         //---UI elements----
         //Panels
