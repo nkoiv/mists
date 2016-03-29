@@ -114,11 +114,18 @@ public class LocationLibrary  {
             l.addRoof(r);
         }
         Mists.logger.info("Roofs done, generating stairs");
-        //TODO: Stop randomizing starting location
-        //TODO: Stairs isnt the only way to access locations, right?
-        MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
-        l.addMapObject(stairs);
-        l.setMobInRandomOpenSpot(stairs);
+        boolean entranceFound = false;
+        for (MapObject mob : template.mobs) {
+            if (mob instanceof MapEntrance) {
+                entranceFound = true;
+            }
+        }
+        //If no MapEntrance waws found, generate one
+        if (!entranceFound) {
+            MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
+            l.addMapObject(stairs);
+            l.setMobInRandomOpenSpot(stairs);
+        }
         l.setMinLightLevel(template.lightlevel);
         l.loading = false;
         return l;

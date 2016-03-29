@@ -12,14 +12,13 @@ import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
+import com.nkoiv.mists.game.libraries.premade.Village;
 import com.nkoiv.mists.game.puzzle.CircuitPuzzle;
 import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.sprites.Sprite;
@@ -28,9 +27,7 @@ import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
 import com.nkoiv.mists.game.sprites.Roof;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -328,20 +325,7 @@ public class LibLoader {
         lib.addTemplate(testDungeon);
         
         //--TestVillage--
-        Mists.logger.info("Generating template for test village");
-        LocationTemplate testVillage =new LocationTemplate(2, "TestVillage", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
-        testVillage.map = new TileMap("/mapdata/villagetest.map");
-        
-        Roof roof1 = new Roof(new Image("/images/roof_thatch_10x8.png"));
-        roof1.setPosition(10*Mists.TILESIZE, 18*Mists.TILESIZE);
-        roof1.setHiddenArea(12*Mists.TILESIZE, 21*Mists.TILESIZE, 8*Mists.TILESIZE, 5*Mists.TILESIZE);
-        testVillage.roofs.add(roof1);
-        
-        Roof roof2 = new Roof(new Image("/images/roof_brick_11x7.png"));
-        roof2.setPosition(38*Mists.TILESIZE, 13*Mists.TILESIZE);
-        roof2.setHiddenArea(40*Mists.TILESIZE, 16*Mists.TILESIZE, 9*Mists.TILESIZE, 4*Mists.TILESIZE);
-        testVillage.roofs.add(roof2);
-        lib.addTemplate(testVillage);
+        lib.addTemplate(Village.getVillage());
         
          //--Woods--
         Image woodsBackground = new Image("/images/pocmap.png");
