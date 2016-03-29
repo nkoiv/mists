@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -126,6 +127,36 @@ public class LibLoader {
             Mists.logger.warning(e.toString());
         }
         return structureMap;
+    }
+    
+    public static HashMap<Integer, Image> loadLocationFloorCodes(String codeFile) {
+        HashMap<Integer, Image> floorMap = new HashMap<>();
+        File codeYAML = new File(codeFile);
+        try {
+            Mists.logger.info("Attempting to read YAML from "+codeYAML.getCanonicalPath());
+            YamlReader reader = new YamlReader(new FileReader(codeYAML));
+            while (true) {
+                Object object = reader.read();
+                if (object == null) break;
+                try {
+                    Map floorDataMap = (Map)object;
+                    int tileCode = (int)((String)floorDataMap.get("symbol")).charAt(0);
+                    String graphicsPath = (String)floorDataMap.get("graphics");
+                    Image floorGraphics = new Image(graphicsPath);
+                    floorMap.put(tileCode, floorGraphics);
+                    Mists.logger.log(Level.INFO, "Added {0} on tileCode {1}", new Object[]{(String)floorDataMap.get("graphic"), tileCode});
+                } catch (Exception e) {
+                    Mists.logger.log(Level.WARNING, "Failed parsing {0}", object.toString());
+                    Mists.logger.warning(e.toString());
+                }
+                
+            }
+
+        } catch (Exception e) {
+            Mists.logger.warning("Was unable to read structure code data!");
+            Mists.logger.warning(e.toString());
+        }
+        return floorMap;
     }
     
     public static void initializeStructureLibrary(MobLibrary<Structure> lib) {

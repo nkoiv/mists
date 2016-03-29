@@ -19,8 +19,10 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -37,6 +39,7 @@ public class TileMap implements GameMap, KryoSerializable {
     
     protected Tile[][] tileMap;
     protected HashMap<Integer, Structure> structureCodes;
+    protected HashMap<Integer, Image> floorCodes;
     
     protected static final int CLEAR = 0;
     protected static final int FLOOR = 46;
@@ -59,9 +62,9 @@ public class TileMap implements GameMap, KryoSerializable {
     
     public TileMap (String mapFileName) {
         this.tilesize = Global.TILESIZE;
-        this.loadMap(mapFileName);
+        this.loadMap(mapFileName); //Generate intmap from the mapfile
         this.tileMap = new Tile[tileWidth][tileHeight];
-        this.generateTilesFromIntMap();
+        this.generateTilesFromIntMap(); //turn the intmap into a tilemap
     }
     
     public TileMap (int tileWidth, int tileHeight, int tilesize, int[][] intMap) {
@@ -100,6 +103,18 @@ public class TileMap implements GameMap, KryoSerializable {
         //TODO: Check the tilecodes to make sure we have all the images we need
         
         
+    }
+    
+    private void loadDefaultFloorCodes() {
+        try {
+            this.floorCodes = LibLoader.loadLocationFloorCodes("libdata/defaultFloorCodes.yml");
+        } catch (Exception e) {
+            Mists.logger.warning(("Error loading floor codes!"));
+            Mists.logger.warning(e.getMessage());
+
+        }
+        
+        Mists.logger.info("Default floor codes loaded");
     }
     
     private void loadDefaultStructCodes() {
@@ -253,25 +268,67 @@ public class TileMap implements GameMap, KryoSerializable {
     
     //use the intMap to generate the tiles
     protected void generateTilesFromIntMap() {
+        if (this.floorCodes == null) this.loadDefaultFloorCodes();
         Mists.logger.info("Generating tiles");
         Mists.logger.info("IntMap: "+this.intMap.length+"x"+this.intMap[0].length);
         Mists.logger.info("TileMap: "+this.tileMap.length+"x"+this.tileMap[0].length);
         for (int x=0; x<this.tileWidth; x++) {
             for (int y=0; y<this.tileHeight; y++) {
-               //TODO: Check the intMap value against tilesheet
-               //For now, everything is floor
-               if (this.intMap[x][y]==1) {
-                   this.tileMap[x][y] = new Tile(1, "Floor", this.tilesize, 
+                if (floorCodes.containsKey(intMap[x][y])) {
+                    this.tileMap[x][y] = new Tile(intMap[x][y], "Floor", this.tilesize, 
+                    new Sprite(floorCodes.get(intMap[x][y]),x*this.tilesize, y*this.tilesize));
+                } else {
+                    int avgTileCode = getFloorTileAverage(x, y, intMap);
+                    this.tileMap[x][y] = new Tile(avgTileCode, "Floor", this.tilesize, 
+                    new Sprite(floorCodes.get(avgTileCode),x*this.tilesize, y*this.tilesize));
+                    /*
+                    this.tileMap[x][y] = new Tile(1, "Floor", this.tilesize, 
                     new Sprite(Mists.graphLibrary.getImage("floorDungeonLight"),
                     x*this.tilesize, y*this.tilesize)); 
-               } else {
-                   this.tileMap[x][y] = new Tile(0, "DarkFloor", this.tilesize, 
-                    new Sprite(Mists.graphLibrary.getImage("floorDungeonDark"),
-                    x*this.tilesize, y*this.tilesize)); 
-               }
-               
+                    */
+                }
             }
         }    
+    }
+    
+    
+    private int getFloorTileAverage(int x, int y, int[][] intMap) {
+        int ret = 0;
+        TreeMap<Integer, Integer> counts = new TreeMap<>();
+        //Row above the spot
+        if (y > 0) {
+            if (x>0) incrementTileCount(intMap[x-1][y-1], counts);
+            incrementTileCount(intMap[x][y-1], counts);
+            if (x<intMap.length) incrementTileCount(intMap[x+1][y-1], counts);
+        }
+        //Row at the spot
+            if (x>0) incrementTileCount(intMap[x-1][y], counts);
+            incrementTileCount(intMap[x][y], counts);
+            if (x<intMap.length) incrementTileCount(intMap[x+1][y], counts);
+        //Row below the spot
+        if (y < intMap[0].length) {
+            if (x>0) incrementTileCount(intMap[x-1][y+1], counts);
+            incrementTileCount(intMap[x][y+1], counts);
+            if (x<intMap.length) incrementTileCount(intMap[x+1][y+1], counts);
+        }
+        
+        //Get the best match from floorCodes
+        while (!counts.isEmpty()) {
+            int value = counts.lastKey();
+            if (floorCodes.containsKey(value)) {
+                ret = value;
+                break;
+            } else {
+                counts.remove(counts.lastKey());
+            }
+        }
+        
+        return ret;
+    }
+    
+    private void incrementTileCount(int value, TreeMap<Integer, Integer> countMap) {
+        if (countMap.containsKey(value)) countMap.put(value, countMap.get(value)+1);
+        else countMap.put(value, 1);
     }
     
     /*
@@ -294,6 +351,7 @@ public class TileMap implements GameMap, KryoSerializable {
                 String lines = line.toString();
                 for (int x=0; x<this.tileWidth; x++) {
                     int tilecode = lines.charAt(x);
+                    if (tilecode == 32) tilecode = 0; //Hardcode empty (space) to be 0
                     this.intMap[x][y] = tilecode;
                 }
             }
@@ -327,6 +385,7 @@ public class TileMap implements GameMap, KryoSerializable {
             this.intMap[i] = input.readInts(tileHeight);
         }
         this.loadDefaultStructCodes();
+        this.loadDefaultFloorCodes();
         //this.structureCodes = (HashMap<Integer, Structure>)kryo.readClassAndObject(input);
     }
 

@@ -1,0 +1,12 @@
+---
+symbol: "."
+graphics: "/images/environment/floor_dungeon_light.png"
+---
+symbol: ","
+graphics: "/images/environment/floor_dungeon_dark.png"
+---
+symbol: "_"
+graphics: "/images/environment/floor_wood_dark.png"
+---
+symbol: "'"
+graphics: "/images/environment/floor_grass.png"
