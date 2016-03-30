@@ -266,6 +266,10 @@ public class Location extends Flags implements Global {
             if (s instanceof MapEntrance) return new double[]{s.getXPos(), s.getYPos()};
         }
         double[] newEntrance = this.getRandomOpenSpot(this.getPlayer().getWidth());
+        
+        //Just return an open random spot if there's no structure library (for unit tests)
+        if (Mists.structureLibrary == null) return this.getRandomOpenSpot(this.getPlayer().getWidth());
+        
         MapEntrance newStairs = (MapEntrance)Mists.structureLibrary.create("DungeonStairs");
         newStairs.setPosition(newEntrance[0], newEntrance[1]);
         this.addMapObject(newStairs);
