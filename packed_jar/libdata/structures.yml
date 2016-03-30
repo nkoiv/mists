@@ -1,18 +1,30 @@
 ---
-name: "DungeonWall"
+name: "StoneWall1"
 type: "Wall"
-image: "/images/structures/dwall.png"
+image: "/images/structures/stonewall1.png"
 collisionLevel: 1
 ---
-name: "Tree"
-type: "GenericStructure"
-image: "/images/tree_stump.png"
+name: "StoneWall2"
+type: "Wall"
+image: "/images/structures/stonewall2.png"
 collisionLevel: 1
-extras:
- tree:
-  image: "/images/tree.png"
-  xOffset: -35
-  yOffset: -96
+---
+name: "StoneWall3"
+type: "Wall"
+image: "/images/structures/stonewall3.png"
+collisionLevel: 1
+---
+name: "VillageWall"
+type: "Wall"
+image: "/images/structures/villagewall.png"
+collisionLevel: 1
+---
+name: "AnimatedGrass"
+type: "AnimatedFrill"
+#image: "/images/blank.png"
+spritesheet: "/images/environment/grass_animated1.png"
+spritesheetParameters: [6, 0, 0, 0, 0, 32, 32]
+#spritesheetParameters: [frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight]
 ---
 name: "Tree1"
 type: "GenericStructure"
@@ -58,6 +70,26 @@ name: "Rock"
 type: "GenericStructure"
 image: "/images/block.png"
 collisionLevel: 1
+---
+name: "Barrel"
+type: "GenericStructure"
+image: "/images/structures/barrel.png"
+collisionLevel: 1
+---
+name: "Chest"
+type: "ItemContainer"
+image: "/images/structures/chest3.png"
+collisionLevel: 1
+---
+name: "Bookcase"
+type: "GenericStructure"
+image: "/images/structures/bookcase_base.png"
+collisionLevel: 1
+extras:
+ graph:
+  image: "/images/structures/bookcase_full.png"
+  xOffset: 0
+  yOffset: -13
 ---
 name: "DungeonStairs"
 type: "MapEntrance"
