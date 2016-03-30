@@ -141,6 +141,7 @@ public class LibLoader {
                 try {
                     Map floorDataMap = (Map)object;
                     int tileCode = (int)((String)floorDataMap.get("symbol")).charAt(0);
+                    if (tileCode == 32) tileCode = 0; //Space (empty) defaults to code 0, which is used for unclear cases
                     String graphicsPath = (String)floorDataMap.get("graphics");
                     Image floorGraphics = new Image(graphicsPath);
                     floorMap.put(tileCode, floorGraphics);
@@ -324,11 +325,6 @@ public class LibLoader {
     public static void initializeLocationLibrary(LocationLibrary lib) {
         //--TestDungeon--
         LocationTemplate testDungeon = new LocationTemplate(1, "TestDungeon", 60*Mists.TILESIZE, 40*Mists.TILESIZE);
-        for (int i = 0; i<10;i++) {
-            //Make a bunch of trees
-            Structure tree = Mists.structureLibrary.create("Tree");
-            testDungeon.mobs.add(tree);
-        }
         
         for (int i = 0; i<10;i++) {
             //Make a bunch of itempiles

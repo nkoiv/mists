@@ -118,8 +118,8 @@ public class GeneralLocationTest extends Application {
     
     @Test
     public void structureExtrasMoveWithStructure() {
-        Structure tree = new Structure("Tree", new Image("/images/tree_stump.png"), 1);
-        tree.addExtra(new Image("/images/tree.png"), -35, -96);
+        Structure tree = new Structure("Tree", new Image("/images/structures/tree1_stump.png"), 1);
+        tree.addExtra(new Image("/images/structures/tree1_frill.png"), -20, -106);
         testLocation.addMapObject(tree, 200 , 200);
         double startX = tree.getExtras().get(0).getXPos();
         tree.setPosition(500, 500);

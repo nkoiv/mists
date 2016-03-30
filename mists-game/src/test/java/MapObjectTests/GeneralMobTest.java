@@ -56,13 +56,13 @@ public class GeneralMobTest {
     
     @Test
     public void structureCanHaveExtraFrills() {
-        testStructure.addExtra(new Image("/images/tree.png"), -35, -96);
+        testStructure.addExtra(new Image("/images/structures/tree1_frill.png"), -20, -106);
         assert(!testStructure.getExtras().isEmpty());
     }
     
     @Test
     public void structuralExtrasCanBeRemoved() {
-        testStructure.addExtra(new Image("/images/tree.png"), -35, -96);
+        testStructure.addExtra(new Image("/images/structures/tree1_frill.png"), -20, -106);
         testStructure.removeExtras();
         assert(testStructure.getExtras().isEmpty());
     }
