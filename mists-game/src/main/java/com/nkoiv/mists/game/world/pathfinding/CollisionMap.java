@@ -110,6 +110,7 @@ public class CollisionMap {
             //Structures mark all blocked nodes with collisionLevel
             if (mob instanceof Structure) {
                 //Mists.logger.info("This is a structure at "+mobYNodeStart+","+mobXNodeStart);
+                if (mob.getCollisionLevel() == 0) continue; //CL 0 means anything can pass through
                 for (int row = mobYNodeStart; row <= mobYNodeEnd;row++ ) {
                     for (int column = mobXNodeStart; column <= mobXNodeEnd;column++) {
                         //Mists.logger.info("Should be setting some CL at "+column+","+row);

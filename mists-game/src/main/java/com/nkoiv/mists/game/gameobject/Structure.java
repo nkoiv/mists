@@ -7,9 +7,11 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Structures are MapObjects with varying collision boxes

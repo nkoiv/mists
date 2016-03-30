@@ -165,8 +165,15 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     private static Structure generateStructureFromYAML(Map structureData) {
         String mobname = (String)structureData.get("name");
         int collisionLevel = Integer.parseInt((String)structureData.get("collisionLevel"));
-        Image image = new Image((String)structureData.get("image"));
-        Structure struct = new Structure(mobname, image, collisionLevel); 
+        Structure struct;
+        if (structureData.containsKey("spriteType")) {
+            String spriteType = (String)structureData.get("spriteType");
+            Image image = new Image((String)structureData.get("image"));
+            struct = new Structure(mobname, image, collisionLevel); 
+        } else {
+            Image image = new Image((String)structureData.get("image"));
+            struct = new Structure(mobname, image, collisionLevel); 
+        }
         addExtras(structureData, struct);
         return struct;
     }
