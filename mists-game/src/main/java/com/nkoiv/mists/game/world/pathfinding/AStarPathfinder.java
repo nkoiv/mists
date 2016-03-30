@@ -201,6 +201,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
 
 
     private void removeFromOpen(Node node) {
+        if (node.getX() > this.nodeMap.length-1 || node.getX() < 0 || node.getY()> this.nodeMap[0].length-1 || node.getY() < 0) return;
         Node n = this.nodeMap[node.getX()][node.getY()];
         this.openNodes.remove(n);
         this.nodeMap[node.getX()][node.getY()] = null;
