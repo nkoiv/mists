@@ -91,6 +91,21 @@ extras:
   xOffset: 0
   yOffset: -13
 ---
+name: "TorchFloorDungeon"
+type: "GenericStructure"
+image: "/images/structures/torch_floor_base.png"
+collisionLevel: 1
+extras:
+ graph:
+  image: "/images/structures/torch_floor.png"
+  xOffset: 0
+  yOffset: -32
+ flame:
+  spritesheet: "/images/environment/torch_flame.png"
+  spritesheetParameters: [5, 0, 0, 0, 0, 32, 32]
+  xOffset: 0
+  yOffset: -32
+---
 name: "DungeonStairs"
 type: "MapEntrance"
 image: "/images/structures/stairs.png"

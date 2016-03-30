@@ -301,6 +301,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     
     
     private static void addExtras(Map structureData, Structure structure) {
+        Mists.logger.info("Generating extras for "+structure.getName());
         Map extras = (Map)structureData.get("extras");
         if (extras != null) {
             for (Object key : extras.keySet()) {
