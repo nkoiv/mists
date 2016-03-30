@@ -110,6 +110,9 @@ public class Structure extends MapObject {
     @Override
     public Structure createFromTemplate() {
         Structure ns = new Structure(this.name, this.getSprite().getImage(), this.collisionLevel);
+        if (this.getSprite().isAnimated()) {
+            ns.getSprite().setAnimation(this.getSprite().getAnimation());
+        }
         if (!this.extraSprites.isEmpty()) {
             for (Sprite s : this.extraSprites) {
                 double xOffset = s.getXPos() - this.getSprite().getXPos();

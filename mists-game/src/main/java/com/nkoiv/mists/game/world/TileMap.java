@@ -279,8 +279,14 @@ public class TileMap implements GameMap, KryoSerializable {
                     new Sprite(floorCodes.get(intMap[x][y]),x*this.tilesize, y*this.tilesize));
                 } else {
                     int avgTileCode = getFloorTileAverage(x, y, intMap);
-                    this.tileMap[x][y] = new Tile(avgTileCode, "Floor", this.tilesize, 
-                    new Sprite(floorCodes.get(avgTileCode),x*this.tilesize, y*this.tilesize));
+                    if (floorCodes.containsKey(avgTileCode)) {
+                        this.tileMap[x][y] = new Tile(avgTileCode, "Floor", this.tilesize, 
+                            new Sprite(floorCodes.get(avgTileCode),x*this.tilesize, y*this.tilesize));
+                    } else {
+                        Mists.logger.log(Level.WARNING, "Was unable to generate floortile with the (average)code of {0}", avgTileCode);
+                        this.tileMap[x][y] = new Tile(0, "Floor", this.tilesize, 
+                            new Sprite(Mists.graphLibrary.getImage("floorDungeonLight"),x*this.tilesize, y*this.tilesize));
+                    }
                     /*
                     this.tileMap[x][y] = new Tile(1, "Floor", this.tilesize, 
                     new Sprite(Mists.graphLibrary.getImage("floorDungeonLight"),
@@ -299,17 +305,17 @@ public class TileMap implements GameMap, KryoSerializable {
         if (y > 0) {
             if (x>0) incrementTileCount(intMap[x-1][y-1], counts);
             incrementTileCount(intMap[x][y-1], counts);
-            if (x<intMap.length) incrementTileCount(intMap[x+1][y-1], counts);
+            if (x<intMap.length-1) incrementTileCount(intMap[x+1][y-1], counts);
         }
         //Row at the spot
             if (x>0) incrementTileCount(intMap[x-1][y], counts);
             incrementTileCount(intMap[x][y], counts);
-            if (x<intMap.length) incrementTileCount(intMap[x+1][y], counts);
+            if (x<intMap.length-1) incrementTileCount(intMap[x+1][y], counts);
         //Row below the spot
-        if (y < intMap[0].length) {
+        if (y < intMap[0].length-1) {
             if (x>0) incrementTileCount(intMap[x-1][y+1], counts);
             incrementTileCount(intMap[x][y+1], counts);
-            if (x<intMap.length) incrementTileCount(intMap[x+1][y+1], counts);
+            if (x<intMap.length-1) incrementTileCount(intMap[x+1][y+1], counts);
         }
         
         //Get the best match from floorCodes

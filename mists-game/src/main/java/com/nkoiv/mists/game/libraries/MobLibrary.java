@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
 import java.io.Serializable;
 import java.util.*;
@@ -100,6 +101,8 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                 return generatePuzzleTileFromYAML(mobData);
             case "CircuitTile": Mists.logger.info("Generating CIRCUIT TILE");
                 return generateCircuitTileFromYAML(mobData);
+            case "AnimatedFrill": Mists.logger.info("Generating ANIMATED FRILL");
+                return generateAnimatedFrillFromYAML(mobData);
         }        
         return null;
     }
@@ -168,13 +171,44 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         Structure struct;
         if (structureData.containsKey("spriteType")) {
             String spriteType = (String)structureData.get("spriteType");
-            Image image = new Image((String)structureData.get("image"));
-            struct = new Structure(mobname, image, collisionLevel); 
+            if (spriteType.equals("static")) {
+                Image image = new Image((String)structureData.get("image"));
+                struct = new Structure(mobname, image, collisionLevel); 
+            } else { //if (spriteType.equals("spritesheet")){
+                SpriteAnimation sa = generateSpriteAnimation((String)structureData.get("spritesheet"), 
+                (List<String>)structureData.get("spritesheetParameters"));
+                Sprite sp = new Sprite();
+                sp.setAnimation(sa);
+                struct = new Structure(mobname, sp, collisionLevel);
+            }
         } else {
             Image image = new Image((String)structureData.get("image"));
             struct = new Structure(mobname, image, collisionLevel); 
         }
         addExtras(structureData, struct);
+        return struct;
+    }
+    
+    
+    private static SpriteAnimation generateSpriteAnimation(String spritesheet, List<String> spriteSheetParameters) {
+        ImageView imageView = new ImageView(spritesheet);
+        SpriteAnimation sa = new SpriteAnimation(imageView, Integer.parseInt(spriteSheetParameters.get(0)),
+                    Integer.parseInt(spriteSheetParameters.get(1)),
+                    Integer.parseInt(spriteSheetParameters.get(2)),
+                    Integer.parseInt(spriteSheetParameters.get(3)),
+                    Integer.parseInt(spriteSheetParameters.get(4)),
+                    Integer.parseInt(spriteSheetParameters.get(5)),
+                    Integer.parseInt(spriteSheetParameters.get(6)));
+        return sa;
+    }
+    
+    private static Structure generateAnimatedFrillFromYAML(Map frillData) {
+        String frillname = (String)frillData.get("name");
+        SpriteAnimation sa = generateSpriteAnimation((String)frillData.get("spritesheet"), 
+                (List<String>)frillData.get("spritesheetParameters"));
+        Sprite sp = new Sprite();
+        sp.setAnimation(sa);
+        Structure struct = new Structure(frillname, sp, 0);
         return struct;
     }
     
@@ -243,10 +277,20 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         if (extras != null) {
             for (Object key : extras.keySet()) {
                 Map extraValues = (Map)extras.get(key);
-                Image extraImage = new Image((String)extraValues.get("image"));
-                int xOffset = Integer.parseInt(((String)extraValues.get("xOffset")));
-                int yOffset = Integer.parseInt(((String)extraValues.get("yOffset")));
-                structure.addExtra(extraImage, xOffset, yOffset);
+                if (extraValues.keySet().contains("spritesheet")) {
+                    SpriteAnimation sa = generateSpriteAnimation((String)extraValues.get("spritesheet"), 
+                        (List<String>)extraValues.get("spritesheetParameters"));
+                    Sprite sp = new Sprite();
+                    sp.setAnimation(sa);
+                    int xOffset = Integer.parseInt(((String)extraValues.get("xOffset")));
+                    int yOffset = Integer.parseInt(((String)extraValues.get("yOffset")));
+                    structure.addExtra(sp, xOffset, yOffset);
+                } else {
+                    Image extraImage = new Image((String)extraValues.get("image"));
+                    int xOffset = Integer.parseInt(((String)extraValues.get("xOffset")));
+                    int yOffset = Integer.parseInt(((String)extraValues.get("yOffset")));
+                    structure.addExtra(extraImage, xOffset, yOffset);
+                }
             }
         }
     }
