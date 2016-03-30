@@ -104,6 +104,14 @@ public class Sprite extends MovingGraphics
         return this.image;
     }
     
+    public boolean isAnimated() {
+        return this.animated;
+    }
+    
+    public SpriteAnimation getAnimation() {
+        return this.animation;
+    }
+    
     public void setAnimation (SpriteAnimation animation) {
         this.animation = animation;
         this.animated = true;
