@@ -177,7 +177,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
             } else { //if (spriteType.equals("spritesheet")){
                 SpriteAnimation sa = generateSpriteAnimation((String)structureData.get("spritesheet"), 
                 (List<String>)structureData.get("spritesheetParameters"));
-                Sprite sp = new Sprite();
+                Sprite sp = new Sprite(Mists.graphLibrary.getImage("blank"));
                 sp.setAnimation(sa);
                 struct = new Structure(mobname, sp, collisionLevel);
             }
@@ -206,9 +206,10 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         String frillname = (String)frillData.get("name");
         SpriteAnimation sa = generateSpriteAnimation((String)frillData.get("spritesheet"), 
                 (List<String>)frillData.get("spritesheetParameters"));
-        Sprite sp = new Sprite();
+        Sprite sp = new Sprite(Mists.graphLibrary.getImage("blank"));
         sp.setAnimation(sa);
         Structure struct = new Structure(frillname, sp, 0);
+        addExtras(frillData, struct);
         return struct;
     }
     
@@ -280,7 +281,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                 if (extraValues.keySet().contains("spritesheet")) {
                     SpriteAnimation sa = generateSpriteAnimation((String)extraValues.get("spritesheet"), 
                         (List<String>)extraValues.get("spritesheetParameters"));
-                    Sprite sp = new Sprite();
+                    Sprite sp = new Sprite(Mists.graphLibrary.getImage("blank"));
                     sp.setAnimation(sa);
                     int xOffset = Integer.parseInt(((String)extraValues.get("xOffset")));
                     int yOffset = Integer.parseInt(((String)extraValues.get("yOffset")));

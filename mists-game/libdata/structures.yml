@@ -19,6 +19,13 @@ type: "Wall"
 image: "/images/structures/villagewall.png"
 collisionLevel: 1
 ---
+name: "AnimatedGrass"
+type: "AnimatedFrill"
+#image: "/images/blank.png"
+spritesheet: "/images/environment/grass_animated1.png"
+spritesheetParameters: [6, 0, 0, 0, 0, 32, 32]
+#spritesheetParameters: [frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight]
+---
 name: "Tree"
 type: "GenericStructure"
 image: "/images/tree_stump.png"

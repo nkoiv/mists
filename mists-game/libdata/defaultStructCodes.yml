@@ -23,6 +23,9 @@ structure: "Tree1"
 symbol: "t"
 structure: "Tree2"
 ---
+symbol: "\""
+structure: "AnimatedGrass"
+---
 symbol: "B"
 structure: "Bookcase"
 ---

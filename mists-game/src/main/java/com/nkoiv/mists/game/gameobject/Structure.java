@@ -117,7 +117,9 @@ public class Structure extends MapObject {
             for (Sprite s : this.extraSprites) {
                 double xOffset = s.getXPos() - this.getSprite().getXPos();
                 double yOffset = s.getYPos() - this.getSprite().getYPos();
-                ns.addExtra(s.getImage(), xOffset, yOffset);
+                Sprite extra = new Sprite(s.getImage(), 0, 0);
+                if (s.isAnimated()) extra.setAnimation(s.getAnimation());
+                ns.addExtra(extra, xOffset, yOffset);
             }
         }
         return ns;
