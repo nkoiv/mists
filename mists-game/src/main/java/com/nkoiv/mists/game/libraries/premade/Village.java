@@ -48,8 +48,8 @@ public class Village {
         villageTemplate.roofs.add(roof1);
         
         //A 11x7 brick roof
-        Roof roof2 = new Roof(new Image("/images/roof_brick_11x7.png"));
-        roof2.setPosition(38*Mists.TILESIZE, 13*Mists.TILESIZE);
+        Roof roof2 = new Roof(new Image("/images/roof_brick_11x8.png"));
+        roof2.setPosition(38*Mists.TILESIZE, 12*Mists.TILESIZE);
         roof2.setHiddenArea(40*Mists.TILESIZE, 16*Mists.TILESIZE, 9*Mists.TILESIZE, 4*Mists.TILESIZE);
         villageTemplate.roofs.add(roof2);
     }
