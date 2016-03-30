@@ -245,6 +245,12 @@ public class Location extends Flags implements Global {
         mob.setPosition(openSpot[0], openSpot[1]);
     }
     
+    /**
+     * Retrieve the entrancenode to worldmap
+     * if there are several, return the first on the list
+     * TODO: might be good to key getters for individual nodes
+     * @return (World)MapEntrace for this Location
+     */
     private MapEntrance getEntrace() {
         for (Structure s : this.structures) {
             if (s instanceof MapEntrance) return (MapEntrance)s;
@@ -259,6 +265,10 @@ public class Location extends Flags implements Global {
         for (Structure s : this.structures) {
             if (s instanceof MapEntrance) return new double[]{s.getXPos(), s.getYPos()};
         }
+        double[] newEntrance = this.getRandomOpenSpot(this.getPlayer().getWidth());
+        MapEntrance newStairs = (MapEntrance)Mists.structureLibrary.create("DungeonStairs");
+        newStairs.setPosition(newEntrance[0], newEntrance[1]);
+        this.addMapObject(newStairs);
         return this.getRandomOpenSpot(this.getPlayer().getWidth());
     }
             
@@ -1435,6 +1445,14 @@ public class Location extends Flags implements Global {
      */
     public void exitLocation() {
         Mists.logger.log(Level.INFO, "Location {0} exited, cleaning up...", this.getName());
+        //Release player from Location
+        
+        if (this.player != null) {
+            this.removeMapObject(this.player);
+            this.player.clearLocation();
+            this.player = null;
+        }
+        
         //TODO: The cleanup
     }
     

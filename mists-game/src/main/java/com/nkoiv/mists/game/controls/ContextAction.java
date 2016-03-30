@@ -45,7 +45,6 @@ public class ContextAction {
         this.generateTriggerRange();
     }
     
-    
     public void setLocationServer(LocationServer server) {
         this.server = server;
     }
@@ -148,7 +147,8 @@ public class ContextAction {
     
     public boolean setTriggerOnMobIfInRange(MapObject mob) {
         for (int i = 0; i < this.availableTriggers.size(); i++) {
-            if (availableTriggers.get(i).getTarget().equals(mob)) {
+            if (availableTriggers.get(i).getTarget() == null) continue;
+            else if (availableTriggers.get(i).getTarget().equals(mob)) {
                 this.currentTrigger = i;
                 return true;
             }

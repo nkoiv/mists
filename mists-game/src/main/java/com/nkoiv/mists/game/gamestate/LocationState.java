@@ -154,7 +154,7 @@ public class LocationState implements GameState {
         this.playerInventory.setBgOpacity(0.8);
         this.playerInventory.setName("PlayerInventory");
         ContextAction ca = new ContextAction(game.getPlayer());
-        if (Mists.gameMode == GameMode.CLIENT) {;
+        if (Mists.gameMode == GameMode.CLIENT) {
             ca.setLocationClient(client);
         }
         this.contextAction = ca;
@@ -615,11 +615,14 @@ public class LocationState implements GameState {
     @Override
     public void exit() {
         Mists.soundManager.stopMusic();
+        this.paused = true;
     }
 
     @Override
     public void enter() {
         Mists.soundManager.playMusic("dungeon");
+        this.loadDefaultUI();
+        this.paused = false;
     }
 
     

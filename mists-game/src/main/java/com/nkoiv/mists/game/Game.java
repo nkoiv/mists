@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
@@ -249,10 +250,13 @@ public class Game {
      * @return 
      */
     public Location getLocation(int locationID) {
+        Mists.logger.log(Level.INFO, "Retrieving Location with ID {0} from the generated locations table", locationID);
         Location l = this.generatedLocations.get(locationID);
         if (l == null) {
+            Mists.logger.info("Generated location was not found, creating a new one from template");
             l = Mists.locationLibrary.create(locationID);
             this.generatedLocations.put(locationID, l);
+            Mists.logger.info(l.getName()+" generated and added to table with ID "+locationID);
         }
         return l;
     }

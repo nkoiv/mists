@@ -140,6 +140,15 @@ public class PlayerCharacter extends Creature implements Combatant {
     public void setLightSize(double lightSize) {
         this.lightSize = lightSize;
     }
+    
+    public void clearLocation() {
+        this.location = null;
+        this.IDinLocation = 0;
+        for (Creature c : this.companions) {
+            c.location = null;
+            c.IDinLocation  = 0;
+        }
+    }
 
     @Override
     public void useAction(String action ) {
