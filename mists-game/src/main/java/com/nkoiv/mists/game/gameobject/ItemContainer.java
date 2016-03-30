@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.LootTrigger;
+import com.nkoiv.mists.game.triggers.OpenInventoryTrigger;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -26,9 +27,11 @@ public class ItemContainer extends Structure implements HasInventory {
     private Inventory inv;
     private int oldInvHash;
     private boolean renderContent;
+    private boolean permanentInventory;
     
     public ItemContainer(String name, MovingGraphics graphics) {
         super(name, graphics, 0);
+        this.renderContent = false;
         this.inv = new Inventory();
     }
     
@@ -59,6 +62,14 @@ public class ItemContainer extends Structure implements HasInventory {
     @Override
     public Inventory getInventory() {
         return this.inv;
+    }
+    
+    public void setPermanency(boolean permanent) {
+        this.permanentInventory = permanent;
+    }
+    
+    public boolean isPermanent() {
+        return this.permanentInventory;
     }
     
     public boolean addItem(Item i) {
@@ -126,7 +137,33 @@ public class ItemContainer extends Structure implements HasInventory {
     
     @Override
     public Trigger[] getTriggers() {
-        Trigger[] a = new Trigger[]{new LootTrigger(this)};
-        return a;
+        if (permanentInventory) {
+            Trigger[] a = new Trigger[]{new LootTrigger(this)};
+            return a;
+        }
+        else {
+            Trigger[] a = new Trigger[]{new OpenInventoryTrigger(this)};
+            return a;
+        }
     }
+    
+    @Override
+    public ItemContainer createFromTemplate() {
+        ItemContainer nic = new ItemContainer(this.name, new Sprite(this.getSprite().getImage()));
+        nic.setCollisionLevel(this.collisionLevel);
+        if (this.getSprite().isAnimated()) {
+            nic.getSprite().setAnimation(this.getSprite().getAnimation());
+        }
+        if (!this.extraSprites.isEmpty()) {
+            for (Sprite s : this.extraSprites) {
+                double xOffset = s.getXPos() - this.getSprite().getXPos();
+                double yOffset = s.getYPos() - this.getSprite().getYPos();
+                Sprite extra = new Sprite(s.getImage(), 0, 0);
+                if (s.isAnimated()) extra.setAnimation(s.getAnimation());
+                nic.addExtra(extra, xOffset, yOffset);
+            }
+        }
+        return nic;
+    }
+    
 }

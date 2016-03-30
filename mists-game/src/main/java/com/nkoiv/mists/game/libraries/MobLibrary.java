@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
@@ -93,6 +94,8 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                 return generateStructureFromYAML(mobData);
             case "Wall": Mists.logger.info("Generating WALL");
                 return generateWallFromYAML(mobData);
+            case "ItemContainer": Mists.logger.info("Generating ITEM CONTAINER");
+                return generateItemContainerFromYAML(mobData);
             case "MapEntrance": Mists.logger.info("Generating MAP ENTRANCE");
                 return generateMapEntranceFromYAML(mobData);
             case "Door": Mists.logger.info("Generating DOOR");
@@ -189,6 +192,30 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return struct;
     }
     
+    
+    private static ItemContainer generateItemContainerFromYAML(Map structureData) {
+        String mobname = (String)structureData.get("name");
+        ItemContainer ic;
+        if (structureData.containsKey("spriteType")) {
+            String spriteType = (String)structureData.get("spriteType");
+            if (spriteType.equals("static")) {
+                Image image = new Image((String)structureData.get("image"));
+                ic = new ItemContainer(mobname, new Sprite(image)); 
+            } else { //if (spriteType.equals("spritesheet")){
+                SpriteAnimation sa = generateSpriteAnimation((String)structureData.get("spritesheet"), 
+                (List<String>)structureData.get("spritesheetParameters"));
+                Sprite sp = new Sprite(Mists.graphLibrary.getImage("blank"));
+                sp.setAnimation(sa);
+                ic = new ItemContainer(mobname, sp);
+            }
+        } else {
+            Image image = new Image((String)structureData.get("image"));
+            ic = new ItemContainer(mobname, new Sprite(image)); 
+        }
+        if (structureData.containsKey("collisionLevel")) ic.setCollisionLevel(Integer.parseInt((String)structureData.get("collisionLevel")));
+        addExtras(structureData, ic);
+        return ic;
+    }
     
     private static SpriteAnimation generateSpriteAnimation(String spritesheet, List<String> spriteSheetParameters) {
         ImageView imageView = new ImageView(spritesheet);

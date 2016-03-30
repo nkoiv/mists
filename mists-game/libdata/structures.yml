@@ -87,7 +87,7 @@ image: "/images/structures/barrel.png"
 collisionLevel: 1
 ---
 name: "Chest"
-type: "GenericStructure"
+type: "ItemContainer"
 image: "/images/structures/chest3.png"
 collisionLevel: 1
 ---
