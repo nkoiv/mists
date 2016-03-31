@@ -314,6 +314,11 @@ public class LibLoader {
         lib.addImage("musicOnIcon", new Image("/images/ui/musicOn.png"));
         lib.addImage("musicOffIcon", new Image("/images/ui/musicOff.png"));
         
+        lib.addImage("charsheetIcon", new Image("/images/ui/charsheetIcon.png"));
+        lib.addImage("inventoryIcon", new Image("/images/ui/inventoryIcon.png"));
+        lib.addImage("locationmenuIcon", new Image("/images/ui/locationmenuIcon.png"));
+        lib.addImage("questlogIcon", new Image("/images/ui/questlogIcon.png"));
+        
         lib.addImage("buttonSelectbeige", new Image("/images/ui/buttonSquareSelect_beige.png"));
         lib.addImage("buttonSelectSmallbeige", new Image("/images/ui/buttonSquareSelectSmall_beige.png"));
         

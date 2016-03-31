@@ -21,6 +21,7 @@ import com.nkoiv.mists.game.ui.CombatPopup;
 import com.nkoiv.mists.game.ui.Console;
 import com.nkoiv.mists.game.ui.DialoguePanel;
 import com.nkoiv.mists.game.ui.GoMainMenuButton;
+import com.nkoiv.mists.game.ui.IconButton;
 import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.Overlay;
@@ -129,25 +130,6 @@ public class LocationState implements GameState {
     
     public void loadDefaultUI() {
         this.uiComponents.clear();
-        TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
-        actionBar.setBgOpacity(0.3);
-        TextButton attackButton = new ActionButton(game.getPlayer(), "Smash!",  80, 60);
-        TextButton pathsButton = new LocationButtons.DrawPathsButton("Paths Off", 80, 60, this.game);
-        TextButton lightenButton = new LocationButtons.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
-        TextButton darkenButton = new LocationButtons.ReduceLightlevelButton("Darken", 80, 60, this.game);
-        TextButton toggleScaleButton = new LocationButtons.ToggleScaleButton("Resize", 80, 60, this.game);
-        MuteMusicButton muteMusicButton;
-        muteMusicButton = new AudioControls.MuteMusicButton();
-        
-        actionBar.addSubComponent(attackButton);
-        actionBar.addSubComponent(pathsButton);
-        actionBar.addSubComponent(lightenButton);
-        actionBar.addSubComponent(darkenButton);
-        actionBar.addSubComponent(muteMusicButton);
-        actionBar.addSubComponent(toggleScaleButton);
-        actionBar.setRenderZ(-10);
-        this.addUIComponent(actionBar);
-        
         this.infobox = new TextPanel(this, "InfoBox", 250, 150, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
         this.infobox.addCloseButton();
         this.playerInventory = new InventoryPanel(this, game.getPlayer().getInventory());
@@ -168,6 +150,42 @@ public class LocationState implements GameState {
         
         this.sct = new CombatPopup();
         
+        this.addUIComponent(this.generateActionBar());
+        this.addUIComponent(generateGeneralBar());
+    }
+    
+    private TiledWindow generateGeneralBar(){
+        int buttonCount = 4;
+        TiledWindow generalBar = new TiledWindow(this, "GeneralButtons", 80, buttonCount*60, 0, 80);
+        generalBar.setBgOpacity(0.3);
+        IconButton menuButton = new LocationButtons.ToggleLocationMenuButton(game);
+        generalBar.addSubComponent(menuButton);
+        IconButton inventoryButton = new LocationButtons.ToggleInventoryButton(game, playerInventory);
+        generalBar.addSubComponent(inventoryButton);
+        IconButton questlogButton = new LocationButtons.ToggleQuestLogButton(game);
+        generalBar.addSubComponent(questlogButton);
+        MuteMusicButton muteMusicButton = new AudioControls.MuteMusicButton();
+        generalBar.addSubComponent(muteMusicButton);        
+        generalBar.setRenderZ(-11);
+        return generalBar;
+    }
+    
+    private TiledWindow generateActionBar() {
+        TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
+        actionBar.setBgOpacity(0.3);
+        TextButton attackButton = new ActionButton(game.getPlayer(), "Smash!",  80, 60);
+        TextButton pathsButton = new LocationButtons.DrawPathsButton("Paths Off", 80, 60, this.game);
+        TextButton lightenButton = new LocationButtons.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
+        TextButton darkenButton = new LocationButtons.ReduceLightlevelButton("Darken", 80, 60, this.game);
+        TextButton toggleScaleButton = new LocationButtons.ToggleScaleButton("Resize", 80, 60, this.game);
+        
+        actionBar.addSubComponent(attackButton);
+        actionBar.addSubComponent(pathsButton);
+        actionBar.addSubComponent(lightenButton);
+        actionBar.addSubComponent(darkenButton);
+        actionBar.addSubComponent(toggleScaleButton);
+        actionBar.setRenderZ(-10);
+        return actionBar;
     }
     
     public void addDamageFloat(int damage, MapObject target) {

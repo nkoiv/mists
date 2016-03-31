@@ -42,6 +42,77 @@ public class LocationButtons {
         
     }
     
+    public static class ToggleInventoryButton extends IconButton {
+        private final Game game;
+        private final InventoryPanel invPanel;
+        
+        public ToggleInventoryButton(Game game, InventoryPanel invPanel) {
+            super("Inventory", 0, 0, Mists.graphLibrary.getImage("inventoryIcon"), Mists.graphLibrary.getImage("inventoryIcon"), Mists.graphLibrary.getImage("buttonSquareBeige"), Mists.graphLibrary.getImage("buttonSquareBeigePressed"));
+            this.game = game;
+            this.invPanel = invPanel;
+        }
+        
+        @Override
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+                game.locControls.toggleInventory(this.invPanel);
+            }
+        }
+        
+    }
+    
+    public static class ToggleQuestLogButton extends IconButton {
+        private final Game game;
+        
+        public ToggleQuestLogButton(Game game) {
+            super("QuestLog", 0, 0, Mists.graphLibrary.getImage("questlogIcon"), Mists.graphLibrary.getImage("questlogIcon"), Mists.graphLibrary.getImage("buttonSquareBeige"), Mists.graphLibrary.getImage("buttonSquareBeigePressed"));
+            this.game = game;
+        }
+        
+        @Override
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+                game.locControls.toggleQuestPanel();
+            }
+        }
+    }
+    
+        public static class ToggleLocationMenuButton extends IconButton {
+        private final Game game;
+        
+        public ToggleLocationMenuButton(Game game) {
+            super("Menu", 0, 0, Mists.graphLibrary.getImage("locationmenuIcon"), Mists.graphLibrary.getImage("locationmenuIcon"), Mists.graphLibrary.getImage("buttonSquareBeige"), Mists.graphLibrary.getImage("buttonSquareBeigePressed"));
+            this.game = game;
+        }
+        
+        @Override
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+                game.locControls.toggleLocationMenu();
+            }
+        }
+    }
+    
+    public static class ToggleCharacterSheetButton extends IconButton {
+        private final Game game;
+        
+        public ToggleCharacterSheetButton(Game game) {
+            super("CharacterSheet", 0, 0, Mists.graphLibrary.getImage("charsheetIcon"), Mists.graphLibrary.getImage("charsheetIcon"), Mists.graphLibrary.getImage("buttonSquareBeige"), Mists.graphLibrary.getImage("buttonSquareBeigePressed"));
+            this.game = game;
+        }
+        
+        @Override
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+                //game.locControls.toggleCharacterSheet();
+            }
+        }
+    }
+    
     public static class ToggleScaleButton extends TextButton {
         private final Game game;
         public ToggleScaleButton(String name, double width, double height, Game game) {
