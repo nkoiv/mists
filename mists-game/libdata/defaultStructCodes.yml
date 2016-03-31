@@ -14,7 +14,7 @@ structure: "VillageWall"
 symbol: "+"
 structure: "DungeonDoor"
 ---
-symbol: "^"
+symbol: "<"
 structure: "DungeonStairs"
 ---
 symbol: "T"
@@ -37,6 +37,9 @@ structure: "Barrel"
 ---
 symbol: "C"
 structure: "Chest"
+---
+symbol: "P"
+structure: "SignpostSmall"
 ---
 symbol: "R"
 structure: "PuzzleRune"
