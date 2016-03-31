@@ -45,7 +45,7 @@ public class QuestPanel extends TextPanel {
         int currentRow = 1;
         StringBuilder sb;
         for (int questID : this.questManager.getOpenQuests().keySet()) {
-            gc.setFill(Color.STEELBLUE);
+            gc.setFill(Color.DARKBLUE);
             gc.setFont(Mists.fonts.get("alagard20"));
             String title = this.questManager.getOpenQuests().get(questID).getTitle();
             renderTextLine(title, gc, xPosition, yPosition, currentRow, maxRowCount);
