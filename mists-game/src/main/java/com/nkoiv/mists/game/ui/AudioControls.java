@@ -26,7 +26,6 @@ public class AudioControls {
         
         public MuteMusicButton() {
             super("Mute music", 0, 0, Mists.graphLibrary.getImage("musicOnIcon"), Mists.graphLibrary.getImage("musicOffIcon"), Mists.graphLibrary.getImage("buttonSquareBeige"), Mists.graphLibrary.getImage("buttonSquareBeigePressed"));
-            this.alpha = 0.5;
         }
         
         @Override

@@ -156,7 +156,7 @@ public class LocationState implements GameState {
     
     private TiledWindow generateGeneralBar(){
         int buttonCount = 4;
-        TiledWindow generalBar = new TiledWindow(this, "GeneralButtons", 80, buttonCount*60, 0, 80);
+        TiledWindow generalBar = new TiledWindow(this, "GeneralButtons", 70, buttonCount*60, 0, 80);
         generalBar.setBgOpacity(0.3);
         IconButton menuButton = new LocationButtons.ToggleLocationMenuButton(game);
         generalBar.addSubComponent(menuButton);

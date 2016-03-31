@@ -91,6 +91,11 @@ extras:
   xOffset: 0
   yOffset: -13
 ---
+name: "SignpostSmall"
+type: "GenericStructure"
+image: "/images/structures/signpost_small.png"
+collisionLevel: 1
+---
 name: "TorchFloorDungeon"
 type: "GenericStructure"
 image: "/images/structures/torch_floor_base.png"

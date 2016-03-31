@@ -54,7 +54,9 @@ public class LocationButtons {
         
         @Override
         public void handleMouseEvent(MouseEvent me) {
-            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+            if (me.getEventType() == MouseEvent.MOUSE_PRESSED) this.pressed = true;
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                this.pressed = false;
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 game.locControls.toggleInventory(this.invPanel);
             }
@@ -72,7 +74,9 @@ public class LocationButtons {
         
         @Override
         public void handleMouseEvent(MouseEvent me) {
-            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+            if (me.getEventType() == MouseEvent.MOUSE_PRESSED) this.pressed = true;
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                this.pressed = false;
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 game.locControls.toggleQuestPanel();
             }
@@ -89,7 +93,9 @@ public class LocationButtons {
         
         @Override
         public void handleMouseEvent(MouseEvent me) {
-            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+            if (me.getEventType() == MouseEvent.MOUSE_PRESSED) this.pressed = true;
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                this.pressed = false;
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 game.locControls.toggleLocationMenu();
             }
@@ -106,7 +112,9 @@ public class LocationButtons {
         
         @Override
         public void handleMouseEvent(MouseEvent me) {
-            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+            if (me.getEventType() == MouseEvent.MOUSE_PRESSED) this.pressed = true;
+            if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                this.pressed = false;
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 //game.locControls.toggleCharacterSheet();
             }

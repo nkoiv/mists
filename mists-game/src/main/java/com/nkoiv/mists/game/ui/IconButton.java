@@ -84,7 +84,7 @@ public class IconButton extends UIComponent {
         
         if (this.background.getWidth() != img.getWidth()) xOffset = (this.background.getWidth() - img.getWidth())/2;
         if (this.background.getHeight() != img.getHeight()) yOffset = (this.background.getHeight() - img.getHeight())/2;
-        
+        if (this.pressed) yOffset = yOffset+3;
         gc.drawImage(img, xPosition+xOffset, yPosition+yOffset);
         
     }
