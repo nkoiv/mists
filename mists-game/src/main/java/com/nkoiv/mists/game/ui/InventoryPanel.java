@@ -90,7 +90,7 @@ public class InventoryPanel extends TiledPanel {
         //tileSubComponentPositions(xOffset, yOffset);
         for (UIComponent sc : this.subComponents) {
             sc.render(gc, sc.getXPosition(), sc.getYPosition());
-        }       
+        }    
     }
     
     @Override
@@ -135,7 +135,7 @@ public class InventoryPanel extends TiledPanel {
             this.parent.removeUIComponent("PopUpMenu");
             PopUpMenu pmenu = new PopUpMenu(parent);
             pmenu.setPosition(xCoor, yCoor);
-            pmenu.setRenderZ(this.renderZ+1);
+            pmenu.setRenderZ(11);
             //pmenu.setOpenUpwards(pressed);
             this.populateItemMenu(pmenu, inv, itemSlot);
             this.parent.addUIComponent(pmenu);

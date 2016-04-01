@@ -128,6 +128,7 @@ public class PopUpMenu extends UIComponent{
         
         public MenuButton(PopUpMenu parent) {
             this.parent = parent;
+            this.renderZ = parent.getRenderZ()+1;
             this.fontSize = -1;
             this.width = 80;
             this.height = 20;
