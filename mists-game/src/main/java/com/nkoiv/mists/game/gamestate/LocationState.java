@@ -17,6 +17,7 @@ import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.ui.ActionButton;
 import com.nkoiv.mists.game.ui.AudioControls;
 import com.nkoiv.mists.game.ui.AudioControls.MuteMusicButton;
+import com.nkoiv.mists.game.ui.CharacterPanel;
 import com.nkoiv.mists.game.ui.CombatPopup;
 import com.nkoiv.mists.game.ui.Console;
 import com.nkoiv.mists.game.ui.DialoguePanel;
@@ -72,6 +73,7 @@ public class LocationState implements GameState {
     private InventoryPanel playerInventory;
     private DialoguePanel dialoguePanel;
     private QuestPanel questPanel;
+    private CharacterPanel characterPanel;
     private CombatPopup sct;
     
     public LocationState (Game game) {
@@ -146,8 +148,8 @@ public class LocationState implements GameState {
         this.dialoguePanel = dp;
         dp.setPosition(100, 200);
         this.questPanel = new QuestPanel(this);
-        questPanel.setPosition(0, 0);
-        
+        questPanel.setPosition(20, 20);
+        this.characterPanel = new CharacterPanel(this, game.getPlayer());
         this.sct = new CombatPopup();
         
         this.addUIComponent(this.generateActionBar());
@@ -155,11 +157,13 @@ public class LocationState implements GameState {
     }
     
     private TiledWindow generateGeneralBar(){
-        int buttonCount = 4;
+        int buttonCount = 5;
         TiledWindow generalBar = new TiledWindow(this, "GeneralButtons", 70, buttonCount*60, 0, 80);
         generalBar.setBgOpacity(0.3);
         IconButton menuButton = new LocationButtons.ToggleLocationMenuButton(game);
         generalBar.addSubComponent(menuButton);
+        IconButton characterButton = new LocationButtons.ToggleCharacterPanelButton(game);
+        generalBar.addSubComponent(characterButton);
         IconButton inventoryButton = new LocationButtons.ToggleInventoryButton(game, playerInventory);
         generalBar.addSubComponent(inventoryButton);
         IconButton questlogButton = new LocationButtons.ToggleQuestLogButton(game);
@@ -207,6 +211,17 @@ public class LocationState implements GameState {
         this.dialoguePanel.setDialogue(null);
     }
     
+    public void toggleCharacterPanel() {
+        Mists.logger.info("Toggling character panel");
+        if (this.uiComponents.containsKey(this.characterPanel.getName())) {
+            //Mists.logger.info("Quest panel was already open");
+            this.closeCharacterPanel();
+        } else {
+            //Mists.logger.info("Quest panel was closed, opening...");
+            this.openCharacterPanel();
+        }
+    }
+    
     public void toggleQuestPanel() {
         Mists.logger.info("Toggling quest panel");
         if (this.uiComponents.containsKey(this.questPanel.getName())) {
@@ -216,6 +231,14 @@ public class LocationState implements GameState {
             //Mists.logger.info("Quest panel was closed, opening...");
             this.openQuestPanel();
         }
+    }
+    
+    public void openCharacterPanel() {
+        this.addUIComponent(this.characterPanel);
+    }
+    
+    public void closeCharacterPanel() {
+        this.removeUIComponent(this.characterPanel);
     }
     
     public void openQuestPanel() {

@@ -102,10 +102,10 @@ public class LocationButtons {
         }
     }
     
-    public static class ToggleCharacterSheetButton extends IconButton {
+    public static class ToggleCharacterPanelButton extends IconButton {
         private final Game game;
         
-        public ToggleCharacterSheetButton(Game game) {
+        public ToggleCharacterPanelButton(Game game) {
             super("CharacterSheet", 0, 0, Mists.graphLibrary.getImage("charsheetIcon"), Mists.graphLibrary.getImage("charsheetIcon"), Mists.graphLibrary.getImage("buttonSquareBeige"), Mists.graphLibrary.getImage("buttonSquareBeigePressed"));
             this.game = game;
         }
@@ -116,7 +116,7 @@ public class LocationButtons {
             if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
                 this.pressed = false;
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-                //game.locControls.toggleCharacterSheet();
+                game.locControls.toggleCharacterPanel();
             }
         }
     }

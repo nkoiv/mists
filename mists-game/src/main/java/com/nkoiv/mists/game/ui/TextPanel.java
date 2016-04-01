@@ -44,7 +44,6 @@ public class TextPanel extends TextWindow {
         gc.restore();
         this.renderText(gc, xPosition, yPosition);
         if (this.closeButton != null) this.closeButton.render(gc, xPosition+closeButton.xPosition, yPosition+closeButton.yPosition);
-        
     }
     
     protected void renderBackground(GraphicsContext gc) {

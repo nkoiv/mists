@@ -122,6 +122,12 @@ public class LocationControls {
         LS.toggleQuestPanel();
     }
     
+    public void toggleCharacterPanel() {
+        LocationState LS = (LocationState)this.game.currentState;
+        LS.toggleCharacterPanel();
+    }
+    
+    
     public void increseLightLevel() {
         //this.game.getPlayer().setVisionRange(this.game.getPlayer().getVisionRange()+1);
         this.game.getPlayer().setLightSize(this.game.getPlayer().getLightSize()+0.2);
