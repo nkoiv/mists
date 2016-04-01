@@ -6,9 +6,9 @@
 package com.nkoiv.mists.game.libraries.premade;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Roof;
-import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import javafx.scene.image.Image;
 
@@ -52,6 +52,15 @@ public class Village {
         roof2.setPosition(38*Mists.TILESIZE, 12*Mists.TILESIZE);
         roof2.setHiddenArea(40*Mists.TILESIZE, 16*Mists.TILESIZE, 9*Mists.TILESIZE, 4*Mists.TILESIZE);
         villageTemplate.roofs.add(roof2);
+    }
+    
+    /**
+     * Generate the village NPCs
+     * @param villageTemplate the village to generate the NPCs on
+     */
+    private static void generateNPCs(LocationTemplate villageTemplate) {
+        Creature villageElder = Mists.creatureLibrary.create("VillageElder");
+        villageElder.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(10));
     }
     
 }
