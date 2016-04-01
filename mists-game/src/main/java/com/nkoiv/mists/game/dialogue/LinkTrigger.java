@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.quests.Quest;
 
 /**
  * LinkTriggers are something that manipulate the game world
@@ -19,6 +20,25 @@ import com.nkoiv.mists.game.items.Item;
 public interface LinkTrigger {
     
     public boolean toggle(MapObject owner, MapObject talker);
+    
+}
+
+class LinkGiveQuestTrigger implements LinkTrigger {
+    private int questID;
+
+    public LinkGiveQuestTrigger(Quest quest) {
+        this.questID = quest.getID();
+    }
+    
+    public LinkGiveQuestTrigger(int questID) {
+        this.questID = questID;
+    }
+    
+    @Override
+    public boolean toggle(MapObject owner, MapObject talker) {
+        return Mists.MistsGame.questManager.openQuest(questID);
+    }
+    
     
 }
 

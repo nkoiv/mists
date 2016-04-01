@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nkoiv.mists.game.dialogue;
+package com.nkoiv.mists.game.triggers;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
