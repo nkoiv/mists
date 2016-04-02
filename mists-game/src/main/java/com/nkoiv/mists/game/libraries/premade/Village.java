@@ -32,7 +32,7 @@ public class Village {
         villageTemplate.map = new TileMap("/mapdata/villagetest.map");
         
         addRoofs(villageTemplate);
-        
+        generateNPCs(villageTemplate);
         return villageTemplate;
     }
     
@@ -59,8 +59,11 @@ public class Village {
      * @param villageTemplate the village to generate the NPCs on
      */
     private static void generateNPCs(LocationTemplate villageTemplate) {
-        Creature villageElder = Mists.creatureLibrary.create("VillageElder");
-        villageElder.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(10));
+        Creature villageShopkeeper = Mists.creatureLibrary.create("VillageShopkeeper");
+        villageShopkeeper.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(10));
+        
+        villageShopkeeper.setPosition(44*Mists.TILESIZE, 14*Mists.TILESIZE);
+        villageTemplate.mobs.add(villageShopkeeper);
     }
     
 }

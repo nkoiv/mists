@@ -89,3 +89,19 @@ attributes:
  MaxHealth: 250
 flags:
  collisionLevel: 5
+---
+monsterID: 100
+name: "VillageShopkeeper"
+type: "Creature"
+aiType: "villager"
+spriteType: "spritesheet"
+spritesheet: "/images/shopkeeper.png"
+spritesheetParameters: [3, 0, 0, 0, 0, 32, 32]
+attributes:
+ Strength: 5
+ Dexterity: 5
+ Intelligence: 5
+ Speed: 30
+ MaxHealth: 150
+flags:
+ collisionLevel: 5
