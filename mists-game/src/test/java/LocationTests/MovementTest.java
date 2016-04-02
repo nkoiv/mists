@@ -52,7 +52,9 @@ public class MovementTest extends Application {
     
     @Before
     public void setUp() {
-       testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
+       if (testLocation == null) {
+           testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
+       }
        testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
        testPlayer.setLocation(testLocation);
        testLocation.addPlayerCharacter(testPlayer, 300, 200);

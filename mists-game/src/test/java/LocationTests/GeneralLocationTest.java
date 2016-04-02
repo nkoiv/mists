@@ -36,9 +36,9 @@ import org.junit.Test;
  */
 public class GeneralLocationTest extends Application {
     
-    private Location testLocation;
+    private static Location testLocation;
     private Creature testCreature;
-    private GameMap testMap; 
+    private static GameMap testMap; 
     private Mists mists;
     
     public GeneralLocationTest() {
@@ -48,19 +48,21 @@ public class GeneralLocationTest extends Application {
     
     @BeforeClass
     public static void setUpClass() {
-        
     }
     
     @AfterClass
     public static void tearDownClass() {
+       
     }
     
     @Before
     public void setUp() {
-       Mists.loadLibraries();
+       if (Mists.creatureLibrary == null) {
+           Mists.loadLibraries();
+       }
        testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
-       testCreature = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
        testMap = new BGMap(new Image("/images/pocmap.png"));
+       testCreature = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
     }
     
     @Test

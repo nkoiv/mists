@@ -368,6 +368,11 @@ public class Location extends Flags implements Global {
         this.nextID = id;
     }
 
+    public void clearAllMapObjects() {
+        for (int mobID : this.mobs.keySet()) {
+            this.removeMapObject(mobID);
+        }
+    }
     
     public void removeMapObject(int mobID) {
         MapObject mob = this.mobs.get(mobID);

@@ -7,7 +7,6 @@ package LocationTests;
 
 import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
@@ -33,7 +32,7 @@ import org.junit.Rule;
  */
 public class PathFinderTest {
     
-    Location testLocation;
+    static Location testLocation;
     CollisionMap testCollisionMap;
     PathFinder testPathFinder;
     ArrayList<Integer> crossableTerrain;
@@ -53,12 +52,18 @@ public class PathFinderTest {
     
     @Before
     public void setUp() {
-        testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
-        testLocation.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
-        testCollisionMap = new CollisionMap(testLocation, Mists.TILESIZE);
-        testPathFinder = new PathFinder(testCollisionMap, 50, true);
-        crossableTerrain = new ArrayList<>();
-        crossableTerrain.add(0);
+        if (testLocation == null) {
+            testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
+            testLocation.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
+        } 
+        if (testCollisionMap == null) {
+            testCollisionMap = new CollisionMap(testLocation, Mists.TILESIZE);
+            testPathFinder = new PathFinder(testCollisionMap, 50, true);
+        }
+        if (crossableTerrain == null) {
+            crossableTerrain = new ArrayList<>();
+            crossableTerrain.add(0);
+        }
     }
     
     @After
