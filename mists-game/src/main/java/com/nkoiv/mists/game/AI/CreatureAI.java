@@ -61,7 +61,6 @@ public class CreatureAI extends Flags{
     
     /**
      * PickNewAction is the root of the AI decision tree
-     * @param time Time used on the action //TODO: Actually unneeded for AI
      * @return Task the AI deicided to perform next
      */
     protected Task pickNewAction() {
@@ -86,7 +85,6 @@ public class CreatureAI extends Flags{
      * The path is stored to AI:s "pathToMoveOn", so it can be used
      * repeatedly before discarded as outdated
      * @param mob MapObject to move towards
-     * @param time Time we can spend on moving
      * @return Task on what the creature is doing (for networking)
      */
     protected Task moveTowardsMob(MapObject mob) {
@@ -144,7 +142,6 @@ public class CreatureAI extends Flags{
     /**
      * Choose a random direction (can be STAY)
      * and move towards it
-     * @param time time spent moving
      * @return the movement done as a task
      */
     protected Task moveRandomly() {
@@ -201,7 +198,6 @@ public class CreatureAI extends Flags{
      * Distance based follow sets the creep to follow the target,
      * unless it's too far (over 10 tiles) away. If target is close
      * (two or less tiles), then the creep just wanders around randomly
-     * @param time time spent for moving
      * @param target target to follow
      * @return the task the creature decided to perform
      */

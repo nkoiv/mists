@@ -31,7 +31,7 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     public PlayerCharacter() {
         //Dummy player for testing
-        super ("Lini",new Image("/images/himmutoy.png"));
+        super ("Lini",new Image("/images/lini_test.png"));
         //SpriteSkeleton playerSkeleton = new SpriteSkeleton();
         //playerSkeleton.addPart("body", new Sprite(new Image("/images/lini_test.png"),0,0));
         //this.graphics = playerSkeleton;

@@ -242,12 +242,12 @@ public class Game {
     }
     
     /**
-     * Retreive the location tied to the given locationID
+     * Retrieve the location tied to the given locationID
      * If the locationID results in a null location, a new
      * location is generated from Mists.LocationLibrary with
      * the given locationID;
      * @param locationID
-     * @return 
+     * @return Location tied to the given ID
      */
     public Location getLocation(int locationID) {
         Mists.logger.log(Level.INFO, "Retrieving Location with ID {0} from the generated locations table", locationID);
@@ -265,6 +265,7 @@ public class Game {
     /**
     * Move the player (and the game) to a new location
     * @param locationID ID of the Location to move to
+     * @param entranceNode EntranceNode within the location to zone into
     */
     public void moveToLocation(int locationID, MapNode entranceNode) {
         Location l = getLocation(locationID);
@@ -275,6 +276,7 @@ public class Game {
      * Move directly to a location without further consulting
      * the generatedLocations. For use in multiplayer fex.
      * @param l Location to move to
+     * @param entranceNode EntranceNode within the location to zone into
      */
     public void moveToLocation(Location l, MapNode entranceNode) {
         Mists.logger.info("Moving into location "+l.getName());

@@ -72,14 +72,18 @@ public class Wall extends Structure {
      * This exists because sometimes the wall is needed
      * to be a bit "higher" than it actually blocks, so that
      * it can be walked "behind".
-     * @param topWallAdjustX
-     * @param topWallAdjustY 
+     * @param topWallAdjustX xCoordinate for the adjustment
+     * @param topWallAdjustY yCoordinate for the adjustment
      */
     public void setTopWallAdjust(double topWallAdjustX, double topWallAdjustY) {
         this.topWallAdjustX = topWallAdjustX;
         this.topWallAdjustY = topWallAdjustY;
     }
     
+    /**
+     * Scan the surrounding walls for neighbouring walls,
+     * and update this walls list of neighbours accordingly.
+     */
     public void updateNeighbours() {
         boolean noNeedForLowerDiagonals = false; //Flag if [6] is set, in which case [5] and [7] are not needed
         if (this.useExtrasForWalls == false) {

@@ -20,7 +20,7 @@ import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.logging.Level;
 
 /**
- * GenericTasks is meant to ease sever->client communication.
+ * GenericTasks is meant to ease server-client communication.
  * While the creaturetype specific AI-classes handle decision making (serverside),
  * the actual executable tasks can be chopped down to GenericTasks.
  * These GenericTasks can then be transferred over network with simple IDs.

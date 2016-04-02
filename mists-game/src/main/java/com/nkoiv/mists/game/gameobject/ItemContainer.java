@@ -125,7 +125,7 @@ public class ItemContainer extends Structure implements HasInventory {
     /**
      * If set to true, the ItemContainer will
      * have its image composed of whatever it contains
-     * @param renderContent 
+     * @param renderContent If set to true, items inside the container will be rendered on it
      */
     public void setRenderContent(boolean renderContent) {
         this.renderContent = renderContent;

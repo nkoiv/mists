@@ -81,7 +81,7 @@ public class TriggerPlate extends MapObject {
      * If requireReEntry is set, a mob standing
      * on trigger will no re-trigger it before moving
      * in and out again
-     * @param requireReEntry 
+     * @param requireReEntry Value to set requireReEntry to
      */
     public void setRequireReEntry(boolean requireReEntry) {
         this.requireReEntry = requireReEntry;

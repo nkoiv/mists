@@ -147,8 +147,8 @@ public class Link extends LocalizableText{
          * mob has equal or higher value on the flag.
          * If "requirement" is set to false, return true when
          * mob is below required value.
-         * @param mob
-         * @return 
+         * @param mob MapObject to check for requirements
+         * @return True if mob meets the requirements, False otherwise
          */
         @Override
         public boolean requirementsMet(MapObject mob) {
