@@ -33,6 +33,7 @@ import com.nkoiv.mists.game.ui.TextPanel;
 import com.nkoiv.mists.game.ui.TiledPanel;
 import com.nkoiv.mists.game.ui.TiledWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
+import java.awt.MouseInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -75,6 +76,10 @@ public class LocationState implements GameState {
     private QuestPanel questPanel;
     private CharacterPanel characterPanel;
     private CombatPopup sct;
+    
+    private boolean movingWithMouse = false;
+    private double movingTowardsX;
+    private double movingTowardsY;
     
     public LocationState (Game game) {
         Mists.logger.info("Generating locationstate for "+Mists.gameMode);
@@ -379,6 +384,7 @@ public class LocationState implements GameState {
      */
     @Override
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
+        if (movingWithMouse) game.locControls.playerAttackMove(movingTowardsX, movingTowardsY);
         handleLocationKeyPress(pressedButtons, releasedButtons);
         switch (Mists.gameMode) {
             case SINGLEPLAYER: this.tickSinglePlayer(time); break;
@@ -407,6 +413,12 @@ public class LocationState implements GameState {
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
+        if (movingWithMouse) {
+            double xOffset = this.game.getCurrentLocation().getLastxOffset();
+            double yOffset = this.game.getCurrentLocation().getLastyOffset();
+            movingTowardsX = me.getSceneX()+xOffset;
+            movingTowardsY = me.getSceneY()+yOffset;
+        }
         //See if there's an UI component to click
         if (me.getEventType() == MouseEvent.MOUSE_CLICKED || me.getEventType() == MouseEvent.MOUSE_PRESSED || me.getEventType() == MouseEvent.MOUSE_RELEASED) this.handleClicks(me);
         if (me.getEventType() == MouseEvent.MOUSE_DRAGGED) this.handleMouseDrags(me);
@@ -470,6 +482,8 @@ public class LocationState implements GameState {
         if (game.getCurrentLocation() == null) return false;
         double clickX = me.getX();
         double clickY = me.getY();
+        if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_PRESSED) movingWithMouse = true;
+        if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_RELEASED) movingWithMouse = false;
         if (me.getButton() == MouseButton.SECONDARY  && me.getEventType() == MouseEvent.MOUSE_RELEASED) {
             //Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
             double xOffset = this.game.getCurrentLocation().getLastxOffset();
@@ -497,7 +511,6 @@ public class LocationState implements GameState {
                 }
                 return true;
             }
-            
         }
         //Click didn't do anything
         return false;

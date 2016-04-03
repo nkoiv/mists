@@ -235,6 +235,12 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
     
     @Override
+    public double getAttackRange() {
+        //TODO: Actually hceck attack range of abilities, based on what's being wielded(?)
+        return 1;
+    }
+    
+    @Override
     public Action getAttack(ActionType actionType) {
         if (this.availableActions == null) return null;
         for (String actionName : this.availableActions.keySet()) {

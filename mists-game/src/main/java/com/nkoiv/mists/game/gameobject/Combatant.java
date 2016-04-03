@@ -22,6 +22,8 @@ public interface Combatant {
 
 	int getAV();
 	
+        double getAttackRange();
+        
         Action getAttack(ActionType actionType);
         
 	void takeDamage(int damage);

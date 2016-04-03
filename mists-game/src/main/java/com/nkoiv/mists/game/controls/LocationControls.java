@@ -159,6 +159,31 @@ public class LocationControls {
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(move);
     }
     
+    public void playerMove(double xTarget, double yTarget) {
+        /*
+        Direction d = Toolkit.getDirection(game.getPlayer().getCenterXPos(), game.getPlayer().getCenterYPos(), xTarget, yTarget);
+        playerMove(d);
+        */
+        Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, game.getPlayer().getID(), new int[]{(int)xTarget, (int)yTarget});
+        game.getPlayer().setNextTask(move);
+        
+    }
+    
+    public void playerAttackMove(double xTarget, double yTarget) {
+        MapObject mob = game.getCurrentLocation().getMobAtLocation(xTarget, yTarget);
+        if (mob == null) {
+            playerMove(xTarget, yTarget);
+        } else {
+            double distance = Toolkit.distance(game.getPlayer().getCenterXPos(), game.getPlayer().getCenterYPos(), mob.getCenterXPos(), mob.getCenterYPos());
+            if ((game.getPlayer().getWidth()/2 + mob.getWidth()/2) + game.getPlayer().getAttackRange() > distance) {
+                //Player is in range to attack
+                
+            } else {
+                playerMove(xTarget, yTarget);
+            }
+        }
+    }
+    
     public void teleportPlayer(double xCoor, double yCoor) {
         if (Mists.gameMode != GameMode.CLIENT) this.game.getCurrentLocation().getPlayer().setCenterPosition(xCoor, yCoor);
     }
