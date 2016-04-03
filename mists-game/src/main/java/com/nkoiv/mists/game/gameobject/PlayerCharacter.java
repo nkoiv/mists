@@ -39,10 +39,12 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.addItem(Mists.itemLibrary.create("axe"));
         this.addItem(Mists.itemLibrary.create("himmutoy"));
         
+        
         this.setAnimation("downMovement", new ImageView("/images/lini.png"), 3, 0, 0, 0, 0, 32, 32 );
         this.setAnimation("leftMovement", new ImageView("/images/lini.png"), 3, 0, 32, 0, 0, 32, 32 );
         this.setAnimation("rightMovement", new ImageView("/images/lini.png"), 3, 0, 64, 0, 0, 32, 32 );
         this.setAnimation("upMovement", new ImageView("/images/lini.png"), 3, 0, 96, 0, 0, 32, 32 );       
+        
         
         this.setFlag("alive", 1);
         this.setMaxHealth(500);
