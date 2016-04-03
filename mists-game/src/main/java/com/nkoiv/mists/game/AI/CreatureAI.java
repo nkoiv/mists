@@ -148,8 +148,9 @@ public class CreatureAI extends Flags{
     
     
     protected Task idleMovementAroundHomeSpot() {
+        Random rnd = new Random();
+        if (rnd.nextInt(10) < 7) return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         if (distanceFromHome() >= 0) {
-            Random rnd = new Random();
             int hs = this.getFlag("homesick");
             if (hs == 0) hs = 60; //Some wandering should always be okay if this method is called
             int r = rnd.nextInt(hs);
