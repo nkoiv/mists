@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.libraries.premade;
 
+import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
@@ -62,7 +63,11 @@ public class Village {
         Creature villageShopkeeper = Mists.creatureLibrary.create("VillageShopkeeper");
         villageShopkeeper.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(10));
         
-        villageShopkeeper.setPosition(44*Mists.TILESIZE, 14*Mists.TILESIZE);
+        villageShopkeeper.setPosition(45*Mists.TILESIZE, 17*Mists.TILESIZE);
+        CreatureAI shopkeeperAI = new CreatureAI(villageShopkeeper);
+        shopkeeperAI.setFlag("homeX", (int)villageShopkeeper.getXPos());
+        shopkeeperAI.setFlag("homeY", (int)villageShopkeeper.getYPos());
+        villageShopkeeper.setAI(shopkeeperAI);
         villageTemplate.mobs.add(villageShopkeeper);
     }
     

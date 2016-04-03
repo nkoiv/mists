@@ -22,6 +22,12 @@ import java.util.Random;
  * the creatures states and intentions.
  * Most general AI functions are stored here, while more
  * specific ones are located in the classes that extend this one
+ * 
+ * Used common AI Flags:
+ * "homeX" - xCoordinate of this creeps homespot
+ * "homeY" - yCoordinate of this creeps homespot
+ * "homesick" - distance creep can go from home before always wanting to go back
+ * 
  * @author nikok
  */
 public class CreatureAI extends Flags{
@@ -61,7 +67,8 @@ public class CreatureAI extends Flags{
     
     /**
      * PickNewAction is the root of the AI decision tree
-     * @return Task the AI deicided to perform next
+     * TODO: StateMachine goes here?
+     * @return Task the AI decided to perform next
      */
     protected Task pickNewAction() {
         if (creep.getLocation().getPlayer() == null) return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
@@ -75,7 +82,8 @@ public class CreatureAI extends Flags{
             return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         }
         else {
-            return this.goMelee(creep.getLocation().getPlayer());
+            return this.idleMovementAroundHomeSpot();
+            //return this.goMelee(creep.getLocation().getPlayer());
         }
     }
 
@@ -138,6 +146,32 @@ public class CreatureAI extends Flags{
         }
     }
     
+    
+    protected Task idleMovementAroundHomeSpot() {
+        if (distanceFromHome() >= 0) {
+            Random rnd = new Random();
+            int hs = this.getFlag("homesick");
+            if (hs == 0) hs = 60; //Some wandering should always be okay if this method is called
+            int r = rnd.nextInt(hs);
+            if (r < distanceFromHome()) {
+                return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{this.getFlag("homeX"), this.getFlag("homeY")});
+            } else {
+                return moveRandomly();
+            }
+        }
+        return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
+    }
+    
+    protected double distanceFromHome() {
+        if (this.isFlagged("homeX") && this.isFlagged("homeY")) {
+            double homeX = this.getFlag("homeX");
+            double homeY = this.getFlag("homeY");
+            double distanceX = Math.abs(homeX - creep.getXPos());
+            double distanceY = Math.abs(homeY - creep.getYPos());
+            return Math.max(distanceX, distanceY);
+        }
+        return -1;
+    }
     
     /**
      * Choose a random direction (can be STAY)

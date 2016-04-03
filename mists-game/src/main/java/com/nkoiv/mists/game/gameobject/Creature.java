@@ -779,6 +779,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         if (ai instanceof MonsterAI) {
             nc.ai = new MonsterAI(nc);
         }
+        for (String flag : ai.getFlags()) {
+            nc.ai.setFlag(flag, ai.getFlag(flag));
+        }
         return nc;
     }
     
