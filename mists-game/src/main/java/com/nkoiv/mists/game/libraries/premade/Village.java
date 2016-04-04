@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.libraries.premade;
 import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.world.TileMap;
@@ -34,7 +35,14 @@ public class Village {
         villageTemplate.lightlevel = 2;
         addRoofs(villageTemplate);
         generateNPCs(villageTemplate);
+        generateStaticStructures(villageTemplate);
         return villageTemplate;
+    }
+    
+    private static void generateStaticStructures(LocationTemplate villageTemplate) {
+        MapEntrance entrance = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
+        entrance.setPosition(3*Mists.TILESIZE, 17*Mists.TILESIZE);
+        villageTemplate.mobs.add(entrance);
     }
     
     /**
