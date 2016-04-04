@@ -9,6 +9,8 @@ package com.nkoiv.mists.game;
 import static com.nkoiv.mists.game.Mists.logger;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.audio.SoundManager;
+import com.nkoiv.mists.game.audio.SoundManagerJavaFX;
+import com.nkoiv.mists.game.audio.SoundManagerOgg;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gamestate.LoadingScreen;
@@ -237,7 +239,8 @@ public class Mists extends Application implements Global {
     }
        
     private static void setupSoundManager() {
-        Mists.soundManager = new SoundManager(5);
+        Mists.soundManager = new SoundManagerJavaFX(5);
+        //Mists.soundManager = new SoundManagerOgg();
     }
     
     private static void setupGraphLibrary() {

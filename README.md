@@ -26,6 +26,7 @@ Please see the [LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.m
 
 * Kryonet TCP/UDP client/server library, licence terms in [LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.md)
 * YAMLbeans YAML library, licence terms in [LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.md)
+* EasyOgg for Ogg Vorbis playback is from Kevins site (http://www.cokeandcode.com/). It utilizes jogg and jorbis (LGPL, http://www.jcraft.com/).
 
 * Majority of the UI components are from Kenneys Pack (http://kenney.nl/projects/kenney-game-assets)
 
