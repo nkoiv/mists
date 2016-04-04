@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 /** MapObjects are basically anything that can be encountered on in a Location (dungeon/town/whatever)
@@ -32,6 +33,8 @@ public class MapObject extends Flags implements Global, Templatable {
     protected int collisionLevel;
     protected boolean removable;
     protected Location location;
+    protected double lightSize;
+    protected Color lightColor;
     
     protected int IDinLocation;
     
@@ -110,6 +113,24 @@ public class MapObject extends Flags implements Global, Templatable {
     public double getHeight() {
         return this.graphics.getHeight();
     }
+    
+    public double getLightSize() {
+        return this.lightSize;
+    }
+    
+    public void setLightSize(double lightsize) {
+        this.lightSize = lightsize;
+    }
+
+    public Color getLightColor() {
+        return lightColor;
+    }
+
+    public void setLightColor(Color lightColor) {
+        this.lightColor = lightColor;
+    }
+    
+    
     
     public Double[] getCorner(Direction d) {
         return this.getGraphics().getCorner(d);
