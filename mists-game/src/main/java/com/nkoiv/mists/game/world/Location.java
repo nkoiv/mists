@@ -67,6 +67,7 @@ public class Location extends Flags implements Global {
     private List<MapObject> targets;
     private String name;
     private GameMap map;
+    private LocationEnvironment environment;
     private CollisionMap collisionMap;
     private PathFinder pathFinder;
     private DungeonGenerator mapGen;
@@ -121,6 +122,7 @@ public class Location extends Flags implements Global {
      * the map playable (collisionmaps, lights...)
      */
     private void localizeMap() {
+        this.environment = new LocationEnvironment(this);
         this.collisionMap = new CollisionMap(this, Mists.TILESIZE);
         Mists.logger.info("Collisionmap generated");
         this.collisionMap.setStructuresOnly(true);
@@ -1186,8 +1188,11 @@ public class Location extends Flags implements Global {
         
         sc.setFill(Color.BLACK);
         sc.fillRect(0, 0, sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
-        lights.renderLightSource(sc, (player.getCenterXPos()-xOffset)*Mists.graphicScale, (player.getCenterYPos()-yOffset)*Mists.graphicScale,player.getLightSize());
-        if (!player.getCompanions().isEmpty()) lights.renderLightSource(sc, (player.getCompanions().get(0).getCenterXPos()-xOffset)*Mists.graphicScale, (player.getCompanions().get(0).getCenterYPos()-yOffset)*Mists.graphicScale,1);
+        //Render playerlight:
+        lights.renderLightSource(sc, (player.getCenterXPos()-xOffset)*Mists.graphicScale, (player.getCenterYPos()-yOffset)*Mists.graphicScale,player.getLightSize()*environment.getLightlevel());
+        
+        //Render companion lights:
+        if (!player.getCompanions().isEmpty()) lights.renderLightSource(sc, (player.getCompanions().get(0).getCenterXPos()-xOffset)*Mists.graphicScale, (player.getCompanions().get(0).getCenterYPos()-yOffset)*Mists.graphicScale,1*environment.getLightlevel());
         
         
     }
@@ -1367,6 +1372,10 @@ public class Location extends Flags implements Global {
     
     public List<MapObject> getTargets() {
         return this.targets;
+    }
+    
+    public LocationEnvironment getEnvironment() {
+        return this.environment;
     }
     
     public void setMinLightLevel(double lightlevel) {

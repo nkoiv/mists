@@ -31,7 +31,7 @@ public class Village {
         Mists.logger.info("Generating template for test village");
         LocationTemplate villageTemplate =new LocationTemplate(2, "TestVillage", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
         villageTemplate.map = new TileMap("/mapdata/villagetest.map");
-        
+        villageTemplate.lightlevel = 2;
         addRoofs(villageTemplate);
         generateNPCs(villageTemplate);
         return villageTemplate;

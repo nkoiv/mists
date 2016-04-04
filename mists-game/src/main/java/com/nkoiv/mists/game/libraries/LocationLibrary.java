@@ -126,7 +126,9 @@ public class LocationLibrary  {
             l.addMapObject(stairs);
             l.setMobInRandomOpenSpot(stairs);
         }
-        l.setMinLightLevel(template.lightlevel);
+        //l.setMinLightLevel(template.lightlevel);
+        if (template.lightlevel > 0) l.getEnvironment().setLightlevel(template.lightlevel);
+        
         l.loading = false;
         return l;
     }

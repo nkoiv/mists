@@ -353,7 +353,7 @@ public class LibLoader {
             }
             testDungeon.mobs.add(monster);
         }
-        
+        testDungeon.lightlevel = 0.5;
         lib.addTemplate(testDungeon);
         
         //--TestVillage--
@@ -388,7 +388,7 @@ public class LibLoader {
             Structure rock = Mists.structureLibrary.create("Rock");
             woods.mobs.add(rock);
         }
-        //woods.lightlevel = 0.3;
+        woods.lightlevel = 1;
         lib.addTemplate(woods);
         
         
