@@ -11,10 +11,8 @@ import com.nkoiv.mists.game.quests.QuestTask;
 import com.nkoiv.mists.game.quests.QuestTaskType;
 import java.util.HashSet;
 import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 

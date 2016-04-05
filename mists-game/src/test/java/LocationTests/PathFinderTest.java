@@ -19,10 +19,8 @@ import java.util.List;
 import java.util.Random;
 import javafx.scene.image.Image;
 import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 

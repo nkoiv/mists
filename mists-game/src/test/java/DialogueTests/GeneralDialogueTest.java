@@ -14,10 +14,8 @@ import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
 import javafx.scene.image.Image;
 import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
