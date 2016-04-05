@@ -533,7 +533,7 @@ public class LocationState implements GameState {
             return true;
         }
         //If nothing was closed, return false
-        return false;
+        else return false;
     }
     
     /**

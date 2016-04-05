@@ -581,6 +581,7 @@ class Shapes
                     // Should never occur
                     throw new AssertionError(
                         "SEG_CUBICTO in flattened path!");
+                default: throw new AssertionError("Unknown path in computeLineSegments()!");
             }
             pi.next();
         }

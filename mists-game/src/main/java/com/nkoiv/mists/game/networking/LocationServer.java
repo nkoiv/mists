@@ -207,8 +207,8 @@ public class LocationServer {
             
             private boolean isValid (String value) {
                 if (value == null) return false;
-                value = value.trim();
-                if (value.length() == 0) return false;
+                String v  = value.trim();
+                if (v.length() == 0) return false;
                 return true;
             }
 

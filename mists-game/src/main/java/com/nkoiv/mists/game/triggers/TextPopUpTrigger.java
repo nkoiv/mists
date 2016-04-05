@@ -14,8 +14,8 @@ import com.nkoiv.mists.game.gamestate.LocationState;
  * @author nikok
  */
 public class TextPopUpTrigger implements Trigger {
-    MapObject target;
-    String popupText;
+    private MapObject target;
+    private String popupText;
     
     public TextPopUpTrigger (MapObject target, String popupText) {
         this.target = target;

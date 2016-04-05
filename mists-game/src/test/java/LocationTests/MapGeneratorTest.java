@@ -25,8 +25,8 @@ import org.junit.Test;
  * @author nikok
  */
 public class MapGeneratorTest {
-    static Location testLocation;
-    static DungeonGenerator testMapGen;
+    private static Location testLocation;
+    private static DungeonGenerator testMapGen;
     
     public MapGeneratorTest() {
     }

@@ -15,7 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class Tile {
     
-    int id;
+    private int id;
     private int size;
     private Sprite tileSprite;
     private String name;

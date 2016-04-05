@@ -31,9 +31,9 @@ import org.junit.Test;
  */
 public class MovementTest extends Application {
     
-    Location testLocation;
-    PlayerCharacter testPlayer;
-    Creature testCreature;
+    private Location testLocation;
+    private PlayerCharacter testPlayer;
+    private Creature testCreature;
     
     public MovementTest() {
     }

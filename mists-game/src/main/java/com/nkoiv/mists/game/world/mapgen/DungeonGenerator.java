@@ -26,10 +26,10 @@ public class DungeonGenerator implements Global{
     private static final int FLOOR = 46;
     private static final int WALL = 35;
     private static final int DOOR = 43;
-    private static Random rnd = new Random();
+    private static final Random rnd = new Random();
 
     public DungeonGenerator() {
-        this.rnd = new Random(); //Create a new random seed every time a DungeonGen is initialized
+        //this.rnd = new Random(); //Create a new random seed every time a DungeonGen is initialized
 
     }
     

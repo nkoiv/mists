@@ -22,7 +22,7 @@ import javafx.scene.paint.Paint;
 public class CombatPopup {
     
     private static Random rand = new Random();
-    ArrayList<ScrollingCombatText> currentSCT;
+    private ArrayList<ScrollingCombatText> currentSCT;
     
     
     public CombatPopup() {

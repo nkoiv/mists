@@ -17,9 +17,9 @@ import java.util.ArrayList;
  * @author nikok
  */
 public class Link extends LocalizableText{
-    int destinationCardID;
-    ArrayList<LinkRequirement> ownerRequirements;
-    ArrayList<LinkRequirement> talkerRequirements;
+    public int destinationCardID;
+    private ArrayList<LinkRequirement> ownerRequirements;
+    private ArrayList<LinkRequirement> talkerRequirements;
     
     public Link(String optionText, int destinationCardID) {
         this.destinationCardID = destinationCardID;
