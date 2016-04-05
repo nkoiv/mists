@@ -71,6 +71,7 @@ public class CircuitPuzzle {
             case 1: xCoor = widthInTiles-1; yCoor = rnd.nextInt(heightInTiles); break; //Start from right side
             case 2: xCoor = rnd.nextInt(widthInTiles); yCoor = heightInTiles-1; break; //Start from lower side
             case 3: xCoor = 0; yCoor = rnd.nextInt(heightInTiles); break; //Start from left side
+            default: xCoor = 0; yCoor = rnd.nextInt(heightInTiles); break;
         }
         
         //The drunk walk here!

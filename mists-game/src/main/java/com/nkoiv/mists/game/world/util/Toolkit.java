@@ -37,24 +37,24 @@ public abstract class Toolkit {
     public static Direction getDirection(double xFrom, double yFrom, double xTo, double yTo) {
         double xMovement = xTo - xFrom;
         double yMovement = yTo - yFrom;
-        Direction d = Direction.STAY;
+        Direction direction = Direction.STAY;
         if (xMovement > 0) {
             //We're going Right
-            if (yMovement>0) d = Direction.DOWNRIGHT;
-            else if (yMovement<0) d = Direction.UPRIGHT;
-            else d = Direction.RIGHT;
+            if (yMovement>0) direction = Direction.DOWNRIGHT;
+            else if (yMovement<0) direction = Direction.UPRIGHT;
+            else direction = Direction.RIGHT;
         } else if (xMovement < 0) {
             //We're going Left
-            if (yMovement>0) d = Direction.DOWNLEFT;
-            else if (yMovement<0) d = Direction.UPLEFT;
-            else d = Direction.LEFT;
+            if (yMovement>0) direction = Direction.DOWNLEFT;
+            else if (yMovement<0) direction = Direction.UPLEFT;
+            else direction = Direction.LEFT;
         } else if (xMovement == 0) {
-            if (yMovement >0) d = Direction.DOWN;
-            else if (yMovement < 0) d = Direction.UP;
+            if (yMovement >0) direction = Direction.DOWN;
+            else if (yMovement < 0) direction = Direction.UP;
         }
         
         
-        return d;
+        return direction;
     }
     
     public static Direction getDirection(Direction from, Direction to) {
@@ -99,11 +99,11 @@ public abstract class Toolkit {
     
     /**
      * Convert direction enum into x/y vector
-     * @param d Direction to get x and y for
+     * @param direction Direction to get x and y for
      * @return x and y towards direction given
      */
-    public static double[] getDirectionXY(Direction d) {
-        switch (d) {
+    public static double[] getDirectionXY(Direction direction) {
+        switch (direction) {
             case UP: return new double[]{0,-1};
             case DOWN: return new double[]{0,1};
             case RIGHT: return new double[]{1,0};
@@ -117,8 +117,8 @@ public abstract class Toolkit {
         }
     }
     
-    public static int getDirectionNumber(Direction d) {
-        switch (d) {
+    public static int getDirectionNumber(Direction direction) {
+        switch (direction) {
             case UP: return 1;
             case UPRIGHT: return 2;
             case RIGHT: return 3;
@@ -134,11 +134,11 @@ public abstract class Toolkit {
     
     /**
      * Next direction going clockwise
-     * @param d Direction to go clockwise from
+     * @param direction Direction to go clockwise from
      * @return The next direction
      */
-    public static Direction clockwise(Direction d) {
-        switch (d) {
+    public static Direction clockwise(Direction direction) {
+        switch (direction) {
             case UP: return Direction.UPRIGHT;
             case DOWN: return Direction.DOWNLEFT;
             case RIGHT: return Direction.DOWNRIGHT;
@@ -154,11 +154,11 @@ public abstract class Toolkit {
     
     /**
      * Next direction going counterclockwise
-     * @param d Direction to go counterclockwise from
+     * @param direction Direction to go counterclockwise from
      * @return The next direction
      */
-    public static Direction counterClockwise(Direction d) {
-        switch (d) {
+    public static Direction counterClockwise(Direction direction) {
+        switch (direction) {
             case UP: return Direction.UPLEFT;
             case DOWN: return Direction.DOWNRIGHT;
             case RIGHT: return Direction.UPRIGHT;
@@ -172,16 +172,16 @@ public abstract class Toolkit {
         }
     }
     
-    public static Direction clockwise(Direction d, int steps) {
-        if (steps <= 0) return d;
-        d = clockwise(d);
-        return clockwise (d, steps-1);
+    public static Direction clockwise(Direction direction, int steps) {
+        if (steps <= 0) return direction;
+        direction = clockwise(direction);
+        return clockwise (direction, steps-1);
     }
     
-    public static Direction counterClockwise(Direction d, int steps) {
-        if (steps <= 0) return d;
-        d = counterClockwise(d);
-        return counterClockwise (d, steps-1);
+    public static Direction counterClockwise(Direction direction, int steps) {
+        if (steps <= 0) return direction;
+        direction = counterClockwise(direction);
+        return counterClockwise (direction, steps-1);
     }
     
     /**
@@ -190,11 +190,11 @@ public abstract class Toolkit {
      * [315][00 ][ 45]
      * [270][00 ][ 90]
      * [225][180][135]
-     * @param d
+     * @param direction
      * @return 
      */
-    public static double getRotation(Direction d) {
-        switch (d) {
+    public static double getRotation(Direction direction) {
+        switch (direction) {
             case UP: return 0;
             case DOWN: return 180;
             case RIGHT: return 90;

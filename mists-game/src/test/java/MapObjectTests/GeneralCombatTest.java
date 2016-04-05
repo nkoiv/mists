@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,9 +30,9 @@ import org.junit.Test;
  */
 public class GeneralCombatTest {
     
-    Location testLocation;
-    Creature combatant1;
-    Creature combatant2;
+    private Location testLocation;
+    private Creature combatant1;
+    private Creature combatant2;
     
     public GeneralCombatTest() {
     }
@@ -86,7 +87,7 @@ public class GeneralCombatTest {
         ArrayList<MapObject> targets = new ArrayList<>();
         targets.add(combatant1);
         testAttack.hitOn(targets);
-        assertTrue(!TestTools.CompareTools.isGreaterThan(combatant1.getMaxHealth(), combatant1.getHealth()));
+        assertFalse(TestTools.CompareTools.isGreaterThan(combatant1.getMaxHealth(), combatant1.getHealth()));
     }
     
     @Test

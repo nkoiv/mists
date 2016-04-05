@@ -104,7 +104,7 @@ public class Console extends TextWindow{
             case "togglescale":super.getGame().toggleScale =true;
             case "giveitem": super.getGame().locControls.giveItem(attributes); break;
             case "printlightmap": super.getGame().locControls.printLightMapIntoConsole(); break;
-            case "help": printHelp(); ;break;
+            case "help": printHelp(); break;
             default: break;
         }
         

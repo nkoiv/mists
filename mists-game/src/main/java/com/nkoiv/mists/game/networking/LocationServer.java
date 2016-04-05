@@ -65,7 +65,7 @@ public class LocationServer {
     
     private static final int PLAYERCAP = 4;
     
-    HashSet<Player> loggedIn = new HashSet();
+    private HashSet<Player> loggedIn = new HashSet();
     
     /*
     TODO: Running multiple locations at once

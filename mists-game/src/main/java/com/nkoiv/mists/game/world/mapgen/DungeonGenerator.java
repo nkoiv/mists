@@ -600,9 +600,9 @@ public class DungeonGenerator implements Global{
     * extending this base Room class.
     */
     private class Room {
-        int width, height;
-        int xOffset, yOffset; //Offsets control wherein the area the room is located
-        int[][] roomMap; //contents of the room
+        private int width, height;
+        private int xOffset, yOffset; //Offsets control wherein the area the room is located
+        private int[][] roomMap; //contents of the room
 
         public Room (int width, int height, int xOffset, int yOffset) {
                 this.width = width;

@@ -33,8 +33,8 @@ public class ContextAction {
     private final HashMap<Trigger, MapObject> triggerSource;
     private ArrayList<MapObject> nearbyObjects;
     private MapObject triggerRadius;
-    int currentTrigger;
-    Creature actor; //Usually the player?
+    private int currentTrigger;
+    private Creature actor; //Usually the player?
     private LocationServer server;
     private LocationClient client;
     

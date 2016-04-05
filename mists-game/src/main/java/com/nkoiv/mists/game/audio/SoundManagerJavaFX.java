@@ -25,9 +25,9 @@ import javafx.util.Duration;
  */
 public class SoundManagerJavaFX implements SoundManager {
     
-    ExecutorService soundPool = Executors.newFixedThreadPool(2);
-    HashMap<String, AudioClip> soundEffects = new HashMap<>();
-    HashMap<String, Media> musicPlaylist = new HashMap<>();
+    private ExecutorService soundPool = Executors.newFixedThreadPool(2);
+    private HashMap<String, AudioClip> soundEffects = new HashMap<>();
+    private HashMap<String, Media> musicPlaylist = new HashMap<>();
     private MediaPlayer mediaPlayer;
     
     public SoundManagerJavaFX(int numberOfThreads) {
