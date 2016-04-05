@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -61,7 +62,7 @@ public class CreatureAITest {
         double yDistance = Math.abs(testPlayer.getYPos() - testCreature.getYPos());
         GenericTasks.moveTowardsTarget(testCreature, testPlayer.getID());
         testCreature.update(0.15f);
-        assert(Math.abs(testPlayer.getXPos() - testCreature.getXPos()) <= xDistance || Math.abs(testPlayer.getYPos() - testCreature.getYPos()) <= xDistance);
+        assertTrue(Math.abs(testPlayer.getXPos() - testCreature.getXPos()) <= xDistance || Math.abs(testPlayer.getYPos() - testCreature.getYPos()) <= xDistance);
     }
     
     @After

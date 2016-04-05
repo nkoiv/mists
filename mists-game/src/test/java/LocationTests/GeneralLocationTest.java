@@ -23,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -67,14 +68,14 @@ public class GeneralLocationTest extends Application {
     
     @Test
     public void testLocationStartsWithEmptyMOBList() {
-        assert(testLocation.getCreatures().isEmpty());
+        assertTrue(testLocation.getCreatures().isEmpty());
     }
     
     @Test
     public void addedStructuresShouldBeInMOBList() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
         testLocation.addMapObject(testRock, 500 , 200);
-        assert(testLocation.getStructures().contains(testRock));
+        assertTrue(testLocation.getStructures().contains(testRock));
     }
     /*
     @Test
@@ -83,13 +84,13 @@ public class GeneralLocationTest extends Application {
         PlayerCharacter testPlayer = new PlayerCharacter();
         Location testLocation2 = new Location(testPlayer);
         testGame.moveToLocation(testLocation2);
-        assert(testGame.currentLocation == testLocation2);
+        assertTrue(testGame.currentLocation == testLocation2);
     }
     */
     @Test
     public void locationFlagsAreSetRight(){
         testLocation.setFlag("swamp",1);
-        assert(testLocation.isFlagged("swamp"));
+        assertTrue(testLocation.isFlagged("swamp"));
     }
     
     @Test
@@ -101,21 +102,21 @@ public class GeneralLocationTest extends Application {
         testLocation.addMapObject(testCreature, 300, 300);
         testCreature.setRemovable();
         testLocation.update(0.15f);
-        assert(testLocation.getCreatures().contains(testCreature) == false);
+        assertTrue(testLocation.getCreatures().contains(testCreature) == false);
     }
     
     @Test
     public void movingIntoLocationUpdatesCurrentPlayer() {
         PlayerCharacter testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
         testLocation.enterLocation(testPlayer, null);
-        assert(testLocation.getPlayer()==testPlayer);
+        assertTrue(testLocation.getPlayer()==testPlayer);
     }
     
     @Test
     public void creaturesCanBeFoundByName() {
         Creature rotta = new Creature("Rotta", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         testLocation.addMapObject(rotta, 500, 500);
-        assert(testLocation.getCreatureByName("Rotta").getName().equals("Rotta"));  
+        assertTrue(testLocation.getCreatureByName("Rotta").getName().equals("Rotta"));  
     }
     
     @Test
@@ -126,7 +127,7 @@ public class GeneralLocationTest extends Application {
         double startX = tree.getExtras().get(0).getXPos();
         tree.setPosition(500, 500);
         
-        assert(tree.getExtras().get(0).getXPos() != startX);
+        assertTrue(tree.getExtras().get(0).getXPos() != startX);
         
     }
         
@@ -136,7 +137,7 @@ public class GeneralLocationTest extends Application {
         testRock.setRemovable();
         testLocation.addMapObject(testRock, 500 , 200);
         testLocation.update(1);
-        assert(testLocation.getStructures().isEmpty());
+        assertTrue(testLocation.getStructures().isEmpty());
     }
     
     
@@ -151,7 +152,7 @@ public class GeneralLocationTest extends Application {
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
-        assert(testLocation.collidedSides(testCreature1).contains(Direction.RIGHT) == true);
+        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.RIGHT) == true);
     }
     
     @Test
@@ -164,7 +165,7 @@ public class GeneralLocationTest extends Application {
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
-        assert(testLocation.collidedSides(testCreature1).contains(Direction.LEFT) == true);
+        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.LEFT) == true);
     }
     
     @Test
@@ -177,7 +178,7 @@ public class GeneralLocationTest extends Application {
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
-        assert(testLocation.collidedSides(testCreature1).contains(Direction.UP) == true);
+        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.UP) == true);
     }
     
     @Test
@@ -190,7 +191,7 @@ public class GeneralLocationTest extends Application {
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
-        assert(testLocation.collidedSides(testCreature1).contains(Direction.DOWN) == true);
+        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.DOWN) == true);
     }
     
     @Test
@@ -207,7 +208,7 @@ public class GeneralLocationTest extends Application {
         testCreature1.setRemovable();
         testCreature2.setRemovable();
         testLocation.update(0.15f);
-        assert(testLocation.getCreatures().size() == mobsAtLocation-2);
+        assertTrue(testLocation.getCreatures().size() == mobsAtLocation-2);
     }
     
     @Test
@@ -216,25 +217,25 @@ public class GeneralLocationTest extends Application {
         testLocation.loadMap(new TileMap("/mapdata/pathfinder_test.map"));
         testLocation.setMobInRandomOpenSpot(testCreature);
         //Only testCreature itself should be at this random open spot
-        assert(testLocation.checkCollisions(testCreature).size() <= 1);
+        assertTrue(testLocation.checkCollisions(testCreature).size() <= 1);
     }
     
     @Test
     public void addedCreaturesKnowTheirLocation() {
         testLocation.addMapObject(testCreature, 7, 8);
-        assert(testCreature.getLocation()==testLocation);
+        assertTrue(testCreature.getLocation()==testLocation);
     }
     
     @Test
     public void addedStructuresKnowTheirLocation() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
         testLocation.addMapObject(testRock, 300 , 200);
-        assert(testRock.getLocation() == testLocation);
+        assertTrue(testRock.getLocation() == testLocation);
     }
     
     @Test
     public void locationAlwaysHasAMap() {
-        assert(testLocation.getMap() != null);
+        assertTrue(testLocation.getMap() != null);
     }
     
    
@@ -243,7 +244,7 @@ public class GeneralLocationTest extends Application {
         testLocation.addMapObject(testCreature, 50, 70);
         testCreature.setRemovable();
         testLocation.update(1);
-        assert(testLocation.getCreatures().isEmpty());
+        assertTrue(testLocation.getCreatures().isEmpty());
     }
     
     @After

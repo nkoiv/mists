@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.quests.QuestTask;
 import com.nkoiv.mists.game.quests.QuestTaskType;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -58,14 +59,14 @@ public class QuestManagerTest {
     public void questsCanBeAddedToQuestManager() {
         Quest q = generateTestQuest();
         qm.addQuest(q);
-        assert(qm.questAvailable(q.getID()));
+        assertTrue(qm.questAvailable(q.getID()));
     }
     
     @Test
     public void questsCanBeAddedToTheOpenList() {
         Quest q = generateTestQuest();
         qm.openQuest(q);
-        assert(qm.getOpenQuests().containsValue(q));
+        assertTrue(qm.getOpenQuests().containsValue(q));
     }
     
     @Test
@@ -74,7 +75,7 @@ public class QuestManagerTest {
         qm.addQuest(q);
         int questID = q.getID();
         qm.openQuest(questID);
-        assert(qm.getOpenQuests().containsValue(q));
+        assertTrue(qm.getOpenQuests().containsValue(q));
     }
     
     @Test
@@ -82,7 +83,7 @@ public class QuestManagerTest {
         Quest q = generateTestQuest();
         qm.openQuest(q);
         qm.closeQuest(q.getID());
-        assert(!qm.getOpenQuests().containsKey(q.getID()));
+        assertTrue(!qm.getOpenQuests().containsKey(q.getID()));
     }
     
     @Test
@@ -90,7 +91,7 @@ public class QuestManagerTest {
         Quest q = generateTestQuest();
         qm.openQuest(q);
         qm.registerQuestEvent(QuestTaskType.CREATUREKILL, 1, 1);
-        assert(qm.getOpenQuests().get(q.getID()).isComplete());
+        assertTrue(qm.getOpenQuests().get(q.getID()).isComplete());
     }
     
 }

@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -60,7 +61,7 @@ public class GeneralCombatTest {
     
     @Test
     public void creaturesStartWithFullHp(){
-        assert(combatant1.getHealth() == combatant1.getMaxHealth());
+        assertTrue(combatant1.getHealth() == combatant1.getMaxHealth());
     }
     
     @Test
@@ -69,7 +70,7 @@ public class GeneralCombatTest {
         ArrayList<MapObject> targets = new ArrayList<>();
         targets.add(combatant2);
         testAttack.hitOn(targets);
-        assert(TestTools.CompareTools.isGreaterThan(combatant2.getMaxHealth(), combatant2.getHealth()));
+        assertTrue(TestTools.CompareTools.isGreaterThan(combatant2.getMaxHealth(), combatant2.getHealth()));
     }
     
     @Test
@@ -85,7 +86,7 @@ public class GeneralCombatTest {
         ArrayList<MapObject> targets = new ArrayList<>();
         targets.add(combatant1);
         testAttack.hitOn(targets);
-        assert(!TestTools.CompareTools.isGreaterThan(combatant1.getMaxHealth(), combatant1.getHealth()));
+        assertTrue(!TestTools.CompareTools.isGreaterThan(combatant1.getMaxHealth(), combatant1.getHealth()));
     }
     
     @Test
@@ -96,30 +97,30 @@ public class GeneralCombatTest {
         combatant1.getAvailableActions().remove("melee");
         testAttack.hitOn(targets);
         int healthAfterFirstHit = combatant2.getHealth();
-        assert(TestTools.CompareTools.isGreaterThan(combatant2.getMaxHealth(), combatant2.getHealth()));
+        assertTrue(TestTools.CompareTools.isGreaterThan(combatant2.getMaxHealth(), combatant2.getHealth()));
         testAttack.hitOn(targets);
         int healthAfterSecondHit = combatant2.getHealth();
-        assert(healthAfterFirstHit == healthAfterSecondHit);
+        assertTrue(healthAfterFirstHit == healthAfterSecondHit);
     }
     
     @Test
     public void healingCreatureShouldIncreaseItsHealth() {
         combatant1.setHealth(1);
         combatant1.healHealth(50);
-        assert(combatant1.getHealth() == 51);
+        assertTrue(combatant1.getHealth() == 51);
     }
     
     @Test
     public void healingCantHealOverMaxHealth() {
         combatant1.setHealth(combatant1.getMaxHealth());
         combatant1.healHealth(1000);
-        assert(combatant1.getHealth() == combatant1.getMaxHealth());
+        assertTrue(combatant1.getHealth() == combatant1.getMaxHealth());
     }
     
     @Test
     public void creaturesHitToZeroHealthGetRemovableFlag() {
         combatant1.takeDamage(combatant1.getMaxHealth());
-        assert(combatant1.isRemovable());
+        assertTrue(combatant1.isRemovable());
     }
     
     @After

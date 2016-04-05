@@ -152,7 +152,7 @@ public class PathFinderTest {
         int goalY = rnd.nextInt(50);
         int xDistance = Math.abs(startX-goalX);
         int yDistance = Math.abs(startY-goalY);
-        assert(testCalc.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY) == xDistance+yDistance);
+        assertTrue(testCalc.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY) == xDistance+yDistance);
     }
     
     @Test
@@ -171,7 +171,7 @@ public class PathFinderTest {
         double AC = Math.sqrt(Math.pow(AB, 2)
                             + Math.pow(BC, 2));
         
-        assert(testCalc.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY) == AC);
+        assertTrue(testCalc.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY) == AC);
     }
     
     @Test
@@ -185,7 +185,7 @@ public class PathFinderTest {
         int goalY = rnd.nextInt(50);
         MoveCostCalculator testCalcManhattan = new MoveCostCalculator(1);
         MoveCostCalculator testCalcDiagonal = new MoveCostCalculator(1);
-        assert(testCalcManhattan.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY)
+        assertTrue(testCalcManhattan.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY)
                 == testCalcDiagonal.getCost(testCollisionMap, crossableTerrain, startX, startY, goalX, goalY));
     }
     

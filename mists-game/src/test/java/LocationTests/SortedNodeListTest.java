@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.world.util.SortedList;
 import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class SortedNodeListTest {
         SortedList testList = new SortedList();
         Node testNode = new Node(1, 1);
         testList.add(testNode);
-        assert(testList.contains(testNode));
+        assertTrue(testList.contains(testNode));
     }
     
     @Test
@@ -54,7 +55,7 @@ public class SortedNodeListTest {
         System.out.println("Adding node to list");
         testList.add(testNode);
         System.out.println("List size: " +testList.size());
-        assert(testList.size() == 1);
+        assertTrue(testList.size() == 1);
     }
     
     @Test
@@ -63,7 +64,7 @@ public class SortedNodeListTest {
         Node testNode = new Node(1, 1);
         testList.add(testNode);
         testList.remove(testNode);
-        assert(testList.size() == 0);
+        assertTrue(testList.size() == 0);
         
     }
 
@@ -82,6 +83,6 @@ public class SortedNodeListTest {
         double endTime = System.nanoTime();
         double sortingTimeMS = ((endTime-startTime)/1000000);
         System.out.println("Sorting done in "+sortingTimeMS+"ms");
-        assert(sortingTimeMS < 10);
+        assertTrue(sortingTimeMS < 10);
     }
 }

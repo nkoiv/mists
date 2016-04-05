@@ -16,6 +16,7 @@ import java.util.Random;
 import javafx.scene.image.Image;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -63,7 +64,7 @@ public class MapGeneratorTest {
         TileMap generatedTilemap = DungeonGenerator.generateDungeon(testLocation.getMapGen(), randomXSize, randomYSize);
         System.out.println("Randomed size was "+randomXSize+","+randomYSize);
         
-        assert(generatedTilemap.getWidth() == randomXSize*generatedTilemap.getTileSize() && generatedTilemap.getHeight()==randomYSize*generatedTilemap.getTileSize()); 
+        assertTrue(generatedTilemap.getWidth() == randomXSize*generatedTilemap.getTileSize() && generatedTilemap.getHeight()==randomYSize*generatedTilemap.getTileSize()); 
     }
     
     @Test
@@ -74,7 +75,7 @@ public class MapGeneratorTest {
         int absMinSize = 5;
         ArrayList<DungeonGenerator.BSParea> testBSP = DungeonGenerator.BSPdungeon(testMapGen, randomXSize, randomYSize, 20, 0.3f, 0.7f, absMinSize, true);
         for (DungeonGenerator.BSParea a : testBSP) {
-            assert(CompareTools.isGreaterThan(a.width * a.height, absMinSize));
+            assertTrue(CompareTools.isGreaterThan(a.width * a.height, absMinSize));
         } 
     }
        
@@ -85,7 +86,7 @@ public class MapGeneratorTest {
         int randomYSize = rng.nextInt(30)+30;
         int absMinSize = 5;
         ArrayList<DungeonGenerator.BSParea> testBSP = DungeonGenerator.BSPdungeon(testMapGen, randomXSize, randomYSize, 20, 0.3f, 0.7f, absMinSize, false);
-        assert(testBSP.size() > 1);
+        assertTrue(testBSP.size() > 1);
     }
     
 }

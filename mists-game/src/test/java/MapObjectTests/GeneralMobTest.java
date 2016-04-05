@@ -29,13 +29,14 @@ import org.junit.Test;
  */
 public class GeneralMobTest {
     
-    Location testLocation;
-    Structure testStructure;
-    Creature testCreature;
-    Effect testEffect;
+    private Location testLocation;
+    private Structure testStructure;
+    private Creature testCreature;
+    private Effect testEffect;
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     
+    /*
     public GeneralMobTest() {
     }
     
@@ -46,6 +47,7 @@ public class GeneralMobTest {
     @AfterClass
     public static void tearDownClass() {
     }
+    */
     
     @Before
     public void setUp() {
@@ -57,19 +59,19 @@ public class GeneralMobTest {
     @Test
     public void structureCanHaveExtraFrills() {
         testStructure.addExtra(new Image("/images/structures/tree1_frill.png"), -20, -106);
-        assert(!testStructure.getExtras().isEmpty());
+        assertTrue(!testStructure.getExtras().isEmpty());
     }
     
     @Test
     public void structuralExtrasCanBeRemoved() {
         testStructure.addExtra(new Image("/images/structures/tree1_frill.png"), -20, -106);
         testStructure.removeExtras();
-        assert(testStructure.getExtras().isEmpty());
+        assertTrue(testStructure.getExtras().isEmpty());
     }
     @Test
     public void structuresCanBeMoved() {
         testStructure.setPosition(100, 100);
-        assert(testStructure.getXPos() == 100);
+        assertTrue(testStructure.getXPos() == 100);
     }
     
     @Test
@@ -82,7 +84,7 @@ public class GeneralMobTest {
     @Test
     public void creatureFlagValuesAreSaved() {
         testCreature.setFlag("Testflag", 500);
-        assert(testCreature.getFlag("Testflag") == 500);
+        assertTrue(testCreature.getFlag("Testflag") == 500);
     }
     
     @Test
@@ -95,38 +97,38 @@ public class GeneralMobTest {
     
     @Test
     public void creatureFlagReturnsFalseWhenThereIsNoFlag() {
-        assert(!testCreature.isFlagged("Testflag"));
+        assertTrue(!testCreature.isFlagged("Testflag"));
     }
     
     @Test
     public void creatureFlagReturnsFalseWhenFlagIsZero() {
         testCreature.setFlag("Testflag", 0);
-        assert(!testCreature.isFlagged("Testflag"));
+        assertTrue(!testCreature.isFlagged("Testflag"));
     }
     
     @Test
     public void creatureAttributesAlwaysReturnAtleastZero() {
-        assert(testCreature.getAttribute("Testattribute") >= 0);
+        assertTrue(testCreature.getAttribute("Testattribute") >= 0);
     }
     
     @Test
     public void creatureFacingMatchesMovement() {
         testCreature.moveTowards(Direction.UP);
-        assert(testCreature.getFacing() == Direction.UP);
+        assertTrue(testCreature.getFacing() == Direction.UP);
     }
     
     @Test
     public void mobCenterXPositionIsPositionPlusHalfWidth() {
         testCreature.setPosition(100,100);
         double centerX = testCreature.getCenterXPos();
-        assert(centerX == 100+(testCreature.getWidth()/2));
+        assertTrue(centerX == 100+(testCreature.getWidth()/2));
     }
     
     @Test
     public void mobCenterYPositionIsPositionPlusHalfHeight() {
         testCreature.setPosition(200,200);
         double centerY = testCreature.getCenterYPos();
-        assert(centerY == 200+(testCreature.getHeight()/2));
+        assertTrue(centerY == 200+(testCreature.getHeight()/2));
     }
     
     @After

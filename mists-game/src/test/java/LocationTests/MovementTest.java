@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -76,8 +77,8 @@ public class MovementTest extends Application {
         testPlayer.moveTowards(Direction.UPLEFT);
         testPlayer.moveTowards(Direction.UP);
         //testPlayer.update(0.16f);
-        assert(testPlayer.getXPos()==originalXPos);
-        assert(testPlayer.getYPos()==originalYPos);
+        assertTrue(testPlayer.getXPos()==originalXPos);
+        assertTrue(testPlayer.getYPos()==originalYPos);
         
     }
     
@@ -95,8 +96,8 @@ public class MovementTest extends Application {
         testCreature.moveTowards(Direction.UPLEFT);
         testCreature.moveTowards(Direction.UP);
         //testPlayer.update(0.16f);
-        assert(testCreature.getXPos()==originalXPos);
-        assert(testCreature.getYPos()==originalYPos);
+        assertTrue(testCreature.getXPos()==originalXPos);
+        assertTrue(testCreature.getYPos()==originalYPos);
         
     }
     
@@ -108,7 +109,7 @@ public class MovementTest extends Application {
         testPlayer.moveTowards(Direction.DOWN);
         testPlayer.applyMovement(0.16f);
         
-        assert(originalYPos != testPlayer.getYPos());
+        assertTrue(originalYPos != testPlayer.getYPos());
     }
     
     @Test
@@ -119,7 +120,7 @@ public class MovementTest extends Application {
         testCreature.moveTowards(Direction.DOWN);
         testCreature.applyMovement(0.16f);
         
-        assert(originalYPos != testCreature.getYPos());
+        assertTrue(originalYPos != testCreature.getYPos());
     }
     
     
@@ -131,7 +132,7 @@ public class MovementTest extends Application {
         testPlayer.moveTowards(Direction.UP);
         testPlayer.update(0.16f);
         
-        assert(originalYPos == testPlayer.getXPos()); //Should still be at original position
+        assertTrue(originalYPos == testPlayer.getXPos()); //Should still be at original position
     }
     
     @Test
@@ -149,7 +150,7 @@ public class MovementTest extends Application {
         }
         
         //testPlayer should still be on the left (smaller X) side of the rock, because collisions prevented it going past it:
-        assert(TestTools.CompareTools.isGreaterThan(testRock.getXPos(), testPlayer.getXPos()));
+        assertTrue(TestTools.CompareTools.isGreaterThan(testRock.getXPos(), testPlayer.getXPos()));
         
     }
 

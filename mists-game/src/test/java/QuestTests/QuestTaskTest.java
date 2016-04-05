@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.quests.QuestTaskType;
 import java.util.HashSet;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -56,13 +57,13 @@ public class QuestTaskTest {
     
     @Test
     public void questIsNotCompleteBeforeTasksAreComplete() {
-        assert(!testQuest.isComplete());
+        assertTrue(!testQuest.isComplete());
     }
     
     @Test
     public void questTasksCanBeProgressed() {
         testQuest.addProgress(QuestTaskType.CREATUREKILL, 1, 1);
-        assert(testQuest.isComplete());
+        assertTrue(testQuest.isComplete());
     }
     
     @Test
@@ -70,14 +71,14 @@ public class QuestTaskTest {
         testQuest.addTask(new QuestTask("Kill more monsters of type 2", QuestTaskType.CREATUREKILL, 2, 10));
         testQuest.addProgress(QuestTaskType.CREATUREKILL, 2, 10);
         testQuest.addProgress(QuestTaskType.CREATUREKILL, 1, 1);
-        assert(testQuest.isComplete());
+        assertTrue(testQuest.isComplete());
     }
     
     @Test
     public void questTaskTypesAreNeededCorrectly() {
         testQuest.addTask(new QuestTask("Use an item", QuestTaskType.ITEMUSE, 1, 1));
         HashSet s = testQuest.getNeededTaskTypes();
-        assert(s.size() == 2);
-        assert(s.contains(QuestTaskType.CREATUREKILL) && s.contains(QuestTaskType.ITEMUSE));
+        assertTrue(s.size() == 2);
+        assertTrue(s.contains(QuestTaskType.CREATUREKILL) && s.contains(QuestTaskType.ITEMUSE));
     }
 }

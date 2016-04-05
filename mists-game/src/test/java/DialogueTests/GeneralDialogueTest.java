@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.world.Location;
 import javafx.scene.image.Image;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -61,7 +62,7 @@ public class GeneralDialogueTest {
     public void dialogueCanBeNavigatedManually() {
         int startCard = testDialogue.getCardNumber();
         testDialogue.moveToCard(startCard+1);
-        assert(startCard!=testDialogue.getCardNumber());
+        assertTrue(startCard!=testDialogue.getCardNumber());
     }
     
     @Test
@@ -69,27 +70,27 @@ public class GeneralDialogueTest {
         int startCard = testDialogue.getCardNumber();
         int targetCard = testDialogue.getCurrentCard().getLinkDestination(0);
         testDialogue.moveToCard(targetCard);
-        assert(startCard!=testDialogue.getCardNumber());
+        assertTrue(startCard!=testDialogue.getCardNumber());
     }
     
     @Test
     public void localizedTextWorksWithOwnerName() {
-        System.out.println("PreInit: "+testDialogue.getCurrentCard().getText());
+        //System.out.println("PreInit: "+testDialogue.getCurrentCard().getText());
         testDialogue.initiateDialogue(dialogueOwner, dialogueTalker);
         String talktext = testDialogue.getCurrentCard().getText();
-        System.out.println("PostInit: "+testDialogue.getCurrentCard().getText());
-        assert(talktext.contains(dialogueOwner.getName()));
+        //System.out.println("PostInit: "+testDialogue.getCurrentCard().getText());
+        assertTrue(talktext.contains(dialogueOwner.getName()));
     }
     
     @Test
     public void localizedTextWorksWithTalkerName() {
         testDialogue.setCurrentCard(2);
-        System.out.println("PreInit: "+testDialogue.getCurrentCard().getText());
+        //System.out.println("PreInit: "+testDialogue.getCurrentCard().getText());
         testDialogue.initiateDialogue(dialogueOwner, dialogueTalker);
         testDialogue.moveToCard(2);
         String talktext = testDialogue.getCurrentCard().getText();
-        System.out.println("PostInit: "+testDialogue.getCurrentCard().getText());
-        assert(talktext.contains(dialogueTalker.getName()));
+        //System.out.println("PostInit: "+testDialogue.getCurrentCard().getText());
+        assertTrue(talktext.contains(dialogueTalker.getName()));
     }
     
     private static Dialogue buildTestDialogue() {

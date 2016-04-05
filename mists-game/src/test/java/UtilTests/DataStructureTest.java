@@ -46,8 +46,8 @@ public class DataStructureTest {
     @Test
     public void minHeapStartsEmpty() {
         MinHeap testHeap = new MinHeap();
-        assert(testHeap.isEmpty());
-        assert(testHeap.first() == null);
+        assertTrue(testHeap.isEmpty());
+        assertTrue(testHeap.first() == null);
     }
     
     @Test
@@ -55,7 +55,7 @@ public class DataStructureTest {
         MinHeap testHeap = new MinHeap();
         Node testNode = new Node(0, 0);
         testHeap.add(testNode);
-        assert(testHeap.size() == 1);
+        assertTrue(testHeap.size() == 1);
     }
     
     @Test
@@ -63,7 +63,7 @@ public class DataStructureTest {
         MinHeap testHeap = new MinHeap();
         Node testNode = new Node(0, 0);
         testHeap.add(testNode);
-        assert(testHeap.first() == testNode);
+        assertTrue(testHeap.first() == testNode);
     }
     
     @Test
@@ -79,7 +79,7 @@ public class DataStructureTest {
         smallCostNode.setCostEstimate(10);
         testHeap.add(smallCostNode);
         
-        assert(testHeap.first() == smallCostNode);
+        assertTrue(testHeap.first() == smallCostNode);
         
     }
     
@@ -89,7 +89,7 @@ public class DataStructureTest {
         Node testNode = new Node(0, 0);
         testHeap.add(testNode);
         testHeap.clear();
-        assert(testHeap.isEmpty());
+        assertTrue(testHeap.isEmpty());
     }
     
     @Test
@@ -98,7 +98,7 @@ public class DataStructureTest {
         Node testNode = new Node(0, 0);
         testHeap.add(testNode);
         testHeap.remove(testHeap.first());
-        assert(testHeap.isEmpty());
+        assertTrue(testHeap.isEmpty());
     }
     
     @Test
@@ -115,7 +115,7 @@ public class DataStructureTest {
         testHeap.add(smallCostNode);
         
         testHeap.remove(testHeap.first());
-        assert(testHeap.first() == mediumCostNode);
+        assertTrue(testHeap.first() == mediumCostNode);
         
     }
     
@@ -124,7 +124,7 @@ public class DataStructureTest {
         MinHeap testHeap = new MinHeap();
         Node[] testNodes = createNodes(100);
         addIntoMinHeap(testHeap, testNodes);
-        assert(testHeap.size() > 50);
+        assertTrue(testHeap.size() > 50);
     }
     
     @Test
@@ -149,7 +149,7 @@ public class DataStructureTest {
         testHeap.add(testNode);
         Node[] testNodes = createNodes(500);
         addIntoMinHeap(testHeap, testNodes);
-        assert(testHeap.first().equals(testNode));
+        assertTrue(testHeap.first().equals(testNode));
     }
     
     @Test
@@ -193,8 +193,8 @@ public class DataStructureTest {
     @Test
     public void comparingQueueStartsEmpty() {
         ComparingQueue testQueue = new ComparingQueue();
-        assert(testQueue.isEmpty());
-        assert(testQueue.first() == null);
+        assertTrue(testQueue.isEmpty());
+        assertTrue(testQueue.first() == null);
     }
     
     @Test
@@ -202,7 +202,7 @@ public class DataStructureTest {
         ComparingQueue testQueue = new ComparingQueue();
         Node testNode = new Node(0, 0);
         testQueue.add(testNode);
-        assert(testQueue.size() == 1);
+        assertTrue(testQueue.size() == 1);
     }
     
     @Test
@@ -210,7 +210,7 @@ public class DataStructureTest {
         ComparingQueue testQueue = new ComparingQueue();
         Node testNode = new Node(0, 0);
         testQueue.add(testNode);
-        assert(testQueue.first() == testNode);
+        assertTrue(testQueue.first() == testNode);
     }
     
     @Test
@@ -226,7 +226,7 @@ public class DataStructureTest {
         smallCostNode.setCostEstimate(10);
         testQueue.add(smallCostNode);
         
-        assert(testQueue.first() == smallCostNode);
+        assertTrue(testQueue.first() == smallCostNode);
         
     }
     
@@ -236,7 +236,7 @@ public class DataStructureTest {
         Node testNode = new Node(0, 0);
         testQueue.add(testNode);
         testQueue.clear();
-        assert(testQueue.isEmpty());
+        assertTrue(testQueue.isEmpty());
     }
     
     @Test
@@ -245,7 +245,7 @@ public class DataStructureTest {
         Node testNode = new Node(0, 0);
         testQueue.add(testNode);
         testQueue.remove(testQueue.first());
-        assert(testQueue.isEmpty());
+        assertTrue(testQueue.isEmpty());
     }
     
     @Test
@@ -264,7 +264,7 @@ public class DataStructureTest {
         System.out.println(testQueue.toString());
         testQueue.remove(testQueue.first());
         System.out.println(testQueue.toString());
-        assert(testQueue.first() == mediumCostNode);
+        assertTrue(testQueue.first() == mediumCostNode);
         
     }
     
@@ -273,7 +273,7 @@ public class DataStructureTest {
         ComparingQueue testQueue = new ComparingQueue();
         Node[] testNodes = createNodes(100);
         addIntoComparingQueue(testQueue, testNodes);
-        assert(testQueue.size() > 50);
+        assertTrue(testQueue.size() > 50);
     }
     
     
@@ -281,8 +281,8 @@ public class DataStructureTest {
     @Test
     public void sortedListStartsEmpty() {
         SortedList testList = new SortedList();
-        assert(testList.isEmpty());
-        assert(testList.first() == null);
+        assertTrue(testList.isEmpty());
+        assertTrue(testList.first() == null);
     }
     
     @Test
@@ -290,7 +290,7 @@ public class DataStructureTest {
         SortedList testList = new SortedList();
         Node testNode = new Node(0, 0);
         testList.add(testNode);
-        assert(testList.size() == 1);
+        assertTrue(testList.size() == 1);
     }
     
     @Test
@@ -298,7 +298,7 @@ public class DataStructureTest {
         SortedList testList = new SortedList();
         Node testNode = new Node(0, 0);
         testList.add(testNode);
-        assert(testList.first() == testNode);
+        assertTrue(testList.first() == testNode);
     }
     
     @Test
@@ -314,7 +314,7 @@ public class DataStructureTest {
         smallCostNode.setCostEstimate(10);
         testList.add(smallCostNode);
         
-        assert(testList.first() == smallCostNode);
+        assertTrue(testList.first() == smallCostNode);
         
     }
     
@@ -324,7 +324,7 @@ public class DataStructureTest {
         Node testNode = new Node(0, 0);
         testList.add(testNode);
         testList.clear();
-        assert(testList.isEmpty());
+        assertTrue(testList.isEmpty());
     }
     
     @Test
@@ -338,7 +338,7 @@ public class DataStructureTest {
         testList.remove(testList.first());
         System.out.println("SortedList size: "+testList.size()+" - First: "+testList.first());
         System.out.println("---sortedListFirstItemCanBeRemoved---");
-        assert(testList.isEmpty());
+        assertTrue(testList.isEmpty());
         
     }
     
@@ -356,7 +356,7 @@ public class DataStructureTest {
         testList.add(smallCostNode);
         
         testList.remove(testList.first());
-        assert(testList.first() == mediumCostNode);
+        assertTrue(testList.first() == mediumCostNode);
         
     }
     
@@ -365,7 +365,7 @@ public class DataStructureTest {
         SortedList testList = new SortedList();
         Node[] testNodes = createNodes(100);
         addIntoSortedList(testList, testNodes);
-        assert(testList.size() > 50);
+        assertTrue(testList.size() > 50);
     }
     
      /**

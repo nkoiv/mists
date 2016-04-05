@@ -86,7 +86,7 @@ public class Wall extends Structure {
      */
     public void updateNeighbours() {
         boolean noNeedForLowerDiagonals = false; //Flag if [6] is set, in which case [5] and [7] are not needed
-        if (this.useExtrasForWalls == false) {
+        if (!this.useExtrasForWalls) {
             if (this.wallimages == null) this.generateWallImages(this.wallparts);
             this.getSprite().setImage(this.composeImage());
             //Still always use the extra for [1], aka top wall
@@ -215,7 +215,7 @@ public class Wall extends Structure {
         int n = 1;
         boolean noNeedForLowerCardinals = true; //neighbours[6] //TODO: Do we EVER need the lower corners?
         for (int i = 0; i < this.neighbours.length; i++) {
-            if (this.neighbours[i] == false) {
+            if (!this.neighbours[i]) {
                 if ((i == 5 || i == 7) && noNeedForLowerCardinals) {
                     //No need to add lower right or lower left corner if lower center is present
                 } else {
