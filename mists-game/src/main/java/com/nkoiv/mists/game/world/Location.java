@@ -901,7 +901,7 @@ public class Location extends Flags implements Global {
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(7); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpRight
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(5); w.updateNeighbours();}
-        mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownLeft
+        mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownLeft
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(2); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownRight
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(0); w.updateNeighbours();}
