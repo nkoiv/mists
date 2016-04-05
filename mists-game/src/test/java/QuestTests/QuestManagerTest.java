@@ -31,7 +31,7 @@ public class QuestManagerTest {
     
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-    
+    /*
     @BeforeClass
     public static void setUpClass() {
     }
@@ -39,7 +39,7 @@ public class QuestManagerTest {
     @AfterClass
     public static void tearDownClass() {
     }
-    
+    */
     @Before
     public void setUp() {
         qm = new QuestManager();

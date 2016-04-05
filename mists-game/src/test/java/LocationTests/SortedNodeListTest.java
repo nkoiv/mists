@@ -27,7 +27,7 @@ public class SortedNodeListTest {
     @BeforeClass
     public static void setUpClass() {
     }
-    
+    /*
     @AfterClass
     public static void tearDownClass() {
     }
@@ -39,7 +39,7 @@ public class SortedNodeListTest {
     @After
     public void tearDown() {
     }
-    
+    */
     @Test
     public void nodesCanBeFoundFromTheList() {
         SortedList testList = new SortedList();

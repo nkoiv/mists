@@ -35,7 +35,7 @@ public class MapGeneratorTest {
     
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-    
+    /*    
     @BeforeClass
     public static void setUpClass() {
         
@@ -44,7 +44,7 @@ public class MapGeneratorTest {
     @AfterClass
     public static void tearDownClass() {
     }
-    
+    */
     @Before
     public void setUp() {
         testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));

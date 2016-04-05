@@ -146,11 +146,10 @@ public class DialoguePanel extends TextPanel {
             //Player clicked panel midrender - nothing too bad.
         }
         if (this.closeButton != null) {
-            if (clickX >= xPosition+closeButton.getXPosition() && clickX <= (xPosition+closeButton.getXPosition() + closeButton.getWidth())) {
-                if (clickY >= yPosition+closeButton.getYPosition() && clickY <= yPosition+closeButton.getYPosition() + closeButton.getHeight()) {
+            if (clickX >= xPosition+closeButton.getXPosition() && clickX <= (xPosition+closeButton.getXPosition() + closeButton.getWidth())
+                && clickY >= yPosition+closeButton.getYPosition() && clickY <= yPosition+closeButton.getYPosition() + closeButton.getHeight()) {
                     Mists.logger.info("CloseButton was pressed");
                     closeButton.handleMouseEvent(me);
-                }
             }
         }
         

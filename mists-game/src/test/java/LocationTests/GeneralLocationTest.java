@@ -46,7 +46,7 @@ public class GeneralLocationTest extends Application {
     }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-    
+    /*
     @BeforeClass
     public static void setUpClass() {
     }
@@ -55,7 +55,7 @@ public class GeneralLocationTest extends Application {
     public static void tearDownClass() {
        
     }
-    
+    */
     @Before
     public void setUp() {
        if (Mists.creatureLibrary == null) {

@@ -30,7 +30,7 @@ public class QuestTaskTest {
  
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-    
+    /*
     @BeforeClass
     public static void setUpClass() {
     }
@@ -38,7 +38,7 @@ public class QuestTaskTest {
     @AfterClass
     public static void tearDownClass() {
     }
-    
+    */
     @Before
     public void setUp() {
         testQuest = generateTestQuest();

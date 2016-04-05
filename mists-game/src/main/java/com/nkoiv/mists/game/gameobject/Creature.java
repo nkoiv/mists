@@ -350,8 +350,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     private void updateSprite() {
         if (!(this.graphics instanceof Sprite)) return;
         if (this.spriteAnimations == null) return;
-        if (this.isFlagged("visible") && !this.spriteAnimations.isEmpty()) {
-            if (this.facing != this.lastFacing) {
+        if (this.isFlagged("visible") && !this.spriteAnimations.isEmpty() 
+            && this.facing != this.lastFacing) {
             this.lastFacing = this.facing;
             //Mists.logger.log(Level.INFO, "{0} is facing {1}", new Object[]{this.getName(), this.facing});
             switch(this.facing) {
@@ -364,7 +364,6 @@ public class Creature extends MapObject implements Combatant, HasInventory {
                 case DOWNRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
                 case DOWNLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
                 default: break;
-            }
             }
         }
     }

@@ -41,7 +41,7 @@ public class PathFinderTest {
     }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-    
+    /*
     @BeforeClass
     public static void setUpClass() {
     }
@@ -49,7 +49,7 @@ public class PathFinderTest {
     @AfterClass
     public static void tearDownClass() {
     }
-    
+    */
     @Before
     public void setUp() {
         if (testLocation == null) {

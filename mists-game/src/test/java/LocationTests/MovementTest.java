@@ -41,7 +41,7 @@ public class MovementTest extends Application {
     }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-    
+    /*
     @BeforeClass
     public static void setUpClass() {
         
@@ -50,7 +50,7 @@ public class MovementTest extends Application {
     @AfterClass
     public static void tearDownClass() {
     }
-    
+    */
     @Before
     public void setUp() {
        if (testLocation == null) {
