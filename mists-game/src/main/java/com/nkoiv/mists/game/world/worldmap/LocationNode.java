@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.world.worldmap;
 
-import com.nkoiv.mists.game.world.Location;
 import javafx.scene.image.Image;
 
 /**

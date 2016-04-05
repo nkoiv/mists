@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.puzzle;
 
-import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.Iterator;
 

@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.world.pathfinding;
 
-import com.nkoiv.mists.game.Mists;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

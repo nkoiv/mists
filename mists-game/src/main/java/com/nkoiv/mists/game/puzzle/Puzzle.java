@@ -5,8 +5,8 @@
  */
 package com.nkoiv.mists.game.puzzle;
 
-import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.triggers.Trigger;
 import java.util.ArrayList;
 
 /**

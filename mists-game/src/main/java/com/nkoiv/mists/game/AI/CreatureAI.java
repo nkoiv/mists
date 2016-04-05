@@ -5,9 +5,9 @@
  */
 package com.nkoiv.mists.game.AI;
 
-import com.nkoiv.mists.game.actions.Task;
-import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.GenericTasks;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.pathfinding.Path;

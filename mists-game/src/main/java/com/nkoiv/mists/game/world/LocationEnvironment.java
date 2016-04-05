@@ -10,13 +10,14 @@ package com.nkoiv.mists.game.world;
  * @author nikok
  */
 public class LocationEnvironment {
-    Location location;
-    double lightlevel;
+    private Location location;
+    private double lightlevel;
 
     public LocationEnvironment(Location location) {
+        this.location = location;
         this.lightlevel = 1;
     }
-    
+        
     public double getLightlevel() {
         return lightlevel;
     }

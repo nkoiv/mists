@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.world;
 
-import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Global;
@@ -22,6 +21,7 @@ import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.puzzle.PuzzleManager;
 import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.ui.Overlay;
+import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import com.nkoiv.mists.game.world.util.Flags;

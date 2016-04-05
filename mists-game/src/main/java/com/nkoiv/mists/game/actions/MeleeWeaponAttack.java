@@ -13,11 +13,9 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.sprites.Sprite;
-import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import javafx.scene.image.ImageView;
 
 /**
  * Action for swinging whichever (melee)weapon

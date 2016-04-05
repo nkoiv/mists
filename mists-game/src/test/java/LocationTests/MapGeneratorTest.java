@@ -9,8 +9,8 @@ import TestTools.CompareTools;
 import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.world.TileMap;
+import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.scene.image.Image;
@@ -18,8 +18,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.Rule;
+import org.junit.Test;
 
 /**
  *

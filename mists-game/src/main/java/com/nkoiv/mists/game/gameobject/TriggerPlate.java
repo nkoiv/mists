@@ -6,9 +6,9 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.ToggleTrigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import java.util.ArrayList;
 
 /**

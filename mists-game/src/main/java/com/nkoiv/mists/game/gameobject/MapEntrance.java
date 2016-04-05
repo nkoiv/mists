@@ -5,10 +5,10 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
-import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.EntranceTrigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 
 /**

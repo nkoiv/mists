@@ -7,9 +7,9 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
-import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.util.Flags;
 import java.util.HashMap;

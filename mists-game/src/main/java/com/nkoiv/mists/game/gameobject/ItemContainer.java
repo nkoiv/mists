@@ -6,13 +6,13 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.LootTrigger;
 import com.nkoiv.mists.game.triggers.OpenInventoryTrigger;
+import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

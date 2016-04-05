@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.puzzle;
 
-import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import java.util.Arrays;
 import java.util.logging.Level;

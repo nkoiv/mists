@@ -1,12 +1,9 @@
 package TestTools;
 
 import java.util.concurrent.CountDownLatch;
-
-import javax.swing.SwingUtilities;
-
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-
+import javax.swing.SwingUtilities;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;

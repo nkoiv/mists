@@ -5,12 +5,12 @@
  */
 package com.nkoiv.mists.game.controls;
 
-import com.nkoiv.mists.game.actions.GenericTasks;
-import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.GenericTasks;
+import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;

@@ -22,7 +22,9 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -115,7 +117,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         int monsterID = Integer.parseInt((String)creatureData.get("monsterID"));
         String mobname = (String)creatureData.get("name");
         String spriteType = (String)creatureData.get("spriteType");
-        if (spriteType.equals("static")) {
+        if (("static").equals(spriteType)) {
             Image monsterImage = new Image((String)creatureData.get("image"));
             creep = new Creature(mobname, monsterImage);
         } else {
