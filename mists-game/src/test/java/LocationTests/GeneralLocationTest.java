@@ -191,7 +191,7 @@ public class GeneralLocationTest extends Application {
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
-        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.DOWN) == true);
+        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.DOWN));
     }
     
     @Test

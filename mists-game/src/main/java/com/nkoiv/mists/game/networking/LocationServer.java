@@ -543,7 +543,7 @@ public class LocationServer {
      * @param player
      * @return Name of the player getting saved
      */
-    boolean saveCharacter (Player player) {
+    public boolean saveCharacter (Player player) {
         File file = new File("characters", player.name.toLowerCase());
         file.getParentFile().mkdirs();
         Kryo kryo = server.getKryo();

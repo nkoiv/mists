@@ -32,10 +32,10 @@ import org.junit.Test;
  */
 public class PathFinderTest {
     
-    static Location testLocation;
-    CollisionMap testCollisionMap;
-    PathFinder testPathFinder;
-    ArrayList<Integer> crossableTerrain;
+    private static Location testLocation;
+    private CollisionMap testCollisionMap;
+    private PathFinder testPathFinder;
+    private ArrayList<Integer> crossableTerrain;
     
     public PathFinderTest() {
     }

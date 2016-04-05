@@ -47,12 +47,13 @@ public class Config {
             case "debug": setDebugMode(value); break;
             case "drawCollisions": setDrawCollisions(value); break;
             case "drawGrid": setDrawGrid(value); break;
+            default: break;
         }
     }
     
     private void setDebugMode(String value) {
-        if (value.equals("true")) this.debug = true;
-        if (value.equals("false")) this.debug = false;
+        if (("true").equals(value)) this.debug = true;
+        if (("false").equals(value)) this.debug = false;
     }
     
     private void setDrawCollisions(String value) {

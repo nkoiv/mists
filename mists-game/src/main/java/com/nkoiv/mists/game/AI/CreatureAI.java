@@ -222,7 +222,7 @@ public class CreatureAI extends Flags{
     protected boolean hasNothingInBetween(MapObject target) {
         ArrayList<MapObject> mobsInBetween = creep.getLocation().checkCollisions(creep.getCenterXPos(), creep.getCenterXPos(), target.getCenterXPos(), target.getCenterYPos());
         for (MapObject m : mobsInBetween) {
-            if (m != creep && m != target) {
+            if (m.equals(creep) && !m.equals(target)) {
                return false;
            }
         }
