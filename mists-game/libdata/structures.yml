@@ -100,6 +100,7 @@ name: "TorchFloorDungeon"
 type: "GenericStructure"
 image: "/images/structures/torch_floor_base.png"
 collisionLevel: 1
+lightLevel: 1
 extras:
  graph:
   image: "/images/structures/torch_floor.png"

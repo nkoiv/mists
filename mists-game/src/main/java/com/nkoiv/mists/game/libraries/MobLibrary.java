@@ -190,6 +190,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
             Image image = new Image((String)structureData.get("image"));
             struct = new Structure(mobname, image, collisionLevel); 
         }
+        if (structureData.containsKey("lightLevel")) struct.setLightSize(Double.parseDouble((String)structureData.get("lightLevel")));
         addExtras(structureData, struct);
         return struct;
     }

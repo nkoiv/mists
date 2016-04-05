@@ -338,6 +338,12 @@ public class LibLoader {
             pile.addItem(Mists.itemLibrary.create("himmutoy"));
             testDungeon.mobs.add(pile);
         }
+        for (int i = 0; i<10;i++) {
+            //Make a bunch of torches
+            Structure torch = Mists.structureLibrary.create("TorchFloorDungeon");
+            testDungeon.mobs.add(torch);
+        }
+        
         
         for (int i = 0; i < 20; i++) {
             Random rnd = new Random();
@@ -352,7 +358,7 @@ public class LibLoader {
             }
             testDungeon.mobs.add(monster);
         }
-        testDungeon.lightlevel = 0.5;
+        testDungeon.lightlevel = 1;
         lib.addTemplate(testDungeon);
         
         //--TestVillage--
@@ -387,7 +393,7 @@ public class LibLoader {
             Structure rock = Mists.structureLibrary.create("Rock");
             woods.mobs.add(rock);
         }
-        woods.lightlevel = 1;
+        woods.lightlevel = 2;
         lib.addTemplate(woods);
         
         

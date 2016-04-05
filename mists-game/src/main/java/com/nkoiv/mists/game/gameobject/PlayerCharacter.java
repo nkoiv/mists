@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 /**
  * PlayerCharacter is currently designed to be unique per game
@@ -27,7 +28,6 @@ import javafx.scene.image.ImageView;
  */
 public class PlayerCharacter extends Creature implements Combatant {
     private ArrayList<Creature> companions;
-    private double lightSize = 3.0;
     
     public PlayerCharacter() {
         //Dummy player for testing
@@ -52,6 +52,8 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setSpeed(50);
         this.setAttribute("Strength", 50);
         this.companions = new ArrayList<>();
+        this.lightSize = 2;
+        this.lightColor = Color.BLUEVIOLET;
     }
     
     public PlayerCharacter(String name) {
@@ -133,14 +135,6 @@ public class PlayerCharacter extends Creature implements Combatant {
         }
         this.updateGraphics();
         //this.applyMovement(time);  
-    }
-    
-    public double getLightSize() {
-        return this.lightSize;
-    }
-    
-    public void setLightSize(double lightSize) {
-        this.lightSize = lightSize;
     }
     
     public void clearLocation() {

@@ -901,7 +901,7 @@ public class Location extends Flags implements Global {
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(7); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpRight
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(5); w.updateNeighbours();}
-        mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownLeft
+        mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownLeft
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(2); w.updateNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownRight
         if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(0); w.updateNeighbours();}
@@ -1181,19 +1181,21 @@ public class Location extends Flags implements Global {
         shadows.paintLights(sc, xOffset, yOffset);
         */
         
-        //Calculate the player vision range to see what's hidden behind walls
+        //Calculate the player vision range to see what's hidden behind walls (used on fex. roofs)
         lights.paintVision(player.getCenterXPos(), player.getCenterYPos(), player.getVisionRange());
         //Render black blocks on top of hidden segments
         //lights.renderLightMap(gc, xOffset, yOffset);
         
         sc.setFill(Color.BLACK);
+        //Black the layer, as light punches holes in it
         sc.fillRect(0, 0, sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
-        //Render playerlight:
-        lights.renderLightSource(sc, (player.getCenterXPos()-xOffset)*Mists.graphicScale, (player.getCenterYPos()-yOffset)*Mists.graphicScale,player.getLightSize()*environment.getLightlevel());
         
-        //Render companion lights:
-        if (!player.getCompanions().isEmpty()) lights.renderLightSource(sc, (player.getCompanions().get(0).getCenterXPos()-xOffset)*Mists.graphicScale, (player.getCompanions().get(0).getCenterYPos()-yOffset)*Mists.graphicScale,1*environment.getLightlevel());
-        
+        //Render lightsources around mobs that have them (should be at least player)
+        for (MapObject mob : MOBsOnScreen) {
+            if (mob.getLightSize() > 0) {
+                lights.renderLightSource(sc, (mob.getCenterXPos()-xOffset)*Mists.graphicScale, (mob.getCenterYPos()-yOffset)*Mists.graphicScale,mob.getLightSize()*environment.getLightlevel(), mob.getLightColor());
+            }
+        }
         
     }
     

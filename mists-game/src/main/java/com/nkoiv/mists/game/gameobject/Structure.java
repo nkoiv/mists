@@ -122,6 +122,8 @@ public class Structure extends MapObject {
                 ns.addExtra(extra, xOffset, yOffset);
             }
         }
+        ns.lightSize = this.lightSize;
+        ns.lightColor = this.lightColor;
         return ns;
     }
     

@@ -11,6 +11,10 @@ import java.text.NumberFormat;
 import java.util.logging.Level;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -79,8 +83,36 @@ public class LightsRenderer {
     }
     
     public void renderLightSource(GraphicsContext shadowCanvas, double xCoor, double yCoor, double lightscale) {
+        renderLightSource(shadowCanvas, xCoor, yCoor, lightscale, null);
+    }
+    
+    public void renderLightSource(GraphicsContext shadowCanvas, double xCoor, double yCoor, double lightscale, Color color) {
         shadowCanvas.save();
         Image light = Mists.graphLibrary.getImage("lightspot");
+        double drawX = (xCoor/lightscale)-light.getWidth()/(lightscale*2);
+        double drawY = (yCoor/lightscale)-light.getHeight()/(lightscale*2);
+        /*
+        //TODO: Fix this light colour thing so it actually works
+        if (color != null) {
+            Color c = color.deriveColor(1, 1, 1, 0);
+            ColorAdjust monochrome = new ColorAdjust();
+            monochrome.setSaturation(-1.0);
+            //monochrome.setBrightness(-1.0);
+            Blend blend = new Blend(
+                BlendMode.OVERLAY,
+                new ColorInput(
+                        drawX,
+                        drawY,
+                        light.getWidth() * lightscale,
+                        light.getHeight() * lightscale,
+                        c
+                
+                )
+                ,monochrome
+            );
+            shadowCanvas.setEffect(blend);
+        }
+        */
         
         Scale s = new Scale(lightscale, lightscale, light.getWidth()/2, light.getHeight()/2);
         Affine a = new Affine();
@@ -88,8 +120,7 @@ public class LightsRenderer {
         
         shadowCanvas.setTransform(a);
         
-        double drawX = (xCoor/lightscale)-light.getWidth()/(lightscale*2);
-        double drawY = (yCoor/lightscale)-light.getHeight()/(lightscale*2);
+        
         shadowCanvas.drawImage(light, drawX, drawY);
         shadowCanvas.restore();
     }
