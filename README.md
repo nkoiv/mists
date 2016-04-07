@@ -1,7 +1,7 @@
 # mists
 A realtime Roguelike adventure for cs.hel.fi lab courses
 
-So far you can move around in a procedurally generated dungeon, dodging monsters and burrowing through walls. Move around with arrow keys and use space to attack (walls or creatures). Clicking a location teleports player there. Shift-button toggles monsters to life, esc brings up the main menu. 
+So far you can move around in a procedurally generated dungeon, dodging monsters and burrowing through walls. Move around with arrow keys, wasd or mouse and use space to attack (walls or creatures). Clicking a location teleports player there. Esc brings up the main menu with more commands explained. 
 
 ##Latest stable
 
