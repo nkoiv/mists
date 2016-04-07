@@ -214,7 +214,7 @@ public class Sprite extends MovingGraphics
         } else {
             positionY += velocityY * time;
         }                   
-        this.collisionBox.SetPosition(positionX, positionY);
+        this.collisionBox.setPosition(positionX, positionY);
     }
     /**
      * Update uses the velocity it has and the time given,
@@ -227,7 +227,7 @@ public class Sprite extends MovingGraphics
     public void update(double time)
     {
         super.update(time);
-        this.collisionBox.SetPosition(positionX, positionY);
+        this.collisionBox.setPosition(positionX, positionY);
         if (this.spin!=0) this.refreshCollisionBox();
     }
     
@@ -362,7 +362,7 @@ public class Sprite extends MovingGraphics
         if (this.rotation!=0 || m.rotation != 0) {
            return this.intersectsWithShape(m.getBoundary());
         }
-        if (this.collisionBox.Intersect(m.collisionBox)) {
+        if (this.collisionBox.intersects(m.collisionBox)) {
             //Check pixel collsion
             return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), m.getXPos(), m.getYPos(), m.getImage());
             

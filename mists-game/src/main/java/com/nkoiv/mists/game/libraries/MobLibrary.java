@@ -179,6 +179,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
             if (spriteType.equals("static")) {
                 Image image = new Image((String)structureData.get("image"));
                 struct = new Structure(mobname, image, collisionLevel); 
+                
             } else { //if (spriteType.equals("spritesheet")){
                 SpriteAnimation sa = generateSpriteAnimation((String)structureData.get("spritesheet"), 
                 (List<String>)structureData.get("spritesheetParameters"));
@@ -192,6 +193,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
         if (structureData.containsKey("lightLevel")) struct.setLightSize(Double.parseDouble((String)structureData.get("lightLevel")));
         addExtras(structureData, struct);
+        setCollisionArea(structureData, struct);
         return struct;
     }
     
@@ -302,6 +304,20 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return door;
     }
     
+    
+    private static void setCollisionArea(Map structureData, Structure structure) {
+        if (!structureData.containsKey("collisionArea")) return;
+        List<String> collisionParameters = (List)structureData.get("collisionArea");
+        try {
+            int width = Integer.parseInt(collisionParameters.get(0));
+            int height = Integer.parseInt(collisionParameters.get(1));
+            int xOffset = Integer.parseInt(collisionParameters.get(2));
+            int yOffset = Integer.parseInt(collisionParameters.get(3));
+            structure.getSprite().setCollisionBox(width, height, xOffset, yOffset);
+        } catch (Exception e) {
+            Mists.logger.log(Level.WARNING, "Tried to parse collisionArea data for {0} but ran into error with the list: {1}", new String[]{structure.getName(), e.toString()});
+        }
+    }
     
     private static void addExtras(Map structureData, Structure structure) {
         Mists.logger.info("Generating extras for "+structure.getName());

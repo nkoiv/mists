@@ -254,11 +254,10 @@ public abstract class MovingGraphics {
     }
     
     public boolean intersects(MovingGraphics m) {
-        return this.collisionBox.Intersect(m.getCollisionBox());
+        return this.collisionBox.intersects(m.getCollisionBox());
     }
     
     protected void refreshCollisionBox() {
-        if (this.customCollisionArea) return;
         if (this.collisionBox == null) this.collisionBox = new CollisionBox(positionX, positionY, width, height);
         else {
             this.collisionBox.refresh(positionX, positionY, width, height);
@@ -266,6 +265,14 @@ public abstract class MovingGraphics {
         //Mists.logger.log(Level.INFO, "{0}Refreshed new collisionbox with values {1}x{2}:{3}x{4}", new Object[]{height, positionX, positionY, width, height});
     }
     
+    /**
+     * Check whether or not the collision area is locked
+     * to custom.
+     * @return True if custom collisionarea is used
+     */
+    public boolean isCollisionAreaLocked() {
+        return this.customCollisionArea;
+    }
     
     /**
      * Setting a custom collisiobox will lock
@@ -278,7 +285,8 @@ public abstract class MovingGraphics {
      * @param yOffset Offset for the collision area, from the sprite position
      */
     public void setCollisionBox(double width, double height, double xOffset, double yOffset) {
-        this.collisionBox = new CollisionBox(positionX+xOffset, positionY+yOffset, width, height);
+        this.collisionBox = new CollisionBox(positionX, positionY, width, height);
+        this.collisionBox.setOffset(xOffset, yOffset);
         this.customCollisionArea = true;
     }
     
@@ -293,7 +301,7 @@ public abstract class MovingGraphics {
         this.collisionBox = collisionbox;
         this.customCollisionArea = true;
     }
-    
+
     /**
      * If the area has custom CollisonBox set (collision
      * area differing from graphics), removing it will refresh
@@ -304,8 +312,8 @@ public abstract class MovingGraphics {
         this.refreshCollisionBox();
     }
     
-    protected CollisionBox getCollisionBox() {
-        if (this.collisionBox.GetWidth()<=1 || this.collisionBox.GetHeight() <=1 && !customCollisionArea) {
+    public CollisionBox getCollisionBox() {
+        if (this.collisionBox.getWidth()<=1 || this.collisionBox.getHeight() <=1 && !customCollisionArea) {
             this.collisionBox = new CollisionBox(positionX, positionY, width, height);
         }
         return this.collisionBox;

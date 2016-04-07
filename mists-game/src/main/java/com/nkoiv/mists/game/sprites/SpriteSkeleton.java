@@ -229,7 +229,7 @@ public class SpriteSkeleton extends MovingGraphics {
         if (this.rotation!=0 || m.rotation != 0) {
            return this.intersectsWithShape(m.getBoundary());
         }
-        if (this.collisionBox.Intersect(m.collisionBox)) {
+        if (this.collisionBox.intersects(m.collisionBox)) {
             return Sprite.pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), m.getXPos(), m.getYPos(), m.getImage());
         }
         else return false;

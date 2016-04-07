@@ -85,6 +85,7 @@ name: "Bookcase"
 type: "GenericStructure"
 image: "/images/structures/bookcase_base.png"
 collisionLevel: 1
+collisionArea: [ 32, 12, 0, 20 ]
 extras:
  graph:
   image: "/images/structures/bookcase_full.png"

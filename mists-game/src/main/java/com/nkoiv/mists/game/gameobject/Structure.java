@@ -122,6 +122,13 @@ public class Structure extends MapObject {
                 ns.addExtra(extra, xOffset, yOffset);
             }
         }
+        
+        
+        if (this.getSprite().isCollisionAreaLocked()) {
+            ns.getSprite().setCollisionBox(getSprite().getCollisionBox().getWidth(), getSprite().getCollisionBox().getHeight(),
+                    getSprite().getCollisionBox().xOffset, getSprite().getCollisionBox().yOffset);
+        }
+        
         ns.lightSize = this.lightSize;
         ns.lightColor = this.lightColor;
         return ns;
