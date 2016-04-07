@@ -26,8 +26,7 @@ import javafx.scene.transform.Scale;
  * @author nikok
  */
 public class LightsRenderer {
-    Location loc;
-    Polygon[] obstacles;
+    private Location loc;
     public final double[][] lightmap;
     public boolean[][] explored;
     double minLightLevel;
@@ -35,7 +34,6 @@ public class LightsRenderer {
     public LightsRenderer(Location loc) {
         this.minLightLevel=0.5;
         this.loc = loc;
-        this.obstacles = new Polygon[0];
         int tileWidth = (int)(loc.getMap().getWidth() / Mists.TILESIZE);
         int tileHeight = (int)(loc.getMap().getHeight() / Mists.TILESIZE);
         this.explored = new boolean[tileWidth][tileHeight];

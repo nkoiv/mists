@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.junit.After;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Rule;
@@ -100,7 +101,7 @@ public class GeneralLocationTest extends Application {
         testLocation.addMapObject(testCreature, 300, 300);
         testCreature.setRemovable();
         testLocation.update(0.15f);
-        assertTrue(testLocation.getCreatures().contains(testCreature) == false);
+        assertFalse(testLocation.getCreatures().contains(testCreature));
     }
     
     @Test
@@ -150,7 +151,7 @@ public class GeneralLocationTest extends Application {
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
-        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.RIGHT) == true);
+        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.RIGHT));
     }
     
     @Test
@@ -163,7 +164,7 @@ public class GeneralLocationTest extends Application {
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
-        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.LEFT) == true);
+        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.LEFT));
     }
     
     @Test
@@ -176,7 +177,7 @@ public class GeneralLocationTest extends Application {
         testLocation.update(1);
         EnumSet<Direction> collidedDirections = testLocation.collidedSides(testCreature1);
         System.out.println(collidedDirections);
-        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.UP) == true);
+        assertTrue(testLocation.collidedSides(testCreature1).contains(Direction.UP));
     }
     
     @Test

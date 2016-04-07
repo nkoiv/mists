@@ -120,8 +120,8 @@ public class PopUpMenu extends UIComponent{
     public static class MenuButton  extends UIComponent {
         private static Font defaultFont = Mists.fonts.get("alagard");
         protected String text;
-        double textXOffset;
-        double textYOffset;
+        private double textXOffset;
+        private double textYOffset;
         protected double fontSize;
         protected PopUpMenu parent;
         protected boolean displayOnlyWhenAvailable;

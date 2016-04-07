@@ -108,8 +108,8 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                 return generateCircuitTileFromYAML(mobData);
             case "AnimatedFrill": Mists.logger.info("Generating ANIMATED FRILL");
                 return generateAnimatedFrillFromYAML(mobData);
+            default: return null;
         }        
-        return null;
     }
     
     private static Creature generateCreatureFromYAML(Map creatureData) {

@@ -15,8 +15,8 @@ import java.util.logging.Level;
  * @author nikok
  */
 public class RotateTrigger implements Trigger{
-    CircuitTile ct;
-    boolean clockwise = true;
+    private CircuitTile ct;
+    private boolean clockwise = true;
     
     public RotateTrigger(CircuitTile ct) {
         this.ct = ct;
