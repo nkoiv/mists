@@ -42,6 +42,7 @@ public abstract class MovingGraphics {
     protected double velocityX;
     protected double velocityY;
     
+    protected boolean customCollisionArea;
     protected CollisionBox collisionBox;
     
     /**
@@ -257,6 +258,7 @@ public abstract class MovingGraphics {
     }
     
     protected void refreshCollisionBox() {
+        if (this.customCollisionArea) return;
         if (this.collisionBox == null) this.collisionBox = new CollisionBox(positionX, positionY, width, height);
         else {
             this.collisionBox.refresh(positionX, positionY, width, height);
@@ -264,8 +266,46 @@ public abstract class MovingGraphics {
         //Mists.logger.log(Level.INFO, "{0}Refreshed new collisionbox with values {1}x{2}:{3}x{4}", new Object[]{height, positionX, positionY, width, height});
     }
     
+    
+    /**
+     * Setting a custom collisiobox will lock
+     * it and stop refreshing the box. This is intended
+     * for when the collisionbox doesn't match the
+     * visual graphics
+     * @param width width of the custom collision area
+     * @param height height of the custom collision area
+     * @param xOffset Offset for the collision area, from the sprite position
+     * @param yOffset Offset for the collision area, from the sprite position
+     */
+    public void setCollisionBox(double width, double height, double xOffset, double yOffset) {
+        this.collisionBox = new CollisionBox(positionX+xOffset, positionY+yOffset, width, height);
+        this.customCollisionArea = true;
+    }
+    
+    /**
+     * Setting a custom collisiobox will lock
+     * it and stop refreshing the box. This is intended
+     * for when the collisionbox doesn't match the
+     * visual graphics
+     * @param collisionbox The custom collisionbox to use
+     */
+    public void setCollisionBox(CollisionBox collisionbox) {
+        this.collisionBox = collisionbox;
+        this.customCollisionArea = true;
+    }
+    
+    /**
+     * If the area has custom CollisonBox set (collision
+     * area differing from graphics), removing it will refresh
+     * the collision back to graphics
+     */
+    public void removeCollisionBoxLock() {
+        this.customCollisionArea = false;
+        this.refreshCollisionBox();
+    }
+    
     protected CollisionBox getCollisionBox() {
-        if (this.collisionBox.GetWidth()<=1 || this.collisionBox.GetHeight() <=1) {
+        if (this.collisionBox.GetWidth()<=1 || this.collisionBox.GetHeight() <=1 && !customCollisionArea) {
             this.collisionBox = new CollisionBox(positionX, positionY, width, height);
         }
         return this.collisionBox;
