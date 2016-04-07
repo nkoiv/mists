@@ -112,7 +112,7 @@ public class Wall extends Structure {
             SnapshotParameters parameters = new SnapshotParameters();
             parameters.setFill(Color.TRANSPARENT);
             //Cardinals
-            if (neighbours[1] ==false) {
+            if (!neighbours[1]) {
                 Sprite s;
                 if (this.wallimages[1]!=null) {
                     s = new Sprite(this.wallimages[1]);
@@ -123,7 +123,7 @@ public class Wall extends Structure {
                 }
                 this.addExtra(s, topWallAdjustX, topWallAdjustY);
             }
-            if (neighbours[3] ==false) {
+            if (!neighbours[3]) {
                 Sprite s;
                 if (this.wallimages[3]!=null) {
                     s = new Sprite(this.wallimages[3]);
@@ -134,7 +134,7 @@ public class Wall extends Structure {
                 }
                 this.addExtra(s, 0, -4);
             }
-            if (neighbours[4] ==false) {
+            if (!neighbours[4]) {
                 Sprite s;
                 if (this.wallimages[4]!=null) {
                     s = new Sprite(this.wallimages[4]);
@@ -145,7 +145,7 @@ public class Wall extends Structure {
                 }
                 this.addExtra(s, 0, -4);
             }
-            if (neighbours[6] ==false) {
+            if (!neighbours[6]) {
                 Sprite s;
                 if (this.wallimages[6]!=null) {
                     s = new Sprite(this.wallimages[6]);
@@ -160,7 +160,7 @@ public class Wall extends Structure {
             }
             //Diagonals
             
-            if (neighbours[0] ==false) {
+            if (!neighbours[0]) {
                 Sprite s;
                 if (this.wallimages[0]!=null) {
                     s = new Sprite(this.wallimages[0]);
@@ -171,7 +171,7 @@ public class Wall extends Structure {
                 }
                 this.addExtra(s, 0, -8);
             }
-            if (neighbours[5] ==false) {
+            if (!neighbours[5]) {
                 Sprite s;
                 if (this.wallimages[5]!=null) {
                     s = new Sprite(this.wallimages[5]);
@@ -182,7 +182,7 @@ public class Wall extends Structure {
                 }
                 if (!noNeedForLowerDiagonals) this.addExtra(s, 0, 0);
             }
-            if (neighbours[7] ==false) {
+            if (!neighbours[7]) {
                 Sprite s;
                 if (this.wallimages[7]!=null) {
                     s = new Sprite(this.wallimages[7]);
@@ -193,7 +193,7 @@ public class Wall extends Structure {
                 }
                 if (!noNeedForLowerDiagonals) this.addExtra(s, 0, 0);
             }
-            if (neighbours[2] ==false) {
+            if (!neighbours[2]) {
                 Sprite s;
                 if (this.wallimages[2]!=null) {
                     s = new Sprite(this.wallimages[2]);
