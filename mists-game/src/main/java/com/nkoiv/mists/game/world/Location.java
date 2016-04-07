@@ -1496,7 +1496,6 @@ public class Location extends Flags implements Global {
             }
         }
         this.screenFocus = p;
-        
     }
     
     private class CoordinateComparator implements Comparator<MapObject> {

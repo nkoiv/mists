@@ -85,7 +85,9 @@ public class SoundManagerJavaFX implements SoundManager {
             MediaPlayer newPlayer = new MediaPlayer(this.musicPlaylist.get(id));
             newPlayer.setVolume(mediaPlayer.getVolume());
             newPlayer.setOnEndOfMedia(mediaPlayer.getOnEndOfMedia());
+            if (this.mediaPlayer != null) this.mediaPlayer.stop(); //Stop the old music
             this.mediaPlayer = newPlayer;
+            Mists.logger.info("Music "+id+" found, starting playback");
         } else {
             Mists.logger.log(Level.WARNING, "Tried to play music with id <{0}>, but it was not in the playlist", id);
             return;

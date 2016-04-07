@@ -673,7 +673,10 @@ public class LocationState implements GameState {
 
     @Override
     public void enter() {
-        Mists.soundManager.playMusic("dungeon");
+        if (game.getCurrentLocation().getEnvironment().getDefaultMusic() != null) {
+            Mists.logger.log(Level.INFO, "Location entered, playing music: {0}", game.getCurrentLocation().getEnvironment().getDefaultMusic());
+            Mists.soundManager.playMusic(game.getCurrentLocation().getEnvironment().getDefaultMusic());
+        }
         this.loadDefaultUI();
         this.paused = false;
     }
