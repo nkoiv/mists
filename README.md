@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/nkoiv/mists.svg?branch=master)](https://travis-ci.org/nkoiv/mists)
+
+
 # mists
 A realtime Roguelike adventure for cs.hel.fi javalab & tiralab.
 
