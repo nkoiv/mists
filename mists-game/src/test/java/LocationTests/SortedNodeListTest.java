@@ -18,9 +18,6 @@ import org.junit.Test;
  */
 public class SortedNodeListTest {
     
-    public SortedNodeListTest() {
-    }
-    
     @BeforeClass
     public static void setUpClass() {
     }

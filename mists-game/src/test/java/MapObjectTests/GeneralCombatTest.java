@@ -15,12 +15,9 @@ import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -34,11 +31,10 @@ public class GeneralCombatTest {
     private Creature combatant1;
     private Creature combatant2;
     
-    public GeneralCombatTest() {
-    }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     
+    /*
     @BeforeClass
     public static void setUpClass() {
         
@@ -47,7 +43,7 @@ public class GeneralCombatTest {
     @AfterClass
     public static void tearDownClass() {
     }
-    
+    */
     @Before
     public void setUp() {
         testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
@@ -124,13 +120,9 @@ public class GeneralCombatTest {
         assertTrue(combatant1.isRemovable());
     }
     
+    /*
     @After
     public void tearDown() {
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    */
 }

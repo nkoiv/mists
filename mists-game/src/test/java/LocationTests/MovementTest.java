@@ -13,10 +13,8 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
-import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -29,14 +27,12 @@ import org.junit.Test;
  *
  * @author nkoiv
  */
-public class MovementTest extends Application {
+public class MovementTest  {
     
     private Location testLocation;
     private PlayerCharacter testPlayer;
     private Creature testCreature;
     
-    public MovementTest() {
-    }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     /*
@@ -158,16 +154,4 @@ public class MovementTest extends Application {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
-    
-    
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        
-    }
 }

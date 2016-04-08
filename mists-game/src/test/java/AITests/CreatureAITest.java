@@ -13,11 +13,8 @@ import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -31,12 +28,9 @@ public class CreatureAITest {
     private PlayerCharacter testPlayer;
     private Creature testCreature;
     
-    public CreatureAITest() {
-    }
-    
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-    
+    /*
     @BeforeClass
     public static void setUpClass() {
     }
@@ -44,7 +38,7 @@ public class CreatureAITest {
     @AfterClass
     public static void tearDownClass() {
     }
-    
+    */
     @Before
     public void setUp() {
        testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
@@ -59,19 +53,15 @@ public class CreatureAITest {
     public void movingTowardsPlayerShouldGetCreatureCoordinatesCloserToPlayer() {
         //testCreature.setFlag("testFlag", 1); //Set on the testflag that makes creature move towards player
         double xDistance = Math.abs(testPlayer.getXPos() - testCreature.getXPos());
-        double yDistance = Math.abs(testPlayer.getYPos() - testCreature.getYPos());
+        //double yDistance = Math.abs(testPlayer.getYPos() - testCreature.getYPos());
         GenericTasks.moveTowardsTarget(testCreature, testPlayer.getID());
         testCreature.update(0.15f);
         assertTrue(Math.abs(testPlayer.getXPos() - testCreature.getXPos()) <= xDistance || Math.abs(testPlayer.getYPos() - testCreature.getYPos()) <= xDistance);
     }
     
+    /*
     @After
     public void tearDown() {
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    */
 }

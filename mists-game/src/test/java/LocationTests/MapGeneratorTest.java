@@ -28,9 +28,6 @@ public class MapGeneratorTest {
     private static Location testLocation;
     private static DungeonGenerator testMapGen;
     
-    public MapGeneratorTest() {
-    }
-    
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     /*    

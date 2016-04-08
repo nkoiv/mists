@@ -17,11 +17,8 @@ import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import java.util.EnumSet;
-import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import org.junit.After;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -34,15 +31,13 @@ import org.junit.Test;
  *
  * @author nkoiv
  */
-public class GeneralLocationTest extends Application {
+public class GeneralLocationTest {
     
     private static Location testLocation;
     private Creature testCreature;
     private static GameMap testMap; 
     private Mists mists;
     
-    public GeneralLocationTest() {
-    }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     /*
@@ -246,20 +241,9 @@ public class GeneralLocationTest extends Application {
         assertTrue(testLocation.getCreatures().isEmpty());
     }
     
+    /*
     @After
     public void tearDown() {
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
-    
-    
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        
-    }
+    */
 }

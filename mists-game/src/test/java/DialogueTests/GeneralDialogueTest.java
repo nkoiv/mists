@@ -29,8 +29,6 @@ public class GeneralDialogueTest {
     private Creature dialogueTalker;
     private Location testLocation;
     
-    public GeneralDialogueTest() {
-    }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     /*

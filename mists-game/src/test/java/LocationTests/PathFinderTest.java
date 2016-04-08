@@ -35,8 +35,6 @@ public class PathFinderTest {
     private PathFinder testPathFinder;
     private ArrayList<Integer> crossableTerrain;
     
-    public PathFinderTest() {
-    }
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     /*
