@@ -178,7 +178,7 @@ public class LocationControls {
         MapObject mob = game.getCurrentLocation().getMobAtLocation(xTarget, yTarget);
         if (mob == null) {
             playerMove(xTarget, yTarget);
-        } else {
+        } else if (mob instanceof Creature) {
             //Mists.logger.info("Trying to attack "+mob.getName());
             double distance = Toolkit.distance(game.getPlayer().getCenterXPos(), game.getPlayer().getCenterYPos(), mob.getCenterXPos(), mob.getCenterYPos());
             if (((game.getPlayer().getWidth()/2 + mob.getWidth()/2) + game.getPlayer().getAttackRange()) > distance) {
