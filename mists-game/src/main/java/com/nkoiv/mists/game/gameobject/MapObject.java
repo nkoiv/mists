@@ -207,10 +207,27 @@ public class MapObject extends Flags implements Global, Templatable {
         return this.graphics.getImage();
     }
     
+    /**
+     * Set the removable variable by hand
+     * @param removable Value to set removable to (true=get removed on next tick)
+     */
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
+    }
+    
+    /**
+     * Set the removable parameter to true
+     */
     public void setRemovable() {
         this.removable = true;
     }
     
+    /**
+     * Controls whether or not the mob is to be removed on next
+     * pass. Mobs are not removed from locations instantly to
+     * avoid concurrent modification errors.
+     * @return True if the mob is to be removed on next pass
+     */
     public boolean isRemovable() {
         return this.removable;
     }

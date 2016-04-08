@@ -145,6 +145,7 @@ public abstract class Overlay {
     }
     
     public static void drawHighlightRectangle(GraphicsContext gc, MapObject mob) {
+        if (mob == null) return;
         drawHighlightRectangle(gc, mob.getXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset(), mob.getWidth(), mob.getHeight());
     }
     

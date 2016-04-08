@@ -484,6 +484,10 @@ public class Location extends Flags implements Global {
     private void addCreature(Creature c, double xPos, double yPos) {
         if (!this.creatures.contains(c)) {
             this.addMapObject(c);
+        } else {
+            //No need to re-add the creature if it's already in. Just give it a new ID.
+            this.giveID(c);
+            Mists.logger.log(Level.WARNING, "Tried to add a {3} to {0} but {3} was already in it. Gave the {3} new ID: {1}", new Object[]{this.getName(), c.getID(), c.getName()});
         }
         c.setLocation(this);
         c.setPosition(xPos, yPos);
@@ -512,6 +516,10 @@ public class Location extends Flags implements Global {
     public void addPlayerCharacter(PlayerCharacter p, double xPos, double yPos) {
         if (!this.creatures.contains(p)) {
             this.addMapObject(p);
+        } else {
+            //No need to re-add the player if it's already in. Just give it a new ID
+            this.giveID(p);
+            Mists.logger.log(Level.WARNING, "Tried to add a player to {0} but player was already in it. Gave the player new ID: {1}", new Object[]{this.getName(), p.getID()});
         }
         p.setLocation(this);
         p.setPosition(xPos, yPos);
@@ -1468,7 +1476,11 @@ public class Location extends Flags implements Global {
         //Release player from Location
         
         if (this.player != null) {
-            this.removeMapObject(this.player);
+            this.player.setRemovable();
+            for (Creature c : player.getCompanions()) {
+                c.setRemovable();
+            }
+            //this.removeMapObject(this.player);
             this.player.clearLocation();
             this.player = null;
         }
@@ -1482,6 +1494,7 @@ public class Location extends Flags implements Global {
      */
     public void enterLocation(PlayerCharacter p, MapNode entranceNode) {
         Mists.logger.info("Location "+this.getName()+" entered. Preparing area...");
+        if (p.isRemovable()) p.setRemovable(false);
         this.setPlayer(p);
         if (this.getEntrace() != null && entranceNode != null) {
             Mists.logger.info("Setting exit node to "+entranceNode.getName());
@@ -1492,6 +1505,7 @@ public class Location extends Flags implements Global {
         //Add companions)
         if (p.getCompanions() != null) {
             for (Creature c : p.getCompanions()) {
+                if (c.isRemovable()) c.setRemovable(false);
                 this.addCreature(c, entryPoint[0], entryPoint[1]);
             }
         }

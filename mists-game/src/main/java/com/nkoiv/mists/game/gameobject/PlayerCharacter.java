@@ -137,6 +137,15 @@ public class PlayerCharacter extends Creature implements Combatant {
         //this.applyMovement(time);  
     }
     
+    
+    /**
+     * Clear all the Location -links from the player,
+     * as well as do the same for any companions the player
+     * might have.
+     * This only clears the links from Player TO Location
+     * and Location TO Player side might still be in effect
+     * (Location.mapObjects, Location.spatials, etc)
+     */
     public void clearLocation() {
         this.location = null;
         this.IDinLocation = 0;

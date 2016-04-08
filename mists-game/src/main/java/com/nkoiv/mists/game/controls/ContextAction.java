@@ -147,8 +147,11 @@ public class ContextAction {
     
     public boolean setTriggerOnMobIfInRange(MapObject mob) {
         for (int i = 0; i < this.availableTriggers.size(); i++) {
-            if (availableTriggers.get(i).getTarget() == null) continue;
-            else if (availableTriggers.get(i).getTarget().equals(mob)) {
+            if (availableTriggers.get(i) == null) continue;
+            if (availableTriggers.get(i).getTarget() == null) {
+                //Do nothing as the mob was lost to void
+                //TODO: Maybe log this? Dig to the bottom of it at some point
+            } else if (availableTriggers.get(i).getTarget().equals(mob)) {
                 this.currentTrigger = i;
                 return true;
             }
