@@ -38,7 +38,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;

@@ -10,7 +10,6 @@ import com.nkoiv.mists.game.quests.Quest;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.quests.QuestTask;
 import com.nkoiv.mists.game.quests.QuestTaskType;
-import org.junit.After;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
