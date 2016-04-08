@@ -246,7 +246,7 @@ public class DungeonGenerator implements Global{
                         }
                         //If corridor is above AND there is no wall below us, or makedoor is false, dont add a door
                         if (intMap[corridorXPosOnMap-1][corridorYPosOnMap]!=WALL || intMap[corridorXPosOnMap+1][corridorYPosOnMap]!=WALL
-                                        || makeDoor!=true) makeDoor=false;
+                                        || !makeDoor) makeDoor=false;
                     }
                     if(direction==Direction.RIGHT && corridorXPosOnMap<mapWidth) {
                         if (distanceX!=0) corridorXPosOnMap=corridorXPosOnMap+1;

@@ -60,16 +60,17 @@ public class ComparingQueue<E extends Comparable> {
     * @param e the Element to add to the queue
     */
     public void findSpot(int position, E e) {
+            int p = position;
             Comparable<? super E> key = (Comparable<? super E>) e;
-            while (position > 0 ) {
-                int parentPos = (position -1);
+            while (p > 0 ) {
+                int parentPos = (p -1);
                 E parent = data[parentPos];
                 if (key.compareTo(parent) >= 0) break;
-                data[position] = parent;
-                position = parentPos;
+                data[p] = parent;
+                p = parentPos;
             }
             //If this wasnt better than anyone else, it goes to last
-            data[position] = e;
+            data[p] = e;
     }
 
     /*

@@ -95,7 +95,7 @@ public class Wall extends Structure {
             WritableImage snapshot = null;
             SnapshotParameters parameters = new SnapshotParameters();
             parameters.setFill(Color.TRANSPARENT);
-            if (neighbours[1] ==false) {
+            if (!neighbours[1]) {
                 Sprite s;
                 if (this.wallimages[1]!=null) {
                     s = new Sprite(this.wallimages[1]);

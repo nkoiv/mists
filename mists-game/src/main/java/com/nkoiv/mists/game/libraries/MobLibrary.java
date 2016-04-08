@@ -159,6 +159,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
             switch (aiType){
                 case "monster": creep.setAI(new MonsterAI(creep));
                     break;
+                default: break;
             }
         }
         
@@ -176,7 +177,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         Structure struct;
         if (structureData.containsKey("spriteType")) {
             String spriteType = (String)structureData.get("spriteType");
-            if (spriteType.equals("static")) {
+            if ("static".equals(spriteType)) {
                 Image image = new Image((String)structureData.get("image"));
                 struct = new Structure(mobname, image, collisionLevel); 
                 

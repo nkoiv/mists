@@ -29,7 +29,7 @@ public class LightsRenderer {
     private Location loc;
     public final double[][] lightmap;
     public boolean[][] explored;
-    double minLightLevel;
+    private double minLightLevel;
     
     public LightsRenderer(Location loc) {
         this.minLightLevel=0.5;

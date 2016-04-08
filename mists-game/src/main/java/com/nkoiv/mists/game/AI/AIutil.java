@@ -49,7 +49,7 @@ public class AIutil {
         if (l == null) return true;
         ArrayList<MapObject> mobsInBetween = l.checkCollisions(start.getCenterXPos(), start.getCenterYPos(), target.getCenterXPos(), target.getCenterYPos());
         for (MapObject mob : mobsInBetween) {
-           if (mob != start && mob != target && mob instanceof Structure && mob.getCollisionLevel() > 0) {
+           if (mob.equals(start) && !mob.equals(target) && mob instanceof Structure && mob.getCollisionLevel() > 0) {
                //Mists.logger.log(Level.INFO, "Line of sight between {0}x{1} and {2} blocked by {3}", new Object[]{(int)start.getCenterXPos(), (int)start.getCenterYPos(), target.getName(), mob.toString()});
                return false;
            }

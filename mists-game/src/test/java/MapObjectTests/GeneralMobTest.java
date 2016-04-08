@@ -16,6 +16,7 @@ import java.util.Random;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.junit.After;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Rule;
@@ -57,7 +58,7 @@ public class GeneralMobTest {
     @Test
     public void structureCanHaveExtraFrills() {
         testStructure.addExtra(new Image("/images/structures/tree1_frill.png"), -20, -106);
-        assertTrue(!testStructure.getExtras().isEmpty());
+        assertFalse(testStructure.getExtras().isEmpty());
     }
     
     @Test

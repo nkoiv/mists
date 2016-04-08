@@ -189,7 +189,10 @@ public class LocationControls {
     }
     
     public void toggleInventory(InventoryPanel inv) {
-        if (game.currentState.removeUIComponent(inv.getName()));
+        if (game.currentState.removeUIComponent(inv.getName())){
+            //Inventory panel was there and was removed
+            Mists.logger.info("Inventory panel closed");
+        }
         else {
             game.currentState.addUIComponent(inv); 
             Mists.logger.log(Level.INFO, "Inventory size: {0} items, capacity {1}", new Object[]{inv.getInventory().getSize(), inv.getInventory().getCapacity()});
