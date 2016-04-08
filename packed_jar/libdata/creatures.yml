@@ -16,7 +16,7 @@ spritesheetParameters: [3, 0, 0, 4, 0, 36, 32]
 #Unless attributes are specified, they default to 1.
 attributes:
  Strength: 1
- Dexterity: 2
+ Agility: 2
  Intelligence: 1
  Speed: 50
  MaxHealth: 120
@@ -35,7 +35,7 @@ spritesheet: "/images/monster_small.png"
 spritesheetParameters: [3, 0, 4, 4, 0, 36, 32]
 attributes:
  Strength: 1
- Dexterity: 2
+ Agility: 2
  Intelligence: 1
  Speed: 50
  MaxHealth: 120
@@ -51,7 +51,7 @@ spritesheet: "/images/monster_small.png"
 spritesheetParameters: [3, 3, 0, 4, 0, 36, 32]
 attributes:
  Strength: 1
- Dexterity: 2
+ Agility: 2
  Intelligence: 1
  Speed: 50
  MaxHealth: 120
@@ -67,7 +67,7 @@ spritesheet: "/images/monster_small.png"
 spritesheetParameters: [3, 3, 4, 4, 0, 36, 32]
 attributes:
  Strength: 1
- Dexterity: 2
+ Agility: 2
  Intelligence: 1
  Speed: 50
  MaxHealth: 120
@@ -83,9 +83,25 @@ spritesheet: "/images/blob.png"
 spritesheetParameters: [3, 0, 0, 4, 0, 84, 84]
 attributes:
  Strength: 10
- Dexterity: 1
+ Agility: 1
  Intelligence: 1
  Speed: 30
  MaxHealth: 250
+flags:
+ collisionLevel: 5
+---
+monsterID: 100
+name: "VillageShopkeeper"
+type: "Creature"
+aiType: "villager"
+spriteType: "spritesheet"
+spritesheet: "/images/shopkeeper.png"
+spritesheetParameters: [3, 0, 0, 0, 0, 32, 32]
+attributes:
+ Strength: 5
+ Agility: 5
+ Intelligence: 5
+ Speed: 30
+ MaxHealth: 150
 flags:
  collisionLevel: 5
