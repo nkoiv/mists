@@ -372,25 +372,25 @@ class Lines
      * @param The result line
      * @return The result line
      */
-    static Line2D rotate(Line2D line, double angleRad, Line2D result)
+    protected static Line2D rotate(Line2D line, double angleRad, Line2D result)
     {
         double x0 = line.getX1();
         double y0 = line.getY1();
         double x1 = line.getX2();
         double y1 = line.getY2();
-        double dx = x1 - x0;;
+        double dx = x1 - x0;
         double dy = y1 - y0;
         double sa = Math.sin(angleRad);
         double ca = Math.cos(angleRad);
         double nx = ca * dx - sa * dy;
         double ny = sa * dx + ca * dy;
-        if (result == null)
-        {
-            result = new Line2D.Double();
+        Line2D r = result;
+        if (result == null) {
+            r = new Line2D.Double();
         }
         
-        result.setLine(x0, y0, x0+nx, y0+ny);
-        return result;
+        r.setLine(x0, y0, x0+nx, y0+ny);
+        return r;
     }
 
 }
