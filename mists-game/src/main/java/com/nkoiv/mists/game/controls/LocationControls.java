@@ -147,6 +147,11 @@ public class LocationControls {
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(stop);
     }
     
+    public void playerAttack(double xTarget, double yTarget) {
+        Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_COORDINATES, game.getPlayer().getID(), new int[]{(int)xTarget, (int)yTarget});
+        game.getPlayer().setNextTask(attack);
+    }
+    
     public void playerAttack() {
         Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(game.getPlayer().getFacing())});
         game.getPlayer().setNextTask(attack);
@@ -174,10 +179,11 @@ public class LocationControls {
         if (mob == null) {
             playerMove(xTarget, yTarget);
         } else {
+            //Mists.logger.info("Trying to attack "+mob.getName());
             double distance = Toolkit.distance(game.getPlayer().getCenterXPos(), game.getPlayer().getCenterYPos(), mob.getCenterXPos(), mob.getCenterYPos());
-            if ((game.getPlayer().getWidth()/2 + mob.getWidth()/2) + game.getPlayer().getAttackRange() > distance) {
+            if (((game.getPlayer().getWidth()/2 + mob.getWidth()/2) + game.getPlayer().getAttackRange()) > distance) {
                 //Player is in range to attack
-                
+                playerAttack();
             } else {
                 playerMove(xTarget, yTarget);
             }

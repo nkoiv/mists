@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world.util;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Mists;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -28,33 +29,59 @@ public abstract class Toolkit {
      * are returned only if x or y movement
      * is exactly 0. Diagonal direction is far more
      * common return value.
-     * @param xFrom
-     * @param yFrom
-     * @param xTo
-     * @param yTo
+     * @param xFrom xCoordinate of From
+     * @param yFrom yCoordinate of From
+     * @param xTo xCoordinate of To
+     * @param yTo yCoordinate of To
      * @return Direction from x/yFrom to x/yTo
      */
     public static Direction getDirection(double xFrom, double yFrom, double xTo, double yTo) {
-        double xMovement = xTo - xFrom;
-        double yMovement = yTo - yFrom;
-        Direction direction = Direction.STAY;
-        if (xMovement > 0) {
-            //We're going Right
-            if (yMovement>0) direction = Direction.DOWNRIGHT;
-            else if (yMovement<0) direction = Direction.UPRIGHT;
-            else direction = Direction.RIGHT;
-        } else if (xMovement < 0) {
-            //We're going Left
-            if (yMovement>0) direction = Direction.DOWNLEFT;
-            else if (yMovement<0) direction = Direction.UPLEFT;
-            else direction = Direction.LEFT;
-        } else if (xMovement == 0) {
-            if (yMovement >0) direction = Direction.DOWN;
-            else if (yMovement < 0) direction = Direction.UP;
+        double angle = angleFromCoordinates(xFrom, yFrom, xTo, yTo);
+        Mists.logger.info("Angle before conversion: "+angle);
+        //Convert the angle from -180 to +180 into 0 to 360
+        if (angle < 0) {
+            double dif = Math.abs(angle);
+            dif = 180-dif;
+            angle = 180+dif;
         }
-        
-        
+        Mists.logger.info("Giving direction to angle "+angle);
+        Direction direction = Direction.STAY;
+        if (angle < 22) {
+            direction = Direction.RIGHT;
+        } else if (angle < 67) {
+            direction = Direction.DOWNRIGHT;
+        } else if (angle < 112) {
+            direction = Direction.DOWN;
+        } else if (angle < 157) {
+            direction = Direction.DOWNLEFT;
+        } else if (angle < 202) {
+            direction = Direction.LEFT;
+        } else if (angle < 247) {
+            direction = Direction.UPLEFT;
+        } else if (angle < 292) {
+            direction = Direction.UP;
+        } else if (angle < 337) {
+            direction = Direction.UPRIGHT;
+        } else if (angle >=337) {
+            direction = Direction.RIGHT;
+        }
+        Mists.logger.info("Direction is : "+direction);
         return direction;
+    }
+    
+    /**
+     * Calculate the degree to move on from
+     * From coordinates to get to To coordinates.
+     * @param xFrom xCoordinate of From
+     * @param yFrom yCoordinate of From
+     * @param xTo xCoordinate of To
+     * @param yTo yCoordinate of To
+     * @return angle (-180 - +180) to move on
+     */
+    public static double angleFromCoordinates(double xFrom, double yFrom, double xTo, double yTo) {
+        double deltaX = xTo - xFrom;
+        double deltaY = yTo - yFrom;
+        return Math.atan2(deltaY, deltaX)*180.0/Math.PI;
     }
     
     public static Direction getDirection(Direction from, Direction to) {
@@ -222,8 +249,8 @@ public abstract class Toolkit {
         * ((AC = sqrt(AB^2 + BC^2))), 
         * where AB = x2 - x1 and BC = y2 - y1 and AC will be [x3, y3]
         */
-        double euclideanDistance = Math.sqrt(Math.pow(fromX - toX, 2)
-                            + Math.pow(fromX - toX, 2));
+        double euclideanDistance = Math.sqrt(Math.pow(toX - fromX, 2)
+                            + Math.pow(toY - fromY, 2));
         return euclideanDistance;
     }
     

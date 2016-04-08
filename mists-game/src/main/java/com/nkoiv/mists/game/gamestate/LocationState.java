@@ -481,40 +481,58 @@ public class LocationState implements GameState {
         if (game.getCurrentLocation() == null) return false;
         double clickX = me.getX();
         double clickY = me.getY();
+        double xOffset = this.game.getCurrentLocation().getLastxOffset();
+        double yOffset = this.game.getCurrentLocation().getLastyOffset();
         if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_PRESSED) movingWithMouse = true;
         if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_RELEASED) movingWithMouse = false;
         if (me.getButton() == MouseButton.SECONDARY  && me.getEventType() == MouseEvent.MOUSE_RELEASED) {
+            //Secondary mouse button teleports player
             //Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
-            double xOffset = this.game.getCurrentLocation().getLastxOffset();
-            double yOffset = this.game.getCurrentLocation().getLastyOffset();
             game.locControls.teleportPlayer(clickX+xOffset, clickY+yOffset);
             return true;
         }
         if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_RELEASED) {
-            MapObject targetMob = game.getCurrentLocation().getMobAtLocation(clickX+game.getCurrentLocation().getLastxOffset(), clickY+game.getCurrentLocation().getLastyOffset());
-            if (targetMob!=null) { 
-                if (game.getCurrentLocation().getTargets().contains(targetMob)) {
-                    //There already is the same mob targetted, so reselection should clear the targetting
-                    //... unless it was for contextAction
-                    if (!contextAction.setTriggerOnMobIfInRange(targetMob)) {
-                        game.getCurrentLocation().clearTarget();
-                        this.removeUIComponent("InfoBox");
-                    }
-                }
-                else {
-                    Mists.logger.log(Level.INFO, "Targetted {0}", targetMob.toString());
-                    game.getCurrentLocation().setTarget(targetMob);
-                    this.addUIComponent(this.infobox);
-                    //If the target has context-action vible triggers, it should be selected for context action
-                    contextAction.setTriggerOnMobIfInRange(targetMob);
-                }
-                return true;
-            }
+            //use default action towards mouseclick coordinates
+            //game.locControls.playerAttackMove(clickX+xOffset, clickY+yOffset);
+            //Select a target if possible
+            if (toggleTarget(clickX, clickY)) return true;
         }
         //Click didn't do anything
         return false;
     }
 
+    /**
+     * Check the given mouse coordinates for a map object,
+     * and make it the current target (updating infobox) if
+     * there is one.
+     * If the same mob already was targetted, release the targeting
+     * @param clickX local xCoordinate of the mouseclick
+     * @param clickY local yCoordinate of the mouseclick
+     * @return true if a mob was clicked
+     */
+    private boolean toggleTarget(double clickX, double clickY) {
+        MapObject targetMob = game.getCurrentLocation().getMobAtLocation(clickX+game.getCurrentLocation().getLastxOffset(), clickY+game.getCurrentLocation().getLastyOffset());
+        if (targetMob!=null) { 
+            if (game.getCurrentLocation().getTargets().contains(targetMob)) {
+                //There already is the same mob targetted, so reselection should clear the targetting
+                //... unless it was for contextAction
+                if (!contextAction.setTriggerOnMobIfInRange(targetMob)) {
+                    game.getCurrentLocation().clearTarget();
+                    this.removeUIComponent("InfoBox");
+                }
+            }
+            else {
+                Mists.logger.log(Level.INFO, "Targetted {0}", targetMob.toString());
+                game.getCurrentLocation().setTarget(targetMob);
+                this.addUIComponent(this.infobox);
+                //If the target has context-action vible triggers, it should be selected for context action
+                contextAction.setTriggerOnMobIfInRange(targetMob);
+            }
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Close the topmost open menu if menus/windows
      * are open. Return false if nothing was closed.
@@ -524,8 +542,7 @@ public class LocationState implements GameState {
         //Close the frontmost menu/window
         for (UIComponent uic : this.drawOrder.descendingSet()) {
             if (uic.getRenderZ() < 0) break;
-            else this.removeUIComponent(uic);
-            return true;
+            else return this.removeUIComponent(uic);
         }
         //If no window was closed, deselect a target if a target is selected
         if (!game.getCurrentLocation().getTargets().isEmpty()) {
@@ -605,7 +622,7 @@ public class LocationState implements GameState {
         }
 
         //Location controls
-        if (this.paused == false) {
+        if (!this.paused) {
         if (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W)) {
             game.locControls.playerMove(Direction.UP);            
         }
