@@ -431,7 +431,7 @@ public class Location extends Flags implements Global {
         if (mob == null) {
             Mists.logger.warning("Tried to add NULL mob to "+this.getName());
         }
-        if (Mists.gameMode == GameMode.CLIENT && (this.loading == false && (!(mob instanceof Effect)))) {
+        if (Mists.gameMode == GameMode.CLIENT && (!this.loading && (!(mob instanceof Effect)))) {
             //Clientmode should use ClientAddMapObject
             Mists.logger.warning("Client mode tried to add a map object directly ("+mob.toString()+")");
             return;

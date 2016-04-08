@@ -139,9 +139,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
      
     public void setVisionRange(int visionRange) {
-        if (visionRange < 0) visionRange = 0;
-        if (visionRange > 20) visionRange = 20;
         this.visionRange = visionRange;
+        if (this.visionRange < 0) this.visionRange = 0;
+        if (this.visionRange > 20) this.visionRange = 20;
     }
     
     public int getVisionRange() {

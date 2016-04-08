@@ -38,7 +38,7 @@ public class Puzzle {
      * @return true if puzzle is complete
      */
     public boolean isComplete() {
-        if (this.lockedComplete == true) return true;
+        if (this.lockedComplete) return true;
         for (PuzzleRequirement pr : this.requirements) {
             if (!pr.isMet()) return false;
         }

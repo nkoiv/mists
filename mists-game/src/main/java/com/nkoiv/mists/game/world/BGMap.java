@@ -17,9 +17,9 @@ import javafx.scene.image.Image;
  */
 public class BGMap implements GameMap{
     
-    Image image;
-    double width;
-    double height;
+    private Image image;
+    private double width;
+    private double height;
     
     public BGMap (Image i) {
         this.image = i;

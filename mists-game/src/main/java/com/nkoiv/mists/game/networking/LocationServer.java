@@ -487,7 +487,7 @@ public class LocationServer {
             b[p.playerID] = true;
         }
         for (int i = 0; i < b.length; i++) {
-            if (b[i]==false) return i;
+            if (!b[i]) return i;
         }
         return -1;
     }

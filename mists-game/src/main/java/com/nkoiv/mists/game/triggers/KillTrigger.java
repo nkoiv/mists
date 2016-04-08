@@ -13,7 +13,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
  * @author nikok
  */
 public class KillTrigger implements Trigger {
-    MapObject target;
+    private MapObject target;
     
     public KillTrigger(MapObject target) {
         this.target = target;

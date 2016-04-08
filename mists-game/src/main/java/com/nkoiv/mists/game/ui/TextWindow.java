@@ -110,7 +110,7 @@ public class TextWindow extends UIComponent {
     }
     
     protected class CloseButton extends IconButton {
-        TextWindow tw;
+        private TextWindow tw;
         
         public CloseButton(TextWindow tw, double xPosition, double yPosition) {
             super("CloseButton", 15, 15, xPosition, yPosition, Mists.graphLibrary.getImage("iconCrossBlue"), Mists.graphLibrary.getImage("iconCrossBlue"));

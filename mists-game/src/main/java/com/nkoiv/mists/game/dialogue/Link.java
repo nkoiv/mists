@@ -99,8 +99,8 @@ public class Link extends LocalizableText{
     }
     
     public class AttributeRequirement implements LinkRequirement{
-        String attribute;
-        int value;
+        private String attribute;
+        private int value;
         
         public AttributeRequirement(String attributeName, int attributeValue) {
             this.attribute = attributeName;

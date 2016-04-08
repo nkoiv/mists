@@ -121,7 +121,7 @@ public class TestBench {
             System.out.println("--------------------");
             String s = sc.nextLine();
             i = Integer.parseInt(s);
-            if (d.moveToCard(d.getCurrentCard().getLinkDestination(i-1)) == false) break;
+            if (!d.moveToCard(d.getCurrentCard().getLinkDestination(i-1))) break;
         }
         
     }

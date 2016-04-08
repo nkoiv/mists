@@ -195,7 +195,7 @@ public class LocationClient {
         }
         
         if (mob.type.equals(PlayerCharacter.class.toString())) {
-            if (mob.templateName.equals("Lini")) {
+            if ("Lini".equals(mob.templateName)) {
                 m = new PlayerCharacter();
                 ((PlayerCharacter)m).addAction(new MeleeWeaponAttack());
             }

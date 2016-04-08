@@ -144,11 +144,12 @@ public class TileMap implements GameMap, KryoSerializable {
     * because structures should have "floor" under them
     */
     private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
+        int t = tileCode;
         if (this.structureCodes == null) this.loadDefaultStructCodes();
-        if (tileCode == CLEAR) tileCode = WALL;
+        if (t == CLEAR) t = WALL;
         if (xCoor < 0 || xCoor > tileWidth-1 || yCoor < 0 || yCoor > tileHeight-1) return null;
-        if (this.structureCodes.keySet().contains(tileCode)) {
-            Structure s = this.structureCodes.get(tileCode).createFromTemplate();
+        if (this.structureCodes.keySet().contains(t)) {
+            Structure s = this.structureCodes.get(t).createFromTemplate();
             s.setPosition(xCoor*this.tilesize, yCoor*this.tilesize);
             return s;
         }

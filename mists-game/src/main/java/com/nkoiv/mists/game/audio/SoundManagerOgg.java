@@ -17,8 +17,8 @@ import java.util.logging.Level;
  */
 public class SoundManagerOgg implements SoundManager {
 
-    HashMap<String, OggClip> soundEffects = new HashMap<>();
-    HashMap<String, OggClip> musicPlaylist = new HashMap<>();
+    private HashMap<String, OggClip> soundEffects = new HashMap<>();
+    private HashMap<String, OggClip> musicPlaylist = new HashMap<>();
     private OggClip currentMusic;
     private double musicVolume;
     

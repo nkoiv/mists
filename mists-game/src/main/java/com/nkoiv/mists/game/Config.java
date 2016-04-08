@@ -57,13 +57,13 @@ public class Config {
     }
     
     private void setDrawCollisions(String value) {
-        if (value.equals("true")) this.drawCollisions = true;
-        if (value.equals("false")) this.drawCollisions = false;
+        if (("true").equals(value)) this.drawCollisions = true;
+        if (("false").equals(value)) this.drawCollisions = false;
     }
     
     private void setDrawGrid(String value) {
-        if (value.equals("true")) this.drawGrid = true;
-        if (value.equals("false")) this.drawGrid = false;
+        if (("true").equals(value)) this.drawGrid = true;
+        if (("false").equals(value)) this.drawGrid = false;
     }
     
     /**

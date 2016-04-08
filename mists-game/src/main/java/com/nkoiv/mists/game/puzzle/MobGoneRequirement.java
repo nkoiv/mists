@@ -14,8 +14,8 @@ import com.nkoiv.mists.game.world.Location;
  * @author nikok
  */
 public class MobGoneRequirement extends PuzzleRequirement {
-    Location location;
-    MapObject mobToDestroy;
+    private Location location;
+    private MapObject mobToDestroy;
     
     public MobGoneRequirement(MapObject mob, Location location) {
         this.location = location;

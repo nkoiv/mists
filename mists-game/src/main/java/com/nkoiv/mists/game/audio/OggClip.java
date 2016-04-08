@@ -486,7 +486,7 @@ public class OggClip {
 
 			while (eos == 0) {
 				while (eos == 0) {
-					if (player != me) {
+					if (!player.equals(me)) {
 						return;
 					}
 

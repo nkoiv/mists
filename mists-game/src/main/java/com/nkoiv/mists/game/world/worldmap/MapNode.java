@@ -22,7 +22,7 @@ public class MapNode {
         protected boolean bigNode;
         protected double xPos;
         protected double yPos;
-        MapNode[] neighboursByDirection; //0 is left empty, as the direction would be Direction.STAY
+        protected MapNode[] neighboursByDirection; //0 is left empty, as the direction would be Direction.STAY
         /* Neighbours by direction
         * [8][1][2]
         * [7]   [3]

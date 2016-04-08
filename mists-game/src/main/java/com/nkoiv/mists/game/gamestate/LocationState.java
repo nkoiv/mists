@@ -271,13 +271,13 @@ public class LocationState implements GameState {
         double screenWidth = gameCanvas.getWidth();
         double screenHeight = gameCanvas.getHeight();
         
-        if (this.game.toggleScale == true) {
+        if (this.game.toggleScale) {
             toggleScale(gameCanvas.getGraphicsContext2D());
             this.game.toggleScale = false;
         }
         
         //Render the current Location unless paused
-        if (this.paused == false) {
+        if (!this.paused) {
             gc.clearRect(0, 0, screenWidth, screenHeight);
             sc.clearRect(0, 0, screenWidth, screenHeight);
             if (game.getCurrentLocation() != null) {

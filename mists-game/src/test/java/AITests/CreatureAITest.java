@@ -27,9 +27,9 @@ import org.junit.Test;
  */
 public class CreatureAITest {
     
-    Location testLocation;
-    PlayerCharacter testPlayer;
-    Creature testCreature;
+    private Location testLocation;
+    private PlayerCharacter testPlayer;
+    private Creature testCreature;
     
     public CreatureAITest() {
     }
