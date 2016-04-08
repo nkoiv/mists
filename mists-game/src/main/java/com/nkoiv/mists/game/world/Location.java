@@ -151,14 +151,11 @@ public class Location extends Flags implements Global {
         else this.loading = true;
         this.map = map;
         // Add in all the static structures from the selected map
-        int addedStructures = 0;
         ArrayList<Structure> staticStructures = map.getStaticStructures(this);
         Mists.logger.info("Map has "+staticStructures.size()+" static structures");
         ArrayList<Wall> walls = new ArrayList<>();
         for (Structure s : staticStructures) {
-            //Mists.logger.info(addedStructures +" structures added");
             this.addStructure(s, s.getXPos(), s.getYPos());
-            addedStructures++;
             if (s instanceof Wall) walls.add((Wall)s);
         }
         for (Wall w : walls) {
@@ -214,15 +211,13 @@ public class Location extends Flags implements Global {
         MapObject mobAtLocation = null;
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) {
-                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth()) {
-                    if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
-                        //Do a pixelcheck on the mob;
-                        //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
-                            return mob;
-                        //}
-                    }
+                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth() &&
+                    yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
+                    //Do a pixelcheck on the mob;
+                    //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
+                    return mob;
+                    //}   
                 }
-                
             }
         }
         if (!this.structures.isEmpty()) {
@@ -303,6 +298,7 @@ public class Location extends Flags implements Global {
                     if ((sizeRequirement > this.getCollisionMap().nodeSize)
                             && (this.getCollisionMap().isBlocked(0, openX+1, openY+1))) {
                         //Bigger things need more space
+                        foundSpot = false;
                     } else {
                         foundSpot = true;
                         openX = openX * this.getCollisionMap().nodeSize;
@@ -535,10 +531,6 @@ public class Location extends Flags implements Global {
     
     public void clearRoofs() {
         this.roofs.clear();
-    }
-    
-    private void setMap(GameMap m) {
-        this.map = m;
     }
     
     public void setMapGen (DungeonGenerator mg) {
@@ -1002,12 +994,10 @@ public class Location extends Flags implements Global {
                  > (collidingObject.getHeight() + mob.getHeight()))) {
                 //Objects are far enough from oneanother
             } else {
-                if (!collidingObject.equals(mob)) { // Colliding with yourself is not really a collision
-                if ( mob.intersects(collidingObject) ) 
-                 {
+                if (!collidingObject.equals(mob) && mob.intersects(collidingObject)) { 
+                    // Colliding with yourself is not really a collision
                     collidingObjects.add(collidingObject);
                 }
-            }
             }
             
         }
@@ -1031,8 +1021,7 @@ public class Location extends Flags implements Global {
         if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(upleft[0]/collisionMap.nodeSize), (int)(upleft[1]/collisionMap.nodeSize))) return true;
         if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(upright[0]/collisionMap.nodeSize), (int)(upright[1]/collisionMap.nodeSize))) return true;
         if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(downleft[0]/collisionMap.nodeSize), (int)(downleft[1]/collisionMap.nodeSize))) return true;
-        if (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(downright[0]/collisionMap.nodeSize), (int)(downright[1]/collisionMap.nodeSize))) return true;
-        return false;
+        return (this.collisionMap.isBlocked(mob.getCrossableTerrain(),(int)(downright[0]/collisionMap.nodeSize), (int)(downright[1]/collisionMap.nodeSize)));
     }
     
  
@@ -1147,7 +1136,7 @@ public class Location extends Flags implements Global {
         //Mists.logger.info("Offset: "+xOffset+","+yOffset);
         this.renderMap(gc, xOffset, yOffset);
         this.lastRenderedMapObjects = this.renderMobs(gc, xOffset, yOffset);
-        this.renderLights(gc, sc, lastRenderedMapObjects, xOffset, yOffset);
+        this.renderLights(sc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderStructureExtras(gc, lastRenderedMapObjects, xOffset, yOffset);
         this.renderExtras(gc, xOffset, yOffset);
         this.renderRoofs(gc, xOffset, yOffset);
@@ -1174,7 +1163,7 @@ public class Location extends Flags implements Global {
     }
     
     //TODO: Move this to a separate class
-    private void renderLights(GraphicsContext gc, GraphicsContext sc, List<MapObject> MOBsOnScreen, double xOffset, double yOffset) {
+    private void renderLights(GraphicsContext sc, List<MapObject> MOBsOnScreen, double xOffset, double yOffset) {
         //Raycast from player to all screen corners and to corners of all visible structures
         /*
         List<Structure> StructuresOnScreen = new ArrayList<>();
@@ -1300,8 +1289,8 @@ public class Location extends Flags implements Global {
         gc.save();
         
         gc.setGlobalAlpha(0.8);
-        double lightlevel;
-        ColorAdjust lightmap = new ColorAdjust();
+        //double lightlevel;
+        //ColorAdjust lightmap = new ColorAdjust();
         if (!renderedMOBs.isEmpty()) {
             for (MapObject struct : renderedMOBs) {
                 if (struct instanceof Structure) {

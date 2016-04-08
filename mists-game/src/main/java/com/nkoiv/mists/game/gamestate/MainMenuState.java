@@ -31,7 +31,7 @@ public class MainMenuState implements GameState {
     private HashMap<String, UIComponent> uiComponents;
     private final TreeSet<UIComponent> drawOrder;
     private final Game game;
-    private UIComponent currentMenu;
+    //private UIComponent currentMenu;
     private boolean gameMenuOpen;
     
     
@@ -42,7 +42,7 @@ public class MainMenuState implements GameState {
         MainMenuWindow mainMenuWindow = new MainMenuWindow(this);
         this.addUIComponent(mainMenuWindow);
         //this.uiComponents.put(mainMenuWindow.getName(), mainMenuWindow);
-        this.currentMenu = uiComponents.get(mainMenuWindow.getName());
+        //this.currentMenu = uiComponents.get(mainMenuWindow.getName());
         
     }
     
@@ -79,7 +79,7 @@ public class MainMenuState implements GameState {
     private void drawLogo(Canvas canvas) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         double screenWidth = game.WIDTH;
-        double screenHeight = game.HEIGHT;
+        //double screenHeight = game.HEIGHT;
         Image logo = new Image("/images/mists_logo.png");
         gc.drawImage(logo, (screenWidth/2)-(logo.getWidth()/2), 50);
         
@@ -95,20 +95,18 @@ public class MainMenuState implements GameState {
 
     @Override
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
-        
+        //No game logic to perform in game menu
+        //perhaps consider adding in some minigame? :)
     }
  
 
     @Override
     public void handleMouseEvent(MouseEvent me) {
         //See if there's an UI component to click
-        if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
-            if(!mouseClickOnUI(me)){
+        if (me.getEventType() == MouseEvent.MOUSE_CLICKED && !mouseClickOnUI(me)) {
             //If not, give the click to the underlying gameLocation
             Mists.logger.info("Click didnt land on an UI button");
-        }
-        }
-        
+        }   
     }
     
     public boolean mouseClickOnUI(MouseEvent me) {

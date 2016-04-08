@@ -28,10 +28,10 @@ import org.junit.Test;
  */
 public class GeneralMobTest {
     
-    private Location testLocation;
+    //private Location testLocation;
     private Structure testStructure;
     private Creature testCreature;
-    private Effect testEffect;
+    //private Effect testEffect;
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     
@@ -50,7 +50,7 @@ public class GeneralMobTest {
     
     @Before
     public void setUp() {
-        testLocation = new Location("TestLocation",new BGMap(new Image("/images/pocmap.png")));
+        //testLocation = new Location("TestLocation",new BGMap(new Image("/images/pocmap.png")));
         testCreature = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
         testStructure = new Structure("Rock", new Image("/images/block.png"), 100);
     }
@@ -96,13 +96,13 @@ public class GeneralMobTest {
     
     @Test
     public void creatureFlagReturnsFalseWhenThereIsNoFlag() {
-        assertTrue(!testCreature.isFlagged("Testflag"));
+        assertFalse(testCreature.isFlagged("Testflag"));
     }
     
     @Test
     public void creatureFlagReturnsFalseWhenFlagIsZero() {
         testCreature.setFlag("Testflag", 0);
-        assertTrue(!testCreature.isFlagged("Testflag"));
+        assertFalse(testCreature.isFlagged("Testflag"));
     }
     
     @Test
@@ -130,13 +130,9 @@ public class GeneralMobTest {
         assertTrue(centerY == 200+(testCreature.getHeight()/2));
     }
     
+    /*
     @After
     public void tearDown() {
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    */
 }

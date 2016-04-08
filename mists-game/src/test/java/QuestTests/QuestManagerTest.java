@@ -22,10 +22,7 @@ import org.junit.Test;
  * @author nikok
  */
 public class QuestManagerTest {
-    QuestManager qm;
-    
-    public QuestManagerTest() {
-    }
+    private QuestManager qm;
     
     @Rule 
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
@@ -41,10 +38,6 @@ public class QuestManagerTest {
     @Before
     public void setUp() {
         qm = new QuestManager();
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     private Quest generateTestQuest() {
@@ -92,5 +85,10 @@ public class QuestManagerTest {
         qm.registerQuestEvent(QuestTaskType.CREATUREKILL, 1, 1);
         assertTrue(qm.getOpenQuests().get(q.getID()).isComplete());
     }
-    
+        
+    /*
+    @After
+    public void tearDown() {
+    }
+    */
 }
