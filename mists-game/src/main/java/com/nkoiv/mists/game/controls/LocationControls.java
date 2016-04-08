@@ -303,7 +303,7 @@ public class LocationControls {
     //----------Location creation------------
     
     public void createLoc(String location) {
-        if (location.equals("testmap")) {
+        if ("testmap".equals(location)) {
             //TODO: Rewrite this to adhere to LocationLibrary
             //game.moveToState(0);
             Location newlocation = new Location ("ConsoleLoc", new TileMap("/mapdata/pathfinder_test.map"));

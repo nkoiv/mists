@@ -22,7 +22,7 @@ import org.junit.Test;
  * @author nikok
  */
 public class QuestTaskTest {
-    Quest testQuest;
+    private Quest testQuest;
     
     public QuestTaskTest() {
     }

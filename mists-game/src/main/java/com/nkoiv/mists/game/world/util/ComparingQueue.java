@@ -150,11 +150,7 @@ public class ComparingQueue<E extends Comparable> {
      */
     public boolean contains(E e) {
         int eIndex = this.getIndex(e);
-        if (eIndex >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (eIndex >= 0);
     }
 
     /**

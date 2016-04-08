@@ -75,8 +75,8 @@ public class LocationNetwork {
         
         //--- MapObjects---
         static public class FullMapObjectIDList {
-            int mobCount;
-            int[] mobIDList;
+            public int mobCount;
+            public int[] mobIDList;
         }
         
         static public class MapObjectUpdateRequest {

@@ -204,7 +204,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         ItemContainer ic;
         if (structureData.containsKey("spriteType")) {
             String spriteType = (String)structureData.get("spriteType");
-            if (spriteType.equals("static")) {
+            if ("static".equals(spriteType)) {
                 Image image = new Image((String)structureData.get("image"));
                 ic = new ItemContainer(mobname, new Sprite(image)); 
             } else { //if (spriteType.equals("spritesheet")){

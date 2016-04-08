@@ -180,7 +180,7 @@ public class InventoryPanel extends TiledPanel {
                 case USE_ITEM: this.text = "Use"; break;
                 case EQUIP_ITEM: this.text = "Equip"; break;
                 case DROP_ITEM: this.text = "Drop"; break;
-                default: this.text = "----";
+                default: this.text = "----"; break;
             }
         }
         

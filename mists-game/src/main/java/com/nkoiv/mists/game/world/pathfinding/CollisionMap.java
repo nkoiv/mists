@@ -176,11 +176,7 @@ public class CollisionMap {
     }
     
     private boolean isOnMap (int xCoor, int yCoor) {
-        if ((xCoor >= 0) && (xCoor < this.mapTileWidth) && (yCoor >= 0) && (yCoor < this.mapTileHeight))  {
-            return true;
-        } else {
-            return false;
-        }
+        return ((xCoor >= 0) && (xCoor < this.mapTileWidth) && (yCoor >= 0) && (yCoor < this.mapTileHeight));
     }
     
     public int getMapTileWidth() {

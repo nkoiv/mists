@@ -237,7 +237,7 @@ public class LocationClient {
             Object object = this.incomingUpdatesStack.pop();
             
             if (object instanceof LocationClear) {
-                if (((LocationClear)object).clear == true) {
+                if (((LocationClear)object).clear) {
                     ready = true;
                     game.clearLoadingScreen();
                     ((LocationState)game.currentState).loadDefaultUI();

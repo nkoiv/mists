@@ -208,8 +208,7 @@ public class LocationServer {
             private boolean isValid (String value) {
                 if (value == null) return false;
                 String v  = value.trim();
-                if (v.length() == 0) return false;
-                return true;
+                return (v.length() == 0);
             }
 
             @Override

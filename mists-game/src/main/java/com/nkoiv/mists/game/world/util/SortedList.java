@@ -15,7 +15,7 @@ package com.nkoiv.mists.game.world.util;
         /** The list of elements */
         protected E[] data; //the elements stored in the SortedList 
         protected int capacity; //Max capacity of the list
-        static final int def_cap = 50; //default capacity for a new list
+        protected static final int def_cap = 50; //default capacity for a new list
         protected int num; //ID of the next element to add to the list
         
         /**
@@ -79,7 +79,7 @@ package com.nkoiv.mists.game.world.util;
          */
         public E get(int index) throws Exception {
             if (index < 0 || index >= num) {
-                throw new Exception("Element index out of list bounds");
+                throw new IndexOutOfBoundsException("Element index out of list bounds");
             }
             return data[index];
         }
@@ -224,11 +224,7 @@ package com.nkoiv.mists.game.world.util;
          */
         public boolean contains(E e) {
             int eIndex = this.getIndex(e);
-            if (eIndex >= 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return (eIndex >= 0);
         }
         
 

@@ -72,6 +72,7 @@ public class ItemLibrary <E extends Item> {
                 return generateMiscItemFromYAML(itemData);
             case "Weapon 1h": Mists.logger.info("Generating 1H WEAPON");
                 return generateWeaponFromYAML(itemData);
+            default: break;
         }        
         return null;
     }
@@ -84,7 +85,7 @@ public class ItemLibrary <E extends Item> {
         switch (type) {
             case "Weapon 1h": weaponType = ItemType.WEAPON_1H; break;
             case "Weapon 2h": weaponType = ItemType.WEAPON_2H; break;
-            default: weaponType = ItemType.WEAPON_1H;
+            default: weaponType = ItemType.WEAPON_1H; break;
         }
         String name = (String)weaponData.get("name");
         String description = (String)weaponData.get("description");
