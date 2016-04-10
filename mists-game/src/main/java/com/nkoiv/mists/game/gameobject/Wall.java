@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.Arrays;
+import java.util.HashMap;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -41,6 +42,9 @@ import javafx.scene.paint.Color;
  * @author nikok
  */
 public class Wall extends Structure {
+    //GeneratedWallImages key: templateID+"-"+Arrays.toString(neighbours)
+    private static final HashMap<String, Image[]> generatedWallImages = new HashMap<>();
+    
     private ImageView wallparts;
     private Image[] wallimages;
     private boolean useExtrasForWalls;
@@ -270,6 +274,17 @@ public class Wall extends Structure {
     }
     
     public void generateWallImages(ImageView wallparts) {
+        Mists.logger.info("Checking if correct wallimage array already exists");
+        String wallImagesKey = this.templateID+"-"+Arrays.toString(this.neighbours);
+        if (generatedWallImages.containsKey(wallImagesKey)) {
+            this.wallimages = generatedWallImages.get(wallImagesKey);
+        } else  {
+            generatedWallImages.put(wallImagesKey, generateNewWallImageArrayFromNeighbours(this. wallparts, this.neighbours));
+        }
+        
+    }
+    
+    private Image[] generateNewWallImageArrayFromNeighbours(ImageView wallparts, boolean[] neighbours) {
         Mists.logger.info("Generating wallimages from wallparts");
         WritableImage snapshot = null;
         SnapshotParameters parameters = new SnapshotParameters();
@@ -295,6 +310,7 @@ public class Wall extends Structure {
         //Cardinal
         
         Mists.logger.info("Done with wallimages");
+        return wallimages;
     }
     
     @Override

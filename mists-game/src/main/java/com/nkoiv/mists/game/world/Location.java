@@ -1182,10 +1182,18 @@ public class Location extends Flags implements Global {
         //Render black blocks on top of hidden segments
         //lights.renderLightMap(gc, xOffset, yOffset);
         
+        sc.save();
+        /*
+        //Old black fill
         sc.setFill(Color.BLACK);
-        //Black the layer, as light punches holes in it
+        sc.setGlobalAlpha(1);
         sc.fillRect(0, 0, sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
-        
+        */
+        sc.setFill(environment.getShadowColor());
+        sc.setGlobalAlpha(environment.getShadowDepth());
+        //Shadow the layer, as light punches holes in it
+        sc.fillRect(0, 0, sc.getCanvas().getWidth(), sc.getCanvas().getHeight());
+        sc.restore();
         //Render lightsources around mobs that have them (should be at least player)
         for (MapObject mob : MOBsOnScreen) {
             if (mob.getLightSize() > 0) {
