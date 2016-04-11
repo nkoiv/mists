@@ -15,7 +15,6 @@ import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
