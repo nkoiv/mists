@@ -102,26 +102,11 @@ public abstract class Toolkit {
      * @return x and y direction in -1 - +1 range
      */
     public static double[] getDirectionXY(double xFrom, double yFrom, double xTo, double yTo) {
-        double xDif = xTo - xFrom;
-        double yDif = yTo - yFrom;
-        boolean left = false;
-        boolean up = false;
-        if (xDif<0) left = true;
-        if (yDif<0) up = true;
-        double xFactor;
-        double yFactor;
-        if (Math.abs(xDif) > Math.abs(yDif)) {
-            yFactor = Math.abs(yDif) / Math.abs(xDif);
-            xFactor = 1-yFactor;
-        } else {
-            xFactor = Math.abs(xDif) / Math.abs(yDif);
-            yFactor = 1-xFactor;
-        }
-        if (left) xFactor = -xFactor;
-        if (up) yFactor = -yFactor;
+        double angle = Toolkit.angleFromCoordinates(xFrom, yFrom, xTo, yTo);
+        double x = Math.cos(angle);
+        double y = Math.sin(angle);
         
-        double[] xy = new double[]{xFactor, yFactor};
-        return xy;
+        return new double[]{x, y};
     }
     
     /**

@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game;
 
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
+import com.nkoiv.mists.game.actions.ProjectileSpell;
 import com.nkoiv.mists.game.controls.LocationControls;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
@@ -115,6 +116,7 @@ public class Game {
         System.out.println(companion.toString());
         pocplayer.addCompanion(companion);
         pocplayer.addAction(new MeleeWeaponAttack());
+        pocplayer.addAction(new ProjectileSpell("Firebolt"));
         setPlayer(pocplayer);
         
         //POC Dialogue
@@ -122,39 +124,7 @@ public class Game {
         //POC worldmap
         WorldMap wm = new WorldMap("Himmu island", new Image("/images/himmu_island.png"));
         WorldMapLibrary.populateWorldMapWithNodesFromYAML(wm, "libdata/defaultWorldmapNodes.yml");
-        /*
-        LocationNode cave = new LocationNode("Cave", new Image("/images/mountain_cave.png"), 1);
-        MapNode boat = new MapNode("Boat", new Image("/images/boat.png"));
-        MapNode roadToCave = new MapNode("Road", null);
-        LocationNode village = new LocationNode("Village", new Image("/images/village.png"), 2);
-        LocationNode byTheWoods = new LocationNode("Road to woods", new Image("/images/woods.png"), 3);
-        MapNode sea1 = new MapNode("Out on the sea", null);
-        MapNode sea2 = new MapNode("Out on the sea", null);
-        
-        
-        boat.setNeighbour(sea1, Direction.DOWN);
-        sea1.setNeighbour(boat, Direction.UP);
-        sea1.setNeighbour(sea2, Direction.RIGHT);
-        sea2.setNeighbour(sea1, Direction.LEFT);
-        
-        boat.setNeighbour(roadToCave, Direction.RIGHT);
-        boat.setNeighbour(byTheWoods, Direction.UP);
-        cave.setNeighbour(roadToCave, Direction.LEFT);
-        village.setNeighbour(roadToCave, Direction.DOWN);
-        roadToCave.setNeighbour(cave, Direction.RIGHT);
-        roadToCave.setNeighbour(village, Direction.UP);
-        roadToCave.setNeighbour(boat, Direction.LEFT);
-        byTheWoods.setNeighbour(boat, Direction.DOWN);
-        
-        wm.addNode(sea1, 180, 450);
-        wm.addNode(sea2, 550, 550);
-        
-        wm.addNode(cave, 290, 280);
-        wm.addNode(boat, 150, 280);
-        wm.addNode(roadToCave, 230, 290);
-        wm.addNode(village, 250, 220);
-        wm.addNode(byTheWoods, 140, 200);
-        */
+
         wm.setPlayerNode("Boat");
         wm.setPlayerCharacter(player);
         

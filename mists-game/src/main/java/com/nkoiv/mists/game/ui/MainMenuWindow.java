@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
+import com.nkoiv.mists.game.actions.ProjectileSpell;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.GameState;
@@ -102,6 +103,7 @@ public class MainMenuWindow extends TiledPanel {
                         System.out.println(companion.toString());
                         pocplayer.addCompanion(companion);
                         pocplayer.addAction(new MeleeWeaponAttack());
+                        pocplayer.addAction(new ProjectileSpell("Firebolt"));
                         game.setPlayer(pocplayer);
                         //Location newLoc = Mists.locationLibrary.create(1);
                         //Mists.logger.info("Location "+newLoc.getName()+" generated");

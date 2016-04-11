@@ -6,9 +6,12 @@
 package com.nkoiv.mists.game.actions;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Combatant;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.util.Flags;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -90,6 +93,38 @@ public class Action extends Flags implements Serializable {
     public void hitOn(ArrayList<MapObject> mobs) {
         
     }
+    
+    public void directDamageHit(ArrayList<MapObject> mobs) {
+        int damage = this.getFlag("damage");
+        int scalingDamage = this.owner.getFlag("Strength"); //TODO: Customized scaling attribute
+        damage = damage+scalingDamage;
+        if (mobs.contains(this.owner)) mobs.remove(this.owner);
+        if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
+            Mists.logger.log(Level.INFO, "{0}s {1} landed on {2}", new Object[]{this.getOwner().getName(),this.toString(), mobs.toString()});
+            for (MapObject mob : mobs) {
+                if (mob instanceof Combatant) {
+                    if (this.getOwner() instanceof PlayerCharacter && mob instanceof Creature) {
+                        //Disallow friendly fire
+                        //TODO: build this into flags somehow (if mob.faction == getOwner.faction...)
+                        PlayerCharacter pc =(PlayerCharacter)this.getOwner();
+                        if (!pc.getCompanions().contains((Creature)mob)) {
+                            Mists.logger.log(Level.INFO, "{0} Hit {1} for {2} damage", new Object[]{this.getOwner().getName(), mob.getName(), damage});
+                            ((Combatant)mob).takeDamage(damage);
+                        }
+                    } else {
+                        Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
+                        ((Combatant)mob).takeDamage(damage);
+                    }
+                } else if (mob instanceof Structure) {
+                    //TODO: Temp: DESTROY THE STRUCTURES!
+                    //this.getOwner().getLocation().removeMapObject(mob);
+                    if (this.owner instanceof PlayerCharacter) mob.setRemovable();
+                }
+            }
+            this.setFlag("triggered", 1);
+        }
+    }
+    
     
     public String getName() {
         return this.name;

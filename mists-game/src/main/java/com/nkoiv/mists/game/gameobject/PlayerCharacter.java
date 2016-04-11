@@ -156,9 +156,15 @@ public class PlayerCharacter extends Creature implements Combatant {
     }
 
     @Override
-    public void useAction(String action ) {
+    public void useAction(String action) {
+        Mists.logger.info("Using action: "+action+" if possible");
         if (this.getAvailableActions() != null) {
-            if (this.getAvailableActions().containsKey(action)) this.getAvailableActions().get(action).use(this);
+            if (this.getAvailableActions().containsKey(action)) {
+                this.getAvailableActions().get(action).use(this);
+            } else {
+                Mists.logger.info("Action not found. Available actions:");
+                Mists.logger.info(this.getAvailableActions().entrySet().toString());
+            }
         } else {
             Mists.logger.log(Level.INFO, "{0} tried using action [{1}], but doesnt have the ability.", new Object[]{this.getName(), action});
         }

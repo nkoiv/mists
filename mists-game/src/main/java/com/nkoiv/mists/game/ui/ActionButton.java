@@ -31,7 +31,11 @@ public class ActionButton extends TextButton {
 
     public void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-        player.useAction(actionName);
+        if (!player.getLocation().getTargets().isEmpty()) {
+            player.useAction(actionName, player.getLocation().getTargets().get(0));
+        } else {
+            player.useAction(actionName);
+        }
     }
     
     
