@@ -119,7 +119,7 @@ public class MainMenuWindow extends TiledPanel {
             }
             
             @Override
-            protected void buttonPress() {
+            public void buttonPress() {
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 this.game.setGameMode(GameMode.SINGLEPLAYER);
                 parent.close();
@@ -162,7 +162,7 @@ public class MainMenuWindow extends TiledPanel {
             }
             
             @Override
-            protected void buttonPress() {
+            public void buttonPress() {
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 this.game.setGameMode(GameMode.SERVER);
                 parent.close();
@@ -199,7 +199,7 @@ public class MainMenuWindow extends TiledPanel {
             }
             
             @Override
-            protected void buttonPress() {
+            public void buttonPress() {
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
                 this.game.setGameMode(GameMode.CLIENT);
                 parent.close();
@@ -218,7 +218,7 @@ public class MainMenuWindow extends TiledPanel {
         }
         
         @Override
-        protected void buttonPress() {
+        public void buttonPress() {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
             if (this.game.getCurrentLocation() == null) {
                 //No game to resume
@@ -236,7 +236,7 @@ public class MainMenuWindow extends TiledPanel {
         }
         
         @Override
-        protected void buttonPress() {
+        public void buttonPress() {
             Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         }
         

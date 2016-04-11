@@ -49,17 +49,25 @@ public class TextButton extends UIComponent{
     @Override
     public void render (GraphicsContext gc, double xPosition, double yPosition) {
         gc.save();
+        this.renderBackground(gc, xPosition, yPosition);
+        gc.restore();
         
+        gc.save();
+        this.renderText(gc, xPosition, yPosition);
+        gc.restore();
+    }
+    
+    protected void renderText(GraphicsContext gc, double xPosition, double yPosition) {
         gc.setGlobalAlpha(background.getOpacity());
         gc.setFill(background.getFill());
         gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
-        gc.restore();
-        
+    }
+    
+    protected void renderBackground(GraphicsContext gc, double xPosition, double yPosition) {
         gc.setGlobalAlpha(1);
         gc.setFont(text.getFont());
         gc.setFill(text.getFill());
         gc.fillText(text.getText(), xPosition-textXOffset, yPosition+background.getHeight()+textYOffset);
-        gc.restore();
     }
     
     public void setText(Text newText) {
