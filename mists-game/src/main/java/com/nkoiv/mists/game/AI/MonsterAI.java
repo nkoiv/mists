@@ -24,12 +24,7 @@ public class MonsterAI extends CreatureAI{
     @Override
     protected Task pickNewAction() {
         if (!this.active) {
-            if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), creep.getLocation().getPlayer().getCenterXPos(), creep.getLocation().getPlayer().getCenterYPos())
-                    < 10 * Mists.TILESIZE) {
-                if (this.isInLineOfSight(creep.getLocation().getPlayer())) {
-                    this.active = true;
-                }
-            }
+            this.active = activateByLineOfSight(creep.getLocation().getPlayer());
             return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         }
         else {

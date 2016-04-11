@@ -73,12 +73,7 @@ public class CreatureAI extends Flags{
     protected Task pickNewAction() {
         if (creep.getLocation().getPlayer() == null) return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         if (!this.active) {
-            if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), creep.getLocation().getPlayer().getCenterXPos(), creep.getLocation().getPlayer().getCenterYPos())
-                    < 10 * Mists.TILESIZE) {
-                if (this.isInLineOfSight(creep.getLocation().getPlayer())) {
-                    this.active = true;
-                }
-            }
+            this.active = activateByLineOfSight(creep.getLocation().getPlayer());
             return new Task(GenericTasks.ID_IDLE, creep.getID(), null);
         }
         else {
@@ -87,6 +82,16 @@ public class CreatureAI extends Flags{
         }
     }
 
+    protected boolean activateByLineOfSight(MapObject mob) {
+        if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), mob.getCenterXPos(), mob.getCenterYPos())
+                    < 10 * Mists.TILESIZE) {
+            if (this.isInLineOfSight(creep.getLocation().getPlayer())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     /**
      * MoveTowardsMob uses A* pathfinding to route a path towards the
      * target, and then moves towards the next step on the path.
