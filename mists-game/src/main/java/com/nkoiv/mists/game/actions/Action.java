@@ -45,6 +45,7 @@ public class Action extends Flags implements Serializable {
         this.actionType = actionType;
         this.id = nextId++;
         this.flags = new HashMap<>();
+        this.effects = new ArrayList<>();
     }
     
     /*
@@ -94,7 +95,7 @@ public class Action extends Flags implements Serializable {
         
     }
     
-    public void directDamageHit(ArrayList<MapObject> mobs) {
+    public boolean directDamageHit(ArrayList<MapObject> mobs) {
         int damage = this.getFlag("damage");
         int scalingDamage = this.owner.getFlag("Strength"); //TODO: Customized scaling attribute
         damage = damage+scalingDamage;
@@ -122,7 +123,9 @@ public class Action extends Flags implements Serializable {
                 }
             }
             this.setFlag("triggered", 1);
+            return true;
         }
+        return false;
     }
     
     

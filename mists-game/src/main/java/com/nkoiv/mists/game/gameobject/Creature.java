@@ -199,16 +199,19 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     public void useAction(String name) {
         if (this.availableActions != null) {
             if (this.availableActions.containsKey(name)) this.availableActions.get(name).use(this);
-        } else {
-            Mists.logger.log(Level.INFO, "{0} tried using action [{1}], but doesnt have the ability.", new Object[]{this.getName(), name});
+            else {
+                Mists.logger.log(Level.INFO, "{0} tried using action [{1}], but doesnt have the ability.", new Object[]{this.getName(), name});
+            }
         }
     }
     
     public void useAction(String name, MapObject target) {
         if (this.availableActions != null) {
-            if (this.availableActions.containsKey(name)) this.availableActions.get(name).use(this, target.getCenterYPos(), target.getCenterYPos());
-        } else {
-            Mists.logger.log(Level.INFO, "{0} tried using action [{1}], but doesnt have the ability.", new Object[]{this.getName(), name});
+            if (this.availableActions.containsKey(name)) {
+                this.availableActions.get(name).use(this, target.getCenterXPos(), target.getCenterYPos());
+            } else {
+                Mists.logger.log(Level.INFO, "{0} tried using action [{1}], but doesnt have the ability.", new Object[]{this.getName(), name});
+            }
         }
     }
     

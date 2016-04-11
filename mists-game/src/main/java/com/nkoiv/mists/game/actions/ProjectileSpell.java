@@ -76,14 +76,22 @@ public class ProjectileSpell extends Action implements AttackAction {
                     this, "meleeattack",
                     this.getSprite(actor),duration);
             attackEffect.getSprite().setVelocity(directionXY[0]*projectileSpeed, directionXY[1]*projectileSpeed);
+            //Put the effect on the list for keeping tabs on it
+            this.effects.add(attackEffect);
             //Put the effect on the actor
             actor.getLocation().addEffect(attackEffect,
                     (attackPointX-(this.projectileAnimation.getFrameWidth()/2)),
                     (attackPointY-(this.projectileAnimation.getFrameHeight()/2)));
-            //Link the effect so it moves with actor
-            //attackEffect.setLinkedObject(actor);
         }
     }
+    
+    private void onImpact() {
+        //Only trigger once
+        for (Effect e : this.effects) {
+            e.setRemovable();
+        }
+    }
+    
     @Override
     public void use(Creature actor, double xTarget, double yTarget) {
         double[] directionXY = Toolkit.getDirectionXY(actor.getCenterXPos(), actor.getCenterYPos(), xTarget, yTarget);
@@ -99,7 +107,9 @@ public class ProjectileSpell extends Action implements AttackAction {
        
     @Override
     public void hitOn(ArrayList<MapObject> mobs) {
-        this.directDamageHit(mobs);
+        boolean triggered = this.directDamageHit(mobs);
+        //Trigger the on impact effect (animation changes etc)
+        if (triggered) this.onImpact();
     }
     
     @Override

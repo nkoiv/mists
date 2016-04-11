@@ -585,6 +585,23 @@ public class LocationState implements GameState {
             return;
         }
         
+        if (releasedButtons.contains(KeyCode.DIGIT1)) {
+            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
+            //ab.getSubComponents().get(0)
+        }
+        if (releasedButtons.contains(KeyCode.DIGIT2)) {
+            
+        }
+        if (releasedButtons.contains(KeyCode.DIGIT3)) {
+            
+        }
+        if (releasedButtons.contains(KeyCode.DIGIT4)) {
+            
+        }
+        if (releasedButtons.contains(KeyCode.DIGIT5)) {
+            
+        }
+        
         if (releasedButtons.contains(KeyCode.L)) {
             Mists.logger.info("L pressed for QuestPanel");
             game.locControls.toggleQuestPanel();
