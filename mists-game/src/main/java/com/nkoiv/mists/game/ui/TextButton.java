@@ -114,7 +114,7 @@ public class TextButton extends UIComponent{
         
     }
     
-    protected void buttonPress() {
+    public void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
     }
     

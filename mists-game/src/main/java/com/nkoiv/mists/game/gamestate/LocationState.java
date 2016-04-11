@@ -587,19 +587,43 @@ public class LocationState implements GameState {
         
         if (releasedButtons.contains(KeyCode.DIGIT1)) {
             TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
-            //ab.getSubComponents().get(0)
+            if (ab.getSubComponents().get(0) instanceof ActionButton) {
+                ((ActionButton)ab.getSubComponents().get(0)).buttonPress();
+            } else if (ab.getSubComponents().get(0) instanceof TextButton) {
+                ((TextButton)ab.getSubComponents().get(0)).buttonPress();
+            }
         }
         if (releasedButtons.contains(KeyCode.DIGIT2)) {
-            
+            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
+            if (ab.getSubComponents().get(1) instanceof ActionButton) {
+                ((ActionButton)ab.getSubComponents().get(1)).buttonPress();
+            } else if (ab.getSubComponents().get(1) instanceof TextButton) {
+                ((TextButton)ab.getSubComponents().get(1)).buttonPress();
+            }
         }
         if (releasedButtons.contains(KeyCode.DIGIT3)) {
-            
+            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
+            if (ab.getSubComponents().get(2) instanceof ActionButton) {
+                ((ActionButton)ab.getSubComponents().get(2)).buttonPress();
+            } else if (ab.getSubComponents().get(2) instanceof TextButton) {
+                ((TextButton)ab.getSubComponents().get(2)).buttonPress();
+            }
         }
         if (releasedButtons.contains(KeyCode.DIGIT4)) {
-            
+            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
+            if (ab.getSubComponents().get(3) instanceof ActionButton) {
+                ((ActionButton)ab.getSubComponents().get(3)).buttonPress();
+            } else if (ab.getSubComponents().get(3) instanceof TextButton) {
+                ((TextButton)ab.getSubComponents().get(3)).buttonPress();
+            }
         }
         if (releasedButtons.contains(KeyCode.DIGIT5)) {
-            
+            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
+            if (ab.getSubComponents().get(4) instanceof ActionButton) {
+                ((ActionButton)ab.getSubComponents().get(4)).buttonPress();
+            } else if (ab.getSubComponents().get(4) instanceof TextButton) {
+                ((TextButton)ab.getSubComponents().get(4)).buttonPress();
+            }
         }
         
         if (releasedButtons.contains(KeyCode.L)) {
