@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * ActionButtons (currently) extend the Test button,
@@ -38,8 +39,10 @@ public class ActionButton extends TextButton {
         gc.setFill(background.getFill());
         gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
         Action a = player.getAvailableActions().get(actionName);
-        if (a instanceof AttackAction) {
-            
+        if (a.isOnCooldown()) {
+            double cdPortion = a.getRemainingCooldown() / a.getCooldown();
+            gc.setFill(Color.DARKRED);
+            gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight()*cdPortion);
         }
     }
     
