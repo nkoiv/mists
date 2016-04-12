@@ -50,7 +50,7 @@ public class ProjectileSpell extends Action implements AttackAction {
     
     
     private void use(Creature actor, double[] directionXY) {
-        Mists.logger.info("Player tried to use projectile spell");
+        Mists.logger.log(Level.INFO, "{0} tried to use projectile spell (owner {1})", new Object[]{actor.getName(), this.owner});
         if (this.isOnCooldown()) {
             //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {

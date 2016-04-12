@@ -100,7 +100,7 @@ public class Action extends Flags implements Serializable {
         int damage = this.getFlag("damage");
         int scalingDamage = this.owner.getFlag("Strength"); //TODO: Customized scaling attribute
         damage = damage+scalingDamage;
-        if (mobs.contains(this.owner)) mobs.remove(this.owner);
+        while (mobs.contains(this.owner))  mobs.remove(this.owner);
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
             Mists.logger.log(Level.INFO, "{0}s {1} landed on {2}", new Object[]{this.getOwner().getName(),this.toString(), mobs.toString()});
             for (MapObject mob : mobs) {
@@ -120,7 +120,7 @@ public class Action extends Flags implements Serializable {
                 } else if (mob instanceof Structure) {
                     //TODO: Temp: DESTROY THE STRUCTURES!
                     //this.getOwner().getLocation().removeMapObject(mob);
-                    if (this.owner instanceof PlayerCharacter) mob.setRemovable();
+                    //if (this.owner instanceof PlayerCharacter) mob.setRemovable();
                 }
             }
             this.setFlag("triggered", 1);
