@@ -23,7 +23,6 @@ import javafx.scene.image.ImageView;
 public class ProjectileSpell extends Action implements AttackAction {
 
     private SpriteAnimation projectileAnimation;
-    private long lastUsed;
     
     public ProjectileSpell(String name) {
         super(name, ActionType.RANGED_ATTACK);
@@ -63,7 +62,7 @@ public class ProjectileSpell extends Action implements AttackAction {
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2} ({3},{4})",
                     new Object[]{this.toString(), actor.getName(), actor.getFacing(), directionXY[0], directionXY[1]});
-            this.lastUsed = System.currentTimeMillis(); //In case the ability has a cooldown
+            this.currentCooldown = this.getFlag("cooldown");
             //Build the effect
             double attackPointX = (directionXY[0] * actor.getWidth())/2 + actor.getCenterXPos();
             double attackPointY = (directionXY[1] * actor.getHeight())/2 + actor.getCenterYPos();
@@ -118,10 +117,4 @@ public class ProjectileSpell extends Action implements AttackAction {
         a.projectileAnimation = this.projectileAnimation;
         return a;
     }
-    
-    @Override
-    public boolean isOnCooldown() {
-        return System.currentTimeMillis() < (this.lastUsed+this.getFlag("cooldown"));
-    }
-    
 }

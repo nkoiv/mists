@@ -33,7 +33,8 @@ public class Action extends Flags implements Serializable {
     protected int id;
     protected MapObject owner;
     protected ArrayList<Effect> effects;
-    protected HashMap<String, Integer> flags;    
+    protected HashMap<String, Integer> flags;
+    protected double currentCooldown;
     
     
     public Action(String name) {
@@ -135,6 +136,26 @@ public class Action extends Flags implements Serializable {
 
     public ActionType getActionType() {
         return this.actionType;
+    }
+    
+    public void tickCooldown(double time) {
+        double time_milliseconds = time * 1000;
+        if (currentCooldown == 0) return;
+        this.currentCooldown = (currentCooldown - time_milliseconds);
+        //Mists.logger.info(this.name+" cooldown ticking. Remaining: "+currentCooldown);
+        if (currentCooldown < 0) currentCooldown = 0;
+    }
+    
+    public double getCooldown() {
+        return this.getFlag("cooldown");
+    }
+    
+    public double getRemainingCooldown() {
+        return currentCooldown;
+    }
+    
+    public boolean isOnCooldown() {
+        return (currentCooldown > 0);
     }
     
     public Action createFromTemplate() {

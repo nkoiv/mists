@@ -25,7 +25,6 @@ import java.util.logging.Level;
 public class MeleeWeaponAttack extends Action implements AttackAction {
     
     private double swingPosition;
-    private long lastUsed;
     
     public MeleeWeaponAttack() {
         super("weaponmelee", ActionType.MELEE_ATTACK);
@@ -55,7 +54,7 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
             }
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2}", new Object[]{this.toString(), actor.getName(), actor.getFacing()});
-            this.lastUsed = System.currentTimeMillis();
+            this.currentCooldown = this.getFlag("cooldown");
             Double[] attackPoint = actor.getCorner(actor.getFacing());
             Effect attackEffect = new Effect(
                     this, "weaponattack",
@@ -108,13 +107,4 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
             }
         }
     }
-    
-
-    @Override
-    public boolean isOnCooldown() {
-        return System.currentTimeMillis() < (this.lastUsed+this.getFlag("cooldown"));
-    }
-    
-
-    
 }

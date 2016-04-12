@@ -325,9 +325,16 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         }
         GenericTasks.performTask(location, nextTask, time);
         if (nextTask.taskID > 20) setNextTask(new Task(GenericTasks.ID_IDLE, this.IDinLocation, null));
+        tickActionCooldowns(time);
         this.updateGraphics();
     }
 
+    protected void tickActionCooldowns(double time) {
+        for (Action a : this.availableActions.values()) {
+            a.tickCooldown(time);
+        }
+    }
+    
     public Task getLastTask() {
         return this.lastTask;
     }

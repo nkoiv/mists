@@ -132,6 +132,7 @@ public class PlayerCharacter extends Creature implements Combatant {
                 this.nextTask = null;
             }
         }
+        tickActionCooldowns(time);
         this.updateGraphics();
         //this.applyMovement(time);  
     }

@@ -12,6 +12,6 @@ package com.nkoiv.mists.game.actions;
  */
 public interface AttackAction {
 
-    boolean isOnCooldown();
+    
     
 }

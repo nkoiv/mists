@@ -22,9 +22,9 @@ import javafx.scene.text.Text;
  */
 public class TextButton extends UIComponent{ 
     protected Text text;
-    private double textXOffset;
-    private double textYOffset;
-    private Rectangle background;
+    protected double textXOffset;
+    protected double textYOffset;
+    protected Rectangle background;
     protected Color textColor;
 
     public TextButton(String name, double width, double height) {
@@ -58,16 +58,16 @@ public class TextButton extends UIComponent{
     }
     
     protected void renderText(GraphicsContext gc, double xPosition, double yPosition) {
-        gc.setGlobalAlpha(background.getOpacity());
-        gc.setFill(background.getFill());
-        gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
-    }
-    
-    protected void renderBackground(GraphicsContext gc, double xPosition, double yPosition) {
         gc.setGlobalAlpha(1);
         gc.setFont(text.getFont());
         gc.setFill(text.getFill());
         gc.fillText(text.getText(), xPosition-textXOffset, yPosition+background.getHeight()+textYOffset);
+    }
+    
+    protected void renderBackground(GraphicsContext gc, double xPosition, double yPosition) {
+        gc.setGlobalAlpha(background.getOpacity());
+        gc.setFill(background.getFill());
+        gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
     }
     
     public void setText(Text newText) {

@@ -24,7 +24,6 @@ import javafx.scene.image.ImageView;
 public class MeleeAttack extends Action implements AttackAction {
 
     private SpriteAnimation attackAnimation;
-    private long lastUsed;
     
     public MeleeAttack() {
         super("melee", ActionType.MELEE_ATTACK);
@@ -61,7 +60,7 @@ public class MeleeAttack extends Action implements AttackAction {
             this.setFlag("triggered", 0);
             Mists.logger.log(Level.INFO, "{0} used by {1} towards {2} ({3},{4})",
                     new Object[]{this.toString(), actor.getName(), actor.getFacing(), directionXY[0], directionXY[1]});
-            this.lastUsed = System.currentTimeMillis(); //In case the ability has a cooldown
+            this.currentCooldown = this.getFlag("cooldown");
             //Build the effect
             double attackPointX = (directionXY[0] * actor.getWidth())/2 + actor.getCenterXPos();
             double attackPointY = (directionXY[1] * actor.getHeight())/2 + actor.getCenterYPos();
@@ -102,11 +101,6 @@ public class MeleeAttack extends Action implements AttackAction {
         }
         a.attackAnimation = this.attackAnimation;
         return a;
-    }
-    
-    @Override
-    public boolean isOnCooldown() {
-        return System.currentTimeMillis() < (this.lastUsed+this.getFlag("cooldown"));
     }
     
 }

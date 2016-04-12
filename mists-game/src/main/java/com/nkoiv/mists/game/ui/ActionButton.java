@@ -6,8 +6,11 @@
 package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import java.util.logging.Level;
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * ActionButtons (currently) extend the Test button,
@@ -29,6 +32,17 @@ public class ActionButton extends TextButton {
         this.actionName = actionName;
     }
 
+    @Override
+    protected void renderBackground(GraphicsContext gc, double xPosition, double yPosition) {
+        gc.setGlobalAlpha(background.getOpacity());
+        gc.setFill(background.getFill());
+        gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
+        Action a = player.getAvailableActions().get(actionName);
+        if (a instanceof AttackAction) {
+            
+        }
+    }
+    
     public void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         if (!player.getLocation().getTargets().isEmpty()) {
