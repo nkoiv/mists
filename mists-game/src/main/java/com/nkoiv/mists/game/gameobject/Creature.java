@@ -59,12 +59,12 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     * Would be too easy to accidentally make walls alive if they were
     * TODO: Consider if the above would be awesome
     */
-    private int visionRange;
-    private HashMap<String, Integer> attributes;
-    private HashMap<String, Integer> effects;
+    protected int visionRange;
+    protected HashMap<String, Integer> attributes;
+    protected HashMap<String, Integer> effects;
     //TODO: Consider if effects should be used for MapObjects (can a wall or a rock get debuffs/buffs?)
-    private HashMap<String, Action> availableActions;
-    private ArrayList<Integer> crossableTerrain; //List of terrains we can go through;
+    protected HashMap<String, Action> availableActions;
+    protected ArrayList<Integer> crossableTerrain; //List of terrains we can go through;
     
     //Old position to snap back to when colliding;
     private double oldXPos;
@@ -80,6 +80,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
         this.ai = new CreatureAI(this);
+        this.availableActions = new HashMap<>();
     }
     
     public Creature (String name, Image image) {
@@ -98,7 +99,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this.ai = new CreatureAI(this);
         this.crossableTerrain = new ArrayList<>();
         this.crossableTerrain.add(0);
-        
+        this.availableActions = new HashMap<>();
     }
     
     public Creature (String name, ImageView imageView, int frameCount, int startingXTile, int startingYTile, int frameWidth, int frameHeight) {

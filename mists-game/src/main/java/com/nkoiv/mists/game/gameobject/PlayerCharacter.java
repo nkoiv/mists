@@ -53,6 +53,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.companions = new ArrayList<>();
         this.lightSize = 2;
         this.lightColor = Color.BLUEVIOLET;
+        this.availableActions = new HashMap<>();
     }
     
     public PlayerCharacter(String name) {
@@ -67,6 +68,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
         this.companions = new ArrayList<>();
+        this.availableActions = new HashMap<>();
     }
     
     
@@ -83,6 +85,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setHealth(this.getMaxHealth());
         this.setSpeed(50);
         this.companions = new ArrayList<>();
+        this.availableActions = new HashMap<>();
     }
     
     public void addCompanion (Creature comp) {
