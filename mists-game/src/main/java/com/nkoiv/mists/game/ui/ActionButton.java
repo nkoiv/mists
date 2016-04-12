@@ -7,7 +7,6 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
-import com.nkoiv.mists.game.actions.AttackAction;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
@@ -46,6 +45,7 @@ public class ActionButton extends TextButton {
         }
     }
     
+    @Override
     public void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
         if (!player.getLocation().getTargets().isEmpty()) {

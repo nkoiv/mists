@@ -286,6 +286,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
             case "T": openPaths = new boolean[]{true, true, true, false}; break;
             case "S": openPaths = new boolean[]{false, false, true, false}; break;
             case "O": openPaths = new boolean[]{false, false, true, false}; break;
+            default: Mists.logger.warning("Unrecognized puzzle tile shape in YAML"); break;
         }
         Image imageOpen = new Image((String)tileData.get("imageLit"));
         Image imageClosed = new Image((String)tileData.get("imageUnlit"));

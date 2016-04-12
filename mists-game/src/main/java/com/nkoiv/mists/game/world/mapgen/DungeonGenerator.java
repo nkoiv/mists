@@ -65,8 +65,8 @@ public class DungeonGenerator implements Global{
     }
 
 
-    public static ArrayList<BSParea> BSPdungeon (DungeonGenerator mapGen, int xSize, int ySize, int totalAreas, float minSize, float maxSize, int absMin, boolean tree) {
-
+    public static ArrayList<BSParea> BSPdungeon (DungeonGenerator mapGen, int xSize, int ySize, int totalAreasToCreate, float minSize, float maxSize, int absMin, boolean tree) {
+            int totalAreas = totalAreasToCreate;
             float absMax = 0.5f; //Max size for any given area
             ArrayList<BSParea> BSPareas = new ArrayList<BSParea>();
             BSParea mainArea = mapGen.new BSParea(0, 0, xSize, ySize, null);
@@ -255,7 +255,7 @@ public class DungeonGenerator implements Global{
                             if (distanceY<0) corridorYPosOnMap=corridorYPosOnMap-1;
                         }
                         if (intMap[corridorXPosOnMap][corridorYPosOnMap+1]!=WALL || intMap[corridorXPosOnMap][corridorYPosOnMap-1]!=WALL
-                                        || makeDoor!=true) makeDoor=false;
+                                        || !makeDoor) makeDoor=false;
                     }
                     if(direction==Direction.DOWN && corridorYPosOnMap<mapHeight) {
                         if (distanceY!=0) corridorYPosOnMap=corridorYPosOnMap+1;
@@ -264,7 +264,7 @@ public class DungeonGenerator implements Global{
                             if (distanceX<0) corridorXPosOnMap=corridorXPosOnMap-1;
                         }
                         if (intMap[corridorXPosOnMap-1][corridorYPosOnMap]!=WALL || intMap[corridorXPosOnMap+1][corridorYPosOnMap]!=WALL
-                                        || makeDoor!=true) makeDoor=false;
+                                        || !makeDoor) makeDoor=false;
                     }
                     if(direction==Direction.LEFT && corridorXPosOnMap>0) {
                         if (distanceX!=0) corridorXPosOnMap=corridorXPosOnMap-1;
@@ -273,7 +273,7 @@ public class DungeonGenerator implements Global{
                             if (distanceY<0) corridorYPosOnMap=corridorYPosOnMap-1;
                         }
                         if (intMap[corridorXPosOnMap][corridorYPosOnMap+1]!=WALL || intMap[corridorXPosOnMap][corridorYPosOnMap-1]!=WALL
-                                        || makeDoor!=true) makeDoor=false;
+                                        || !makeDoor) makeDoor=false;
                     }
 
                     //Mists.logger.info("Corridoring at "+corridorXPosOnMap+", "+corridorYPosOnMap);

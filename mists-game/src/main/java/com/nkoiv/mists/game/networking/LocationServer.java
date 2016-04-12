@@ -234,7 +234,7 @@ public class LocationServer {
     }
     
     public void tick(double time) {
-        if(this.paused == false) {
+        if(!this.paused) {
             game.getCurrentLocation().update(time, this);
         }
         if (server.getConnections().length > 0) {

@@ -123,7 +123,7 @@ import com.nkoiv.mists.game.Global;
                 public double getMovementCost(boolean[] movementTypes) {
                     double cost = 99;
                     for (int i = 0; i < this.movementCosts.length; i++) {
-                        if (movementTypes[i] == true && getMovementCost(i) < cost) cost = getMovementCost(i);
+                        if (movementTypes[i] && getMovementCost(i) < cost) cost = getMovementCost(i);
                     }
                     return cost;
                 }

@@ -389,12 +389,13 @@ public class LocationState implements GameState {
             case SINGLEPLAYER: this.tickSinglePlayer(time); break;
             case SERVER: this.tickServer(time); break;
             case CLIENT: this.tickClient(time); break;
+            default: Mists.logger.warning("Trying to access an unavailable gamemode in location state!"); break;
         }
         this.sct.tick(time);
     }
     
     private void tickSinglePlayer(double time) {
-        if(this.paused == false) {
+        if(!this.paused) {
             game.getCurrentLocation().update(time);
         } 
     }

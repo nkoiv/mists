@@ -536,7 +536,7 @@ class Shapes
      * @param flatness The allowed flatness
      * @return The list of line segments
      */
-    static List<Line2D> computeLineSegments(Shape shape, double flatness) {
+    public static List<Line2D> computeLineSegments(Shape shape, double flatness) {
         List<Line2D> result = new ArrayList<>();
         PathIterator pi =
             new FlatteningPathIterator(

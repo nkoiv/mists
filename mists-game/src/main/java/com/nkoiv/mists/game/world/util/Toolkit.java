@@ -186,8 +186,8 @@ public abstract class Toolkit {
     
     public static Direction clockwise(Direction direction, int steps) {
         if (steps <= 0) return direction;
-        direction = clockwise(direction);
-        return clockwise (direction, steps-1);
+        Direction d = clockwise(direction);
+        return clockwise (d, steps-1);
     }
     
     public static Direction counterClockwise(Direction direction, int steps) {

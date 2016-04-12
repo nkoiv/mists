@@ -57,7 +57,7 @@ public class DialoguePanel extends TextPanel {
     }
     
     public void moveToCard(int cardNumber) {
-        if (this.dialogue.moveToCard(cardNumber) == true)  {
+        if (this.dialogue.moveToCard(cardNumber))  {
             this.generateLinks();
             this.formatCurrentCardText();
         } else {

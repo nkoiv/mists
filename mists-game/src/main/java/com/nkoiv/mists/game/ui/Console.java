@@ -95,7 +95,7 @@ public class Console extends TextWindow{
         switch (command) {
             case "quit": Platform.exit(); System.exit(0); break;
             case "toggleflag": super.getGame().locControls.toggleFlag(attributes); break;
-            case "drawcollisions": ; break;
+            case "drawcollisions": break;
             case "whois": super.getGame().locControls.printMobInfo(attributes); break;
             case "clearancemap": super.getGame().locControls.printClearanceMapIntoConsole(); break;
             case "collisionmap": super.getGame().locControls.printCollisionMapIntoConsole(); break;

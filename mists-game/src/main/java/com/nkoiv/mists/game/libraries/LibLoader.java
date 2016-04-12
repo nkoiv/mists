@@ -354,7 +354,7 @@ public class LibLoader {
                 case 1: monster = Mists.creatureLibrary.create("swampy"); break;
                 case 2: monster = Mists.creatureLibrary.create("eggy"); break;
                 case 3: monster = Mists.creatureLibrary.create("rabbit"); break;
-                default: monster = Mists.creatureLibrary.create("worm");
+                default: monster = Mists.creatureLibrary.create("worm"); break;
             }
             testDungeon.mobs.add(monster);
         }

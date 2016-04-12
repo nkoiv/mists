@@ -226,7 +226,7 @@ public class CircuitPuzzle {
         }
         Mists.logger.info("Generated a tile: "+tile.getName());
         if (!tile.setCircuit(c)) Mists.logger.warning("Failure in connecting a Circuit to Tile in puzzle generation");
-        if (shape.equals("O")) {
+        if ("O".equals(shape)) {
             //O-style starting points default at {false,false,false,false} - give it an extra corridor (south);
             tile.setPaths(false, false, true, false);
             c.setPaths(false, false, true, false);
