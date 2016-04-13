@@ -37,7 +37,7 @@ Controls are displayed in game menu (Esc in a Location)
 The game is built loosely on MVC principles, where everything the user sees and does is passed
 through a controller. Various gamestates govern the main areas of the game, and the principle is that a new gamestate is only added when desired gameplay differs wildly from what
 existing gamestates can provide.
-The accompanied [UML Class diagram](https://github.com/nkoiv/mists/blob/master/documentation/mists_classchart.jpg) is good reference for this.
+The accompanied [UML Class diagram](https://github.com/nkoiv/mists/blob/master/documentation/mists_class_diagram.jpg) is good reference for this.
 
 ##Main loop
 
