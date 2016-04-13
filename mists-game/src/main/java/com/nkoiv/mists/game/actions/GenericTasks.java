@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.MoveState;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.triggers.Trigger;
@@ -97,6 +98,11 @@ public abstract class GenericTasks {
     
     public static void stopMovement(Creature creature) {
         creature.moveTowards(Direction.STAY);
+        switch (creature.getMoveState()) {
+            case WALK: creature.setMoveState(MoveState.STAND); break;
+            case RUN: creature.setMoveState(MoveState.STAND); break;
+            default: break;
+        }
     }
     
     

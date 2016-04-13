@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.util.Toolkit;
@@ -105,6 +106,13 @@ public class ProjectileSpell extends Action implements AttackAction {
     public void hitOn(ArrayList<MapObject> mobs) {
         boolean triggered = this.directDamageHit(mobs);
         //Trigger the on impact effect (animation changes etc)
+        for (MapObject mob : mobs) {
+            if (mob instanceof Structure) {
+                //TODO: Temp: DESTROY THE STRUCTURES!
+                //this.getOwner().getLocation().removeMapObject(mob);
+                mob.setRemovable();
+            }
+        }
         if (triggered) this.onImpact();
     }
     

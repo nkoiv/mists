@@ -26,6 +26,7 @@ import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import com.nkoiv.mists.game.triggers.DialogueTrigger;
 import com.nkoiv.mists.game.triggers.Trigger;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -46,7 +47,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     protected Task nextTask;
     protected long lastTaskSet; //For networking purposes
     
-    private Direction facing;
+    private MoveState animationMovestate;
+    private MoveState movestate = MoveState.STAND;
+    private Direction facing = Direction.DOWN;
     private Direction lastFacing = null;
     protected HashMap<String, SpriteAnimation> spriteAnimations;
     protected Inventory inventory;
@@ -73,7 +76,6 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     //Constructor for a creature template with one static image
     public Creature (String name, MovingGraphics graphics) {
         super (name, graphics);
-        this.setFacing(Direction.DOWN);
         this.initializeAttributes();
         this.initializeFlags();
         this.inventory = new Inventory(this);
@@ -90,7 +92,6 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     //Constructing a creature template with sprite animations
     public Creature (String name, ImageView imageView, int frameCount, int startingXTile, int startingYTile, int xOffset, int yOffset, int frameWidth, int frameHeight) {
         super(name);
-        this.setFacing(Direction.DOWN);
         this.setAnimations(imageView, frameCount, startingXTile, startingYTile, frameWidth, frameHeight);
         this.setSprite(new Sprite(this.spriteAnimations.get("downMovement").getCurrentFrame()));
         this.initializeAttributes();
@@ -349,9 +350,19 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this.lastTaskSet = System.currentTimeMillis();
     }
 
+    public MoveState getMoveState() {
+        return this.movestate;
+    }
+    
+    public void setMoveState(MoveState movestate) {
+        this.movestate = movestate;
+    }
+    
     protected void updateGraphics() {
         if (this.graphics instanceof Sprite) this.updateSprite();
         if (this.graphics instanceof SpriteSkeleton) this.updateSpriteSkeleton();
+        this.animationMovestate = movestate;
+        this.lastFacing = this.facing;
     }
     
     /*
@@ -359,24 +370,35 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     * Is everything animated?
     */
     private void updateSprite() {
+        if (movestate == animationMovestate && this.facing == this.lastFacing) return; //If we're already in the right animationstate, nothing to update
         if (!(this.graphics instanceof Sprite)) return;
         if (this.spriteAnimations == null) return;
-        if (this.isFlagged("visible") && !this.spriteAnimations.isEmpty() 
-            && this.facing != this.lastFacing) {
-            this.lastFacing = this.facing;
-            //Mists.logger.log(Level.INFO, "{0} is facing {1}", new Object[]{this.getName(), this.facing});
-            switch(this.facing) {
-                case UP: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
-                case DOWN: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
-                case LEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("leftMovement")); break;
-                case RIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("rightMovement")); break;
-                case UPRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
-                case UPLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
-                case DOWNRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
-                case DOWNLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
-                default: break;
-            }
+        
+        switch (movestate) {
+            case WALK: updateSpriteToWalk(); break;
+            case STAND: updateSpriteToStand(); break;
+            default: break;
         }
+        
+    }
+    
+    private void updateSpriteToWalk() {
+        switch(this.facing) {
+            case UP: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
+            case DOWN: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
+            case LEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("leftMovement")); break;
+            case RIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("rightMovement")); break;
+            case UPRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
+            case UPLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upMovement")); break;
+            case DOWNRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
+            case DOWNLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downMovement")); break;
+            default: break;
+        }
+    }
+    
+    private void updateSpriteToStand() {
+        updateSpriteToWalk();
+        //TODO: Idle standing animations
     }
     
     private void updateSpriteSkeleton() {
@@ -405,23 +427,14 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     
     //-------------movement-----------
-    
+   
     /**
      * Apply movement to the creature.
      * The movement is done by creature sprites x and y velocity,
      * multiplied by time spent moving.
      * @param time Time spent moving
      * @return Return true if movement was possible, false if it was blocked
-     */
-    
-    /**
-     * Apply movement to the creature.
-     * The movement is done by creature sprites x and y velocity,
-     * multiplied by time spent moving.
-     * @param time Time spent moving
-     * @return Return true if movement was possible, false if it was blocked
-     */
-    
+     */ 
     public boolean applyMovement(double time){
         /*
         * Check collisions before movement
@@ -486,82 +499,20 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     
     public boolean moveTowards (double xCoor, double yCoor) {
+        //TODO: Decide on if we're Walking, Running or Dashing based on relative movement speed?
         this.getGraphics().setVelocity(0, 0);
-        //Mists.logger.log(Level.INFO, "{0} moving from {1},{2} to {3},{4}", new Object[]{this.getName(), this.getCenterXPos(), this.getCenterYPos(), xCoor, yCoor});
-        double xDifference = xCoor - this.getCenterXPos();
-        double yDifference = yCoor - this.getCenterYPos();
-        if (xDifference < 1) xDifference = 0;
-        if (yDifference < 1) yDifference = 0;
-        //Stop moving if we're already in our target coordinates
-        if (xCoor == this.getXPos() && yCoor == this.getYPos()) return this.stopMovement();
-        //If X or Y target is same as where we're at, we can use normal diagonal movements
-        if (xCoor == this.getXPos()) {
-            if (this.getYPos() <= yCoor) {
-                return this.moveDown();
-            } else {
-                return this.moveUp();
-            }
-        }
-        if (yCoor == this.getYPos()) {
-            if (this.getXPos() <= xCoor) {
-                return this.moveRight();
-            } else {
-                return this.moveLeft();
-            }
-        }
-        
-        /*
-        * Pythagoras lets us calculate diagonal speed:
-        * ((AC = sqrt(AB^2 + BC^2)))
-        */
-        double AB=Math.abs(xCoor-this.getXPos());
-        double BC=Math.abs(yCoor-this.getYPos());
-        double AC = Math.sqrt(Math.pow(AB, 2) + Math.pow(BC, 2));
-        double xSpeedMultiplier = AB/AC;
-        double ySpeedMultiplier = BC/AC;
-        
-        if (this.getXPos() <= xCoor) {
-            //Moving Right
-            if (this.getYPos() <= yCoor) {
-                //Moving Down(&Right)
-                this.getGraphics().addVelocity(
-                this.getAttribute("Speed")*xSpeedMultiplier,
-                this.getAttribute("Speed")*ySpeedMultiplier);
-            } else {
-                //Moving Up(&Right)
-                this.getGraphics().addVelocity(
-                this.getAttribute("Speed")*xSpeedMultiplier,
-                -this.getAttribute("Speed")*ySpeedMultiplier);
-            }
-        } else {
-            //Moving Left
-            if (this.getYPos() <= yCoor) {
-                //Moving Down(&Left)
-                this.getGraphics().addVelocity(
-                -this.getAttribute("Speed")*xSpeedMultiplier,
-                this.getAttribute("Speed")*ySpeedMultiplier);
-            } else {
-                //Moving Up(&Left)
-                this.getGraphics().addVelocity(
-                -this.getAttribute("Speed")*xSpeedMultiplier,
-                -this.getAttribute("Speed")*ySpeedMultiplier);
-            }
-        }
+        double[] direction = Toolkit.getDirectionXY(this.getCenterXPos(), this.getCenterYPos(), xCoor, yCoor);
+        direction[0] = direction[0] * this.getAttribute("Speed");
+        direction[1] = direction[1] * this.getAttribute("Speed");
+        this.graphics.addVelocity(direction[0], direction[1]);
         //Update facing
-        if (this.getGraphics().getYVelocity() > 0) this.setFacing(Direction.DOWN);
-        else this.setFacing(Direction.UP);
-        if (Math.abs(this.getGraphics().getYVelocity()) < Math.abs(this.getGraphics().getXVelocity())) {
-            if (this.graphics.getXVelocity() > 0) this.setFacing(Direction.RIGHT);
-            else this.setFacing(Direction.LEFT);
-        }
-        
+        this.setFacing(Toolkit.getDirection(0, 0, direction[0], direction[1]));
         return true;
     }
     
     @Override
     public boolean moveTowards (Direction direction) {
         //this.stopMovement(); //clear old movement (velocity)
-        this.setFlag("moving", 1);
         switch(direction) {
             case UP: return moveUp();
             case DOWN: return moveDown();
@@ -628,8 +579,12 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
 
     public boolean stopMovement() {
-        this.setFlag("moving", 0);
         this.getGraphics().setVelocity(0, 0);
+        switch(this.movestate) {
+            case WALK: setMoveState(MoveState.STAND);
+            case RUN: setMoveState(MoveState.STAND);
+            default: break;
+        }
         //this.getGraphics().setImage(this.getGraphics().getImage());
         return true;
     }
@@ -732,6 +687,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
     
     protected void die() {
+        //TODO: Spawn tombstone/corpse/whatever
         this.setRemovable();
         if (Mists.MistsGame == null) return;
         Mists.MistsGame.questManager.registerMobDeath(this);
@@ -809,7 +765,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
             "ID "+this.IDinLocation+" @ "+this.location.getName(),
             "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
             this.getHealth() + "/"+this.getMaxHealth()+" hp",
-            "Last: "+this.getLastTask().toString()
+            "Last: "+this.getLastTask().toString(),
+            "Facing: "+this.getFacing().toString()
         };
         return s;
     }
