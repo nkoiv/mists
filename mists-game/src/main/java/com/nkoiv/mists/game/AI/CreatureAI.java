@@ -137,7 +137,8 @@ public class CreatureAI extends Flags{
             //Mists.logger.info("Got a path: " +pathToMob.toString());
             int nextTileX = pathToMob.getNode(1).getX();//*pathToMob.getNode(0).getSize();
             int nextTileY = pathToMob.getNode(1).getY();//*pathToMob.getNode(0).getSize();
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{nextTileX*mob.getLocation().getCollisionMap().getNodeSize(), nextTileY*mob.getLocation().getCollisionMap().getNodeSize()});
+            int nodeSize = mob.getLocation().getCollisionMap().getNodeSize();
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{nextTileX*nodeSize+nodeSize/2, nextTileY*nodeSize+nodeSize/2});
         }
     }
     
