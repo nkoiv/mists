@@ -370,7 +370,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     * Is everything animated?
     */
     private void updateSprite() {
-        if (movestate == animationMovestate && this.facing == this.lastFacing) return; //If we're already in the right animationstate, nothing to update
+        if (movestate.equals(animationMovestate) && facing.equals(lastFacing)) return; //If we're already in the right animationstate, nothing to update
         if (!(this.graphics instanceof Sprite)) return;
         if (this.spriteAnimations == null) return;
         
@@ -581,8 +581,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     public boolean stopMovement() {
         this.getGraphics().setVelocity(0, 0);
         switch(this.movestate) {
-            case WALK: setMoveState(MoveState.STAND);
-            case RUN: setMoveState(MoveState.STAND);
+            case WALK: setMoveState(MoveState.STAND); break;
+            case RUN: setMoveState(MoveState.STAND); break; 
             default: break;
         }
         //this.getGraphics().setImage(this.getGraphics().getImage());
