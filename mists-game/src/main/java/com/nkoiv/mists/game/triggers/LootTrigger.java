@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.items.Item;
+import java.util.logging.Level;
 
 /**
 * LootTrigger, when toggled, gives the player the
@@ -25,8 +26,9 @@ public class LootTrigger implements Trigger {
 
    @Override
    public boolean toggle(MapObject toggler) {
+       Mists.logger.info("LootTrigger toggled by "+toggler.getName());
        if (!(toggler instanceof Creature)) {
-           Mists.logger.info(toggler.getName()+" tried to toggle "+ic.getName()+" but is not a creature");
+           Mists.logger.log(Level.INFO, "{0} tried to toggle {1} but is not a creature", new Object[]{toggler.getName(), ic.getName()});
            return false;
        }
        //int topItemID = ic.topItemID();

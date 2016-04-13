@@ -266,6 +266,7 @@ public class Inventory {
             Item droppedItem = inv.removeItem(slot);
             Mists.logger.info("Spawning itempile with "+droppedItem.getName()+" on the ground at "+inv.getOwner().getXPos()+", "+inv.getOwner().getYPos());
             ItemContainer itemPile = new ItemContainer(droppedItem.getName(), new Sprite(Mists.graphLibrary.getImage("blank")));
+            itemPile.setPermanency(true);
             itemPile.addItem(droppedItem);
             itemPile.setRenderContent(true);
             inv.owner.getLocation().addMapObject(itemPile, inv.owner.getCenterXPos(), inv.owner.getCenterYPos());

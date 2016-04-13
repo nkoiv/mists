@@ -333,6 +333,7 @@ public class LibLoader {
         for (int i = 0; i<10;i++) {
             //Make a bunch of itempiles
             ItemContainer pile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
+            pile.setPermanency(true);
             pile.setRenderContent(true);
             pile.addItem(Mists.itemLibrary.create("sword"));
             pile.addItem(Mists.itemLibrary.create("himmutoy"));

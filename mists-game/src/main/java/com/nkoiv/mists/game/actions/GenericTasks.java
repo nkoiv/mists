@@ -17,6 +17,7 @@ import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.util.Toolkit;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 /**
@@ -251,10 +252,11 @@ public abstract class GenericTasks {
         if (mob != null) {
             Mists.logger.info(actor.getName()+" used trigger on "+mob.getName());
             Trigger[] triggers = mob.getTriggers();
+            Mists.logger.info("Got triggers: "+Arrays.toString(triggers));
             if (triggerID < 0 || triggerID >= triggers.length) return;
             Trigger t = triggers[triggerID];
             if (t != null) t.toggle(actor);
-            Mists.logger.info("Trigger toggled");
+            Mists.logger.log(Level.INFO, "Trigger {0} toggled", triggerID);
         }
     }
 }
