@@ -188,19 +188,19 @@ public class InventoryPanel extends TiledPanel {
         protected boolean click() {
             switch (this.actionType) {
                 case USE_ITEM: {
-                    Task use = new Task(GenericTasks.ID_USE_ITEM, inv.getOwner().getID(), new int[]{slot});
+                    Task use = new Task(GenericTasks.ID_USE_ITEM, inv.getOwner().getID(), new double[]{slot});
                     inv.getOwner().setNextTask(use);
                     this.parent.close();
                     return true;
                 } 
                 case EQUIP_ITEM: {
-                    Task use = new Task(GenericTasks.ID_EQUIP_ITEM, inv.getOwner().getID(), new int[]{slot});
+                    Task use = new Task(GenericTasks.ID_EQUIP_ITEM, inv.getOwner().getID(), new double[]{slot});
                     inv.getOwner().setNextTask(use);
                     this.parent.close();
                     return true;
                 }
                 case DROP_ITEM: {
-                    Task drop = new Task(GenericTasks.ID_DROP_ITEM, inv.getOwner().getID(), new int[]{slot});
+                    Task drop = new Task(GenericTasks.ID_DROP_ITEM, inv.getOwner().getID(), new double[]{slot});
                     inv.getOwner().setNextTask(drop);
                     this.parent.close();
                     return true;

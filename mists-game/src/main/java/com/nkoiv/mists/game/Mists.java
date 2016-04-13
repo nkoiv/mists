@@ -126,7 +126,7 @@ public class Mists extends Application implements Global {
             @Override
             public void handle(WindowEvent t) {
                 Platform.exit();
-                //System.exit(0);
+                System.exit(0);
             }
         });
         

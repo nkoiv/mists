@@ -38,6 +38,7 @@ public class ActionButton extends TextButton {
         gc.setFill(background.getFill());
         gc.fillRect(xPosition, yPosition, background.getWidth(), background.getHeight());
         Action a = player.getAvailableActions().get(actionName);
+        if (a==null) return;
         if (a.isOnCooldown()) {
             double cdPortion = a.getRemainingCooldown() / a.getCooldown();
             gc.setFill(Color.DARKRED);

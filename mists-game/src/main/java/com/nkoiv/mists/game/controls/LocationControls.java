@@ -148,33 +148,33 @@ public class LocationControls {
     }
     
     public void playerAttack(double xTarget, double yTarget) {
-        Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_COORDINATES, game.getPlayer().getID(), new int[]{(int)xTarget, (int)yTarget});
+        Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
         game.getPlayer().setNextTask(attack);
     }
     
     public void playerAttack() {
-        Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(game.getPlayer().getFacing())});
+        Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_DIRECTION, game.getPlayer().getID(), new double[]{Toolkit.getDirectionNumber(game.getPlayer().getFacing())});
         game.getPlayer().setNextTask(attack);
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(attack);
     }
     
     public void playerMove(Direction direction) {
-        Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(direction)});
+        Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, game.getPlayer().getID(), new double[]{Toolkit.getDirectionNumber(direction)});
         game.getPlayer().setNextTask(move);
     }
     
     public void playerMove(double xTarget, double yTarget) {
-        Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, game.getPlayer().getID(), new int[]{(int)xTarget, (int)yTarget});
+        Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
         game.getPlayer().setNextTask(move);   
     }
     
     public void playerDash(Direction direction) {
-        Task move = new Task(GenericTasks.ID_DASH_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(direction)});
+        Task move = new Task(GenericTasks.ID_DASH_TOWARDS_DIRECTION, game.getPlayer().getID(), new double[]{Toolkit.getDirectionNumber(direction)});
         game.getPlayer().setNextTask(move);
     }
     
     public void playerDash(double xTarget, double yTarget) {
-        Task move = new Task(GenericTasks.ID_DASH_TOWARDS_COORDINATES, game.getPlayer().getID(), new int[]{(int)xTarget, (int)yTarget});
+        Task move = new Task(GenericTasks.ID_DASH_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
         game.getPlayer().setNextTask(move);   
     }
     
@@ -211,32 +211,32 @@ public class LocationControls {
 
     public void useTrigger(int triggersourceID, int triggerID) {
         //Trigger t = triggersource.getTriggers()[triggerID];
-        Task task = new Task(GenericTasks.ID_USE_TRIGGER, game.getPlayer().getID(), new int[]{triggersourceID, triggerID});
+        Task task = new Task(GenericTasks.ID_USE_TRIGGER, game.getPlayer().getID(), new double[]{triggersourceID, triggerID});
         game.getPlayer().setNextTask(task);
         Mists.logger.log(Level.INFO, "Set players next task to: USE_TRIGGER {0} : {1}", new Object[]{triggersourceID, triggerID});
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(task);
     }
     
     public void takeItem(MapObject targetInventory, int slot) {
-        Task take = new Task(GenericTasks.ID_TAKE_ITEM, game.getPlayer().getID(), new int[]{targetInventory.getID(), slot});
+        Task take = new Task(GenericTasks.ID_TAKE_ITEM, game.getPlayer().getID(), new double[]{targetInventory.getID(), slot});
         game.getPlayer().setNextTask(take);
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(take);
     }
     
     public void dropItem(int slot) {
-        Task drop = new Task(GenericTasks.ID_DROP_ITEM, game.getPlayer().getID(), new int[]{slot});
+        Task drop = new Task(GenericTasks.ID_DROP_ITEM, game.getPlayer().getID(), new double[]{slot});
         game.getPlayer().setNextTask(drop);
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(drop);
     }
     
     public void equipItem(int slot) {
-        Task equip = new Task(GenericTasks.ID_EQUIP_ITEM, game.getPlayer().getID(), new int[]{slot});
+        Task equip = new Task(GenericTasks.ID_EQUIP_ITEM, game.getPlayer().getID(), new double[]{slot});
         game.getPlayer().setNextTask(equip);
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(equip);
     }
     
     public void useItem(Inventory inventory, int slot) {
-        Task use = new Task(GenericTasks.ID_USE_ITEM, game.getPlayer().getID(), new int[]{slot});
+        Task use = new Task(GenericTasks.ID_USE_ITEM, game.getPlayer().getID(), new double[]{slot});
         game.getPlayer().setNextTask(use);
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(use);
     }

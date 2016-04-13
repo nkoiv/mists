@@ -68,13 +68,13 @@ import java.util.Arrays;
         public int taskID;
         public int actorID;
         public int argumentCount;
-        public int arguments[];
+        public double arguments[];
         
         public Task() {
             
         }
         
-        public Task(int taskID, int actorID, int[] arguments) {
+        public Task(int taskID, int actorID, double[] arguments) {
             this.taskID = taskID;
             this.actorID = actorID;
             if (arguments == null) {
@@ -90,7 +90,7 @@ import java.util.Arrays;
             output.writeInt(this.taskID);
             output.writeInt(this.actorID);
             output.writeInt(this.argumentCount);
-            if (this.arguments!=null)output.writeInts(this.arguments);
+            if (this.arguments!=null)output.writeDoubles(this.arguments);
         }
 
         @Override
@@ -98,7 +98,7 @@ import java.util.Arrays;
             this.taskID = input.readInt();
             this.actorID = input.readInt();
             this.argumentCount = input.readInt();
-            if(this.argumentCount>0)this.arguments = input.readInts(this.argumentCount);
+            if(this.argumentCount>0)this.arguments = input.readDoubles(this.argumentCount);
         }
         
         @Override

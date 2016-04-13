@@ -66,23 +66,23 @@ public abstract class GenericTasks {
         switch (task.taskID) {
             case ID_IDLE: break;
             case ID_CONTINUE_MOVEMENT: actor.applyMovement(time); break;
-            case ID_MOVE_TOWARDS_DIRECTION: moveTowardsDirection(actor, task.arguments[0]); actor.applyMovement(time);break;
+            case ID_MOVE_TOWARDS_DIRECTION: moveTowardsDirection(actor, (int)task.arguments[0]); actor.applyMovement(time);break;
             case ID_MOVE_TOWARDS_TARGET: moveTowardsTarget(actor, task.arguments[0]); actor.applyMovement(time); break;
             case ID_MOVE_TOWARDS_COORDINATES: moveTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); actor.applyMovement(time); break;
-            case ID_DASH_TOWARDS_DIRECTION: dashTowardsDirection(actor, task.arguments[0]); actor.applyMovement(time);break;
+            case ID_DASH_TOWARDS_DIRECTION: dashTowardsDirection(actor, (int)task.arguments[0]); actor.applyMovement(time);break;
             case ID_DASH_TOWARDS_TARGET: dashTowardsTarget(actor, task.arguments[0]); actor.applyMovement(time); break;
             case ID_DASH_TOWARDS_COORDINATES: dashTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); actor.applyMovement(time); break;
             case ID_CHECK_COORDINATES: checkCoordinates(actor, task.arguments[0], task.arguments[1]); break;
             case ID_STOP_MOVEMENT: actor.stopMovement(); break;
-            case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, task.arguments[0]); break;
-            case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, task.arguments[0]); break;
+            case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, (int)task.arguments[0]); break;
+            case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, (int)task.arguments[0]); break;
             case ID_USE_MELEE_TOWARDS_COORDINATES: useMeleeTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); break;
-            case ID_USE_MELEE_TOWARDS_DIRECTION: useMeleeTowardsDirection(actor, task.arguments[0]); break;
-            case ID_DROP_ITEM: dropItem(actor, task.arguments[0]); break;
-            case ID_TAKE_ITEM: takeItem(actor, task.arguments[0], task.arguments[1]); break;
-            case ID_EQUIP_ITEM: equipItem(actor, task.arguments[0]); break;
-            case ID_USE_ITEM: useItem(actor, task.arguments[0]); break;
-            case ID_USE_TRIGGER: useMapObjectTrigger(actor, task.arguments[0], task.arguments[1]); break;
+            case ID_USE_MELEE_TOWARDS_DIRECTION: useMeleeTowardsDirection(actor, (int)task.arguments[0]); break;
+            case ID_DROP_ITEM: dropItem(actor, (int)task.arguments[0]); break;
+            case ID_TAKE_ITEM: takeItem(actor, (int)task.arguments[0], (int)task.arguments[1]); break;
+            case ID_EQUIP_ITEM: equipItem(actor, (int)task.arguments[0]); break;
+            case ID_USE_ITEM: useItem(actor, (int)task.arguments[0]); break;
+            case ID_USE_TRIGGER: useMapObjectTrigger(actor, (int)task.arguments[0], (int)task.arguments[1]); break;
             default: break;
         }
         return true;
@@ -176,37 +176,37 @@ public abstract class GenericTasks {
         }
     }
     
-    public static void dashTowardsCoordinates(Creature actor, int xCoor, int yCoor) {
+    public static void dashTowardsCoordinates(Creature actor, double xCoor, double yCoor) {
         actor.dashTowards(xCoor, yCoor);
     }
     
-    public static void moveTowardsCoordinates(Creature actor, int xCoor, int yCoor) {
+    public static void moveTowardsCoordinates(Creature actor, double xCoor, double yCoor) {
         actor.moveTowards(xCoor, yCoor);
     }
     
-    public static void dashTowardsTarget(Creature actor, int targetID) {
-        MapObject target = actor.getLocation().getMapObject(targetID);
+    public static void dashTowardsTarget(Creature actor, double targetID) {
+        MapObject target = actor.getLocation().getMapObject((int)targetID);
         if (target == null) return;
         actor.dashTowards(target.getCenterXPos(), target.getCenterYPos());
     }
     
-    public static void moveTowardsTarget(Creature actor, int targetID) {
-        MapObject target = actor.getLocation().getMapObject(targetID);
+    public static void moveTowardsTarget(Creature actor, double targetID) {
+        MapObject target = actor.getLocation().getMapObject((int)targetID);
         if (target == null) return;
         actor.moveTowards(target.getCenterXPos(), target.getCenterYPos());
     }
     
-    public static void useMeleeTowardsDirection(Creature actor, int d) {
+    public static void useMeleeTowardsDirection(Creature actor, int direction) {
         Action meleeAttack = actor.getAttack(ActionType.MELEE_ATTACK);
         if (meleeAttack != null) {
-            turnTowardsDirection(actor, d);
+            turnTowardsDirection(actor, direction);
             actor.useAction(meleeAttack.getName());
         } else {
             Mists.logger.log(Level.INFO, "{0} tried to use melee, but it wasn''t available", actor.getName());
         }
     }
     
-    public static void useMeleeTowardsCoordinates(Creature actor, int xCoor, int yCoor) {
+    public static void useMeleeTowardsCoordinates(Creature actor, double xCoor, double yCoor) {
         //Mists.logger.log(Level.INFO, "{0} uses melee towards {1}", new Object[]{creep.getName(), target.getName()});
         Action meleeAttack = actor.getAttack(ActionType.MELEE_ATTACK);
         if (meleeAttack != null) {

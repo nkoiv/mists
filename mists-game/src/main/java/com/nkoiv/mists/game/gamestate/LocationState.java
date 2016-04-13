@@ -418,12 +418,12 @@ public class LocationState implements GameState {
     
     @Override
     public void handleMouseEvent(MouseEvent me) {
-        //if (movingWithMouse) {
+        if (game.getCurrentLocation() !=null ) {
             double xOffset = this.game.getCurrentLocation().getLastxOffset();
             double yOffset = this.game.getCurrentLocation().getLastyOffset();
             movingTowardsX = me.getSceneX()+xOffset;
             movingTowardsY = me.getSceneY()+yOffset;
-        //}
+        }
         //See if there's an UI component to click
         if (me.getEventType() == MouseEvent.MOUSE_CLICKED || me.getEventType() == MouseEvent.MOUSE_PRESSED || me.getEventType() == MouseEvent.MOUSE_RELEASED) this.handleClicks(me);
         if (me.getEventType() == MouseEvent.MOUSE_DRAGGED) this.handleMouseDrags(me);

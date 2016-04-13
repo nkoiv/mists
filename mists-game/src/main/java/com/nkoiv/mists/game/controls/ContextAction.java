@@ -127,7 +127,7 @@ public class ContextAction {
         if (currentTrigger < 0 || currentTrigger >= availableTriggers.size()) currentTrigger = 0;
         //
         Trigger t = this.availableTriggers.get(currentTrigger);
-        Task task = new Task(GenericTasks.ID_USE_TRIGGER, actor.getID(), new int[]{this.triggerSource.get(t).getID(), 0});
+        Task task = new Task(GenericTasks.ID_USE_TRIGGER, actor.getID(), new double[]{this.triggerSource.get(t).getID(), 0});
         actor.setNextTask(task);
         if (Mists.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(task);
         return true;

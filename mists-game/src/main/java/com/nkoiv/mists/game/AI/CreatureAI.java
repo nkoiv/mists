@@ -121,31 +121,31 @@ public class CreatureAI extends Flags{
             */
             //Mists.logger.info("Got a short path or no path");
             this.pathToMoveOn = null;
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{((int)mob.getCenterXPos()), ((int)mob.getCenterYPos())});
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new double[]{(mob.getCenterXPos()), (mob.getCenterYPos())});
         }
         if (pathToMob.getLength() == 1) {
             /* We're next to target
             *  Try to get even closer (TODO: Is this the right course of action?)
             */
             //Mists.logger.info("Next to target");
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{((int)mob.getCenterXPos()), ((int)mob.getCenterYPos())});
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new double[]{(mob.getCenterXPos()), (mob.getCenterYPos())});
         }
         else { //if (pathToMob.getLength() > 2)
             /* There's tiles between us and the target
             *  Try to move towards the next tile
             */
             //Mists.logger.info("Got a path: " +pathToMob.toString());
-            int nextTileX = pathToMob.getNode(0).getX();//*pathToMob.getNode(0).getSize();
-            int nextTileY = pathToMob.getNode(0).getY();//*pathToMob.getNode(0).getSize();
+            int nextTileX = pathToMob.getNode(1).getX();//*pathToMob.getNode(0).getSize();
+            int nextTileY = pathToMob.getNode(1).getY();//*pathToMob.getNode(0).getSize();
             int nodeSize = mob.getLocation().getCollisionMap().getNodeSize();
-            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{nextTileX*nodeSize+nodeSize/2, nextTileY*nodeSize+nodeSize/2});
+            return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new double[]{nextTileX*nodeSize+nodeSize/2, nextTileY*nodeSize+nodeSize/2});
         }
     }
     
     protected Task goMelee(MapObject target) {
         if (AIutil.inRange(creep, 0, target)) {
             //Mists.logger.log(Level.INFO, "{0} in range to hit {1}", new Object[]{creep.getName(), target.getName()});
-            return new Task(GenericTasks.ID_USE_MELEE_TOWARDS_MOB, creep.getID(), new int[]{target.getID()});
+            return new Task(GenericTasks.ID_USE_MELEE_TOWARDS_MOB, creep.getID(), new double[]{target.getID()});
         } else {
             //return new Task(GenericTasks.ID_MOVE_TOWARDS_TARGET, creep.getID(), new int[]{target.getID()});
             return this.moveTowardsMob(target);
@@ -161,7 +161,7 @@ public class CreatureAI extends Flags{
             if (hs == 0) hs = 60; //Some wandering should always be okay if this method is called
             int r = rnd.nextInt(hs);
             if (r < distanceFromHome()) {
-                return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new int[]{this.getFlag("homeX"), this.getFlag("homeY")});
+                return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new double[]{this.getFlag("homeX"), this.getFlag("homeY")});
             } else {
                 return moveRandomly();
             }
@@ -188,7 +188,7 @@ public class CreatureAI extends Flags{
     protected Task moveRandomly() {
         Random rnd = new Random();
         int randomint = rnd.nextInt(9);  
-        return new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, creep.getID(), new int[]{randomint});
+        return new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, creep.getID(), new double[]{randomint});
     }
     
     /**
