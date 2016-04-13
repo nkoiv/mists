@@ -9,6 +9,7 @@ import TestTools.JavaFXThreadingRule;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.Location;
@@ -65,8 +66,9 @@ public class GeneralCombatTest {
     public void hittingCreatureWithDamagingAttackReducesItsHealth() {
         Action testAttack = combatant1.getAvailableActions().get("melee");
         ArrayList<MapObject> targets = new ArrayList<>();
+        Effect testEffect = new Effect("Test");
         targets.add(combatant2);
-        testAttack.hitOn(targets);
+        testAttack.hitOn(testEffect, targets);
         assertTrue(TestTools.CompareTools.isGreaterThan(combatant2.getMaxHealth(), combatant2.getHealth()));
     }
     
@@ -74,21 +76,23 @@ public class GeneralCombatTest {
     public void meleeAttackDoesNotDamageUser() {
         Action testAttack = combatant1.getAvailableActions().get("melee");
         ArrayList<MapObject> targets = new ArrayList<>();
+        Effect testEffect = new Effect("Test");
         targets.add(combatant1);
-        testAttack.hitOn(targets);
+        testAttack.hitOn(testEffect, targets);
         assertFalse(TestTools.CompareTools.isGreaterThan(combatant1.getMaxHealth(), combatant1.getHealth()));
     }
     
     @Test
     public void abilitiesCannotBeUsedOnCooldown() {
         Action testAttack = combatant1.getAvailableActions().get("melee");
+        Effect testEffect = new Effect("Test");
         ArrayList<MapObject> targets = new ArrayList<>();
         targets.add(combatant2);
         combatant1.getAvailableActions().remove("melee");
-        testAttack.hitOn(targets);
+        testAttack.hitOn(testEffect, targets);
         int healthAfterFirstHit = combatant2.getHealth();
         assertTrue(TestTools.CompareTools.isGreaterThan(combatant2.getMaxHealth(), combatant2.getHealth()));
-        testAttack.hitOn(targets);
+        testAttack.hitOn(testEffect, targets);
         int healthAfterSecondHit = combatant2.getHealth();
         assertTrue(healthAfterFirstHit == healthAfterSecondHit);
     }

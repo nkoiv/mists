@@ -57,6 +57,8 @@ public class Location extends Flags implements Global {
     private ArrayList<TriggerPlate> triggerPlates;
     private List<Effect> effects;
     
+    private final Stack<MapObject> incomingMobs = new Stack<>();
+    
     public boolean loading;
     private final HashMap<Integer, MapObject> mobs = new HashMap<>();
     private int nextID = 1;
@@ -488,6 +490,14 @@ public class Location extends Flags implements Global {
         c.setPosition(xPos, yPos);
     }
     
+    public void addEffectThreadSafe(Effect e, double xPos, double yPos) {
+        if (!this.effects.contains(e)) {
+            this.incomingMobs.push(e);
+        }
+        e.setLocation(this);
+        e.setPosition(xPos, yPos);
+    }
+    
     /** Adds an Effect to the location
     * Effects do not use location based mobID,
     * so they're safe handled totally clientside
@@ -654,6 +664,8 @@ public class Location extends Flags implements Global {
      * @param server Server to relay the updates to
      */
     public void update (double time, LocationServer server) {
+        //Threadsafe additions
+        handleIncomingMobStack();
         //AI-stuff
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) { //Mobs do whatever mobs do
@@ -674,6 +686,11 @@ public class Location extends Flags implements Global {
         } else this.fullCleanup(true, true, true);
     }
     
+    private void handleIncomingMobStack() {
+        while (!this.incomingMobs.isEmpty()){
+            this.addMapObject(incomingMobs.pop());
+        }
+    }
     
     public void fullCleanup(boolean cleanCreatures, boolean cleanStructures, boolean cleanEffects) {
         if (cleanCreatures) creatureCleanup();

@@ -72,7 +72,7 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
     }
        
     @Override
-    public void hitOn(ArrayList<MapObject> mobs) {
+    public void hitOn(Effect e, ArrayList<MapObject> mobs) {
         int damage = 0;
         if (this.owner instanceof Creature) {
             damage += ((Creature) this.owner).getWeapon().getDamageValue();

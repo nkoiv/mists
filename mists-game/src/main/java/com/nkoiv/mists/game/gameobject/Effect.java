@@ -79,7 +79,7 @@ public class Effect extends MapObject {
         if (this.owner==null) return;
         ArrayList<MapObject> collisions = this.location.checkCollisions(this);
         if (!collisions.isEmpty()) {       
-            this.getOwner().hitOn(collisions);
+            this.getOwner().hitOn(this, collisions);
         }
     }
     

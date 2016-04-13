@@ -24,11 +24,15 @@ import javafx.scene.image.ImageView;
 public class ProjectileSpell extends Action implements AttackAction {
 
     private SpriteAnimation projectileAnimation;
+    private SpriteAnimation explosionAnimation;
+    private ArrayList damagedMobs = new ArrayList<>();
     
     public ProjectileSpell(String name) {
         super(name, ActionType.RANGED_ATTACK);
         this.projectileAnimation = new SpriteAnimation(new ImageView("/images/environment/torch_flame.png"), 4, 0, 0, 0, 0, 32, 32);
         this.projectileAnimation.setAnimationSpeed(100);
+        this.explosionAnimation = new SpriteAnimation(new ImageView("/images/effects/explosion-4.png"), 12, 0, 0, 0, 0, 128, 128);
+        this.explosionAnimation.setAnimationSpeed(50);
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
         this.setFlag("cooldown", 2500);
@@ -42,10 +46,10 @@ public class ProjectileSpell extends Action implements AttackAction {
         this.projectileAnimation = new SpriteAnimation(imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight);
     }
     
-    public Sprite getSprite(Creature actor) {
-        Sprite attackSprite = new Sprite(this.projectileAnimation.getCurrentFrame());
-        attackSprite.setAnimation(projectileAnimation);
-        attackSprite.setPosition(actor.getXPos(), actor.getYPos());
+    public Sprite createSprite(SpriteAnimation anim, double xPos, double yPos) {
+        Sprite attackSprite = new Sprite(anim.getCurrentFrame());
+        attackSprite.setAnimation(anim);
+        attackSprite.setPosition(xPos, yPos);
         return attackSprite;
     }
     
@@ -70,8 +74,8 @@ public class ProjectileSpell extends Action implements AttackAction {
             double projectileSpeed = this.getFlag("projectilespeed");
             int duration = (int)(this.getFlag("projectilerange") / projectileSpeed * 100);
             Effect attackEffect = new Effect(
-                    this, "meleeattack",
-                    this.getSprite(actor),duration);
+                    this, "projectile",
+                    this.createSprite(projectileAnimation, actor.getXPos(), actor.getYPos()),duration);
             attackEffect.getSprite().setVelocity(directionXY[0]*projectileSpeed, directionXY[1]*projectileSpeed);
             //Put the effect on the list for keeping tabs on it
             this.effects.add(attackEffect);
@@ -102,18 +106,49 @@ public class ProjectileSpell extends Action implements AttackAction {
         this.use(actor, directionXY);
     }
        
+    private void explode(String effectName) {
+        damagedMobs.clear();
+        int projectileID = 0;
+        for (int i = 0; i < effects.size(); i++) {
+            if (effectName.equals(effects.get(i).getName())) projectileID = i;
+        }
+        double xSpot = this.effects.get(projectileID).getXPos()-54;
+        double ySpot = this.effects.get(projectileID).getYPos()-80;
+        Effect explosionEffect = new Effect(
+                    this, "explosion",
+                    this.createSprite(explosionAnimation, xSpot, ySpot),350);
+        //Put the effect on the list for keeping tabs on it
+        this.effects.add(explosionEffect);
+        //Put the effect on the actor
+        this.effects.get(projectileID).getLocation().addEffectThreadSafe(explosionEffect,(xSpot),(ySpot));
+    }
+    
     @Override
-    public void hitOn(ArrayList<MapObject> mobs) {
-        boolean triggered = this.directDamageHit(mobs);
-        //Trigger the on impact effect (animation changes etc)
-        for (MapObject mob : mobs) {
-            if (mob instanceof Structure) {
-                //TODO: Temp: DESTROY THE STRUCTURES!
-                //this.getOwner().getLocation().removeMapObject(mob);
-                mob.setRemovable();
+    public void hitOn(Effect e, ArrayList<MapObject> mobs) {
+        while (mobs.contains(owner)) {
+            mobs.remove(owner);
+        }
+        if (mobs.isEmpty()) return;
+        
+        if ("projectile".equals(e.getName())) {
+            explode("projectile");
+            e.setRemovable();
+        }
+        if ("explosion".equals(e.getName())) {
+            //Trigger the on impact effect (animation changes etc)
+            for (MapObject mob : mobs) {
+                if (mob instanceof Structure) {
+                    //TODO: Temp: DESTROY THE STRUCTURES!
+                    //this.getOwner().getLocation().removeMapObject(mob);
+                    mob.setRemovable();
+                }
+                if (mob instanceof Creature) {
+                    if (damagedMobs.contains(((Creature)mob).getID())) continue;
+                    damagedMobs.add(((Creature)mob).getID());
+                    ((Creature)mob).takeDamage(50);
+                }
             }
         }
-        if (triggered) this.onImpact();
     }
     
     @Override

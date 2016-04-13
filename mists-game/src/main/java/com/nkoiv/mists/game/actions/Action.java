@@ -92,7 +92,7 @@ public class Action extends Flags implements Serializable {
     }
     
 
-    public void hitOn(ArrayList<MapObject> mobs) {
+    public void hitOn(Effect e, ArrayList<MapObject> mobs) {
         
     }
     
