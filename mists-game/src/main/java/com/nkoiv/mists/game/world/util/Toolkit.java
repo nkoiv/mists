@@ -37,14 +37,14 @@ public abstract class Toolkit {
      */
     public static Direction getDirection(double xFrom, double yFrom, double xTo, double yTo) {
         double angle = angleFromCoordinates(xFrom, yFrom, xTo, yTo);
-        Mists.logger.info("Angle before conversion: "+angle);
+        //Mists.logger.info("Angle before conversion: "+angle);
         //Convert the angle from -180 to +180 into 0 to 360
         if (angle < 0) {
             double dif = Math.abs(angle);
             dif = 180-dif;
             angle = 180+dif;
         }
-        Mists.logger.info("Giving direction to angle "+angle);
+        //Mists.logger.info("Giving direction to angle "+angle);
         Direction direction = Direction.STAY;
         if (angle < 22) {
             direction = Direction.RIGHT;
@@ -65,7 +65,7 @@ public abstract class Toolkit {
         } else if (angle >=337) {
             direction = Direction.RIGHT;
         }
-        Mists.logger.info("Direction is : "+direction);
+        //Mists.logger.info("Direction is : "+direction);
         return direction;
     }
     

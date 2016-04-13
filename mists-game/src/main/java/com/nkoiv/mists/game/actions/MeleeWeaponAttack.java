@@ -11,7 +11,6 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
-import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.logging.Level;
  */
 public class MeleeWeaponAttack extends Action implements AttackAction {
     
-    private double swingPosition;
+    //private double swingPosition;
     
     public MeleeWeaponAttack() {
         super("weaponmelee", ActionType.MELEE_ATTACK);
@@ -74,6 +73,33 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
        
     @Override
     public void hitOn(ArrayList<MapObject> mobs) {
-        directDamageHit(mobs);
+        int damage = 0;
+        if (this.owner instanceof Creature) {
+            damage += ((Creature) this.owner).getWeapon().getDamageValue();
+            damage += ((Creature) this.owner).getAttribute("Strength");
+        }
+        
+        if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
+            Mists.logger.log(Level.INFO, "{0} landed on {1}", new Object[]{this.toString(), mobs.toString()});
+            for (MapObject mob : mobs) {
+                if (!mob.equals(this.getOwner())) {
+                    this.setFlag("triggered", 1);
+                    if (mob instanceof Combatant) {
+                        if (this.getOwner() instanceof PlayerCharacter && mob instanceof Creature) {
+                            //Disallow friendly fire
+                            //TODO: build this into flags somehow (if mob.faction == getOwner.faction...)
+                            PlayerCharacter pc =(PlayerCharacter)this.getOwner();
+                            if (!pc.getCompanions().contains((Creature)mob)) {
+                                Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
+                                ((Combatant)mob).takeDamage(damage);
+                            }
+                        } else {
+                            Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
+                            ((Combatant)mob).takeDamage(damage);
+                        }
+                    } 
+                }
+            }
+        }
     }
 }
