@@ -20,15 +20,8 @@ Further down the road, there should be a world map to travel from a location to 
 ***Location controls (POC)***
 
 Controls are displayed in game menu (Esc in a Location)
-* Open game menu: Escape
-* Open console: F1
-* Moving around: Arrow keys / WASD
-* Opening doors: E
-* Selecting different door to open: R
-* Using ability (Melee attack): Space
-* Activate/Deactivate creatures: Shift
-* Teleport to a location: Right mousebutton
-* Target a map object: Left mousebutton
+
+![](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/resources/images/controls.png)
 
 
 ***Some useful console commands (POC)***
