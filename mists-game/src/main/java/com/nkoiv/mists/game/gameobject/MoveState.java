@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.gameobject;
 /**
  * MoveState is the enumerator for possible movement states
  * a character can perform.
+ * TODO: Would states as objects make more sense?
  * @author nikok
  */
 public enum MoveState {

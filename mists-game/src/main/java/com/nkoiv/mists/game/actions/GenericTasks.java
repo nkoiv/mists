@@ -35,6 +35,9 @@ public abstract class GenericTasks {
     public static final int ID_MOVE_TOWARDS_DIRECTION = 2; //1 argument: the direction
     public static final int ID_MOVE_TOWARDS_TARGET = 3; // 1 argument: targetID
     public static final int ID_MOVE_TOWARDS_COORDINATES = 4; //2 arguments: x and y coordinates
+    public static final int ID_DASH_TOWARDS_DIRECTION = 5; //1 argument: the direction
+    public static final int ID_DASH_TOWARDS_TARGET = 6; // 1 argument: targetID
+    public static final int ID_DASH_TOWARDS_COORDINATES = 7; //2 arguments: x and y coordinates
     public static final int ID_CHECK_COORDINATES = 8; //2 arguments: x and y coordinates
     public static final int ID_STOP_MOVEMENT = 9; //no arguments
     public static final int ID_TURN_TOWARDS_MOB = 11; //1 argument: MobID
@@ -66,6 +69,9 @@ public abstract class GenericTasks {
             case ID_MOVE_TOWARDS_DIRECTION: moveTowardsDirection(actor, task.arguments[0]); actor.applyMovement(time);break;
             case ID_MOVE_TOWARDS_TARGET: moveTowardsTarget(actor, task.arguments[0]); actor.applyMovement(time); break;
             case ID_MOVE_TOWARDS_COORDINATES: moveTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); actor.applyMovement(time); break;
+            case ID_DASH_TOWARDS_DIRECTION: dashTowardsDirection(actor, task.arguments[0]); actor.applyMovement(time);break;
+            case ID_DASH_TOWARDS_TARGET: dashTowardsTarget(actor, task.arguments[0]); actor.applyMovement(time); break;
+            case ID_DASH_TOWARDS_COORDINATES: dashTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); actor.applyMovement(time); break;
             case ID_CHECK_COORDINATES: checkCoordinates(actor, task.arguments[0], task.arguments[1]); break;
             case ID_STOP_MOVEMENT: actor.stopMovement(); break;
             case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, task.arguments[0]); break;
@@ -106,8 +112,23 @@ public abstract class GenericTasks {
     }
     
     
+    public static void dashTowardsDirection(Creature creature, int direction) {
+        switch (direction) {
+            case 1: creature.dashTowards(Direction.UP); break;
+            case 2: creature.dashTowards(Direction.UPRIGHT); break;
+            case 3: creature.dashTowards(Direction.RIGHT); break;
+            case 4: creature.dashTowards(Direction.DOWNRIGHT); break;
+            case 5: creature.dashTowards(Direction.DOWN); break;
+            case 6: creature.dashTowards(Direction.DOWNLEFT); break;
+            case 7: creature.dashTowards(Direction.LEFT); break;
+            case 8: creature.dashTowards(Direction.UPLEFT); break;
+            case 0: creature.dashTowards(Direction.STAY); break;
+            default: creature.dashTowards(Direction.STAY); break;
+        }
+    }
+    
     public static void moveTowardsDirection(Creature creature, int direction) {
-            switch (direction) {
+        switch (direction) {
             case 1: creature.moveTowards(Direction.UP); break;
             case 2: creature.moveTowards(Direction.UPRIGHT); break;
             case 3: creature.moveTowards(Direction.RIGHT); break;
@@ -155,8 +176,18 @@ public abstract class GenericTasks {
         }
     }
     
+    public static void dashTowardsCoordinates(Creature actor, int xCoor, int yCoor) {
+        actor.dashTowards(xCoor, yCoor);
+    }
+    
     public static void moveTowardsCoordinates(Creature actor, int xCoor, int yCoor) {
         actor.moveTowards(xCoor, yCoor);
+    }
+    
+    public static void dashTowardsTarget(Creature actor, int targetID) {
+        MapObject target = actor.getLocation().getMapObject(targetID);
+        if (target == null) return;
+        actor.dashTowards(target.getCenterXPos(), target.getCenterYPos());
     }
     
     public static void moveTowardsTarget(Creature actor, int targetID) {

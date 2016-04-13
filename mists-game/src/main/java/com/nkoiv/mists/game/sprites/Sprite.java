@@ -113,6 +113,7 @@ public class Sprite extends MovingGraphics
     }
     
     public void setAnimation (SpriteAnimation animation) {
+        if (animation == null) return;
         this.animation = animation;
         this.animated = true;
         this.width = animation.getFrameWidth();

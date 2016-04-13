@@ -161,17 +161,21 @@ public class LocationControls {
     public void playerMove(Direction direction) {
         Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(direction)});
         game.getPlayer().setNextTask(move);
-        //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(move);
     }
     
     public void playerMove(double xTarget, double yTarget) {
-        /*
-        Direction d = Toolkit.getDirection(game.getPlayer().getCenterXPos(), game.getPlayer().getCenterYPos(), xTarget, yTarget);
-        playerMove(d);
-        */
         Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, game.getPlayer().getID(), new int[]{(int)xTarget, (int)yTarget});
+        game.getPlayer().setNextTask(move);   
+    }
+    
+    public void playerDash(Direction direction) {
+        Task move = new Task(GenericTasks.ID_DASH_TOWARDS_DIRECTION, game.getPlayer().getID(), new int[]{Toolkit.getDirectionNumber(direction)});
         game.getPlayer().setNextTask(move);
-        
+    }
+    
+    public void playerDash(double xTarget, double yTarget) {
+        Task move = new Task(GenericTasks.ID_DASH_TOWARDS_COORDINATES, game.getPlayer().getID(), new int[]{(int)xTarget, (int)yTarget});
+        game.getPlayer().setNextTask(move);   
     }
     
     public void playerAttackMove(double xTarget, double yTarget) {

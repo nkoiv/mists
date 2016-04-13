@@ -42,7 +42,11 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setAnimation("downMovement", new ImageView("/images/lini.png"), 3, 0, 0, 0, 0, 32, 32 );
         this.setAnimation("leftMovement", new ImageView("/images/lini.png"), 3, 0, 32, 0, 0, 32, 32 );
         this.setAnimation("rightMovement", new ImageView("/images/lini.png"), 3, 0, 64, 0, 0, 32, 32 );
-        this.setAnimation("upMovement", new ImageView("/images/lini.png"), 3, 0, 96, 0, 0, 32, 32 );       
+        this.setAnimation("upMovement", new ImageView("/images/lini.png"), 3, 0, 96, 0, 0, 32, 32 );   
+        this.setAnimation("downDash", new ImageView("/images/lini_dash.png"), 3, 0, 0, 0, 0, 32, 32 );
+        this.setAnimation("leftDash", new ImageView("/images/lini_dash.png"), 3, 0, 32, 0, 0, 32, 32 );
+        this.setAnimation("rightDash", new ImageView("/images/lini_dash.png"), 3, 0, 64, 0, 0, 32, 32 );
+        this.setAnimation("upDash", new ImageView("/images/lini_dash.png"), 3, 0, 96, 0, 0, 32, 32 );
         
         
         this.setFlag("alive", 1);
@@ -125,6 +129,18 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     @Override
     public void update(double time) {
+        if (!MoveState.DASH.equals(movestate)) {
+            handleNextTask(time);
+        } else {
+            this.applyMovement(time); 
+        }
+        tickActionCooldowns(time);
+        checkupMoveState(time);
+        this.updateGraphics();
+        
+    }
+    
+    private void handleNextTask(double time) {
         if (this.nextTask!=null) {
             if (this.nextTask.taskID != GenericTasks.ID_IDLE) {
                 GenericTasks.performTask(location, nextTask, time);
@@ -135,11 +151,7 @@ public class PlayerCharacter extends Creature implements Combatant {
                 this.nextTask = null;
             }
         }
-        tickActionCooldowns(time);
-        this.updateGraphics();
-        //this.applyMovement(time);  
     }
-    
     
     /**
      * Clear all the Location -links from the player,

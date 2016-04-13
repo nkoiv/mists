@@ -47,8 +47,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     protected Task nextTask;
     protected long lastTaskSet; //For networking purposes
     
-    private MoveState animationMovestate;
-    private MoveState movestate = MoveState.STAND;
+    protected MoveState animationMovestate;
+    protected MoveState movestate = MoveState.STAND;
     private Direction facing = Direction.DOWN;
     private Direction lastFacing = null;
     protected HashMap<String, SpriteAnimation> spriteAnimations;
@@ -63,6 +63,12 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     * TODO: Consider if the above would be awesome
     */
     protected int visionRange;
+    protected double dashCooldown = 2000;
+    protected double dashCooldownRemaining;
+    protected double dashDuration = 250;
+    protected double dashRemaining;
+    protected double dashMultiplier = 6;
+    
     protected HashMap<String, Integer> attributes;
     protected HashMap<String, Integer> effects;
     //TODO: Consider if effects should be used for MapObjects (can a wall or a rock get debuffs/buffs?)
@@ -328,13 +334,28 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         GenericTasks.performTask(location, nextTask, time);
         if (nextTask.taskID > 20) setNextTask(new Task(GenericTasks.ID_IDLE, this.IDinLocation, null));
         tickActionCooldowns(time);
-        this.updateGraphics();
+        checkupMoveState(time);
+        updateGraphics();
     }
 
+    protected void checkupMoveState(double time) {
+        if (dashRemaining > 0) dashRemaining = dashRemaining - (time*1000);
+        if (dashRemaining <= 0) endDash();
+    }
+    
     protected void tickActionCooldowns(double time) {
         for (Action a : this.availableActions.values()) {
             a.tickCooldown(time);
         }
+        if (this.dashCooldownRemaining > 0) {
+            dashCooldownRemaining = dashCooldownRemaining - (time*1000);
+            if (dashCooldownRemaining < 0) dashCooldownRemaining = 0;
+        }
+        
+    }
+    
+    public boolean dashOnCooldown() {
+        return this.dashCooldownRemaining>0;
     }
     
     public Task getLastTask() {
@@ -377,9 +398,24 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         switch (movestate) {
             case WALK: updateSpriteToWalk(); break;
             case STAND: updateSpriteToStand(); break;
+            case DASH: updateSpriteToDash(); break;
             default: break;
         }
         
+    }
+    
+    private void updateSpriteToDash() {
+        switch(this.facing) {
+            case UP: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upDash")); break;
+            case DOWN: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downDash")); break;
+            case LEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("leftDash")); break;
+            case RIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("rightDash")); break;
+            case UPRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upDash")); break;
+            case UPLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("upDash")); break;
+            case DOWNRIGHT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downDash")); break;
+            case DOWNLEFT: ((Sprite)this.graphics).setAnimation(this.spriteAnimations.get("downDash")); break;
+            default: break;
+        }
     }
     
     private void updateSpriteToWalk() {
@@ -497,8 +533,32 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         }
     }
     
+    private void startDash() {
+        this.dashRemaining = this.dashDuration;
+        this.movestate = MoveState.DASH;
+        this.dashCooldownRemaining = dashCooldown;
+    }
+    
+    private void endDash() {
+        this.dashRemaining = 0;
+        this.movestate = MoveState.STAND;
+    }
+    
+    public boolean dashTowards (double xCoor, double yCoor) {
+        this.startDash();
+        //TODO: Decide on if we're Walking, Running or Dashing based on relative movement speed?
+        this.getGraphics().setVelocity(0, 0);
+        double[] direction = Toolkit.getDirectionXY(this.getCenterXPos(), this.getCenterYPos(), xCoor, yCoor);
+        direction[0] = direction[0] * this.getAttribute("Speed")*dashMultiplier;
+        direction[1] = direction[1] * this.getAttribute("Speed")*dashMultiplier;
+        this.graphics.addVelocity(direction[0], direction[1]);
+        //Update facing
+        this.setFacing(Toolkit.getDirection(0, 0, direction[0], direction[1]));
+        return true;
+    }
     
     public boolean moveTowards (double xCoor, double yCoor) {
+        this.movestate = MoveState.WALK;
         //TODO: Decide on if we're Walking, Running or Dashing based on relative movement speed?
         this.getGraphics().setVelocity(0, 0);
         double[] direction = Toolkit.getDirectionXY(this.getCenterXPos(), this.getCenterYPos(), xCoor, yCoor);
@@ -510,72 +570,109 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         return true;
     }
     
+    public boolean dashTowards (Direction direction) {
+        this.startDash();
+        switch(direction) {
+            case UP: {
+                this.facing = Direction.UP;
+                this.getGraphics().setVelocity(0, -this.getAttribute("Speed")*dashMultiplier);
+                return true;
+            }
+            case DOWN: {
+                this.facing = Direction.DOWN;
+                this.getGraphics().setVelocity(0, this.getAttribute("Speed")*dashMultiplier);
+                return true;
+            }
+            case LEFT: {
+                this.facing = Direction.LEFT;
+                this.getGraphics().setVelocity(-this.getAttribute("Speed")*dashMultiplier, 0);
+                return true;
+            }
+            case RIGHT: {
+                this.facing = Direction.RIGHT;
+                this.getGraphics().setVelocity(this.getAttribute("Speed")*dashMultiplier, 0);
+                return true;
+            }
+            case UPRIGHT: { 
+                this.getGraphics().setVelocity((this.getAttribute("Speed")/1.41)*dashMultiplier, -(this.getAttribute("Speed")/1.41)*dashMultiplier);
+                this.facing = Direction.UPRIGHT;
+                return true;
+            }
+            case UPLEFT: {
+                this.getGraphics().setVelocity((-this.getAttribute("Speed")/1.41)*dashMultiplier, (-this.getAttribute("Speed")/1.41)*dashMultiplier);
+                this.facing = Direction.UPLEFT;
+                return true;
+            }
+            case DOWNRIGHT: {
+                this.getGraphics().setVelocity((this.getAttribute("Speed")/1.41)*dashMultiplier, (this.getAttribute("Speed")/1.41)*dashMultiplier);
+                this.facing = Direction.DOWNRIGHT;
+                return true;
+            }
+            case DOWNLEFT: {
+                this.getGraphics().setVelocity((-this.getAttribute("Speed")/1.41)*dashMultiplier, (this.getAttribute("Speed")/1.41)*dashMultiplier);
+                this.facing = Direction.DOWNLEFT;
+                return true;
+            }
+            case STAY: {
+                return stopMovement();
+            }
+        default: break;
+        }
+        return false;
+    }
+    
     @Override
     public boolean moveTowards (Direction direction) {
         //this.stopMovement(); //clear old movement (velocity)
+        this.movestate = MoveState.WALK;
         switch(direction) {
-            case UP: return moveUp();
-            case DOWN: return moveDown();
-            case LEFT: return moveLeft();
-            case RIGHT: return moveRight();
-            case UPRIGHT: return moveUpRight();
-            case UPLEFT: return moveUpLeft();
-            case DOWNRIGHT: return moveDownRight();
-            case DOWNLEFT: return moveDownLeft();
-            case STAY: return stopMovement();
+            case UP: {
+                this.facing = Direction.UP;
+                this.getGraphics().setVelocity(0, -this.getAttribute("Speed"));
+                return true;
+            }
+            case DOWN: {
+                this.facing = Direction.DOWN;
+                this.getGraphics().setVelocity(0, this.getAttribute("Speed"));
+                return true;
+            }
+            case LEFT: {
+                this.facing = Direction.LEFT;
+                this.getGraphics().setVelocity(-this.getAttribute("Speed"), 0);
+                return true;
+            }
+            case RIGHT: {
+                this.facing = Direction.RIGHT;
+                this.getGraphics().setVelocity(this.getAttribute("Speed"), 0);
+                return true;
+            }
+            case UPRIGHT: { 
+                this.getGraphics().setVelocity(this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
+                this.facing = Direction.UPRIGHT;
+                return true;
+            }
+            case UPLEFT: {
+                this.getGraphics().setVelocity(-this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
+                this.facing = Direction.UPLEFT;
+                return true;
+            }
+            case DOWNRIGHT: {
+                this.getGraphics().setVelocity(this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
+                this.facing = Direction.DOWNRIGHT;
+                return true;
+            }
+            case DOWNLEFT: {
+                this.getGraphics().setVelocity(-this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
+                this.facing = Direction.DOWNLEFT;
+                return true;
+            }
+            case STAY: {
+                return stopMovement();
+            }
         default: break;
         }
         
         return false;
-    }
-
-    
-    private boolean moveUp() {
-        this.facing = Direction.UP;
-        this.getGraphics().setVelocity(0, -this.getAttribute("Speed"));
-        return true;
-    }
-    
-    private boolean moveDown() {
-        this.facing = Direction.DOWN;
-        this.getGraphics().setVelocity(0, this.getAttribute("Speed"));
-        return true;
-    }
-        
-    private boolean moveLeft() {
-        this.facing = Direction.LEFT;
-        this.getGraphics().setVelocity(-this.getAttribute("Speed"), 0);
-        return true;
-    }
-    
-    private boolean moveRight() {
-        this.facing = Direction.RIGHT;
-        this.getGraphics().setVelocity(this.getAttribute("Speed"), 0);
-        return true;
-    }
-
-    private boolean moveUpRight() {
-        this.getGraphics().setVelocity(this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
-        this.facing = Direction.UPRIGHT;
-        return true;
-    }
-    
-    private boolean moveUpLeft() {
-        this.getGraphics().setVelocity(-this.getAttribute("Speed")/1.41, -this.getAttribute("Speed")/1.41);
-        this.facing = Direction.UPLEFT;
-        return true;
-    }
-        
-    private boolean moveDownRight() {
-        this.getGraphics().setVelocity(this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
-        this.facing = Direction.DOWNRIGHT;
-        return true;
-    }
-    
-    private boolean moveDownLeft() {
-        this.getGraphics().setVelocity(-this.getAttribute("Speed")/1.41, this.getAttribute("Speed")/1.41);
-        this.facing = Direction.DOWNLEFT;
-        return true;
     }
 
     public boolean stopMovement() {

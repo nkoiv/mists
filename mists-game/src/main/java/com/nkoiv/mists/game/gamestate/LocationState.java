@@ -383,7 +383,12 @@ public class LocationState implements GameState {
      */
     @Override
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
-        if (movingWithMouse) game.locControls.playerAttackMove(movingTowardsX, movingTowardsY);
+        if (movingWithMouse) {
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(movingTowardsX, movingTowardsY);
+            }
+            else game.locControls.playerMove(movingTowardsX, movingTowardsY);
+        }
         handleLocationKeyPress(pressedButtons, releasedButtons);
         switch (Mists.gameMode) {
             case SINGLEPLAYER: this.tickSinglePlayer(time); break;
@@ -654,11 +659,6 @@ public class LocationState implements GameState {
             
         }
         
-        if (releasedButtons.contains(KeyCode.SHIFT)) {
-            game.locControls.toggleFlag("testFlag");
-        
-        }
-        
         if (releasedButtons.contains(KeyCode.ESCAPE)) {
             if (!this.closeMenus()) game.locControls.toggleLocationMenu();
         }
@@ -666,38 +666,62 @@ public class LocationState implements GameState {
         //Location controls
         if (!this.paused) {
         if (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W)) {
-            game.locControls.playerMove(Direction.UP);            
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(Direction.UP);            
+            }
+            else game.locControls.playerMove(Direction.UP);            
         }
         if (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S)) {
             //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
-            game.locControls.playerMove(Direction.DOWN);
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(Direction.DOWN);            
+            }
+            else game.locControls.playerMove(Direction.DOWN);
         }
         if (pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) {
             //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
-            game.locControls.playerMove(Direction.LEFT);
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(Direction.LEFT);            
+            }
+            else game.locControls.playerMove(Direction.LEFT);
         }
         if (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D)) {
             //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
-            game.locControls.playerMove(Direction.RIGHT);
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(Direction.RIGHT);            
+            }
+            else game.locControls.playerMove(Direction.RIGHT);
         }
         if ((pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))
             && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
-            game.locControls.playerMove(Direction.UPRIGHT);            
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(Direction.UPRIGHT);            
+            }
+            else game.locControls.playerMove(Direction.UPRIGHT);            
         }
         if ((pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))
             && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
             //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
-            game.locControls.playerMove(Direction.DOWNRIGHT);
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(Direction.DOWNRIGHT);            
+            }
+            else game.locControls.playerMove(Direction.DOWNRIGHT);
         }
         if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A))
                 && (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))) {
             //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
-            game.locControls.playerMove(Direction.UPLEFT);
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(Direction.UPLEFT);            
+            }
+            else game.locControls.playerMove(Direction.UPLEFT);
         }
         if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) 
                 && (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))) {
             //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
-            game.locControls.playerMove(Direction.DOWNLEFT);
+            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
+                game.locControls.playerDash(Direction.DOWNLEFT);            
+            }
+            else game.locControls.playerMove(Direction.DOWNLEFT);
         }
         
         
