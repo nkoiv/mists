@@ -70,7 +70,7 @@ public abstract class Toolkit {
     }
     
     /**
-     * Calculate the degree to move on from
+     * Calculate the DEGREE (not radians) to move on from
      * From coordinates to get to To coordinates.
      * @param xFrom xCoordinate of From
      * @param yFrom yCoordinate of From
@@ -107,7 +107,6 @@ public abstract class Toolkit {
         double radians = Math.toRadians(angle);
         double x = Math.cos(radians);
         double y = Math.sin(radians);
-        Mists.logger.info("GetDirectioXY got angle "+angle+" (radians:"+radians+") Returning "+x+"x"+y);
         return new double[]{x, y};
     }
     
