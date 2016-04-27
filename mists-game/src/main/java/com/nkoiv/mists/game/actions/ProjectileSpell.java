@@ -55,7 +55,6 @@ public class ProjectileSpell extends Action implements AttackAction {
     
     
     private void use(Creature actor, double[] directionXY) {
-        Mists.logger.log(Level.INFO, "{0} tried to use projectile spell (owner {1})", new Object[]{actor.getName(), this.owner});
         if (this.isOnCooldown()) {
             //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {
@@ -95,7 +94,9 @@ public class ProjectileSpell extends Action implements AttackAction {
     
     @Override
     public void use(Creature actor, double xTarget, double yTarget) {
+        Mists.logger.log(Level.INFO, "{0} using {1} from {2}x{3} towards {4}x{5}", new Object[]{actor.getName(), this.name, actor.getCenterXPos(), actor.getCenterYPos(), xTarget, yTarget});
         double[] directionXY = Toolkit.getDirectionXY(actor.getCenterXPos(), actor.getCenterYPos(), xTarget, yTarget);
+        Mists.logger.info("Giving directionXY: "+directionXY[0]+"x"+directionXY[1]);
         this.use(actor, directionXY);
     }
     

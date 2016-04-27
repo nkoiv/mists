@@ -81,6 +81,7 @@ public abstract class Toolkit {
     public static double angleFromCoordinates(double xFrom, double yFrom, double xTo, double yTo) {
         double deltaX = xTo - xFrom;
         double deltaY = yTo - yFrom;
+        Mists.logger.info("Angle from "+xFrom+"x"+yFrom+" to "+xTo+"x"+yTo+" is "+(Math.atan2(deltaY, deltaX)*180.0/Math.PI));
         return Math.atan2(deltaY, deltaX)*180.0/Math.PI;
     }
     
@@ -103,9 +104,10 @@ public abstract class Toolkit {
      */
     public static double[] getDirectionXY(double xFrom, double yFrom, double xTo, double yTo) {
         double angle = Toolkit.angleFromCoordinates(xFrom, yFrom, xTo, yTo);
-        double x = Math.cos(angle);
-        double y = Math.sin(angle);
-        
+        double radians = Math.toRadians(angle);
+        double x = Math.cos(radians);
+        double y = Math.sin(radians);
+        Mists.logger.info("GetDirectioXY got angle "+angle+" (radians:"+radians+") Returning "+x+"x"+y);
         return new double[]{x, y};
     }
     
