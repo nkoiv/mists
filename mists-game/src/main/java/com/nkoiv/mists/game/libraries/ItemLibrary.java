@@ -83,10 +83,10 @@ public class ItemLibrary <E extends Item> {
         ItemType weaponType;
         String type = (String)weaponData.get("type");
         switch (type) {
-            case "Weapon 1h melee": weaponType = ItemType.WEAPON_1H_MELEE; break;
-            case "Weapon 2h melee": weaponType = ItemType.WEAPON_2H_MELEE; break;
-            case "Weapon 1h ranged": weaponType = ItemType.WEAPON_1H_RANGED; break;
-            case "Weapon 2h ranged": weaponType = ItemType.WEAPON_2H_RANGED; break;
+            case "Weapon 1h": weaponType = ItemType.WEAPON_1H_MELEE; break;
+            case "Weapon 2h": weaponType = ItemType.WEAPON_2H_MELEE; break;
+            case "Ranged 1h": weaponType = ItemType.WEAPON_1H_RANGED; break;
+            case "Ranged 2h": weaponType = ItemType.WEAPON_2H_RANGED; break;
             default: weaponType = ItemType.WEAPON_1H_MELEE; break;
         }
         String name = (String)weaponData.get("name");

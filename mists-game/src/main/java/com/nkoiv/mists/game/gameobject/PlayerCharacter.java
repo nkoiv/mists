@@ -114,6 +114,7 @@ public class PlayerCharacter extends Creature implements Combatant {
      */
     @Override
     public boolean addItem(Item i) {
+        if (i == null) return false;
         if (this.inventory == null) return false;
         Mists.logger.info("Attempted to give "+this.getName()+" "+i.getName());
         if (Mists.MistsGame.currentState instanceof LocationState) {

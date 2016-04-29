@@ -1,14 +1,14 @@
 ---
 id: 1
 name: "Sword"
-type: "Weapon 1h melee"
+type: "Weapon 1h"
 description: "a simple sword"
 image: "/images/sword.png"
 damage: 12
 ---
 id: 2
 name: "Axe"
-type: "Weapon 1h melee"
+type: "Weapon 1h"
 description: "an ugly axe"
 image: "/images/axe.png"
 damage: 12
@@ -21,6 +21,6 @@ image: "/images/himmuToyMini.png"
 ---
 id: 3
 name: "Bow"
-type: "Weapon 2h ranged"
+type: "Ranged 2h"
 description: "A basic ranged weapon"
 image: "/images/bow.png"
