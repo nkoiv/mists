@@ -10,6 +10,13 @@ package com.nkoiv.mists.game.items;
  * @author daedra
  */
 public enum ItemType {
-	MISC, HELMET, ARMOR, BOOTS, GLOVES, WEAPON_1H, WEAPON_2H
-
+	MISC,
+        HELMET,
+        ARMOR,
+        BOOTS,
+        GLOVES,
+        WEAPON_1H_MELEE,
+        WEAPON_2H_MELEE, 
+        WEAPON_1H_RANGED,
+        WEAPON_2H_RANGED;
 }
