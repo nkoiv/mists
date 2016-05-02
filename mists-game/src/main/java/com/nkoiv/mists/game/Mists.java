@@ -132,7 +132,7 @@ public class Mists extends Application implements Global {
         
         logger.info("Mists game started");
         
-       /*
+        /*
         * Game main loop
         */
         new AnimationTimer() //Logic loop

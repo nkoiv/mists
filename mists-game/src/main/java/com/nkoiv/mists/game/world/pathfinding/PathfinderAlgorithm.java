@@ -16,10 +16,10 @@ public interface PathfinderAlgorithm {
     
     public Path findPath(CollisionMap map, int tilesize, List<Integer> crossableTerrain, int startX, int startY, int goalX, int goalY);
     
-    public List<Node> Neighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y);
-    public List<Node> Neighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y);
-    public List<Node> DiagonalNeighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y);
-    public List<Node> DiagonalNeighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y);
+    public List<Node> neighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y);
+    public List<Node> neighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y);
+    public List<Node> diagonalNeighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y);
+    public List<Node> diagonalNeighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y);
     
     public HashMap<Integer, int[][]> getClearanceMaps(); //Used for console debugging, to examine the clearance map in use
 }

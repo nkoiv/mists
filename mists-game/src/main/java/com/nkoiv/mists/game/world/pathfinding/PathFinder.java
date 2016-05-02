@@ -124,7 +124,7 @@ public class PathFinder {
             return pathToGoal.getNode(pathToGoal.getLength()-1);
         } else {
             //Check if there's corners we might get stuck into:
-            List<Node> corners = algo.DiagonalNeighbours(map, clearanceNeed, crossableTerrain, pathToGoal.getNode(0).getX(), pathToGoal.getNode(0).getY());
+            List<Node> corners = algo.diagonalNeighbours(map, clearanceNeed, crossableTerrain, pathToGoal.getNode(0).getX(), pathToGoal.getNode(0).getY());
             if (corners.size() == 4) {
                 //All corners clear, move on
                 return pathToGoal.getNode(1);
@@ -167,7 +167,7 @@ public class PathFinder {
             openNode[2] = goalY;
             return openNode;
         } else {
-            List<Node> openNeighbours = algo.Neighbours(map, crossableTerrain, goalY, goalY);
+            List<Node> openNeighbours = algo.neighbours(map, crossableTerrain, goalY, goalY);
             if (openNeighbours.size() > 0) { //Just try to go to whichever open block
                 openNode[0] = openNeighbours.get(0).getX();
                 openNode[1] = openNeighbours.get(0).getY();

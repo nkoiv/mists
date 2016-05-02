@@ -76,8 +76,8 @@ public class AStarPathfinder implements PathfinderAlgorithm {
                 return new Path();
             } else { //not at goal yet, find open neighbours
                 List<Node> neighbours = new ArrayList<>(); //add in all traversable neighbours
-                neighbours.addAll(this.Neighbours(map, tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
-                if (allowDiagonalMovement) neighbours.addAll(this.DiagonalNeighbours(map, tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
+                neighbours.addAll(this.neighbours(map, tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
+                if (allowDiagonalMovement) neighbours.addAll(this.diagonalNeighbours(map, tileSize,crossableTerrain, currentNode.getX(), currentNode.getY()));
                 //Mists.logger.log(Level.INFO, "{0} neighbouring tiles found for {1},{2}", new Object[]{neighbours.size(), currentNode.getX(), currentNode.getY()});
                 // Check through all the neighbouring tiles
                 for (Node n : neighbours) {
@@ -232,9 +232,9 @@ public class AStarPathfinder implements PathfinderAlgorithm {
      * @param y Target nodes Y coordinate
      * @return List of available neighbours
      */
-    public List<Node> Neighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y) {
+    public List<Node> neighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y) {
         //if no size given, assume clearance need of 1
-        return Neighbours(map, 1,crossableTerrain, x, y);
+        return neighbours(map, 1,crossableTerrain, x, y);
     } 
 
     /**
@@ -248,7 +248,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
      * @return List of available neighbours
      */
 
-    public List<Node> Neighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
+    public List<Node> neighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
     /**Neighbours only lists cardinal directions
     * because being surrounded cardinally blocks movement
     * TODO: Consider if this is good
@@ -289,9 +289,9 @@ public class AStarPathfinder implements PathfinderAlgorithm {
      * @param y Target nodes Y coordinate
      * @return List of available diagonally neighbouring spots
      */    
-    public List<Node> DiagonalNeighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y) {
+    public List<Node> diagonalNeighbours(CollisionMap map, List<Integer> crossableTerrain, int x, int y) {
         //if no size given, assume clearance need of 1
-        return DiagonalNeighbours(map, 1, crossableTerrain, x, y);
+        return diagonalNeighbours(map, 1, crossableTerrain, x, y);
     }
     /** DiagonalNeighbours returns all the diagonal direction (UpRight, RightDown, UpLeft, LeftDown)
     * neighbours of a given X,Y tile that can be crossed with the given parameters.
@@ -302,7 +302,7 @@ public class AStarPathfinder implements PathfinderAlgorithm {
     * @param y Target nodes Y coordinate
     * @return List of available diagonally neighbouring spots
     */  
-    public List<Node> DiagonalNeighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
+    public List<Node> diagonalNeighbours(CollisionMap map, int clearanceNeed, List<Integer> crossableTerrain, int x, int y) {
         //Return all NE, NW, SE and SW that are passable without squeezing through
         ArrayList<Node> result = new ArrayList<>();
         int N = y - 1;
