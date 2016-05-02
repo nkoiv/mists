@@ -15,8 +15,8 @@ import com.nkoiv.mists.game.sprites.Sprite;
  */
 public class Projectile extends Effect {
     
-    double xVelocity;
-    double yVelocity;
+    private double xVelocity;
+    private double yVelocity;
     
     public Projectile(Action owner, String name, Sprite sprite, int durationMS, double xVelocity, double yVelocity) {
         super(owner, name, sprite, durationMS);
