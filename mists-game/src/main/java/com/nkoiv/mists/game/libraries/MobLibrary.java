@@ -21,6 +21,7 @@ import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.util.Flags;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -112,6 +113,28 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }        
     }
     
+    private static void addFlagsFromYAML(Flags mob, Map mobData) {
+        if (mobData.containsKey("flags")) {
+            Map flags = (Map)mobData.get("flags");
+            for (Object f : flags.keySet()) {
+                String flagName = (String)f;
+                int flagValue = Integer.parseInt((String)flags.get(flagName));
+                mob.setFlag(flagName, flagValue);
+            }
+        }
+    }
+    
+    private static void addAttributesFromYAML(Creature mob, Map mobData) {
+        if (mobData.containsKey("attributes")) {
+            Map attributes = (Map)mobData.get("attributes");
+            for (Object a : attributes.keySet()) {
+                String attributeName = (String)a;
+                int attributeValue = Integer.parseInt((String)attributes.get(attributeName));
+                mob.setAttribute(attributeName, attributeValue);
+            }
+        }
+    }
+    
     private static Creature generateCreatureFromYAML(Map creatureData) {
         Creature creep;
         int monsterID = Integer.parseInt((String)creatureData.get("monsterID"));
@@ -136,23 +159,8 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
         Mists.logger.info("Creature base generated, adding attributes and flags");
         
-        if (creatureData.containsKey("attributes")) {
-            Map attributes = (Map)creatureData.get("attributes");
-            for (Object a : attributes.keySet()) {
-                String attributeName = (String)a;
-                int attributeValue = Integer.parseInt((String)attributes.get(attributeName));
-                creep.setAttribute(attributeName, attributeValue);
-            }
-        }
-        
-        if (creatureData.containsKey("flags")) {
-            Map flags = (Map)creatureData.get("flags");
-            for (Object f : flags.keySet()) {
-                String flagName = (String)f;
-                int flagValue = Integer.parseInt((String)flags.get(flagName));
-                creep.setAttribute(flagName, flagValue);
-            }
-        }
+        addAttributesFromYAML(creep, creatureData);
+        addFlagsFromYAML(creep, creatureData);
         
         if (creatureData.containsKey("aiType")) {
             String aiType = (String)creatureData.get("aiType");
@@ -162,7 +170,6 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                 default: break;
             }
         }
-        
         
         //TODO: Add actions to YAML
         creep.addAction(new MeleeAttack());
