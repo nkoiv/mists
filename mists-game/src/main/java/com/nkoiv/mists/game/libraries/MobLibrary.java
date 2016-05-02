@@ -47,7 +47,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     
     private final HashMap<String, E> libByName;
     private final HashMap<Integer, E> lib;
-    
+    private int nextFreeID = 1;
     
     public MobLibrary() {
         lib = (HashMap<Integer, E>) new HashMap();
@@ -88,6 +88,22 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         Mists.logger.log(Level.INFO, "{0}:{1} added to library", new Object[]{e.getTemplateID(), lowercasename});
     }
     
+    private int getNextFreeID() {
+        while (this.lib.containsKey(nextFreeID)) {
+            nextFreeID++;
+        }
+        return nextFreeID;
+    }
+    
+    public void setTemplateID(Map mobData, MapObject mob) {
+        if (mobData.containsKey("templateID")) {
+            int templateID = Integer.parseInt((String)mobData.get("templateID"));
+            mob.setTemplateID(templateID);
+        } else {
+            mob.setTemplateID(getNextFreeID());
+        }
+    }
+    
     public static MapObject generateFromYAML(Map mobData) {
         String mobtype = (String)mobData.get("type");
         switch (mobtype) {
@@ -113,7 +129,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }        
     }
     
-    private static void addFlagsFromYAML(Flags mob, Map mobData) {
+    private static void addFlagsFromYAML(Map mobData, Flags mob) {
         if (mobData.containsKey("flags")) {
             Map flags = (Map)mobData.get("flags");
             for (Object f : flags.keySet()) {
@@ -124,7 +140,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
     }
     
-    private static void addAttributesFromYAML(Creature mob, Map mobData) {
+    private static void addAttributesFromYAML(Map mobData, Creature mob) {
         if (mobData.containsKey("attributes")) {
             Map attributes = (Map)mobData.get("attributes");
             for (Object a : attributes.keySet()) {
@@ -137,7 +153,6 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     
     private static Creature generateCreatureFromYAML(Map creatureData) {
         Creature creep;
-        int monsterID = Integer.parseInt((String)creatureData.get("monsterID"));
         String mobname = (String)creatureData.get("name");
         String spriteType = (String)creatureData.get("spriteType");
         if (("static").equals(spriteType)) {
@@ -159,8 +174,8 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
         Mists.logger.info("Creature base generated, adding attributes and flags");
         
-        addAttributesFromYAML(creep, creatureData);
-        addFlagsFromYAML(creep, creatureData);
+        addAttributesFromYAML(creatureData, creep);
+        addFlagsFromYAML(creatureData, creep);
         
         if (creatureData.containsKey("aiType")) {
             String aiType = (String)creatureData.get("aiType");
@@ -174,7 +189,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         //TODO: Add actions to YAML
         creep.addAction(new MeleeAttack());
         
-        creep.setTemplateID(monsterID);
+        
         return creep;
     }
     
@@ -227,6 +242,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
         if (structureData.containsKey("collisionLevel")) ic.setCollisionLevel(Integer.parseInt((String)structureData.get("collisionLevel")));
         addExtras(structureData, ic);
+        addFlagsFromYAML(structureData, ic);
         return ic;
     }
     
@@ -259,6 +275,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         ImageView wallImages = new ImageView((String)wallData.get("image"));
         Wall wall = new Wall(mobname, new Image("/images/structures/blank.png"), Integer.parseInt(collisionLevel), wallImages);
         wall.generateWallImages(wallImages);
+        addFlagsFromYAML(wallData, wall);
         return wall;
     }
     
@@ -269,6 +286,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         Image image = new Image((String)entranceData.get("image"));
         MapEntrance entrance = new MapEntrance(mobname, new Sprite(image), collisionLevel, null); 
         addExtras(entranceData, entrance);
+        addFlagsFromYAML(entranceData, entrance);
         return entrance;
         //MapEntrance stairs = new MapEntrance("dungeonStairs", new Sprite(new Image("/images/structures/stairs.png")), 0, null);
     }
@@ -279,6 +297,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         Image imageClosed = new Image((String)tileData.get("imageUnlit"));
         PuzzleTile puzzletile = new PuzzleTile(mobname, imageOpen, imageClosed);
         addExtras(tileData, puzzletile);
+        addFlagsFromYAML(tileData, puzzletile);
         return puzzletile;
     }
     
@@ -299,6 +318,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         Image imageClosed = new Image((String)tileData.get("imageUnlit"));
         CircuitTile circuittile = new CircuitTile(mobname, openPaths, imageOpen, imageClosed);
         addExtras(tileData, circuittile);
+        addFlagsFromYAML(tileData, circuittile);
         return circuittile;
     }
     
@@ -310,6 +330,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         Door door = new Door(mobname, imageOpen, imageClosed, collisionLevel); 
         Map extras = (Map)doorData.get("extras");
         addExtras(doorData, door);
+        addFlagsFromYAML(doorData, door);
         return door;
     }
     

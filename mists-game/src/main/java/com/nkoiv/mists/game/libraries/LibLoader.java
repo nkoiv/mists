@@ -62,6 +62,7 @@ public class LibLoader {
                     if (library instanceof MobLibrary) {
                         MapObject mob = MobLibrary.generateFromYAML(libraryObjectData);
                         //Mists.logger.info("Got "+mob.getName()+ " from YAML parsing");
+                        ((MobLibrary)library).setTemplateID(libraryObjectData, mob);
                         ((MobLibrary)library).addTemplate(mob);
                     }
                     if (library instanceof ItemLibrary) {

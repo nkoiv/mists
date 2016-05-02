@@ -81,7 +81,7 @@ public abstract class Toolkit {
     public static double angleFromCoordinates(double xFrom, double yFrom, double xTo, double yTo) {
         double deltaX = xTo - xFrom;
         double deltaY = yTo - yFrom;
-        Mists.logger.info("Angle from "+xFrom+"x"+yFrom+" to "+xTo+"x"+yTo+" is "+(Math.atan2(deltaY, deltaX)*180.0/Math.PI));
+        //Mists.logger.info("Angle from "+xFrom+"x"+yFrom+" to "+xTo+"x"+yTo+" is "+(Math.atan2(deltaY, deltaX)*180.0/Math.PI));
         return Math.atan2(deltaY, deltaX)*180.0/Math.PI;
     }
     

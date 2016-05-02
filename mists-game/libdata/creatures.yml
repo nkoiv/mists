@@ -1,6 +1,6 @@
 ---
-#"monsterID" is mandatory and unique identifier
-monsterID: 1
+#"templateID" is a unique identifier, if not given, one will be generated
+templateID: 1
 #"name" is mandatory, but doesn't need to be unique (though probably it should be)
 name: "Worm"
 #"type" is mandatory and used to differentiate various MapObject types.
@@ -26,7 +26,7 @@ attributes:
 flags:
  collisionLevel: 5
 ---
-monsterID: 2
+templateID: 2
 name: "Rabbit"
 type: "Creature"
 aiType: "monster"
@@ -42,7 +42,7 @@ attributes:
 flags:
  collisionLevel: 5
 ---
-monsterID: 3
+templateID: 3
 name: "Eggy"
 type: "Creature"
 aiType: "monster"
@@ -58,7 +58,7 @@ attributes:
 flags:
  collisionLevel: 5
 ---
-monsterID: 4
+templateID: 4
 name: "Swampy"
 type: "Creature"
 aiType: "monster"
@@ -74,7 +74,7 @@ attributes:
 flags:
  collisionLevel: 5
 ---
-monsterID: 5
+templateID: 5
 name: "Blob"
 type: "Creature"
 aiType: "monster"
@@ -90,7 +90,7 @@ attributes:
 flags:
  collisionLevel: 5
 ---
-monsterID: 100
+templateID: 100
 name: "VillageShopkeeper"
 type: "Creature"
 aiType: "villager"

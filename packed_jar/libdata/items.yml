@@ -16,6 +16,12 @@ damage: 12
 id: 3
 name: "Himmutoy"
 type: "Misc"
-description: "It's so fluffy!"
+description: "it's so fluffy!"
 image: "/images/himmuToyMini.png"
- 
+---
+id: 3
+name: "Bow"
+type: "Ranged 2h"
+description: "a basic ranged weapon"
+image: "/images/bow.png"
+damage: 10

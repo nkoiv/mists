@@ -9,7 +9,6 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.world.GameMap;
