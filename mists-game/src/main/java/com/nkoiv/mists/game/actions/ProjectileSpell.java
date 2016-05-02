@@ -28,12 +28,10 @@ public class ProjectileSpell extends Action implements AttackAction {
     private SpriteAnimation explosionAnimation;
     private ArrayList damagedMobs = new ArrayList<>();
     
-    public ProjectileSpell(String name) {
+    public ProjectileSpell(String name, SpriteAnimation projectileAnimation, SpriteAnimation explosionAnimation) {
         super(name, ActionType.RANGED_ATTACK);
-        this.projectileAnimation = new SpriteAnimation(new ImageView("/images/environment/torch_flame.png"), 4, 0, 0, 0, 0, 32, 32);
-        this.projectileAnimation.setAnimationSpeed(100);
-        this.explosionAnimation = new SpriteAnimation(new ImageView("/images/effects/explosion-4.png"), 12, 0, 0, 0, 0, 128, 128);
-        this.explosionAnimation.setAnimationSpeed(50);
+        this.projectileAnimation = projectileAnimation;
+        this.explosionAnimation = explosionAnimation;
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
         this.setFlag("cooldown", 2500);
@@ -41,6 +39,16 @@ public class ProjectileSpell extends Action implements AttackAction {
         this.setFlag("damage", 10);
         this.setFlag("projectilespeed", 200);
         this.setFlag("projectilerange", 2000);
+    }
+    
+    public ProjectileSpell(String name) {
+        this(name,
+            new SpriteAnimation(new ImageView("/images/environment/torch_flame.png"), 4, 0, 0, 0, 0, 32, 32), 
+            new SpriteAnimation(new ImageView("/images/effects/explosion-4.png"), 12, 0, 0, 0, 0, 128, 128)
+        );
+        this.projectileAnimation.setAnimationSpeed(100);
+        this.explosionAnimation.setAnimationSpeed(50);
+        
     }
 
     public void setAnimation(ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
