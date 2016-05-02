@@ -91,8 +91,8 @@ public class Wall extends Structure {
      */
     public void updateNeighbours() {
         boolean noNeedForLowerDiagonals = false; //Flag if [6] is set, in which case [5] and [7] are not needed
+        if (this.wallimages == null) this.generateWallImages(this.wallparts);
         if (!this.useExtrasForWalls) {
-            if (this.wallimages == null) this.generateWallImages(this.wallparts);
             this.getSprite().setImage(this.composeImage());
             //Still always use the extra for [1], aka top wall
             //so creatures can move behind it!
