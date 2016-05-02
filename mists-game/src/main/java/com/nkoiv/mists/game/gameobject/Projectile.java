@@ -5,28 +5,32 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
-import javafx.scene.canvas.GraphicsContext;
+import com.nkoiv.mists.game.actions.Action;
+import com.nkoiv.mists.game.sprites.Sprite;
 
 /**
- *
+ * Projectile is a type of effect that has
+ * velocity on a vector by default
  * @author nikok
  */
 public class Projectile extends Effect {
-
-    private double xTarget;
-    private double yTarget;
     
-    public Projectile(String name) {
-        super(name);
+    double xVelocity;
+    double yVelocity;
+    
+    public Projectile(Action owner, String name, Sprite sprite, int durationMS, double xVelocity, double yVelocity) {
+        super(owner, name, sprite, durationMS);
+        ((Sprite)(this.graphics)).setVelocity(xVelocity, yVelocity);
+        this.xVelocity = xVelocity;
+        this.yVelocity = yVelocity;
+    }
+
+    public double getInitialXVelocity() {
+        return this.xVelocity;
     }
     
-        @Override
-    public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        //Mists.logger.log(Level.INFO, "Rendering the Effect [{0}]", this.getName());
-        if (this.isFlagged("visible")) {
-            this.getSprite().render(xOffset, yOffset, gc);
-        }
-        if(System.currentTimeMillis() > this.endTime)this.setRemovable();
-    }  
+    public double getInitialYVelocity() {
+        return this.yVelocity;
+    }
     
 }

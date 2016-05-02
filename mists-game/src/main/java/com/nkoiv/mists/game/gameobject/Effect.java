@@ -91,7 +91,7 @@ public class Effect extends MapObject {
         }
     }   
     
-    private void updatePosition() {
+    protected void updatePosition() {
         if (linkedObject.getXPos() != oldLinkX) {
             this.getSprite().setXPosition(this.getSprite().getXPos() + (linkedObject.getXPos()- oldLinkX));
             oldLinkX = linkedObject.getXPos();

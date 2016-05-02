@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.Projectile;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
@@ -72,14 +73,15 @@ public class ProjectileSpell extends Action implements AttackAction {
             double attackPointY = (directionXY[1] * actor.getHeight())/2 + actor.getCenterYPos();
             double projectileSpeed = this.getFlag("projectilespeed");
             int duration = (int)(this.getFlag("projectilerange") / projectileSpeed * 100);
-            Effect attackEffect = new Effect(
+            Projectile attackProjectile = new Projectile(
                     this, "projectile",
-                    this.createSprite(projectileAnimation, actor.getXPos(), actor.getYPos()),duration);
-            attackEffect.getSprite().setVelocity(directionXY[0]*projectileSpeed, directionXY[1]*projectileSpeed);
+                    this.createSprite(projectileAnimation,
+                     actor.getXPos(), actor.getYPos()), duration,
+                    directionXY[0]*projectileSpeed, directionXY[1]*projectileSpeed);
             //Put the effect on the list for keeping tabs on it
-            this.effects.add(attackEffect);
+            this.effects.add(attackProjectile);
             //Put the effect on the actor
-            actor.getLocation().addEffect(attackEffect,
+            actor.getLocation().addEffect(attackProjectile,
                     (attackPointX-(this.projectileAnimation.getFrameWidth()/2)),
                     (attackPointY-(this.projectileAnimation.getFrameHeight()/2)));
         }
