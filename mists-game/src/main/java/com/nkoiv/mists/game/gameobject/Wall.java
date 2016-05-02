@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -43,7 +44,7 @@ import javafx.scene.paint.Color;
  */
 public class Wall extends Structure {
     //GeneratedWallImages key: templateID+"-"+Arrays.toString(neighbours)
-    private static final HashMap<String, Image[]> generatedWallImages = new HashMap<>();
+    private static final HashMap<String, Image> generatedCompositeImages = new HashMap<>();
     
     private ImageView wallparts;
     private Image[] wallimages;
@@ -212,27 +213,32 @@ public class Wall extends Structure {
         }
     }
     
+    
     private Image composeImage() {
-        
-        Image[] extraImages = new Image[9];
-        extraImages[0] = Mists.graphLibrary.getImage("black");
-        int n = 1;
-        boolean noNeedForLowerCardinals = true; //neighbours[6] //TODO: Do we EVER need the lower corners?
-        for (int i = 0; i < this.neighbours.length; i++) {
-            if (!this.neighbours[i]) {
-                if ((i == 5 || i == 7) && noNeedForLowerCardinals) {
-                    //No need to add lower right or lower left corner if lower center is present
-                } else {
-                    extraImages[n] = this.wallimages[i];
-                    n++;
+        String wallImagesKey = (this.templateID+"-"+Arrays.toString(this.neighbours));
+        if (!generatedCompositeImages.containsKey(wallImagesKey)) {
+            Mists.logger.log(Level.INFO, "Composite image for {0} was not found, creating one", wallImagesKey);
+           Image[] extraImages = new Image[9];
+            extraImages[0] = Mists.graphLibrary.getImage("black");
+            int n = 1;
+            boolean noNeedForLowerCardinals = true; //neighbours[6] //TODO: Do we EVER need the lower corners?
+            for (int i = 0; i < this.neighbours.length; i++) {
+                if (!this.neighbours[i]) {
+                    if ((i == 5 || i == 7) && noNeedForLowerCardinals) {
+                        //No need to add lower right or lower left corner if lower center is present
+                    } else {
+                        extraImages[n] = this.wallimages[i];
+                        n++;
+                    }
                 }
             }
-        }
-        if (n == 0) return Mists.graphLibrary.getImage("blank");
-        Image[] trimmedExtraImages = new Image[n];
-        System.arraycopy(extraImages, 0, trimmedExtraImages, 0, n);
-        if (trimmedExtraImages.length == 1) return trimmedExtraImages[0];
-        return Toolkit.mergeImage(false, trimmedExtraImages);
+            if (n == 0) return Mists.graphLibrary.getImage("blank");
+            Image[] trimmedExtraImages = new Image[n];
+            System.arraycopy(extraImages, 0, trimmedExtraImages, 0, n);
+            if (trimmedExtraImages.length == 1) return trimmedExtraImages[0];
+            generatedCompositeImages.put(wallImagesKey, Toolkit.mergeImage(false, trimmedExtraImages));
+        } 
+        return generatedCompositeImages.get(wallImagesKey);
     }
     
     public void setWallImages(Image[] wallimages) {
@@ -274,17 +280,10 @@ public class Wall extends Structure {
     }
     
     public void generateWallImages(ImageView wallparts) {
-        Mists.logger.info("Checking if correct wallimage array already exists");
-        String wallImagesKey = this.templateID+"-"+Arrays.toString(this.neighbours);
-        if (generatedWallImages.containsKey(wallImagesKey)) {
-            this.wallimages = generatedWallImages.get(wallImagesKey);
-        } else  {
-            generatedWallImages.put(wallImagesKey, generateNewWallImageArrayFromNeighbours(this. wallparts, this.neighbours));
-        }
-        
+        this.wallimages = generateNewWallImageArray(wallparts);
     }
     
-    private Image[] generateNewWallImageArrayFromNeighbours(ImageView wallparts, boolean[] neighbours) {
+    private Image[] generateNewWallImageArray(ImageView wallparts) {
         Mists.logger.info("Generating wallimages from wallparts");
         WritableImage snapshot = null;
         SnapshotParameters parameters = new SnapshotParameters();
@@ -320,7 +319,8 @@ public class Wall extends Structure {
             "ID "+this.IDinLocation+" @ "+this.location.getName(),
             "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
             "Neighbours: ",
-            Arrays.toString(neighbours)
+            Arrays.toString(neighbours),
+            "WIK: "+this.templateID+"-"+Arrays.toString(this.neighbours),
         };
         return s;
     }
@@ -329,6 +329,7 @@ public class Wall extends Structure {
     public Wall createFromTemplate() {
         if (this.wallimages == null) this.generateWallImages(this.wallparts);
         Wall newWall = new Wall(this.name, this.getSprite().getImage(), this.getCollisionLevel(), this.wallimages);
+        newWall.setTemplateID(this.templateID);
         newWall.setTopWallAdjust(topWallAdjustX, topWallAdjustY);
         return newWall;
     }

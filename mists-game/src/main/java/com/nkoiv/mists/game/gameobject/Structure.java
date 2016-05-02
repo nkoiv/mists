@@ -110,6 +110,7 @@ public class Structure extends MapObject {
     @Override
     public Structure createFromTemplate() {
         Structure ns = new Structure(this.name, this.getSprite().getImage(), this.collisionLevel);
+        ns.templateID = this.templateID;
         if (this.getSprite().isAnimated()) {
             ns.getSprite().setAnimation(this.getSprite().getAnimation());
         }
