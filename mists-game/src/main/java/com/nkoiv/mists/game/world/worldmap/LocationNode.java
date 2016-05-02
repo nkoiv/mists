@@ -14,20 +14,30 @@ import javafx.scene.image.Image;
  
 public class LocationNode extends MapNode {
         
-        private int locationID; //if already created
-        private int locationSeed; //if random generated
+    private int locationID; //if already created
+    private int locationSeed; //if random generated
+
+
+    public LocationNode(String name, Image image, int locationID) {
+        super(name, image);
+        this.locationID = locationID;
+    }
+
+    public void setLocationID(int locationID) {
+        this.locationID = locationID;
+    }
+
+    public int getLocationID() {
+        return this.locationID;
+    }
+
+    public int getLocationSeed() {
+        return locationSeed;
+    }
+
+    public void setLocationSeed(int locationSeed) {
+        this.locationSeed = locationSeed;
+    }
         
         
-        public LocationNode(String name, Image image, int locationID) {
-            super(name, image);
-            this.locationID = locationID;
-        }
-        
-        public void setLocationID(int locationID) {
-            this.locationID = locationID;
-        }
-        
-        public int getLocationID() {
-            return this.locationID;
-        }
 }
