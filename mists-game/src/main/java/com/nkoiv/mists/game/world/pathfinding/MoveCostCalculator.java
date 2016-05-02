@@ -16,9 +16,9 @@ import java.util.List;
 public class MoveCostCalculator {
     
     private int type;
-    private int MANHATTAN_DISTANCE = 0;
-    private int DIAGONAL_DISTANCE = 1;
-    private int EUCLIDEAN_DISTANCE = 2;
+    public static int MANHATTAN_DISTANCE = 0;
+    public static int DIAGONAL_DISTANCE = 1;
+    public static int EUCLIDEAN_DISTANCE = 2;
     
     
     public MoveCostCalculator () {
