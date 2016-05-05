@@ -12,7 +12,9 @@ import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 
 /**
- *
+ * MapEntrance serves to move players from WorldMap
+ * to Location and vice versa. Each MapEntrance is linked
+ * to a WorldMap Node, while being a MapObject inside a Location.
  * @author nikok
  */
 public class MapEntrance extends Structure {
