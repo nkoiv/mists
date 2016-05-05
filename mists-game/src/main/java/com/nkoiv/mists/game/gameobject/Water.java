@@ -218,7 +218,7 @@ public class Water extends Structure implements HasNeighbours{
         if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, true, true})) return randomIDFromArray(new int[]{10, 15,16, 17});
         
         
-        //Special variations
+        //Corner variations
         /*  +----9----+-----9---+---11----+---11----+
             |[x][x][x]|[ ][x][x]|[x][x][x]|[x][x][ ]|
             |[ ][0][x]|[ ][0][x]|[x][0][ ]|[x][0][ ]|
@@ -237,6 +237,16 @@ public class Water extends Structure implements HasNeighbours{
         if (Arrays.equals(neighbours, new boolean[]{false, false, true, true, true, true, true, true})) return 7;
         if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, false, false})) return 13;
         if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, false, false, true})) return 13;
+        /*  +----6----+----8----+----12---+----14---+
+            |[ ][ ][ ]|[ ][ ][ ]|[x][x][x]|[x][x][x]|
+            |[ ][0][x]|[x][0][ ]|[ ][0][x]|[x][0][ ]|
+            |[x][x][x]|[x][x][x]|[ ][ ][ ]|[ ][ ][ ]|
+            +---------+---------+---------+ */
+        if (Arrays.equals(neighbours, new boolean[]{false, false, false, false, true, true, true, true})) return 6;
+        if (Arrays.equals(neighbours, new boolean[]{false, false, false, true, false, true, true, true})) return 8;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, false, true, false, false, false})) return 12;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, false, false, false, false})) return 14;
+        
         
         //Reaching here means we have a weird neighbours-array
         Mists.logger.log(Level.WARNING, "WARNING: {0} at {1}x{2} has neighbours: {3}", new Object[]{this.getName(), this.getXPos(), this.getYPos(), Arrays.toString(this.neighbours)});
