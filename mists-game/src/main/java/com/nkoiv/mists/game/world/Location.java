@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.HasNeighbours;
 import com.nkoiv.mists.game.gameobject.MapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
@@ -222,6 +223,12 @@ public class Location extends Flags implements Global {
                     //}   
                 }
         }
+        Structure s = (getStructureAtLocation(xCoor, yCoor));
+        if (s!=null) mobAtLocation = s;
+        return mobAtLocation;
+    }
+    
+    public Structure getStructureAtLocation(double xCoor, double yCoor) {
         if (!this.structures.isEmpty()) {
             //Check the collisionmap first
             //No structure on collisionmap means no need to iterate through all structures (or spatials)
@@ -236,7 +243,7 @@ public class Location extends Flags implements Global {
                 }
             }
         }
-        return mobAtLocation;
+        return null;
     }
     
     /**
@@ -879,6 +886,15 @@ public class Location extends Flags implements Global {
         if (removedWalls.isEmpty()) return;
         for (Wall w : removedWalls) {
             updateWallsAt(w.getCenterXPos(), w.getCenterYPos());
+        }
+    }
+    
+    public void updateAllVariableGraphicStructures() {
+        for (Structure s : this.structures) {
+            if (s instanceof HasNeighbours) {
+                ((HasNeighbours)s).setNeighbours(((HasNeighbours)s).checkNeighbours());
+                ((HasNeighbours)s).updateGraphicsBasedOnNeighbours();
+            }
         }
     }
     

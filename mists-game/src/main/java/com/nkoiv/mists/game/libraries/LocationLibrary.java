@@ -128,7 +128,7 @@ public class LocationLibrary  {
         }
         //l.setMinLightLevel(template.lightlevel);
         if (template.lightlevel > 0) l.getEnvironment().setLightlevel(template.lightlevel);
-        
+        l.updateAllVariableGraphicStructures();
         l.loading = false;
         return l;
     }
@@ -146,15 +146,13 @@ public class LocationLibrary  {
     }
     */
     
-    
-      
     public static Structure generateStructureFromYAML(Map structureDataMap) {
         Structure s = null;
         try {
             String templateName = (String)structureDataMap.get("structure");
             s = Mists.structureLibrary.getTemplate(templateName);
         } catch (Exception e) {
-            Mists.logger.warning("Error generating structure from StructureDataMap");
+            Mists.logger.log(Level.WARNING, "Error generating structure from StructureDataMap: {0}", structureDataMap.toString());
         }
         return s;
     }

@@ -100,28 +100,28 @@ public class Wall extends Structure implements HasNeighbours {
         double yCoor = this.getCenterYPos();
         MapObject mob;
         //UpLeft
-        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor-this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor-this.getWidth(), yCoor-this.getHeight());
         if (mob instanceof Wall) newNeighbours[0] = true;
         //Up
-        mob = this.location.getMobAtLocation(xCoor, yCoor-this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor, yCoor-this.getHeight());
         if (mob instanceof Wall) newNeighbours[1] = true;
         //UpRight
-        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor-this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor+this.getWidth(), yCoor-this.getHeight());
         if (mob instanceof Wall) newNeighbours[2] = true;
         //Left
-        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor);
+        mob = this.location.getStructureAtLocation(xCoor-this.getWidth(), yCoor);
         if (mob instanceof Wall) newNeighbours[3] = true;
         //Right
-        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor);
+        mob = this.location.getStructureAtLocation(xCoor+this.getWidth(), yCoor);
         if (mob instanceof Wall) newNeighbours[4] = true;
         //DownLeft
-        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor+this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor-this.getWidth(), yCoor+this.getHeight());
         if (mob instanceof Wall) newNeighbours[5] = true;
         //Down
-        mob = this.location.getMobAtLocation(xCoor, yCoor+this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor, yCoor+this.getHeight());
         if (mob instanceof Wall) newNeighbours[6] = true;
         //DownRight
-        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor+this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor+this.getWidth(), yCoor+this.getHeight());
         if (mob instanceof Wall) newNeighbours[7] = true;
         
         return newNeighbours;

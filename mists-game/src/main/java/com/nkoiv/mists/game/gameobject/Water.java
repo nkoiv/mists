@@ -6,10 +6,12 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.logging.Level;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -22,18 +24,19 @@ import javafx.scene.paint.Color;
  * to be tiled to look nice. Not much unlike Walls.
  * @author nikok
  */
-public class Water extends MapObject implements HasNeighbours{
+public class Water extends Structure implements HasNeighbours{
     private boolean[] neighbours;
     private ImageView waterImages;
     private ImageView waterImages_alt;
     private SpriteAnimation[] animatedTiles;
     
     public Water(String name, ImageView shapeImages, ImageView shapeImages_alt) {
-        super(name);
+        super(name, new Sprite(), 10);
         this.waterImages = shapeImages;
         this.waterImages_alt = shapeImages_alt;
         this.graphics = new Sprite(this.getImageFromImageView(shapeImages, 0, 0));
         this.neighbours = new boolean[8];
+        this.animatedTiles = new SpriteAnimation[18];
     }
     
     @Override
@@ -44,28 +47,28 @@ public class Water extends MapObject implements HasNeighbours{
         double yCoor = this.getCenterYPos();
         MapObject mob;
         //UpLeft
-        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor-this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor-this.getWidth(), yCoor-this.getHeight());
         if (mob instanceof Water) newNeighbours[0] = true;
         //Up
-        mob = this.location.getMobAtLocation(xCoor, yCoor-this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor, yCoor-this.getHeight());
         if (mob instanceof Water) newNeighbours[1] = true;
         //UpRight
-        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor-this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor+this.getWidth(), yCoor-this.getHeight());
         if (mob instanceof Water) newNeighbours[2] = true;
         //Left
-        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor);
+        mob = this.location.getStructureAtLocation(xCoor-this.getWidth(), yCoor);
         if (mob instanceof Water) newNeighbours[3] = true;
         //Right
-        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor);
+        mob = this.location.getStructureAtLocation(xCoor+this.getWidth(), yCoor);
         if (mob instanceof Water) newNeighbours[4] = true;
         //DownLeft
-        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor+this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor-this.getWidth(), yCoor+this.getHeight());
         if (mob instanceof Water) newNeighbours[5] = true;
         //Down
-        mob = this.location.getMobAtLocation(xCoor, yCoor+this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor, yCoor+this.getHeight());
         if (mob instanceof Water) newNeighbours[6] = true;
         //DownRight
-        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor+this.getHeight());
+        mob = this.location.getStructureAtLocation(xCoor+this.getWidth(), yCoor+this.getHeight());
         if (mob instanceof Water) newNeighbours[7] = true;
         
         return newNeighbours;
@@ -104,6 +107,17 @@ public class Water extends MapObject implements HasNeighbours{
     public void removeNeighbour(int n) {
         this.neighbours[n] = false;
     }
+    
+    /**
+     * Preload the imageviews in this watertile
+     * into SpriteAnimations, so they can be accessed
+     * (and copied) faster later.
+     */
+    public void generateWaterTilesFromImageView() {
+        for (int i = 0; i < this.animatedTiles.length; i++) {
+            animatedTiles[i] = generateSpriteAnimationFromImageViews(i);
+        }
+    }
 
     private SpriteAnimation generateSpriteAnimationFromImageViews(int tileID) {
         switch (tileID) {
@@ -122,6 +136,9 @@ public class Water extends MapObject implements HasNeighbours{
             case 12: return generateSpriteAnimationFromImageViews(0,4);
             case 13: return generateSpriteAnimationFromImageViews(1,4);
             case 14: return generateSpriteAnimationFromImageViews(2,4);
+            case 15: return generateSpriteAnimationFromImageViews(0,5);
+            case 16: return generateSpriteAnimationFromImageViews(1,5);
+            case 17: return generateSpriteAnimationFromImageViews(2,5);
             default: return generateSpriteAnimationFromImageViews(0,0);
         }
     }
@@ -140,7 +157,7 @@ public class Water extends MapObject implements HasNeighbours{
         SnapshotParameters parameters = new SnapshotParameters();
         parameters.setFill(Color.TRANSPARENT);
         
-        imageview.setViewport(new Rectangle2D(x,y, imageview.getImage().getWidth()/3,imageview.getImage().getHeight()/5));
+        imageview.setViewport(new Rectangle2D(x,y, imageview.getImage().getWidth()/3,imageview.getImage().getHeight()/6));
         return imageview.snapshot(parameters, snapshot);
     }
     
@@ -175,24 +192,55 @@ public class Water extends MapObject implements HasNeighbours{
         if (Arrays.equals(neighbours, new boolean[]{false, false, false, false, true, false, true, true})) return 6;
         if (Arrays.equals(neighbours, new boolean[]{false, false, false, true, true, true, true, true})) return 7;
         if (Arrays.equals(neighbours, new boolean[]{false, false, false, true, false, true, true, false})) return 8;
-        /*  +----9----+----10---+----11---+
+        /*  +----9----+----10---+---11----+
+            |[ ][x][x]|[x][x][x]|[x][x][ ]|
+            |[ ][x][x]|[x][x][x]|[x][x][ ]|
+            |[ ][x][x]|[x][x][x]|[x][x][ ]|
+            +---------+---------+---------+ */
+        if (Arrays.equals(neighbours, new boolean[]{false, true, true, false, true, false, true, true})) return 9;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, true, true})) return randomIDFromArray(new int[]{10, 15,16, 17});
+        if (Arrays.equals(neighbours, new boolean[]{true, true, false, true, false, true, true, false})) return 11;
+        /*  +----12---+----13---+----14---+
             |[ ][x][x]|[x][x][x]|[x][x][ ]|
             |[ ][0][x]|[x][0][x]|[x][0][ ]|
             |[ ][ ][ ]|[ ][ ][ ]|[ ][ ][ ]|
             +---------+---------+---------+ */
-        if (Arrays.equals(neighbours, new boolean[]{false, true, true, false, true, false, false, false})) return 9;
-        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, false, false, false})) return 10;
-        if (Arrays.equals(neighbours, new boolean[]{true, true, false, true, false, false, false, false})) return 11;
-        /*  +----12---+----13---+----14---+
+        if (Arrays.equals(neighbours, new boolean[]{false, true, true, false, true, false, false, false})) return 12;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, false, false, false})) return 13;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, false, true, false, false, false, false})) return 14;
+        /*  +----15---+----16---+----17---+
             |[x][x][x]|[x][x][x]|[x][x][x]|
             |[x][0][x]|[x][0][x]|[x][0][x]|
             |[x][x][x]|[x][x][x]|[x][x][x]|
             +---------+---------+---------+ */
-        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, true, true})) return randomIDFromArray(new int[]{12,13, 14});
-        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, true, true})) return randomIDFromArray(new int[]{12,13, 14});
-        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, true, true})) return randomIDFromArray(new int[]{12,13, 14});
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, true, true})) return randomIDFromArray(new int[]{10, 15,16, 17});
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, true, true})) return randomIDFromArray(new int[]{10, 15,16, 17});
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, true, true})) return randomIDFromArray(new int[]{10, 15,16, 17});
         
-        return -1;
+        
+        //Special variations
+        /*  +----9----+-----9---+---11----+---11----+
+            |[x][x][x]|[ ][x][x]|[x][x][x]|[x][x][ ]|
+            |[ ][0][x]|[ ][0][x]|[x][0][ ]|[x][0][ ]|
+            |[ ][x][x]|[x][x][x]|[x][x][ ]|[x][x][x]|
+            +---------+---------+---------+---------+ */
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, false, true, false, true, true})) return 9;
+        if (Arrays.equals(neighbours, new boolean[]{false, true, true, false, true, true, true, true})) return 9;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, false, true, true, false})) return 11;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, false, true, false, true, true, true})) return 11;
+        /*  +----7----+-----7---+---13----+---13----+
+            |[x][ ][ ]|[ ][ ][x]|[x][x][x]|[x][x][x]|
+            |[x][0][x]|[x][0][x]|[x][0][x]|[x][0][x]|
+            |[x][x][x]|[x][x][x]|[x][ ][ ]|[ ][ ][x]|
+            +---------+---------+---------+---------+ */
+        if (Arrays.equals(neighbours, new boolean[]{true, false, false, true, true, true, true, true})) return 7;
+        if (Arrays.equals(neighbours, new boolean[]{false, false, true, true, true, true, true, true})) return 7;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, true, false, false})) return 13;
+        if (Arrays.equals(neighbours, new boolean[]{true, true, true, true, true, false, false, true})) return 13;
+        
+        //Reaching here means we have a weird neighbours-array
+        Mists.logger.log(Level.WARNING, "WARNING: {0} at {1}x{2} has neighbours: {3}", new Object[]{this.getName(), this.getXPos(), this.getYPos(), Arrays.toString(this.neighbours)});
+        return 0;
     }
     
     @Override

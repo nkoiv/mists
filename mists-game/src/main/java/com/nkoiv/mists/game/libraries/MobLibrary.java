@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.gameobject.Water;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.Location;
@@ -113,6 +114,8 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                 return generateStructureFromYAML(mobData);
             case "Wall": Mists.logger.info("Generating WALL");
                 return generateWallFromYAML(mobData);
+            case "Water": Mists.logger.info("Generating WATER");
+                return generateWaterFromYAML(mobData);
             case "ItemContainer": Mists.logger.info("Generating ITEM CONTAINER");
                 return generateItemContainerFromYAML(mobData);
             case "MapEntrance": Mists.logger.info("Generating MAP ENTRANCE");
@@ -279,6 +282,17 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return wall;
     }
     
+    private static Water generateWaterFromYAML(Map waterData) {
+        String mobname = (String)waterData.get("name");
+        int collisionLevel = Integer.parseInt((String)waterData.get("collisionLevel"));
+        ImageView waterImages = new ImageView((String)waterData.get("image_anim1"));
+        ImageView waterImages_alt = new ImageView((String)waterData.get("image_anim2"));
+        Water water = new Water(mobname, waterImages, waterImages_alt);
+        water.setCollisionLevel(collisionLevel);
+        water.generateWaterTilesFromImageView();
+        addFlagsFromYAML(waterData, water);
+        return water;
+    }
     
     private static MapEntrance generateMapEntranceFromYAML(Map entranceData) {
         String mobname = (String)entranceData.get("name");

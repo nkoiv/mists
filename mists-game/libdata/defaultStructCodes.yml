@@ -11,6 +11,9 @@ structure: "StoneWall3"
 symbol: "%"
 structure: "VillageWall"
 ---
+symbol: "~"
+structure: "Water"
+---
 symbol: "+"
 structure: "DungeonDoor"
 ---

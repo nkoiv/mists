@@ -116,7 +116,7 @@ public class LibLoader {
                         Mists.logger.info("Added "+structure.getName()+" on tileCode "+tileCode);
                     }
                 } catch (Exception e) {
-                    Mists.logger.warning("Failed parsing "+object.toString());
+                    Mists.logger.warning("Failed parsing Structure Code for "+object.toString());
                     Mists.logger.warning(e.toString());
                 }
                 
