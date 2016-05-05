@@ -84,6 +84,32 @@ public class Wall extends Structure implements HasNeighbours {
         this.topWallAdjustX = topWallAdjustX;
         this.topWallAdjustY = topWallAdjustY;
     }
+    /**
+     * Check the current location of this object
+     * and get the neighbouring walls as an array
+     * [0][1][2]
+     * [3]   [4]   
+     * [5][6][7]
+     * @return Array of neighbouring walls
+     */
+    @Override
+    public boolean[] checkNeighbours() {
+        boolean[] newNeighbours = new boolean[8];
+        if (this.location == null) return newNeighbours;
+        double xCoor = this.getCenterXPos();
+        double yCoor = this.getCenterYPos();
+        //UpLeft
+        
+        //Up
+        //UpRight
+        //Left
+        //Right
+        //DownLeft
+        //Down
+        //DownRight
+        
+        return newNeighbours;
+    }
     
     /**
      * Scan the surrounding walls for neighbouring walls,

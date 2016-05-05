@@ -51,7 +51,8 @@ import javafx.scene.shape.Line;
 public class Location extends Flags implements Global {
     //private QuadTree mobQuadTree; //Used for collision detection //retired idea for now
     private int baseLocationID;
-    private HashMap<Integer, HashSet> spatial; //New idea for lessening collision detection load
+    private HashMap<Integer, HashSet> creatureSpatial; //New idea for lessening collision detection load
+    private HashMap<Integer, HashSet> structureSpatial; //New idea for lessening collision detection load
     private ArrayList<Creature> creatures;
     private ArrayList<Structure> structures;
     private ArrayList<TriggerPlate> triggerPlates;
@@ -136,7 +137,8 @@ public class Location extends Flags implements Global {
         this.lights = new LightsRenderer(this);
         this.shadows = new RayShadows();
         this.targets = new ArrayList<>();
-        this.spatial = new HashMap<>();
+        this.creatureSpatial = new HashMap<>();
+        this.structureSpatial = new HashMap<>();
         this.roofs = new ArrayList<>();
         //this.mobQuadTree = new QuadTree(0, new Rectangle(0,0,this.map.getWidth(),this.map.getHeight()));
         Mists.logger.log(Level.INFO, "Map ({0}x{1}) localized", new Object[]{map.getWidth(), map.getHeight()});
@@ -210,25 +212,28 @@ public class Location extends Flags implements Global {
      */
     public MapObject getMobAtLocation(double xCoor, double yCoor) {
         MapObject mobAtLocation = null;
-        if (!this.creatures.isEmpty()) {
-            for (Creature mob : this.creatures) {
-                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth() &&
+        int spatialID = this.getSpatial(xCoor, yCoor);
+        for (Creature mob : (HashSet<Creature>)this.creatureSpatial.get(spatialID)) {
+            if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth() &&
                     yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
                     //Do a pixelcheck on the mob;
                     //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
                     return mob;
                     //}   
                 }
-            }
         }
         if (!this.structures.isEmpty()) {
-            for (Structure mob : this.structures) {
-                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth()) {
-                    if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
-                        return mob;
+            //Check the collisionmap first
+            //No structure on collisionmap means no need to iterate through all structures (or spatials)
+            if (this.collisionMap.isBlocked(0, (int)xCoor * collisionMap.nodeSize, (int)yCoor * collisionMap.nodeSize)) {
+                for (Structure mob : this.structures) {
+                    if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth()) {
+                        if (yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
+                            return mob;
+                        }
                     }
+
                 }
-                
             }
         }
         return mobAtLocation;
@@ -681,7 +686,7 @@ public class Location extends Flags implements Global {
             server.compileRemovals(creatureCleanup());
             server.compileRemovals(structureCleanup());
             server.compileRemovals(effectCleanup());
-            this.updateSpatials();
+            this.updateCreatureSpatial();
             this.collisionMap.updateCollisionLevels();
         } else this.fullCleanup(true, true, true);
     }
@@ -696,7 +701,7 @@ public class Location extends Flags implements Global {
         if (cleanCreatures) creatureCleanup();
         if (cleanStructures) structureCleanup();
         if (cleanEffects) effectCleanup();
-        this.updateSpatials();
+        this.updateCreatureSpatial();
         this.collisionMap.updateCollisionLevels();
     }
     
@@ -790,51 +795,43 @@ public class Location extends Flags implements Global {
         }
         return removedEffectIDs;
     }
-
-    /**
-     * Update the QuadTree by clearing it and adding
-     * all mobs in the mapObjects.
-     * TODO: Consider keeping structures and creatures separate as creatures are updated more often(?)
-     */
-    /*
-    private void updateQuadTree() {
-        mobQuadTree.clear();
-        for (Creature creature : creatures) {
-            mobQuadTree.insert(creature);
-        }
-        for (Structure structure : structures) {
-            mobQuadTree.insert(structure);
-        }
-    }
-    */
     
-    private void updateSpatials() {
-        if (this.spatial == null) this.spatial = new HashMap<>();
-        clearSpatials();
-        for (MapObject mob : this.creatures) {
-            HashSet<Integer> mobSpatials = getSpatials(mob);
+    private void updateCreatureSpatial() {
+        if (this.creatureSpatial == null) this.creatureSpatial = new HashMap<>();
+        if (this.creatureSpatial != null) this.creatureSpatial.clear();
+        
+        for (MapObject creep : this.creatures) {
+            HashSet<Integer> mobSpatials = getSpatials(creep);
             for (Integer i : mobSpatials) {
-                addToSpatial(mob, i, this.spatial);
+                addToSpatial(creep, i, this.creatureSpatial);
             }
         }
-        
-        /* [ 1][ 2][ 3][ 3]
-        *  [ 4][ 5][ 6][ 7]
-        *  [ 8][ 9][10][11]
-        *  [12][13][14][15]
+
+        /* [ 0][ 1][ 2][ 3][ 4]
+        *  [ 5][ 6][ 7][ 8][ 9]
+        *  [10][11][12][13][14]
+        *  [15][16][17][18][19]
         * Above a spatial node is the node number -5,
         * below it is node number +5 and sides are +/- 1
         */
         
     }
     
+    private void updateStructureSpatial() {
+        if (this.structureSpatial == null) this.structureSpatial = new HashMap<>();
+        if (this.structureSpatial != null) this.structureSpatial.clear();
+        
+        for (MapObject struct : this.structures) {
+            HashSet<Integer> mobSpatials = getSpatials(struct);
+            for (Integer i : mobSpatials) {
+                addToSpatial(struct, i, this.structureSpatial);
+            }
+        }
+    }
+    
     private static void addToSpatial (MapObject mob, int spatialID, HashMap<Integer, HashSet> spatial) {
         if (spatial.get(spatialID) == null) spatial.put(spatialID, new HashSet<MapObject>());
         spatial.get(spatialID).add(mob);
-    }
-    
-    private void clearSpatials () {
-        if (this.spatial != null) this.spatial.clear();
     }
     
     /**
@@ -934,7 +931,7 @@ public class Location extends Flags implements Global {
         HashSet<Integer> mobSpatials = getSpatials(o);
         //Spatials cover the creature collisions
         for (Integer i : mobSpatials) {
-            addMapObjectCollisions(o, this.spatial.get(i), collidingObjects);
+            addMapObjectCollisions(o, this.creatureSpatial.get(i), collidingObjects);
         }
         return collidingObjects;
     }
@@ -951,7 +948,7 @@ public class Location extends Flags implements Global {
         HashSet<Integer> mobSpatials = getSpatials(o);
         //Spatials cover the creature collisions
         for (Integer i : mobSpatials) {
-            addMapObjectCollisions(o, this.spatial.get(i), collidingObjects);
+            addMapObjectCollisions(o, this.creatureSpatial.get(i), collidingObjects);
         }
         
         //Check collisions for structures too

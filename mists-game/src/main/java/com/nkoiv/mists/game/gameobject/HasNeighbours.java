@@ -17,6 +17,8 @@ public interface HasNeighbours {
 
     public boolean[] getNeighbours();
     
+    public boolean[] checkNeighbours();
+    
     /**
      * Supply the object with a new set of neighbours
      * [0][1][2]
