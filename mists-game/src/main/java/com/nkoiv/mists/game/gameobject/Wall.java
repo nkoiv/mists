@@ -265,7 +265,7 @@ public class Wall extends Structure implements HasNeighbours {
     private Image composeImage() {
         String wallImagesKey = (this.templateID+"-"+Arrays.toString(this.neighbours));
         if (!GENERATED_COMPOSITE_IMAGES.containsKey(wallImagesKey)) {
-            Mists.logger.log(Level.INFO, "Composite image for {0} was not found, creating one", wallImagesKey);
+            //Mists.logger.log(Level.INFO, "Composite image for {0} was not found, creating one", wallImagesKey);
             Image[] extraImages = new Image[9];
             extraImages[0] = Mists.graphLibrary.getImage("black");
             int n = 1;
@@ -289,7 +289,7 @@ public class Wall extends Structure implements HasNeighbours {
                 else imageToStore =  Toolkit.mergeImage(false, trimmedExtraImages);
             }
             GENERATED_COMPOSITE_IMAGES.put(wallImagesKey, imageToStore);
-            Mists.logger.info(wallImagesKey+" key placed in GENERATED_COMPOSITE_IMAGES");
+            //Mists.logger.info(wallImagesKey+" key placed in GENERATED_COMPOSITE_IMAGES");
         } 
         return GENERATED_COMPOSITE_IMAGES.get(wallImagesKey);
     }

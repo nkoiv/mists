@@ -9,6 +9,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
+import java.util.logging.Level;
 
 /**
  *
@@ -31,6 +32,7 @@ public class DialogueTrigger implements Trigger {
 
         @Override
         public boolean toggle(MapObject toggler) {
+            Mists.logger.log(Level.INFO, "Initiating dialogue between {0} and {1}", new Object[]{owner.getName(), toggler.getName()});
             dialogue.initiateDialogue(owner, toggler);
             //TODO:Fix this bubblegum thing...
             if (Mists.MistsGame.currentState instanceof LocationState) {

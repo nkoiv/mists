@@ -106,6 +106,7 @@ public class ContextAction {
         int sourceID = -1;
         Trigger t = this.availableTriggers.get(currentTrigger);
         if (t!=null) sourceID = this.triggerSource.get(t).getID();
+        Mists.logger.info("Returning ID "+sourceID+" for trigger "+currentTrigger);
         return sourceID;
     }
     

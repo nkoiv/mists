@@ -270,7 +270,7 @@ public class Location extends Flags implements Global {
         return null;
     }
     
-    private double[] getEntryPoint() {
+    private double[] getEntryPoint(MapNode entryNode) {
         /*TODO: use the HashMap entryPoints to select
         * where the player lands when he first enters the location
         */
@@ -281,11 +281,11 @@ public class Location extends Flags implements Global {
         
         //Just return an open random spot if there's no structure library (for unit tests)
         if (Mists.structureLibrary == null) return this.getRandomOpenSpot(this.getPlayer().getWidth());
-        Mists.logger.log(Level.INFO, "No entrance for the location was found, so generating new one at {0}x{1}", new Object[]{newEntrance[1], newEntrance[2]});
+        Mists.logger.log(Level.INFO, "No entrance for the location was found, so generating new one at {0}x{1}", new Object[]{newEntrance[0], newEntrance[1]});
         MapEntrance newStairs = (MapEntrance)Mists.structureLibrary.create("DungeonStairs");
-        newStairs.setPosition(newEntrance[0], newEntrance[1]);
-        this.addMapObject(newStairs);
-        return this.getRandomOpenSpot(this.getPlayer().getWidth());
+        newStairs.setExitNode(entryNode);
+        this.addMapObject(newStairs, newEntrance[0], newEntrance[1]);
+        return newEntrance;
     }
             
     /**
@@ -1529,13 +1529,15 @@ public class Location extends Flags implements Global {
             Mists.logger.info("Setting exit node to "+entranceNode.getName());
             if (this.getEntrace().getExitNode() == null) this.getEntrace().setExitNode(entranceNode);
         }
-        double[] entryPoint = this.getEntryPoint();
+        double[] entryPoint = this.getEntryPoint(entranceNode);
         this.addPlayerCharacter(p, entryPoint[0], entryPoint[1]);
+        Mists.logger.info("Placing player at "+entryPoint[0]+"x"+entryPoint[1]);
         //Add companions)
         if (p.getCompanions() != null) {
             for (Creature c : p.getCompanions()) {
                 if (c.isRemovable()) c.setRemovable(false);
                 this.addCreature(c, entryPoint[0], entryPoint[1]);
+                Mists.logger.info("Placing "+c.getName()+" at "+entryPoint[0]+"x"+entryPoint[1]);
             }
         }
         this.screenFocus = p;

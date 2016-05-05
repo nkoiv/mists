@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
+import java.util.Objects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
@@ -101,6 +102,17 @@ public abstract class UIComponent implements Comparable<UIComponent>{
     public boolean equals(Object object) {
         if (!(object instanceof UIComponent)) return false;
         return ((UIComponent)object).getName().equals(this.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + (int) (Double.doubleToLongBits(this.width) ^ (Double.doubleToLongBits(this.width) >>> 32));
+        hash = 29 * hash + (int) (Double.doubleToLongBits(this.height) ^ (Double.doubleToLongBits(this.height) >>> 32));
+        hash = 29 * hash + (int) (Double.doubleToLongBits(this.xPosition) ^ (Double.doubleToLongBits(this.xPosition) >>> 32));
+        hash = 29 * hash + (int) (Double.doubleToLongBits(this.yPosition) ^ (Double.doubleToLongBits(this.yPosition) >>> 32));
+        return hash;
     }
     
     @Override

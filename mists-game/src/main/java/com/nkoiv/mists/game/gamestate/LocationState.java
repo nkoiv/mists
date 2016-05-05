@@ -136,6 +136,7 @@ public class LocationState implements GameState {
     
     public void loadDefaultUI() {
         this.uiComponents.clear();
+        this.drawOrder.clear();
         this.infobox = new TextPanel(this, "InfoBox", 250, 150, game.WIDTH-300, game.HEIGHT-500, Mists.graphLibrary.getImageSet("panelBeigeLight"));
         this.infobox.addCloseButton();
         this.playerInventory = new InventoryPanel(this, game.getPlayer().getInventory());
@@ -768,9 +769,19 @@ public class LocationState implements GameState {
     @Override
     public void addUIComponent(UIComponent uic) {
         this.uiComponents.put(uic.getName(), uic);
+        uic.setRenderZ(getNextFreeDrawZ(uic));
         this.drawOrder.add(uic);
         Mists.logger.info("Currently in the UIC-map: "+this.uiComponents.keySet());
         Mists.logger.info("Currently in the drawOrder: "+this.drawOrder.toString());
+    }
+    
+    private int getNextFreeDrawZ(UIComponent uic) {
+        int newRenderZ = uic.getRenderZ();
+        while (drawOrder.contains(uic)) {
+            newRenderZ++;
+            uic.setRenderZ(newRenderZ);
+        }
+        return newRenderZ;
     }
     
     @Override

@@ -121,11 +121,13 @@ public class LocationLibrary  {
             }
         }
         //If no MapEntrance waws found, generate one
+        /*
         if (!entranceFound) {
             MapEntrance stairs = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
             l.addMapObject(stairs);
             l.setMobInRandomOpenSpot(stairs);
         }
+        */
         //l.setMinLightLevel(template.lightlevel);
         if (template.lightlevel > 0) l.getEnvironment().setLightlevel(template.lightlevel);
         l.updateAllVariableGraphicStructures();
