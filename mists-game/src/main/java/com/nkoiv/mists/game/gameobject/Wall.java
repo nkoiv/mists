@@ -262,12 +262,11 @@ public class Wall extends Structure implements HasNeighbours {
 
     }
 
-    
     private Image composeImage() {
         String wallImagesKey = (this.templateID+"-"+Arrays.toString(this.neighbours));
         if (!generatedCompositeImages.containsKey(wallImagesKey)) {
             Mists.logger.log(Level.INFO, "Composite image for {0} was not found, creating one", wallImagesKey);
-           Image[] extraImages = new Image[9];
+            Image[] extraImages = new Image[9];
             extraImages[0] = Mists.graphLibrary.getImage("black");
             int n = 1;
             boolean noNeedForLowerCardinals = true; //neighbours[6] //TODO: Do we EVER need the lower corners?

@@ -61,7 +61,7 @@ public class Sprite extends MovingGraphics
         this.refreshRotationData();
     }
     
-    public Sprite (Image i, double xPosition, double yPosition) {
+    public Sprite(Image i, double xPosition, double yPosition) {
         this(i);
         positionX = xPosition;
         positionY = yPosition;    
@@ -274,14 +274,15 @@ public class Sprite extends MovingGraphics
      */
     private void renderOnScreen(double xOffset, double yOffset, GraphicsContext gc) {
         if (this.animated) {
-                gc.drawImage( this.animation.getCurrentFrame(), positionX-xOffset, positionY-yOffset );
+                gc.drawImage(this.animation.getCurrentFrame(), positionX-xOffset, positionY-yOffset);
                 this.width = this.animation.getCurrentFrame().getWidth();
                 this.height = this.animation.getCurrentFrame().getHeight();
             } else if (this.image != null) {
-                gc.drawImage( image, positionX-xOffset, positionY-yOffset );
+                gc.drawImage(image, positionX-xOffset, positionY-yOffset);
         }
     }
     
+    @Override
     public void renderCollisions(double xOffset, double yOffset, GraphicsContext gc) {
         gc.setStroke(Color.RED);
         switch (this.collisionArea) {
