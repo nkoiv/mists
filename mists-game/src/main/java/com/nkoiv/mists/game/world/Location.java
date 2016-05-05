@@ -215,14 +215,17 @@ public class Location extends Flags implements Global {
         MapObject mobAtLocation = null;
         int spatialID = this.getSpatial(xCoor, yCoor);
         if (!this.creatureSpatial.isEmpty()) {
-            for (Creature mob : (HashSet<Creature>)this.creatureSpatial.get(spatialID)) {
-                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth() &&
-                        yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
-                        //Do a pixelcheck on the mob;
-                        //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
-                        return mob;
-                        //}   
-                    }
+            HashSet<Creature> spatial = this.creatureSpatial.get(spatialID);
+            if (spatial != null) {
+                for (Creature mob : spatial) {
+                    if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth() &&
+                            yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
+                            //Do a pixelcheck on the mob;
+                            //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
+                            return mob;
+                            //}   
+                        }
+                }
             }
         }
         Structure s = (getStructureAtLocation(xCoor, yCoor));
@@ -277,7 +280,7 @@ public class Location extends Flags implements Global {
         for (Structure s : this.structures) {
             if (s instanceof MapEntrance) return new double[]{s.getXPos(), s.getYPos()};
         }
-        double[] newEntrance = this.getRandomOpenSpot(this.getPlayer().getWidth());
+        double[] newEntrance = this.getRandomOpenSpot(32);
         
         //Just return an open random spot if there's no structure library (for unit tests)
         if (Mists.structureLibrary == null) return this.getRandomOpenSpot(this.getPlayer().getWidth());
@@ -1516,20 +1519,10 @@ public class Location extends Flags implements Global {
         //TODO: The cleanup
     }
     
-    /**
-     *  EnterLocation should prepare the location for player
-     * @param p PlayerCharacter entering the location
-     * @param entranceNode WorldMap node the player enters from
-     */
-    public void enterLocation(PlayerCharacter p, MapNode entranceNode) {
+    private void enterLocation(PlayerCharacter p, double[] entryPoint) {
         Mists.logger.info("Location "+this.getName()+" entered. Preparing area...");
         if (p.isRemovable()) p.setRemovable(false);
         this.setPlayer(p);
-        if (this.getEntrace() != null && entranceNode != null) {
-            Mists.logger.info("Setting exit node to "+entranceNode.getName());
-            if (this.getEntrace().getExitNode() == null) this.getEntrace().setExitNode(entranceNode);
-        }
-        double[] entryPoint = this.getEntryPoint(entranceNode);
         this.addPlayerCharacter(p, entryPoint[0], entryPoint[1]);
         Mists.logger.info("Placing player at "+entryPoint[0]+"x"+entryPoint[1]);
         //Add companions)
@@ -1541,6 +1534,20 @@ public class Location extends Flags implements Global {
             }
         }
         this.screenFocus = p;
+    }
+    
+    /**
+     *  EnterLocation should prepare the location for player
+     * @param p PlayerCharacter entering the location
+     * @param entranceNode WorldMap node the player enters from
+     */
+    public void enterLocation(PlayerCharacter p, MapNode entranceNode) {
+        if (this.getEntrace() != null && entranceNode != null) {
+            Mists.logger.info("Setting exit node to "+entranceNode.getName());
+            if (this.getEntrace().getExitNode() == null) this.getEntrace().setExitNode(entranceNode);
+        }
+        double[] entryPoint = this.getEntryPoint(entranceNode);
+        this.enterLocation(p, entryPoint);
     }
     
     private class CoordinateComparator implements Comparator<MapObject> {

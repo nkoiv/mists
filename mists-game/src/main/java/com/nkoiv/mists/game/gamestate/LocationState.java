@@ -768,6 +768,10 @@ public class LocationState implements GameState {
     
     @Override
     public void addUIComponent(UIComponent uic) {
+        if (this.uiComponents.containsValue(uic)) {
+            this.uiComponents.remove(uic);
+            this.drawOrder.remove(uic);
+        }
         this.uiComponents.put(uic.getName(), uic);
         uic.setRenderZ(getNextFreeDrawZ(uic));
         this.drawOrder.add(uic);
