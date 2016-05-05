@@ -33,6 +33,7 @@ public class Water extends MapObject implements HasNeighbours{
         this.waterImages = shapeImages;
         this.waterImages_alt = shapeImages_alt;
         this.graphics = new Sprite(this.getImageFromImageView(shapeImages, 0, 0));
+        this.neighbours = new boolean[8];
     }
     
     @Override
@@ -65,7 +66,7 @@ public class Water extends MapObject implements HasNeighbours{
         if (mob instanceof Water) newNeighbours[6] = true;
         //DownRight
         mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor+this.getHeight());
-        if (mob instanceof Wall) newNeighbours[7] = true;
+        if (mob instanceof Water) newNeighbours[7] = true;
         
         return newNeighbours;
     }
@@ -199,6 +200,28 @@ public class Water extends MapObject implements HasNeighbours{
         int id = getWaterGraphicsIDbyNeighbours();
         if (this.animatedTiles[id] == null) this.animatedTiles[id] = generateSpriteAnimationFromImageViews(id);
         ((Sprite)this.graphics).setAnimation(this.animatedTiles[getWaterGraphicsIDbyNeighbours()]);
+    }
+    
+    @Override
+    public String[] getInfoText() {
+        String[] s = new String[]{
+            this.name,
+            "ID "+this.IDinLocation+" @ "+this.location.getName(),
+            "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
+            "Neighbours: ",
+            Arrays.toString(neighbours),
+            "WIK: "+this.templateID+"-"+Arrays.toString(this.neighbours),
+        };
+        return s;
+    }
+    
+    @Override
+    public Water createFromTemplate() {
+        Water newWater = new Water(name, waterImages, waterImages_alt);
+        newWater.animatedTiles = this.animatedTiles;
+        newWater.setTemplateID(this.templateID);
+        
+        return newWater;
     }
     
 }
