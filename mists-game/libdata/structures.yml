@@ -99,7 +99,7 @@ extras:
   yOffset: -13
 ---
 name: "SignpostSmall"
-type: "GenericStructure"
+type: "MapEntrance"
 image: "/images/structures/signpost_small.png"
 collisionLevel: 1
 ---

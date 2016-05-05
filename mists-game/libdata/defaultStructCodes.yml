@@ -26,10 +26,10 @@ structure: "Tree1"
 symbol: "t"
 structure: "Tree2"
 ---
-symbol: "P"
+symbol: "R"
 structure: "Tree3a"
 ---
-symbol: "p"
+symbol: "r"
 structure: "Tree3b"
 ---
 symbol: "Y"
