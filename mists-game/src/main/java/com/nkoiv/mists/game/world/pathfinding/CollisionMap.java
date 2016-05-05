@@ -150,7 +150,7 @@ public class CollisionMap {
     }
     
     public boolean isBlocked(int crossableTerrain, int x, int y) {
-        if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
+        if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1 || x < 0 || y < 0) return true;
         if (nodeMap[x][y] == null) return true;
 	return (crossableTerrain != nodeMap[x][y].getCollisionLevel());
     }

@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
+import com.nkoiv.mists.game.libraries.premade.Beach;
 import com.nkoiv.mists.game.libraries.premade.Village;
 import com.nkoiv.mists.game.puzzle.CircuitPuzzle;
 import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
@@ -424,9 +425,7 @@ public class LibLoader {
         Mists.logger.info("Puzzlemap template added");
         
         //Beach
-        Mists.logger.info("Generating template for the beach");
-        LocationTemplate beach = new LocationTemplate(5, "Beach", 40*Mists.TILESIZE, 30*Mists.TILESIZE);
-        beach.map = new TileMap("/mapdata/beach.map");
+        LocationTemplate beach = Beach.getBeach();
         lib.addTemplate(beach);
         
     }

@@ -44,7 +44,7 @@ import javafx.scene.paint.Color;
  */
 public class Wall extends Structure implements HasNeighbours {
     //GeneratedWallImages key: templateID+"-"+Arrays.toString(neighbours)
-    private static final HashMap<String, Image> generatedCompositeImages = new HashMap<>();
+    private static final HashMap<String, Image> GENERATED_COMPOSITE_IMAGES = new HashMap<>();
     
     private ImageView wallparts;
     private Image[] wallimages;
@@ -154,9 +154,9 @@ public class Wall extends Structure implements HasNeighbours {
                     s = new Sprite(upWall);
                 }
                 this.addExtra(s, topWallAdjustX, topWallAdjustY);
-            } else {
-                updateSpriteExtras();
             }
+        }else {
+            updateSpriteExtras();
         }
     }
     
@@ -261,10 +261,10 @@ public class Wall extends Structure implements HasNeighbours {
         }
 
     }
-
+    
     private Image composeImage() {
         String wallImagesKey = (this.templateID+"-"+Arrays.toString(this.neighbours));
-        if (!generatedCompositeImages.containsKey(wallImagesKey)) {
+        if (!GENERATED_COMPOSITE_IMAGES.containsKey(wallImagesKey)) {
             Mists.logger.log(Level.INFO, "Composite image for {0} was not found, creating one", wallImagesKey);
             Image[] extraImages = new Image[9];
             extraImages[0] = Mists.graphLibrary.getImage("black");
@@ -280,13 +280,18 @@ public class Wall extends Structure implements HasNeighbours {
                     }
                 }
             }
-            if (n == 0) return Mists.graphLibrary.getImage("blank");
-            Image[] trimmedExtraImages = new Image[n];
-            System.arraycopy(extraImages, 0, trimmedExtraImages, 0, n);
-            if (trimmedExtraImages.length == 1) return trimmedExtraImages[0];
-            generatedCompositeImages.put(wallImagesKey, Toolkit.mergeImage(false, trimmedExtraImages));
+            Image imageToStore;
+            if (n == 0) imageToStore = Mists.graphLibrary.getImage("blank");
+            else { 
+                Image[] trimmedExtraImages = new Image[n];
+                System.arraycopy(extraImages, 0, trimmedExtraImages, 0, n);
+                if (trimmedExtraImages.length == 1) imageToStore = trimmedExtraImages[0];
+                else imageToStore =  Toolkit.mergeImage(false, trimmedExtraImages);
+            }
+            GENERATED_COMPOSITE_IMAGES.put(wallImagesKey, imageToStore);
+            Mists.logger.info(wallImagesKey+" key placed in GENERATED_COMPOSITE_IMAGES");
         } 
-        return generatedCompositeImages.get(wallImagesKey);
+        return GENERATED_COMPOSITE_IMAGES.get(wallImagesKey);
     }
     
     public void setWallImages(Image[] wallimages) {

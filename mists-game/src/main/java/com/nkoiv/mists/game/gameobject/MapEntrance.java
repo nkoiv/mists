@@ -42,7 +42,7 @@ public class MapEntrance extends Structure {
     @Override
     public String[] getInfoText() {
         String exitNodeName;
-        if (this.exitNode == null) exitNodeName = this.exitNode.getName();
+        if (this.exitNode != null) exitNodeName = this.exitNode.getName();
         else exitNodeName = "Unspecified";
         String[] s = new String[]{
             this.name,

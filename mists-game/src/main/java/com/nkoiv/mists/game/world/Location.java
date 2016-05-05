@@ -214,14 +214,16 @@ public class Location extends Flags implements Global {
     public MapObject getMobAtLocation(double xCoor, double yCoor) {
         MapObject mobAtLocation = null;
         int spatialID = this.getSpatial(xCoor, yCoor);
-        for (Creature mob : (HashSet<Creature>)this.creatureSpatial.get(spatialID)) {
-            if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth() &&
-                    yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
-                    //Do a pixelcheck on the mob;
-                    //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
-                    return mob;
-                    //}   
-                }
+        if (!this.creatureSpatial.isEmpty()) {
+            for (Creature mob : (HashSet<Creature>)this.creatureSpatial.get(spatialID)) {
+                if (xCoor >= mob.getXPos() && xCoor <= mob.getXPos()+mob.getWidth() &&
+                        yCoor >= mob.getYPos() && yCoor <= mob.getYPos()+mob.getHeight()) {
+                        //Do a pixelcheck on the mob;
+                        //if (Sprite.pixelCollision(xCoor, yCoor, Mists.pixel, mob.getXPos(), mob.getYPos(), mob.getSprite().getImage())) {
+                        return mob;
+                        //}   
+                    }
+            }
         }
         Structure s = (getStructureAtLocation(xCoor, yCoor));
         if (s!=null) mobAtLocation = s;
@@ -279,7 +281,7 @@ public class Location extends Flags implements Global {
         
         //Just return an open random spot if there's no structure library (for unit tests)
         if (Mists.structureLibrary == null) return this.getRandomOpenSpot(this.getPlayer().getWidth());
-        
+        Mists.logger.log(Level.INFO, "No entrance for the location was found, so generating new one at {0}x{1}", new Object[]{newEntrance[1], newEntrance[2]});
         MapEntrance newStairs = (MapEntrance)Mists.structureLibrary.create("DungeonStairs");
         newStairs.setPosition(newEntrance[0], newEntrance[1]);
         this.addMapObject(newStairs);
@@ -1517,6 +1519,7 @@ public class Location extends Flags implements Global {
     /**
      *  EnterLocation should prepare the location for player
      * @param p PlayerCharacter entering the location
+     * @param entranceNode WorldMap node the player enters from
      */
     public void enterLocation(PlayerCharacter p, MapNode entranceNode) {
         Mists.logger.info("Location "+this.getName()+" entered. Preparing area...");
