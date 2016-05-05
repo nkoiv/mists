@@ -130,7 +130,7 @@ public class Game {
         this.generatedWorldMaps.put(1, wm);
         this.currentWorldMap = wm;
         this.moveToLocation(5, wm.getPlayerNode());
-        this.moveToState(LOCATION);
+        this.moveToState(MAINMENU);
         currentState.enter();
         this.running = true;
     }
@@ -245,6 +245,23 @@ public class Game {
     public void moveToLocation(int locationID, MapNode entranceNode) {
         Location l = getLocation(locationID);
         moveToLocation(l, entranceNode);
+    }
+    
+    public void moveToLocation(int locationID, double xCoor, double yCoor) {
+        Location l = getLocation(locationID);
+        moveToLocation(l, xCoor, yCoor);
+    }
+    
+    public void moveToLocation(Location l, double xCoor, double yCoor) {
+        Mists.logger.info("Moving into location "+l.getName());
+        if (currentLocation != null) currentLocation.exitLocation();
+        l.enterLocation(player, xCoor, yCoor);
+        currentLocation = l;
+        GameState s = this.gameStates.get(LOCATION);
+        if (s!=null) {
+            if (Mists.gameMode == GameMode.CLIENT) ((LocationState)s).getClient().setLocation(l);
+            if (Mists.gameMode == GameMode.SERVER) ((LocationState)s).getServer().setLocation(l, null);
+        }
     }
     
     /**

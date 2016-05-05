@@ -500,8 +500,10 @@ public class Location extends Flags implements Global {
             this.addMapObject(c);
         } else {
             //No need to re-add the creature if it's already in. Just give it a new ID.
+            this.removeMapObject(c);
             this.giveID(c);
             Mists.logger.log(Level.WARNING, "Tried to add a {3} to {0} but {3} was already in it. Gave the {3} new ID: {1}", new Object[]{this.getName(), c.getID(), c.getName()});
+            this.addMapObject(c);
         }
         c.setLocation(this);
         c.setPosition(xPos, yPos);
@@ -540,11 +542,14 @@ public class Location extends Flags implements Global {
             this.addMapObject(p);
         } else {
             //No need to re-add the player if it's already in. Just give it a new ID
+            this.removeMapObject(p);
             this.giveID(p);
             Mists.logger.log(Level.WARNING, "Tried to add a player to {0} but player was already in it. Gave the player new ID: {1}", new Object[]{this.getName(), p.getID()});
+            this.addMapObject(p);
         }
         p.setLocation(this);
         p.setPosition(xPos, yPos);
+        Mists.logger.info("Added player "+p.getName()+" to "+this.getName());
     }
     
     public void addRoof(Roof r) {
@@ -1488,6 +1493,11 @@ public class Location extends Flags implements Global {
         return s;
     }
     
+    public void changeLocation(int targetLocationID, double targetXCoor, double targetYCoor) {
+        exitLocation();
+        Mists.MistsGame.moveToLocation(targetLocationID, targetXCoor, targetYCoor);
+    }
+    
     /**
      * Exit from the location and go to a specific exitNode on the worldmap.
      * @param exitNode 
@@ -1519,6 +1529,12 @@ public class Location extends Flags implements Global {
         //TODO: The cleanup
     }
     
+    /**
+     * Prepare the Location for entering a place
+     * PlayerCharacter within.
+     * @param p PlayerCharacter that's entering the location
+     * @param entryPoint X and Y coordinates for where the player enters
+     */
     private void enterLocation(PlayerCharacter p, double[] entryPoint) {
         Mists.logger.info("Location "+this.getName()+" entered. Preparing area...");
         if (p.isRemovable()) p.setRemovable(false);
@@ -1537,13 +1553,25 @@ public class Location extends Flags implements Global {
     }
     
     /**
-     *  EnterLocation should prepare the location for player
+     * Entering Location directly to target coordinates,
+     * like from another Location
+     * @param p PlayerCharacter that's entering the location
+     * @param xCoor XCoordinate for where player is entering
+     * @param yCoor YCoordinate for where player is entering
+     */
+    public void enterLocation(PlayerCharacter p, double xCoor, double yCoor) {
+        this.enterLocation(p, new double[]{xCoor, yCoor});
+    }
+    
+    /**
+     * Entering Location from a WorldMap node (entranceNode)
+     * Should prepare the location for player.
      * @param p PlayerCharacter entering the location
      * @param entranceNode WorldMap node the player enters from
      */
     public void enterLocation(PlayerCharacter p, MapNode entranceNode) {
         if (this.getEntrace() != null && entranceNode != null) {
-            Mists.logger.info("Setting exit node to "+entranceNode.getName());
+            Mists.logger.log(Level.INFO, "Setting exit node to {0}", entranceNode.getName());
             if (this.getEntrace().getExitNode() == null) this.getEntrace().setExitNode(entranceNode);
         }
         double[] entryPoint = this.getEntryPoint(entranceNode);

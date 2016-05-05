@@ -298,6 +298,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
     
     public void think(double time) {
+        if (this.location == null) return;
         this.lastTask = this.nextTask;
         this.setNextTask(this.ai.think(time));
     }

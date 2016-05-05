@@ -7,7 +7,7 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
-import com.nkoiv.mists.game.triggers.EntranceTrigger;
+import com.nkoiv.mists.game.triggers.WoldMapEntranceTrigger;
 import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 
@@ -37,7 +37,7 @@ public class MapEntrance extends Structure {
     @Override
     public Trigger[] getTriggers() {
         if (this.exitNode == null) return new Trigger[1];
-        Trigger[] a = new Trigger[]{new EntranceTrigger(this, this.exitNode)};
+        Trigger[] a = new Trigger[]{new WoldMapEntranceTrigger(this, this.exitNode)};
         return a;
     }
     

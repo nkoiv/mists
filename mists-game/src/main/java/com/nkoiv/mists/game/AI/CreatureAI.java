@@ -201,6 +201,7 @@ public class CreatureAI extends Flags{
      */
     protected ArrayList<Creature> surroundingCreatures(double xCoor, double yCoor, double range) {
         ArrayList<Creature> nearbyCreatures = new ArrayList<>();
+        if (creep.getLocation() == null) return nearbyCreatures;
         for (Creature mob : creep.getLocation().getCreatures()) {
             double euclideanDistance = Math.sqrt(Math.pow(this.getCreature().getXPos() - mob.getXPos(), 2)
                             + Math.pow(this.getCreature().getYPos() - mob.getYPos(), 2));

@@ -13,11 +13,11 @@ import com.nkoiv.mists.game.world.worldmap.MapNode;
  * Toggle to move between WorldMap and Location
  * @author nikok
  */
-public class EntranceTrigger implements Trigger {
+public class WoldMapEntranceTrigger implements Trigger {
     private MapEntrance entrance;
     private MapNode exitNode;
 
-    public EntranceTrigger(MapEntrance entrance, MapNode exitNode) {
+    public WoldMapEntranceTrigger(MapEntrance entrance, MapNode exitNode) {
         this.entrance = entrance;
         this.exitNode = exitNode;
     }
@@ -52,8 +52,8 @@ public class EntranceTrigger implements Trigger {
     }
 
     @Override
-    public EntranceTrigger createFromTemplate() {
-        EntranceTrigger et = new EntranceTrigger(this.entrance, this.exitNode);
+    public WoldMapEntranceTrigger createFromTemplate() {
+        WoldMapEntranceTrigger et = new WoldMapEntranceTrigger(this.entrance, this.exitNode);
         return et;
     }
 
