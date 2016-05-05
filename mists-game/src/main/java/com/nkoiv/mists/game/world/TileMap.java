@@ -355,7 +355,7 @@ public class TileMap implements GameMap, KryoSerializable {
             intMap = new int[(int)this.tileWidth][(int)this.tileHeight];
             for (int y=0; y<this.tileHeight; y++) {
                 line = scanner.nextLine();
-                String lines = line.toString();
+                String lines = line;
                 for (int x=0; x<this.tileWidth; x++) {
                     int tilecode = lines.charAt(x);
                     if (tilecode == 32) tilecode = 0; //Hardcode empty (space) to be 0

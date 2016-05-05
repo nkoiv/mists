@@ -11,7 +11,6 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * CollisionMap is a location turned simple
@@ -153,7 +152,7 @@ public class CollisionMap {
     public boolean isBlocked(int crossableTerrain, int x, int y) {
         if (x>this.mapTileWidth-1 || y>this.mapTileHeight-1) return true;
         if (nodeMap[x][y] == null) return true;
-	return (!(crossableTerrain == nodeMap[x][y].getCollisionLevel()));
+	return (crossableTerrain != nodeMap[x][y].getCollisionLevel());
     }
 
     //The Visited -thing is not currently in use by pathfinding.

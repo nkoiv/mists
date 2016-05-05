@@ -5,7 +5,6 @@
  */
 package com.nkoiv.mists.game.sprites;
 
-import java.util.ArrayList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
