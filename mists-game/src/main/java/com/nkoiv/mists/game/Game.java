@@ -57,7 +57,7 @@ public class Game {
     public double HEIGHT; //Dimensions of the screen (render area)
     public double xOffset; //Offsets are used control which part of the map is drawn
     public double yOffset; //If/when a map is larger than display-area, it should be centered on player
-    public boolean toggleScale = true;
+    public boolean toggleScale = false;
     
     public DungeonGenerator mapGen;
     public QuestManager questManager;
@@ -108,7 +108,6 @@ public class Game {
     public void start() {
         gameStates.put(MAINMENU, new MainMenuState(this));
         gameStates.put(WORLDMAP, new WorldMapState(this));
-        currentState = gameStates.get(MAINMENU);
         
         //POC player:
         PlayerCharacter pocplayer = new PlayerCharacter();
@@ -130,6 +129,8 @@ public class Game {
         
         this.generatedWorldMaps.put(1, wm);
         this.currentWorldMap = wm;
+        this.moveToLocation(5, wm.getPlayerNode());
+        this.moveToState(LOCATION);
         currentState.enter();
         this.running = true;
     }
@@ -144,7 +145,7 @@ public class Game {
     
     public void moveToState(int gameStateNumber) {
         //TODO: Do some fancy transition?
-        currentState.exit();
+        if (currentState != null) currentState.exit();
         if (gameStates.get(gameStateNumber) == null) {
             buildNewState(gameStateNumber);
         } 
@@ -294,19 +295,7 @@ public class Game {
     public WorldMap getCurrentWorldMap() {
         return this.currentWorldMap;
     }
-    
-    /*
-    public void toggleScale(GraphicsContext gc) {
-        if (Mists.scale == 1) {
-            gc.scale(2, 2);
-            Mists.scale = 2;
-        } else {
-            gc.scale(0.5, 0.5);
-            Mists.scale = 1;
-        }
-        
-    }
-    */
+
     /**
     * Tick checks keybuffer, initiates actions and does just about everything.
     * Tick needs to know how much time has passed since the last tick, so it can
