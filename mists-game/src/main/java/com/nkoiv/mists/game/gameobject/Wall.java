@@ -98,15 +98,31 @@ public class Wall extends Structure implements HasNeighbours {
         if (this.location == null) return newNeighbours;
         double xCoor = this.getCenterXPos();
         double yCoor = this.getCenterYPos();
+        MapObject mob;
         //UpLeft
-        
+        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor-this.getHeight());
+        if (mob instanceof Wall) newNeighbours[0] = true;
         //Up
+        mob = this.location.getMobAtLocation(xCoor, yCoor-this.getHeight());
+        if (mob instanceof Wall) newNeighbours[1] = true;
         //UpRight
+        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor-this.getHeight());
+        if (mob instanceof Wall) newNeighbours[2] = true;
         //Left
+        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor);
+        if (mob instanceof Wall) newNeighbours[3] = true;
         //Right
+        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor);
+        if (mob instanceof Wall) newNeighbours[4] = true;
         //DownLeft
+        mob = this.location.getMobAtLocation(xCoor-this.getWidth(), yCoor+this.getHeight());
+        if (mob instanceof Wall) newNeighbours[5] = true;
         //Down
+        mob = this.location.getMobAtLocation(xCoor, yCoor+this.getHeight());
+        if (mob instanceof Wall) newNeighbours[6] = true;
         //DownRight
+        mob = this.location.getMobAtLocation(xCoor+this.getWidth(), yCoor+this.getHeight());
+        if (mob instanceof Wall) newNeighbours[7] = true;
         
         return newNeighbours;
     }
@@ -115,14 +131,16 @@ public class Wall extends Structure implements HasNeighbours {
      * Scan the surrounding walls for neighbouring walls,
      * and update this walls list of neighbours accordingly.
      */
+    @Override
     public void updateGraphicsBasedOnNeighbours() {
-        boolean noNeedForLowerDiagonals = false; //Flag if [6] is set, in which case [5] and [7] are not needed
         if (this.wallimages == null) this.generateWallImages(this.wallparts);
         if (!this.useExtrasForWalls) {
             this.getSprite().setImage(this.composeImage());
             //Still always use the extra for [1], aka top wall
             //so creatures can move behind it!
             this.removeExtras();
+            
+            //Top Extra is always needed, so creatures can get "behind" the wall
             WritableImage snapshot = null;
             SnapshotParameters parameters = new SnapshotParameters();
             parameters.setFill(Color.TRANSPARENT);
@@ -136,109 +154,114 @@ public class Wall extends Structure implements HasNeighbours {
                     s = new Sprite(upWall);
                 }
                 this.addExtra(s, topWallAdjustX, topWallAdjustY);
+            } else {
+                updateSpriteExtras();
             }
-        } else {
-            this.removeExtras();
-            WritableImage snapshot = null;
-            SnapshotParameters parameters = new SnapshotParameters();
-            parameters.setFill(Color.TRANSPARENT);
-            //Cardinals
-            if (!neighbours[1]) {
-                Sprite s;
-                if (this.wallimages[1]!=null) {
-                    s = new Sprite(this.wallimages[1]);
-                } else {
-                    wallparts.setViewport(new Rectangle2D(this.getWidth(),0,this.getWidth(),this.getHeight()));
-                    WritableImage upWall = wallparts.snapshot(parameters, snapshot);
-                    s = new Sprite(upWall);
-                }
-                this.addExtra(s, topWallAdjustX, topWallAdjustY);
-            }
-            if (!neighbours[3]) {
-                Sprite s;
-                if (this.wallimages[3]!=null) {
-                    s = new Sprite(this.wallimages[3]);
-                } else {
-                    wallparts.setViewport(new Rectangle2D(this.getWidth()*3,0,this.getWidth(),this.getHeight()));
-                    WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
-                    s = new Sprite(leftWall);
-                }
-                this.addExtra(s, 0, -4);
-            }
-            if (!neighbours[4]) {
-                Sprite s;
-                if (this.wallimages[4]!=null) {
-                    s = new Sprite(this.wallimages[4]);
-                } else {
-                    wallparts.setViewport(new Rectangle2D(this.graphics.getWidth()*2,0,this.graphics.getWidth(),this.graphics.getHeight()));
-                    WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
-                    s = new Sprite(rightWall);
-                }
-                this.addExtra(s, 0, -4);
-            }
-            if (!neighbours[6]) {
-                Sprite s;
-                if (this.wallimages[6]!=null) {
-                    s = new Sprite(this.wallimages[6]);
-                } else {
-                    wallparts.setViewport(new Rectangle2D(0,0,this.graphics.getWidth(),this.graphics.getHeight()));
-                    WritableImage downWall = wallparts.snapshot(parameters, snapshot);
-                    s = new Sprite(downWall);
-                }
-                //this.addExtra(s, 0, 0);
-                this.getSprite().setImage(s.getImage());
-                noNeedForLowerDiagonals = true;
-            }
-            //Diagonals
-            
-            if (!neighbours[0]) {
-                Sprite s;
-                if (this.wallimages[0]!=null) {
-                    s = new Sprite(this.wallimages[0]);
-                } else {
-                    wallparts.setViewport(new Rectangle2D(0,graphics.getHeight(),graphics.getWidth(),graphics.getHeight()));
-                    WritableImage upWall = wallparts.snapshot(parameters, snapshot);
-                    s = new Sprite(upWall);
-                }
-                this.addExtra(s, 0, -8);
-            }
-            if (!neighbours[5]) {
-                Sprite s;
-                if (this.wallimages[5]!=null) {
-                    s = new Sprite(this.wallimages[5]);
-                } else {
-                    wallparts.setViewport(new Rectangle2D(graphics.getWidth(),graphics.getHeight(),graphics.getWidth(),graphics.getHeight()));
-                    WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
-                    s = new Sprite(leftWall);
-                }
-                if (!noNeedForLowerDiagonals) this.addExtra(s, 0, 0);
-            }
-            if (!neighbours[7]) {
-                Sprite s;
-                if (this.wallimages[7]!=null) {
-                    s = new Sprite(this.wallimages[7]);
-                } else {
-                    wallparts.setViewport(new Rectangle2D(graphics.getWidth()*2,graphics.getHeight(),graphics.getWidth(),graphics.getHeight()));
-                    WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
-                    s = new Sprite(rightWall);
-                }
-                if (!noNeedForLowerDiagonals) this.addExtra(s, 0, 0);
-            }
-            if (!neighbours[2]) {
-                Sprite s;
-                if (this.wallimages[2]!=null) {
-                    s = new Sprite(this.wallimages[2]);
-                } else {
-                    wallparts.setViewport(new Rectangle2D(graphics.getWidth()*3,graphics.getHeight(),graphics.getWidth(),graphics.getHeight()));
-                    WritableImage downWall = wallparts.snapshot(parameters, snapshot);
-                    s = new Sprite(downWall);
-                }
-                this.addExtra(s, 0, -8);
-            }
-            
         }
     }
     
+    private void updateSpriteExtras() {
+        boolean noNeedForLowerDiagonals = false; //Flag if [6] is set, in which case [5] and [7] are not needed
+        this.removeExtras();
+        WritableImage snapshot = null;
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setFill(Color.TRANSPARENT);
+        //Cardinals
+        if (!neighbours[1]) {
+            Sprite s;
+            if (this.wallimages[1]!=null) {
+                s = new Sprite(this.wallimages[1]);
+            } else {
+                wallparts.setViewport(new Rectangle2D(this.getWidth(),0,this.getWidth(),this.getHeight()));
+                WritableImage upWall = wallparts.snapshot(parameters, snapshot);
+                s = new Sprite(upWall);
+            }
+            this.addExtra(s, topWallAdjustX, topWallAdjustY);
+        }
+        if (!neighbours[3]) {
+            Sprite s;
+            if (this.wallimages[3]!=null) {
+                s = new Sprite(this.wallimages[3]);
+            } else {
+                wallparts.setViewport(new Rectangle2D(this.getWidth()*3,0,this.getWidth(),this.getHeight()));
+                WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
+                s = new Sprite(leftWall);
+            }
+            this.addExtra(s, 0, -4);
+        }
+        if (!neighbours[4]) {
+            Sprite s;
+            if (this.wallimages[4]!=null) {
+                s = new Sprite(this.wallimages[4]);
+            } else {
+                wallparts.setViewport(new Rectangle2D(this.graphics.getWidth()*2,0,this.graphics.getWidth(),this.graphics.getHeight()));
+                WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
+                s = new Sprite(rightWall);
+            }
+            this.addExtra(s, 0, -4);
+        }
+        if (!neighbours[6]) {
+            Sprite s;
+            if (this.wallimages[6]!=null) {
+                s = new Sprite(this.wallimages[6]);
+            } else {
+                wallparts.setViewport(new Rectangle2D(0,0,this.graphics.getWidth(),this.graphics.getHeight()));
+                WritableImage downWall = wallparts.snapshot(parameters, snapshot);
+                s = new Sprite(downWall);
+            }
+            //this.addExtra(s, 0, 0);
+            this.getSprite().setImage(s.getImage());
+            noNeedForLowerDiagonals = true;
+        }
+        //Diagonals
+
+        if (!neighbours[0]) {
+            Sprite s;
+            if (this.wallimages[0]!=null) {
+                s = new Sprite(this.wallimages[0]);
+            } else {
+                wallparts.setViewport(new Rectangle2D(0,graphics.getHeight(),graphics.getWidth(),graphics.getHeight()));
+                WritableImage upWall = wallparts.snapshot(parameters, snapshot);
+                s = new Sprite(upWall);
+            }
+            this.addExtra(s, 0, -8);
+        }
+        if (!neighbours[5]) {
+            Sprite s;
+            if (this.wallimages[5]!=null) {
+                s = new Sprite(this.wallimages[5]);
+            } else {
+                wallparts.setViewport(new Rectangle2D(graphics.getWidth(),graphics.getHeight(),graphics.getWidth(),graphics.getHeight()));
+                WritableImage leftWall = wallparts.snapshot(parameters, snapshot);
+                s = new Sprite(leftWall);
+            }
+            if (!noNeedForLowerDiagonals) this.addExtra(s, 0, 0);
+        }
+        if (!neighbours[7]) {
+            Sprite s;
+            if (this.wallimages[7]!=null) {
+                s = new Sprite(this.wallimages[7]);
+            } else {
+                wallparts.setViewport(new Rectangle2D(graphics.getWidth()*2,graphics.getHeight(),graphics.getWidth(),graphics.getHeight()));
+                WritableImage rightWall = wallparts.snapshot(parameters, snapshot);
+                s = new Sprite(rightWall);
+            }
+            if (!noNeedForLowerDiagonals) this.addExtra(s, 0, 0);
+        }
+        if (!neighbours[2]) {
+            Sprite s;
+            if (this.wallimages[2]!=null) {
+                s = new Sprite(this.wallimages[2]);
+            } else {
+                wallparts.setViewport(new Rectangle2D(graphics.getWidth()*3,graphics.getHeight(),graphics.getWidth(),graphics.getHeight()));
+                WritableImage downWall = wallparts.snapshot(parameters, snapshot);
+                s = new Sprite(downWall);
+            }
+            this.addExtra(s, 0, -8);
+        }
+
+    }
+
     
     private Image composeImage() {
         String wallImagesKey = (this.templateID+"-"+Arrays.toString(this.neighbours));

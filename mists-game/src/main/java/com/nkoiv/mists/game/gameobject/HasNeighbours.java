@@ -16,8 +16,8 @@ package com.nkoiv.mists.game.gameobject;
 public interface HasNeighbours {
 
     public boolean[] getNeighbours();
-    
     public boolean[] checkNeighbours();
+    public void updateGraphicsBasedOnNeighbours();
     
     /**
      * Supply the object with a new set of neighbours
