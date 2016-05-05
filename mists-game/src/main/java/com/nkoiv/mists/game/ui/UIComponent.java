@@ -103,4 +103,9 @@ public abstract class UIComponent implements Comparable<UIComponent>{
         return ((UIComponent)object).getName().equals(this.name);
     }
     
+    @Override
+    public String toString() {
+        return "UIC: "+this.name;
+    }
+    
 }
