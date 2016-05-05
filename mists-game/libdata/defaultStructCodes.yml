@@ -26,6 +26,12 @@ structure: "Tree1"
 symbol: "t"
 structure: "Tree2"
 ---
+symbol: "P"
+structure: "Tree3a"
+---
+symbol: "p"
+structure: "Tree3b"
+---
 symbol: "Y"
 structure: "TorchFloorDungeon"
 ---

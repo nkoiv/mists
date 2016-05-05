@@ -125,7 +125,7 @@ public class Game {
         WorldMap wm = new WorldMap("Himmu island", new Image("/images/himmu_island.png"));
         WorldMapLibrary.populateWorldMapWithNodesFromYAML(wm, "libdata/defaultWorldmapNodes.yml");
 
-        wm.setPlayerNode("Boat");
+        wm.setPlayerNode("Beach");
         wm.setPlayerCharacter(player);
         
         this.generatedWorldMaps.put(1, wm);

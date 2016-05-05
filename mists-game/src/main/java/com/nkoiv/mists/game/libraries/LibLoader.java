@@ -398,7 +398,6 @@ public class LibLoader {
         woods.lightlevel = 2;
         lib.addTemplate(woods);
         
-        
         //PuzzleArea
         Mists.logger.info("Generating template for puzzlemap");
         LocationTemplate puzzlearea = new LocationTemplate(4, "Puzzle Area", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
@@ -423,5 +422,12 @@ public class LibLoader {
         puzzlearea.mobs.addAll(Arrays.asList(circuitPuzzle1));
         lib.addTemplate(puzzlearea);
         Mists.logger.info("Puzzlemap template added");
+        
+        //Beach
+        Mists.logger.info("Generating template for the beach");
+        LocationTemplate beach = new LocationTemplate(5, "Beach", 40*Mists.TILESIZE, 30*Mists.TILESIZE);
+        beach.map = new TileMap("/mapdata/beach.map");
+        lib.addTemplate(beach);
+        
     }
 }

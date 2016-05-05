@@ -39,7 +39,8 @@ links:
  Down: 4
 ---
 id: 4
-name: "Boat"
+name: "Beach"
+enterLocationID: 5
 image: "images/boat.png"
 xCoordinate: 470
 yCoordinate: 1000
