@@ -160,7 +160,7 @@ public class Location extends Flags implements Global {
             if (s instanceof Wall) walls.add((Wall)s);
         }
         for (Wall w : walls) {
-            w.updateNeighbours();
+            w.updateGraphicsBasedOnNeighbours();
         }
         Mists.logger.info("Walls updated");
         if (!wasLoading) this.loading = false;
@@ -905,22 +905,22 @@ public class Location extends Flags implements Global {
         //Cardinal directions
         MapObject mob;
         mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos)); //Left
-        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(4); w.updateNeighbours();}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(4); w.updateGraphicsBasedOnNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos)); //Right
-        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(3); w.updateNeighbours();}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(3); w.updateGraphicsBasedOnNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos, yCenterPos-Mists.TILESIZE)); //Up
-        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(6); w.updateNeighbours();}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(6); w.updateGraphicsBasedOnNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos, yCenterPos+Mists.TILESIZE)); //Down
-        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(1); w.updateNeighbours();}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(1); w.updateGraphicsBasedOnNeighbours();}
         //Diagonal directions
         mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpLeft
-        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(7); w.updateNeighbours();}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(7); w.updateGraphicsBasedOnNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos-Mists.TILESIZE)); //UpRight
-        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(5); w.updateNeighbours();}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(5); w.updateGraphicsBasedOnNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos-Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownLeft
-        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(2); w.updateNeighbours();}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(2); w.updateGraphicsBasedOnNeighbours();}
         mob = (this.getMobAtLocation(xCenterPos+Mists.TILESIZE, yCenterPos+Mists.TILESIZE)); //DownRight
-        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(0); w.updateNeighbours();}
+        if (mob instanceof Wall) {Wall w = (Wall)mob; w.removeNeighbour(0); w.updateGraphicsBasedOnNeighbours();}
 
     }
     

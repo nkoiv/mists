@@ -42,7 +42,7 @@ import javafx.scene.paint.Color;
  * 
  * @author nikok
  */
-public class Wall extends Structure {
+public class Wall extends Structure implements HasNeighbours {
     //GeneratedWallImages key: templateID+"-"+Arrays.toString(neighbours)
     private static final HashMap<String, Image> generatedCompositeImages = new HashMap<>();
     
@@ -52,8 +52,8 @@ public class Wall extends Structure {
     private double topWallAdjustX;
     private double topWallAdjustY;
     
-    private boolean[] neighbours = new boolean[8];
-    /* Neighbours is the list of walls that affect the looks of this wall
+    private boolean[] neighbours;
+    /* Neighbours is the list of similiar objects that affect the looks of this map object
      [0][1][2]
      [3]   [4]   
      [5][6][7]
@@ -89,7 +89,7 @@ public class Wall extends Structure {
      * Scan the surrounding walls for neighbouring walls,
      * and update this walls list of neighbours accordingly.
      */
-    public void updateNeighbours() {
+    public void updateGraphicsBasedOnNeighbours() {
         boolean noNeedForLowerDiagonals = false; //Flag if [6] is set, in which case [5] and [7] are not needed
         if (this.wallimages == null) this.generateWallImages(this.wallparts);
         if (!this.useExtrasForWalls) {
@@ -245,10 +245,12 @@ public class Wall extends Structure {
         this.wallimages = wallimages;
     }
     
+    @Override
     public boolean[] getNeighbours() {
         return this.neighbours;
     }
 
+    @Override
     public void setNeighbours(boolean[] neighbours) {
         this.neighbours = neighbours;
     }
@@ -260,6 +262,7 @@ public class Wall extends Structure {
      * [5][6][7]
      * @param n The number of the neighbour added
      */
+    @Override
     public void addNeighbour(int n) {
         this.neighbours[n] = true;
     }
@@ -275,9 +278,11 @@ public class Wall extends Structure {
      * [0][5][7][2] Optional diagonal walls
      * @param n The number of the neighbour to remove
      */
+    @Override
     public void removeNeighbour(int n) {
         this.neighbours[n] = false;
     }
+    
     
     public void generateWallImages(ImageView wallparts) {
         this.wallimages = generateNewWallImageArray(wallparts);

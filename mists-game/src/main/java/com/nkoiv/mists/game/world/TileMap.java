@@ -228,7 +228,7 @@ public class TileMap implements GameMap, KryoSerializable {
         }
         for (Structure s: staticStructures) {
             if (s instanceof Wall) {
-                ((Wall)s).updateNeighbours();
+                ((Wall)s).updateGraphicsBasedOnNeighbours();
             }
         }
         
