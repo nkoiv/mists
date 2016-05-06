@@ -6,7 +6,7 @@
 package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gameobject.MapEntrance;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.puzzle.Puzzle;
@@ -116,7 +116,7 @@ public class LocationLibrary  {
         Mists.logger.info("Roofs done, generating stairs");
         boolean entranceFound = false;
         for (MapObject mob : template.mobs) {
-            if (mob instanceof MapEntrance) {
+            if (mob instanceof WorldMapEntrance) {
                 entranceFound = true;
             }
         }

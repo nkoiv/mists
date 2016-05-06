@@ -19,6 +19,12 @@ type: "Wall"
 image: "/images/structures/villagewall.png"
 collisionLevel: 1
 ---
+name: "Water"
+type: "Water"
+image_anim1: "/images/environment/water1.png"
+image_anim2: "/images/environment/water2.png"
+collisionLevel: 10
+---
 name: "AnimatedGrass"
 type: "AnimatedFrill"
 #image: "/images/blank.png"
@@ -93,7 +99,7 @@ extras:
   yOffset: -13
 ---
 name: "SignpostSmall"
-type: "GenericStructure"
+type: "MapEntrance"
 image: "/images/structures/signpost_small.png"
 collisionLevel: 1
 ---

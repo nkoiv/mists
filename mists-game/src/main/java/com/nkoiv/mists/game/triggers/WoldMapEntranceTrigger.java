@@ -5,7 +5,7 @@
  */
 package com.nkoiv.mists.game.triggers;
 
-import com.nkoiv.mists.game.gameobject.MapEntrance;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 
@@ -14,15 +14,15 @@ import com.nkoiv.mists.game.world.worldmap.MapNode;
  * @author nikok
  */
 public class WoldMapEntranceTrigger implements Trigger {
-    private MapEntrance entrance;
+    private WorldMapEntrance entrance;
     private MapNode exitNode;
 
-    public WoldMapEntranceTrigger(MapEntrance entrance, MapNode exitNode) {
+    public WoldMapEntranceTrigger(WorldMapEntrance entrance, MapNode exitNode) {
         this.entrance = entrance;
         this.exitNode = exitNode;
     }
 
-    public void setEntrance(MapEntrance entrance) {
+    public void setEntrance(WorldMapEntrance entrance) {
         this.entrance = entrance;
     }
 
@@ -43,7 +43,7 @@ public class WoldMapEntranceTrigger implements Trigger {
 
     @Override
     public void setTarget(MapObject mob) {
-        if(mob instanceof MapEntrance) this.entrance = (MapEntrance)mob;
+        if(mob instanceof WorldMapEntrance) this.entrance = (WorldMapEntrance)mob;
     }
 
     @Override

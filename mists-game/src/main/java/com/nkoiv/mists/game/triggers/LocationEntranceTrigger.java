@@ -6,28 +6,28 @@
  */
 package com.nkoiv.mists.game.triggers;
 
-import com.nkoiv.mists.game.gameobject.MapEntrance;
+import com.nkoiv.mists.game.gameobject.LocationDoorway;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.world.worldmap.MapNode;
 
 /**
  *
  * @author nikok
  */
 public class LocationEntranceTrigger implements Trigger {
-    private MapEntrance entrance;
+    private LocationDoorway entrance;
     private int targetLocationID;
     private double targetXCoor;
     private double targetYCoor;
 
-    public LocationEntranceTrigger(MapEntrance entrance, int targetLocationID, double targetXCoordinate, double targetYCoordinate) {
+    public LocationEntranceTrigger(LocationDoorway entrance, int targetLocationID, double targetXCoordinate, double targetYCoordinate) {
         this.entrance = entrance;
         this.targetLocationID = targetLocationID;
         this.targetXCoor = targetXCoordinate;
         this.targetYCoor = targetYCoordinate;
     }
 
-    public void setEntrance(MapEntrance entrance) {
+    public void setEntrance(LocationDoorway entrance) {
         this.entrance = entrance;
     }
 
@@ -50,7 +50,7 @@ public class LocationEntranceTrigger implements Trigger {
 
     @Override
     public void setTarget(MapObject mob) {
-        if(mob instanceof MapEntrance) this.entrance = (MapEntrance)mob;
+        if(mob instanceof LocationDoorway) this.entrance = (LocationDoorway)mob;
     }
 
     @Override

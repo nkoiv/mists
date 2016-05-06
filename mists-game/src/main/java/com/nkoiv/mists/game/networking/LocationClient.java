@@ -20,7 +20,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
-import com.nkoiv.mists.game.gameobject.MapEntrance;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -182,7 +182,7 @@ public class LocationClient {
         if (mob.type.equals(Structure.class.toString())) {
             m = Mists.structureLibrary.create(mob.templateName);
         }
-        if (mob.type.equals(MapEntrance.class.toString())) {
+        if (mob.type.equals(WorldMapEntrance.class.toString())) {
             m = Mists.structureLibrary.create(mob.templateName);
         }
         if (mob.type.equals(Effect.class.toString())) {

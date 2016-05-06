@@ -119,9 +119,14 @@ extras:
   xOffset: 0
   yOffset: -32
 ---
-name: "DungeonStairs"
+name: "DungeonStairsUp"
 type: "MapEntrance"
-image: "/images/structures/stairs.png"
+image: "/images/structures/stairs_up.png"
+collisionLevel: 0
+---
+name: "DungeonStairsDown"
+type: "MapEntrance"
+image: "/images/structures/stairs_down.png"
 collisionLevel: 0
 ---
 name: "DungeonDoor"

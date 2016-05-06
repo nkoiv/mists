@@ -12,7 +12,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.HasNeighbours;
-import com.nkoiv.mists.game.gameobject.MapEntrance;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -266,9 +266,9 @@ public class Location extends Flags implements Global {
      * TODO: might be good to key getters for individual nodes
      * @return (World)MapEntrace for this Location
      */
-    private MapEntrance getEntrace() {
+    private WorldMapEntrance getEntrace() {
         for (Structure s : this.structures) {
-            if (s instanceof MapEntrance) return (MapEntrance)s;
+            if (s instanceof WorldMapEntrance) return (WorldMapEntrance)s;
         }
         return null;
     }
@@ -278,14 +278,14 @@ public class Location extends Flags implements Global {
         * where the player lands when he first enters the location
         */
         for (Structure s : this.structures) {
-            if (s instanceof MapEntrance) return new double[]{s.getXPos(), s.getYPos()};
+            if (s instanceof WorldMapEntrance) return new double[]{s.getXPos(), s.getYPos()};
         }
         double[] newEntrance = this.getRandomOpenSpot(32);
         
         //Just return an open random spot if there's no structure library (for unit tests)
-        if (Mists.structureLibrary == null) return this.getRandomOpenSpot(this.getPlayer().getWidth());
+        if (Mists.structureLibrary == null) return this.getRandomOpenSpot(32);
         Mists.logger.log(Level.INFO, "No entrance for the location was found, so generating new one at {0}x{1}", new Object[]{newEntrance[0], newEntrance[1]});
-        MapEntrance newStairs = (MapEntrance)Mists.structureLibrary.create("DungeonStairs");
+        WorldMapEntrance newStairs = (WorldMapEntrance)Mists.structureLibrary.create("DungeonStairsUp");
         newStairs.setExitNode(entryNode);
         this.addMapObject(newStairs, newEntrance[0], newEntrance[1]);
         return newEntrance;

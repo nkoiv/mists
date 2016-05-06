@@ -17,10 +17,10 @@ import com.nkoiv.mists.game.world.worldmap.MapNode;
  * to a WorldMap Node, while being a MapObject inside a Location.
  * @author nikok
  */
-public class MapEntrance extends Structure {
+public class WorldMapEntrance extends Structure {
     private MapNode exitNode;
     
-    public MapEntrance(String name, MovingGraphics graphics, int collisionLevel, MapNode exitNode) {
+    public WorldMapEntrance(String name, MovingGraphics graphics, int collisionLevel, MapNode exitNode) {
         super(name, graphics, collisionLevel);
         this.exitNode = exitNode;
     }
@@ -55,8 +55,8 @@ public class MapEntrance extends Structure {
     }
     
     @Override
-    public MapEntrance createFromTemplate() {
-        MapEntrance ne = new MapEntrance(this.name, this.getGraphics(), 0, this.exitNode);
+    public WorldMapEntrance createFromTemplate() {
+        WorldMapEntrance ne = new WorldMapEntrance(this.name, this.getGraphics(), 0, this.exitNode);
         if (!this.extraSprites.isEmpty()) {
             for (Sprite s : this.extraSprites) {
                 double xOffset = s.getXPos() - this.getXPos();

@@ -8,7 +8,7 @@ package com.nkoiv.mists.game.libraries.premade;
 import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.MapEntrance;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.world.TileMap;
@@ -40,8 +40,8 @@ public class Village {
     }
     
     private static void generateStaticStructures(LocationTemplate villageTemplate) {
-        MapEntrance entrance = (MapEntrance)Mists.structureLibrary.create("dungeonStairs");
-        entrance.setPosition(3*Mists.TILESIZE, 17*Mists.TILESIZE);
+        WorldMapEntrance entrance = (WorldMapEntrance)Mists.structureLibrary.create("SignpostSmall");
+        entrance.setPosition(20*Mists.TILESIZE, 1*Mists.TILESIZE);
         villageTemplate.mobs.add(entrance);
     }
     

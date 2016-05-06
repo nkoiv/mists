@@ -11,6 +11,9 @@ structure: "StoneWall3"
 symbol: "%"
 structure: "VillageWall"
 ---
+symbol: "~"
+structure: "Water"
+---
 symbol: "+"
 structure: "DungeonDoor"
 ---
@@ -22,6 +25,12 @@ structure: "Tree1"
 ---
 symbol: "t"
 structure: "Tree2"
+---
+symbol: "F"
+structure: "Tree3a"
+---
+symbol: "f"
+structure: "Tree3b"
 ---
 symbol: "Y"
 structure: "TorchFloorDungeon"

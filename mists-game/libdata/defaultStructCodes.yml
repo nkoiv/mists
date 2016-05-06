@@ -18,7 +18,10 @@ symbol: "+"
 structure: "DungeonDoor"
 ---
 symbol: "<"
-structure: "DungeonStairs"
+structure: "DungeonStairsUp"
+---
+symbol: ">"
+structure: "DungeonStairsDown"
 ---
 symbol: "T"
 structure: "Tree1"

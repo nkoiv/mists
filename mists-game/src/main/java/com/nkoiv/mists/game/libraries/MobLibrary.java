@@ -13,7 +13,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
-import com.nkoiv.mists.game.gameobject.MapEntrance;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -294,11 +294,11 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return water;
     }
     
-    private static MapEntrance generateMapEntranceFromYAML(Map entranceData) {
+    private static WorldMapEntrance generateMapEntranceFromYAML(Map entranceData) {
         String mobname = (String)entranceData.get("name");
         int collisionLevel = Integer.parseInt((String)entranceData.get("collisionLevel"));
         Image image = new Image((String)entranceData.get("image"));
-        MapEntrance entrance = new MapEntrance(mobname, new Sprite(image), collisionLevel, null); 
+        WorldMapEntrance entrance = new WorldMapEntrance(mobname, new Sprite(image), collisionLevel, null); 
         addExtras(entranceData, entrance);
         addFlagsFromYAML(entranceData, entrance);
         return entrance;
