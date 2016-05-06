@@ -19,7 +19,7 @@ attributes:
  Agility: 2
  Intelligence: 1
  Speed: 50
- MaxHealth: 120
+ MaxHealth: 70
 #Default flags for creatures are:
 #visible: 1
 #collisionLevel: 5
@@ -38,7 +38,7 @@ attributes:
  Agility: 10
  Intelligence: 3
  Speed: 50
- MaxHealth: 100
+ MaxHealth: 40
 flags:
  collisionLevel: 5
 ---
@@ -70,7 +70,7 @@ attributes:
  Agility: 1
  Intelligence: 1
  Speed: 30
- MaxHealth: 150
+ MaxHealth: 140
 flags:
  collisionLevel: 5
 ---
