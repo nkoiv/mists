@@ -83,13 +83,8 @@ public class CreatureAI extends Flags{
     }
 
     protected boolean activateByLineOfSight(MapObject mob) {
-        if (Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), mob.getCenterXPos(), mob.getCenterYPos())
-                    < 10 * Mists.TILESIZE) {
-            if (this.isInLineOfSight(creep.getLocation().getPlayer())) {
-                return true;
-            }
-        }
-        return false;
+        return Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), mob.getCenterXPos(), mob.getCenterYPos())
+                < 10 * Mists.TILESIZE && this.isInLineOfSight(creep.getLocation().getPlayer());
     }
     
     /**

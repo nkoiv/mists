@@ -49,12 +49,10 @@ public class ItemContainer extends Structure implements HasInventory {
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
         //Update the image if needed
-        if (this.renderContent) {
-            if (this.inv.contentHash() != this.oldInvHash) {
-                Sprite newSprite = new Sprite(this.compileImageFromInventory());
-                newSprite.setPosition(this.graphics.getXPos(), this.graphics.getYPos());
-                this.graphics = newSprite;
-            }
+        if (this.renderContent && this.inv.contentHash() != this.oldInvHash) {
+            Sprite newSprite = new Sprite(this.compileImageFromInventory());
+            newSprite.setPosition(this.graphics.getXPos(), this.graphics.getYPos());
+            this.graphics = newSprite;
         }
         super.render(xOffset, yOffset, gc);
     }

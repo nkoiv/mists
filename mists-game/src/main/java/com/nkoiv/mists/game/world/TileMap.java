@@ -89,8 +89,7 @@ public class TileMap implements GameMap, KryoSerializable {
         double screenHeight = gc.getCanvas().getHeight();
         for (int row=(int)(-yOffset/this.tilesize);row<(screenHeight/this.tilesize)+(-yOffset/this.tilesize);row++) {
             for (int column=(int)(-xOffset/this.tilesize);column<(screenWidth/this.tilesize)+(-xOffset/this.tilesize);column++) {
-                if (column<this.tileMap.length && row<this.tileMap[0].length) {
-                if (this.tileMap[column][row]!=null)
+                if (column<this.tileMap.length && row<this.tileMap[0].length && this.tileMap[column][row]!=null) {
                     this.tileMap[column][row].render(-xOffset, -yOffset, gc);
                 //Print tile coordinates on top of tile
                 //gc.strokeText(column+","+row, this.tileMap[column][row].getSprite().getXPos()-xOffset, this.tileMap[column][row].getSprite().getYPos()-yOffset);
@@ -355,7 +354,7 @@ public class TileMap implements GameMap, KryoSerializable {
             intMap = new int[(int)this.tileWidth][(int)this.tileHeight];
             for (int y=0; y<this.tileHeight; y++) {
                 line = scanner.nextLine();
-                String lines = line;
+                String lines = line.toString();
                 for (int x=0; x<this.tileWidth; x++) {
                     int tilecode = lines.charAt(x);
                     if (tilecode == 32) tilecode = 0; //Hardcode empty (space) to be 0

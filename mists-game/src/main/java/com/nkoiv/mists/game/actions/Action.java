@@ -93,7 +93,7 @@ public class Action extends Flags implements Serializable {
     
 
     public void hitOn(Effect e, ArrayList<MapObject> mobs) {
-        
+        Mists.logger.log(Level.INFO, "{0} hit landed {1} targets with {2}", new Object[]{this.name, mobs.size(), e.getName()});
     }
     
     public boolean directDamageHit(ArrayList<MapObject> mobs) {

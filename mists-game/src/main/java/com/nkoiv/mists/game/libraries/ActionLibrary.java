@@ -61,6 +61,6 @@ public class ActionLibrary <E extends Action> {
     } 
     
     private static void prepareAttackAction(AttackAction e) {
-        
+        Mists.logger.info("Prepared "+e.toString()+" for library addition");
     }
 }

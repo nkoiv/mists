@@ -62,9 +62,7 @@ public class Circuit {
     public void givePowerToNeighbours() {
         if (!hasPower) return;
         for (int i = 0; i < this.openPaths.length; i++) {
-            if (openPaths[i] && !poweredFrom[i]) {
-                if (neighbours[i] != null) neighbours[i].getPowerFrom(oppositeSide(i));
-            }
+            if (openPaths[i] && !poweredFrom[i] && neighbours[i] != null) neighbours[i].getPowerFrom(oppositeSide(i));
         }
     }
     

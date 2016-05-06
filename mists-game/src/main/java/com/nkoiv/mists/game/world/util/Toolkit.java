@@ -21,6 +21,10 @@ import javafx.scene.text.Text;
  * @author nikok
  */
 public abstract class Toolkit {
+    private static final char NEWLINE = '\n';
+    private static final String SPACE_SEPARATOR = " ";
+    //if text has \n, \r or \t symbols it's better to split by \s+
+    private static final String SPLIT_REGEXP= "\\s+";
     
     /**
      * Convert the vector between two points
@@ -247,10 +251,6 @@ public abstract class Toolkit {
      * @param maxCharInLine
      * @return 
      */
-    private static final char NEWLINE = '\n';
-    private static final String SPACE_SEPARATOR = " ";
-    //if text has \n, \r or \t symbols it's better to split by \s+
-    private static final String SPLIT_REGEXP= "\\s+";
     public static String breakLines(String input, int maxLineLength) {
         String[] tokens = input.split(SPLIT_REGEXP);
         StringBuilder output = new StringBuilder(input.length());

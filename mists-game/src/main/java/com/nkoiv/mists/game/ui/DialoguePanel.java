@@ -135,10 +135,8 @@ public class DialoguePanel extends TextPanel {
             double uicX = lb.getXPosition();
             double uicY = lb.getYPosition();
             //Check if the click landed on the ui component
-            if (clickX >= uicX && clickX <= (uicX + uicWidth)) {
-                if (clickY >= uicY && clickY <= uicY + uicHeight) {
-                    lb.handleMouseEvent(me);
-                }
+            if (clickX >= uicX && clickX <= (uicX + uicWidth) && clickY >= uicY && clickY <= uicY + uicHeight) {
+                lb.handleMouseEvent(me);
             }
 
             }

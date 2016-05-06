@@ -41,7 +41,7 @@ public class DungeonGenerator implements Global{
             int totalAreas  = 20; //TODO: Make these into parameters
             int minAreaSize = 6;
             boolean treeMode = true;
-            ArrayList<BSParea> BSPareas = BSPdungeon(mapGen, xSize, ySize, totalAreas, 0.3f, 0.7f, minAreaSize, treeMode);
+            ArrayList<BSParea> BSPareas = bspDungeon(mapGen, xSize, ySize, totalAreas, 0.3f, 0.7f, minAreaSize, treeMode);
             int[][] randomStructures = dungeonStructures(BSPareas, xSize, ySize, minAreaSize);
             TileMap dungeon =  new TileMap (xSize, ySize, Mists.TILESIZE, randomStructures);
             //IsometricTileMap dungeon =  new IsometricTileMap (xSize, ySize, Mists.TILESIZE, randomStructures);
@@ -65,7 +65,7 @@ public class DungeonGenerator implements Global{
     }
 
 
-    public static ArrayList<BSParea> BSPdungeon (DungeonGenerator mapGen, int xSize, int ySize, int totalAreasToCreate, float minSize, float maxSize, int absMin, boolean tree) {
+    public static ArrayList<BSParea> bspDungeon (DungeonGenerator mapGen, int xSize, int ySize, int totalAreasToCreate, float minSize, float maxSize, int absMin, boolean tree) {
             int totalAreas = totalAreasToCreate;
             float absMax = 0.5f; //Max size for any given area
             ArrayList<BSParea> BSPareas = new ArrayList<BSParea>();

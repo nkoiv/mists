@@ -107,14 +107,14 @@ public class PopUpMenu extends UIComponent{
             double itemX = menuButtons[i].getXPosition();
             double itemY = menuButtons[i].getYPosition();
             //Check if the click landed on the ui component
-            if (clickX >= itemX && clickX <= (itemX + itemWidth)) {
-                if (clickY >= itemY && clickY <= itemY + itemHeight) {
-                    menuButtons[i].handleMouseEvent(me);
-                }
+            if (clickX >= itemX && clickX <= (itemX + itemWidth) &&
+                clickY >= itemY && clickY <= (itemY + itemHeight)) {
+                menuButtons[i].handleMouseEvent(me);
             }
-            
         }
+            
     }
+    
 
     
     public static class MenuButton  extends UIComponent {

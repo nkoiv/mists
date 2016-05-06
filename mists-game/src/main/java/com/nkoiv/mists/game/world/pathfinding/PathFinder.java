@@ -278,10 +278,12 @@ public class PathFinder {
                         //update the Clearance levels on current box
                         for (int row=0;row<lap;row++) {
                             for (int column=0;column<lap;column++) {
-                               if (clearanceMap[x+column][y+row] < lap) {
-                                   if(clearanceMap[x+column][y+row]<(lap-row) && clearanceMap[x+column][y+row]<(lap-column))
+                                if (clearanceMap[x+column][y+row] < lap
+                                    && clearanceMap[x+column][y+row]<(lap-row) 
+                                    && clearanceMap[x+column][y+row]<(lap-column)) {
                                        clearanceMap[x+column][y+row]++; //increase the level (up to lap)
-                               }
+                                }
+                                
                             }
                         }
                         //add all the edges of this tile to the edges list

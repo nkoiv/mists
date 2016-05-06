@@ -174,10 +174,8 @@ public class WorldMapState implements GameState {
             double uicX = uic.getXPosition();
             double uicY = uic.getYPosition();
             //Check if the click landed on the ui component
-            if (xCoor >= uicX && xCoor <= (uicX + uicWidth)) {
-                if (yCoor >= uicY && yCoor <= uicY + uicHeight) {
-                    return uic;
-                }
+            if (xCoor >= uicX && xCoor <= (uicX + uicWidth) && yCoor >= uicY && yCoor <= uicY + uicHeight) {
+                return uic;
             }
         }
         //Click landed on area without UI component

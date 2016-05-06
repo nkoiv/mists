@@ -147,9 +147,7 @@ public class Inventory {
     
     public Item getItemByID(int itemID) {
         for (Item i : this.items) {
-            if (i != null) {
-                if (i.baseID == itemID) return i;
-            }
+            if (i != null && i.baseID == itemID) return i;
         }
         return null;
     }
@@ -182,32 +180,28 @@ public class Inventory {
     
     public Item removeItemByID(int itemID) {
         for (int i = 0; i< this.items.length; i++) {
-            if (this.items[i] != null) {
-                if (this.items[i].getBaseID() == itemID) return this.removeItem(i);
-            }
+            if (this.items[i] != null && this.items[i].getBaseID() == itemID) return this.removeItem(i);
         }
         return null;
     }
     
     public Item removeItemByName(String itemname) {
         for (int i = 0; i< this.items.length; i++) {
-            if (this.items[i] != null) {
-                if (this.items[i].getName().equals(itemname)) return this.removeItem(i);
-            }
+            if (this.items[i] != null && this.items[i].getName().equals(itemname)) return this.removeItem(i);
         }
         return null;
     }
     
     public boolean containsItem(int itemID) {
         for (Item i : this.items) {
-            if (i !=null) if (i.baseID == itemID) return true;
+            if (i !=null && i.baseID == itemID) return true;
         }
         return false;
     }
     
     public boolean containsItem(String itemName) {
         for (Item i : this.items) {
-            if (i !=null) if (i.name.equals(itemName)) return true;
+            if (i !=null && i.name.equals(itemName)) return true;
         }
         return false;
     }
