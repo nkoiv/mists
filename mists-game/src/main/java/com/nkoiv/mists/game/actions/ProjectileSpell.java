@@ -11,10 +11,12 @@ import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Projectile;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.Water;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import javafx.scene.image.ImageView;
 
@@ -139,6 +141,14 @@ public class ProjectileSpell extends Action implements AttackAction {
         while (mobs.contains(owner)) {
             mobs.remove(owner);
         }
+        
+        //Spells should fly over frills and water
+        Iterator mobIterator = mobs.iterator();
+        while (mobIterator.hasNext()) {
+            MapObject mob = (MapObject)mobIterator.next();
+            if ((mob.getCollisionLevel() == 0 && mob instanceof Structure) || mob instanceof Water) mobIterator.remove();
+        }
+        
         if (mobs.isEmpty()) return;
         
         if ("projectile".equals(e.getName())) {

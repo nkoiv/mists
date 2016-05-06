@@ -15,6 +15,7 @@ import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.TileMap;
+import java.util.Random;
 import javafx.scene.image.Image;
 
 /**
@@ -130,7 +131,19 @@ public abstract class StarterDungeon {
     }
     
     private static void generateDungeonCaveLevelMobs(LocationTemplate dungeon) {
-        
+        for (int i = 0; i < 10; i++) {
+            Random rnd = new Random();
+            int randomMob = rnd.nextInt(4);
+            Creature monster;
+            switch (randomMob) {
+                case 0: monster = Mists.creatureLibrary.create("worm"); break;
+                case 1: monster = Mists.creatureLibrary.create("swampy"); break;
+                case 2: monster = Mists.creatureLibrary.create("worm"); break;
+                case 3: monster = Mists.creatureLibrary.create("swampy"); break;
+                default: monster = Mists.creatureLibrary.create("worm"); break;
+            }
+            dungeon.mobs.add(monster);
+        }
     }
     
     private static void addStructureFrillsToDungeonCaveLevel(LocationTemplate dungeon) {

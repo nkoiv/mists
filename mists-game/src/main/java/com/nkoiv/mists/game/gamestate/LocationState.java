@@ -661,6 +661,7 @@ public class LocationState implements GameState {
         
         if (releasedButtons.contains(KeyCode.ESCAPE)) {
             if (!this.closeMenus()) game.locControls.toggleLocationMenu();
+            game.getCurrentLocation().clearTarget();
         }
 
         //Location controls
