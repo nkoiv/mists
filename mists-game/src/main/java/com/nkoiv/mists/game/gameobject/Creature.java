@@ -789,6 +789,18 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this.setRemovable();
         if (Mists.MistsGame == null) return;
         Mists.MistsGame.questManager.registerMobDeath(this);
+        this.dropItems();
+    }
+    
+    protected void dropItems() {
+        if (!this.inventory.isEmpty()) {
+            ItemContainer pile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
+            for (int itemID = 0; itemID < this.inventory.getSize(); itemID++) {
+                if (this.inventory.getItem(itemID) != null) {
+                    pile.addItem(this.inventory.removeItem(itemID));
+                }
+            }
+        }
     }
 	
     @Override
