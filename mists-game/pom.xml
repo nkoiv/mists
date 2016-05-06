@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nkoiv</groupId>
     <artifactId>mists-game</artifactId>
-    <version>0.4-PANDARIN_GRAPES</version>
+    <version>0.5-PANDARIN_DUNGEON</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

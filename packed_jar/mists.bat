@@ -1,1 +1,1 @@
-java -jar mists-game-0.4-PANDARIN_GRAPES.jar
+java -jar mists-game-0.5-PANDARIN_DUNGEON.jar
