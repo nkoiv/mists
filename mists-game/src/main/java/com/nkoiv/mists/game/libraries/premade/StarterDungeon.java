@@ -109,9 +109,23 @@ public abstract class StarterDungeon {
         }
         
         //Muck
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 5; i++) {
             Structure randomOoze = Mists.structureLibrary.create("MuckFrill");
             dungeon1.mobs.add(randomOoze);
+        }
+        
+        //Moss
+        for (int i = 0; i < 8; i++) {
+            Structure randomMoss = Mists.structureLibrary.create("MossFrill");
+            dungeon1.mobs.add(randomMoss);
+            Structure randomMossAlt = Mists.structureLibrary.create("MossFrillAlt");
+            dungeon1.mobs.add(randomMossAlt);
+        }
+        
+        //Cracks
+        for (int i = 0; i < 5; i++) {
+            Structure randomCracks = Mists.structureLibrary.create("CracksFrill");
+            dungeon1.mobs.add(randomCracks);
         }
         
         //Furniture
@@ -122,7 +136,28 @@ public abstract class StarterDungeon {
     }
     
     private static void generateDungeonTwoMobs(LocationTemplate dungeon2) {
+        addStructureFrillsToDungeonTwo(dungeon2);
+    }
+    
+    private static void addStructureFrillsToDungeonTwo(LocationTemplate dungeon2) {
+        //Moss
+        for (int i = 0; i < 10; i++) {
+            Structure randomMoss = Mists.structureLibrary.create("MossFrill");
+            dungeon2.mobs.add(randomMoss);
+            Structure randomMossAlt = Mists.structureLibrary.create("MossFrillAlt");
+            dungeon2.mobs.add(randomMossAlt);
+        }
+        //Ooze
+        for (int i = 0; i < 10; i++) {
+            Structure randomOoze = Mists.structureLibrary.create("OozeFrill");
+            dungeon2.mobs.add(randomOoze);
+        }
         
+        //Muck
+        for (int i = 0; i < 5; i++) {
+            Structure randomOoze = Mists.structureLibrary.create("MuckFrill");
+            dungeon2.mobs.add(randomOoze);
+        }
     }
     
     private static void generateDungeonTwoStaticStructures(LocationTemplate dungeon2) {

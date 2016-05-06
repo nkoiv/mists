@@ -50,6 +50,9 @@ structure: "Barrel"
 symbol: "m"
 structure: "TableRound"
 ---
+symbol: "M"
+structure: "TableRoundCards"
+---
 symbol: "r"
 structure: "ChairRight"
 ---

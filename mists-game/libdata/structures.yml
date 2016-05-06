@@ -199,6 +199,24 @@ type: "GenericStructure"
 spritesheet: "/images/structures/dungeonex.png"
 spritesheetParameters: [1, 64, 256, 0, 0, 32, 32]
 ---
+name: "MossFrill"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 0, 0, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "MossFrillAlt"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 0, 32, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "BonesFrill"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 96, 256, 0, 0, 32, 32]
+collisionLevel: 0
+---
 name: "BonesFrill"
 type: "GenericStructure"
 spritesheet: "/images/structures/dungeonex.png"
@@ -217,10 +235,22 @@ spritesheet: "/images/structures/dungeonex.png"
 spritesheetParameters: [1, 224, 128, 0, 0, 32, 32]
 collisionLevel: 0
 ---
-name: "BonesFrill"
+name: "CracksFrill"
 type: "GenericStructure"
 spritesheet: "/images/structures/dungeonex.png"
-spritesheetParameters: [1, 96, 256, 0, 0, 32, 32]
+spritesheetParameters: [1, 256, 128, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "Cobwebs"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 288, 128, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "CobwebsAlt"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 288, 160, 0, 0, 32, 32]
 collisionLevel: 0
 ---
 name: "CircuitI"
