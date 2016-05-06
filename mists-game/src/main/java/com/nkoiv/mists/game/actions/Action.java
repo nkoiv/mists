@@ -117,11 +117,7 @@ public class Action extends Flags implements Serializable {
                         Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
                         ((Combatant)mob).takeDamage(damage);
                     }
-                } else if (mob instanceof Structure) {
-                    //TODO: Temp: DESTROY THE STRUCTURES!
-                    //this.getOwner().getLocation().removeMapObject(mob);
-                    //if (this.owner instanceof PlayerCharacter) mob.setRemovable();
-                }
+                } 
             }
             this.setFlag("triggered", 1);
             return true;

@@ -26,15 +26,10 @@ public class DungeonGenerator implements Global{
     private static final int FLOOR = 46;
     private static final int WALL = 35;
     private static final int DOOR = 43;
-    private static final Random rnd = new Random();
+    private static final Random RND = new Random();
 
-    public DungeonGenerator() {
-        //this.rnd = new Random(); //Create a new random seed every time a DungeonGen is initialized
-
-    }
-    
     public static void setRandomSeed(long seed) {
-        rnd.setSeed(seed);
+        RND.setSeed(seed);
     }
 
     public static TileMap generateDungeon(DungeonGenerator mapGen, int xSize, int ySize) {
@@ -86,7 +81,7 @@ public class DungeonGenerator implements Global{
                     }
                     //If no area is at max size, pick one at random
                     if (areaToSplit==null) {
-                            areaToSplit = BSPareas.get(rnd.nextInt(BSPareas.size()));
+                            areaToSplit = BSPareas.get(RND.nextInt(BSPareas.size()));
                     }
 
                     //Split the area
@@ -232,7 +227,7 @@ public class DungeonGenerator implements Global{
                 boolean digging = true;
                 int tilesDug = 0;
                 while (digging && tilesDug <= (Math.abs(distanceX)+Math.abs(distanceY)+2)) {
-                    if (rnd.nextFloat()<doorChance) makeDoor=true;
+                    if (RND.nextFloat()<doorChance) makeDoor=true;
                     //Move corridor by one to the desired direction
                     //Check how much distance we have left to cover
                     distanceX = destinationX - corridorXPosOnMap;
@@ -338,21 +333,21 @@ public class DungeonGenerator implements Global{
 
         //Make a corridor from each room
         for (BSParea area : arealist) {
-            if (rnd.nextFloat()>corridorChance) continue;
-            int direction = rnd.nextInt(3);
+            if (RND.nextFloat()>corridorChance) continue;
+            int direction = RND.nextInt(3);
             int doorwayX;
             int doorwayY;
             //If we're going up or down
             if (direction==0||direction==2){
                 //Doorway cant be at the very edge (there's wall there)
-                doorwayX =  1+rnd.nextInt(area.room.width-2);
+                doorwayX =  1+RND.nextInt(area.room.width-2);
                 if (direction==0) { //Door made at upper edge
                     doorwayY = 0;
                 } else { //Otherwise its the lower edge
                     doorwayY = area.room.height-1;
                 }				
             } else {
-                doorwayY = 1+rnd.nextInt(area.room.height-2);
+                doorwayY = 1+RND.nextInt(area.room.height-2);
                 if (direction==1) {	//Door to the right
                     doorwayX = area.room.width-1;
                 } else { //Door to the left
@@ -540,7 +535,7 @@ public class DungeonGenerator implements Global{
                         return false;
                 }
                 //Figure out which way to split
-                boolean splitHorizontal = rnd.nextBoolean();
+                boolean splitHorizontal = RND.nextBoolean();
                 //Figure the largest splittable child
                 int maxAreaSize = (splitHorizontal ? height : width) - absMin;
                 if (maxAreaSize < absMin) {
@@ -548,7 +543,7 @@ public class DungeonGenerator implements Global{
                         return false;
                 }
                 //Make the split and ensure it falls between max and minSize
-                int splitPosition = rnd.nextInt((int)((splitHorizontal ? height : width)*maxSize));
+                int splitPosition = RND.nextInt((int)((splitHorizontal ? height : width)*maxSize));
                 if(debug)Mists.logger.info("Splitting at position "+splitPosition);
                 if (splitPosition < (splitHorizontal ? height : width)*minSize) splitPosition = (int)((splitHorizontal ? height : width)*minSize);
                 //Create the sub-areas
@@ -570,7 +565,7 @@ public class DungeonGenerator implements Global{
          */
         public void generateRoom(int minSize) {
             //Give the room a random size
-            float roomSize = rnd.nextFloat();
+            float roomSize = RND.nextFloat();
             //Room size should never be less than 80% of the area
             if (roomSize<0.8f) roomSize=0.8f;
             if (width<=minSize|height<=minSize) roomSize=1.0f;
@@ -583,10 +578,10 @@ public class DungeonGenerator implements Global{
             int xOffset = 0;
             int yOffset = 0;
             if (xOffsetMax>0) {
-                    xOffset = rnd.nextInt(xOffsetMax);
+                    xOffset = RND.nextInt(xOffsetMax);
             }
             if (yOffsetMax>0) {
-                    yOffset = rnd.nextInt(yOffsetMax);
+                    yOffset = RND.nextInt(yOffsetMax);
             }
 
             this.room = new Room(roomWidth,roomHeight, xOffset, yOffset);

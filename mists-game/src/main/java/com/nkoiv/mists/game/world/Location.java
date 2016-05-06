@@ -155,7 +155,7 @@ public class Location extends Flags implements Global {
         else this.loading = true;
         this.map = map;
         // Add in all the static structures from the selected map
-        ArrayList<Structure> staticStructures = map.getStaticStructures(this);
+        ArrayList<Structure> staticStructures = map.getStaticStructures();
         Mists.logger.info("Map has "+staticStructures.size()+" static structures");
         ArrayList<Wall> walls = new ArrayList<>();
         for (Structure s : staticStructures) {

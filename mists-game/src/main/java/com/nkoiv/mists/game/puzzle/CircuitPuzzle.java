@@ -140,7 +140,7 @@ public class CircuitPuzzle {
      * Rotate each circuit in a puzzle for a number of times (0-3)
      * @param circuitMap Array[] with the circuits in it
      */
-    private static void randomizePuzzleRotations(Circuit[][] circuitMap) {
+    public static void randomizePuzzleRotations(Circuit[][] circuitMap) {
         Random rnd = new Random();
         for (int i = 0; i < circuitMap.length; i++) {
             for (int j = 0; j < circuitMap[0].length; j++) {

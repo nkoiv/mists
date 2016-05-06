@@ -203,7 +203,7 @@ public class PathFinder {
         *  Otherwise the mover might get stuck on corners
         *  This method returns the center of the given tile in "real coordinates"
         */
-    private double[] getTileCoordinates(int tileXCoor, int tileYCoor, int tileSize){    
+    protected double[] getTileCoordinates(int tileXCoor, int tileYCoor, int tileSize){    
         double[] realCoordinates = new double[2];
         realCoordinates[0] = (tileXCoor * tileSize)+(tileSize/2);
         realCoordinates[1] = (tileYCoor * tileSize)+(tileSize/2);
@@ -222,7 +222,7 @@ public class PathFinder {
      }
            
 
-    private boolean isValidLocation(List<Integer> crossableTerrain, int currentX, int currentY, int goalX, int goalY) {
+    protected boolean isValidLocation(List<Integer> crossableTerrain, int currentX, int currentY, int goalX, int goalY) {
             boolean invalid = (goalX < 0) || (goalY < 0) || (goalX >= map.getMapTileWidth()) || (goalY >= map.getMapTileWidth());
 
             if ((!invalid) && ((currentX != goalX) || (currentY != goalX))) {

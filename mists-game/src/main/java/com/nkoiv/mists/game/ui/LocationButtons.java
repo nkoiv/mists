@@ -18,12 +18,6 @@ import javafx.scene.input.MouseEvent;
 public class LocationButtons {
     public static int DISPLAY_PATHS = 1;
     
-    
-    public LocationButtons() {
-        
-    }
-    
-    
     public  static class ResumeButton extends TextButton {
         private final Game game;
         

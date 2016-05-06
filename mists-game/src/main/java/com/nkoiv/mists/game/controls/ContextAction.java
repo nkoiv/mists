@@ -35,7 +35,7 @@ public class ContextAction {
     private MapObject triggerRadius;
     private int currentTrigger;
     private Creature actor; //Usually the player?
-    private LocationServer server;
+    //private LocationServer server;
     private LocationClient client;
     
     public ContextAction(Creature actor) {
@@ -44,11 +44,11 @@ public class ContextAction {
         this.triggerSource = new HashMap<>();
         this.generateTriggerRange();
     }
-    
+    /*
     public void setLocationServer(LocationServer server) {
         this.server = server;
     }
-    
+    */
     public void setLocationClient(LocationClient client) {
         this.client = client;
     }
@@ -152,6 +152,7 @@ public class ContextAction {
             if (availableTriggers.get(i).getTarget() == null) {
                 //Do nothing as the mob was lost to void
                 //TODO: Maybe log this? Dig to the bottom of it at some point
+                Mists.logger.warning("Context Action tried to access a null mob");
             } else if (availableTriggers.get(i).getTarget().equals(mob)) {
                 this.currentTrigger = i;
                 return true;

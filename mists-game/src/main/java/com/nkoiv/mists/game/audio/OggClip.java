@@ -495,9 +495,7 @@ public class OggClip {
 						break; // need more data
 					if (result == -1) { // missing or corrupt data at this page
 						// position
-						// System.err.println("Corrupt or missing data in
-						// bitstream;
-						// continuing...");
+						 System.err.println("Corrupt or missing data in bitstream; continuing...");
 					} else {
 						os.pagein(og);
 

@@ -27,8 +27,8 @@ public class WorldMapState implements GameState {
     private HashMap<String, UIComponent> uiComponents;
     private final TreeSet<UIComponent> drawOrder;
     private final Game game;
-    private UIComponent currentMenu;
-    private boolean gameMenuOpen;
+    //private UIComponent currentMenu;
+    //private boolean gameMenuOpen;
     private double lastDragX;
     private double lastDragY;
     

@@ -57,14 +57,14 @@ public class LocationState implements GameState {
     private LocationClient client;
 
     private final Game game;
-    private UIComponent currentMenu;
+    //private UIComponent currentMenu;
     public boolean gameMenuOpen;
     public boolean paused;
     public double lastDragX;
     public double lastDragY;
     public boolean infoBoxOpen;
-    private final AudioControls audioControls = new AudioControls();
-    private final LocationButtons locationControls = new LocationButtons();
+    //private final AudioControls audioControls = new AudioControls();
+    //private final LocationButtons locationControls = new LocationButtons();
     private boolean inConsole;
     private final HashMap<String, UIComponent> uiComponents;
     private final TreeSet<UIComponent> drawOrder;
@@ -98,7 +98,7 @@ public class LocationState implements GameState {
     private void setToClient() {
         try {    
                 this.client = new LocationClient(game);
-                game.locControls.setLocationClient(client);
+                //game.locControls.setLocationClient(client);
             } catch (Exception e) {
                 Mists.logger.warning("Error starting client: "+e.getMessage());
                 Mists.logger.warning("Changing to Singleplayer");
@@ -108,7 +108,7 @@ public class LocationState implements GameState {
     private void setToServer() {
         try {    
                 this.server = new LocationServer(game);
-                game.locControls.setLocationServer(server);
+                //game.locControls.setLocationServer(server);
             } catch (Exception e) {
                 Mists.logger.warning("Error starting server: "+e.getMessage());
                 Mists.logger.warning("Changing to Singleplayer");

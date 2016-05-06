@@ -40,8 +40,8 @@ import javafx.scene.image.ImageView;
 public class LocationControls {
     
     private final Game game;
-    private LocationServer server;
-    private LocationClient client;
+    //private LocationServer server;
+    //private LocationClient client;
     
     public LocationControls(Game game) {
         this.game = game;
@@ -54,7 +54,7 @@ public class LocationControls {
     public Game getGame() {
         return this.game;
     }
-    
+    /*
     public void setLocationServer(LocationServer server) {
         this.server = server;
     }
@@ -62,7 +62,7 @@ public class LocationControls {
     public void setLocationClient(LocationClient client) {
         this.client = client;
     }
-    
+    */
     /**
      * Trigger is used for interpreting a command,
      * either via console or by some external script

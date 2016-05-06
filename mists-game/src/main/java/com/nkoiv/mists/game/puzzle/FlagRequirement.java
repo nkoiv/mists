@@ -31,6 +31,7 @@ public class FlagRequirement {
     }
     
     public FlagRequirement(Flags target, String flag, int requiredValue, boolean largerValuesAllowed, boolean smallerValuesAllowed) {
+        this.target = target;
         this.flag = flag;
         this.requiredValue = requiredValue;
         this.largerValuesAllowed = largerValuesAllowed;

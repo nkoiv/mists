@@ -142,7 +142,7 @@ public class TileMap implements GameMap, KryoSerializable {
     * Note that generated maps should have separate arrays for structures and the tiles,
     * because structures should have "floor" under them
     */
-    private Structure generateStructure(int tileCode, Location l, int xCoor, int yCoor) {
+    private Structure generateStructure(int tileCode, int xCoor, int yCoor) {
         int t = tileCode;
         if (this.structureCodes == null) this.loadDefaultStructCodes();
         if (t == CLEAR) t = WALL;
@@ -203,7 +203,7 @@ public class TileMap implements GameMap, KryoSerializable {
     
     //TODO: Structures should have their own map, and not just intMap
     @Override
-    public ArrayList<Structure> getStaticStructures(Location l) {
+    public ArrayList<Structure> getStaticStructures() {
         if (this.structureCodes == null) this.loadDefaultStructCodes();
         //Generate structures and return them
         Mists.logger.info("Generating structures");
@@ -212,7 +212,7 @@ public class TileMap implements GameMap, KryoSerializable {
             for (int y=0; y<this.tileHeight; y++) {
                 //TODO: Check the intMap value against tilesheet
                 //For now, everything is floor
-                Structure newStructure = this.generateStructure(this.intMap[x][y], l, x, y);
+                Structure newStructure = this.generateStructure(this.intMap[x][y], x, y);
                 if(newStructure != null)staticStructures.add(newStructure); 
             }
         }

@@ -95,7 +95,7 @@ public class ProjectileSpell extends Action implements AttackAction {
         }
     }
     
-    private void onImpact() {
+    protected void onImpact() {
         //Only trigger once
         for (Effect e : this.effects) {
             e.setRemovable();
