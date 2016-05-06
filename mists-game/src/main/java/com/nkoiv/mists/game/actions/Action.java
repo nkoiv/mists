@@ -98,7 +98,10 @@ public class Action extends Flags implements Serializable {
     
     public boolean directDamageHit(ArrayList<MapObject> mobs) {
         int damage = this.getFlag("damage");
-        int scalingDamage = this.owner.getFlag("Strength"); //TODO: Customized scaling attribute
+        int scalingDamage = 0;
+        if (this.owner instanceof Creature) {
+            scalingDamage = ((Creature)owner).getAttribute("Strength");
+        } //TODO: Customized scaling attribute
         damage = damage+scalingDamage;
         while (mobs.contains(this.owner))  mobs.remove(this.owner);
         if (!mobs.isEmpty() && !this.isFlagged("triggered")) {
