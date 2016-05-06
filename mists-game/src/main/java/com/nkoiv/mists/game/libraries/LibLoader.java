@@ -79,8 +79,7 @@ public class LibLoader {
                         ((DialogueLibrary)library).addTemplate(dialogue, dialogueID);
                     }
                 } catch (Exception e) {
-                    Mists.logger.warning("Failed parsing "+object.toString());
-                    Mists.logger.warning(e.toString());
+                    Mists.logger.warning("Failed parsing "+object.toString()+" Error message: "+e.toString());
                 }
                 
             }

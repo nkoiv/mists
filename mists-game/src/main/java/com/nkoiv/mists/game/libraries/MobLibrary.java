@@ -28,8 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 
 /**
  * A library is a collection of map objects templates.
@@ -198,21 +202,19 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     
     private static Structure generateStructureFromYAML(Map structureData) {
         String mobname = (String)structureData.get("name");
-        int collisionLevel = Integer.parseInt((String)structureData.get("collisionLevel"));
+        int collisionLevel;
+        if (structureData.containsKey("collisionLevel")) {
+            collisionLevel = Integer.parseInt((String)structureData.get("collisionLevel"));
+        } else {
+            collisionLevel = 1;
+        }
         Structure struct;
-        if (structureData.containsKey("spriteType")) {
-            String spriteType = (String)structureData.get("spriteType");
-            if ("static".equals(spriteType)) {
-                Image image = new Image((String)structureData.get("image"));
-                struct = new Structure(mobname, image, collisionLevel); 
-                
-            } else { //if (spriteType.equals("spritesheet")){
-                SpriteAnimation sa = generateSpriteAnimation((String)structureData.get("spritesheet"), 
-                (List<String>)structureData.get("spritesheetParameters"));
-                Sprite sp = new Sprite(Mists.graphLibrary.getImage("blank"));
-                sp.setAnimation(sa);
-                struct = new Structure(mobname, sp, collisionLevel);
-            }
+        if (structureData.containsKey("spritesheet")) {
+            Mists.logger.info("Generating structure sprite from spritesheet");
+            List<String> spritesheetParameters = (List<String>)structureData.get("spritesheetParameters");
+            String spritesheetLocation = (String)structureData.get("spritesheet");
+            Sprite sp = getSpriteFromSpriteSheet(spritesheetLocation, spritesheetParameters);
+            struct = new Structure(mobname, sp, collisionLevel);
         } else {
             Image image = new Image((String)structureData.get("image"));
             struct = new Structure(mobname, image, collisionLevel); 
@@ -227,18 +229,11 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     private static ItemContainer generateItemContainerFromYAML(Map structureData) {
         String mobname = (String)structureData.get("name");
         ItemContainer ic;
-        if (structureData.containsKey("spriteType")) {
-            String spriteType = (String)structureData.get("spriteType");
-            if ("static".equals(spriteType)) {
-                Image image = new Image((String)structureData.get("image"));
-                ic = new ItemContainer(mobname, new Sprite(image)); 
-            } else { //if (spriteType.equals("spritesheet")){
-                SpriteAnimation sa = generateSpriteAnimation((String)structureData.get("spritesheet"), 
-                (List<String>)structureData.get("spritesheetParameters"));
-                Sprite sp = new Sprite(Mists.graphLibrary.getImage("blank"));
-                sp.setAnimation(sa);
-                ic = new ItemContainer(mobname, sp);
-            }
+        if (structureData.containsKey("spritesheet")) {
+            List<String> spritesheetParameters = (List<String>)structureData.get("spritesheetParameters");
+            String spritesheetLocation = (String)structureData.get("spritesheet");
+            Sprite sp = getSpriteFromSpriteSheet(spritesheetLocation, spritesheetParameters);
+            ic = new ItemContainer(mobname, sp);
         } else {
             Image image = new Image((String)structureData.get("image"));
             ic = new ItemContainer(mobname, new Sprite(image)); 
@@ -247,6 +242,43 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         addExtras(structureData, ic);
         addFlagsFromYAML(structureData, ic);
         return ic;
+    }
+    
+    private static Sprite getSpriteFromSpriteSheet(String spritesheetLocation, List<String> spriteSheetParameters) {
+        //Mists.logger.info("Generating sprite from spritesheet");
+        Sprite sp;
+        int framecount = Integer.parseInt(spriteSheetParameters.get(0));
+        if (framecount == 1) {
+            //Mists.logger.info("Framecount set to 1");
+            Image structureImage = clipImageFromSpriteSheet(spritesheetLocation, spriteSheetParameters);
+            sp = new Sprite(structureImage);
+        } else {
+            //Mists.logger.info("Framecount set to more than 1");
+            SpriteAnimation sa = generateSpriteAnimation(spritesheetLocation, spriteSheetParameters);
+            sp = new Sprite(Mists.graphLibrary.getImage("blank"));
+            sp.setAnimation(sa);
+        }
+        return sp;
+    }
+    
+    private static Image clipImageFromSpriteSheet(String spritesheet, List<String> spriteSheetParameters) {
+        //Mists.logger.info("Clipping image from spritesheet...");
+        ImageView imageView = new ImageView(spritesheet);
+        //int framecount = Integer.parseInt(spriteSheetParameters.get(0));
+        int xPos = Integer.parseInt(spriteSheetParameters.get(1));
+        int yPos = Integer.parseInt(spriteSheetParameters.get(2));
+        //int xOffset = Integer.parseInt(spriteSheetParameters.get(3));
+        //int yOffset = Integer.parseInt(spriteSheetParameters.get(4));
+        int width = Integer.parseInt(spriteSheetParameters.get(5));
+        int height = Integer.parseInt(spriteSheetParameters.get(6));
+        //Mists.logger.info("Rectangle setting to: "+xPos+"x"+yPos+" - size: "+width+"x"+height);
+        Rectangle2D r = new Rectangle2D(xPos, yPos, width, height);
+        imageView.setViewport(r);
+        WritableImage snapshot = null;
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setFill(Color.TRANSPARENT);
+        //Mists.logger.info("Returning snapshot");
+        return imageView.snapshot(parameters, snapshot);
     }
     
     private static SpriteAnimation generateSpriteAnimation(String spritesheet, List<String> spriteSheetParameters) {

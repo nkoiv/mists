@@ -29,7 +29,9 @@ Please see the [LICENCE.md](https://github.com/nkoiv/mists/blob/master/LICENCE.m
 
 * Majority of the UI components are from Kenneys Pack (http://kenney.nl/projects/kenney-game-assets)
 
-* Some game sprites are from: Humble Bundle pack: Old School Modern 2 Copyright Jason Perry
+* Some monster sprites (monster3.png, monster6.png) are from: Humble Bundle pack: Old School Modern 2 Copyright Jason Perry
+
+* Several dungeon frills are from http://opengameart.org/content/lpc-dungeon-elements by William Thomsonj and Sharm
 
 * Animated water tiles by Bart from OpenGameArt.org: http://opengameart.org/content/art-bart-animated-water-tiles
 

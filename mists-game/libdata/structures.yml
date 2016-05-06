@@ -1,8 +1,12 @@
 ---
-name: "StoneWall1"
-type: "Wall"
-image: "/images/structures/stonewall1.png"
-collisionLevel: 1
+name: "StoneWall1" #name is mandatory
+type: "Wall" #type is mandatory
+image: "/images/structures/stonewall1.png" #either image or spritesheet is mandatory
+#example of spritesheet:
+#spritesheet: "/images/environment/grass_animated1.png"
+#spritesheetParameters: [6, 0, 0, 0, 0, 32, 32]
+#spritesheetParameters: [frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight]
+collisionLevel: 1 #if no collisionLevel is supplied, it defaults to 1
 ---
 name: "StoneWall2"
 type: "Wall"
@@ -27,7 +31,6 @@ collisionLevel: 10
 ---
 name: "AnimatedGrass"
 type: "AnimatedFrill"
-#image: "/images/blank.png"
 spritesheet: "/images/environment/grass_animated1.png"
 spritesheetParameters: [6, 0, 0, 0, 0, 32, 32]
 #spritesheetParameters: [frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight]
@@ -139,6 +142,37 @@ name: "PuzzleRune"
 type: "PuzzleTile"
 imageLit: "/images/structures/puzzletile_lit.png"
 imageUnlit: "/images/structures/puzzletile_unlit.png"
+---
+name: "TableRound"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 96, 0, 0, 0, 32, 32]
+#spritesheetParameters: [frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight]
+---
+name: "TableRoundCards"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 96, 32, 0, 0, 32, 32]
+---
+name: "ChairDown"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 64, 0, 0, 0, 32, 32]
+---
+name: "ChairUp"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 128, 0, 0, 0, 32, 32]
+---
+name: "ChairRight"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 64, 32, 0, 0, 32, 32]
+---
+name: "ChairLeft"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 128, 32, 0, 0, 32, 32]
 ---
 name: "CircuitI"
 type: "CircuitTile"
