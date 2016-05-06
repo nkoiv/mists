@@ -13,6 +13,7 @@ import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
+import com.nkoiv.mists.game.gameobject.LocationDoorway;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
@@ -362,6 +363,10 @@ public class LibLoader {
             testDungeon.mobs.add(monster);
         }
         testDungeon.lightlevel = 1;
+        Image stairsDownImage = Mists.structureLibrary.getTemplate("DungeonStairsDown").getSprite().getImage();
+        LocationDoorway ld = new LocationDoorway("To Puzzles", new Sprite(stairsDownImage), 0, 4, 500, 500);
+        ld.setTargetLocation(4, 500, 500);
+        testDungeon.mobs.add(ld);
         lib.addTemplate(testDungeon);
         
         //--TestVillage--
