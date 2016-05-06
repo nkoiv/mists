@@ -21,7 +21,7 @@ import javafx.scene.image.Image;
  * developed
  * @author nikok
  */
-public class Village {
+public abstract class Village {
     
     /**
      * Generate and return the static premade test village template

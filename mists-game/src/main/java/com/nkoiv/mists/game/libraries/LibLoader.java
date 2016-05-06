@@ -20,6 +20,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.libraries.premade.Beach;
+import com.nkoiv.mists.game.libraries.premade.StarterDungeon;
 import com.nkoiv.mists.game.libraries.premade.Village;
 import com.nkoiv.mists.game.puzzle.CircuitPuzzle;
 import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
@@ -368,6 +369,12 @@ public class LibLoader {
         ld.setTargetLocation(4, 500, 500);
         testDungeon.mobs.add(ld);
         lib.addTemplate(testDungeon);
+        
+        //--TestDungeon--
+        //Level1
+        lib.addTemplate(StarterDungeon.getDungeonLevelOne());
+        //Level2
+        lib.addTemplate(StarterDungeon.getDungeonLevelTwo());
         
         //--TestVillage--
         lib.addTemplate(Village.getVillage());

@@ -14,7 +14,7 @@ import com.nkoiv.mists.game.world.TileMap;
  * Starting beach, where the player lands in originally
  * @author nikok
  */
-public class Beach {
+public abstract class Beach {
     
     public static LocationTemplate getBeach() {
         Mists.logger.info("Generating template for the beach");

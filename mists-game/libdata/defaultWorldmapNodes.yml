@@ -6,7 +6,7 @@ id: 1
 name: "Cave"
 #"enterLocationID", if supplied, signals which
 #location this worldmapnode links to
-enterLocationID: 1
+enterLocationID: 11
 #"image" is optional. if it's not supplied,
 #the node is drawn as an empty circle
 image: "images/mountain_cave.png"
