@@ -786,6 +786,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     protected void die() {
         //TODO: Spawn tombstone/corpse/whatever
+        Mists.logger.log(Level.INFO, "{0} was killed!", name);
         this.setRemovable();
         if (Mists.MistsGame == null) return;
         Mists.MistsGame.questManager.registerMobDeath(this);
@@ -794,12 +795,19 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     protected void dropItems() {
         if (!this.inventory.isEmpty()) {
+            Mists.logger.info(name+" had items to drop:");
             ItemContainer pile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
             for (int itemID = 0; itemID < this.inventory.getSize(); itemID++) {
                 if (this.inventory.getItem(itemID) != null) {
+                    Mists.logger.info("Dropped "+this.inventory.getItem(itemID).getName());
                     pile.addItem(this.inventory.removeItem(itemID));
                 }
             }
+            pile.setRenderContent(true);
+            pile.setPermanency(true);
+            this.location.addMapObject(pile, this.getXPos(), this.getYPos());
+        } else {
+            Mists.logger.info(name+" had no items to drop");
         }
     }
 	
@@ -852,6 +860,19 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         if (this.currentDialogue != null) {
             nc.setCurrentDialogue(currentDialogue.createFromTemplate());
         }
+        
+        //Items
+        //TODO: Should items be cloned like this?
+        if (!this.inventory.isEmpty()) {
+            for (int i = 0; i < this.inventory.getCapacity(); i++) {
+                Item item = this.inventory.getItem(i);
+                if (item != null) {
+                    Item newItem = Mists.itemLibrary.create(item.getBaseID());
+                    nc.getInventory().addItem(newItem);
+                }
+            }
+        }
+        
         
         //AI should be the same type as Template
         //TODO: This needs rethinking

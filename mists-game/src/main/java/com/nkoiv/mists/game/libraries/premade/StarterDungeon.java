@@ -7,8 +7,10 @@
 package com.nkoiv.mists.game.libraries.premade;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.LocationDoorway;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.TileMap;
@@ -44,7 +46,11 @@ public abstract class StarterDungeon {
     }
     
     private static void generateDungeonOneMobs(LocationTemplate dungeon1) {
-        
+        Creature skeleton = Mists.creatureLibrary.create("Skeleton");
+        Item himmutoy = Mists.itemLibrary.create(3);
+        skeleton.getInventory().addItem(himmutoy);
+        skeleton.setPosition(24*Mists.TILESIZE, 11*Mists.TILESIZE);
+        dungeon1.mobs.add(skeleton);
     }
     
     private static void generateDungeonOneStaticStructures(LocationTemplate dungeon1) {

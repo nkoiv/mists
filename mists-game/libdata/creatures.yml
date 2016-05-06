@@ -8,7 +8,7 @@ type: "Creature"
 #"aiType" can be left blank, resulting in a creature that doesnt move
 aiType: "monster"
 #"spriteType" can be either "spritesheet" or "static". 
-#Spritesheets have four rows: Down, Left, Right and Up.
+#Spritesheets have FOUR rows: Down, Left, Right and Up.
 #Frames per direction may vary.
 spriteType: "spritesheet"
 spritesheet: "/images/monster_small.png"
@@ -34,11 +34,11 @@ spriteType: "spritesheet"
 spritesheet: "/images/monster_small.png"
 spritesheetParameters: [3, 0, 4, 4, 0, 36, 32]
 attributes:
- Strength: 1
- Agility: 2
- Intelligence: 1
+ Strength: 5
+ Agility: 10
+ Intelligence: 3
  Speed: 50
- MaxHealth: 120
+ MaxHealth: 100
 flags:
  collisionLevel: 5
 ---
@@ -50,11 +50,11 @@ spriteType: "spritesheet"
 spritesheet: "/images/monster_small.png"
 spritesheetParameters: [3, 3, 0, 4, 0, 36, 32]
 attributes:
- Strength: 1
- Agility: 2
+ Strength: 5
+ Agility: 5
  Intelligence: 1
  Speed: 50
- MaxHealth: 120
+ MaxHealth: 80
 flags:
  collisionLevel: 5
 ---
@@ -66,11 +66,11 @@ spriteType: "spritesheet"
 spritesheet: "/images/monster_small.png"
 spritesheetParameters: [3, 3, 4, 4, 0, 36, 32]
 attributes:
- Strength: 1
- Agility: 2
+ Strength: 10
+ Agility: 1
  Intelligence: 1
- Speed: 50
- MaxHealth: 120
+ Speed: 30
+ MaxHealth: 150
 flags:
  collisionLevel: 5
 ---
@@ -103,5 +103,21 @@ attributes:
  Intelligence: 5
  Speed: 30
  MaxHealth: 150
+flags:
+ collisionLevel: 5
+---
+templateID: 11
+name: "Skeleton"
+type: "Creature"
+aiType: "monster"
+spriteType: "spritesheet"
+spritesheet: "/images/skeleton.png"
+spritesheetParameters: [3, 0, 0, 0, 0, 32, 64]
+attributes:
+ Strength: 10
+ Agility: 2
+ Intelligence: 1
+ Speed: 40
+ MaxHealth: 250
 flags:
  collisionLevel: 5
