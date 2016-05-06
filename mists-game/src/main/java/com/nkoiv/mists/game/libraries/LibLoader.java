@@ -371,9 +371,9 @@ public class LibLoader {
         
         //--TestDungeon--
         //Level1
-        lib.addTemplate(StarterDungeon.getDungeonLevelOne());
+        lib.addTemplate(StarterDungeon.getDungeonSkeletonLevel());
         //Level2
-        lib.addTemplate(StarterDungeon.getDungeonLevelTwo());
+        lib.addTemplate(StarterDungeon.getDungeonCaveLevel());
         
         //--TestVillage--
         lib.addTemplate(Village.getVillage());

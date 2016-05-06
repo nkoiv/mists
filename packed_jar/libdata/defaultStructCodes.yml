@@ -18,7 +18,10 @@ symbol: "+"
 structure: "DungeonDoor"
 ---
 symbol: "<"
-structure: "DungeonStairs"
+structure: "DungeonStairsUp"
+---
+symbol: ">"
+structure: "DungeonStairsDown"
 ---
 symbol: "T"
 structure: "Tree1"
@@ -44,8 +47,29 @@ structure: "Bookcase"
 symbol: "b"
 structure: "Barrel"
 ---
+symbol: "m"
+structure: "TableRound"
+---
+symbol: "M"
+structure: "TableRoundCards"
+---
+symbol: "r"
+structure: "ChairRight"
+---
+symbol: "l"
+structure: "ChairLeft"
+---
+symbol: "u"
+structure: "ChairUp"
+---
+symbol: "d"
+structure: "ChairDown"
+---
 symbol: "C"
 structure: "Chest"
+---
+symbol: "x"
+structure: "Bonepile"
 ---
 symbol: "P"
 structure: "SignpostSmall"

@@ -50,7 +50,7 @@ public class MeleeAttack extends Action implements AttackAction {
     
     private void use(Creature actor, double[] directionXY) {
         if (this.isOnCooldown()) {
-            Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
+            //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {
             try {
                 Mists.soundManager.playSound("weapon_blow");

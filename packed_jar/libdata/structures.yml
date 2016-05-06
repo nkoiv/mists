@@ -1,8 +1,12 @@
 ---
-name: "StoneWall1"
-type: "Wall"
-image: "/images/structures/stonewall1.png"
-collisionLevel: 1
+name: "StoneWall1" #name is mandatory
+type: "Wall" #type is mandatory
+image: "/images/structures/stonewall1.png" #either image or spritesheet is mandatory
+#example of spritesheet:
+#spritesheet: "/images/environment/grass_animated1.png"
+#spritesheetParameters: [6, 0, 0, 0, 0, 32, 32]
+#spritesheetParameters: [frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight]
+collisionLevel: 1 #if no collisionLevel is supplied, it defaults to 1
 ---
 name: "StoneWall2"
 type: "Wall"
@@ -27,7 +31,6 @@ collisionLevel: 10
 ---
 name: "AnimatedGrass"
 type: "AnimatedFrill"
-#image: "/images/blank.png"
 spritesheet: "/images/environment/grass_animated1.png"
 spritesheetParameters: [6, 0, 0, 0, 0, 32, 32]
 #spritesheetParameters: [frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight]
@@ -119,9 +122,14 @@ extras:
   xOffset: 0
   yOffset: -32
 ---
-name: "DungeonStairs"
+name: "DungeonStairsUp"
 type: "MapEntrance"
-image: "/images/structures/stairs.png"
+image: "/images/structures/stairs_up.png"
+collisionLevel: 0
+---
+name: "DungeonStairsDown"
+type: "MapEntrance"
+image: "/images/structures/stairs_down.png"
 collisionLevel: 0
 ---
 name: "DungeonDoor"
@@ -134,6 +142,116 @@ name: "PuzzleRune"
 type: "PuzzleTile"
 imageLit: "/images/structures/puzzletile_lit.png"
 imageUnlit: "/images/structures/puzzletile_unlit.png"
+---
+name: "TableRound"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 96, 0, 0, 0, 32, 32]
+#spritesheetParameters: [frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight]
+---
+name: "TableRoundCards"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 96, 32, 0, 0, 32, 32]
+---
+name: "ChairDown"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 64, 0, 0, 0, 32, 32]
+---
+name: "ChairUp"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 128, 0, 0, 0, 32, 32]
+---
+name: "ChairRight"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 64, 32, 0, 0, 32, 32]
+---
+name: "ChairLeft"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 128, 32, 0, 0, 32, 32]
+---
+name: "TableWoodWide"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 160, 0, 0, 0, 96, 64]
+---
+name: "TableWoodTall"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 256, 0, 0, 0, 32, 96]
+---
+name: "Bonepile"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 64, 288, 0, 0, 32, 32]
+---
+name: "Skullpile"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 32, 288, 0, 0, 32, 32]
+---
+name: "Skull"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 64, 256, 0, 0, 32, 32]
+---
+name: "MossFrill"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 0, 0, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "MossFrillAlt"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 0, 32, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "BonesFrill"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 96, 256, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "BonesFrill"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 96, 256, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "OozeFrill"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 224, 96, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "MuckFrill"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 224, 128, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "CracksFrill"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 256, 128, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "Cobwebs"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 288, 128, 0, 0, 32, 32]
+collisionLevel: 0
+---
+name: "CobwebsAlt"
+type: "GenericStructure"
+spritesheet: "/images/structures/dungeonex.png"
+spritesheetParameters: [1, 288, 160, 0, 0, 32, 32]
+collisionLevel: 0
 ---
 name: "CircuitI"
 type: "CircuitTile"

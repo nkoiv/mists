@@ -19,7 +19,7 @@ type: "Misc"
 description: "it's so fluffy!"
 image: "/images/himmuToyMini.png"
 ---
-id: 3
+id: 4
 name: "Bow"
 type: "Ranged 2h"
 description: "a basic ranged weapon"
