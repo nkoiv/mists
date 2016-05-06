@@ -9,6 +9,7 @@ package com.nkoiv.mists.game.libraries.premade;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.LocationDoorway;
+import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
@@ -66,6 +67,58 @@ public abstract class StarterDungeon {
         stairsDown.setTargetLocation(12, 25*Mists.TILESIZE, 5*Mists.TILESIZE);
         stairsDown.setPosition(40*Mists.TILESIZE, 28*Mists.TILESIZE);
         dungeon1.mobs.add(stairsDown);
+        
+        addStructureFrillsToDungeonOne(dungeon1);
+        
+    }
+    
+    private static void addStructureFrillsToDungeonOne(LocationTemplate dungeon1) {
+        //Skulls and bones
+        Structure skullpile1 = Mists.structureLibrary.create("Skullpile");
+        skullpile1.setPosition(20*Mists.TILESIZE, 9*Mists.TILESIZE);
+        dungeon1.mobs.add(skullpile1);
+        Structure skullpile2 = Mists.structureLibrary.create("Skullpile");
+        skullpile2.setPosition(30*Mists.TILESIZE, 11*Mists.TILESIZE);
+        dungeon1.mobs.add(skullpile2);
+        Structure skullpile3 = Mists.structureLibrary.create("Skullpile");
+        skullpile3.setPosition(18*Mists.TILESIZE, 31*Mists.TILESIZE);
+        dungeon1.mobs.add(skullpile3);
+        
+        Structure skull1 = Mists.structureLibrary.create("Skull");
+        skull1.setPosition(14*Mists.TILESIZE, 29*Mists.TILESIZE);
+        dungeon1.mobs.add(skull1);
+        Structure skull2 = Mists.structureLibrary.create("Skull");
+        skull2.setPosition(35*Mists.TILESIZE, 29*Mists.TILESIZE);
+        dungeon1.mobs.add(skull2);
+        Structure skull3 = Mists.structureLibrary.create("Skull");
+        skull3.setPosition(30*Mists.TILESIZE, 8*Mists.TILESIZE);
+        dungeon1.mobs.add(skull3);
+        
+        Structure bones1 = Mists.structureLibrary.create("BonesFrill");
+        bones1.setPosition(25*Mists.TILESIZE, 12*Mists.TILESIZE);
+        dungeon1.mobs.add(bones1);
+        for (int i = 0; i < 15; i++) {
+            Structure randomBones = Mists.structureLibrary.create("BonesFrill");
+            dungeon1.mobs.add(randomBones);
+        }
+        
+        //Ooze
+        for (int i = 0; i < 10; i++) {
+            Structure randomOoze = Mists.structureLibrary.create("OozeFrill");
+            dungeon1.mobs.add(randomOoze);
+        }
+        
+        //Muck
+        for (int i = 0; i < 7; i++) {
+            Structure randomOoze = Mists.structureLibrary.create("MuckFrill");
+            dungeon1.mobs.add(randomOoze);
+        }
+        
+        //Furniture
+        Structure longTable = Mists.structureLibrary.create("TableWoodTall");
+        longTable.setPosition(40*Mists.TILESIZE, 13*Mists.TILESIZE);
+        dungeon1.mobs.add(longTable);
+        
     }
     
     private static void generateDungeonTwoMobs(LocationTemplate dungeon2) {

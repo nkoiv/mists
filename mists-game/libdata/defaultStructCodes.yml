@@ -47,8 +47,26 @@ structure: "Bookcase"
 symbol: "b"
 structure: "Barrel"
 ---
+symbol: "m"
+structure: "TableRound"
+---
+symbol: "r"
+structure: "ChairRight"
+---
+symbol: "l"
+structure: "ChairLeft"
+---
+symbol: "u"
+structure: "ChairUp"
+---
+symbol: "d"
+structure: "ChairDown"
+---
 symbol: "C"
 structure: "Chest"
+---
+symbol: "x"
+structure: "Bonepile"
 ---
 symbol: "P"
 structure: "SignpostSmall"
