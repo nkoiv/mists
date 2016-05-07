@@ -191,7 +191,7 @@ public class LibLoader {
         MeleeAttack himmumelee = new MeleeAttack();
         himmumelee.setFlag("cooldown", 2000);
         himmu.addAction(himmumelee);
-        himmu.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(1));
+        himmu.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(2));
         himmu.setTemplateID(creatureID);
         creatureID++;
         

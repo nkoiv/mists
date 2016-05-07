@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
@@ -12,6 +13,7 @@ import com.nkoiv.mists.game.dialogue.LinkTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * DialogueLibrary stores the game dialogues in "unlocalized" state.
@@ -43,12 +45,12 @@ public class DialogueLibrary {
     }
         
     public static Dialogue generateDialogueFromYAML(Map object) {
-        //Mists.logger.info("Generating dialogue...");
+        Mists.logger.info("Generating dialogue...");
         Dialogue d = new Dialogue();
         //Set cardSet = (Set)object.get("cards");
         ArrayList cardList = (ArrayList)object.get("cards");
-        //Mists.logger.log(Level.INFO, "{0} cards in dialogue", cardList.size());
-        //Mists.logger.info(cardList.toString());
+        Mists.logger.log(Level.INFO, "{0} cards in dialogue", cardList.size());
+        Mists.logger.info(cardList.toString());
         for (Object c : cardList) {
             HashMap cardData = (HashMap)c;
             int cardID = Integer.parseInt((String)cardData.get("id"));

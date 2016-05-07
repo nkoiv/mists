@@ -1,6 +1,43 @@
----
 #"dialogueID" is both mandatory and unique. Duplicate dialogueIDs are overwritten.
 dialogueID: 1
+dialogueName: "Chat with Himmu"
+#"cards" is mandatory. Without cards, Dialogue would be empty
+cards:
+ #"id" is a mandatory field, used to interlink the cards in dialogue
+ - id: 1
+   #"text" is a mandatory field - it's what's displayed on the card
+   text: "Welcome to Mists TALKER_NAME! Your quest is to get your hands on the fabled artifact called Himmutoy. It's a small stuffed toy that looks like a dinosaur."
+   #links are stored in a set
+   #if no "links" are supplied, a static "end conversation" link is added
+   links:
+    - linkText: "Got it. Lets move! [End Dialogue]"
+      linkDestination: -1
+    - linkText: "Alright, how should I get started with it?"
+      linkDestination: 2
+ - id: 2
+   text: "Himmutoy is hidden somewhere deep down in a dungeon, but you should probably get equipped before you go there."
+   links:
+    - linkText: "A dungeon? Where might that be?"
+      linkDestination: 4
+    - linkText: "Equipped? Where can I find equipment?"
+      linkDestination: 3
+ - id: 3
+   text: "There's a village not far north of here. Perhaps you could find something there."
+   links:
+    - linkText: "Sure, lets go! [End of Dialogue]"
+      linkDestination: -1
+    - linkText: "What about the dungeon?"
+      linkDestination: 4
+ - id: 4
+   text: "A dungeon, yes. Ancient ruins hidden inside a mountain cave. To the east if I remember correctly. Beware though, there's both monsters and puzzles within."
+   links:
+    - linkText: "Nothing I can't handle. [End of Dialogue]"
+      linkDestination: -1
+    - linkText: "You mentioned equipment?"
+      linkDestination: 3
+---
+#"dialogueID" is both mandatory and unique. Duplicate dialogueIDs are overwritten.
+dialogueID: 2
 dialogueName: "Chat with Himmu"
 #"cards" is mandatory. Without cards, Dialogue would be empty
 cards:

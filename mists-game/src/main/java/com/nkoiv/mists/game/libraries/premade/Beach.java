@@ -7,9 +7,13 @@
 package com.nkoiv.mists.game.libraries.premade;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.triggers.DialogueTrigger;
 import com.nkoiv.mists.game.world.TileMap;
 import javafx.scene.image.Image;
 
@@ -24,6 +28,7 @@ public abstract class Beach {
         LocationTemplate beach = new LocationTemplate(5, "Beach", 40*Mists.TILESIZE, 30*Mists.TILESIZE);
         beach.map = new TileMap("/mapdata/beach.map");
         generateStaticStructures(beach);
+        generateNPCs(beach);
         return beach;
     }
      
@@ -34,6 +39,18 @@ public abstract class Beach {
         entrance.setPosition(31*Mists.TILESIZE, 2*Mists.TILESIZE);
         beachTemplate.mobs.add(entrance);
         
+        
     }
     
+   private static void generateNPCs(LocationTemplate beachTemplate) {
+       Creature gamemaster = new Creature("The GM", Mists.graphLibrary.getImage("blank"));
+       TriggerPlate tp = new TriggerPlate("Triggerplate", 32, 32, 1000, gamemaster);
+       tp.setTrigger(new DialogueTrigger(gamemaster, Mists.dialogueLibrary.getDialogue(1)));
+       tp.setPosition(14*Mists.TILESIZE, 8*Mists.TILESIZE);
+       tp.setCooldown(10000);
+       beachTemplate.mobs.add(gamemaster);
+       beachTemplate.mobs.add(tp);
+       
+   }
+   
 }

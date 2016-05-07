@@ -66,6 +66,19 @@ public class TriggerPlate extends MapObject {
         }
     }
     
+    public void addTrigger(Trigger t) {
+        this.touchTriggers.add(t);
+    }
+    
+    public void setTrigger(Trigger t) {
+        this.touchTriggers.clear();
+        this.addTrigger(t);
+    }
+    
+    public void clearTriggers() {
+        this.touchTriggers.clear();
+    }
+    
     /**
      * Force the Trigger effect for the the triggerplate,
      * for for example initiation of locations and puzzles.
@@ -116,7 +129,7 @@ public class TriggerPlate extends MapObject {
         if (!this.touchTriggers.isEmpty()) {
                 for (Trigger touchTrigger : this.touchTriggers) {
                 Trigger tr = touchTrigger.createFromTemplate();
-                tr.setTarget(tp);
+                tr.setTarget(touchTrigger.getTarget());
                 tp.addTouchTrigger(tr);
             }
         }
