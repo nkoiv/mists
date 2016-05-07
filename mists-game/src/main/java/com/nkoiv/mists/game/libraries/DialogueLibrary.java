@@ -9,7 +9,9 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
-import com.nkoiv.mists.game.dialogue.LinkTrigger;
+import com.nkoiv.mists.game.dialogue.linktriggers.LinkChangeDialogueOnOwnerTrigger;
+import com.nkoiv.mists.game.dialogue.linktriggers.LinkGiveItemToTalkerTrigger;
+import com.nkoiv.mists.game.dialogue.linktriggers.LinkTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +42,27 @@ public class DialogueLibrary {
     }
     
     public Dialogue getDialogue(int dialogueID) {
-        if (lib.containsKey(dialogueID)) return lib.get(dialogueID).createFromTemplate();
+        if (lib.containsKey(dialogueID)) {
+            /*
+            //Logging for testing, ignore unless debugging
+            Mists.logger.info("Found dialogue with ID "+dialogueID);
+            int triggerCount = 0;
+            Dialogue d = lib.get(dialogueID).createFromTemplate();
+            int currentCard = 1;
+            while (true) {
+                d.setCurrentCard(currentCard);
+                if (d.getCurrentCard() == null) break;
+                for (Link l : d.getCurrentCard().getLinks()) {
+                    for (LinkTrigger lt : l.getTriggers()) {
+                        triggerCount++;
+                    }
+                }
+                currentCard++;
+            }
+            Mists.logger.info("Returning Dialogue with "+triggerCount+" triggers");
+            */
+            return lib.get(dialogueID).createFromTemplate();
+        }
         else return null;
     }
         
@@ -85,21 +107,60 @@ public class DialogueLibrary {
             //No links on card, add EndOfConversation -link
             card.addLink(generateEndOfConversationLink());
         }
-        
         return card;
     }
     
     private static Link generateLinkFromYAML(Map linkData) {
         //TODO: utilize link requirements
+        Mists.logger.info("Generating link from linkdata: "+linkData.toString());
         String linkText = (String)linkData.get("linkText");
         int linkDestination = Integer.parseInt((String)linkData.get("linkDestination"));
         Link l = new Link(linkText, linkDestination);
+        if (linkData.keySet().contains("triggers")) {
+            Mists.logger.info("Link contains triggers!");
+            ArrayList<LinkTrigger> lts = generateLinkTriggersFromYAML(linkData);
+            for (LinkTrigger trigger : lts) {
+                Mists.logger.info("Adding linktrigger to the link");
+                l.addTrigger(trigger);
+            }
+        }
+        Mists.logger.info("Generated link with "+l.getTriggers().size()+" triggers");
         return l;
     }
     
-    private static LinkTrigger generateLinkTriggersFromYAML(Map linkData) {
-        
-        return null;
+    private static ArrayList<LinkTrigger> generateLinkTriggersFromYAML(Map linkData) {
+        ArrayList<LinkTrigger> linkTriggers = new ArrayList<>();
+        if (linkData.containsKey("triggers")) {
+            ArrayList triggers = (ArrayList)linkData.get("triggers");
+            for (Object triggerData : triggers) {
+                LinkTrigger t = generateTriggerFromYAML((Map)triggerData);
+                if (t!=null)linkTriggers.add(t);
+            }
+        }
+        return linkTriggers;
+    }
+    
+    private static LinkTrigger generateTriggerFromYAML(Map triggerData) {
+        Mists.logger.info("Generating linktrigger from triggerdata");
+        String triggerType = (String)triggerData.get("triggerType");
+        LinkTrigger lt = null;
+        switch(triggerType) {
+            case "GiveItem": 
+                int itemID = Integer.parseInt((String)triggerData.get("itemID"));
+                int itemCount = 1;
+                if (triggerData.containsKey("amount")) itemCount = Integer.parseInt((String)triggerData.get("amount"));
+                lt = new LinkGiveItemToTalkerTrigger(itemID, itemCount);
+                Mists.logger.info("GiveItem trigger generated");
+                break;
+            case "ChangeDialogue": 
+                int targetDialogueID = -1;
+                if (triggerData.containsKey("dialogueID")) targetDialogueID = Integer.parseInt((String)triggerData.get("dialogueID"));
+                lt = new LinkChangeDialogueOnOwnerTrigger(targetDialogueID);
+                Mists.logger.info("ChangeDialogue trigger generated");
+                break;
+            default: break;
+        }
+        return lt;
     }
     
     private static Link generateEndOfConversationLink() {

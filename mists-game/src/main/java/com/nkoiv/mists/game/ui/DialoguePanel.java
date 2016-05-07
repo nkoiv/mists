@@ -207,6 +207,7 @@ public class DialoguePanel extends TextPanel {
             } else {
                 boolean reqsMet = this.link.LinkRequirementsMet(this.parent.getDialogue().getOwner(), this.parent.getDialogue().getTalker());
                 if (reqsMet) {
+                    link.doTriggers(dialogue.getOwner(), dialogue.getTalker());
                     this.parent.moveToCard(this.link.getDestinationCardID());
                 } else {
                     Mists.logger.info("Tried to click link in dialogue, but requirements not met.");

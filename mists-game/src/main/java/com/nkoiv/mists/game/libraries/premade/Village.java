@@ -79,6 +79,7 @@ public abstract class Village {
         shopkeeperAI.setFlag("homeX", (int)villageShopkeeper.getXPos());
         shopkeeperAI.setFlag("homeY", (int)villageShopkeeper.getYPos());
         villageShopkeeper.setAI(shopkeeperAI);
+        villageShopkeeper.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(3));
         villageTemplate.mobs.add(villageShopkeeper);
     }
     

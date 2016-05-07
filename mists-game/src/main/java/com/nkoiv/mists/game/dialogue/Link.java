@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.dialogue;
 
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.dialogue.linktriggers.LinkTrigger;
 import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.ArrayList;
@@ -20,12 +22,14 @@ public class Link extends LocalizableText{
     public int destinationCardID;
     private ArrayList<LinkRequirement> ownerRequirements;
     private ArrayList<LinkRequirement> talkerRequirements;
+    private ArrayList<LinkTrigger> triggers;
     
     public Link(String optionText, int destinationCardID) {
         this.destinationCardID = destinationCardID;
         this.originalText = optionText;
         this.ownerRequirements = new ArrayList<>();
         this.talkerRequirements = new ArrayList<>();
+        this.triggers = new ArrayList<>();
     }
     
     public int getDestinationCardID() {
@@ -60,17 +64,33 @@ public class Link extends LocalizableText{
     
     public Link createFromTemplate() {
         Link ln = new Link(this.originalText, this.destinationCardID);
-        //TODO: Is it actually necessary or beneficial to spawn extra LinkRequirements? Why not reuse old?
         for (LinkRequirement lr : this.ownerRequirements) {
-            ln.addOwnerRequirement(lr.createFromTemplate());
+            ln.addOwnerRequirement(lr);
         }
         for (LinkRequirement lr : this.talkerRequirements) {
-            ln.addTalkerRequirement(lr.createFromTemplate());
+            ln.addTalkerRequirement(lr);
+        }
+        for (LinkTrigger lt : this.triggers) {
+            ln.addTrigger(lt);
         }
         
         return ln;
     }
     
+    public void addTrigger(LinkTrigger lt) {
+        this.triggers.add(lt);
+    }
+    
+    public ArrayList<LinkTrigger> getTriggers() {
+        return this.triggers;
+    }
+    
+    public void doTriggers(MapObject owner, MapObject talker) {
+        Mists.logger.info("Doing "+triggers.size()+" triggers!");
+        for (LinkTrigger lt : this.triggers) {
+            lt.toggle(owner, talker);
+        }
+    }
     
     public interface LinkRequirement {
         public boolean requirementsMet(MapObject mob);
