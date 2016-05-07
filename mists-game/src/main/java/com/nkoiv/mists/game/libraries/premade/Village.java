@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Roof;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.TileMap;
 import javafx.scene.image.Image;
 
@@ -40,9 +41,9 @@ public abstract class Village {
     }
     
     private static void generateStaticStructures(LocationTemplate villageTemplate) {
-        
-        WorldMapEntrance entrance = (WorldMapEntrance)Mists.structureLibrary.create("SignpostSmall");
-        entrance.setPosition(26*Mists.TILESIZE, 30*Mists.TILESIZE);
+        Image signpostImage = Mists.structureLibrary.getTemplate("SignpostSmall").getSnapshot();
+        WorldMapEntrance entrance = new WorldMapEntrance("To Worldmap", new Sprite(signpostImage), 0, null);
+        entrance.setPosition(26*Mists.TILESIZE, 34*Mists.TILESIZE);
         villageTemplate.mobs.add(entrance);
         
     }

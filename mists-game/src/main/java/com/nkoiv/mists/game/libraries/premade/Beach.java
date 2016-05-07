@@ -9,7 +9,9 @@ package com.nkoiv.mists.game.libraries.premade;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.TileMap;
+import javafx.scene.image.Image;
 
 /**
  * Starting beach, where the player lands in originally
@@ -27,7 +29,8 @@ public abstract class Beach {
      
    private static void generateStaticStructures(LocationTemplate beachTemplate) {
         
-        WorldMapEntrance entrance = (WorldMapEntrance)Mists.structureLibrary.create("SignpostSmall");
+        Image signpostImage = Mists.structureLibrary.getTemplate("SignpostSmall").getSnapshot();
+        WorldMapEntrance entrance = new WorldMapEntrance("To Worldmap", new Sprite(signpostImage), 0, null);
         entrance.setPosition(31*Mists.TILESIZE, 2*Mists.TILESIZE);
         beachTemplate.mobs.add(entrance);
         

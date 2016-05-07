@@ -57,6 +57,7 @@ public class WorldMapEntrance extends Structure {
     @Override
     public WorldMapEntrance createFromTemplate() {
         WorldMapEntrance ne = new WorldMapEntrance(this.name, this.getGraphics(), 0, this.exitNode);
+        ne.setPosition(0, 0);
         if (!this.extraSprites.isEmpty()) {
             for (Sprite s : this.extraSprites) {
                 double xOffset = s.getXPos() - this.getXPos();
