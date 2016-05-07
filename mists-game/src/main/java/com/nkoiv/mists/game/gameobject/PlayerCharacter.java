@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
@@ -15,6 +16,7 @@ import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -51,7 +53,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         
         
         this.setFlag("alive", 1);
-        this.setMaxHealth(500);
+        this.setMaxHealth(300);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(65);
         this.setAttribute("Strength", 20);
@@ -100,6 +102,15 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     public ArrayList<Creature> getCompanions() {
         return this.companions;
+    }
+    
+    @Override
+    protected void die() {
+        //TODO: Spawn tombstone/corpse/whatever
+        Mists.logger.log(Level.INFO, "{0} was killed!", name);
+        this.remove();
+        if (Mists.MistsGame == null) return;
+        Mists.MistsGame.moveToState(Game.MAINMENU);
     }
     
     @Override
