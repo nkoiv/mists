@@ -266,7 +266,7 @@ public class LocationClient {
                 Mists.logger.info("removing mobID "+mob.id);
                 //location.removeMapObject(mob.id);
                 if (location.getMapObject(mob.id) == null) return;
-                location.getMapObject(mob.id).setRemovable();
+                location.getMapObject(mob.id).remove();
                 continue;
             }
 

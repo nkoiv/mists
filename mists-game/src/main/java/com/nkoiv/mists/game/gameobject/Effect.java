@@ -71,7 +71,7 @@ public class Effect extends MapObject {
         this.graphics.update(time);
         this.elapsedTime = elapsedTime+(time*1000);
         if (endTime < 0) return;
-        if(elapsedTime > endTime)this.setRemovable();
+        if(elapsedTime > endTime)this.remove();
         if (!isRemovable()) doCollisions();
     }
     

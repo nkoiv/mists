@@ -227,7 +227,7 @@ public class MapObject extends Flags implements Global, Templatable {
     /**
      * Set the removable parameter to true
      */
-    public void setRemovable() {
+    public void remove() {
         this.removable = true;
     }
     

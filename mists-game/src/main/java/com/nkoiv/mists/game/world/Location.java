@@ -739,6 +739,20 @@ public class Location extends Flags implements Global {
         }
     }
     
+    private void triggerplateCleanup(Stack<Integer> stackToAddIDsOn) {
+        if (!this.triggerPlates.isEmpty()) {
+            Iterator<TriggerPlate> triggerplateIterator = triggerPlates.iterator();
+            while (triggerplateIterator.hasNext()) {
+                TriggerPlate tp = triggerplateIterator.next();
+                if (tp.isRemovable()) {
+                    triggerplateIterator.remove();
+                    this.triggerPlates.remove(tp);
+                    stackToAddIDsOn.add(tp.getID());
+                }
+            }
+        }
+    }
+    
     /**
      * structureCleanup cleans all the "removable"
      * flagged structures.
@@ -765,6 +779,8 @@ public class Location extends Flags implements Global {
             }  
             this.restructureWalls(removedWalls);
         }
+        triggerplateCleanup(removedStructureIDs);
+        
         return removedStructureIDs;
     }
     
@@ -1517,9 +1533,9 @@ public class Location extends Flags implements Global {
         //Release player from Location
         
         if (this.player != null) {
-            this.player.setRemovable();
+            this.player.remove();
             for (Creature c : player.getCompanions()) {
-                c.setRemovable();
+                c.remove();
             }
             //this.removeMapObject(this.player);
             this.player.clearLocation();

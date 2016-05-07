@@ -39,7 +39,7 @@ public class ItemContainer extends Structure implements HasInventory {
     @Override
     public void update(double time) {
         if (this.inv.getSize() <= 0) {
-            this.setRemovable();
+            this.remove();
             return;
         }
         
@@ -91,12 +91,12 @@ public class ItemContainer extends Structure implements HasInventory {
         Item topItemInPile = null;
         for (int i  = 0; i < this.inv.getCapacity(); i++)  {
             if (inv.getItem(i) != null) {
-                if (this.inv.getSize() < 1) this.setRemovable();
+                if (this.inv.getSize() < 1) this.remove();
                 topItemInPile =  this.inv.removeItem(i);
                 break;
             }
         }
-        if (this.inv.getSize() < 1) this.setRemovable();
+        if (this.inv.getSize() < 1) this.remove();
         return topItemInPile;
     }
 

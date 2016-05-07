@@ -47,7 +47,8 @@ public abstract class Beach {
        TriggerPlate tp = new TriggerPlate("Triggerplate", 32, 32, 1000, gamemaster);
        tp.setTrigger(new DialogueTrigger(gamemaster, Mists.dialogueLibrary.getDialogue(1)));
        tp.setPosition(14*Mists.TILESIZE, 8*Mists.TILESIZE);
-       tp.setCooldown(10000);
+       tp.setTriggerOnlyOnce(true);
+       //tp.setCooldown(10000);
        beachTemplate.mobs.add(gamemaster);
        beachTemplate.mobs.add(tp);
        

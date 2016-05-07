@@ -100,7 +100,7 @@ public class ProjectileSpell extends Action implements AttackAction {
     protected void onImpact() {
         //Only trigger once
         for (Effect e : this.effects) {
-            e.setRemovable();
+            e.remove();
         }
     }
     
@@ -153,7 +153,7 @@ public class ProjectileSpell extends Action implements AttackAction {
         
         if ("projectile".equals(e.getName())) {
             explode("projectile");
-            e.setRemovable();
+            e.remove();
         }
         if ("explosion".equals(e.getName())) {
             //Trigger the on impact effect (animation changes etc)
@@ -161,7 +161,7 @@ public class ProjectileSpell extends Action implements AttackAction {
                 if (mob instanceof Structure) {
                     //TODO: Temp: DESTROY THE STRUCTURES!
                     //this.getOwner().getLocation().removeMapObject(mob);
-                    mob.setRemovable();
+                    mob.remove();
                 }
                 if (mob instanceof Creature) {
                     if (damagedMobs.contains(((Creature)mob).getID())) continue;

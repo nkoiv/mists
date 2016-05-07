@@ -30,7 +30,7 @@ public class KillTrigger implements Trigger {
             ((Creature)target).setHealth(0);
             return true;
         } else {
-            target.setRemovable();
+            target.remove();
             return true;
         }
     }

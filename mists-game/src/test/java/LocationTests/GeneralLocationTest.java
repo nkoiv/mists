@@ -94,7 +94,7 @@ public class GeneralLocationTest {
         PlayerCharacter testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
         testLocation.addPlayerCharacter(testPlayer, 500, 500);
         testLocation.addMapObject(testCreature, 300, 300);
-        testCreature.setRemovable();
+        testCreature.remove();
         testLocation.update(0.15f);
         assertFalse(testLocation.getCreatures().contains(testCreature));
     }
@@ -128,7 +128,7 @@ public class GeneralLocationTest {
     @Test
     public void removableFlaggedMobsShouldBeRemovedOnUpdate() {
         Structure testRock = new Structure("Rock", new Image("/images/block.png"), 100);
-        testRock.setRemovable();
+        testRock.remove();
         testLocation.addMapObject(testRock, 500 , 200);
         testLocation.update(1);
         assertTrue(testLocation.getStructures().isEmpty());
@@ -199,8 +199,8 @@ public class GeneralLocationTest {
         testLocation.addMapObject(testCreature3, 150, 50);
         testLocation.addMapObject(testCreature4, 250, 50);
         int mobsAtLocation = testLocation.getCreatures().size();
-        testCreature1.setRemovable();
-        testCreature2.setRemovable();
+        testCreature1.remove();
+        testCreature2.remove();
         testLocation.update(0.15f);
         assertTrue(testLocation.getCreatures().size() == mobsAtLocation-2);
     }
@@ -236,7 +236,7 @@ public class GeneralLocationTest {
     @Test
     public void removableMobsAreRemovedOnUpdate() {
         testLocation.addMapObject(testCreature, 50, 70);
-        testCreature.setRemovable();
+        testCreature.remove();
         testLocation.update(1);
         assertTrue(testLocation.getCreatures().isEmpty());
     }

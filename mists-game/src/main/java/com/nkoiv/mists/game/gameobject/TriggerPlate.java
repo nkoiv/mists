@@ -23,6 +23,7 @@ public class TriggerPlate extends MapObject {
     private double onCooldown;
     private boolean requireReEntry;
     private boolean clear;
+    private boolean triggerOnlyOnce;
     
     public TriggerPlate(String name, double width, double height, double triggerCooldown, MapObject target) {
         this(name,width, height, triggerCooldown);
@@ -61,6 +62,7 @@ public class TriggerPlate extends MapObject {
                 //Mists.logger.info("Wasn't on cooldown, toggling "+name);
                 this.onCooldown = this.triggerCooldown;
                 this.clear = false;
+                if (this.triggerOnlyOnce) this.setRemovable(true);
             }
             }   
         }
@@ -77,6 +79,10 @@ public class TriggerPlate extends MapObject {
     
     public void clearTriggers() {
         this.touchTriggers.clear();
+    }
+    
+    public void setTriggerOnlyOnce(boolean value) {
+        this.triggerOnlyOnce = value;
     }
     
     /**
@@ -126,6 +132,7 @@ public class TriggerPlate extends MapObject {
         TriggerPlate tp = new TriggerPlate(this.name, this.getWidth(), this.getHeight(), this.triggerCooldown);
         tp.setSprite(new Sprite(this.getGraphics().getImage()));
         tp.setRequireReEntry(this.requireReEntry);
+        tp.setTriggerOnlyOnce(this.triggerOnlyOnce);
         if (!this.touchTriggers.isEmpty()) {
                 for (Trigger touchTrigger : this.touchTriggers) {
                 Trigger tr = touchTrigger.createFromTemplate();

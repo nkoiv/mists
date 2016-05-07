@@ -786,7 +786,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     protected void die() {
         //TODO: Spawn tombstone/corpse/whatever
         Mists.logger.log(Level.INFO, "{0} was killed!", name);
-        this.setRemovable();
+        this.remove();
         if (Mists.MistsGame == null) return;
         Mists.MistsGame.questManager.registerMobDeath(this);
         this.dropItems();
