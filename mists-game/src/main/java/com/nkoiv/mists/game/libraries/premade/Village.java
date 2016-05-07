@@ -40,9 +40,11 @@ public abstract class Village {
     }
     
     private static void generateStaticStructures(LocationTemplate villageTemplate) {
+        
         WorldMapEntrance entrance = (WorldMapEntrance)Mists.structureLibrary.create("SignpostSmall");
-        entrance.setPosition(20*Mists.TILESIZE, 1*Mists.TILESIZE);
+        entrance.setPosition(26*Mists.TILESIZE, 30*Mists.TILESIZE);
         villageTemplate.mobs.add(entrance);
+        
     }
     
     /**

@@ -7,6 +7,7 @@
 package com.nkoiv.mists.game.libraries.premade;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.world.TileMap;
 
@@ -20,11 +21,15 @@ public abstract class Beach {
         Mists.logger.info("Generating template for the beach");
         LocationTemplate beach = new LocationTemplate(5, "Beach", 40*Mists.TILESIZE, 30*Mists.TILESIZE);
         beach.map = new TileMap("/mapdata/beach.map");
-        
+        generateStaticStructures(beach);
         return beach;
     }
-    
-    public static void generateStaticStructures(LocationTemplate beachTemplate) {
+     
+   private static void generateStaticStructures(LocationTemplate beachTemplate) {
+        
+        WorldMapEntrance entrance = (WorldMapEntrance)Mists.structureLibrary.create("SignpostSmall");
+        entrance.setPosition(31*Mists.TILESIZE, 2*Mists.TILESIZE);
+        beachTemplate.mobs.add(entrance);
         
     }
     

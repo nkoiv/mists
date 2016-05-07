@@ -55,12 +55,24 @@ public class CombatPopup {
     public void addSCT(MapObject mob, String text, Color c) {
         if (mob == null || text == null || c == null) return;
         if (mob.getLocation() == null) return;
-        ScrollingCombatText sct = new ScrollingCombatText(text, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), mob.getYPos()-mob.getLocation().getLastyOffset());
-        sct.setColour(c);
+        double lifetime = calculateLifetimeFromTextLength(text);
+        ScrollingCombatText sct = new ScrollingCombatText(
+                text, mob.getCenterXPos()-mob.getLocation().getLastxOffset(), 
+                mob.getYPos()-mob.getLocation().getLastyOffset(),
+                lifetime, c);
         this.currentSCT.add(sct);
         //Mists.logger.info("Added SCT on: "+mob.getName()+" text: "+text);
     }
     
+    private double calculateLifetimeFromTextLength(String text) {
+        double lifetime = 1500;
+        if (text.length() >= 15) {
+            lifetime = text.length()*100;
+            if (lifetime > 5000) lifetime = 5000;
+        }
+        return lifetime;
+    }
+
     /**
      * Tick the currently active combat popups
      * Each will move and fade accordingly.
@@ -107,12 +119,15 @@ public class CombatPopup {
         
         
         public ScrollingCombatText(String text, double xCoor, double yCoor) {
+            this(text, xCoor, yCoor, 1500, Color.RED);
+        }
+        
+        public ScrollingCombatText(String text, double xCoor, double yCoor, double lifetimeMS, Color color) {
             this.text = text;
-            this.colour = Color.RED;
+            this.colour = color;
             this.xCoor = xCoor;
             this.yCoor = yCoor;
-            
-            this.lifetime = 1500; //text duration on screen in milliseconds
+            this.lifetime = lifetimeMS;
         }
         
         public void setDirection(double xDirection, double yDirection) {

@@ -371,4 +371,23 @@ public class Game {
         return this.loadingScreen;
     }
     
+    /**
+     * Initialize a new game session
+     */
+    public void newGame() {
+        PlayerCharacter pocplayer = new PlayerCharacter();
+        pocplayer.addAction(new MeleeWeaponAttack());
+        pocplayer.addAction(new ProjectileSpell("Firebolt"));
+        setPlayer(pocplayer);
+        //Location newLoc = Mists.locationLibrary.create(1);
+        //Mists.logger.info("Location "+newLoc.getName()+" generated");
+        //game.addLocation(1, newLoc);
+        moveToLocation(5, null);
+        pocplayer.setPosition(14*Mists.TILESIZE, 8*Mists.TILESIZE);
+        moveToState(Game.LOCATION);
+        clearLoadingScreen();
+        ((LocationState)getGameState(Game.LOCATION)).loadDefaultUI();
+    }
+
+    
 }

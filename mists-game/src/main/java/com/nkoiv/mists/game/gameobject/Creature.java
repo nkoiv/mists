@@ -781,7 +781,6 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         if (Mists.MistsGame.currentState instanceof LocationState) {
             ((LocationState)Mists.MistsGame.currentState).addDamageFloat(damage, this);
         }
-
     }
     
     protected void die() {

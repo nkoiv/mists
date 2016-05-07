@@ -28,7 +28,8 @@ public class CompanionAI extends CreatureAI {
     protected Task pickNewAction() {
         Task t = this.attackNearbyEnemies();
         if (t.taskID == GenericTasks.ID_IDLE && creep.getLocation().getPlayer()!=null) {
-            return distanceBasedFollow(creep.getLocation().getPlayer());
+            Task followTask = distanceBasedFollow(creep.getLocation().getPlayer());
+            return followTask;
         }
         else {
             return t;

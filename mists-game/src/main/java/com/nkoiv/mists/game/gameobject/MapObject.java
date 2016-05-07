@@ -7,6 +7,8 @@ package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.Trigger;
@@ -54,6 +56,13 @@ public class MapObject extends Flags implements Global, Templatable {
         this.graphics = graphics;
     }
     
+    public boolean addTextPopup(String text) {
+        if (Mists.MistsGame.currentState instanceof LocationState) {
+            ((LocationState)Mists.MistsGame.currentState).addTextFloat(text, this);
+            return true;
+        }
+        return false;
+    }
 
     public boolean instersects(MapObject o) {
         return o.getGraphics().intersects(this.getGraphics());
