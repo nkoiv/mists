@@ -71,8 +71,5 @@ structure: "Chest"
 symbol: "x"
 structure: "Bonepile"
 ---
-symbol: "P"
-structure: "SignpostSmall"
----
 symbol: "R"
 structure: "PuzzleRune"

@@ -230,8 +230,12 @@ public class Game {
         if (l == null) {
             Mists.logger.info("Generated location was not found, creating a new one from template");
             l = Mists.locationLibrary.create(locationID);
-            this.generatedLocations.put(locationID, l);
-            Mists.logger.info(l.getName()+" generated and added to table with ID "+locationID);
+            if (l!= null) {
+                this.generatedLocations.put(locationID, l);
+                Mists.logger.info(l.getName()+" generated and added to table with ID "+locationID);
+            } else {
+                Mists.logger.warning("Error generation location "+locationID);
+            }
         }
         return l;
     }

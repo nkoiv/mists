@@ -14,17 +14,23 @@ import com.nkoiv.mists.game.gameobject.MapObject;
  */
 public class DoorTrigger implements Trigger {
     private Door door;
-
+    private boolean unlocks;
+    
     public DoorTrigger(Door d) {
         this.door = d;
     }
 
     @Override
     public boolean toggle(MapObject toggler) {
+        if (unlocks)door.setLocked(false);
         this.door.toggle();
         return true;
     }
 
+    public void setUnlocking(boolean unlocksOnUse) {
+        this.unlocks = unlocksOnUse;
+    }
+    
     @Override
     public MapObject getTarget() {
         return this.door;
@@ -44,6 +50,7 @@ public class DoorTrigger implements Trigger {
     @Override
     public DoorTrigger createFromTemplate() {
         DoorTrigger d = new DoorTrigger(this.door);
+        d.unlocks = this.unlocks;
         return d;
     }
 

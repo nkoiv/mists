@@ -8,13 +8,20 @@ package com.nkoiv.mists.game.libraries.premade;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.LocationDoorway;
+import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
+import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
+import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.triggers.DoorTrigger;
 import com.nkoiv.mists.game.world.TileMap;
+import java.util.Arrays;
 import java.util.Random;
 import javafx.scene.image.Image;
 
@@ -31,7 +38,7 @@ public abstract class StarterDungeon {
         
         generateDungeonSkeletonLevelMobs(dungeon);
         generateDungeonSkeletonLevelStaticStructures(dungeon);
-        
+        addPuzzlesToDungeonSkeletonLevel(dungeon);
         return dungeon;
     }
     
@@ -65,6 +72,21 @@ public abstract class StarterDungeon {
 
         addStructureFrillsToDungeonSkeletonLevel(dungeon);
         
+    }
+    
+    private static void addPuzzlesToDungeonSkeletonLevel(LocationTemplate dungeon) {
+        MapObject[] puzzle1 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 3, Mists.TILESIZE, 26*Mists.TILESIZE, 26*Mists.TILESIZE);
+        dungeon.mobs.addAll(Arrays.asList(puzzle1));
+        Puzzle p1 = LightsOutPuzzle.generatePuzzleFromTiles(puzzle1, true, true);
+        dungeon.puzzles.add(p1);
+        Door lockedDoor = (Door)Mists.structureLibrary.create("DungeonDoor");
+        lockedDoor.setPosition(22*Mists.TILESIZE, 24*Mists.TILESIZE);
+        lockedDoor.setLocked(true);
+        p1.setTriggeringCount(1);
+        DoorTrigger dt = new DoorTrigger(lockedDoor);
+        dt.setUnlocking(true);
+        p1.addTrigger(dt);
+        dungeon.mobs.add(lockedDoor);
     }
     
     private static void addStructureFrillsToDungeonSkeletonLevel(LocationTemplate dungeon) {
@@ -131,6 +153,9 @@ public abstract class StarterDungeon {
     }
     
     private static void generateDungeonCaveLevelMobs(LocationTemplate dungeon) {
+        Creature himmu = Mists.creatureLibrary.create("Himmu");
+        himmu.setPosition(26*Mists.TILESIZE, 7*Mists.TILESIZE);
+        dungeon.mobs.add(himmu);
         for (int i = 0; i < 10; i++) {
             Random rnd = new Random();
             int randomMob = rnd.nextInt(4);

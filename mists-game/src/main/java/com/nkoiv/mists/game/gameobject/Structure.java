@@ -96,14 +96,18 @@ public class Structure extends MapObject {
     
     @Override
     public String[] getInfoText() {
-        double lightlevel = 0;
-        if (this.location != null) lightlevel = location.getLightLevel(this.getCenterXPos(), this.getCenterYPos());
-        String[] s = new String[]{
-            this.name,
-            "ID "+this.IDinLocation+" @ "+this.location.getName(),
-            "X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()),
-            "LightLevel:"+lightlevel
-        };
+        ArrayList<String> a = new ArrayList<>();
+        a.add(this.name);
+        a.add("ID "+this.IDinLocation+" @ "+this.location.getName());
+        a.add("X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()));
+        a.add("Flags:");
+        for (String f : this.flags.keySet()) {
+            a.add(f+" : "+this.flags.get(f));
+        }
+        String[] s = new String[a.size()];
+        for (int i = 0; i < a.size(); i++) {
+            s[i] = a.get(i);
+        }
         return s;
     }
     

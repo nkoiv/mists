@@ -1,15 +1,46 @@
----
 #"dialogueID" is both mandatory and unique. Duplicate dialogueIDs are overwritten.
 dialogueID: 1
-dialogueName: "Chat with Himmu"
+dialogueName: "Welcome to Mists"
 #"cards" is mandatory. Without cards, Dialogue would be empty
 cards:
  #"id" is a mandatory field, used to interlink the cards in dialogue
  - id: 1
    #"text" is a mandatory field - it's what's displayed on the card
-   text: "Hello, TALKER_NAME, my name is OWNER_NAME"
+   text: "Welcome to Mists TALKER_NAME! Your quest is to get your hands on the fabled artifact called Himmutoy. It's a small stuffed toy that looks like a dinosaur."
    #links are stored in a set
    #if no "links" are supplied, a static "end conversation" link is added
+   links:
+    - linkText: "Got it. Lets move! [End Dialogue]"
+      linkDestination: -1
+    - linkText: "Alright, how should I get started with it?"
+      linkDestination: 2
+ - id: 2
+   text: "Himmutoy is hidden somewhere deep down in a dungeon, but you should probably get equipped before you go there."
+   links:
+    - linkText: "A dungeon? Where might that be?"
+      linkDestination: 4
+    - linkText: "Equipped? Where can I find equipment?"
+      linkDestination: 3
+ - id: 3
+   text: "There's a village not far north of here. Perhaps you could find something there. Perhaps talk to the shopkeeper?"
+   links:
+    - linkText: "Buy from shop, got it! [End of Dialogue]"
+      linkDestination: -1
+    - linkText: "What about the dungeon?"
+      linkDestination: 4
+ - id: 4
+   text: "A dungeon, yes. Ancient ruins hidden inside a mountain cave. To the east if I remember correctly. Beware though, there's both monsters and puzzles within."
+   links:
+    - linkText: "Nothing I can't handle. [End of Dialogue]"
+      linkDestination: -1
+    - linkText: "You mentioned equipment?"
+      linkDestination: 3
+---
+dialogueID: 2
+dialogueName: "Chat with Himmu"
+cards:
+ - id: 1
+   text: "Hello, TALKER_NAME, my name is OWNER_NAME"
    links:
     - linkText: "Hi OWNER_NAME! Do you like hamburgers?"
       linkDestination: 2
@@ -29,3 +60,41 @@ cards:
       linkDestination: 1
     - linkText: "Sure, lets go! [End of Dialogue]"
       linkDestination: -1
+---
+dialogueID: 3
+dialogueName: "Shopkeepers quest"
+cards:
+ - id: 1
+   text: "Why hello there! I don't think we've met before. I'm the Shopkeeper."
+   links:
+    - linkText: "How interesting. I'll be back later. [End Dialogue]"   
+      linkDestination: -1
+    - linkText: "Well hello there. What do you have in store?"
+      linkDestination: 2
+ - id: 2
+   text: "Nothing, actually. The shop UI hasn't been designed yet, so I can't sell you anything. I can however give you a sword or an axe, for free no less!"
+   links:
+    - linkText: "Awesome, I'll take the sword."
+      linkDestination: 3
+    - linkText: "The axe, please"
+      linkDestination: 4
+ - id: 3
+   text: "Here you go, I'll place it in your inventory. Remember to equip it!"
+   links:
+    - linkText: "Thanks for the sword! [End Dialogue]"
+      linkDestination: -1
+      triggers:
+       - triggerType: "GiveItem"
+         itemID: 1
+       - triggerType: "ChangeDialogue"
+         dialogueID: -1
+ - id: 4
+   text: "Here you go, you can find it in your inventory. Remember to equip it!"
+   links:
+    - linkText: "Thanks for the axe! [End Dialogue]"
+      linkDestination: -1
+      triggers:
+       - triggerType: "GiveItem"
+         itemID: 2
+       - triggerType: "ChangeDialogue"
+         dialogueID: -1

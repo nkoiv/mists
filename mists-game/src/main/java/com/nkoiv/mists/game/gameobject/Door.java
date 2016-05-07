@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.DoorTrigger;
@@ -20,7 +21,7 @@ public class Door  extends Structure {
     private boolean open;
     private Image openImage;
     private Image closedImage;
-    private Action toggleAction;
+    
     
     public Door(String name, Image closedImage, Image openImage, int collisionLevel) {
         super(name, closedImage, collisionLevel);
@@ -36,10 +37,15 @@ public class Door  extends Structure {
     }
     
     public void toggle() {
-        if (this.isOpen()) this.close();
-        else this.open();
-        this.location.getCollisionMap().updateCollisionLevels();
-        this.location.getPathFinder().setMapOutOfDate(true);
+        Mists.logger.info("Toggling door");
+        if (this.isFlagged("locked")) {
+            this.addTextPopup("Locked!");
+        } else {
+            if (this.isOpen()) this.close();
+            else this.open();
+            this.location.getCollisionMap().updateCollisionLevels();
+            this.location.getPathFinder().setMapOutOfDate(true);
+        }
     }
     
     public void open() {
@@ -57,6 +63,19 @@ public class Door  extends Structure {
     public boolean isOpen() {
         return this.open;
     }
+
+    public boolean isLocked() {
+        return isFlagged("locked");
+    }
+
+    public void setLocked(boolean locked) {
+        if (locked) {
+            this.setFlag("locked", 1);
+        } else {
+            this.setFlag("locked", 0);
+        }
+    }
+    
     
     @Override
     public Trigger[] getTriggers() {
@@ -68,6 +87,9 @@ public class Door  extends Structure {
     @Override
     public Door createFromTemplate() {
         Door nd = new Door(this.name, this.closedImage, this.openImage, this.collisionLevel);
+        for (String f : this.flags.keySet()) {
+            nd.setFlag(f, this.flags.get(f));
+        }
         if (!this.extraSprites.isEmpty()) {
             for (Sprite s : this.extraSprites) {
                 double xOffset = s.getXPos() - this.getXPos();

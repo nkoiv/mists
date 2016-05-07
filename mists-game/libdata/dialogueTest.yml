@@ -42,23 +42,19 @@ cards:
  - id: 1
    text: "Hello, TALKER_NAME, my name is OWNER_NAME"
    links:
-    - linkText: "Hi OWNER_NAME! Do you like hamburgers?"
+    - linkText: "Hi OWNER_NAME! What are you doing here?"
       linkDestination: 2
     - linkText: "OWNER_NAME? What a weird name! Where are we?"   
       linkDestination: 3
  - id: 2
-   text: "I love hamburgers! Should we go look for some?"
+   text: "I came to look for you here in the LOCATION_NAME, but I'm too big to fit into the lower levels"
    links:
-    - linkText: "Did I say hamburgers? Let me rephrase myself."
-      linkDestination: 1
-    - linkText: "Sounds awesome, but where would that lead us?"
+    - linkText: "Lower levels? What's in there"
       linkDestination: 3
  - id: 3
-   text: "Well TALKER_NAME, we're currently at the LOCATION_NAME. I guess we could head onwards and try to find a dungeon entrance?"
+   text: "This dungeon house some puzzles and a skeleton lord. Nasty things both. While I can't help you with those, I can smash the monsters here in the cave for you!"
    links:
-    - linkText: "Let's talk a little bit more first..."
-      linkDestination: 1
-    - linkText: "Sure, lets go! [End of Dialogue]"
+    - linkText: "Alright, lets go! [End Dialogue]"
       linkDestination: -1
 ---
 dialogueID: 3

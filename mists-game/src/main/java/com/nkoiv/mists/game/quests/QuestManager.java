@@ -213,7 +213,7 @@ public class QuestManager {
     
     public static Quest generateTestFetchQuest() {
         Quest q = new Quest("TestFetchQuest", 2);
-        QuestTask qt = new QuestTask("Acquire three Himmu-toys", QuestTaskType.ITEMHAVE, 3, 3);
+        QuestTask qt = new QuestTask("Acquire the Himmutoys", QuestTaskType.ITEMHAVE, 3, 1);
         q.addTask(qt);
         return q;
     }
