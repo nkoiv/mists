@@ -19,6 +19,10 @@ import java.util.Random;
  * its satisfied with what it has.
  * After the area has been split into segments, its
  * populated by rooms that are joined by corridors.
+ * 
+ * TODO: Refactor this dirty code into reworkable modules
+ * and expand from there (initially with room population)
+ * 
  * @author nikok
  */
 public class DungeonGenerator implements Global{
