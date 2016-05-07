@@ -22,9 +22,9 @@ cards:
     - linkText: "Equipped? Where can I find equipment?"
       linkDestination: 3
  - id: 3
-   text: "There's a village not far north of here. Perhaps you could find something there."
+   text: "There's a village not far north of here. Perhaps you could find something there. Perhaps talk to the shopkeeper?"
    links:
-    - linkText: "Sure, lets go! [End of Dialogue]"
+    - linkText: "Buy from shop, got it! [End of Dialogue]"
       linkDestination: -1
     - linkText: "What about the dungeon?"
       linkDestination: 4
