@@ -45,6 +45,10 @@ public class Item implements KryoSerializable {
         this.equippedImages = images;
     }
     
+    public ItemType getType() {
+        return this.itype;
+    }
+    
     /**
      * Create the set of equipped images from an ImageView,
      * framed by given parameters

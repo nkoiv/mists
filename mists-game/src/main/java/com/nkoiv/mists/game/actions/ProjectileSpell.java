@@ -161,7 +161,7 @@ public class ProjectileSpell extends Action implements AttackAction {
                 if (mob instanceof Structure) {
                     //TODO: Temp: DESTROY THE STRUCTURES!
                     //this.getOwner().getLocation().removeMapObject(mob);
-                    mob.remove();
+                    //mob.remove();
                 }
                 if (mob instanceof Creature) {
                     if (damagedMobs.contains(((Creature)mob).getID())) continue;

@@ -54,7 +54,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.setMaxHealth(500);
         this.setHealth(this.getMaxHealth());
         this.setSpeed(65);
-        this.setAttribute("Strength", 50);
+        this.setAttribute("Strength", 20);
         this.companions = new ArrayList<>();
         this.lightSize = 2;
         this.lightColor = Color.BLUEVIOLET;

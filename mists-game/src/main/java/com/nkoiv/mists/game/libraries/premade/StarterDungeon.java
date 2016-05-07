@@ -9,6 +9,7 @@ package com.nkoiv.mists.game.libraries.premade;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.LocationDoorway;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
@@ -56,10 +57,27 @@ public abstract class StarterDungeon {
     
     private static void generateDungeonSkeletonLevelMobs(LocationTemplate dungeon) {
         Creature skeleton = Mists.creatureLibrary.create("Skeleton");
-        Item himmutoy = Mists.itemLibrary.create(3);
+        Item himmutoy = Mists.itemLibrary.create("Himmutoy");
+        Item pickaxe = Mists.itemLibrary.create("pickaxe");
         skeleton.getInventory().addItem(himmutoy);
+        skeleton.getInventory().addItem(pickaxe);
         skeleton.setPosition(24*Mists.TILESIZE, 11*Mists.TILESIZE);
         dungeon.mobs.add(skeleton);
+        
+        for (int i = 0; i < 20; i++) {
+            Random rnd = new Random();
+            int randomMob = rnd.nextInt(4);
+            Creature monster;
+            switch (randomMob) {
+                case 0: monster = Mists.creatureLibrary.create("worm"); break;
+                case 1: monster = Mists.creatureLibrary.create("eggy"); break;
+                case 2: monster = Mists.creatureLibrary.create("worm"); break;
+                case 3: monster = Mists.creatureLibrary.create("rabbit"); break;
+                default: monster = Mists.creatureLibrary.create("worm"); break;
+            }
+            dungeon.mobs.add(monster);
+        }
+        
     }
     
     private static void generateDungeonSkeletonLevelStaticStructures(LocationTemplate dungeon) {
@@ -71,6 +89,8 @@ public abstract class StarterDungeon {
         dungeon.mobs.add(stairsUp);
 
         addStructureFrillsToDungeonSkeletonLevel(dungeon);
+        
+        
         
     }
     

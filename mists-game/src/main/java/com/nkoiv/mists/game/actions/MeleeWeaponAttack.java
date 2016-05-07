@@ -11,6 +11,8 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
@@ -97,7 +99,10 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
                             Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
                             ((Combatant)mob).takeDamage(damage);
                         }
-                    } 
+                    } else if (mob instanceof Structure && owner instanceof Creature) {                        
+                        Weapon w = ((Creature)owner).getWeapon();
+                        if (w!=null && w.getBaseID() == 100) mob.setRemovable(true);
+                    }
                 }
             }
         }

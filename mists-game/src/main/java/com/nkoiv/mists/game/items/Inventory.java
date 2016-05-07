@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * Inventory is a storage container for items
@@ -57,6 +58,28 @@ public class Inventory {
         if (items.length < slot) expand(slot-items.length);
         if (items[slot] == null) itemSize++;
         items[slot] = i;
+    }
+    
+    public Item[] getAllItems() {
+        Stack<Integer> itemIDs = new Stack<>();
+        for (int i = 0; i < this.items.length; i++) {
+            if (items[i] != null) itemIDs.add(i);
+        }
+        Item[] newItems = new Item[itemIDs.size()];
+        int spot = 0;
+        while (!itemIDs.isEmpty()) {
+            newItems[spot] = items[itemIDs.pop()];
+            spot++;
+        }
+        return newItems;
+    }
+    
+    public Item[] takeAllItems() {
+        Item[] newItems = getAllItems();
+        for (Item i : this.items) {
+            i = null;
+        }
+        return newItems;
     }
     
     /**

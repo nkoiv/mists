@@ -794,14 +794,10 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     
     protected void dropItems() {
         if (!this.inventory.isEmpty()) {
-            Mists.logger.info(name+" had items to drop:");
+            Item[] allItems = this.inventory.getAllItems();
+            Mists.logger.info(name+" had "+allItems.length+" items to drop");
             ItemContainer pile = new ItemContainer("ItemPile", new Sprite(Mists.graphLibrary.getImage("blank")));
-            for (int itemID = 0; itemID < this.inventory.getSize(); itemID++) {
-                if (this.inventory.getItem(itemID) != null) {
-                    Mists.logger.info("Dropped "+this.inventory.getItem(itemID).getName());
-                    pile.addItem(this.inventory.removeItem(itemID));
-                }
-            }
+            for (Item i : allItems) pile.addItem(i);
             pile.setRenderContent(true);
             pile.setPermanency(true);
             this.location.addMapObject(pile, this.getXPos(), this.getYPos());
