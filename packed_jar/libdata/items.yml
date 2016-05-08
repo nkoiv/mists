@@ -25,3 +25,10 @@ type: "Ranged 2h"
 description: "a basic ranged weapon"
 image: "/images/bow.png"
 damage: 10
+---
+id: 100
+name: "Pickaxe"
+type: "Weapon 1h"
+description: "a pickaxe to destroy walls with!"
+image: "/images/pickaxe.png"
+damage: 5
