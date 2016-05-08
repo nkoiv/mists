@@ -47,7 +47,6 @@ yCoordinate: 1000
 links:
  Up: 3
  Right: 10
- Down: 11
 ---
 id: 10
 name: "Road to cave"
@@ -57,29 +56,6 @@ links:
  Right: 1
  Up: 2
  Left: 4
----
-id: 11
-name: "Sea 1"
-xCoordinate: 490
-yCoordinate: 1075
-links:
- Up: 4
- Right: 12
----
-id: 12
-name: "Sea 2"
-xCoordinate: 680
-yCoordinate: 1120
-links:
- Left: 11
- Right: 13
----
-id: 13
-name: "Sea 3"
-xCoordinate: 850
-yCoordinate: 1100
-links:
- Left: 12
 ---
 id: 14
 name: "Puzzlearea"

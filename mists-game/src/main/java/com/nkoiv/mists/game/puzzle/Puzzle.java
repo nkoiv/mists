@@ -5,6 +5,7 @@
  */
 package com.nkoiv.mists.game.puzzle;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.triggers.Trigger;
 import java.util.ArrayList;
@@ -89,6 +90,7 @@ public class Puzzle {
         boolean triggered = false;
         for (Trigger t : this.triggers) {
             if (t.toggle(puzzletriggerer)) triggered = true; //TODO: This temp-triggerer might not be the best way to ensure we dont get null-pointers
+            Mists.logger.info("Puzzletrigger triggered");
         }
         timesTriggered++;
         return triggered;

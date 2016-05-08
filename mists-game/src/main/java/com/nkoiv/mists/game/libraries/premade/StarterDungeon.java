@@ -78,16 +78,27 @@ public abstract class StarterDungeon {
             dungeon.mobs.add(monster);
         }
         
+        Creature blob = Mists.creatureLibrary.create(("Blob"));
+        blob.setPosition(42*Mists.TILESIZE, 18*Mists.TILESIZE);
+        dungeon.mobs.add(blob);
+        
     }
     
     private static void generateDungeonSkeletonLevelStaticStructures(LocationTemplate dungeon) {
         //Back up
         Image stairsUpImage = Mists.structureLibrary.getTemplate("DungeonStairsUp").getSprite().getImage();
         LocationDoorway stairsUp = new LocationDoorway("To Level 1", new Sprite(stairsUpImage), 0, 0, 0, 0);
-        stairsUp.setTargetLocation(11, 25*Mists.TILESIZE, 5*Mists.TILESIZE);
+        stairsUp.setTargetLocation(11, 8*Mists.TILESIZE, 27*Mists.TILESIZE);
         stairsUp.setPosition(56*Mists.TILESIZE, 19*Mists.TILESIZE);
         dungeon.mobs.add(stairsUp);
 
+        //Deeper into random dungeon
+        Image stairsDownImage = Mists.structureLibrary.getTemplate("DungeonStairsDown").getSprite().getImage();
+        LocationDoorway stairsDown = new LocationDoorway("Deeper into dungeon", new Sprite(stairsDownImage), 0, 0, 0, 0);
+        stairsDown.setTargetLocation(1, 100, 100);
+        stairsDown.setPosition(18*Mists.TILESIZE, 7*Mists.TILESIZE);
+        dungeon.mobs.add(stairsDown);
+        
         addStructureFrillsToDungeonSkeletonLevel(dungeon);
         
         

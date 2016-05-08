@@ -111,6 +111,7 @@ public class DialoguePanel extends TextPanel {
         this.renderBackground(gc);
         //Mists.logger.info("background rendered");
         gc.restore();
+        gc.setFont(Mists.fonts.get("alagard"));
         if (this.dialogue != null) {
             //Mists.logger.info("dialogue wasn't null, rendering card");
             this.renderCard(gc, xPosition, yPosition);
@@ -121,6 +122,7 @@ public class DialoguePanel extends TextPanel {
         if (this.closeButton != null)
             this.closeButton.render(gc, xPosition+closeButton.xPosition, yPosition+closeButton.yPosition);
         //Mists.logger.info("Dialoguepanel rendered");
+        gc.restore();
     }
     
     @Override

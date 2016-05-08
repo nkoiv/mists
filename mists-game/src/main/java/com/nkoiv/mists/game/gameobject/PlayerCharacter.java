@@ -107,6 +107,7 @@ public class PlayerCharacter extends Creature implements Combatant {
     @Override
     protected void die() {
         //TODO: Spawn tombstone/corpse/whatever
+        //TODO: This should not work like this in multiplayer
         Mists.logger.log(Level.INFO, "{0} was killed!", name);
         this.remove();
         if (Mists.MistsGame == null) return;

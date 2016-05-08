@@ -494,7 +494,7 @@ public class LocationState implements GameState {
         if (me.getButton() == MouseButton.SECONDARY  && me.getEventType() == MouseEvent.MOUSE_RELEASED) {
             //Secondary mouse button teleports player
             //Mists.logger.info("Clicked right mousebutton at "+clickX+","+clickY+" - moving player there");
-            game.locControls.teleportPlayer(clickX+xOffset, clickY+yOffset);
+            //game.locControls.teleportPlayer(clickX+xOffset, clickY+yOffset);
             return true;
         }
         if (me.getButton() == MouseButton.PRIMARY && me.getEventType() == MouseEvent.MOUSE_RELEASED) {

@@ -9,7 +9,10 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.ui.QuestCompletePanel;
+import com.nkoiv.mists.game.ui.TextPanel;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
@@ -134,14 +137,28 @@ public class QuestManager {
             //Cumulative tasks
             for (int qID : this.openQuests.keySet()) {
                 openQuests.get(qID).addProgress(tasktype, objectiveID, count);
+                if (openQuests.get(qID).isComplete()) questCompletePopup(openQuests.get(qID));
             }
         }
         if (tasktype == QuestTaskType.ITEMHAVE) {
             //Tasks that can go down in value
             for (int qID : this.openQuests.keySet()) {
                 openQuests.get(qID).setProgress(tasktype, objectiveID, count);
+                if (openQuests.get(qID).isComplete()) questCompletePopup(openQuests.get(qID));
             }
         }
+    }
+    
+    private void questCompletePopup(Quest quest) {
+        if (Mists.MistsGame == null || Mists.MistsGame.currentState == null) return;
+        if (Mists.MistsGame.currentState instanceof LocationState) {
+            LocationState ls = (LocationState)Mists.MistsGame.currentState;
+            QuestCompletePanel popup = new QuestCompletePanel(ls, "Quest Complete", 300, 100, 200, 200, Mists.graphLibrary.getImageSet("panelBlue"));
+            popup.setText("Quest complete!\n Good job on "+quest.getTitle());
+            ls.addUIComponent(popup);
+        }
+        this.openQuests.remove(quest.getID());
+        this.closedQuests.put(quest.getID(), quest);
     }
     
     public HashMap<Integer, Quest> getOpenQuests() {
@@ -205,14 +222,14 @@ public class QuestManager {
     }
     
     public static Quest generateTestKillQuest() {
-        Quest q = new Quest("TestKillQuest", 1);
+        Quest q = new Quest("Kill two worms", 1);
         QuestTask qt = new QuestTask("Kill two worms", QuestTaskType.CREATUREKILL, 1, 2);
         q.addTask(qt);
         return q;
     }
     
     public static Quest generateTestFetchQuest() {
-        Quest q = new Quest("TestFetchQuest", 2);
+        Quest q = new Quest("Get Himmutoy", 2);
         QuestTask qt = new QuestTask("Acquire the Himmutoys", QuestTaskType.ITEMHAVE, 3, 1);
         q.addTask(qt);
         return q;

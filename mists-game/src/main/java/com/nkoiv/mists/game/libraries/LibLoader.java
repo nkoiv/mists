@@ -17,6 +17,7 @@ import com.nkoiv.mists.game.gameobject.LocationDoorway;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.libraries.premade.Beach;
@@ -25,7 +26,9 @@ import com.nkoiv.mists.game.libraries.premade.Village;
 import com.nkoiv.mists.game.puzzle.CircuitPuzzle;
 import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
 import com.nkoiv.mists.game.puzzle.Puzzle;
+import com.nkoiv.mists.game.puzzle.TileLitRequirement;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.triggers.InsertMobTrigger;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.TileMap;
 import java.io.File;
@@ -382,6 +385,10 @@ public class LibLoader {
         Image woodsBackground = new Image("/images/pocmap.png");
         LocationTemplate woods = new LocationTemplate(3, "Woods", woodsBackground.getWidth(), woodsBackground.getHeight());
         woods.map = new BGMap(woodsBackground);
+        Image signpostImage = Mists.structureLibrary.getTemplate("SignpostSmall").getSnapshot();
+        WorldMapEntrance entrance = new WorldMapEntrance("To Worldmap", new Sprite(signpostImage), 0, null);
+        entrance.setPosition(15*Mists.TILESIZE, 22*Mists.TILESIZE);
+        woods.mobs.add(entrance);
         for (int i = 0; i<10;i++) {
             //Make a bunch of trees
             Structure tree = Mists.structureLibrary.create("Tree1");
@@ -414,6 +421,11 @@ public class LibLoader {
         Mists.logger.info("Generating template for puzzlemap");
         LocationTemplate puzzlearea = new LocationTemplate(4, "Puzzle Area", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
         puzzlearea.map = new TileMap("/mapdata/puzzlearea.map");
+        
+        WorldMapEntrance puzzleEntrance = new WorldMapEntrance("To Worldmap", new Sprite(signpostImage), 0, null);
+        puzzleEntrance.setPosition(15*Mists.TILESIZE, 22*Mists.TILESIZE);
+        puzzlearea.mobs.add(puzzleEntrance);
+        
         //LightsOut Puzzle 1
         
         MapObject[] puzzle1 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 4, Mists.TILESIZE, 20*Mists.TILESIZE, 30*Mists.TILESIZE);
@@ -430,8 +442,12 @@ public class LibLoader {
         */
         
         //Circuit Puzzle 1
-        CircuitTile[] circuitPuzzle1 = CircuitPuzzle.generateTestPuzzle(10*Mists.TILESIZE, 40*Mists.TILESIZE);
-        puzzlearea.mobs.addAll(Arrays.asList(circuitPuzzle1));
+        CircuitTile[] circuitPuzzle = CircuitPuzzle.generateTestPuzzle(10*Mists.TILESIZE, 40*Mists.TILESIZE);
+        CircuitTile targetTile = circuitPuzzle[10];
+        Puzzle p2 = new Puzzle();
+        p2.addRequirement(new TileLitRequirement(targetTile));
+        puzzlearea.mobs.addAll(Arrays.asList(circuitPuzzle));
+        p2.addTrigger(new InsertMobTrigger(Mists.creatureLibrary.create("Blob"), 20*Mists.TILESIZE, 20*Mists.TILESIZE));
         lib.addTemplate(puzzlearea);
         Mists.logger.info("Puzzlemap template added");
         

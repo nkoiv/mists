@@ -1,1 +1,1 @@
-java -jar mists-game-0.5-PANDARIN_DUNGEON.jar
+java -jar mists-game-0.6-PANDARIN_PINEAPPLE.jar
