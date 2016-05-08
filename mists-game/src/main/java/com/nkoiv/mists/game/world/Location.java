@@ -775,6 +775,7 @@ public class Location extends Flags implements Global {
                     this.mobs.remove(mob.getID());
                     removedStructureIDs.add(mob.getID());
                     this.pathFinder.setMapOutOfDate(true);
+                    if (this.targets.contains(mob)) this.targets.remove(mob);
                 }
             }  
             this.restructureWalls(removedWalls);
@@ -801,6 +802,7 @@ public class Location extends Flags implements Global {
                     this.mobs.remove(mobID);
                     removedCreatureIDs.add(mobID);
                     //this.pathFinder.setMapOutOfDate(true); //Creatures are not on pathFindermap atm
+                    if (this.targets.contains(mob)) this.targets.remove(mob);
                 }
             }     
         }
@@ -1170,7 +1172,11 @@ public class Location extends Flags implements Global {
                     collidedDirections.add(Direction.DOWN);
                 }
             }
-        } 
+        }
+        if (mob.getXPos() <= 0) collidedDirections.add(Direction.LEFT);
+        if (mob.getYPos() <= 0) collidedDirections.add(Direction.UP);
+        if (mob.getCenterXPos() >= this.map.getWidth()) collidedDirections.add(Direction.RIGHT);
+        if (mob.getCenterYPos() >= this.map.getHeight()) collidedDirections.add(Direction.DOWN);
         return collidedDirections;
     }
     

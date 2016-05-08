@@ -528,6 +528,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
                 this.getGraphics().setXPosition(this.oldXPos);
                 
             }
+            if (this.getXPos() < 0 || this.getXPos() > this.location.getMap().getWidth()) this.graphics.setXPosition(this.oldXPos);
+            if (this.getYPos() < 0 || this.getYPos() > this.location.getMap().getHeight()) this.graphics.setXPosition(this.oldYPos);
             this.getGraphics().update(time);
             this.setFlag("movementBlocked", 1); //remember this was a bad way to go to
             return false;

@@ -61,6 +61,10 @@ public class CharacterPanel extends TextPanel {
         sb.append("\n");
         sb.append("Speed: ");
         sb.append(character.getAttribute("Speed"));
+        sb.append("\n");
+        sb.append("Equipped: ");
+        if (character.getWeapon() != null) sb.append(character.getWeapon().getName());
+        else sb.append("Nothing");
         statsPanel.setText(sb.toString());
     }
     

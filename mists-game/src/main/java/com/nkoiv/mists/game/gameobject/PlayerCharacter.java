@@ -14,6 +14,7 @@ import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
+import com.nkoiv.mists.game.ui.InfoPanel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -111,7 +112,13 @@ public class PlayerCharacter extends Creature implements Combatant {
         Mists.logger.log(Level.INFO, "{0} was killed!", name);
         this.remove();
         if (Mists.MistsGame == null) return;
-        Mists.MistsGame.moveToState(Game.MAINMENU);
+        deathPopup();
+    }
+    
+    private void deathPopup() {
+        InfoPanel ip = new InfoPanel(Mists.MistsGame.currentState, "You are dead", 300, 200, 300, 200, Mists.graphLibrary.getImageSet("panelBlue"));
+        ip.setText("You are dead\nUse esc and main menu to quit\nor start anew.");
+        Mists.MistsGame.currentState.addUIComponent(ip);
     }
     
     @Override
@@ -151,7 +158,6 @@ public class PlayerCharacter extends Creature implements Combatant {
         tickActionCooldowns(time);
         checkupMoveState(time);
         this.updateGraphics();
-        
     }
     
     private void handleNextTask(double time) {

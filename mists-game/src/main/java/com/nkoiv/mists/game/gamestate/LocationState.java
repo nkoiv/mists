@@ -328,7 +328,10 @@ public class LocationState implements GameState {
     }
     
     private void updateInfoBox() {
-        if (game.getCurrentLocation().getTargets().size() < 1) return;
+        if (game.getCurrentLocation().getTargets().size() < 1) {
+            if (this.uiComponents.containsValue(this.infobox)) this.removeUIComponent("InfoBox");
+            return;
+        }
         this.infobox.setText(Overlay.generateInfoBoxText(game.getCurrentLocation().getTargets().get(0)));
     }
     

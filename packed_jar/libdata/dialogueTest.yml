@@ -22,14 +22,14 @@ cards:
     - linkText: "Equipped? Where can I find equipment?"
       linkDestination: 3
  - id: 3
-   text: "There's a village not far north of here. Perhaps you could find something there. Perhaps talk to the shopkeeper?"
+   text: "There's a village not far north of here. Perhaps you could find something there. Perhaps talk to the shopkeeper? You can leave this area by finding a signpost to world map. One should be located just east of here."
    links:
     - linkText: "Buy from shop, got it! [End of Dialogue]"
       linkDestination: -1
     - linkText: "What about the dungeon?"
       linkDestination: 4
  - id: 4
-   text: "A dungeon, yes. Ancient ruins hidden inside a mountain cave. To the east if I remember correctly. Beware though, there's both monsters and puzzles within."
+   text: "A dungeon, yes. Ancient ruins hidden inside a mountain cave. To the east if I remember correctly. Beware though, there's both monsters and puzzles within. You can reach it by the world map, to which you get with the signpost east of here."
    links:
     - linkText: "Nothing I can't handle. [End of Dialogue]"
       linkDestination: -1
@@ -54,8 +54,13 @@ cards:
  - id: 3
    text: "This dungeon house some puzzles and a skeleton lord. Nasty things both. While I can't help you with those, I can smash the monsters here in the cave for you!"
    links:
-    - linkText: "Alright, lets go! [End Dialogue]"
-      linkDestination: -1
+    - linkText: "Anything else I should know?"
+      linkDestination: 4
+- id: 4
+  text: "The third level of the dungeon is a deathtrap! You should not go there, as I'm not sure there is a way out. Perhaps if you had a tool to dig through walls with..."
+  links:
+   - linkText: "Thanks for the tip, OWNER_NAME [End Dialogue]"
+     linkDestination: -1
 ---
 dialogueID: 3
 dialogueName: "Shopkeepers quest"

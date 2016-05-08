@@ -11,7 +11,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
-import com.nkoiv.mists.game.ui.QuestCompletePanel;
+import com.nkoiv.mists.game.ui.InfoPanel;
 import com.nkoiv.mists.game.ui.TextPanel;
 import java.io.File;
 import java.io.FileReader;
@@ -153,7 +153,7 @@ public class QuestManager {
         if (Mists.MistsGame == null || Mists.MistsGame.currentState == null) return;
         if (Mists.MistsGame.currentState instanceof LocationState) {
             LocationState ls = (LocationState)Mists.MistsGame.currentState;
-            QuestCompletePanel popup = new QuestCompletePanel(ls, "Quest Complete", 300, 100, 200, 200, Mists.graphLibrary.getImageSet("panelBlue"));
+            InfoPanel popup = new InfoPanel(ls, "Quest Complete", 300, 100, 200, 200, Mists.graphLibrary.getImageSet("panelBlue"));
             popup.setText("Quest complete!\n Good job on "+quest.getTitle());
             ls.addUIComponent(popup);
         }

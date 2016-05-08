@@ -17,9 +17,9 @@ import javafx.scene.text.Font;
  *
  * @author nikok
  */
-public class QuestCompletePanel extends TextPanel {
+public class InfoPanel extends TextPanel {
     
-    public QuestCompletePanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images) {
+    public InfoPanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images) {
         super(parent, name, width, height, xPos, yPos, images);
         CloseButton cb = new CloseButton(this, this.width-20, 5);
         this.closeButton = cb;
