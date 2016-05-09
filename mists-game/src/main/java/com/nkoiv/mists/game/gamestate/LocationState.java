@@ -28,6 +28,7 @@ import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.Overlay;
 import com.nkoiv.mists.game.ui.QuestPanel;
 import com.nkoiv.mists.game.ui.QuitButton;
+import com.nkoiv.mists.game.ui.ScrollingPopupText;
 import com.nkoiv.mists.game.ui.TextButton;
 import com.nkoiv.mists.game.ui.TextPanel;
 import com.nkoiv.mists.game.ui.TiledPanel;
@@ -203,6 +204,10 @@ public class LocationState implements GameState {
     
     public void addTextFloat(String text, MapObject target) {
         this.sct.addSCT(target, text, Color.CYAN);
+    }
+    
+    public void addTextFloat(ScrollingPopupText sct) {
+        this.sct.addSCT(sct);
     }
     
     public void openDialogue(Dialogue dialogue) {

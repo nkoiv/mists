@@ -9,7 +9,9 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gamestate.GameState;
+import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Inventory;
+import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.ui.PopUpMenu.MenuButton;
 import java.util.logging.Level;
@@ -33,7 +35,7 @@ public class InventoryPanel extends TiledPanel {
     private static String defaultPanelImages = "panelBlue";
     private Inventory inv;
     private int oldInvHash;
-    
+
     public InventoryPanel(GameState parent, String name, double width, double height, double xPos, double yPos, Image[] images, Inventory inv) {
         super(parent, name, width, height, xPos, yPos, images);
         this.inv = inv;
@@ -90,9 +92,9 @@ public class InventoryPanel extends TiledPanel {
         //tileSubComponentPositions(xOffset, yOffset);
         for (UIComponent sc : this.subComponents) {
             sc.render(gc, sc.getXPosition(), sc.getYPosition());
-        }    
+        }
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof InventoryPanel)) return false;
@@ -142,6 +144,7 @@ public class InventoryPanel extends TiledPanel {
         }
         
         private void populateItemMenu(PopUpMenu pmenu, Inventory inv, int itemSlot) {
+            pmenu.addMenuButton(new ItemMenuButton(pmenu, inv, itemSlot, ItemMenuButton.EXAMINE_ITEM));
             pmenu.addMenuButton(new ItemMenuButton(pmenu, inv, itemSlot, ItemMenuButton.USE_ITEM));
             pmenu.addMenuButton(new ItemMenuButton(pmenu, inv, itemSlot, ItemMenuButton.EQUIP_ITEM));
             pmenu.addMenuButton(new ItemMenuButton(pmenu, inv, itemSlot, ItemMenuButton.DROP_ITEM));
@@ -152,7 +155,7 @@ public class InventoryPanel extends TiledPanel {
         public void handleMouseEvent(MouseEvent me) {
             Mists.logger.info("MouseEvent on "+this.getName());
             if (this.inv.getOwner() != null) Mists.logger.info("Inventory owned by "+this.inv.getOwner());
-            if (me.getEventType() == MouseEvent.MOUSE_RELEASED && me.getButton() == MouseButton.PRIMARY) this.itemClicked(me.getX(), me.getY());
+            if ((me.getEventType() == MouseEvent.MOUSE_RELEASED) && me.getButton() == MouseButton.PRIMARY) this.itemClicked(me.getX(), me.getY());
             if (me.getEventType() == MouseEvent.MOUSE_RELEASED && me.getButton() == MouseButton.SECONDARY) this.itemMenuToggle(me.getX(), me.getY());
         }
         
@@ -162,6 +165,7 @@ public class InventoryPanel extends TiledPanel {
         private int actionType;
         private Inventory inv;
         private int slot;
+        private final static int EXAMINE_ITEM = 10;
         private final static int USE_ITEM = 1;
         private final static int EQUIP_ITEM = 2;
         private final static int DROP_ITEM = 9;
@@ -177,6 +181,7 @@ public class InventoryPanel extends TiledPanel {
         
         private void updateText() {
             switch (this.actionType) {
+                case EXAMINE_ITEM: this.text = "Info"; break;
                 case USE_ITEM: this.text = "Use"; break;
                 case EQUIP_ITEM: this.text = "Equip"; break;
                 case DROP_ITEM: this.text = "Drop"; break;
@@ -187,6 +192,14 @@ public class InventoryPanel extends TiledPanel {
         @Override
         protected boolean click() {
             switch (this.actionType) {
+                case EXAMINE_ITEM: {
+                    InfoPanel itemExamine = new InfoPanel(Mists.MistsGame.currentState, "ItemExamine", 300, 100, this.xPosition-100, this.yPosition-100, Mists.graphLibrary.getImageSet("panelBlue"));
+                    itemExamine.setText(inv.getItem(slot).getName()+"\n"+inv.getItem(slot).getDescription());
+                    itemExamine.setRenderZ(this.parent.renderZ);
+                    Mists.MistsGame.currentState.addUIComponent(itemExamine);
+                    this.parent.close();
+                    return true;
+                }
                 case USE_ITEM: {
                     Task use = new Task(GenericTasks.ID_USE_ITEM, inv.getOwner().getID(), new double[]{slot});
                     inv.getOwner().setNextTask(use);
