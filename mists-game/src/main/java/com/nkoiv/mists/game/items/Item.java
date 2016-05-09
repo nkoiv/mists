@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This software (code) is free to use as it is, as long as it's not used for commercial purposes
+ * and as long as you credit the author accordingly. For commercial purposes please contact the author.
+ * The software is provided "as is" with absolutely no warranty of any kind.
+ * Using this software is entirely up to you, and the author is in no way responsible for anything you do with it.
  */
 package com.nkoiv.mists.game.items;
 
@@ -32,6 +33,7 @@ public class Item implements KryoSerializable {
     protected int weight; //TODO: Probably pointless
     protected Image image;
     protected Image[] equippedImages;
+    protected boolean consumedOnUse;
     
     public Item(int baseID, String name, ItemType itype, Image image) {
         this.baseID = baseID;
@@ -39,6 +41,7 @@ public class Item implements KryoSerializable {
         this.image = image;
         this.description = "";
         this.weight = 1;
+        this.consumedOnUse = false;
     }
     
     public void setEquippedImages(Image[] images) {
@@ -99,13 +102,17 @@ public class Item implements KryoSerializable {
         return this.weight;
     }
     
+    public boolean isConsumedOnUse() {
+        return this.consumedOnUse;
+    }
+    
     public boolean use() {
-        Mists.logger.info(this.getName() + " can't be used");
+        Mists.logger.info(this.getName() + " can't be used without a target");
         return false;
     }
     
     public boolean use(MapObject target) {
-        Mists.logger.info(this.getName() + " was used on "+target.getName()+" but can't be used");
+        Mists.logger.info(this.getName() + " was used on "+target.getName()+" but can't be used on another target");
         return false;
     }
     

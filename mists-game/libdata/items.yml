@@ -26,6 +26,13 @@ description: "a basic ranged weapon"
 image: "/images/bow.png"
 damage: 10
 ---
+id: 10
+name: "Healing potion"
+type: "Potion"
+description: "a small healing potion"
+image: "/images/potion_red.png"
+healing: 100
+---
 id: 100
 name: "Pickaxe"
 type: "Weapon 1h"

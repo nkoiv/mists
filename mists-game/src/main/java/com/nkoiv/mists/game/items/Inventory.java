@@ -258,8 +258,15 @@ public class Inventory {
     }
     
     public static boolean useItem(Inventory inv, int slot) {
-        if (inv.owner != null) return inv.getItem(slot).use(inv.owner);
-        else return inv.getItem(slot).use();
+        //Mists.logger.info("Trying to use item "+inv.getItem(slot).getName());
+        boolean usedSuccesfully;
+        
+        if (inv.owner != null) usedSuccesfully = inv.getItem(slot).use(inv.owner);
+        else usedSuccesfully = inv.getItem(slot).use();
+        
+        if (usedSuccesfully && inv.getItem(slot).isConsumedOnUse()) inv.removeItem(slot);
+        //Mists.logger.info("Itemuse: "+usedSuccesfully);
+        return usedSuccesfully;
     }
     
     public static boolean equipItem(Inventory inv, int slot) {

@@ -10,6 +10,7 @@ package com.nkoiv.mists.game.items;
  * @author daedra
  */
 public enum ItemType {
+        CONSUMABLE,
 	MISC,
         HELMET,
         ARMOR,

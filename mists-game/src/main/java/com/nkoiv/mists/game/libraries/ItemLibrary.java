@@ -8,6 +8,7 @@ package com.nkoiv.mists.game.libraries;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.ItemType;
+import com.nkoiv.mists.game.items.Potion;
 import com.nkoiv.mists.game.items.Weapon;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +73,8 @@ public class ItemLibrary <E extends Item> {
                 return generateMiscItemFromYAML(itemData);
             case "Weapon 1h": Mists.logger.info("Generating 1H WEAPON");
                 return generateWeaponFromYAML(itemData);
+            case "Potion": Mists.logger.info("Generating POTION");
+                return generatePotionFromYAML(itemData);
             default: break;
         }        
         return null;
@@ -106,6 +109,23 @@ public class ItemLibrary <E extends Item> {
         i = new Item(itemID, name, ItemType.MISC, image);
         i.setDescription(description);
         return i;
+    }
+    
+    private static Potion generatePotionFromYAML(Map itemData) {
+        Potion p;
+        int itemID = Integer.parseInt((String)itemData.get("id"));
+        String name = (String)itemData.get("name");
+        String description = (String)itemData.get("description");
+        Image image = new Image((String)itemData.get("image"));
+        p = new Potion(itemID, name, image);
+        p.setDescription(description);
+        
+        if (itemData.containsKey("healing")) {
+            int healing = Integer.parseInt((String)itemData.get("healing"));
+            p.setHealingDone(healing);
+        }
+        
+        return p;
     }
     
      /**
