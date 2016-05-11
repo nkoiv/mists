@@ -1,0 +1,16 @@
+Mists
+
+(Latest stable can be found at https://github.com/nkoiv/mists/tree/master/packed_jar/)
+(Direct download link to latest package: https://github.com/nkoiv/mists/raw/master/packed_jar/mists_0.6.7z)
+
+Mists is an Action RPG built with Java8, and as such it requires JRE1.8+. It features pretty much exactly what you'd expect from an arpg: Exploration, combat, procedural generation, loot, light dialogue, puzzles, and so on. The goal of this demo is to find the fabled stuffed animal, the Himmutoy. It's pretty so very snuggly.
+
+You'll start the game on a beach with no items to your name. Armed with only your trusty fireball spell you'll need to find a weapon somewhere before setting off to the Dungeon. That is, unless you want to go unarmed. Going unarmed is totally fine too, even if somewhat more challenging.
+
+Game controls can be displayed inside the game by pressing Esc, but the core controls are as follows:
+- WASD/Arrows (or mouse) to move around 
+- Space to attack with a weapon if you have one
+- Numberkeys for the buttons on the actionbar
+- E to toggle an object that's selected
+- Q to swap between selected objects
+- Mouse click can be used to focus on a target, both for E-clicks and Fireballs.
