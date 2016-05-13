@@ -32,7 +32,7 @@ public class WoldMapEntranceTrigger implements Trigger {
 
     @Override
     public boolean toggle(MapObject toggler) {
-        toggler.getLocation().exitLocation(exitNode);
+        toggler.getLocation().exitLocationToWorldMap(exitNode);
         return true;
     }
 

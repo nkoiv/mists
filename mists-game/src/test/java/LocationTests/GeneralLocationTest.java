@@ -55,7 +55,9 @@ public class GeneralLocationTest {
        if (Mists.creatureLibrary == null) {
            Mists.loadLibraries();
        }
+       PlayerCharacter p = new PlayerCharacter();
        testLocation = new Location("TestLocation", new BGMap(new Image("/images/pocmap.png")));
+       testLocation.setPlayer(p);
        testMap = new BGMap(new Image("/images/pocmap.png"));
        testCreature = new Creature("TestCreature", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);
     }

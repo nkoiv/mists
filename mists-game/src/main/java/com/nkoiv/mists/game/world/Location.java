@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.Direction;
+import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
@@ -686,6 +687,11 @@ public class Location extends Flags implements Global {
      * @param server Server to relay the updates to
      */
     public void update (double time, LocationServer server) {
+        //TEMP: exit player if outside bounds
+        if (player != null && (player.getXPos() < 0 || player.getYPos() < 0 || player.getXPos() > map.getWidth() || player.getYPos() > map.getHeight())) {
+            exitLocationToWorldMap(null);
+        }
+        
         //Threadsafe additions
         handleIncomingMobStack();
         //AI-stuff
@@ -1524,10 +1530,10 @@ public class Location extends Flags implements Global {
      * Exit from the location and go to a specific exitNode on the worldmap.
      * @param exitNode 
      */
-    public void exitLocation(MapNode exitNode) {
+    public void exitLocationToWorldMap(MapNode exitNode) {
         exitLocation();
-        Mists.MistsGame.getCurrentWorldMap().setPlayerNode(exitNode);
-        Mists.MistsGame.moveToState(Mists.MistsGame.WORLDMAP);
+        if (exitNode != null) Mists.MistsGame.getCurrentWorldMap().setPlayerNode(exitNode);
+        Mists.MistsGame.moveToState(Game.WORLDMAP);
         //TODO: This doesn't feel like the clean way to do this. Rethink!
     }
 
