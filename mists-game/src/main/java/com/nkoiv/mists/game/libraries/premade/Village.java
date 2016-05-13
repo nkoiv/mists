@@ -71,6 +71,7 @@ public abstract class Village {
      * @param villageTemplate the village to generate the NPCs on
      */
     private static void generateNPCs(LocationTemplate villageTemplate) {
+        Mists.logger.info("Generating VillageTemplate NPCs");
         Creature villageShopkeeper = Mists.creatureLibrary.create("VillageShopkeeper");
         villageShopkeeper.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(10));
         
@@ -81,6 +82,7 @@ public abstract class Village {
         villageShopkeeper.setAI(shopkeeperAI);
         villageShopkeeper.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(3));
         villageTemplate.mobs.add(villageShopkeeper);
+        Mists.logger.info("Shopkeeper generated");
     }
     
 }

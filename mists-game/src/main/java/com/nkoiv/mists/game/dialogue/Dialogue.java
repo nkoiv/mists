@@ -107,4 +107,9 @@ public class Dialogue {
         return d;
     }
     
+    @Override
+    public String toString() {
+        return this.cards.size()+" cards in dialogue";
     }
+    
+}

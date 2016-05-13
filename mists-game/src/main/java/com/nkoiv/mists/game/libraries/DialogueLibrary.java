@@ -34,6 +34,7 @@ public class DialogueLibrary {
     }
     
     public void addTemplate(Dialogue d, int dialogueID) {
+        Mists.logger.info("ID "+dialogueID+" dialogue added into library");
         lib.put(dialogueID, d);
     }
     

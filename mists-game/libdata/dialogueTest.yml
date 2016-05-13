@@ -36,32 +36,6 @@ cards:
     - linkText: "You mentioned equipment?"
       linkDestination: 3
 ---
-dialogueID: 2
-dialogueName: "Chat with Himmu"
-cards:
- - id: 1
-   text: "Hello, TALKER_NAME, my name is OWNER_NAME"
-   links:
-    - linkText: "Hi OWNER_NAME! What are you doing here?"
-      linkDestination: 2
-    - linkText: "OWNER_NAME? What a weird name! Where are we?"   
-      linkDestination: 3
- - id: 2
-   text: "I came to look for you here in the LOCATION_NAME, but I'm too big to fit into the lower levels"
-   links:
-    - linkText: "Lower levels? What's in there"
-      linkDestination: 3
- - id: 3
-   text: "This dungeon house some puzzles and a skeleton lord. Nasty things both. While I can't help you with those, I can smash the monsters here in the cave for you!"
-   links:
-    - linkText: "Anything else I should know?"
-      linkDestination: 4
-- id: 4
-  text: "The third level of the dungeon is a deathtrap! You should not go there, as I'm not sure there is a way out. Perhaps if you had a tool to dig through walls with..."
-  links:
-   - linkText: "Thanks for the tip, OWNER_NAME [End Dialogue]"
-     linkDestination: -1
----
 dialogueID: 3
 dialogueName: "Shopkeepers quest"
 cards:
@@ -99,3 +73,29 @@ cards:
          itemID: 2
        - triggerType: "ChangeDialogue"
          dialogueID: -1
+---
+dialogueID: 2
+dialogueName: "Chat with Himmu"
+cards:
+ - id: 1
+   text: "Hello, TALKER_NAME, my name is OWNER_NAME"
+   links:
+    - linkText: "Hi OWNER_NAME! What are you doing here?"
+      linkDestination: 2
+    - linkText: "OWNER_NAME? What a weird name! Where are we?"   
+      linkDestination: 3
+ - id: 2
+   text: "I came to look for you here in the LOCATION_NAME, but I'm too big to fit into the lower levels"
+   links:
+    - linkText: "Lower levels? What is in there"
+      linkDestination: 3
+ - id: 3
+   text: "This dungeon house some puzzles and a skeleton lord. Nasty things both. While I can't help you with those, I can smash the monsters here in the cave for you!"
+   links:
+    - linkText: "Anything else I should know?"
+      linkDestination: 4
+- id: 4
+  text: "The third level of the dungeon is a deathtrap! You should not go there, as I'm not sure there is a way out. Perhaps if you had a tool to dig through walls with..."
+  links:
+   - linkText: "Thanks for the tip, OWNER_NAME [End Dialogue]"
+     linkDestination: -1
