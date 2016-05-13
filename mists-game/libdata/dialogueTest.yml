@@ -82,7 +82,7 @@ cards:
    links:
     - linkText: "Hi OWNER_NAME! What are you doing here?"
       linkDestination: 2
-    - linkText: "OWNER_NAME? What a weird name! Where are we?"   
+    - linkText: "OWNER_NAME? What a weird name! Where are we?"
       linkDestination: 3
  - id: 2
    text: "I came to look for you here in the LOCATION_NAME, but I'm too big to fit into the lower levels"
@@ -94,8 +94,8 @@ cards:
    links:
     - linkText: "Anything else I should know?"
       linkDestination: 4
-- id: 4
-  text: "The third level of the dungeon is a deathtrap! You should not go there, as I'm not sure there is a way out. Perhaps if you had a tool to dig through walls with..."
-  links:
-   - linkText: "Thanks for the tip, OWNER_NAME [End Dialogue]"
-     linkDestination: -1
+ - id: 4
+   text: "The third level of the dungeon is a deathtrap! You should not go there, as I'm not sure there is a way out. Perhaps if you had a tool to dig through walls with..."
+   links:
+    - linkText: "Thanks for the tip, OWNER_NAME [End Dialogue]"
+      linkDestination: -1

@@ -77,7 +77,7 @@ public class DialogueLibrary {
         for (Object c : cardList) {
             HashMap cardData = (HashMap)c;
             int cardID = Integer.parseInt((String)cardData.get("id"));
-            //Mists.logger.info("Generating card" +cardID);
+            Mists.logger.info("Generating card" +cardID);
             Card card = generateCardFromYAML(cardData);
             d.addCard(cardID, card);
         }
