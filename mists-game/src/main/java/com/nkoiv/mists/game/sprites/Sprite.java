@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.sprites;
 
+import com.nkoiv.mists.game.Mists;
+import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -361,9 +363,11 @@ public class Sprite extends MovingGraphics
      */    
     private boolean intersectsInPixels(MovingGraphics m) {
         //Rotated objects are happy with intersection, because pixel collision would require rotating the pixel image too...
+        
         if (this.rotation!=0 || m.rotation != 0) {
            return this.intersectsWithShape(m.getBoundary());
         }
+        
         if (this.collisionBox.intersects(m.collisionBox)) {
             //Check pixel collsion
             return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), m.getXPos(), m.getYPos(), m.getImage());
@@ -386,9 +390,8 @@ public class Sprite extends MovingGraphics
      * @return true if the images overlap in pixels
      */
     
-    public static boolean pixelCollision(double x1, double y1, Image image1,
-                               double x2, double y2, Image image2) {
-
+    public static boolean pixelCollision(double x1, double y1, Image image1, double x2, double y2, Image image2) {
+        //Mists.logger.log(Level.INFO, "pixel collision detection at {0}x{1} - {2}x{3}", new Object[]{x1, y2, x2, y2});
         PixelReader pr1 = image1.getPixelReader();
         PixelReader pr2 = image2.getPixelReader();
 
@@ -418,6 +421,7 @@ public class Sprite extends MovingGraphics
               if (((pr1.getArgb(nx,ny) & 0xFF000000) != 0x00) &&
                   ((pr2.getArgb(nx1,ny1) & 0xFF000000) != 0x00)) {
                  // collide!!
+                 //Mists.logger.info("COLLISION!");
                  return true;
               }
             } catch (Exception e) {
@@ -425,7 +429,7 @@ public class Sprite extends MovingGraphics
             }
           }
         }
-
+        //Mists.logger.info("Returning false from pixel collision");
         return false;
     }
     

@@ -18,6 +18,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.gameobject.Water;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.puzzle.PuzzleManager;
@@ -1050,6 +1051,7 @@ public class Location extends Flags implements Global {
         while ( mobIter.hasNext() )
         {
             MapObject collidingObject = mobIter.next();
+            if (collidingObject.equals(mob)) continue;
             //If the objects are further away than their combined width/height, they cant collide
             if ((Math.abs(collidingObject.getCenterXPos() - mob.getCenterXPos())
                  > (collidingObject.getWidth() + mob.getWidth()))
@@ -1059,6 +1061,7 @@ public class Location extends Flags implements Global {
             } else {
                 if (!collidingObject.equals(mob) && mob.intersects(collidingObject)) { 
                     // Colliding with yourself is not really a collision
+                    //Mists.logger.info(mob.getName()+" collided with "+collidingObject.getName());
                     collidingObjects.add(collidingObject);
                 }
             }

@@ -63,11 +63,6 @@ public class MapObject extends Flags implements Global, Templatable {
         }
         return false;
     }
-
-    public boolean instersects(MapObject o) {
-        return o.getGraphics().intersects(this.getGraphics());
-    }
-    
     
     public void setLocation(Location l) {
         this.location = l;
@@ -146,6 +141,7 @@ public class MapObject extends Flags implements Global, Templatable {
     }
     
     public boolean intersects(MapObject mob) {
+        //if (!"trigger radius".equals(mob.getName()) && !"trigger radius".equals(name))Mists.logger.info("Checking intersection between "+this.getName()+" and "+mob.getName()); 
         return this.graphics.intersects(mob.getGraphics());
     }
     

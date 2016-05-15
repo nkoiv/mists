@@ -726,6 +726,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     public void equipWeapon(Weapon w) {
         if (w==null) return;
         this.equippedWeapon = w;
+        this.addTextPopup("Equipped "+w.getName());
         if (this.graphics instanceof SpriteSkeleton) {
             Mists.logger.info("Added "+w.getName()+" to "+this.getName()+" spriteskeleton");
             ((SpriteSkeleton)graphics).addPart("weapon", new Sprite(w.getImage(), 5, 10));
