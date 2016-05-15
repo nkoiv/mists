@@ -99,9 +99,10 @@ public class Sprite extends MovingGraphics
         this.refreshRotationData();
     }
     
+    @Override
     public Image getImage() {
         if (this.animated) {
-           this.animation.getCurrentFrame();
+           return this.animation.getCurrentFrame();
         } 
         return this.image;
     }
@@ -363,7 +364,6 @@ public class Sprite extends MovingGraphics
      */    
     private boolean intersectsInPixels(MovingGraphics m) {
         //Rotated objects are happy with intersection, because pixel collision would require rotating the pixel image too...
-        
         if (this.rotation!=0 || m.rotation != 0) {
            return this.intersectsWithShape(m.getBoundary());
         }
@@ -371,9 +371,9 @@ public class Sprite extends MovingGraphics
         if (this.collisionBox.intersects(m.collisionBox)) {
             //Check pixel collsion
             return pixelCollision(this.getXPos(), this.getYPos(), this.getImage(), m.getXPos(), m.getYPos(), m.getImage());
-            
         }
-        else return false;
+        //No collision with shape or pixels, so return false
+        return false;
 
     }
 
@@ -409,23 +409,26 @@ public class Sprite extends MovingGraphics
         // intersection rect
         int toty = Math.abs(yend - ystart);
         int totx = Math.abs(xend - xstart);
-
+        
         for (int y=1;y < toty-1;y++){
           int ny = Math.abs(ystart - (int) y1) + y;
           int ny1 = Math.abs(ystart - (int) y2) + y;
-
           for (int x=1;x < totx-1;x++) {
             int nx = Math.abs(xstart - (int) x1) + x;
             int nx1 = Math.abs(xstart - (int) x2) + x;
             try {
-              if (((pr1.getArgb(nx,ny) & 0xFF000000) != 0x00) &&
-                  ((pr2.getArgb(nx1,ny1) & 0xFF000000) != 0x00)) {
-                 // collide!!
-                 //Mists.logger.info("COLLISION!");
-                 return true;
-              }
+                //if (pr1.getColor(nx, ny).getOpacity() > 0 && pr2.getColor(nx1, ny1).getOpacity() > 0) {
+                if (((pr1.getArgb(nx,ny) & 0xFF000000) != 0x00) &&
+                    ((pr2.getArgb(nx1,ny1) & 0xFF000000) != 0x00)) {
+                   // collide!!
+                   //Mists.logger.info("COLLISION AT "+nx+"x"+ny+" - "+nx1+"x"+ny1);
+                   //Mists.logger.info("Color for mob:"+pr1.getColor(nx, ny)+", Color for collision: "+pr2.getColor(nx1, ny1));
+                   //Mists.MistsGame.debugCanvas.getGraphicsContext2D().setFill(pr2.getColor(nx1, ny1));
+                   //Mists.MistsGame.debugCanvas.getGraphicsContext2D().fillRect(x2+nx1-Mists.MistsGame.getCurrentLocation().getLastxOffset()-1, y2+ny1-Mists.MistsGame.getCurrentLocation().getLastyOffset()-1, 3, 3);
+                   return true;
+                }
             } catch (Exception e) {
-            //System.out.println("s1 = "+nx+","+ny+"  -  s2 = "+nx1+","+ny1);
+                //System.out.println("s1 = "+nx+","+ny+"  -  s2 = "+nx1+","+ny1);
             }
           }
         }

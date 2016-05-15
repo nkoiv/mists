@@ -54,6 +54,7 @@ public class Game {
     private final Canvas gameCanvas;
     private final Canvas shadowCanvas;
     private final Canvas uiCanvas;
+    public final Canvas debugCanvas;
     public double WIDTH; //Dimensions of the screen (render area)
     public double HEIGHT; //Dimensions of the screen (render area)
     public double xOffset; //Offsets are used control which part of the map is drawn
@@ -80,11 +81,12 @@ public class Game {
      * @param uiCanvas Canvas to render the UI on
      * @param shadowCanvas Canvas for shadow overlay
     */
-    public Game (Canvas gameCanvas, Canvas uiCanvas, Canvas shadowCanvas) {
+    public Game (Canvas gameCanvas, Canvas uiCanvas, Canvas shadowCanvas, Canvas debugCanvas) {
         //Initialize the screen size
         this.gameCanvas = gameCanvas;
         this.uiCanvas = uiCanvas;
         this.shadowCanvas = shadowCanvas;
+        this.debugCanvas = debugCanvas;
         WIDTH = gameCanvas.getWidth();
         HEIGHT = uiCanvas.getHeight();
         

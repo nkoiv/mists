@@ -1062,6 +1062,7 @@ public class Location extends Flags implements Global {
                 if (!collidingObject.equals(mob) && mob.intersects(collidingObject)) { 
                     // Colliding with yourself is not really a collision
                     //Mists.logger.info(mob.getName()+" collided with "+collidingObject.getName());
+                    if (collidingObject instanceof Structure) Mists.logger.info("Collision between "+mob.getName()+" and "+collidingObject.getName()+" ID:"+collidingObject.getID());
                     collidingObjects.add(collidingObject);
                 }
             }

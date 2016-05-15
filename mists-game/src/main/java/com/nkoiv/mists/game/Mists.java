@@ -102,9 +102,13 @@ public class Mists extends Application implements Global {
         shadowCanvas.widthProperty().bind(primaryStage.widthProperty());
         shadowCanvas.heightProperty().bind(primaryStage.heightProperty());
         shadowCanvas.setBlendMode(BlendMode.MULTIPLY);
+        final Canvas debugCanvas = new Canvas(Global.WIDTH, Global.HEIGHT);
+        debugCanvas.widthProperty().bind(primaryStage.widthProperty());
+        debugCanvas.heightProperty().bind(primaryStage.heightProperty());
         root.getChildren().add(gameCanvas);
         root.getChildren().add(shadowCanvas);
         root.getChildren().add(uiCanvas);
+        root.getChildren().add(debugCanvas);
         logger.info("Scene initialized");
         setupSoundManager();
         logger.info("SoundManager initialized");
@@ -115,7 +119,7 @@ public class Mists extends Application implements Global {
         setupMouseHandles(root);
         setupWindowResizeListeners(launchScene);
         logger.info("Game set up");
-        MistsGame = new Game(gameCanvas, uiCanvas, shadowCanvas);
+        MistsGame = new Game(gameCanvas, uiCanvas, shadowCanvas, debugCanvas);
         MistsGame.WIDTH = primaryStage.getWidth();
         MistsGame.HEIGHT = primaryStage.getHeight();
         primaryStage.show();
