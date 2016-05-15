@@ -55,17 +55,10 @@ public class SoundManagerJavaFX implements SoundManager {
     
     private void initializePlaylist(){
         //TODO: Load these from external file.
-        try {
-            loadMusicIntoPlaylist("menu","audio/music/JDB_Innocence.mp3");
-        } catch (Exception e) {
-            Mists.logger.warning("Tried to load audio/music/JDB_Innocence.mp3 but failed");
-        }
-        
-        try {
-            loadMusicIntoPlaylist("dungeon", "audio/music/Dungeon_-_Dungeon_Delvers_(CS).mp3");
-        } catch (Exception e) {
-            Mists.logger.warning("Tried to load audio/music/Dungeon_-_Dungeon_Delvers_(CS).mp3 but failed");
-        }
+        loadMusicIntoPlaylist("menu","audio/music/JDB_Innocence.mp3");
+        loadMusicIntoPlaylist("dungeon", "audio/music/Dungeon_-_Dungeon_Delvers_(CS).mp3");
+        loadMusicIntoPlaylist("town", "audio/music/Town_-_Small_Town_Welcome_(CS).mp3");
+        loadMusicIntoPlaylist("memories", "audio/music/Theme_-_Good_Memories_(MD).mp3");
         
     }
     
@@ -81,6 +74,10 @@ public class SoundManagerJavaFX implements SoundManager {
     
     @Override
     public void playMusic (String id) {
+        if ("none".equals(id)) {
+            if (this.mediaPlayer != null) this.mediaPlayer.stop(); //Stop the old music
+            return;
+        }
         if (this.musicPlaylist.containsKey(id)) {
             MediaPlayer newPlayer = new MediaPlayer(this.musicPlaylist.get(id));
             newPlayer.setVolume(mediaPlayer.getVolume());
