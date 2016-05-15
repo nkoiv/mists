@@ -73,7 +73,7 @@ public class GeneralMobTest {
     public void mobsAtSamePositionIntersect() {
         testStructure.setPosition(100,100);
         testCreature.setPosition(100, 100);
-        assertTrue(testCreature.instersects(testStructure));
+        assertTrue(testCreature.intersects(testStructure));
     }
     
     @Test
