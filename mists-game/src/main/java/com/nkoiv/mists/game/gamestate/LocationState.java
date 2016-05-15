@@ -35,6 +35,7 @@ import com.nkoiv.mists.game.ui.TextPanel;
 import com.nkoiv.mists.game.ui.TiledPanel;
 import com.nkoiv.mists.game.ui.TiledWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
+import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -511,6 +512,11 @@ public class LocationState implements GameState {
             //use default action towards mouseclick coordinates
             //game.locControls.playerAttackMove(clickX+xOffset, clickY+yOffset);
             //Select a target if possible
+            MapObject mob = game.getCurrentLocation().getMobAtLocation(xOffset+clickX, yOffset+clickY);
+            if (contextAction.getTriggerObjects().contains(mob)) {
+                if (mob!=null) game.locControls.useTrigger(mob.getID(), 0);
+                return true;
+            }
             if (toggleTarget(clickX, clickY)) return true;
         }
         //Click didn't do anything
