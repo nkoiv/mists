@@ -8,9 +8,13 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.world.util.Toolkit;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javax.swing.SwingUtilities;
 
 /**
  * ActionButtons (currently) extend the Test button,
@@ -49,7 +53,13 @@ public class ActionButton extends TextButton {
     @Override
     public void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
+        Point p = MouseInfo.getPointerInfo().getLocation();
         
+        double mouseX = p.getX() - Mists.primaryStage.getX();
+        double mouseY = p.getY() - Mists.primaryStage.getY();
+        //Mists.logger.info("Using action "+actionName+" towards "+mouseX+player.getLocation().getLastxOffset()+"x"+ mouseY+player.getLocation().getLastyOffset());
+        player.useAction(actionName, mouseX+player.getLocation().getLastxOffset(), mouseY+player.getLocation().getLastyOffset());
+        /*
         if (!player.getLocation().getTargets().isEmpty()) {
             Mists.logger.log(Level.INFO, "ActionButton: Using {0} towards {1}", new Object[]{actionName, player.getLocation().getTargets().get(0).getName()});
             player.useAction(actionName, player.getLocation().getTargets().get(0));
@@ -57,6 +67,7 @@ public class ActionButton extends TextButton {
             player.useAction(actionName);
             Mists.logger.log(Level.INFO, "ActionButton: Using {0}", actionName);
         }
+        */
     }
     
     
