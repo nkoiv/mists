@@ -6,13 +6,11 @@
 package com.nkoiv.mists.game.gameobject;
 
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
-import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import com.nkoiv.mists.game.ui.InfoPanel;
 import java.util.ArrayList;

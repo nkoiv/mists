@@ -9,11 +9,13 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.ui.PopUpMenu;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.world.worldmap.LocationNode;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.TreeSet;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -51,7 +53,7 @@ public class WorldMapState implements GameState {
 
     @Override
     public void enter() {
-        Mists.soundManager.playMusic("dungeon");
+        Mists.soundManager.playMusic("menu");
     }
 
     
@@ -291,6 +293,17 @@ public class WorldMapState implements GameState {
             
         }
 
+    }
+    
+    @Override
+    public void closePopUpWindows() {
+        Stack<UIComponent> popups = new Stack<>();
+        for (String k : this.uiComponents.keySet()) {
+            if (this.uiComponents.get(k) instanceof PopUpMenu) popups.add(this.uiComponents.get(k));
+        }
+        while (!popups.isEmpty()) {
+            this.removeUIComponent(popups.pop());
+        }
     }
 
     @Override

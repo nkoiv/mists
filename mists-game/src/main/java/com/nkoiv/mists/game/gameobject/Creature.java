@@ -473,6 +473,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
      * @return Return true if movement was possible, false if it was blocked
      */ 
     public boolean applyMovement(double time){
+        if (this.location == null) return false;
         /*
         * Check collisions before movement
         * TODO: Add in pixel-based collision detection (compare alphamaps?)

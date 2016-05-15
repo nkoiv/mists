@@ -5,8 +5,8 @@
  */
 package com.nkoiv.mists.game.triggers;
 
-import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 
 /**

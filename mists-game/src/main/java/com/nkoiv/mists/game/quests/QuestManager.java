@@ -12,7 +12,6 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.ui.InfoPanel;
-import com.nkoiv.mists.game.ui.TextPanel;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;

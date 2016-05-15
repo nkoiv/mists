@@ -8,10 +8,12 @@ package com.nkoiv.mists.game.gamestate;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.ui.MainMenuWindow;
+import com.nkoiv.mists.game.ui.PopUpMenu;
 import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.TreeSet;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -150,7 +152,18 @@ public class MainMenuState implements GameState {
         }
     }
 
-     @Override
+    @Override
+    public void closePopUpWindows() {
+        Stack<UIComponent> popups = new Stack<>();
+        for (String k : this.uiComponents.keySet()) {
+            if (this.uiComponents.get(k) instanceof PopUpMenu) popups.add(this.uiComponents.get(k));
+        }
+        while (!popups.isEmpty()) {
+            this.removeUIComponent(popups.pop());
+        }
+    }
+    
+    @Override
     public void addUIComponent(UIComponent uic) {
         this.uiComponents.put(uic.getName(), uic);
         this.drawOrder.add(uic);

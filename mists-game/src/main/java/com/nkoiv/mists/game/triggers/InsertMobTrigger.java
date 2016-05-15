@@ -6,7 +6,6 @@
  */
 package com.nkoiv.mists.game.triggers;
 
-import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 
 /**

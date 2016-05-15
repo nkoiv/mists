@@ -12,7 +12,6 @@ import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.networking.LocationClient;
-import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.triggers.Trigger;
 import java.util.ArrayList;
 import java.util.Arrays;

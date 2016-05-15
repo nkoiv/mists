@@ -6,7 +6,6 @@
  */
 package com.nkoiv.mists.game.items;
 
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.HashMap;

@@ -11,7 +11,6 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
-import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.util.Flags;
 import java.io.Serializable;
 import java.util.ArrayList;

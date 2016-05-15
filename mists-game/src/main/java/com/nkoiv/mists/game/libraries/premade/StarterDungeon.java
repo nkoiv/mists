@@ -9,7 +9,6 @@ package com.nkoiv.mists.game.libraries.premade;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
-import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.LocationDoorway;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
@@ -32,17 +31,7 @@ import javafx.scene.image.Image;
  */
 public abstract class StarterDungeon {
     
-    public static LocationTemplate getDungeonSkeletonLevel() {
-        Mists.logger.info("Generating template for the starter dungeon skeleton level");
-        LocationTemplate dungeon = new LocationTemplate(12, "StarterDungeonOne", 60*Mists.TILESIZE, 40*Mists.TILESIZE);
-        dungeon.map = new TileMap("/mapdata/dungeon_skeleton.map");
         
-        generateDungeonSkeletonLevelMobs(dungeon);
-        generateDungeonSkeletonLevelStaticStructures(dungeon);
-        addPuzzlesToDungeonSkeletonLevel(dungeon);
-        return dungeon;
-    }
-    
     
     public static LocationTemplate getDungeonCaveLevel() {
         Mists.logger.info("Generating template for the starter dungeon cave level");
@@ -51,6 +40,22 @@ public abstract class StarterDungeon {
         
         generateDungeonCaveLevelMobs(dungeon);
         generateDungeonCaveLevelStaticStructures(dungeon);
+        
+        dungeon.music = "dungeon";
+        
+        return dungeon;
+    }
+    
+    public static LocationTemplate getDungeonSkeletonLevel() {
+        Mists.logger.info("Generating template for the starter dungeon skeleton level");
+        LocationTemplate dungeon = new LocationTemplate(12, "StarterDungeonOne", 60*Mists.TILESIZE, 40*Mists.TILESIZE);
+        dungeon.map = new TileMap("/mapdata/dungeon_skeleton.map");
+        
+        generateDungeonSkeletonLevelMobs(dungeon);
+        generateDungeonSkeletonLevelStaticStructures(dungeon);
+        addPuzzlesToDungeonSkeletonLevel(dungeon);
+        
+        dungeon.music = "dungeon";
         
         return dungeon;
     }

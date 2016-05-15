@@ -45,6 +45,9 @@ public interface GameState {
     //Update UI (screen resize etC)
     public void updateUI();
     
+    
+    public void closePopUpWindows();
+    
     //TODO:
     //Cleanup the stage
     public void exit();

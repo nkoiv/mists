@@ -26,6 +26,7 @@ import com.nkoiv.mists.game.ui.IconButton;
 import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.Overlay;
+import com.nkoiv.mists.game.ui.PopUpMenu;
 import com.nkoiv.mists.game.ui.QuestPanel;
 import com.nkoiv.mists.game.ui.QuitButton;
 import com.nkoiv.mists.game.ui.ScrollingPopupText;
@@ -36,6 +37,7 @@ import com.nkoiv.mists.game.ui.TiledWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
@@ -351,7 +353,7 @@ public class LocationState implements GameState {
             gameMenuOpen = true;
             TiledPanel gameMenu = new TiledPanel(this, "GameMenu", 220, 300, 100, 100,Mists.graphLibrary.getImageSet("panelBeige"));
             TextButton resumeButton = new LocationButtons.ResumeButton("Resume", 200, 60, this.game);
-            TextButton optionsButton = new TextButton("Options", 200, 60);
+            TextButton optionsButton = new TextButton("TODO: Options", 200, 60);
             GoMainMenuButton mainMenuButton = new GoMainMenuButton(this.game, 200, 60);
             QuitButton quitButton = new QuitButton("Quit game", 200, 60);
             gameMenu.addSubComponent(resumeButton);
@@ -773,6 +775,18 @@ public class LocationState implements GameState {
         this.paused = false;
     }
 
+    
+    @Override
+    public void closePopUpWindows() {
+        Mists.logger.info("Closing popup windows");
+        Stack<UIComponent> popups = new Stack<>();
+        for (String k : this.uiComponents.keySet()) {
+            if (this.uiComponents.get(k) instanceof PopUpMenu) popups.add(this.uiComponents.get(k));
+        }
+        while (!popups.isEmpty()) {
+            this.removeUIComponent(popups.pop());
+        }
+    }
     
     @Override
     public void addUIComponent(UIComponent uic) {

@@ -8,7 +8,6 @@ package com.nkoiv.mists.game.libraries.premade;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
@@ -29,6 +28,9 @@ public abstract class Beach {
         beach.map = new TileMap("/mapdata/beach.map");
         generateStaticStructures(beach);
         generateNPCs(beach);
+        
+        beach.music = "memories";
+        
         return beach;
     }
      

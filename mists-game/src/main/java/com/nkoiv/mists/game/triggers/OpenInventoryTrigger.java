@@ -29,7 +29,7 @@ public class OpenInventoryTrigger implements Trigger {
            Mists.logger.info(toggler.getName()+" tried to toggle "+ic.getName()+" but is not a creature");
            return false;
        }
-       
+       ic.addTextPopup("TODO: Opening external inventories");
        //TODO: Open a window with the target inventory
        
        return true;

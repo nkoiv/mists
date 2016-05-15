@@ -6,9 +6,9 @@
 package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.world.GameMap;
@@ -130,6 +130,7 @@ public class LocationLibrary  {
         */
         //l.setMinLightLevel(template.lightlevel);
         if (template.lightlevel > 0) l.getEnvironment().setLightlevel(template.lightlevel);
+        l.getEnvironment().setDefaultMusic(template.music);
         l.updateAllVariableGraphicStructures();
         l.loading = false;
         return l;
@@ -170,6 +171,7 @@ public class LocationLibrary  {
         public ArrayList<Puzzle> puzzles;
         public ArrayList<Roof> roofs;
         public double lightlevel;
+        public String music;
         
         public LocationTemplate(int ID, String name, double width, double height) {
             this.baseID = ID; this.name = name;
@@ -177,6 +179,7 @@ public class LocationLibrary  {
             this.mobs = new ArrayList();
             this.puzzles = new ArrayList();
             this.roofs = new ArrayList();
+            this.music = "none";
         }
 
         

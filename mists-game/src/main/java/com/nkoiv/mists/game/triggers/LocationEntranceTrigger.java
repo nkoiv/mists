@@ -7,7 +7,6 @@
 package com.nkoiv.mists.game.triggers;
 
 import com.nkoiv.mists.game.gameobject.LocationDoorway;
-import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gameobject.MapObject;
 
 /**

@@ -217,6 +217,7 @@ public class TiledWindow extends UIComponent{
         
         @Override
         protected void buttonPress() {
+            Mists.MistsGame.currentState.closePopUpWindows();
             this.tw.close();
         }
         

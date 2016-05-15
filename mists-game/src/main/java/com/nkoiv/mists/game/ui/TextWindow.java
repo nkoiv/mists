@@ -94,7 +94,6 @@ public class TextWindow extends UIComponent {
             if (me.getX() > xPosition+closeButton.xPosition && me.getX() < xPosition+closeButton.xPosition+closeButton.width
                     && me.getY() > yPosition+closeButton.yPosition && me.getY() < yPosition+closeButton.yPosition+closeButton.height) {
                 closeButton.buttonPress();
-                Mists.logger.info("Raa");
                 me.consume();
             }
             
@@ -121,6 +120,7 @@ public class TextWindow extends UIComponent {
         @Override
         protected void buttonPress() {
             this.tw.close();
+            Mists.MistsGame.currentState.closePopUpWindows();
         }
         
     }

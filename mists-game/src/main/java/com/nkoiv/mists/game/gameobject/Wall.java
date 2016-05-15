@@ -10,7 +10,6 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.logging.Level;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;

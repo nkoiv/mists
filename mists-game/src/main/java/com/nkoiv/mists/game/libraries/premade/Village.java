@@ -37,6 +37,9 @@ public abstract class Village {
         addRoofs(villageTemplate);
         generateNPCs(villageTemplate);
         generateStaticStructures(villageTemplate);
+        
+        villageTemplate.music = "town";
+        
         return villageTemplate;
     }
     

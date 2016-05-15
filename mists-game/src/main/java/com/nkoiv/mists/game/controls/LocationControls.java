@@ -17,8 +17,6 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
-import com.nkoiv.mists.game.networking.LocationClient;
-import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.world.Location;
