@@ -11,6 +11,6 @@ Game controls can be displayed inside the game by pressing Esc, but the core con
 - WASD/Arrows (or mouse) to move around 
 - Space to attack with a weapon if you have one
 - Numberkeys for the buttons on the actionbar
-- E to toggle an object that's selected
+- E or mouseclick to toggle an object that's selected
 - Q to swap between selected objects
 - Mouse click can be used to focus on a target, both for E-clicks and Fireballs.
