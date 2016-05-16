@@ -43,8 +43,8 @@ public class ProjectileSpell extends Action implements AttackAction {
         this.setFlag("projectilerange", 2000);
     }
     
-    public ProjectileSpell(String name) {
-        this(name,
+    public ProjectileSpell() {
+        this("Firebolt",
             new SpriteAnimation(new ImageView("/images/environment/torch_flame.png"), 4, 0, 0, 0, 0, 32, 32), 
             new SpriteAnimation(new ImageView("/images/effects/explosion-4.png"), 12, 0, 0, 0, 0, 128, 128)
         );
@@ -174,7 +174,7 @@ public class ProjectileSpell extends Action implements AttackAction {
     
     @Override
     public Action createFromTemplate() {
-        ProjectileSpell a = new ProjectileSpell(this.name);
+        ProjectileSpell a = new ProjectileSpell(this.name, this.projectileAnimation, this.explosionAnimation);
         for (String flag : this.flags.keySet()) {
             a.setFlag(flag, this.flags.get(flag));
         }
