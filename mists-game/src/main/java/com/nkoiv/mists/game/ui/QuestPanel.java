@@ -7,8 +7,10 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
+import com.nkoiv.mists.game.quests.Quest;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.quests.QuestTask;
+import java.util.HashMap;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -43,16 +45,33 @@ public class QuestPanel extends TextPanel {
     private void renderQuestText(GraphicsContext gc, double xPosition, double yPosition) {
         int maxRowCount = (int)(this.height / this.rowHeight);
         int currentRow = 1;
-        StringBuilder sb;
-        for (int questID : this.questManager.getOpenQuests().keySet()) {
+        StringBuilder sb = new StringBuilder();
+        if (!questManager.getOpenQuests().isEmpty()) {
+            gc.setFont(Mists.fonts.get("alagard20"));
+            gc.setFill(Color.BISQUE);
+            renderTextLine("Open quests", gc, xPosition, yPosition, currentRow, maxRowCount);
+            currentRow++;
+            currentRow = renderQuests(this.questManager.getOpenQuests(), sb, gc, currentRow, maxRowCount);
+        } 
+        if (!questManager.getClosedQuests().isEmpty()) {
+            gc.setFont(Mists.fonts.get("alagard20"));
+            gc.setFill(Color.BISQUE);
+            renderTextLine("Closed quests", gc, xPosition, yPosition, currentRow, maxRowCount);
+            currentRow++;
+            renderQuests(this.questManager.getClosedQuests(), sb, gc, currentRow, maxRowCount);
+        }
+    }
+    
+    private int renderQuests(HashMap<Integer, Quest> quests, StringBuilder sb, GraphicsContext gc, int currentRow, int maxRowCount) {
+        for (int questID : quests.keySet()) {
             gc.setFill(Color.DARKBLUE);
             gc.setFont(Mists.fonts.get("alagard20"));
-            String title = this.questManager.getOpenQuests().get(questID).getTitle();
+            String title = quests.get(questID).getTitle();
             renderTextLine(title, gc, xPosition, yPosition, currentRow, maxRowCount);
             currentRow++;
-            for (QuestTask qt : this.questManager.getOpenQuests().get(questID).getTasks()) {
+            for (QuestTask qt : quests.get(questID).getTasks()) {
                 if (qt.isDone()) gc.setFill(Color.LIME);
-                else gc.setFill(Color.STEELBLUE);
+                else gc.setFill(Color.CYAN);
                 gc.setFont(Mists.fonts.get("alagard12"));
                 sb = new StringBuilder();
                 sb.append(qt.getDescription());
@@ -65,7 +84,8 @@ public class QuestPanel extends TextPanel {
                 if (currentRow>=maxRowCount) break;
             }
             if (currentRow>=maxRowCount) break;
-        }        
+        }
+        return currentRow;
     }
     
     private boolean renderTextLine(String text, GraphicsContext gc, double xPosition, double yPosition, int currentRow, int maxRow) {

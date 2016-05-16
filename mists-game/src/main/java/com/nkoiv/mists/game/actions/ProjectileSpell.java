@@ -107,7 +107,7 @@ public class ProjectileSpell extends Action implements AttackAction {
     @Override
     public void use(Creature actor, double xTarget, double yTarget) {
         Mists.logger.log(Level.INFO, "{0} using {1} from {2}x{3} towards {4}x{5}", new Object[]{actor.getName(), this.name, actor.getCenterXPos(), actor.getCenterYPos(), xTarget, yTarget});
-        double[] directionXY = Toolkit.getDirectionXY(actor.getCenterXPos(), actor.getCenterYPos(), xTarget, yTarget);
+        double[] directionXY = Toolkit.getDirectionXY(actor.getCenterXPos(), actor.getCenterYPos(), xTarget, yTarget-20);
         Mists.logger.info("Giving directionXY: "+directionXY[0]+"x"+directionXY[1]);
         this.use(actor, directionXY);
     }
