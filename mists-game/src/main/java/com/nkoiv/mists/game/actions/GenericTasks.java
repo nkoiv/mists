@@ -45,6 +45,9 @@ public abstract class GenericTasks {
     public static final int ID_USE_MELEE_TOWARDS_MOB = 21; // 1 argument: MobID
     public static final int ID_USE_MELEE_TOWARDS_COORDINATES = 22; // 2 argument: Mob X and Y
     public static final int ID_USE_MELEE_TOWARDS_DIRECTION = 23; // 1 argument: direction number
+    public static final int ID_USE_RANGED_TOWARDS_MOB = 24; // 1 argument: MobID
+    public static final int ID_USE_RANGED_TOWARDS_COORDINATES = 25; // 2 argument: Mob X and Y
+    public static final int ID_USE_RANGED_TOWARDS_DIRECTION = 26; // 1 argument: direction number
     public static final int ID_DROP_ITEM = 31; //1 argument: inventoryslotID of the actor dropping the item
     public static final int ID_TAKE_ITEM = 32; //2 arguments: inventoryholder ID and inventoryslotID
     public static final int ID_EQUIP_ITEM = 33; //1 arguments: inventoryslotID
@@ -76,9 +79,12 @@ public abstract class GenericTasks {
             case ID_CHECK_COORDINATES: checkCoordinates(actor, task.arguments[0], task.arguments[1]); break;
             case ID_STOP_MOVEMENT: actor.stopMovement(); break;
             case ID_TURN_TOWARDS_MOB: turnTowardsMapObject(actor, (int)task.arguments[0]); break;
-            case ID_USE_MELEE_TOWARDS_MOB: useMeleeTowardsMob(actor, (int)task.arguments[0]); break;
-            case ID_USE_MELEE_TOWARDS_COORDINATES: useMeleeTowardsCoordinates(actor, task.arguments[0], task.arguments[1]); break;
-            case ID_USE_MELEE_TOWARDS_DIRECTION: useMeleeTowardsDirection(actor, (int)task.arguments[0]); break;
+            case ID_USE_MELEE_TOWARDS_MOB: useAttackTowardsMob(actor, (int)task.arguments[0], ActionType.MELEE_ATTACK); break;
+            case ID_USE_MELEE_TOWARDS_COORDINATES: useAttackTowardsCoordinates(actor, task.arguments[0], task.arguments[1], ActionType.MELEE_ATTACK); break;
+            case ID_USE_MELEE_TOWARDS_DIRECTION: useAttackTowardsDirection(actor, (int)task.arguments[0], ActionType.MELEE_ATTACK); break;
+            case ID_USE_RANGED_TOWARDS_MOB: useAttackTowardsMob(actor, (int)task.arguments[0], ActionType.RANGED_ATTACK); break;
+            case ID_USE_RANGED_TOWARDS_COORDINATES: useAttackTowardsCoordinates(actor, task.arguments[0], task.arguments[1], ActionType.RANGED_ATTACK); break;
+            case ID_USE_RANGED_TOWARDS_DIRECTION: useAttackTowardsDirection(actor, (int)task.arguments[0], ActionType.RANGED_ATTACK); break;
             case ID_DROP_ITEM: dropItem(actor, (int)task.arguments[0]); break;
             case ID_TAKE_ITEM: takeItem(actor, (int)task.arguments[0], (int)task.arguments[1]); break;
             case ID_EQUIP_ITEM: equipItem(actor, (int)task.arguments[0]); break;
@@ -197,6 +203,8 @@ public abstract class GenericTasks {
         actor.moveTowards(target.getCenterXPos(), target.getCenterYPos());
     }
     
+    /*
+    //Old UseMelee code, replaced with new useAttack(attacktype)
     public static void useMeleeTowardsDirection(Creature actor, int direction) {
         Action meleeAttack = actor.getAttack(ActionType.MELEE_ATTACK);
         if (meleeAttack != null) {
@@ -226,6 +234,36 @@ public abstract class GenericTasks {
         int yCoor = (int)target.getCenterYPos();
         useMeleeTowardsCoordinates(actor, xCoor, yCoor);
     }
+    */
+    public static void useAttackTowardsDirection(Creature actor, int direction, ActionType attackType) {
+        Action attack = actor.getAttack(attackType);
+        if (attack != null) {
+            turnTowardsDirection(actor, direction);
+            actor.useAction(attack.getName());
+        } else {
+            Mists.logger.log(Level.INFO, "{0} tried to use "+attackType.toString()+", but it wasn''t available", actor.getName());
+        }
+    }
+    
+    public static void useAttackTowardsCoordinates(Creature actor, double xCoor, double yCoor, ActionType attackType) {
+        //Mists.logger.log(Level.INFO, "{0} uses melee towards {1}", new Object[]{creep.getName(), target.getName()});
+        Action attack = actor.getAttack(attackType);
+        if (attack != null) {
+            actor.setFacing(Toolkit.getDirection(actor.getCenterXPos(), actor.getCenterYPos(), xCoor, yCoor));
+            actor.useAction(attack.getName());
+        } else {
+            Mists.logger.log(Level.INFO, "{0} tried to use "+attackType.toString()+", but it wasn''t available", actor.getName());
+        }
+    }
+    
+    public static void useAttackTowardsMob(Creature actor, int targetID, ActionType attackType) {
+        MapObject target = actor.getLocation().getMapObject(targetID);
+        if (target == null) return;
+        int xCoor = (int)target.getCenterXPos();
+        int yCoor = (int)target.getCenterYPos();
+        useAttackTowardsCoordinates(actor, xCoor, yCoor, attackType);
+    }
+    
     
     public static void dropItem (Creature actor, int itemID) {
         Inventory.dropItem(actor.getInventory(), itemID);
