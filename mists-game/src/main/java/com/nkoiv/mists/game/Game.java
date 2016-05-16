@@ -118,7 +118,7 @@ public class Game {
         System.out.println(companion.toString());
         pocplayer.addCompanion(companion);
         pocplayer.addAction(new MeleeWeaponAttack());
-        pocplayer.addAction(new ProjectileSpell("Firebolt"));
+        pocplayer.addAction(new ProjectileSpell());
         setPlayer(pocplayer);
         
         //POC Dialogue
@@ -384,7 +384,7 @@ public class Game {
     public void newGame() {
         PlayerCharacter pocplayer = new PlayerCharacter();
         pocplayer.addAction(new MeleeWeaponAttack());
-        pocplayer.addAction(new ProjectileSpell("Firebolt"));
+        pocplayer.addAction(new ProjectileSpell());
         setPlayer(pocplayer);
         pocplayer.getInventory().addItem(Mists.itemLibrary.create("Healing potion"));
         pocplayer.getInventory().addItem(Mists.itemLibrary.create("Healing potion"));
