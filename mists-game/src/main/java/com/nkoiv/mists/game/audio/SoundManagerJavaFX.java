@@ -124,6 +124,9 @@ public class SoundManagerJavaFX implements SoundManager {
     //TODO: Test init
     private void initializeSounds() {
         this.loadSoundEffects("weapon_blow", "audio/sounds/weapon_blow.wav");
+        this.loadSoundEffects("weapon_swing", "audio/sounds/weapon_swing.mp3");
+        this.loadSoundEffects("bow_shoot", "audio/sounds/bow_shoot.mp3");
+        this.loadSoundEffects("flame_woosh", "audio/sounds/flame_woosh.mp3");
         /*
         this.loadSoundEffects("woosh1", "audio/sounds/woosh/woosh1.ogg");
         this.loadSoundEffects("woosh2", "audio/sounds/woosh/woosh2.ogg");

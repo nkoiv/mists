@@ -49,7 +49,7 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
             //Mists.logger.log(Level.INFO, "{0} tried to use {1}, but it was on cooldown", new Object[]{actor.getName(), this.toString()});
         } else {
             try {
-                Mists.soundManager.playSound("weapon_blow");
+                Mists.soundManager.playSound("weapon_swing");
             } catch (Exception e){
                 Mists.logger.warning("Sounds not available");
             }
