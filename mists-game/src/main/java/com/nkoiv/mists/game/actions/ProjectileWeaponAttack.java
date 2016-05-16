@@ -41,7 +41,7 @@ public class ProjectileWeaponAttack  extends Action implements AttackAction {
         this.impactAnimation = impactAnimation;
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
-        this.setFlag("cooldown", 1000);
+        this.setFlag("cooldown", 3000);
         this.setFlag("triggered", 0);
         this.setFlag("projectilespeed", 300);
         this.setFlag("projectilerange", 3000);
