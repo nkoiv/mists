@@ -118,7 +118,10 @@ public class InventoryPanel extends TiledPanel {
                 Mists.logger.info("Last click was at "+this.lastClickTime);
                 if (System.currentTimeMillis()-this.lastClickTime <= 500)  {
                     if (this.inv.getItem(invID) instanceof Weapon) Inventory.equipItem(this.inv, this.invID);
-                    else this.inv.getItem(invID).use();
+                    else if (inv.getOwner() != null) {
+                        this.inv.getItem(invID).use(inv.getOwner());
+                        if (this.inv.getItem(invID).isConsumedOnUse()) this.inv.removeItem(invID);
+                    }
                 }
             }
             this.lastClickTime = System.currentTimeMillis();
