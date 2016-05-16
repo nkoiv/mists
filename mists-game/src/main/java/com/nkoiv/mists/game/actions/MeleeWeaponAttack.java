@@ -99,7 +99,8 @@ public class MeleeWeaponAttack extends Action implements AttackAction {
                             Mists.logger.log(Level.INFO, "Hit {0} for {1} damage", new Object[]{mob.getName(), damage});
                             ((Combatant)mob).takeDamage(damage);
                         }
-                    } else if (mob instanceof Structure && owner instanceof Creature) {                        
+                    } else if (mob instanceof Structure && owner instanceof Creature) {   
+                        //TODO: This is the temporary code for Pickaxe removing structures
                         Weapon w = ((Creature)owner).getWeapon();
                         if (w!=null && w.getBaseID() == 100) mob.setRemovable(true);
                     }
