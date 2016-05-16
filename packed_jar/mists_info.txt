@@ -10,7 +10,7 @@ You'll start the game on a beach with no items to your name. Armed with only you
 Game controls can be displayed inside the game by pressing Esc, but the core controls are as follows:
 - WASD/Arrows (or mouse) to move around 
 - Space to attack with a weapon if you have one
-- Numberkeys for the buttons on the actionbar
+- Numberkeys for the buttons on the actionbar (firebolts are shot towards mouse position)
 - E or mouseclick to toggle an object that's selected
 - Q to swap between selected objects
 - Mouse click can be used to focus on a target, both for E-clicks and Fireballs.
