@@ -250,7 +250,7 @@ public abstract class GenericTasks {
         Action attack = actor.getAttack(attackType);
         if (attack != null) {
             actor.setFacing(Toolkit.getDirection(actor.getCenterXPos(), actor.getCenterYPos(), xCoor, yCoor));
-            actor.useAction(attack.getName());
+            actor.useAction(attack.getName(), xCoor, yCoor);
         } else {
             Mists.logger.log(Level.INFO, "{0} tried to use "+attackType.toString()+", but it wasn''t available", actor.getName());
         }

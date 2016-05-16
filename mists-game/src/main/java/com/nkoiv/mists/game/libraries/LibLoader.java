@@ -9,6 +9,9 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
+import com.nkoiv.mists.game.actions.ProjectileSpell;
+import com.nkoiv.mists.game.actions.ProjectileWeaponAttack;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -224,6 +227,13 @@ public class LibLoader {
         Mists.logger.info("Loading up action data");
         MeleeAttack melee = new MeleeAttack();
         lib.addTemplate(melee);
+        MeleeWeaponAttack weaponattack = new MeleeWeaponAttack();
+        lib.addTemplate(weaponattack);
+        ProjectileWeaponAttack shoot = new ProjectileWeaponAttack();
+        lib.addTemplate(shoot);
+        ProjectileSpell firebolt = new ProjectileSpell();
+        lib.addTemplate(firebolt);
+        
     }
     
     public static void initializeItemLibrary(ItemLibrary lib) {

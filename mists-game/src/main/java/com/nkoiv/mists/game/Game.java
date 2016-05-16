@@ -8,6 +8,7 @@ package com.nkoiv.mists.game;
 
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.actions.ProjectileSpell;
+import com.nkoiv.mists.game.actions.ProjectileWeaponAttack;
 import com.nkoiv.mists.game.controls.LocationControls;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
@@ -385,6 +386,7 @@ public class Game {
         PlayerCharacter pocplayer = new PlayerCharacter();
         pocplayer.addAction(new MeleeWeaponAttack());
         pocplayer.addAction(new ProjectileSpell());
+        pocplayer.addAction(new ProjectileWeaponAttack());
         setPlayer(pocplayer);
         pocplayer.getInventory().addItem(Mists.itemLibrary.create("Healing potion"));
         pocplayer.getInventory().addItem(Mists.itemLibrary.create("Healing potion"));

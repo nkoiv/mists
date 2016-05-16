@@ -74,9 +74,9 @@ public abstract class StarterDungeon {
             int randomMob = rnd.nextInt(4);
             Creature monster;
             switch (randomMob) {
-                case 0: monster = Mists.creatureLibrary.create("worm"); break;
+                case 0: monster = Mists.creatureLibrary.create("rabbit"); break;
                 case 1: monster = Mists.creatureLibrary.create("eggy"); break;
-                case 2: monster = Mists.creatureLibrary.create("worm"); break;
+                case 2: monster = Mists.creatureLibrary.create("eggy"); break;
                 case 3: monster = Mists.creatureLibrary.create("rabbit"); break;
                 default: monster = Mists.creatureLibrary.create("worm"); break;
             }

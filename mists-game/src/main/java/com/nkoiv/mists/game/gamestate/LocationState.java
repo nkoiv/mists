@@ -187,6 +187,7 @@ public class LocationState implements GameState {
         TiledWindow actionBar = new TiledWindow(this, "Actionbar", game.WIDTH, 80, 0, (game.HEIGHT - 80));
         actionBar.setBgOpacity(0.3);
         TextButton attackButton = new ActionButton(game.getPlayer(), "Firebolt",  80, 60);
+        //TextButton attackButton = new ActionButton(game.getPlayer(), "Shoot",  80, 60);
         TextButton pathsButton = new LocationButtons.DrawPathsButton("Paths Off", 80, 60, this.game);
         TextButton lightenButton = new LocationButtons.IncreaseLightlevelButton("Lighten", 80, 60, this.game);
         TextButton darkenButton = new LocationButtons.ReduceLightlevelButton("Darken", 80, 60, this.game);

@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.AI;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.ActionType;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -135,6 +136,21 @@ public class CreatureAI extends Flags{
             int nodeSize = mob.getLocation().getCollisionMap().getNodeSize();
             return new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, creep.getID(), new double[]{nextTileX*nodeSize+nodeSize/2, nextTileY*nodeSize+nodeSize/2});
         }
+    }
+    
+    protected Task goShoot(MapObject target) {
+        if (this.isInLineOfSight(target))  {
+                //&& Toolkit.distance(creep.getCenterXPos(), creep.getCenterYPos(), target.getCenterXPos(), target.getCenterYPos())
+                //<= creep.getAttack(ActionType.RANGED_ATTACK).getFlag("projectilerange")) {
+            if (creep.getAttack(ActionType.RANGED_ATTACK).isOnCooldown()) return this.moveRandomly();
+            else return this.shootAt(target);
+        } else {
+            return this.moveTowardsMob(target);
+        }
+    }
+    
+    protected Task shootAt(MapObject target) {
+        return new Task(GenericTasks.ID_USE_RANGED_TOWARDS_MOB, creep.getID(), new double[]{target.getID()});
     }
     
     protected Task goMelee(MapObject target) {

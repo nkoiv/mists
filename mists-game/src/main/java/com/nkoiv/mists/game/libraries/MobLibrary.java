@@ -9,6 +9,7 @@ package com.nkoiv.mists.game.libraries;
 import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.MeleeAttack;
+import com.nkoiv.mists.game.actions.ProjectileWeaponAttack;
 import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
@@ -196,8 +197,9 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         
         //TODO: Add actions to YAML
         creep.addAction(new MeleeAttack());
-        
-        
+        if ("Rabbit".equals(creep.getName())) {
+            creep.addAction(new ProjectileWeaponAttack());
+        }
         return creep;
     }
     
