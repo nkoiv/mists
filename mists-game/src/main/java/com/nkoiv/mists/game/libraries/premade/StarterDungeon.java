@@ -111,7 +111,7 @@ public abstract class StarterDungeon {
     }
     
     private static void addPuzzlesToDungeonSkeletonLevel(LocationTemplate dungeon) {
-        MapObject[] puzzle1 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 3, Mists.TILESIZE, 26*Mists.TILESIZE, 26*Mists.TILESIZE);
+        MapObject[] puzzle1 = LightsOutPuzzle.generateLightsOutPuzzle((PuzzleTile)Mists.structureLibrary.create("PuzzleRune"), 4, Mists.TILESIZE, 26*Mists.TILESIZE, 25*Mists.TILESIZE);
         dungeon.mobs.addAll(Arrays.asList(puzzle1));
         Puzzle p1 = LightsOutPuzzle.generatePuzzleFromTiles(puzzle1, true, true);
         dungeon.puzzles.add(p1);
@@ -133,9 +133,7 @@ public abstract class StarterDungeon {
         Structure skullpile2 = Mists.structureLibrary.create("Skullpile");
         skullpile2.setPosition(30*Mists.TILESIZE, 11*Mists.TILESIZE);
         dungeon.mobs.add(skullpile2);
-        Structure skullpile3 = Mists.structureLibrary.create("Skullpile");
-        skullpile3.setPosition(18*Mists.TILESIZE, 31*Mists.TILESIZE);
-        dungeon.mobs.add(skullpile3);
+
         
         Structure skull1 = Mists.structureLibrary.create("Skull");
         skull1.setPosition(14*Mists.TILESIZE, 29*Mists.TILESIZE);
