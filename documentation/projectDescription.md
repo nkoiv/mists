@@ -304,7 +304,10 @@ Each mapnode contains a list of adjacent nodes, which governs the possible movem
 	
 
 ##Town
-TODO, probably cut out
+
+Town is a friendly location with helpful NPCs and no hostile creatures. Point of the town is to serve as a hub for adventure, granting the player new quests as well as a chance to stock up on equipment. Key elements for the town include a shopkeeper(s), place to heal up and questgiver(s).
+
+Because town is composed of houses with people inside them, it tends to make heavy use of Roof -style images. The roofs are drawn when the player can't see inside the house, and made opalescent when the player can. Like most graphics, this is done entirely clientside, though it would be possible to enforce this by calculating and distributing the location.lightmap Line of Sight values for all the players serverside.
 
 ##Combat
 
@@ -314,12 +317,17 @@ Combat happens by invoking (combat)actions. Creatures use these actions to do co
 Everything involved in the combat should implement the "Combant" interface. As combat Actions only affect classes implementing the Combatant, this ensures that everything in the combat is capable of dealing with damage, death, etc.
 
 ###Combat mechanics
+
 TODO: Plan and implement mechanics for how damage is calculated. Is there armour? Can mobs dodge/parry attacks?
+
+Currently attacks deal damage as Attack/Weapon base + Creature attribute. For example weapon attacks are weapons Damage stat + users Strength attribute. There is no armour or anything like that.
 
 ##Asset Libraries
 Libraries are used to store templates of game assets. With the exception of Graphics Library (which just houses images in various formats), each library stores a number of asset templates in a HashMap, allowing the program to create additional copies of those on demand. The methods "addTemplate(object)", "getTemplate(id)" and "create(id)" are the bread and butter of asset libraries.
 
 While templates can be added and modified on the fly (via the addTemplate() and getTemplate()), most of them are loaded from an external file. These files are mainly stored in YAML-format, for human readability and easy editing. Esoteric Softwares [YamlBeans](https://github.com/EsotericSoftware/yamlbeans) (full licence at the LICENCE.md) is used to facilitate the saving and loading of the assets. These files are mainly stored in /resources/libdata and /resources/mapdata, but additional assets should be loadable from an external folder (as with the music and sound effects) for modding purposes (TODO).
+
+It's worth noting that YAML is *extremely* nitpicky on spacing of lines, as they signal the structure of the data map. It's easy to break YAML by removing and adding an extra space somewhere. This only breaks the particular YAML object (say, a single dialogue segment or one creature), but in critical cases that can cause progression problems in the game.
 
 ###Graphics Library
 Graphics Library is an exception as far as game libraries are concerned. While individual map objects have their sprite images stored within the template-objects, generic graphics such as UI elements, lightmaps, etc are kept in a separate library.
