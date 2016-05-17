@@ -157,7 +157,7 @@ public class LocationState implements GameState {
         this.dialoguePanel = dp;
         dp.setPosition(100, 100);
         this.questPanel = new QuestPanel(this);
-        questPanel.setPosition(20, 20);
+        questPanel.setPosition(80, 30);
         this.characterPanel = new CharacterPanel(this, game.getPlayer());
         this.sct = new CombatPopup();
         

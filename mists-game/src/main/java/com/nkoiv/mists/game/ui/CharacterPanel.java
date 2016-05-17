@@ -25,7 +25,7 @@ public class CharacterPanel extends TextPanel {
     private TextPanel statsPanel;
     
     public CharacterPanel(GameState parent, PlayerCharacter character) {
-        super(parent, "Character Panel", defaultWidth, defaultHeight, 50, 50, Mists.graphLibrary.getImageSet(defaultTiles));
+        super(parent, "Character Panel", defaultWidth, defaultHeight, 60, 50, Mists.graphLibrary.getImageSet(defaultTiles));
         this.character = character;
         generateStatWindows();
         this.closeButton = new CloseButton(this, this.width-20, 5);
