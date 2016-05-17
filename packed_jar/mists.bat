@@ -1,1 +1,0 @@
-java -jar mists-game-0.6-PANDARIN_PINEAPPLE.jar

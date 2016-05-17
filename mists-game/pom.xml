@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nkoiv</groupId>
     <artifactId>mists-game</artifactId>
-    <version>0.6-PANDARIN_PINEAPPLE</version>
+    <version>0.7-PANDARIN_POMELO</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

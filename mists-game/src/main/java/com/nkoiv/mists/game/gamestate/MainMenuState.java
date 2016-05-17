@@ -91,7 +91,7 @@ public class MainMenuState implements GameState {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.save();
         gc.setStroke(Color.ORANGERED);
-        gc.strokeText("Version 0.6-Pandarin_Pineapple", game.WIDTH-300, game.HEIGHT-20);
+        gc.strokeText("Version 0.7-Pandarin_Pomelo", game.WIDTH-300, game.HEIGHT-20);
         gc.restore();
     }
 

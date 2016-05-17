@@ -1,0 +1,1 @@
+java -jar mists-game-0.7-PANDARIN_POMELO.jar
