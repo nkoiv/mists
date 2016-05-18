@@ -49,15 +49,15 @@ The main loop can be summed rougly into the following:
 6. Back to 1.
 
 Current list gamestates, ticking and rendering:
-* GameState for MainMenu
+* GameState for MainMenu : 
 Selfexplanatory, displayed at launch.
-* GameState for Locations 
+* GameState for Locations : 
 Contains the bulk of the gameplay. These are top down areas where the player can move around, exploring and combating adversaries.
-* GameState for WorldMap
+* GameState for WorldMap :
 WorldMap is used for traveling between Locations, but it's a lot more limited as far
 as action is considered.
-* GameState for Town
-Towns are mainly composed of menus (taverns, shops, etc). MainMenu is selfexplanatory.
+* TODO: GameState for Town :
+Towns are mainly composed of menus (taverns, shops, etc).
 
 ###Loading screens
 
