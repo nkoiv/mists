@@ -80,7 +80,7 @@ Doing things (Actions) in the game is generally done with the aid of Effects. An
 
 ###MapObjects and Sprites
 
-![](https://github.com/nkoiv/mists/blob/master/documentation/mapobjects.png "MapObjects and their relation to Sprites")
+![Mobs and Sprites](https://github.com/nkoiv/mists/blob/master/documentation/mapobjects.png "MapObjects and their relation to Sprites")
 
 MapObjects, or MOBs for short, are a myriad bunch. However when it comes to representing them on the screen, they all default to Sprites. A MapObject itself has no position or appearance, as that's all for the Sprite to handle. If a mapobject has no sprite, it can't be seen or directly interacted with. All movement and render calls pass through the MOB to its Sprite.
 
@@ -119,7 +119,7 @@ PuzzleManager can be set to trigger once (perhaps giving a reward), several time
 
 ####LightOut puzzle
 
-![](https://github.com/nkoiv/mists/blob/master/documentation/lightsout_puzzle.png "LightsOut puzzle is about pressing buttons in correct order")
+![Lightsout](https://github.com/nkoiv/mists/blob/master/documentation/lightsout_puzzle.png "LightsOut puzzle is about pressing buttons in correct order")
 
 In LightsOut, the player steps on tiles to trigger them on or off. Whenever a tile is triggered, it also triggers the (up to) four surrounding tiles. Lets assume the game grid is at the following setup (X implying lights are on, O implying they are out) and player steps on tile C2:
 <pre>
@@ -148,7 +148,7 @@ Goal of the puzzle is generally to either turn everything on, or everything off.
 
 ####Circuit puzzle
 
-![](https://github.com/nkoiv/mists/blob/master/documentation/circuit_puzzle.png "Circuits puzzle has the player route power through rotating circuits")
+![Circuits](https://github.com/nkoiv/mists/blob/master/documentation/circuit_puzzle.png "Circuits puzzle has the player route power through rotating circuits")
 
 In the Circuits puzzle the goal for the player is to route power through the tiles by rotating them. Each tile has a number of entrance points (0-4) and if it gets power from one, it gives it out at the other end.
 Several Puzzles can monitor the same set of tiles, perhaps to give different Triggers depending on which circuits are powered.
@@ -163,7 +163,7 @@ The Constructor takes in a [CollisionMap] (https://github.com/nkoiv/mists/blob/m
 ####Collisionmaps
 Accessed and updated via the location the pathfinder is tied to, the collisionmap is a 2d grid of nodes ([Node.java](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/java/com/nkoiv/mists/game/world/pathfinding/Node.java)). What CollisionMap does is that it takes all the map objects (mobs) from its location and converts them to simple collision values. Effectively any node a mob touches gets the collision value of the mob. This map is updated every time Location ticks (as mobs can move), and it's done by updateCollisionLevels(). The update completes in O(n), n being the number of mobs on a map.
 
-![](https://github.com/nkoiv/mists/blob/master/documentation/collisiongrid.png "Collision grid derived from objects")
+![CollisionMap](https://github.com/nkoiv/mists/blob/master/documentation/collisiongrid.png "Collision grid derived from objects")
 <pre>
 [ ][ ][ ][ ][ ][ ]
 [ ][ ][ ][ ][ ][ ]
@@ -311,7 +311,7 @@ Because town is composed of houses with people inside them, it tends to make hea
 
 ##Combat
 
-![](https://github.com/nkoiv/mists/blob/master/documentation/combat_action.png "Actions in combat")
+![Combat](https://github.com/nkoiv/mists/blob/master/documentation/combat_action.png "Actions in combat")
 
 Combat happens by invoking (combat)actions. Creatures use these actions to do combat with oneanother. Triggering an action generally spawns an effect on the map. This effect then passes the actions trigger on whatever it touches. This chain of effects is modeled in the [actions and effects sequence diagram](https://github.com/nkoiv/mists/blob/master/documentation/sequence_diagrams/actions_and_effects.jpg).
 Everything involved in the combat should implement the "Combant" interface. As combat Actions only affect classes implementing the Combatant, this ensures that everything in the combat is capable of dealing with damage, death, etc.
@@ -455,7 +455,7 @@ structure: "Tree1"
 
 
 ##Dialogue
-![](https://github.com/nkoiv/mists/blob/master/documentation/dialogue_ingame.png "Conversing via dialogue")
+![Dialogue](https://github.com/nkoiv/mists/blob/master/documentation/dialogue_ingame.png "Conversing via dialogue")
 
 The dialogue system in the game is handled with dialogue maps, composed of Cards and Links.
 Each individual piece of conversation is handled by presenting the user with (A) dialogue text and (B) a number of choices with which to navigate the dialogue.
