@@ -14,12 +14,9 @@ Unlike in most roguelikes, the player character in Mists is accompanied by a hel
 * Resume a saved game
 
 ##Playing the game
-So far only the Location -level of the game has been developed.
-Further down the road, there should be a world map to travel from a location to another.
+Playing the game is mainly done by moving around and combating opponents in so called “Locations”. Movement in locations is done with the following controls (also displayed by pressing Esc while in a Location):
 
 ***Location controls (POC)***
-
-Controls are displayed in game menu (Esc in a Location)
 
 ![](https://github.com/nkoiv/mists/blob/master/mists-game/src/main/resources/images/controls.png)
 
