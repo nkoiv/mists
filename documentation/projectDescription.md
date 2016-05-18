@@ -3,7 +3,7 @@ Unlike in most roguelikes, the player character in Mists is accompanied by a hel
 
 **Keywords:** Graphic interface, helpful companion, procedurally generated maps
 
-**Users:** Mists is a ~~single~~multiplayer game. On the broad spectrum, the player should be able to:
+**Users:** Mists is a mainly singleplayer game with multiplayer option. On the broad spectrum, the player should be able to:
 * Start a new game
 * Join existing games
 * Play the game
@@ -486,32 +486,20 @@ Players (including the Server-player) can assign Tasks to their character (fex. 
 
 All the sent objects are registered for Kryo inside the LocationNetwork.java. On rough level they're mainly split between various game objects (which the server sends to client when it spawns or updates one) and actions, mostly composed of Task-class objects. Identifying map objects and tasks is done with LocationID identifier, which is also the key for handling Location specific objects in general (location.getMapObject(int locationID), etc).
 
+Currently the multiplayer is limited to Location(s), and starting and joining a multiplayer game put the host and the clients both in the same (randomly generated) dungeon floor.
+
+##Saving and Loading
+
+Saving and loading has not been implemented yet.
+
+Most of the classes can be serialized fine as it is due to the demands of networked play, but there's still a few lacking smart serialization. Implementing saving and loading will eventually be done with the same Kryo serialization that the multiplayer traffic uses.
 
 ##Testing
 Testing the game is done from two directions: Unit tests inside the Maven project, performing GUI testing by playing the game.
 * Unit tests are enhanced by PIT mutation, documentation for which can be found under the [mists/documentation/pit-reports/ -folder](https://github.com/nkoiv/mists/tree/master/documentation/pit-reports).
 * GUI testing is documented in [/mists/documentation/game_testing.md](https://github.com/nkoiv/mists/blob/master/documentation/game_testing.md)
 
-##Original project plan for the school project:
-
-###Weekly plan (TiraLab)
-* Week 1: Plan the tiralab angle to the project (Pathfinding)
-* Week 2: Modify the UI to better suit pathfinding optimization and testing
-* Week 3: Clean the original pathfinding to use no Collections and optimize the lists
-* Week 4: Create a minHeap to use with the nodes
-* Week 5: Unit tests and PIT
-* Week 6: Prepare the project for presentation
-
-###Weekly plan (JavaLab)
-* Week 1: Create a window with sprites to move around
-* Weel 2: Generate the base structure for the codebase
-* Week 3: Actions, triggers, effects
-* Week 4: Pathfinding and random map generation
-* Week 5: UI
-* Week 6: Creature AI
 
 ##Cut out for future
-* World map
-* Inventory-system
-* Libraries for MOBs
-* Random game generation (beyond maps)
+* Random game content generation (beyond the one test BSD dungeon)
+* Tons of content
