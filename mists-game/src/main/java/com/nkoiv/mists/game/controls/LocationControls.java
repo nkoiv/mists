@@ -24,9 +24,12 @@ import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 
 
 /**
@@ -38,11 +41,13 @@ import javafx.scene.image.ImageView;
 public class LocationControls {
     
     private final Game game;
+    private final TreeMap<LocationCommand, KeyBinding> commands;
     //private LocationServer server;
     //private LocationClient client;
     
     public LocationControls(Game game) {
         this.game = game;
+        this.commands = new TreeMap<>();
     }
     
     private Location currentLoc() {
@@ -52,32 +57,90 @@ public class LocationControls {
     public Game getGame() {
         return this.game;
     }
-    /*
-    public void setLocationServer(LocationServer server) {
-        this.server = server;
-    }
     
-    public void setLocationClient(LocationClient client) {
-        this.client = client;
-    }
-    */
     /**
-     * Trigger is used for interpreting a command,
-     * either via console or by some external script
-     * @param command the supplied command to execute
-     * @param arguments for the command
-     * @return returns true if command was executed
+     * Execute a command according to the given key presses and releases
+     * @param pressedKeys List of keys Player has pressed down
+     * @param releasedKeys List of keys Player just released
+     * @return true if some command was executed
      */
-    
-    public boolean trigger(String command, String ...arguments) {
-        switch (command) {
-            case "toggleFlag": if (arguments!=null) this.toggleFlag(arguments[0]); return true;
-            
-                
-            default: return false;
+    public boolean executeKeybind(ArrayList<KeyCode> pressedKeys, ArrayList<KeyCode> releasedKeys) {
+        //Mists.logger.info("Executing keybind on "+kc);
+        boolean commandExecuted = false;
+        for (LocationCommand lc : this.commands.keySet()) {
+            KeyBinding kb = this.commands.get(lc);
+            if (kb.matchingKeyPress(pressedKeys, releasedKeys))  {
+                kb.execute();
+                commandExecuted = true;
+            }
         }
+        return commandExecuted;
+    }
+    
+    /**
+     * Initialize the default keybindings.
+     * Unless this or some other keybinding initialization is done,
+     * no keybs are bound in Location
+     */
+    public void initializeDefaultKeybinds() {
+        Mists.logger.info("Loading default keybinds...");
+        //UI buttons
+        this.commands.put(LocationCommand.TOGGLE_INVENTORY, new ToggleInventoryCommand(this, new KeyCode[]{KeyCode.I}));
+        this.commands.put(LocationCommand.TOGGLE_QUESTPANEL, new ToggleQuestPanelCommand(this, new KeyCode[]{KeyCode.L}));
+        Mists.logger.info("UI buttons done");
+        //ContextAction
+        this.commands.put(LocationCommand.CONTEXT_TOGGLE, new ContextActionToggleCommand(this, new KeyCode[]{KeyCode.E}));
+        this.commands.put(LocationCommand.CONTEXT_SELECT, new ContextActionSelectCommand(this, new KeyCode[]{KeyCode.Q}));
+        
+        //ActionBar buttons
+        this.commands.put(LocationCommand.ACTIONBAR1, new ActionBarButtonCommand(this, 0, new KeyCode[]{KeyCode.DIGIT1}));
+        this.commands.put(LocationCommand.ACTIONBAR2, new ActionBarButtonCommand(this, 1, new KeyCode[]{KeyCode.DIGIT2}));
+        this.commands.put(LocationCommand.ACTIONBAR3, new ActionBarButtonCommand(this, 2, new KeyCode[]{KeyCode.DIGIT3}));
+        this.commands.put(LocationCommand.ACTIONBAR4, new ActionBarButtonCommand(this, 3, new KeyCode[]{KeyCode.DIGIT4}));
+        this.commands.put(LocationCommand.ACTIONBAR5, new ActionBarButtonCommand(this, 4, new KeyCode[]{KeyCode.DIGIT5}));
+
+        //Movement (arrows)
+        this.commands.put(LocationCommand.MOVE_UP, new PlayerMoveCommand(this, Direction.UP, new KeyCode[]{KeyCode.UP}));
+        this.commands.put(LocationCommand.MOVE_DOWN, new PlayerMoveCommand(this, Direction.DOWN, new KeyCode[]{KeyCode.DOWN}));
+        this.commands.put(LocationCommand.MOVE_LEFT, new PlayerMoveCommand(this, Direction.LEFT, new KeyCode[]{KeyCode.LEFT}));
+        this.commands.put(LocationCommand.MOVE_RIGHT, new PlayerMoveCommand(this, Direction.RIGHT, new KeyCode[]{KeyCode.RIGHT}));
+        this.commands.put(LocationCommand.MOVE_UPRIGHT, new PlayerMoveCommand(this, Direction.UPRIGHT, new KeyCode[]{KeyCode.UP, KeyCode.RIGHT}));
+        this.commands.put(LocationCommand.MOVE_DOWNRIGHT, new PlayerMoveCommand(this, Direction.DOWNRIGHT, new KeyCode[]{KeyCode.DOWN, KeyCode.RIGHT}));
+        this.commands.put(LocationCommand.MOVE_DOWNLEFT, new PlayerMoveCommand(this, Direction.DOWNLEFT, new KeyCode[]{KeyCode.LEFT, KeyCode.DOWN}));
+        this.commands.put(LocationCommand.MOVE_UPLEFT, new PlayerMoveCommand(this, Direction.UPLEFT, new KeyCode[]{KeyCode.LEFT, KeyCode.UP}));
+        //Movement (wasd)
+        this.commands.get(LocationCommand.MOVE_UP).secondaryKey = new KeyCode[]{KeyCode.W};
+        this.commands.get(LocationCommand.MOVE_DOWN).secondaryKey = new KeyCode[]{KeyCode.S};
+        this.commands.get(LocationCommand.MOVE_LEFT).secondaryKey = new KeyCode[]{KeyCode.A};
+        this.commands.get(LocationCommand.MOVE_RIGHT).secondaryKey = new KeyCode[]{KeyCode.D};
+        this.commands.get(LocationCommand.MOVE_UPRIGHT).secondaryKey = new KeyCode[]{KeyCode.W, KeyCode.D};
+        this.commands.get(LocationCommand.MOVE_DOWNRIGHT).secondaryKey = new KeyCode[]{KeyCode.S, KeyCode.D};
+        this.commands.get(LocationCommand.MOVE_DOWNLEFT).secondaryKey = new KeyCode[]{KeyCode.S, KeyCode.A};
+        this.commands.get(LocationCommand.MOVE_UPLEFT).secondaryKey = new KeyCode[]{KeyCode.W, KeyCode.A};
+        
+        //Other
+        this.commands.put(LocationCommand.DEFAULT_ATTACK, new PlayerDefaultAttackCommand(this, new KeyCode[]{KeyCode.SPACE}));
         
     }
+    
+    /**
+     * Assign the given key to the given LocationCommand
+     * @param lc Command to set the binding to
+     * @param keybinding KeyCode(s) to bind to the command
+     * @param primary Is this Primary binding or not - False means secondary binding
+     * @return true if command was successfully bound
+     */
+    public boolean setKeyBinding(LocationCommand lc, KeyCode[] keybinding, boolean primary) {
+        if (this.commands.containsKey(lc) && primary) {
+            this.commands.get(lc).setPrimaryKey(keybinding);
+            return true;
+        } else if (this.commands.containsKey(lc) && !primary) {
+            this.commands.get(lc).setSecondaryKey(keybinding);
+            return true;
+        }
+        return false;
+    }
+    
     
     //------------Individual triggers for controlling a location----
     
@@ -113,6 +176,11 @@ public class LocationControls {
     public void toggleLocationMenu() {
         LocationState LS = (LocationState)this.game.currentState;
         LS.toggleGameMenu();
+    }
+    
+    public void togglePlayerInventoryPanel() {
+        LocationState LS = (LocationState)this.game.currentState;
+        LS.togglePlayerInventoryPanel();
     }
     
     public void toggleQuestPanel() {
