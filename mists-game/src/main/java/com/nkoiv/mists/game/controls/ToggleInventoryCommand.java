@@ -6,8 +6,6 @@
  */
 package com.nkoiv.mists.game.controls;
 
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.ui.InventoryPanel;
 import javafx.scene.input.KeyCode;
 
 /**

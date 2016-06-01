@@ -18,7 +18,6 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.Wall;
-import com.nkoiv.mists.game.gameobject.Water;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.puzzle.PuzzleManager;

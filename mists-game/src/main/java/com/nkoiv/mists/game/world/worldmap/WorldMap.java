@@ -142,9 +142,9 @@ public class WorldMap {
      * in sync with what's on screen.  
      * @return {xOffset, yOffset}
      */
-	public double[] getLastOffsets() {
-		return this.lastOffsets;
-	}
+    public double[] getLastOffsets() {
+            return this.lastOffsets;
+    }
 	
     public List<MapNode> getNodes() {
         return this.nodesOnMap;
