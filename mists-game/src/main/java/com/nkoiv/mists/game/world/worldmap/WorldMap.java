@@ -83,12 +83,10 @@ public class WorldMap {
     public MapNode nodeAtCoordinates (double xCoor, double yCoor) {
         //TODO: Results nullpointer on mapnodes without image. Should we target the circle rather?
         for (MapNode ln : this.nodesOnMap) {
-            if (ln.getImage() !=null ) {
-                boolean b = true;
-                if (xCoor < ln.getXPos() || xCoor > (ln.getXPos()+ln.getImage().getWidth())) b = false;
-                if (yCoor < ln.getYPos() || yCoor > (ln.getYPos()+ln.getImage().getHeight())) b = false;
-                if (b) return ln;
-            }
+            boolean b = true;
+            if (xCoor < ln.getXPos() || xCoor > (ln.getXPos()+ln.getSize())) b = false;
+            if (yCoor < ln.getYPos() || yCoor > (ln.getYPos()+ln.getSize())) b = false;
+            if (b) return ln;
         }
         return null;
     }
@@ -139,6 +137,15 @@ public class WorldMap {
         return yOffset;
     }
     
+    /**
+     * Get the last calculated x and y offsets, most likely
+     * in sync with what's on screen.  
+     * @return {xOffset, yOffset}
+     */
+	public double[] getLastOffsets() {
+		return this.lastOffsets;
+	}
+	
     public List<MapNode> getNodes() {
         return this.nodesOnMap;
     }

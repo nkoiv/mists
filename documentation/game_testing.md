@@ -30,7 +30,7 @@ In order to test the game during the development, before actual content was made
 
 ##Moving on a worldmap
 
-###Test case: Move around a location
+###Test case: Move around on worldmap
 * **Last testing:** 18.5.2016
 * **Setup:** Create a new game and move to world map. Visit all nodes.
 * **Results:** Moving with WASD and arrows works fine, but the lack of movement indicator makes map movement a bit confusing.
