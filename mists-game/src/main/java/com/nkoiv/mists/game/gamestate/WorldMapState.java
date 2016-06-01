@@ -150,13 +150,13 @@ public class WorldMapState implements GameState {
      * @param me MouseEvent that landed on the world map
      */
     private void mouseClickOnMap(MouseEvent me) {
-        double clickX = me.getX();
-        double clickY = me.getY();
+        double clickX = me.getX() + game.getCurrentWorldMap().getLastOffsets()[0];
+        double clickY = me.getY() + game.getCurrentWorldMap().getLastOffsets()[1];
         MapObject mob = game.getCurrentWorldMap().mobAtCoordinates(clickX, clickY);
         MapNode mn = game.getCurrentWorldMap().nodeAtCoordinates(clickX, clickY);
-        if (mob != null) Mists.logger.info("Click landed on "+mob.getName());
-        if (mn != null) Mists.logger.info("Click landed on "+mn.getName());
-        if (mn == null && mob == null) Mists.logger.info("Click didn't land on anything");
+        if (mob != null) Mists.logger.info("Click landed on MOB "+mob.getName());
+        if (mn != null) Mists.logger.info("Click landed on MapNode"+mn.getName());
+        if (mn == null && mob == null) Mists.logger.info("Click at "+clickX+","+clickY +" didn't land on anything");
     }
     
     private void handleMouseDrags(MouseEvent me) {

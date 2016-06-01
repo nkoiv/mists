@@ -62,6 +62,15 @@ public class MapNode {
             return n;
         }
         
+        /**
+         * Return the size of the node (circle surrounding it)
+         * @return Node circle size
+         */
+        public double getSize() {
+        	if (bigNode) return 64;
+        	else return 32;
+        }
+        
         public String getName() {
             return this.name;
         }
