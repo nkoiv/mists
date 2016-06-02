@@ -17,12 +17,15 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gamestate.LoadingScreen;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.ActionLibrary;
+import com.nkoiv.mists.game.libraries.CreatureLibrary;
 import com.nkoiv.mists.game.libraries.DialogueLibrary;
 import com.nkoiv.mists.game.libraries.GraphLibrary;
 import com.nkoiv.mists.game.libraries.ItemLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.libraries.LocationLibrary;
 import com.nkoiv.mists.game.libraries.MobLibrary;
+import com.nkoiv.mists.game.libraries.StructureLibrary;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -72,8 +75,8 @@ public class Mists extends Application implements Global {
     public static HashMap<String, Font> fonts;
     public static ActionLibrary<Action> actionLibrary;
     public static ItemLibrary<Item> itemLibrary;
-    public static MobLibrary<Structure> structureLibrary;
-    public static MobLibrary<Creature> creatureLibrary;
+    public static StructureLibrary<Structure> structureLibrary;
+    public static CreatureLibrary<Creature> creatureLibrary;
     public static LocationLibrary locationLibrary;
     public static DialogueLibrary dialogueLibrary;
     public static Stage primaryStage;
@@ -253,7 +256,7 @@ public class Mists extends Application implements Global {
     }
     
     private static void setupStructureLibrary() {
-        Mists.structureLibrary = new MobLibrary<>();
+        Mists.structureLibrary = new StructureLibrary<>();
         LibLoader.initializeStructureLibrary(structureLibrary);
     }
     
@@ -268,7 +271,7 @@ public class Mists extends Application implements Global {
     }
     
     private static void setupCreatureLibrary() {
-        Mists.creatureLibrary = new MobLibrary<>();
+        Mists.creatureLibrary = new CreatureLibrary<>();
         LibLoader.initializeCreatureLibrary(creatureLibrary);
     }
     

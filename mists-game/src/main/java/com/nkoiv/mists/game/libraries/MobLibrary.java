@@ -43,6 +43,9 @@ import javafx.scene.paint.Color;
  * Monsters are stored in a monlibrary, structures in a struclibrary, etc
  * The concept was inspired (read: stolen) from Mikeras' Tyrant (github.com/mikera/tyrant/)
  * 
+ * The generic MobLibrary also houses generic static classes for parsing flags, sprites, etc
+ * common elements from YAML.
+ * 
  * TODO: Saving and loading of libraries
  * 
  * @author nkoiv
@@ -111,35 +114,37 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
             mob.setTemplateID(getNextFreeID());
         }
     }
+   
     
     public static MapObject generateFromYAML(Map mobData) {
         String mobtype = (String)mobData.get("type");
         switch (mobtype) {
             case "Creature": Mists.logger.info("Generating CREATURE");
-                return generateCreatureFromYAML(mobData);
+                return CreatureLibrary.generateCreatureFromYAML(mobData);
             case "GenericStructure": Mists.logger.info("Generating GENERIC STRUCTURE");
-                return generateStructureFromYAML(mobData);
+                return StructureLibrary.generateStructureFromYAML(mobData);
             case "Wall": Mists.logger.info("Generating WALL");
-                return generateWallFromYAML(mobData);
+                return StructureLibrary.generateWallFromYAML(mobData);
             case "Water": Mists.logger.info("Generating WATER");
-                return generateWaterFromYAML(mobData);
+                return StructureLibrary.generateWaterFromYAML(mobData);
             case "ItemContainer": Mists.logger.info("Generating ITEM CONTAINER");
-                return generateItemContainerFromYAML(mobData);
+                return StructureLibrary.generateItemContainerFromYAML(mobData);
             case "MapEntrance": Mists.logger.info("Generating MAP ENTRANCE");
-                return generateMapEntranceFromYAML(mobData);
+                return StructureLibrary.generateMapEntranceFromYAML(mobData);
             case "Door": Mists.logger.info("Generating DOOR");
-                return generateDoorFromYAML(mobData);
+                return StructureLibrary.generateDoorFromYAML(mobData);
             case "PuzzleTile": Mists.logger.info("Generating PUZZLE TILE");
-                return generatePuzzleTileFromYAML(mobData);
+                return StructureLibrary.generatePuzzleTileFromYAML(mobData);
             case "CircuitTile": Mists.logger.info("Generating CIRCUIT TILE");
-                return generateCircuitTileFromYAML(mobData);
+                return StructureLibrary.generateCircuitTileFromYAML(mobData);
             case "AnimatedFrill": Mists.logger.info("Generating ANIMATED FRILL");
-                return generateAnimatedFrillFromYAML(mobData);
+                return StructureLibrary.generateAnimatedFrillFromYAML(mobData);
             default: return null;
         }        
     }
     
-    private static void addFlagsFromYAML(Map mobData, Flags mob) {
+    
+    protected static void addFlagsFromYAML(Map mobData, Flags mob) {
         if (mobData.containsKey("flags")) {
             Map flags = (Map)mobData.get("flags");
             for (Object f : flags.keySet()) {
@@ -150,7 +155,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
     }
     
-    private static void addAttributesFromYAML(Map mobData, Creature mob) {
+    protected static void addAttributesFromYAML(Map mobData, Creature mob) {
         if (mobData.containsKey("attributes")) {
             Map attributes = (Map)mobData.get("attributes");
             for (Object a : attributes.keySet()) {
@@ -161,92 +166,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
     }
     
-    private static Creature generateCreatureFromYAML(Map creatureData) {
-        Creature creep;
-        String mobname = (String)creatureData.get("name");
-        String spriteType = (String)creatureData.get("spriteType");
-        if (("static").equals(spriteType)) {
-            Image monsterImage = new Image((String)creatureData.get("image"));
-            creep = new Creature(mobname, monsterImage);
-        } else {
-            ImageView monsterSprites = new ImageView((String)creatureData.get("spritesheet"));
-            Mists.logger.info("Spritesheet loaded: "+monsterSprites.getImage().getWidth()+"x"+monsterSprites.getImage().getHeight());
-            List<String> p = (List<String>)creatureData.get("spritesheetParameters");
-            Mists.logger.info("Parameters loaded: "+p.toString());
-            creep = new Creature(mobname, monsterSprites,
-                    Integer.parseInt(p.get(0)),
-                    Integer.parseInt(p.get(1)),
-                    Integer.parseInt(p.get(2)),
-                    Integer.parseInt(p.get(3)),
-                    Integer.parseInt(p.get(4)),
-                    Integer.parseInt(p.get(5)),
-                    Integer.parseInt(p.get(6)));
-        }
-        Mists.logger.info("Creature base generated, adding attributes and flags");
-        
-        addAttributesFromYAML(creatureData, creep);
-        addFlagsFromYAML(creatureData, creep);
-        
-        if (creatureData.containsKey("aiType")) {
-            String aiType = (String)creatureData.get("aiType");
-            switch (aiType){
-                case "monster": creep.setAI(new MonsterAI(creep));
-                    break;
-                default: break;
-            }
-        }
-        
-        //TODO: Add actions to YAML
-        creep.addAction(new MeleeAttack());
-        if ("Rabbit".equals(creep.getName())) {
-            creep.addAction(new ProjectileWeaponAttack());
-        }
-        return creep;
-    }
-    
-    private static Structure generateStructureFromYAML(Map structureData) {
-        String mobname = (String)structureData.get("name");
-        int collisionLevel;
-        if (structureData.containsKey("collisionLevel")) {
-            collisionLevel = Integer.parseInt((String)structureData.get("collisionLevel"));
-        } else {
-            collisionLevel = 1;
-        }
-        Structure struct;
-        if (structureData.containsKey("spritesheet")) {
-            Mists.logger.info("Generating structure sprite from spritesheet");
-            List<String> spritesheetParameters = (List<String>)structureData.get("spritesheetParameters");
-            String spritesheetLocation = (String)structureData.get("spritesheet");
-            Sprite sp = getSpriteFromSpriteSheet(spritesheetLocation, spritesheetParameters);
-            struct = new Structure(mobname, sp, collisionLevel);
-        } else {
-            Image image = new Image((String)structureData.get("image"));
-            struct = new Structure(mobname, image, collisionLevel); 
-        }
-        if (structureData.containsKey("lightLevel")) struct.setLightSize(Double.parseDouble((String)structureData.get("lightLevel")));
-        addExtras(structureData, struct);
-        setCollisionArea(structureData, struct);
-        return struct;
-    }
-    
-    
-    private static ItemContainer generateItemContainerFromYAML(Map structureData) {
-        String mobname = (String)structureData.get("name");
-        ItemContainer ic;
-        if (structureData.containsKey("spritesheet")) {
-            List<String> spritesheetParameters = (List<String>)structureData.get("spritesheetParameters");
-            String spritesheetLocation = (String)structureData.get("spritesheet");
-            Sprite sp = getSpriteFromSpriteSheet(spritesheetLocation, spritesheetParameters);
-            ic = new ItemContainer(mobname, sp);
-        } else {
-            Image image = new Image((String)structureData.get("image"));
-            ic = new ItemContainer(mobname, new Sprite(image)); 
-        }
-        if (structureData.containsKey("collisionLevel")) ic.setCollisionLevel(Integer.parseInt((String)structureData.get("collisionLevel")));
-        addExtras(structureData, ic);
-        addFlagsFromYAML(structureData, ic);
-        return ic;
-    }
+   
     
     protected static Sprite getSpriteFromSpriteSheet(String spritesheetLocation, List<String> spriteSheetParameters) {
         //Mists.logger.info("Generating sprite from spritesheet");
@@ -296,94 +216,6 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
                     Integer.parseInt(spriteSheetParameters.get(6)));
         return sa;
     }
-    
-    protected static Structure generateAnimatedFrillFromYAML(Map frillData) {
-        String frillname = (String)frillData.get("name");
-        SpriteAnimation sa = generateSpriteAnimation((String)frillData.get("spritesheet"), 
-                (List<String>)frillData.get("spritesheetParameters"));
-        Sprite sp = new Sprite(Mists.graphLibrary.getImage("blank"));
-        sp.setAnimation(sa);
-        Structure struct = new Structure(frillname, sp, 0);
-        addExtras(frillData, struct);
-        return struct;
-    }
-    
-    private static Wall generateWallFromYAML(Map wallData) {
-        String mobname = (String)wallData.get("name");
-        String collisionLevel = (String)wallData.get("collisionLevel");
-        ImageView wallImages = new ImageView((String)wallData.get("image"));
-        Wall wall = new Wall(mobname, new Image("/images/structures/blank.png"), Integer.parseInt(collisionLevel), wallImages);
-        wall.generateWallImages(wallImages);
-        addFlagsFromYAML(wallData, wall);
-        return wall;
-    }
-    
-    private static Water generateWaterFromYAML(Map waterData) {
-        String mobname = (String)waterData.get("name");
-        int collisionLevel = Integer.parseInt((String)waterData.get("collisionLevel"));
-        ImageView waterImages = new ImageView((String)waterData.get("image_anim1"));
-        ImageView waterImages_alt = new ImageView((String)waterData.get("image_anim2"));
-        Water water = new Water(mobname, waterImages, waterImages_alt);
-        water.setCollisionLevel(collisionLevel);
-        water.generateWaterTilesFromImageView();
-        addFlagsFromYAML(waterData, water);
-        return water;
-    }
-    
-    private static WorldMapEntrance generateMapEntranceFromYAML(Map entranceData) {
-        String mobname = (String)entranceData.get("name");
-        int collisionLevel = Integer.parseInt((String)entranceData.get("collisionLevel"));
-        Image image = new Image((String)entranceData.get("image"));
-        WorldMapEntrance entrance = new WorldMapEntrance(mobname, new Sprite(image), collisionLevel, null); 
-        addExtras(entranceData, entrance);
-        addFlagsFromYAML(entranceData, entrance);
-        return entrance;
-        //MapEntrance stairs = new MapEntrance("dungeonStairs", new Sprite(new Image("/images/structures/stairs.png")), 0, null);
-    }
-    
-    private static PuzzleTile generatePuzzleTileFromYAML(Map tileData) {
-        String mobname = (String)tileData.get("name");
-        Image imageOpen = new Image((String)tileData.get("imageLit"));
-        Image imageClosed = new Image((String)tileData.get("imageUnlit"));
-        PuzzleTile puzzletile = new PuzzleTile(mobname, imageOpen, imageClosed);
-        addExtras(tileData, puzzletile);
-        addFlagsFromYAML(tileData, puzzletile);
-        return puzzletile;
-    }
-    
-    private static CircuitTile generateCircuitTileFromYAML(Map tileData) {
-        String mobname = (String)tileData.get("name");
-        String pathsID = (String)tileData.get("circuitPaths");
-        boolean[] openPaths = new boolean[4];
-        switch (pathsID) {
-            case "I": openPaths = new boolean[]{true, false, true, false}; break;
-            case "L": openPaths = new boolean[]{false, true, true, false}; break;
-            case "X": openPaths = new boolean[]{true, true, true, true}; break;
-            case "T": openPaths = new boolean[]{true, true, true, false}; break;
-            case "S": openPaths = new boolean[]{false, false, true, false}; break;
-            case "O": openPaths = new boolean[]{false, false, true, false}; break;
-            default: Mists.logger.warning("Unrecognized puzzle tile shape in YAML"); break;
-        }
-        Image imageOpen = new Image((String)tileData.get("imageLit"));
-        Image imageClosed = new Image((String)tileData.get("imageUnlit"));
-        CircuitTile circuittile = new CircuitTile(mobname, openPaths, imageOpen, imageClosed);
-        addExtras(tileData, circuittile);
-        addFlagsFromYAML(tileData, circuittile);
-        return circuittile;
-    }
-    
-    private static Door generateDoorFromYAML(Map doorData) {
-        String mobname = (String)doorData.get("name");
-        int collisionLevel = Integer.parseInt((String)doorData.get("collisionLevel"));
-        Image imageOpen = new Image((String)doorData.get("imageOpen"));
-        Image imageClosed = new Image((String)doorData.get("imageClosed"));
-        Door door = new Door(mobname, imageOpen, imageClosed, collisionLevel); 
-        Map extras = (Map)doorData.get("extras");
-        addExtras(doorData, door);
-        addFlagsFromYAML(doorData, door);
-        return door;
-    }
-    
     
     protected static void setCollisionArea(Map structureData, Structure structure) {
         if (!structureData.containsKey("collisionArea")) return;
