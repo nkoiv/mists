@@ -46,8 +46,6 @@ import javafx.scene.paint.Color;
  * The generic MobLibrary also houses generic static classes for parsing flags, sprites, etc
  * common elements from YAML.
  * 
- * TODO: Saving and loading of libraries
- * 
  * @author nkoiv
  * @param <E> The type of MapObject stored in this MobLibrary
  */
