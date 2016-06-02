@@ -3,6 +3,7 @@
  * and as long as you credit the author accordingly. For commercial purposes please contact the author.
  * The software is provided "as is" with absolutely no warranty of any kind.
  * Using this software is entirely up to you, and the author is in no way responsible for anything you do with it.
+ * (c) nkoiv / Niko Koivumäki
  */
 package com.nkoiv.mists.game.libraries;
 
@@ -247,7 +248,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return ic;
     }
     
-    private static Sprite getSpriteFromSpriteSheet(String spritesheetLocation, List<String> spriteSheetParameters) {
+    protected static Sprite getSpriteFromSpriteSheet(String spritesheetLocation, List<String> spriteSheetParameters) {
         //Mists.logger.info("Generating sprite from spritesheet");
         Sprite sp;
         int framecount = Integer.parseInt(spriteSheetParameters.get(0));
@@ -264,7 +265,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return sp;
     }
     
-    private static Image clipImageFromSpriteSheet(String spritesheet, List<String> spriteSheetParameters) {
+    protected static Image clipImageFromSpriteSheet(String spritesheet, List<String> spriteSheetParameters) {
         //Mists.logger.info("Clipping image from spritesheet...");
         ImageView imageView = new ImageView(spritesheet);
         //int framecount = Integer.parseInt(spriteSheetParameters.get(0));
@@ -284,7 +285,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return imageView.snapshot(parameters, snapshot);
     }
     
-    private static SpriteAnimation generateSpriteAnimation(String spritesheet, List<String> spriteSheetParameters) {
+    protected static SpriteAnimation generateSpriteAnimation(String spritesheet, List<String> spriteSheetParameters) {
         ImageView imageView = new ImageView(spritesheet);
         SpriteAnimation sa = new SpriteAnimation(imageView, Integer.parseInt(spriteSheetParameters.get(0)),
                     Integer.parseInt(spriteSheetParameters.get(1)),
@@ -296,7 +297,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         return sa;
     }
     
-    private static Structure generateAnimatedFrillFromYAML(Map frillData) {
+    protected static Structure generateAnimatedFrillFromYAML(Map frillData) {
         String frillname = (String)frillData.get("name");
         SpriteAnimation sa = generateSpriteAnimation((String)frillData.get("spritesheet"), 
                 (List<String>)frillData.get("spritesheetParameters"));
@@ -384,7 +385,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     }
     
     
-    private static void setCollisionArea(Map structureData, Structure structure) {
+    protected static void setCollisionArea(Map structureData, Structure structure) {
         if (!structureData.containsKey("collisionArea")) return;
         List<String> collisionParameters = (List)structureData.get("collisionArea");
         try {
@@ -398,7 +399,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
         }
     }
     
-    private static void addExtras(Map structureData, Structure structure) {
+    protected static void addExtras(Map structureData, Structure structure) {
         Mists.logger.info("Generating extras for "+structure.getName());
         Map extras = (Map)structureData.get("extras");
         if (extras != null) {
@@ -428,7 +429,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
      * 
      * @param e 
      */
-    private static void prepareAdd(MapObject e) {
+    protected static void prepareAdd(MapObject e) {
         if (e instanceof Creature) {
             prepareCreature((Creature)e);
         }
