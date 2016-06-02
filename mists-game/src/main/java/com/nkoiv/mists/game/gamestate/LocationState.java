@@ -7,7 +7,6 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
-import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
@@ -37,7 +36,6 @@ import com.nkoiv.mists.game.ui.TextPanel;
 import com.nkoiv.mists.game.ui.TiledPanel;
 import com.nkoiv.mists.game.ui.TiledWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
-import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -92,6 +90,7 @@ public class LocationState implements GameState {
         uiComponents = new HashMap<>();
         this.drawOrder = new TreeSet<>();
         this.loadDefaultUI();
+        game.locControls.initializeDefaultKeybinds();
         if (Mists.gameMode == GameMode.SERVER) {
             setToServer();
         }
@@ -237,6 +236,27 @@ public class LocationState implements GameState {
             this.openCharacterPanel();
         }
     }
+    
+    public void togglePlayerInventoryPanel() {
+        Mists.logger.info("Toggling inventory panel");
+        if (this.uiComponents.containsKey(this.playerInventory.getName())) {
+            //Mists.logger.info("Quest panel was already open");
+            this.closePlayerInventoryPanel();
+        } else {
+            //Mists.logger.info("Quest panel was closed, opening...");
+            this.openPlayerInventoryPanel();
+        }
+    }
+    
+     public void closePlayerInventoryPanel() {
+        this.removeUIComponent(this.playerInventory);
+    }
+    
+    public void openPlayerInventoryPanel() {
+        Mists.logger.info("Opening inventory panel");
+        this.addUIComponent(this.playerInventory);
+    }
+    
     
     public void toggleQuestPanel() {
         Mists.logger.info("Toggling quest panel");
@@ -610,149 +630,12 @@ public class LocationState implements GameState {
             return;
         }
         
-        if (releasedButtons.contains(KeyCode.DIGIT1)) {
-            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
-            if (ab.getSubComponents().get(0) instanceof ActionButton) {
-                ((ActionButton)ab.getSubComponents().get(0)).buttonPress();
-            } else if (ab.getSubComponents().get(0) instanceof TextButton) {
-                ((TextButton)ab.getSubComponents().get(0)).buttonPress();
-            }
-        }
-        if (releasedButtons.contains(KeyCode.DIGIT2)) {
-            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
-            if (ab.getSubComponents().get(1) instanceof ActionButton) {
-                ((ActionButton)ab.getSubComponents().get(1)).buttonPress();
-            } else if (ab.getSubComponents().get(1) instanceof TextButton) {
-                ((TextButton)ab.getSubComponents().get(1)).buttonPress();
-            }
-        }
-        if (releasedButtons.contains(KeyCode.DIGIT3)) {
-            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
-            if (ab.getSubComponents().get(2) instanceof ActionButton) {
-                ((ActionButton)ab.getSubComponents().get(2)).buttonPress();
-            } else if (ab.getSubComponents().get(2) instanceof TextButton) {
-                ((TextButton)ab.getSubComponents().get(2)).buttonPress();
-            }
-        }
-        if (releasedButtons.contains(KeyCode.DIGIT4)) {
-            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
-            if (ab.getSubComponents().get(3) instanceof ActionButton) {
-                ((ActionButton)ab.getSubComponents().get(3)).buttonPress();
-            } else if (ab.getSubComponents().get(3) instanceof TextButton) {
-                ((TextButton)ab.getSubComponents().get(3)).buttonPress();
-            }
-        }
-        if (releasedButtons.contains(KeyCode.DIGIT5)) {
-            TiledWindow ab = (TiledWindow)this.uiComponents.get("Actionbar");
-            if (ab.getSubComponents().get(4) instanceof ActionButton) {
-                ((ActionButton)ab.getSubComponents().get(4)).buttonPress();
-            } else if (ab.getSubComponents().get(4) instanceof TextButton) {
-                ((TextButton)ab.getSubComponents().get(4)).buttonPress();
-            }
-        }
+        game.locControls.executeKeybind(pressedButtons, releasedButtons);
         
-        if (releasedButtons.contains(KeyCode.L)) {
-            Mists.logger.info("L pressed for QuestPanel");
-            game.locControls.toggleQuestPanel();
-        }
-        
-        if (releasedButtons.contains(KeyCode.Q)) {
-            Mists.logger.info("Q pressed for next ContextAction");
-            this.contextAction.nextAction();
-        }
-        
-        if (releasedButtons.contains(KeyCode.E)) {
-            Mists.logger.info("E pressed for context action");
-            int triggerTarget = this.contextAction.getSelectedTriggerSourceID();
-            game.locControls.useTrigger(triggerTarget, 0);
-        }
-        
-        if (releasedButtons.contains(KeyCode.I)) {
-            Mists.logger.info("I pressed for Inventory");
-            game.locControls.toggleInventory(this.playerInventory);
-        }
-        
-        if (releasedButtons.contains(KeyCode.ENTER)) {
-            game.locControls.printClearanceMapIntoConsole();
-            game.locControls.printCollisionMapIntoConsole();
-            
-        }
-        
-        if (releasedButtons.contains(KeyCode.ESCAPE)) {
-            if (!this.closeMenus()) game.locControls.toggleLocationMenu();
-            game.getCurrentLocation().clearTarget();
-        }
-
-        //Location controls
-        if (!this.paused) {
-        if (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W)) {
-            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
-                game.locControls.playerDash(Direction.UP);            
-            }
-            else game.locControls.playerMove(Direction.UP);            
-        }
-        if (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S)) {
-            //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
-            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
-                game.locControls.playerDash(Direction.DOWN);            
-            }
-            else game.locControls.playerMove(Direction.DOWN);
-        }
-        if (pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) {
-            //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
-            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
-                game.locControls.playerDash(Direction.LEFT);            
-            }
-            else game.locControls.playerMove(Direction.LEFT);
-        }
-        if (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D)) {
-            //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
-            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
-                game.locControls.playerDash(Direction.RIGHT);            
-            }
-            else game.locControls.playerMove(Direction.RIGHT);
-        }
-        if ((pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))
-            && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
-            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
-                game.locControls.playerDash(Direction.UPRIGHT);            
-            }
-            else game.locControls.playerMove(Direction.UPRIGHT);            
-        }
-        if ((pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))
-            && (pressedButtons.contains(KeyCode.RIGHT) || pressedButtons.contains(KeyCode.D))) {
-            //Mists.logger.log(Level.INFO, "Moving {0} DOWN", currentLocation.getPlayer().getName());
-            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
-                game.locControls.playerDash(Direction.DOWNRIGHT);            
-            }
-            else game.locControls.playerMove(Direction.DOWNRIGHT);
-        }
-        if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A))
-                && (pressedButtons.contains(KeyCode.UP) || pressedButtons.contains(KeyCode.W))) {
-            //Mists.logger.log(Level.INFO, "Moving {0} LEFT", currentLocation.getPlayer().getName());
-            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
-                game.locControls.playerDash(Direction.UPLEFT);            
-            }
-            else game.locControls.playerMove(Direction.UPLEFT);
-        }
-        if ((pressedButtons.contains(KeyCode.LEFT) || pressedButtons.contains(KeyCode.A)) 
-                && (pressedButtons.contains(KeyCode.DOWN) || pressedButtons.contains(KeyCode.S))) {
-            //Mists.logger.log(Level.INFO, "Moving {0} RIGHT", currentLocation.getPlayer().getName());
-            if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
-                game.locControls.playerDash(Direction.DOWNLEFT);            
-            }
-            else game.locControls.playerMove(Direction.DOWNLEFT);
-        }
-        
-        
-        //TODO: These should be directed to the UI-layer, which knows which abilities player has bound where
-        if (pressedButtons.contains(KeyCode.SPACE)) {
-            //Mists.logger.log(Level.INFO, "{0} TRIED USING ABILITY 0", currentLocation.getPlayer().getName());
-            game.locControls.playerAttack();
-        }
-        
-        }
-        
+    }
+    
+    public ContextAction getContextAction() {
+        return this.contextAction;
     }
     
     public LocationClient getClient() {

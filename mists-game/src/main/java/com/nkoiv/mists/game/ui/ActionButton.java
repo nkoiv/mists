@@ -8,13 +8,11 @@ package com.nkoiv.mists.game.ui;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
-import com.nkoiv.mists.game.world.util.Toolkit;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javax.swing.SwingUtilities;
 
 /**
  * ActionButtons (currently) extend the Test button,
