@@ -209,43 +209,82 @@ public class LocationControls {
     
     //----------Player controls-----
     
+    /**
+     * Stop player movement by setting the current Task to ID_IDLE
+     */
     public void playerStop() {
         Task stop = new Task(GenericTasks.ID_IDLE, game.getPlayer().getID(), null);
         game.getPlayer().setNextTask(stop);
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(stop);
     }
     
+    /**
+     * Set player to attack (with MELEE) towards given coordinates
+     * Done by setting player current task to ID_USE_MELEE_TOWARDS_COORDINATES
+     * @param xTarget target x coordinate in location
+     * @param yTarget target y coordinate in location
+     */
     public void playerAttack(double xTarget, double yTarget) {
         Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
         game.getPlayer().setNextTask(attack);
     }
     
+    /**
+     * Set player to attack towards its current facing with ID_USE_MELEE_TOWARDS_DIRECTION
+     */
     public void playerAttack() {
         Task attack = new Task(GenericTasks.ID_USE_MELEE_TOWARDS_DIRECTION, game.getPlayer().getID(), new double[]{Toolkit.getDirectionNumber(game.getPlayer().getFacing())});
         game.getPlayer().setNextTask(attack);
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(attack);
     }
     
+    /**
+     * Set player next task to move towards given direction
+     * uses ID_MOVE_TOWARDS_DIRECTION
+     * @param direction Direction enum to move towards to
+     */
     public void playerMove(Direction direction) {
         Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_DIRECTION, game.getPlayer().getID(), new double[]{Toolkit.getDirectionNumber(direction)});
         game.getPlayer().setNextTask(move);
     }
     
+    /**
+     * Set player to move towards given coordinates with ID_MOVE_TOWARDS_COORDINATES
+     * @param xTarget xCoordinate of the target in location
+     * @param yTarget yCoordinate of the target in location
+     */
     public void playerMove(double xTarget, double yTarget) {
         Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
         game.getPlayer().setNextTask(move);   
     }
     
+    
+    /**
+     * Set player to use Dash towards given direction
+     * uses ID_DASH_TOWARDS_DIRECTION
+     * @param direction Direction enum to move towards to
+     */
     public void playerDash(Direction direction) {
         Task move = new Task(GenericTasks.ID_DASH_TOWARDS_DIRECTION, game.getPlayer().getID(), new double[]{Toolkit.getDirectionNumber(direction)});
         game.getPlayer().setNextTask(move);
     }
     
+    /**
+     * Set player to dash towards given coordinates with ID_DASH_TOWARDS_COORDINATES
+     * @param xTarget xCoordinate of the target in location
+     * @param yTarget yCoordinate of the target in location
+     */
     public void playerDash(double xTarget, double yTarget) {
         Task move = new Task(GenericTasks.ID_DASH_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
         game.getPlayer().setNextTask(move);   
     }
     
+    /**
+     * Set player to move towards given direction and IF there is a mapobject close enough,
+     * attack it with melee
+     * @param xTarget xCoordinate of the target in location
+     * @param yTarget yCoordinate of the target in location
+     */
     public void playerAttackMove(double xTarget, double yTarget) {
         MapObject mob = game.getCurrentLocation().getMobAtLocation(xTarget, yTarget);
         if (mob == null) {
@@ -262,10 +301,20 @@ public class LocationControls {
         }
     }
     
+    /**
+     * Change player position to be at given coordinates.
+     * No tasks are used, just absolute position change
+     * @param xCoor xCoordinate of the target in location
+     * @param yCoor yCoordinate of the target in location
+     */
     public void teleportPlayer(double xCoor, double yCoor) {
         if (Mists.gameMode != GameMode.CLIENT) this.game.getCurrentLocation().getPlayer().setCenterPosition(xCoor, yCoor);
     }
     
+    /**
+     * Toggle (open/close) the inventory panel for given inventory in (Location)GameState
+     * @param inv Inventory to open/close
+     */
     public void toggleInventory(InventoryPanel inv) {
         if (game.currentState.removeUIComponent(inv.getName())){
             //Inventory panel was there and was removed
@@ -277,6 +326,12 @@ public class LocationControls {
         }
     }
 
+    /**
+     * Set player to use the given trigger (by id) on given (location)MobID
+     * Uses ID_USE_TRIGGER from generic tasks
+     * @param triggersourceID (Location)ID of the MapObject hosting the trigger
+     * @param triggerID ID of the trigger in host objects triggerlist
+     */
     public void useTrigger(int triggersourceID, int triggerID) {
         //Trigger t = triggersource.getTriggers()[triggerID];
         Task task = new Task(GenericTasks.ID_USE_TRIGGER, game.getPlayer().getID(), new double[]{triggersourceID, triggerID});
@@ -308,11 +363,14 @@ public class LocationControls {
         game.getPlayer().setNextTask(use);
         //if (this.gameMode == GameMode.CLIENT) this.client.addOutgoingUpdate(use);
     }
-    
-    
+
     
     //-------- Mob creation ------
     
+    /**
+     * Create a mob from the given template name at mouse cursor location
+     * @param mobTemplate Name of the template of the mob to create
+     */
     public void addCreature(String mobTemplate) {
         int mobID;
         try {
@@ -326,6 +384,12 @@ public class LocationControls {
         addCreature(mobID);
     }
     
+    /**
+     * Create an itempile with the given item at the position specified
+     * @param item Item to place on the pile
+     * @param xCoor X position of the pile
+     * @param yCoor Y position of the pile
+     */
     public void createItemPile(Item item, double xCoor, double yCoor) {
         ItemContainer itemPile = new ItemContainer(item.getName(), new Sprite(Mists.graphLibrary.getImage("blank")));
         itemPile.addItem(item);
@@ -333,21 +397,6 @@ public class LocationControls {
         this.currentLoc().addMapObject(itemPile, xCoor, yCoor);
     }
     
-    //------- Inventory manipulation ------
-    
-    public void giveItem(String attributes) {
-        int space = attributes.indexOf(" ");
-        if (space>1) {
-            String target = attributes.substring(0, space);
-            String item = attributes.substring(space+1, attributes.length());
-            Creature targetCreature;
-            if (target.equals(game.getPlayer().getName())) targetCreature = game.getPlayer();
-            else targetCreature = game.getCurrentLocation().getCreatureByName(target);
-            Item itemToGive = Mists.itemLibrary.create(item);
-            if (targetCreature == null || itemToGive == null) Mists.logger.warning ("Could not parse giveItem. Item was: "+item+ " Target was: "+target);
-            else targetCreature.addItem(itemToGive);
-        } else Mists.logger.warning ("Could not parse giveItem");
-    }
     
     /**
      * Create a random mob at spot mouse cursor is at
@@ -377,6 +426,23 @@ public class LocationControls {
         Creature monster = new Creature("Blob", new ImageView("/images/blob.png"), 3, 0, 0, 84, 84);
         game.getCurrentLocation().addMapObject(monster, x+game.getCurrentLocation().getLastxOffset(), y+game.getCurrentLocation().getLastyOffset());   
     }
+    
+    //------- Inventory manipulation ------
+    
+    public void giveItem(String attributes) {
+        int space = attributes.indexOf(" ");
+        if (space>1) {
+            String target = attributes.substring(0, space);
+            String item = attributes.substring(space+1, attributes.length());
+            Creature targetCreature;
+            if (target.equals(game.getPlayer().getName())) targetCreature = game.getPlayer();
+            else targetCreature = game.getCurrentLocation().getCreatureByName(target);
+            Item itemToGive = Mists.itemLibrary.create(item);
+            if (targetCreature == null || itemToGive == null) Mists.logger.warning ("Could not parse giveItem. Item was: "+item+ " Target was: "+target);
+            else targetCreature.addItem(itemToGive);
+        } else Mists.logger.warning ("Could not parse giveItem");
+    }
+    
     
     //----------Location creation------------
     
