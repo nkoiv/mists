@@ -10,6 +10,7 @@ package com.nkoiv.mists.game.gamestate;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.controls.WorldMapControls;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.ui.PopUpMenu;
 import com.nkoiv.mists.game.ui.UIComponent;
@@ -156,9 +157,20 @@ public class WorldMapState implements GameState {
         double clickY = me.getY() + game.getCurrentWorldMap().getLastOffsets()[1];
         MapObject mob = game.getCurrentWorldMap().mobAtCoordinates(clickX, clickY);
         MapNode mn = game.getCurrentWorldMap().nodeAtCoordinates(clickX, clickY);
+        if (mn.equals(game.getCurrentWorldMap().getPlayerNode())) {
+        	if (mn instanceof LocationNode) {
+                game.moveToLocation(((LocationNode)mn).getLocationID(), mn);
+                game.moveToState(Game.LOCATION);
+            } 
+        } else {
+        	WorldMapControls.moveToNode(game.getCurrentWorldMap(), mn);
+        }
+        /*
+        //Logging for testing
         if (mob != null) Mists.logger.info("Click landed on MOB "+mob.getName());
         if (mn != null) Mists.logger.info("Click landed on MapNode"+mn.getName());
         if (mn == null && mob == null) Mists.logger.info("Click at "+clickX+","+clickY +" didn't land on anything");
+        */
     }
     
     private void handleMouseDrags(MouseEvent me) {
@@ -220,73 +232,33 @@ public class WorldMapState implements GameState {
         
         //Movement controls
         if (releasedButtons.contains(KeyCode.UP) || releasedButtons.contains(KeyCode.W)) {
-            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UP);
-            if (mn != null) {
-                game.getCurrentWorldMap().getPlayerNode().exitNode();
-                game.getCurrentWorldMap().setPlayerNode(mn);
-                game.getCurrentWorldMap().getPlayerNode().enterNode();
-            }
+        	WorldMapControls.moveToDirecition(game.getCurrentWorldMap(), Direction.UP);
             
         }
         if (releasedButtons.contains(KeyCode.DOWN) || releasedButtons.contains(KeyCode.S)) {
-            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWN);
-            if (mn != null) {
-                game.getCurrentWorldMap().getPlayerNode().exitNode();
-                game.getCurrentWorldMap().setPlayerNode(mn);
-                game.getCurrentWorldMap().getPlayerNode().enterNode();
-            }
+            WorldMapControls.moveToDirecition(game.getCurrentWorldMap(), Direction.DOWN);
         }
         if (releasedButtons.contains(KeyCode.LEFT) || releasedButtons.contains(KeyCode.A)) {
-            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.LEFT);
-            if (mn != null) {
-                game.getCurrentWorldMap().getPlayerNode().exitNode();
-                game.getCurrentWorldMap().setPlayerNode(mn);
-                game.getCurrentWorldMap().getPlayerNode().enterNode();
-            }
+        	WorldMapControls.moveToDirecition(game.getCurrentWorldMap(), Direction.LEFT);
         }
         if (releasedButtons.contains(KeyCode.RIGHT) || releasedButtons.contains(KeyCode.D)) {
-            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.RIGHT);
-            if (mn != null) {
-                game.getCurrentWorldMap().getPlayerNode().exitNode();
-                game.getCurrentWorldMap().setPlayerNode(mn);
-                game.getCurrentWorldMap().getPlayerNode().enterNode();
-            }
+        	WorldMapControls.moveToDirecition(game.getCurrentWorldMap(), Direction.RIGHT);
         }
         if ((releasedButtons.contains(KeyCode.UP) || releasedButtons.contains(KeyCode.W))
             && (releasedButtons.contains(KeyCode.RIGHT) || releasedButtons.contains(KeyCode.D))) {
-            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UPRIGHT);
-            if (mn != null) {
-                game.getCurrentWorldMap().getPlayerNode().exitNode();
-                game.getCurrentWorldMap().setPlayerNode(mn);
-                game.getCurrentWorldMap().getPlayerNode().enterNode();
-            }
+        	WorldMapControls.moveToDirecition(game.getCurrentWorldMap(), Direction.UPRIGHT);
         }
         if ((releasedButtons.contains(KeyCode.DOWN) || releasedButtons.contains(KeyCode.S))
             && (releasedButtons.contains(KeyCode.RIGHT) || releasedButtons.contains(KeyCode.D))) {
-            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWNRIGHT);
-            if (mn != null) {
-                game.getCurrentWorldMap().getPlayerNode().exitNode();
-                game.getCurrentWorldMap().setPlayerNode(mn);
-                game.getCurrentWorldMap().getPlayerNode().enterNode();
-            }
+        	WorldMapControls.moveToDirecition(game.getCurrentWorldMap(), Direction.DOWNRIGHT);
         }
         if ((releasedButtons.contains(KeyCode.LEFT) || releasedButtons.contains(KeyCode.A))
                 && (releasedButtons.contains(KeyCode.UP) || releasedButtons.contains(KeyCode.W))) {
-            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.UPLEFT);
-            if (mn != null) {
-                game.getCurrentWorldMap().getPlayerNode().exitNode();
-                game.getCurrentWorldMap().setPlayerNode(mn);
-                game.getCurrentWorldMap().getPlayerNode().enterNode();
-            }
+        	WorldMapControls.moveToDirecition(game.getCurrentWorldMap(), Direction.UPLEFT);
         }
         if ((releasedButtons.contains(KeyCode.LEFT) || releasedButtons.contains(KeyCode.A)) 
                 && (releasedButtons.contains(KeyCode.DOWN) || releasedButtons.contains(KeyCode.S))) {
-            MapNode mn = game.getCurrentWorldMap().getPlayerNode().getNeighbour(Direction.DOWNLEFT);
-            if (mn != null) {
-                game.getCurrentWorldMap().getPlayerNode().exitNode();
-                game.getCurrentWorldMap().setPlayerNode(mn);
-                game.getCurrentWorldMap().getPlayerNode().enterNode();
-            }
+        	WorldMapControls.moveToDirecition(game.getCurrentWorldMap(), Direction.DOWNLEFT);
         }
         
         
