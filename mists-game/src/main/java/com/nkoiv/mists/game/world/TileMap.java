@@ -224,7 +224,7 @@ public class TileMap implements GameMap, KryoSerializable {
     }
     
     /**
-     * Update structures fixes context dependant structures
+     * Update structures fixes context dependent structures
      * For example walls might need to change their sprite
      * if adjacent wall is destroyed or built
      * @param tileX xCoordinate for the change in structures
@@ -260,6 +260,39 @@ public class TileMap implements GameMap, KryoSerializable {
         }
         
         return neighbours;
+    }
+    
+    /**
+     * Condence the supplied list of structures into a simple
+     * int-map (according to structureCodes, loaded from YAML by default)
+     * Note that this obviously does not store ANYTHING on the structures
+     * beyond their templateID
+     * @param structures List of structures to squish into an int[][]
+     * @return an int[][] with all the (structureCodes recognized) structures on it
+     */
+    public int[][] compileStructuresIntoIntMap(ArrayList<Structure> structures) {
+    	int[][] structureMap = new int[this.tileWidth][this.tileHeight];
+    	for (Structure s : structures) {
+    		int tileX = (int)(s.getCenterXPos() / this.tilesize);
+    		int tileY = (int)(s.getCenterYPos() / this.tilesize);
+    		int id = getStructureCode(s);
+    		if (id>=0) structureMap[tileX][tileY] = id;
+    	}
+    	return structureMap;
+    }
+    
+    /**
+     * Find the correct structureCode (generally ascii character)
+     * for a given structure. Matched by templateID:s.
+     * @param struct Structure to find structCode for
+     * @return StructureCode if found, -1 if no matching templateID can be located
+     */
+    public int getStructureCode(Structure struct) {
+    	int id = struct.getTemplateID();
+    	for (int i : this.structureCodes.keySet()) {
+    		if (this.structureCodes.get(i).getTemplateID() == id) return i;
+    	}
+    	return -1;
     }
     
     //TODO: Structures should have their own map, and not just intMap
