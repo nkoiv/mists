@@ -7,6 +7,10 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
@@ -29,9 +33,9 @@ import javafx.scene.shape.Shape;
  *  Unlike a mere Sprite (which it heavily utilizes), MapObject is tied to a certain Location.
  * @author nkoiv
  */
-public class MapObject extends Flags implements Global, Templatable {
+public class MapObject extends Flags implements Global, Templatable, KryoSerializable {
     protected int templateID;
-    protected final String name;
+    protected String name;
     protected MovingGraphics graphics;
     
     protected int collisionLevel;
@@ -264,8 +268,9 @@ public class MapObject extends Flags implements Global, Templatable {
     }
 
     @Override
-    public Object createFromTemplate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public MapObject createFromTemplate() {
+        MapObject mob = new MapObject(this.name, this.graphics.getImage());
+        return mob;
     }
 
     
@@ -302,5 +307,19 @@ public class MapObject extends Flags implements Global, Templatable {
         }
         return true;
     }
+
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(templateID);
+		output.writeString(this.name);
+	}
+
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.templateID = input.readInt();
+		this.name = input.readString();
+	}
     
 }

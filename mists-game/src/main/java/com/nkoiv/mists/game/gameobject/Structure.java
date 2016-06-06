@@ -7,6 +7,10 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
@@ -140,5 +144,33 @@ public class Structure extends MapObject {
         ns.lightColor = this.lightColor;
         return ns;
     }
+    
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(templateID);
+		output.writeString(this.name);
+		output.writeInt(this.collisionLevel);
+		output.writeInt(this.IDinLocation);
+		output.writeDouble(this.getXPos());
+		output.writeDouble(this.getYPos());
+	}
+
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.templateID = input.readInt();
+		this.name = input.readString();
+		this.collisionLevel = input.readInt();
+		this.IDinLocation = input.readInt();
+		double xCoor = input.readDouble();
+		double yCoor = input.readDouble();
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (dummy == null) return;
+			this.graphics = dummy.graphics;
+			this.graphics.setPosition(xCoor, yCoor);
+		}
+		 
+	}
     
 }
