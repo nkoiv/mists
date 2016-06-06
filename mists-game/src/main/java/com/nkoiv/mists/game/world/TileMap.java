@@ -48,8 +48,53 @@ public class TileMap implements GameMap, KryoSerializable {
     protected static final int WALL = 35;
     protected static final int DOOR = 43;
     
-    public TileMap() {
-        
+    public TileMap(int[][] floorMap, int[][] structureMap, int tilesize) {
+        this.tilesize = tilesize;
+        this.floorMap = floorMap;
+        this.structureMap = structureMap;
+        this.tileWidth = floorMap.length;
+        this.tileHeight = floorMap[0].length;
+        this.tileMap = new Tile[tileWidth][tileHeight];
+        Mists.logger.log(Level.INFO, "Got a {0}x{1} floorMap for mapgeneration. Generating tiles...", new Object[]{floorMap.length, floorMap[0].length});
+        initializeTileGraphics();
+        Mists.logger.info("Tile graphics initialized");
+        this.generateTilesFromIntMap(floorMap);
+        Mists.logger.info("Tiles generated from FloorMap");
+    }
+     
+    
+    /**
+     * Construct tilemap from supplied mapfile, using the loadMap() method
+     * @param mapFileName location of the mapfile
+     */
+    public TileMap (String mapFileName) {
+        this.tilesize = Global.TILESIZE;
+        this.loadMap(mapFileName); //Generate intmap from the mapfile
+        this.tileMap = new Tile[tileWidth][tileHeight];
+        this.generateTilesFromIntMap(this.intMap); //turn the intmap into a tilemap
+    }
+    
+    /**
+     * Initialize a new tilemap with the supplied dimensions.
+     * The content of the map is constructed from the intMap[][] supplied
+     * (according to default structureCodes and floorCodes, unless those
+     * are overwritten)
+     * @param tileWidth
+     * @param tileHeight
+     * @param tilesize
+     * @param intMap
+     */
+    public TileMap (int tileWidth, int tileHeight, int tilesize, int[][] intMap) {
+        this.tilesize = tilesize;
+        this.intMap = intMap;
+        this.tileWidth=intMap.length;
+        this.tileHeight=intMap[0].length;
+        this.tileMap = new Tile[tileWidth][tileHeight];
+        Mists.logger.log(Level.INFO, "Got a {0}x{1} intMap for mapgeneration. Generating tiles...", new Object[]{intMap.length, intMap[0].length});
+        initializeTileGraphics();
+        Mists.logger.info("Tile graphics initialized");
+        this.generateTilesFromIntMap(this.intMap);
+        Mists.logger.info("Tiles generated");
     }
     
     /**
@@ -67,24 +112,33 @@ public class TileMap implements GameMap, KryoSerializable {
         Mists.logger.info("Tiles generated");
     }
     
-    public TileMap (String mapFileName) {
-        this.tilesize = Global.TILESIZE;
-        this.loadMap(mapFileName); //Generate intmap from the mapfile
-        this.tileMap = new Tile[tileWidth][tileHeight];
-        this.generateTilesFromIntMap(this.intMap); //turn the intmap into a tilemap
-    }
     
-    public TileMap (int tileWidth, int tileHeight, int tilesize, int[][] intMap) {
-        this.tilesize = tilesize;
-        this.intMap = intMap;
-        this.tileWidth=intMap.length;
-        this.tileHeight=intMap[0].length;
-        this.tileMap = new Tile[tileWidth][tileHeight];
-        Mists.logger.log(Level.INFO, "Got a {0}x{1} intMap for mapgeneration. Generating tiles...", new Object[]{intMap.length, intMap[0].length});
-        initializeTileGraphics();
-        Mists.logger.info("Tile graphics initialized");
-        this.generateTilesFromIntMap(this.intMap);
-        Mists.logger.info("Tiles generated");
+    /**
+     * Squish supplied floormap and structuremap into one
+     * single intmap, where structures take priority over
+     * floortiles.
+     * 
+     *    FLOOR        STRUCTURE        INTMAP
+     * [.][.][,][,] + [ ][ ][ ][ ] = [.][.][,][,]
+     * [.][.][,][,] + [#][#][#][#] = [#][#][#][#]
+     * [.][.][,][,] + [ ][#][ ][ ] = [.][#][,][,]
+     * [.][.][.][.] + [ ][+][ ][ ] = [.][+][.][.]
+     * [.][.][.][.] + [ ][#][ ][ ] = [.][#][.][.]
+     * 
+     * 
+     * @param floorMap
+     * @param structureMap
+     * @return
+     */
+    public static int[][] compileIntMap(int[][] floorMap, int[][] structureMap) {
+    	int[][] intMap = new int[floorMap.length][floorMap[0].length];
+    	for (int y = 0; y < intMap[0].length; y++) {
+    		for (int x = 0; x < intMap.length; x++) {
+    			if (structureMap[x][y] > 0) intMap[x][y] = structureMap[x][y];
+    			else intMap[x][y] = floorMap[x][y];
+			}
+    	}
+    	return intMap;
     }
     
     @Override
