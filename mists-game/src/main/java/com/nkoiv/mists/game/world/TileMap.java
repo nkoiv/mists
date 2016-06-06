@@ -35,7 +35,9 @@ public class TileMap implements GameMap, KryoSerializable {
     protected int tileWidth;
     protected int tileHeight;
     
-    protected int[][] intMap;
+    protected int[][] intMap; //Contains both floor and structures
+    protected int[][] floorMap; //Contains only floor, used if available
+    protected int[][] structureMap; //Contains only structures, used if available
     
     protected Tile[][] tileMap;
     protected HashMap<Integer, Structure> structureCodes;
@@ -50,13 +52,18 @@ public class TileMap implements GameMap, KryoSerializable {
         
     }
     
+    /**
+     * Build the map from intmap (tile codes)
+     * and initialize the tiles within for graphics usage.
+     */
     public void buildMap() {
-        if (this.intMap == null) return;
+        if (this.intMap == null || (this.floorMap == null && this.structureMap == null)) return;
         Mists.logger.log(Level.INFO, "Got a {0}x{1} intMap for mapgeneration. Generating tiles...", new Object[]{intMap.length, intMap[0].length});
         this.tileMap = new Tile[tileWidth][tileHeight];
         initializeTileGraphics();
         Mists.logger.info("Tile graphics initialized");
-        this.generateTilesFromIntMap();
+        if (this.floorMap == null) this.generateTilesFromIntMap(this.floorMap);
+        else this.generateTilesFromIntMap(this.intMap);
         Mists.logger.info("Tiles generated");
     }
     
@@ -64,7 +71,7 @@ public class TileMap implements GameMap, KryoSerializable {
         this.tilesize = Global.TILESIZE;
         this.loadMap(mapFileName); //Generate intmap from the mapfile
         this.tileMap = new Tile[tileWidth][tileHeight];
-        this.generateTilesFromIntMap(); //turn the intmap into a tilemap
+        this.generateTilesFromIntMap(this.intMap); //turn the intmap into a tilemap
     }
     
     public TileMap (int tileWidth, int tileHeight, int tilesize, int[][] intMap) {
@@ -76,7 +83,7 @@ public class TileMap implements GameMap, KryoSerializable {
         Mists.logger.log(Level.INFO, "Got a {0}x{1} intMap for mapgeneration. Generating tiles...", new Object[]{intMap.length, intMap[0].length});
         initializeTileGraphics();
         Mists.logger.info("Tile graphics initialized");
-        this.generateTilesFromIntMap();
+        this.generateTilesFromIntMap(this.intMap);
         Mists.logger.info("Tiles generated");
     }
     
@@ -212,7 +219,9 @@ public class TileMap implements GameMap, KryoSerializable {
             for (int y=0; y<this.tileHeight; y++) {
                 //TODO: Check the intMap value against tilesheet
                 //For now, everything is floor
-                Structure newStructure = this.generateStructure(this.intMap[x][y], x, y);
+                Structure newStructure;
+                if (this.structureMap == null) newStructure = this.generateStructure(this.intMap[x][y], x, y);
+                else newStructure = this.generateStructure(this.structureMap[x][y], x, y);
                 if(newStructure != null)staticStructures.add(newStructure); 
             }
         }
@@ -262,12 +271,17 @@ public class TileMap implements GameMap, KryoSerializable {
         }	
     }
     
-    private void setIntMap(int[][] intMap) {
+    public void setIntMap(int[][] intMap) {
         this.intMap = intMap;
     }
     
+    public void setTileMap(Tile[][] tileMap) {
+    	this.tileMap = tileMap;
+    }
+    
+    
     //use the intMap to generate the tiles
-    protected void generateTilesFromIntMap() {
+    protected void generateTilesFromIntMap(int[][] intMap) {
         if (this.floorCodes == null) this.loadDefaultFloorCodes();
         Mists.logger.info("Generating tiles");
         Mists.logger.info("IntMap: "+this.intMap.length+"x"+this.intMap[0].length);
@@ -298,6 +312,16 @@ public class TileMap implements GameMap, KryoSerializable {
     }
     
     
+    /**
+     * Check the area around the given maptile, and figure out
+     * what's the most common floortile. This is utilized to
+     * fill floor in unclear spots, so that the floor fits with
+     * surroundings
+     * @param x Tile X coordinate
+     * @param y Tile y coordinate
+     * @param intMap Tilemap to check
+     * @return floorcode from the tilemap
+     */
     private int getFloorTileAverage(int x, int y, int[][] intMap) {
         int ret = 0;
         TreeMap<Integer, Integer> counts = new TreeMap<>();
@@ -337,9 +361,10 @@ public class TileMap implements GameMap, KryoSerializable {
         else countMap.put(value, 1);
     }
     
-    /*
+    /**
     * Maploader from files mainly for testing purposes
     * TODO: Make proper save/load for maps
+    * @param filename path to the mapfile
     */
     private void loadMap(String filename) {
         

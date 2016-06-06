@@ -26,9 +26,9 @@ public class IsometricTileMap extends TileMap {
     * (x*this.tilesize)+(x%2)*this.tilesize/2, (y*this.tilesize/2))
     */
     @Override
-    protected void generateTilesFromIntMap() {
+    protected void generateTilesFromIntMap(int[][] intMap) {
         Mists.logger.info("Generating tiles");
-        Mists.logger.info("IntMap: "+this.intMap.length+"x"+this.intMap[0].length);
+        Mists.logger.info("IntMap: "+intMap.length+"x"+intMap[0].length);
         Mists.logger.info("TileMap: "+this.tileMap.length+"x"+this.tileMap[0].length);
         for (int x=0; x<this.tileWidth; x++) {
             for (int y=0; y<this.tileHeight; y++) {
@@ -37,7 +37,7 @@ public class IsometricTileMap extends TileMap {
                double xCoor = x*Mists.graphLibrary.getImage("isoDungeonFloor").getWidth();
                if (y%2 == 1) xCoor+=Mists.graphLibrary.getImage("isoDungeonFloor").getWidth()/2;
                double yCoor = y*this.tilesize/2;
-               if (this.intMap[x][y]==1) {
+               if (intMap[x][y]==1) {
                    this.tileMap[x][y] = new Tile(1, "Floor", this.tilesize, 
                     new Sprite(Mists.graphLibrary.getImage("isoDungeonFloor"),
                     xCoor, yCoor)); 
