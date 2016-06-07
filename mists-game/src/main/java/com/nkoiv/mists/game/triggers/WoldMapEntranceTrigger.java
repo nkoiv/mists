@@ -7,11 +7,10 @@
  */
 package com.nkoiv.mists.game.triggers;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
+import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 
 /**
@@ -19,6 +18,7 @@ import com.nkoiv.mists.game.world.worldmap.MapNode;
  * @author nikok
  */
 public class WoldMapEntranceTrigger implements Trigger {
+	private int entranceID;
     private WorldMapEntrance entrance;
     private MapNode exitNode;
 
@@ -34,15 +34,22 @@ public class WoldMapEntranceTrigger implements Trigger {
     public void setExit(MapNode exit) {
         this.exitNode = exit;
     }
+    
+    private void updateEntrance(Location loc) {
+    	MapObject mob = loc.getMapObject(entranceID);
+    	if (mob instanceof WorldMapEntrance) this.entrance = (WorldMapEntrance)mob;
+    }
 
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (entrance == null) updateEntrance(toggler.getLocation());
         toggler.getLocation().exitLocationToWorldMap(exitNode);
         return true;
     }
 
     @Override
     public MapObject getTarget() {
+    	if (entrance == null) updateEntrance(Mists.MistsGame.getCurrentLocation());
         return this.entrance;
     }
 

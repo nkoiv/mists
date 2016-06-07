@@ -10,12 +10,14 @@ package com.nkoiv.mists.game.triggers;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
+import com.nkoiv.mists.game.world.Location;
 
 /**
  *
  * @author nikok
  */
 public class TextPopUpTrigger implements Trigger {
+	private int targetID;
     private MapObject target;
     private String popupText;
     
@@ -23,14 +25,20 @@ public class TextPopUpTrigger implements Trigger {
         this.target = target;
         this.popupText = popupText;
     }
+    
+    private void updateTarget(Location loc) {
+    	this.target = loc.getMapObject(targetID);
+    }
 
     @Override
     public String getDescription() {
+    	if (target == null) updateTarget(Mists.MistsGame.getCurrentLocation());
         return "Trigget to popup "+popupText+" on "+target.getName();
     }
 
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (target == null) updateTarget(toggler.getLocation());
         if (Mists.MistsGame.currentState instanceof LocationState) {
             ((LocationState)Mists.MistsGame.currentState).addTextFloat(popupText, target);
         }
@@ -47,6 +55,7 @@ public class TextPopUpTrigger implements Trigger {
     
     @Override
     public MapObject getTarget() {
+    	if (target == null) updateTarget(Mists.MistsGame.getCurrentLocation());
         return this.target;
     }
 

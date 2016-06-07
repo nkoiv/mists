@@ -9,7 +9,6 @@ package com.nkoiv.mists.game.triggers;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.CircuitTile;
-import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.Location;
 

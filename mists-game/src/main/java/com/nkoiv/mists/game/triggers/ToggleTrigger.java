@@ -7,7 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.Location;
 
 /**
  * Toggle a MapObject (trigger ID 0 on the target) upon triggering
@@ -16,15 +18,21 @@ import com.nkoiv.mists.game.gameobject.MapObject;
  * @author nikok
  */
 public class ToggleTrigger implements Trigger {
-    private MapObject targetMob;
+	private int targetID;
+    private MapObject target;
 
     public ToggleTrigger(MapObject mob) {
-        this.targetMob = mob;
+        this.target = mob;
+    }
+    
+    private void updateTarget(Location loc) {
+    	this.target = loc.getMapObject(targetID);
     }
 
     @Override
     public String getDescription() {
-        String s = "Trigger to toggle "+targetMob.getName();
+    	if (target == null) updateTarget(Mists.MistsGame.getCurrentLocation());
+        String s = "Trigger to toggle "+target.getName();
         return s;
     }
     
@@ -36,7 +44,8 @@ public class ToggleTrigger implements Trigger {
      */
     @Override
     public boolean toggle(MapObject toggler) {
-        Trigger[] targetTriggers = targetMob.getTriggers();
+    	if (target == null) updateTarget(toggler.getLocation());
+        Trigger[] targetTriggers = target.getTriggers();
         if (targetTriggers.length > 0) { 
             targetTriggers[0].toggle(toggler);
             return true;
@@ -46,18 +55,19 @@ public class ToggleTrigger implements Trigger {
 
     @Override
     public ToggleTrigger createFromTemplate() {
-        ToggleTrigger tt = new ToggleTrigger(this.targetMob);
+        ToggleTrigger tt = new ToggleTrigger(this.target);
         return tt;
     }
 
     @Override
     public MapObject getTarget() {
-        return this.targetMob;
+    	if (target == null) updateTarget(Mists.MistsGame.getCurrentLocation());
+        return this.target;
     }
 
     @Override
     public void setTarget(MapObject mob) {
-        this.targetMob = mob;
+        this.target = mob;
     }
 
 }
