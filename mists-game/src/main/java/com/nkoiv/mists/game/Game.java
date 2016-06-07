@@ -316,7 +316,7 @@ public class Game {
     
     private void moveToDummyLocation() {
     	//Used to create a dummy location ... just in case
-    	this.currentLocation = Mists.locationLibrary.create(-1);
+    	this.currentLocation = this.getLocation(-1);
     }
     
     public Location getCurrentLocation() {
