@@ -345,6 +345,12 @@ public class LibLoader {
     }
     
     public static void initializeLocationLibrary(LocationLibrary lib) {
+    	//--Dummy backup Location--
+    	LocationTemplate dummy = new LocationTemplate(-1, "Dummy", 60*Mists.TILESIZE, 50*Mists.TILESIZE);
+        dummy.map = new TileMap("/mapdata/pathfinder_test.map");
+    	
+        lib.addTemplate(dummy);
+        
         //--TestDungeon--
         LocationTemplate testDungeon = new LocationTemplate(1, "TestDungeon", 60*Mists.TILESIZE, 40*Mists.TILESIZE);
         

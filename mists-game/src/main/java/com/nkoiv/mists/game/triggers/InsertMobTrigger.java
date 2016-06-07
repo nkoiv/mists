@@ -7,13 +7,16 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.Location;
 
 /**
  *
  * @author nikok
  */
 public class InsertMobTrigger implements Trigger {
+	private int mobID;
     private MapObject mob;
     private double xCoor;
     private double yCoor;
@@ -26,11 +29,17 @@ public class InsertMobTrigger implements Trigger {
     
     @Override
     public String getDescription() {
+    	if (mob == null) updateMobFromID(Mists.MistsGame.getCurrentLocation());
         return "a trigger that inserts a "+mob.getName();
     }
 
+    private void updateMobFromID(Location loc) {
+    	mob = loc.getMapObject(mobID);
+    }
+    
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (mob == null) updateMobFromID(toggler.getLocation());
         if (toggler != null && toggler.getLocation() != null) {
             toggler.getLocation().addMapObject(mob, xCoor, yCoor);
             return true;
@@ -40,6 +49,7 @@ public class InsertMobTrigger implements Trigger {
 
     @Override
     public MapObject getTarget() {
+    	if (mob == null) updateMobFromID(Mists.MistsGame.getCurrentLocation());
         return mob;
     }
 
@@ -51,6 +61,7 @@ public class InsertMobTrigger implements Trigger {
     @Override
     public Trigger createFromTemplate() {
         InsertMobTrigger nt = new InsertMobTrigger(mob, xCoor, yCoor);
+        nt.mobID = this.mobID;
         return nt;
     }
     

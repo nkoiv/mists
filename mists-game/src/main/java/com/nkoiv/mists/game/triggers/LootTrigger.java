@@ -12,6 +12,8 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.world.Location;
+
 import java.util.logging.Level;
 
 /**
@@ -20,7 +22,8 @@ import java.util.logging.Level;
 * @author nikok
 */
 public class LootTrigger implements Trigger {
-   private ItemContainer ic;
+	private int icID; 
+	private ItemContainer ic;
 
    public LootTrigger(ItemContainer itemContainer) {
        this.ic = itemContainer;
@@ -28,6 +31,7 @@ public class LootTrigger implements Trigger {
 
    @Override
    public boolean toggle(MapObject toggler) {
+	   if (ic == null) updateItemContainer(toggler.getLocation());
        Mists.logger.info("LootTrigger toggled by "+toggler.getName());
        if (!(toggler instanceof Creature)) {
            Mists.logger.log(Level.INFO, "{0} tried to toggle {1} but is not a creature", new Object[]{toggler.getName(), ic.getName()});
@@ -43,6 +47,11 @@ public class LootTrigger implements Trigger {
        return false;
 
    }
+   
+   private void updateItemContainer(Location loc) {
+	   MapObject mob = loc.getMapObject(icID);
+	   if (mob instanceof ItemContainer) this.ic = (ItemContainer)loc.getMapObject(icID);
+   }
 
    @Override
    public void setTarget(MapObject ic) {
@@ -51,11 +60,13 @@ public class LootTrigger implements Trigger {
 
    @Override
    public MapObject getTarget() {
+	   if (ic == null) updateItemContainer(Mists.MistsGame.getCurrentLocation());
        return this.ic;
    }
 
    @Override
    public String getDescription() {
+	   if (ic == null) updateItemContainer(Mists.MistsGame.getCurrentLocation());
        Item i = this.ic.peekTopItem();
        if (i == null) return "Empty";
        else return ("Take "+i.getName());
@@ -64,6 +75,7 @@ public class LootTrigger implements Trigger {
    @Override
    public LootTrigger createFromTemplate() {
        LootTrigger lt = new LootTrigger(this.ic);
+       lt.icID = this.icID;
        return lt;
    }
 

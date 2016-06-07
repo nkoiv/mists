@@ -9,7 +9,10 @@ package com.nkoiv.mists.game.triggers;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.CircuitTile;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.Location;
+
 import java.util.logging.Level;
 
 /**
@@ -17,6 +20,7 @@ import java.util.logging.Level;
  * @author nikok
  */
 public class RotateTrigger implements Trigger{
+	private int tileID;
     private CircuitTile ct;
     private boolean clockwise = true;
     
@@ -26,18 +30,26 @@ public class RotateTrigger implements Trigger{
     
     @Override
     public String getDescription() {
+    	if (ct == null) updateCircuitTile(Mists.MistsGame.getCurrentLocation());
         return "Rotate "+ct.getName();
     }
 
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (ct == null) updateCircuitTile(toggler.getLocation());
         if (clockwise) ct.rotateCW();
         else ct.rotateCCW();
         return true;
     }
 
+    private void updateCircuitTile(Location loc) {
+ 	   MapObject mob = loc.getMapObject(tileID);
+ 	   if (mob instanceof CircuitTile) this.ct = (CircuitTile)loc.getMapObject(tileID);
+    }
+    
     @Override
     public MapObject getTarget() {
+    	if (ct == null) updateCircuitTile(Mists.MistsGame.getCurrentLocation());
         return ct;
     }
 

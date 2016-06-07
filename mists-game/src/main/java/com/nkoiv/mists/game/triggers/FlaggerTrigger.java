@@ -7,7 +7,10 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.Location;
 
 /**
  * FlaggerTrigger flags a target with a given flag
@@ -15,10 +18,17 @@ import com.nkoiv.mists.game.gameobject.MapObject;
  * @author nikok
  */
 public class FlaggerTrigger  implements Trigger {
+	private int targetID;
     private MapObject target;
     private String flag;
     private int flagValue;
 
+    public FlaggerTrigger(int targetID, String flag, int flagValue) {
+    	this.targetID = targetID;
+    	this.flag = flag;
+    	this.flagValue = flagValue;
+    }
+    
     public FlaggerTrigger(MapObject target, String flag, int flagValue) {
         this.target = target;
         this.flag = flag;
@@ -27,17 +37,24 @@ public class FlaggerTrigger  implements Trigger {
     
     @Override
     public String getDescription() {
+    	if (this.target == null) updateTargetMob(Mists.MistsGame.getCurrentLocation());
         return "Flagger: "+flag+":"+flagValue;
     }
 
+    private void updateTargetMob(Location loc) {
+    	this.target = loc.getMapObject(targetID);
+    }
+    
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (this.target == null) updateTargetMob(toggler.getLocation());
         target.setFlag(flag, flagValue);
         return true;
     }
 
     @Override
     public MapObject getTarget() {
+    	if (this.target == null) updateTargetMob(Mists.MistsGame.getCurrentLocation());
         return this.target;
     }
 
@@ -48,7 +65,9 @@ public class FlaggerTrigger  implements Trigger {
 
     @Override
     public Trigger createFromTemplate() {
-        return new FlaggerTrigger(this.target, this.flag, this.flagValue);
+    	FlaggerTrigger ft = new FlaggerTrigger(this.target, this.flag, this.flagValue);
+    	ft.targetID = this.targetID;
+        return ft;
     }
     
 }

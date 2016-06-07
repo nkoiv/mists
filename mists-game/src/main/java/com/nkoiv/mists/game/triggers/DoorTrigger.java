@@ -7,23 +7,36 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.Location;
 
 /**
  * Open/Close door on triggering
  * @author nikok
  */
 public class DoorTrigger implements Trigger {
+	private int doorID;
     private Door door;
     private boolean unlocks;
+    
+    public DoorTrigger(int doorID) {
+    	this.doorID = doorID;
+    }
     
     public DoorTrigger(Door d) {
         this.door = d;
     }
+    
+    private void updateDoor(Location l) {
+    	MapObject mob = l.getMapObject(doorID);
+    	if (mob instanceof Door) this.door=(Door)mob;
+    }
 
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (this.door == null) updateDoor(toggler.getLocation());
         if (unlocks)door.setLocked(false);
         this.door.toggle();
         return true;
@@ -35,6 +48,7 @@ public class DoorTrigger implements Trigger {
     
     @Override
     public MapObject getTarget() {
+    	if (this.door == null) updateDoor(Mists.MistsGame.getCurrentLocation());
         return this.door;
     }
 
@@ -45,6 +59,7 @@ public class DoorTrigger implements Trigger {
 
     @Override
     public String getDescription() {
+    	if (this.door == null) updateDoor(Mists.MistsGame.getCurrentLocation());
         if (this.door.isOpen()) return "Close door";
         else return "Open door";
     }
@@ -53,6 +68,7 @@ public class DoorTrigger implements Trigger {
     public DoorTrigger createFromTemplate() {
         DoorTrigger d = new DoorTrigger(this.door);
         d.unlocks = this.unlocks;
+        d.doorID = this.doorID;
         return d;
     }
 

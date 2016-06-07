@@ -5,8 +5,12 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -390,4 +394,24 @@ public class Wall extends Structure implements HasNeighbours {
         newWall.setTopWallAdjust(topWallAdjustX, topWallAdjustY);
         return newWall;
     }
+    
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.templateID = input.readInt();
+		this.name = input.readString();
+		this.collisionLevel = input.readInt();
+		this.IDinLocation = input.readInt();
+		double xCoor = input.readDouble();
+		double yCoor = input.readDouble();
+		//Copy over graphics from library
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (dummy == null) return;
+			this.graphics = dummy.graphics;
+			this.graphics.setPosition(xCoor, yCoor);
+			this.extraSprites = dummy.extraSprites;
+			if (dummy instanceof Wall) this.wallparts = ((Wall)dummy).wallparts;
+		} else this.graphics = new Sprite();
+	}
 }

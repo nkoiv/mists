@@ -7,8 +7,10 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.Location;
 
 /**
  * KillTrigger destroys (/kills) a mapobject upon triggering
@@ -16,18 +18,25 @@ import com.nkoiv.mists.game.gameobject.MapObject;
  */
 public class KillTrigger implements Trigger {
     private MapObject target;
+    private int targetID;
     
     public KillTrigger(MapObject target) {
         this.target = target;
     }
     
+    private void updateTarget(Location loc) {
+    	this.target = loc.getMapObject(targetID);
+    }
+    
     @Override
     public String getDescription() {
+    	if (target == null) updateTarget(Mists.MistsGame.getCurrentLocation());
         return "Kill trigger for "+target.getName();
     }
 
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (target == null) updateTarget(toggler.getLocation());
         if (target instanceof Creature) {
             ((Creature)target).setHealth(0);
             return true;
@@ -39,6 +48,7 @@ public class KillTrigger implements Trigger {
 
     @Override
     public MapObject getTarget() {
+    	if (target == null) updateTarget(Mists.MistsGame.getCurrentLocation());
         return this.target;
     }
 
@@ -49,7 +59,10 @@ public class KillTrigger implements Trigger {
 
     @Override
     public Trigger createFromTemplate() {
-        return new KillTrigger(this.target);
+    	KillTrigger kt = new KillTrigger(this.target);
+    	kt.targetID = this.targetID;
+        return kt;
+        
     }
     
 }

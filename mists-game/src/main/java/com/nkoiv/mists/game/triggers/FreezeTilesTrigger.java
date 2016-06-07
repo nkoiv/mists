@@ -7,8 +7,11 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
+import com.nkoiv.mists.game.world.Location;
+
 import java.util.ArrayList;
 
 /**
@@ -17,6 +20,7 @@ import java.util.ArrayList;
  * @author nikok
  */
 public class FreezeTilesTrigger implements Trigger {
+	private ArrayList<Integer> tileIDs;
     private ArrayList<PuzzleTile> tiles;
 
     public FreezeTilesTrigger() {
@@ -24,11 +28,13 @@ public class FreezeTilesTrigger implements Trigger {
     }
     
     public void addTile(PuzzleTile tileToBeFrozen) {
-        this.tiles.add(tileToBeFrozen);
+    	if (this.tiles == null) this.tiles = new ArrayList<>();
+    	else this.tiles.add(tileToBeFrozen);
     }
     
     public void clearTiles() {
-        this.tiles.clear();
+    	if (this.tiles == null) tiles = new ArrayList<>();
+    	else this.tiles.clear();
     }
     
     @Override
@@ -36,8 +42,17 @@ public class FreezeTilesTrigger implements Trigger {
         return "Freeze tiles";
     }
 
+    private void updateTilesFromIDs(Location loc) {
+    	this.tiles = new ArrayList<>();
+		if (this.tileIDs != null) for (int id : this.tileIDs) {
+			MapObject mob = loc.getMapObject(id);
+			if (mob instanceof PuzzleTile) this.tiles.add((PuzzleTile)mob);
+		}
+    }
+    
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (this.tiles == null) updateTilesFromIDs(toggler.getLocation());
         for (PuzzleTile tile : this.tiles) {
             tile.setFrozen(true);
         }
@@ -46,6 +61,7 @@ public class FreezeTilesTrigger implements Trigger {
 
     @Override
     public MapObject getTarget() {
+    	if (this.tiles == null) updateTilesFromIDs(Mists.MistsGame.getCurrentLocation());
         return this.tiles.get(0);
     }
 

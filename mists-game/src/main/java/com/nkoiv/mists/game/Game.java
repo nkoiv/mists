@@ -314,7 +314,13 @@ public class Game {
         this.player = p;
     }
     
+    private void moveToDummyLocation() {
+    	//Used to create a dummy location ... just in case
+    	this.currentLocation = Mists.locationLibrary.create(-1);
+    }
+    
     public Location getCurrentLocation() {
+    	if (this.currentLocation == null) moveToDummyLocation();
         return this.currentLocation;
     }
     

@@ -5,6 +5,9 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.ToggleTrigger;
@@ -142,5 +145,58 @@ public class TriggerPlate extends MapObject {
         }
         return tp;
     }
+    
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(templateID);
+		output.writeString(this.name);
+		output.writeInt(this.collisionLevel);
+		output.writeInt(this.IDinLocation);
+		output.writeDouble(this.getXPos());
+		output.writeDouble(this.getYPos());
+		output.writeBoolean(this.requireReEntry);
+		output.writeBoolean(this.clear);
+		output.writeBoolean(this.triggerOnlyOnce);
+		output.writeDouble(triggerCooldown);
+		output.writeDouble(onCooldown);
+		
+		//Triggers
+		output.writeInt(this.touchTriggers.size());
+		for (int i = 0; i < this.touchTriggers.size(); i++) {
+			kryo.writeClassAndObject(output, this.touchTriggers.get(i));
+		}
+	}
+
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.templateID = input.readInt();
+		this.name = input.readString();
+		this.collisionLevel = input.readInt();
+		this.IDinLocation = input.readInt();
+		double xCoor = input.readDouble();
+		double yCoor = input.readDouble();
+		this.requireReEntry = input.readBoolean();
+		this.clear = input.readBoolean();
+		this.triggerOnlyOnce = input.readBoolean();
+		this.triggerCooldown = input.readDouble();
+		this.onCooldown = input.readDouble();
+		
+		int triggerCount = input.readInt();
+		this.touchTriggers = new ArrayList<>();
+		for (int i = 0; i < triggerCount; i++) {
+			this.touchTriggers.add((Trigger)kryo.readClassAndObject(input));
+		}
+		
+		//Copy over graphics from library
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (dummy == null) return;
+			this.graphics = dummy.graphics;
+			this.graphics.setPosition(xCoor, yCoor);
+		} else this.graphics = new Sprite();
+		
+		
+	}
     
 }

@@ -164,13 +164,14 @@ public class Structure extends MapObject {
 		this.IDinLocation = input.readInt();
 		double xCoor = input.readDouble();
 		double yCoor = input.readDouble();
+		//Copy over graphics from library
 		if (Mists.structureLibrary != null) {
 			Structure dummy = Mists.structureLibrary.create(templateID);
 			if (dummy == null) return;
 			this.graphics = dummy.graphics;
 			this.graphics.setPosition(xCoor, yCoor);
-		}
-		 
+			this.extraSprites = dummy.extraSprites;
+		} else this.graphics = new Sprite();
 	}
     
 }

@@ -7,6 +7,7 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.KryoSerializable;
 import com.nkoiv.mists.game.gameobject.MapObject;
 
 /**

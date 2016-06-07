@@ -10,6 +10,8 @@ package com.nkoiv.mists.game.triggers;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
+import com.nkoiv.mists.game.world.Location;
+
 import java.util.logging.Level;
 
 /**
@@ -18,19 +20,26 @@ import java.util.logging.Level;
  */
 public class PuzzleTrigger implements Trigger {
     private MapObject targetMob;
+    private int targetID;
     
     public PuzzleTrigger(MapObject mob) {
         this.targetMob = mob;
     }
 
+    private void updateTarget(Location loc) {
+    	this.targetMob = loc.getMapObject(targetID);
+    }
+    
     @Override
     public String getDescription() {
+    	if (targetMob == null) updateTarget(Mists.MistsGame.getCurrentLocation());
         String s = "Trigger to toggle "+targetMob.getName();
         return s;
     }
     
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (targetMob == null) updateTarget(toggler.getLocation());
         if (targetMob instanceof PuzzleTile) {
             ((PuzzleTile)targetMob).shiftMode();
             return true;
@@ -48,6 +57,7 @@ public class PuzzleTrigger implements Trigger {
 
     @Override
     public MapObject getTarget() {
+    	if (targetMob == null) updateTarget(Mists.MistsGame.getCurrentLocation());
         return this.targetMob;
     }
 

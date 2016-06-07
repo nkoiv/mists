@@ -12,13 +12,14 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.world.Location;
 
 /**
  *
  * @author nikok
  */
 public class OpenInventoryTrigger implements Trigger {
-
+	private int icID;
     private ItemContainer ic;
 
    public OpenInventoryTrigger(ItemContainer itemContainer) {
@@ -27,6 +28,7 @@ public class OpenInventoryTrigger implements Trigger {
 
    @Override
    public boolean toggle(MapObject toggler) {
+	   if (ic == null) updateItemContainer(toggler.getLocation());
        if (!(toggler instanceof Creature)) {
            Mists.logger.info(toggler.getName()+" tried to toggle "+ic.getName()+" but is not a creature");
            return false;
@@ -37,6 +39,11 @@ public class OpenInventoryTrigger implements Trigger {
        return true;
 
    }
+   
+   private void updateItemContainer(Location loc) {
+	   MapObject mob = loc.getMapObject(icID);
+	   if (mob instanceof ItemContainer) this.ic = (ItemContainer)loc.getMapObject(icID);
+   }
 
    @Override
    public void setTarget(MapObject ic) {
@@ -45,11 +52,13 @@ public class OpenInventoryTrigger implements Trigger {
 
    @Override
    public MapObject getTarget() {
+	   if (ic == null) updateItemContainer(Mists.MistsGame.getCurrentLocation());
        return this.ic;
    }
 
    @Override
    public String getDescription() {
+	   if (ic == null) updateItemContainer(Mists.MistsGame.getCurrentLocation());
        Item i = this.ic.peekTopItem();
        if (i == null) return "Empty";
        else return ("Open "+i.getName()+" inventory");
@@ -57,8 +66,9 @@ public class OpenInventoryTrigger implements Trigger {
 
    @Override
    public OpenInventoryTrigger createFromTemplate() {
-       OpenInventoryTrigger lt = new OpenInventoryTrigger(this.ic);
-       return lt;
+       OpenInventoryTrigger oit = new OpenInventoryTrigger(this.ic);
+       oit.icID = this.icID;
+       return oit;
    }
     
 }

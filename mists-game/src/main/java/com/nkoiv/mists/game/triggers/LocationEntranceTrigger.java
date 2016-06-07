@@ -7,14 +7,17 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.LocationDoorway;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.world.Location;
 
 /**
  *
  * @author nikok
  */
 public class LocationEntranceTrigger implements Trigger {
+	private int entranceID;
     private LocationDoorway entrance;
     private int targetLocationID;
     private double targetXCoor;
@@ -37,14 +40,21 @@ public class LocationEntranceTrigger implements Trigger {
         this.targetYCoor = yCoor;
     }
 
+    private void updateEntrance(Location loc) {
+    	MapObject mob = loc.getMapObject(entranceID);
+    	if (mob instanceof LocationDoorway) entrance = (LocationDoorway)mob; 
+    }
+    
     @Override
     public boolean toggle(MapObject toggler) {
+    	if (entrance == null) updateEntrance(toggler.getLocation());
         toggler.getLocation().changeLocation(targetLocationID, targetXCoor, targetYCoor);
         return true;
     }
 
     @Override
     public MapObject getTarget() {
+    	if (entrance == null) updateEntrance(Mists.MistsGame.getCurrentLocation());
         return this.entrance;
     }
 
@@ -61,6 +71,7 @@ public class LocationEntranceTrigger implements Trigger {
     @Override
     public LocationEntranceTrigger createFromTemplate() {
         LocationEntranceTrigger let = new LocationEntranceTrigger(this.entrance, this.targetLocationID, this.targetXCoor, this.targetYCoor);
+        let.entranceID = this.entranceID;
         return let;
     }
 }
