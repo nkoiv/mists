@@ -12,7 +12,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.gameobject.PuzzleTile;
+import com.nkoiv.mists.game.gameobject.Shapechanger;
 import com.nkoiv.mists.game.world.Location;
 
 import java.util.logging.Level;
@@ -43,11 +43,11 @@ public class PuzzleTrigger implements Trigger {
     @Override
     public boolean toggle(MapObject toggler) {
     	if (targetMob == null) updateTarget(toggler.getLocation());
-        if (targetMob instanceof PuzzleTile) {
-            ((PuzzleTile)targetMob).shiftMode();
+        if (targetMob instanceof Shapechanger) {
+            ((Shapechanger)targetMob).shiftMode();
             return true;
         } else {
-            Mists.logger.log(Level.WARNING, "PuzzleTrigger set to manipulate a non-PuzzleTile mob: {0}", targetMob.toString());
+            Mists.logger.log(Level.WARNING, "PuzzleTrigger set to manipulate a non-Shapechanger mob: {0}", targetMob.toString());
             return false;
         }
     }

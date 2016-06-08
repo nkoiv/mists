@@ -148,12 +148,7 @@ public class TriggerPlate extends MapObject {
     
 	@Override
 	public void write(Kryo kryo, Output output) {
-		output.writeInt(templateID);
-		output.writeString(this.name);
-		output.writeInt(this.collisionLevel);
-		output.writeInt(this.IDinLocation);
-		output.writeDouble(this.getXPos());
-		output.writeDouble(this.getYPos());
+		super.write(kryo, output);
 		output.writeBoolean(this.requireReEntry);
 		output.writeBoolean(this.clear);
 		output.writeBoolean(this.triggerOnlyOnce);

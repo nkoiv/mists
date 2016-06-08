@@ -5,6 +5,9 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.DoorTrigger;
@@ -98,4 +101,36 @@ public class Door  extends Structure {
         }
         return nd;
     }
+    
+	@Override
+	public void write(Kryo kryo, Output output) {
+		super.write(kryo, output);
+		output.writeInt(this.closedCollisionLevel);
+		output.writeBoolean(this.open);
+	}
+
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.templateID = input.readInt();
+		this.name = input.readString();
+		this.collisionLevel = input.readInt();
+		this.IDinLocation = input.readInt();
+		double xCoor = input.readDouble();
+		double yCoor = input.readDouble();
+		//Copy over graphics from library
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (!(dummy instanceof Wall)) return;
+			Door d = (Door)dummy;
+			this.graphics = d.graphics;
+			this.graphics.setPosition(xCoor, yCoor);
+			this.extraSprites = d.extraSprites;
+			this.openImage = d.openImage;
+			this.closedImage = d.closedImage;
+		} else this.graphics = new Sprite();
+		this.closedCollisionLevel = input.readInt();
+		this.open = input.readBoolean();
+		//TODO: Missing flag-handling (locked etc)
+	}
 } 

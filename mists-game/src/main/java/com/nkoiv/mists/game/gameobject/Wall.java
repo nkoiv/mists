@@ -395,6 +395,13 @@ public class Wall extends Structure implements HasNeighbours {
         return newWall;
     }
     
+    @Override
+    public void write(Kryo kryo, Output output) {
+    	super.write(kryo, output);
+    	for (int i = 0; i < 8;  i++) {
+    		output.writeBoolean(this.neighbours[i]);
+    	}
+    }
 
 	@Override
 	public void read(Kryo kryo, Input input) {
@@ -413,5 +420,9 @@ public class Wall extends Structure implements HasNeighbours {
 			this.extraSprites = dummy.extraSprites;
 			if (dummy instanceof Wall) this.wallparts = ((Wall)dummy).wallparts;
 		} else this.graphics = new Sprite();
+		this.neighbours = new boolean[8];
+		for (int i = 0; i < 8; i++) {
+			this.neighbours[i] = input.readBoolean();
+		}
 	}
 }

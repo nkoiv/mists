@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import javafx.scene.image.Image;
@@ -81,4 +85,35 @@ public class PuzzleTile extends Structure implements Shapechanger {
         }
         return pt;
     }
+    
+	@Override
+	public void write(Kryo kryo, Output output) {
+		super.write(kryo, output);
+		output.writeBoolean(this.isLit);
+		output.writeBoolean(this.frozen);
+	}
+
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.templateID = input.readInt();
+		this.name = input.readString();
+		this.collisionLevel = input.readInt();
+		this.IDinLocation = input.readInt();
+		double xCoor = input.readDouble();
+		double yCoor = input.readDouble();
+		this.isLit = input.readBoolean();
+		this.frozen = input.readBoolean();
+		//Copy over graphics from library
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (!(dummy instanceof PuzzleTile)) return;
+			PuzzleTile pt = (PuzzleTile)dummy;
+			this.graphics = pt.graphics;
+			this.graphics.setPosition(xCoor, yCoor);
+			this.extraSprites = dummy.extraSprites;
+			this.litUpGraphics = pt.litUpGraphics;
+			this.unLitGraphics = pt.unLitGraphics;
+		} else this.graphics = new Sprite();
+	}
 }

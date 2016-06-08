@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Item;
@@ -165,5 +168,34 @@ public class ItemContainer extends Structure implements HasInventory {
         }
         return nic;
     }
+    
+	@Override
+	public void write(Kryo kryo, Output output) {
+		super.write(kryo, output);
+		output.writeBoolean(this.permanentInventory);
+		output.writeBoolean(this.renderContent);
+		kryo.writeClassAndObject(output, this.inv);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.templateID = input.readInt();
+		this.name = input.readString();
+		this.collisionLevel = input.readInt();
+		this.IDinLocation = input.readInt();
+		double xCoor = input.readDouble();
+		double yCoor = input.readDouble();
+		this.permanentInventory = input.readBoolean();
+		this.renderContent = input.readBoolean();
+		this.inv = (Inventory)kryo.readClassAndObject(input);
+		//Copy over graphics from library
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (dummy == null) return;
+			this.graphics = dummy.graphics;
+			this.graphics.setPosition(xCoor, yCoor);
+			this.extraSprites = dummy.extraSprites;
+		} else this.graphics = new Sprite();
+	}
     
 }
