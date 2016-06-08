@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.LocationDoorway;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -74,4 +77,21 @@ public class LocationEntranceTrigger implements Trigger {
         let.entranceID = this.entranceID;
         return let;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.entrance != null) this.entranceID = entrance.getID();
+		output.writeInt(this.entranceID);
+		output.writeInt(this.targetLocationID);
+		output.writeDouble(this.targetXCoor);
+		output.writeDouble(this.targetYCoor);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.entranceID = input.readInt();
+		this.targetLocationID = input.readInt();
+		this.targetXCoor = input.readDouble();
+		this.targetYCoor = input.readDouble();
+	}
 }

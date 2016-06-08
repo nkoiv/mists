@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
@@ -70,5 +73,18 @@ public class OpenInventoryTrigger implements Trigger {
        oit.icID = this.icID;
        return oit;
    }
+
+@Override
+public void write(Kryo kryo, Output output) {
+	if (this.ic != null) this.icID = this.ic.getID();
+	output.writeInt(this.icID);
+	
+}
+
+@Override
+public void read(Kryo kryo, Input input) {
+	this.icID = input.readInt();
+	
+}
     
 }

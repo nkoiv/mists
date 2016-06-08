@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
@@ -42,6 +45,13 @@ public class FreezeTilesTrigger implements Trigger {
         return "Freeze tiles";
     }
 
+    private void updateTileIDsFromTiles() {
+    	this.tileIDs = new ArrayList<>();
+    	for (PuzzleTile p : this.tiles) {
+    		tileIDs.add(p.getID());
+    	}
+    }
+    
     private void updateTilesFromIDs(Location loc) {
     	this.tiles = new ArrayList<>();
 		if (this.tileIDs != null) for (int id : this.tileIDs) {
@@ -79,4 +89,31 @@ public class FreezeTilesTrigger implements Trigger {
         }
         return ftt;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (!this.tiles.isEmpty()) this.updateTileIDsFromTiles();
+		if (this.tileIDs.size() > this.tiles.size()) {
+			output.writeInt(this.tileIDs.size());
+			for (int i = 0; i < tileIDs.size(); i++) {
+				output.writeInt(this.tileIDs.get(i));
+			}
+		}
+		else {
+			output.writeInt(this.tiles.size());
+			for (int i = 0; i < tiles.size(); i++) {
+				output.writeInt(this.tiles.get(i).getID());
+			}
+		}
+		
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		int t = input.readInt();
+		this.tileIDs = new ArrayList<>();
+		for (int i = 0; i < t; i++) {
+			this.tileIDs.add(input.readInt());
+		}
+	}
 }

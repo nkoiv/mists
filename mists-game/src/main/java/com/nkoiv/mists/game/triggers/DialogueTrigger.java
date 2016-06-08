@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -90,5 +93,19 @@ public class DialogueTrigger implements Trigger {
         t.dialogueID = this.dialogueID;
         return t;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.owner != null) this.ownerID = owner.getID();
+		//TODO: Dialogue into ID?
+		output.writeInt(this.dialogueID);
+		output.writeInt(this.ownerID);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.dialogueID = input.readInt();
+		this.ownerID = input.readInt();
+	}
     
 }

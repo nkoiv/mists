@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
@@ -65,5 +68,17 @@ public class PuzzleTrigger implements Trigger {
     public void setTarget(MapObject mob) {
         this.targetMob = mob;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.targetMob != null) this.targetID = this.targetMob.getID();
+		output.writeInt(this.targetID);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.targetID = input.readInt();
+		
+	}
 
 }

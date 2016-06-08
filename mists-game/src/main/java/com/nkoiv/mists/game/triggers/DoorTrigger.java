@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -71,6 +74,19 @@ public class DoorTrigger implements Trigger {
         d.doorID = this.doorID;
         return d;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.door != null) this.doorID = this.door.getID();
+		output.writeInt(this.doorID);
+		output.writeBoolean(this.unlocks);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.doorID = input.readInt();
+		this.unlocks = input.readBoolean();
+	}
 
 }
 

@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -64,5 +67,16 @@ public class KillTrigger implements Trigger {
         return kt;
         
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.target != null) this.targetID = this.target.getID();
+		output.write(this.targetID);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.targetID = input.readInt();		
+	}
     
 }

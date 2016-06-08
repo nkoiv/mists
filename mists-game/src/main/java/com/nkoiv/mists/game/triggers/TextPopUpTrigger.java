@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
@@ -69,5 +72,19 @@ public class TextPopUpTrigger implements Trigger {
         TextPopUpTrigger t = new TextPopUpTrigger(this.target, this.popupText);
         return t;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.target != null) this.targetID = this.target.getID();
+		output.writeInt(this.targetID);
+		output.writeString(this.popupText);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.targetID = input.readInt();
+		this.popupText = input.readString();
+		
+	}
     
 }

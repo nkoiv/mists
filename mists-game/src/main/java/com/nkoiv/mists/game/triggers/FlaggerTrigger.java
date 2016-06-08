@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.Location;
@@ -68,5 +71,20 @@ public class FlaggerTrigger  implements Trigger {
     	ft.targetID = this.targetID;
         return ft;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.target != null) this.targetID = this.target.getID();
+		output.writeInt(this.targetID);
+		output.writeString(this.flag);
+		output.writeInt(this.flagValue);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.targetID = input.readInt();
+		this.flag = input.readString();
+		this.flagValue = input.readInt();
+	}
     
 }

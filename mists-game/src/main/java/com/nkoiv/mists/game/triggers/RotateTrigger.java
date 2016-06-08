@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -63,5 +66,19 @@ public class RotateTrigger implements Trigger{
         RotateTrigger rt = new RotateTrigger(ct);
         return rt;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.ct != null) this.tileID = ct.getID();
+		output.writeInt(this.tileID);
+		output.writeBoolean(this.clockwise);
+		
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.tileID = input.readInt();
+		this.clockwise = input.readBoolean();
+	}
     
 }

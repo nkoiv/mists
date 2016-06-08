@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.Location;
@@ -64,5 +67,21 @@ public class InsertMobTrigger implements Trigger {
         nt.mobID = this.mobID;
         return nt;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.mob != null) this.mobID = mob.getID();
+		output.writeInt(mobID);
+		output.writeDouble(this.xCoor);
+		output.writeDouble(this.yCoor);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.mobID = input.readInt();
+		this.xCoor = input.readDouble();
+		this.yCoor = input.readDouble();
+		
+	}
     
 }

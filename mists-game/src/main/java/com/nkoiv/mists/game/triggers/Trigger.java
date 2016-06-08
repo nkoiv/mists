@@ -7,6 +7,7 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.KryoSerializable;
 import com.nkoiv.mists.game.gameobject.MapObject;
 
 /**
@@ -14,7 +15,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
  * that aren't tied to an actor.
  * @author nikok
  */
-public interface Trigger {
+public interface Trigger extends KryoSerializable {
     public String getDescription();
     public boolean toggle(MapObject toggler);
     public MapObject getTarget();

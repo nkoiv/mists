@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
@@ -68,5 +71,18 @@ public class WoldMapEntranceTrigger implements Trigger {
         WoldMapEntranceTrigger et = new WoldMapEntranceTrigger(this.entrance, this.exitNode);
         return et;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		if (this.entrance != null) this.entranceID = entrance.getID();
+		output.writeInt(this.entranceID);
+		//TODO: Missing MapNode saving and loading - needs ID!
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.entranceID = input.readInt();
+		
+	}
 
 }

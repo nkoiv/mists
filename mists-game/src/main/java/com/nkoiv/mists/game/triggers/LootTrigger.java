@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
@@ -78,5 +81,17 @@ public class LootTrigger implements Trigger {
        lt.icID = this.icID;
        return lt;
    }
+
+@Override
+public void write(Kryo kryo, Output output) {
+	if (this.ic != null) this.icID = ic.getID();
+	output.writeInt(this.icID);
+}
+
+@Override
+public void read(Kryo kryo, Input input) {
+	this.icID = input.readInt();
+	
+}
 
 }
