@@ -405,24 +405,22 @@ public class Wall extends Structure implements HasNeighbours {
 
 	@Override
 	public void read(Kryo kryo, Input input) {
-		this.templateID = input.readInt();
-		this.name = input.readString();
-		this.collisionLevel = input.readInt();
-		this.IDinLocation = input.readInt();
-		double xCoor = input.readDouble();
-		double yCoor = input.readDouble();
-		//Copy over graphics from library
-		if (Mists.structureLibrary != null) {
-			Structure dummy = Mists.structureLibrary.create(templateID);
-			if (dummy == null) return;
-			this.graphics = dummy.graphics;
-			this.graphics.setPosition(xCoor, yCoor);
-			this.extraSprites = dummy.extraSprites;
-			if (dummy instanceof Wall) this.wallparts = ((Wall)dummy).wallparts;
-		} else this.graphics = new Sprite();
+		super.read(kryo, input);
 		this.neighbours = new boolean[8];
 		for (int i = 0; i < 8; i++) {
 			this.neighbours[i] = input.readBoolean();
 		}
 	}
+	
+	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (dummy == null) return;
+			this.graphics = dummy.graphics;
+			this.extraSprites = dummy.extraSprites;
+			if (dummy instanceof Wall) this.wallparts = ((Wall)dummy).wallparts;
+		} else this.graphics = new Sprite();
+		this.graphics.setPosition(xCoor, yCoor);
+	}
+	
 }

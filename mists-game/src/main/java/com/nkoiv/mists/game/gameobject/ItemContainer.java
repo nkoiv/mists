@@ -179,23 +179,10 @@ public class ItemContainer extends Structure implements HasInventory {
 
 	@Override
 	public void read(Kryo kryo, Input input) {
-		this.templateID = input.readInt();
-		this.name = input.readString();
-		this.collisionLevel = input.readInt();
-		this.IDinLocation = input.readInt();
-		double xCoor = input.readDouble();
-		double yCoor = input.readDouble();
+		super.read(kryo, input);
 		this.permanentInventory = input.readBoolean();
 		this.renderContent = input.readBoolean();
 		this.inv = (Inventory)kryo.readClassAndObject(input);
-		//Copy over graphics from library
-		if (Mists.structureLibrary != null) {
-			Structure dummy = Mists.structureLibrary.create(templateID);
-			if (dummy == null) return;
-			this.graphics = dummy.graphics;
-			this.graphics.setPosition(xCoor, yCoor);
-			this.extraSprites = dummy.extraSprites;
-		} else this.graphics = new Sprite();
 	}
     
 }

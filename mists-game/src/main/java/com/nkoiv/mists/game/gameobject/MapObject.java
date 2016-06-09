@@ -309,6 +309,7 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 
 	@Override
 	public void write(Kryo kryo, Output output) {
+		super.write(kryo, output);
 		output.writeInt(templateID);
 		output.writeString(this.name);
 	}
@@ -316,6 +317,7 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 
 	@Override
 	public void read(Kryo kryo, Input input) {
+		super.read(kryo, input);
 		this.templateID = input.readInt();
 		this.name = input.readString();
 	}

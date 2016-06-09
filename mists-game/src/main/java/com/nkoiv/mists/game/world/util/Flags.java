@@ -8,12 +8,17 @@ package com.nkoiv.mists.game.world.util;
 import java.util.HashMap;
 import java.util.Set;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
 /**
  * Abstract class used for tracking various
  * misc variables, mainly within the MapObjects.
  * @author nikok
  */
-public abstract class Flags {
+public abstract class Flags implements KryoSerializable {
     protected HashMap<String, Integer> flags = new HashMap<>();
     /**
     * Flags store any soft information for the object
@@ -73,4 +78,25 @@ public abstract class Flags {
             return false;
         }
     }
+    
+    @Override
+    public void write(Kryo kryo, Output output) {
+    	int flagCount = this.flags.keySet().size();
+    	output.writeInt(flagCount);
+    	for (String s : this.flags.keySet()) {
+    		output.writeString(s);
+    		output.writeInt(this.flags.get(s));
+    	}
+    }
+    
+    @Override
+    public void read(Kryo kryo, Input input) {
+    	int flagCount = input.readInt();
+    	for (int i = 0; i < flagCount; i++) {
+    		String flag = input.readString();
+    		int value = input.readInt();
+    		this.flags.put(flag, value);
+    	}
+    }
+    
 }

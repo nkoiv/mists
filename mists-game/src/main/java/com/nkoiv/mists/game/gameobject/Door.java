@@ -112,25 +112,22 @@ public class Door  extends Structure {
 
 	@Override
 	public void read(Kryo kryo, Input input) {
-		this.templateID = input.readInt();
-		this.name = input.readString();
-		this.collisionLevel = input.readInt();
-		this.IDinLocation = input.readInt();
-		double xCoor = input.readDouble();
-		double yCoor = input.readDouble();
-		//Copy over graphics from library
+		super.read(kryo,  input);
+		this.closedCollisionLevel = input.readInt();
+		this.open = input.readBoolean();
+	}
+	
+	@Override
+	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
 		if (Mists.structureLibrary != null) {
 			Structure dummy = Mists.structureLibrary.create(templateID);
-			if (!(dummy instanceof Wall)) return;
+			if (!(dummy instanceof Door)) return;
 			Door d = (Door)dummy;
 			this.graphics = d.graphics;
-			this.graphics.setPosition(xCoor, yCoor);
 			this.extraSprites = d.extraSprites;
 			this.openImage = d.openImage;
 			this.closedImage = d.closedImage;
 		} else this.graphics = new Sprite();
-		this.closedCollisionLevel = input.readInt();
-		this.open = input.readBoolean();
-		//TODO: Missing flag-handling (locked etc)
+		this.graphics.setPosition(xCoor, yCoor);
 	}
 } 

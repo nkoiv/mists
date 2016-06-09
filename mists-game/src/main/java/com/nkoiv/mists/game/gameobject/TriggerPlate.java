@@ -165,12 +165,7 @@ public class TriggerPlate extends MapObject {
 
 	@Override
 	public void read(Kryo kryo, Input input) {
-		this.templateID = input.readInt();
-		this.name = input.readString();
-		this.collisionLevel = input.readInt();
-		this.IDinLocation = input.readInt();
-		double xCoor = input.readDouble();
-		double yCoor = input.readDouble();
+		super.read(kryo, input);
 		this.requireReEntry = input.readBoolean();
 		this.clear = input.readBoolean();
 		this.triggerOnlyOnce = input.readBoolean();
@@ -182,16 +177,6 @@ public class TriggerPlate extends MapObject {
 		for (int i = 0; i < triggerCount; i++) {
 			this.touchTriggers.add((Trigger)kryo.readClassAndObject(input));
 		}
-		
-		//Copy over graphics from library
-		if (Mists.structureLibrary != null) {
-			Structure dummy = Mists.structureLibrary.create(templateID);
-			if (dummy == null) return;
-			this.graphics = dummy.graphics;
-			this.graphics.setPosition(xCoor, yCoor);
-		} else this.graphics = new Sprite();
-		
-		
 	}
     
 }
