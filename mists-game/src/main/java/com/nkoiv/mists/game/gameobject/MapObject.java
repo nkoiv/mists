@@ -12,7 +12,6 @@ import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Global;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
@@ -33,7 +32,7 @@ import javafx.scene.shape.Shape;
  *  Unlike a mere Sprite (which it heavily utilizes), MapObject is tied to a certain Location.
  * @author nkoiv
  */
-public class MapObject extends Flags implements Global, Templatable, KryoSerializable {
+public class MapObject extends Flags implements Templatable, KryoSerializable {
     protected int templateID;
     protected String name;
     protected MovingGraphics graphics;
@@ -307,7 +306,6 @@ public class MapObject extends Flags implements Global, Templatable, KryoSeriali
         }
         return true;
     }
-
 
 	@Override
 	public void write(Kryo kryo, Output output) {
