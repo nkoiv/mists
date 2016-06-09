@@ -312,6 +312,9 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 		super.write(kryo, output);
 		output.writeInt(templateID);
 		output.writeString(this.name);
+		output.writeInt(this.IDinLocation);
+		output.writeDouble(this.getXPos());
+		output.writeDouble(this.getYPos());
 	}
 
 
@@ -320,6 +323,20 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 		super.read(kryo, input);
 		this.templateID = input.readInt();
 		this.name = input.readString();
+		this.IDinLocation = input.readInt();
+		double xCoor = input.readDouble();
+		double yCoor = input.readDouble();
+		this.readGraphicsFromLibrary(templateID, xCoor, yCoor);
 	}
+	
+	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (dummy == null) return;
+			this.graphics = dummy.graphics;
+		} else this.graphics = new Sprite();
+		this.graphics.setPosition(xCoor, yCoor);
+	}
+    
     
 }

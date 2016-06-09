@@ -6,6 +6,9 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
@@ -281,5 +284,37 @@ public class Water extends Structure implements HasNeighbours{
         
         return newWater;
     }
+    
+    @Override
+    public void write(Kryo kryo, Output output) {
+    	super.write(kryo, output);
+    	for (int i = 0; i < 8;  i++) {
+    		output.writeBoolean(this.neighbours[i]);
+    	}
+    }
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		super.read(kryo, input);
+		this.neighbours = new boolean[8];
+		for (int i = 0; i < 8; i++) {
+			this.neighbours[i] = input.readBoolean();
+		}
+	}
+	
+	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+		if (Mists.structureLibrary != null) {
+			Structure dummy = Mists.structureLibrary.create(templateID);
+			if (dummy == null) return;
+			this.graphics = dummy.graphics;
+			this.extraSprites = dummy.extraSprites;
+			if (dummy instanceof Water) {
+				this.waterImages = ((Water)dummy).waterImages;
+				this.waterImages_alt = ((Water)dummy).waterImages_alt;
+				this.animatedTiles = ((Water)dummy).animatedTiles;
+			}
+		} else this.graphics = new Sprite();
+		this.graphics.setPosition(xCoor, yCoor);
+	}
     
 }

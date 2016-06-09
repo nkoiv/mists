@@ -149,9 +149,6 @@ public class Structure extends MapObject {
 	public void write(Kryo kryo, Output output) {
 		super.write(kryo, output);
 		output.writeInt(this.collisionLevel);
-		output.writeInt(this.IDinLocation);
-		output.writeDouble(this.getXPos());
-		output.writeDouble(this.getYPos());
 	}
 
 
@@ -159,11 +156,6 @@ public class Structure extends MapObject {
 	public void read(Kryo kryo, Input input) {
 		super.read(kryo, input);
 		this.collisionLevel = input.readInt();
-		this.IDinLocation = input.readInt();
-		double xCoor = input.readDouble();
-		double yCoor = input.readDouble();
-		//Copy over graphics from library
-		readGraphicsFromLibrary(templateID, xCoor, yCoor);
 	}
 	
 	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
