@@ -375,12 +375,16 @@ public class LocationState implements GameState {
         Mists.logger.info("Game menu toggled");
         if (!gameMenuOpen) {
             gameMenuOpen = true;
-            TiledPanel gameMenu = new TiledPanel(this, "GameMenu", 220, 300, 100, 100,Mists.graphLibrary.getImageSet("panelBeige"));
-            TextButton resumeButton = new LocationButtons.ResumeButton("Resume", 200, 60, this.game);
+            TiledPanel gameMenu = new TiledPanel(this, "GameMenu", 220, 360, 100, 100,Mists.graphLibrary.getImageSet("panelBeige"));
+            //TextButton resumeButton = new LocationButtons.ResumeButton("Resume", 200, 60, this.game);
+            TextButton saveButton = new LocationButtons.SaveButton("Save player", 200, 60, game);
+            TextButton loadButton = new LocationButtons.LoadButton("Load player", 200, 60, game);
             TextButton optionsButton = new TextButton("TODO: Options", 200, 60);
             GoMainMenuButton mainMenuButton = new GoMainMenuButton(this.game, 200, 60);
             QuitButton quitButton = new QuitButton("Quit game", 200, 60);
-            gameMenu.addSubComponent(resumeButton);
+            //gameMenu.addSubComponent(resumeButton);
+            gameMenu.addSubComponent(saveButton);
+            gameMenu.addSubComponent(loadButton);
             gameMenu.addSubComponent(optionsButton);
             gameMenu.addSubComponent(mainMenuButton);
             gameMenu.addSubComponent(quitButton);

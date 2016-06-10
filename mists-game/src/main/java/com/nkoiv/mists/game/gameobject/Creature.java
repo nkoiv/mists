@@ -907,7 +907,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 			output.writeInt(currentDialogue.getCardNumber());
 		}
 		//Inventory
-		kryo.writeClassAndObject(output, this.inventory);
+		kryo.writeObject(output, this.inventory);
 	}
 
 
@@ -915,7 +915,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 	public void read(Kryo kryo, Input input) {
 		super.read(kryo, input);
 		//Attributes
+		Mists.logger.info("Reading attributes");
 		int attributeCount = input.readInt();
+		Mists.logger.info("Attribute count: "+attributeCount);
 		for (int i = 0; i < attributeCount; i++) {
 			String attribute = input.readString();
 			int attributeValue = input.readInt();
@@ -944,7 +946,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 			this.setCurrentDialogue(d);
 		}
 		//Inventory
-		Object inv = (Inventory)kryo.readClassAndObject(input);
+		Object inv = (Inventory)kryo.readObject(input, Inventory.class);
 		if (inv instanceof Inventory) this.inventory = (Inventory)inv;
 	}
 	

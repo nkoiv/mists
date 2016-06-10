@@ -9,6 +9,9 @@ package com.nkoiv.mists.game.ui;
 
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.SaveManager;
+
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
@@ -19,6 +22,52 @@ import javafx.scene.input.MouseEvent;
  */
 public class LocationButtons {
     public static int DISPLAY_PATHS = 1;
+    
+    public static class SaveButton extends TextButton {
+    	private final Game game;
+    	
+    	public SaveButton(String name, double width, double height, Game game) {
+            super(name, width, height);
+            this.game = game;
+        }
+    	
+        @Override
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                Mists.logger.info("Trying to save the game");
+                try {
+					SaveManager.testKryoSave(game.getPlayer());
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        }
+        
+    }
+    
+    public static class LoadButton extends TextButton {
+    	private final Game game;
+    	
+    	public LoadButton(String name, double width, double height, Game game) {
+            super(name, width, height);
+            this.game = game;
+        }
+    	
+        @Override
+        public void handleMouseEvent(MouseEvent me) {
+            if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                Mists.logger.info("Trying to load the game");
+                try {
+					SaveManager.testKryoLoad(game);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        }
+        
+    }
     
     public  static class ResumeButton extends TextButton {
         private final Game game;
