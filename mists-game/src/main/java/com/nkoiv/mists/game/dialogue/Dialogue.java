@@ -20,6 +20,7 @@ import java.util.HashMap;
  * @author nikok
  */
 public class Dialogue {
+	private int id;
     private int startingCard;
     private int currentCard;
     private HashMap<Integer, Card> cards;
@@ -98,8 +99,17 @@ public class Dialogue {
         return this.talker;
     }
     
+    public void setID(int id) {
+    	this.id = id;
+    }
+    
+    public int getID() {
+    	return this.id;
+    }
+    
     public Dialogue createFromTemplate() {
         Dialogue d = new Dialogue();
+        d.id = this.id;
         d.setStartingCard(this.startingCard);
         for (int i : this.cards.keySet()) {
             Card c = this.cards.get(i);
@@ -113,5 +123,6 @@ public class Dialogue {
     public String toString() {
         return this.cards.size()+" cards in dialogue";
     }
+
     
 }

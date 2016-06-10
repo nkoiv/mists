@@ -898,6 +898,16 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 		if (this.ai instanceof MonsterAI) aiType = 1;
 		if (this.ai instanceof CompanionAI) aiType = 2;
 		output.writeInt(aiType);
+		//Dialogue
+		//TODO: Rethink this. Consider a DialogueManager, akin to Puzzle and Quest managers
+		if (this.currentDialogue == null) output.writeBoolean(false);
+		else {
+			output.writeBoolean(true);
+			output.writeInt(currentDialogue.getID());
+			output.writeInt(currentDialogue.getCardNumber());
+		}
+		//Inventory
+		kryo.writeClassAndObject(output, this.inventory);
 	}
 
 
@@ -925,6 +935,17 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 			case 2: this.ai = new CompanionAI(this);
 			default: this.ai = null;
 		}
+		//Dialogue
+		boolean hasDialogue = input.readBoolean();
+		if (hasDialogue) {
+			int dialogueID = input.readInt();
+			Dialogue d = Mists.dialogueLibrary.getDialogue(dialogueID);
+			if (d!=null) d.setCurrentCard(input.readInt());
+			this.setCurrentDialogue(d);
+		}
+		//Inventory
+		Object inv = (Inventory)kryo.readClassAndObject(input);
+		if (inv instanceof Inventory) this.inventory = (Inventory)inv;
 	}
 	
 	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {

@@ -7,6 +7,10 @@
  */
 package com.nkoiv.mists.game.items;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
@@ -18,7 +22,7 @@ import java.util.Stack;
  * Inventory is a storage container for items
  * @author nikok
  */
-public class Inventory {
+public class Inventory implements KryoSerializable {
     private Creature owner;
     private Item[] items;
     private String[] slotnames;
@@ -321,5 +325,28 @@ public class Inventory {
         //Mists.logger.info("Generated inv content hash: "+hash);
         return hash;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(this.itemSize);
+		for (int i = 0; i < this.itemSize; i++) {
+			if (this.items[i] == null) output.write(-1);
+			else output.write(items[i].baseID);
+		}
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.itemSize = input.read();
+		this.items = new Item[itemSize];
+		this.slotnames = new String[itemSize];
+		this.prepareInventory();
+		for (int i = 0; i < itemSize; i++) {
+			int itemID = input.readInt();
+			if (itemID != -1) {
+				this.items[i] =  Mists.itemLibrary.create(itemID);
+			}
+		}
+	}
     
 }
