@@ -22,14 +22,33 @@ import java.util.logging.Level;
  */
 public class ActionLibrary <E extends Action> {
     private HashMap<String, E> lib;
+    private HashMap<Integer, String> libByID;
     
     public ActionLibrary() {
         this.lib = new HashMap<>();
+        this.libByID = new HashMap<>();
+    }
+    
+    private int getNextFreeID(int id) {
+    	int nextFreeID = id;
+    	while (this.libByID.containsKey(nextFreeID)) {
+    		nextFreeID++;
+    	}
+    	if (id != nextFreeID) Mists.logger.warning("ActionLibrary ID conflict. ID "+id+" changed to "+nextFreeID);
+    	return nextFreeID;
+    }
+    
+    public E getTemplate(int actionID) {
+    	return this.getTemplate(this.libByID.get(actionID));
     }
     
     public E getTemplate(String actionName) {
         String lowercase = actionName.toLowerCase();
         return this.lib.get(lowercase);
+    }
+    
+    public E create(int actionID) {
+    	return this.create(this.libByID.get(actionID));
     }
     
     public E create(String actionName) {
@@ -46,6 +65,8 @@ public class ActionLibrary <E extends Action> {
         prepareAdd(e);
         String lowercasename = e.getName().toLowerCase();
         this.lib.put(lowercasename, e);
+        e.setID(this.getNextFreeID(e.getID()));
+        this.libByID.put(e.getID(), lowercasename);
         Mists.logger.log(Level.INFO, "{0} added into library", e.getName());
     }
     

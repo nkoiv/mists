@@ -7,14 +7,17 @@
  */
 package com.nkoiv.mists.game.actions;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Combatant;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.gameobject.Templatable;
 import com.nkoiv.mists.game.world.util.Flags;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -27,9 +30,8 @@ import java.util.logging.Level;
  * TODO: (?) All actions are stored in the (static) allById -map
  * @author nkoiv
  */
-public class Action extends Flags implements Serializable {
+public class Action extends Flags implements Templatable {
     protected ActionType actionType;
-    private static int nextId = 0;
     protected String name;
     protected int id;
     protected MapObject owner;
@@ -45,19 +47,10 @@ public class Action extends Flags implements Serializable {
     public Action(String name, ActionType actionType) {
         this.name = name;
         this.actionType = actionType;
-        this.id = nextId++;
         this.flags = new HashMap<>();
         this.effects = new ArrayList<>();
     }
     
-    /*
-    private static Map<Integer, Action> getAllById() {
-        if(allById == null) {
-            allById = new HashMap<>();
-        }
-        return allById;
-    }
-    */
     /**
     * Actions are owned by the user
     * setOwner gives this action to the MapObject
@@ -129,6 +122,13 @@ public class Action extends Flags implements Serializable {
         return false;
     }
     
+    public int getID() {
+    	return this.id;
+    }
+    
+    public void setID(int id) {
+    	this.id = id;
+    }
     
     public String getName() {
         return this.name;
@@ -165,6 +165,21 @@ public class Action extends Flags implements Serializable {
         }
         return a;
     }
+    
+	@Override
+	public void write(Kryo kryo, Output output) {
+		super.write(kryo, output);
+		output.writeInt(id);
+		output.writeString(this.name);
+	}
+
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		super.read(kryo, input);
+		this.id = input.readInt();
+		this.name = input.readString();
+	}
     
     @Override
     public String toString() {

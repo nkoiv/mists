@@ -10,6 +10,9 @@ package com.nkoiv.mists.game.gameobject;
 import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.AI.MonsterAI;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
@@ -115,25 +118,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         this(name, imageView, frameCount, startingXTile, startingYTile, 0,0, frameWidth, frameHeight);
     }
 
-    /*Constructing a creature with only a still image
-    * TODO: This should not be needed once Libraries are done
-    */
-    /*
-    public Creature(String name, Image image, Location location, double xCoor, double yCoor) {
-        super(name, image, location, xCoor, yCoor);
-        this.setFacing(Direction.DOWN);
-        this.initializeAttributes();
-        this.initializeFlags();
-        this.ai = new CreatureAI(this);
-        this.crossableTerrain = new ArrayList<>();
-        this.crossableTerrain.add(0);
-    }
-    */
-    
-    //TODO: Make this load stats from creature library
     private void initializeAttributes() {
+    	this.attributes = new HashMap<>();
         this.visionRange = 10;
-        this.attributes = new HashMap<>();
         this.setAttribute("Strength", 1);
         this.setAttribute("Agility", 1);
         this.setAttribute("Intelligence", 1);
@@ -888,6 +875,70 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         }
         return nc;
     }
+    
+    @Override
+	public void write(Kryo kryo, Output output) {
+		super.write(kryo, output);
+		//Attributes
+		int attributeCount = this.attributes.size();
+		output.write(attributeCount);
+		for (String s : this.attributes.keySet()) {
+			output.writeString(s);
+			output.writeInt(this.attributes.get(s));
+		}
+		//Actions
+		int actionCount = this.availableActions.size();
+		output.writeInt(actionCount);
+		for (String s : this.availableActions.keySet()) {
+			output.writeInt(this.availableActions.get(s).getID());
+		}
+		//AI
+		//TODO: Like with Templates, this needs rethinking
+		int aiType = 0;
+		if (this.ai instanceof MonsterAI) aiType = 1;
+		if (this.ai instanceof CompanionAI) aiType = 2;
+		output.writeInt(aiType);
+	}
+
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		super.read(kryo, input);
+		//Attributes
+		int attributeCount = input.readInt();
+		for (int i = 0; i < attributeCount; i++) {
+			String attribute = input.readString();
+			int attributeValue = input.readInt();
+			this.attributes.put(attribute, attributeValue);
+		}
+		//Actions
+		int actionCount = input.readInt();
+		for (int i = 0; i < actionCount; i++) {
+			int actionID = input.readInt();
+			Action a = Mists.actionLibrary.create(actionID);
+			this.addAction(a);
+		}
+		//AI
+		int aiType = input.readInt();
+		switch (aiType) {
+			case 1: this.ai = new MonsterAI(this);
+			case 2: this.ai = new CompanionAI(this);
+			default: this.ai = null;
+		}
+	}
+	
+	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+		if (Mists.creatureLibrary != null) {
+			Creature dummy = Mists.creatureLibrary.create(templateID);
+			if (dummy == null) return;
+			this.graphics = dummy.graphics;
+			this.spriteAnimations = new HashMap<>();
+	        for (String s : dummy.spriteAnimations.keySet()) {
+	            this.spriteAnimations.put(s, dummy.spriteAnimations.get(s));
+	        }
+		} else this.graphics = new Sprite();
+		this.graphics.setPosition(xCoor, yCoor);
+	}
     
     @Override
     public String[] getInfoText() {

@@ -330,7 +330,7 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 	}
 	
 	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
-		if (Mists.structureLibrary != null) {
+		if (this instanceof Structure && Mists.structureLibrary != null) {
 			Structure dummy = Mists.structureLibrary.create(templateID);
 			if (dummy == null) return;
 			this.graphics = dummy.graphics;
