@@ -321,11 +321,13 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 	@Override
 	public void read(Kryo kryo, Input input) {
 		super.read(kryo, input);
+		Mists.logger.info("Reading MOB:");
 		this.templateID = input.readInt();
 		this.name = input.readString();
 		this.IDinLocation = input.readInt();
 		double xCoor = input.readDouble();
 		double yCoor = input.readDouble();
+		Mists.logger.info("TemplateID: "+templateID+" name: "+name+" locationID: "+IDinLocation);
 		this.readGraphicsFromLibrary(templateID, xCoor, yCoor);
 	}
 	

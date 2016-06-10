@@ -312,6 +312,7 @@ public class Game {
     
     public void setPlayer(PlayerCharacter p) {
         this.player = p;
+        if (currentLocation != null) currentLocation.addPlayerCharacter(p, p.getXPos(), p.getYPos());
     }
     
     private void moveToDummyLocation() {

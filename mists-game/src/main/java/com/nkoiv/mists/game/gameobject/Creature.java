@@ -442,10 +442,10 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     */
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
+        if (this.isFlagged("visible") && this.getLocation() != null) {
             if (this.graphics instanceof SpriteSkeleton) ((SpriteSkeleton)this.graphics).render(xOffset, yOffset, gc, this.facing);
             else this.graphics.render(xOffset, yOffset, gc);
-            if (this.ai.getPath()!=null && this.getLocation().isFlagged("drawPaths")) {
+            if (this.ai != null && this.ai.getPath()!=null && this.getLocation().isFlagged("drawPaths")) {
                 this.ai.getPath().drawPath(gc, Mists.TILESIZE, xOffset, yOffset);
             }
         }
@@ -880,14 +880,14 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 	public void write(Kryo kryo, Output output) {
 		super.write(kryo, output);
 		//Attributes
-		int attributeCount = this.attributes.size();
-		output.write(attributeCount);
+		int attributeCount = this.attributes.keySet().size();
+		output.writeInt(attributeCount);
 		for (String s : this.attributes.keySet()) {
 			output.writeString(s);
 			output.writeInt(this.attributes.get(s));
 		}
 		//Actions
-		int actionCount = this.availableActions.size();
+		int actionCount = this.availableActions.keySet().size();
 		output.writeInt(actionCount);
 		for (String s : this.availableActions.keySet()) {
 			output.writeInt(this.availableActions.get(s).getID());
@@ -951,6 +951,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 	}
 	
 	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+		Mists.logger.info("Reading graphics from library, ID: "+templateID+" : "+xCoor+","+yCoor);
 		if (Mists.creatureLibrary != null) {
 			Creature dummy = Mists.creatureLibrary.create(templateID);
 			if (dummy == null) return;
@@ -959,6 +960,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 	        for (String s : dummy.spriteAnimations.keySet()) {
 	            this.spriteAnimations.put(s, dummy.spriteAnimations.get(s));
 	        }
+	        Mists.logger.info("Graphics succesfully loaded");
 		} else this.graphics = new Sprite();
 		this.graphics.setPosition(xCoor, yCoor);
 	}
