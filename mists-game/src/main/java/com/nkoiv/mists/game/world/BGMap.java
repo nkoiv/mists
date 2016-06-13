@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Structure;
 import java.util.ArrayList;
@@ -13,9 +17,9 @@ import javafx.scene.image.Image;
 
 /**
  *
- * @author lp35567
+ * @author nkoiv
  */
-public class BGMap implements GameMap{
+public class BGMap implements GameMap, KryoSerializable{
     
     private Image image;
     private double width;
@@ -49,6 +53,16 @@ public class BGMap implements GameMap{
     @Override
     public double getHeight() {
         return this.height;
+    }
+
+    @Override
+    public void write(Kryo kryo, Output output) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void read(Kryo kryo, Input input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 
