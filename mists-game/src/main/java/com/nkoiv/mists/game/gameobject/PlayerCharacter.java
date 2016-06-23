@@ -1,7 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This software (code) is free to use as it is, as long as it's not used for commercial purposes
+ * and as long as you credit the author accordingly. For commercial purposes please contact the author.
+ * The software is provided "as is" with absolutely no warranty of any kind.
+ * Using this software is entirely up to you, and the author is in no way responsible for anything you do with it.
+ * (c) nkoiv / Niko Koivumäki
  */
 package com.nkoiv.mists.game.gameobject;
 
@@ -21,13 +23,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 /**
- * PlayerCharacter is currently designed to be unique per game
- * TODO: Implement "World owner" as the main target instead of player,
- * so that several players can coexist in a single game
+ * PlayerCharacter is a creature that is controlled directly by a player.
  * @author nkoiv
  */
 public class PlayerCharacter extends Creature implements Combatant {
     private ArrayList<Creature> companions;
+    
     
     public PlayerCharacter() {
         //Dummy player for testing
@@ -35,21 +36,9 @@ public class PlayerCharacter extends Creature implements Combatant {
         //SpriteSkeleton playerSkeleton = new SpriteSkeleton();
         //playerSkeleton.addPart("body", new Sprite(new Image("/images/lini_test.png"),0,0));
         //this.graphics = playerSkeleton;
-        /*
-        this.equipWeapon((Weapon)Mists.itemLibrary.create("sword"));
-        this.addItem(Mists.itemLibrary.create("axe"));
-        this.addItem(Mists.itemLibrary.create("himmutoy"));
-        */
-        
-        this.setAnimation("downMovement", new ImageView("/images/lini.png"), 3, 0, 0, 0, 0, 32, 32 );
-        this.setAnimation("leftMovement", new ImageView("/images/lini.png"), 3, 0, 32, 0, 0, 32, 32 );
-        this.setAnimation("rightMovement", new ImageView("/images/lini.png"), 3, 0, 64, 0, 0, 32, 32 );
-        this.setAnimation("upMovement", new ImageView("/images/lini.png"), 3, 0, 96, 0, 0, 32, 32 );   
-        this.setAnimation("downDash", new ImageView("/images/lini_dash.png"), 3, 0, 0, 0, 0, 32, 32 );
-        this.setAnimation("leftDash", new ImageView("/images/lini_dash.png"), 3, 0, 32, 0, 0, 32, 32 );
-        this.setAnimation("rightDash", new ImageView("/images/lini_dash.png"), 3, 0, 64, 0, 0, 32, 32 );
-        this.setAnimation("upDash", new ImageView("/images/lini_dash.png"), 3, 0, 96, 0, 0, 32, 32 );
-        
+
+        this.setWalkAnimations("/images/lini.png", 3, 32);
+        this.setDashAnimations("/Images/lini_dash.png", 3, 32);
         
         this.setFlag("alive", 1);
         this.setMaxHealth(300);
@@ -60,7 +49,9 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.lightSize = 2;
         this.lightColor = Color.BLUEVIOLET;
         this.availableActions = new HashMap<>();
+        
     }
+    
     
     public PlayerCharacter(String name) {
         super (name,new Image("/images/himmu.png"));
@@ -77,6 +68,22 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.availableActions = new HashMap<>();
     }
     
+    protected void setWalkAnimations(String imagepath, int frameCount, int imageSize) {
+    	ImageView iw = new ImageView(imagepath);
+        this.setAnimation("downMovement", iw, frameCount, 0, 0, 0, 0, imageSize, imageSize );
+        this.setAnimation("leftMovement", iw, frameCount, 0, imageSize, 0, 0, imageSize, imageSize );
+        this.setAnimation("rightMovement", iw, frameCount, 0, imageSize*2, 0, 0, imageSize, imageSize );
+        this.setAnimation("upMovement", iw, frameCount, 0, imageSize*3, 0, 0, imageSize, imageSize );   
+        
+    }
+    
+    protected void setDashAnimations(String imagepath, int frameCount, int imageSize) {
+    	ImageView iw = new ImageView(imagepath);
+    	this.setAnimation("downDash", iw, frameCount, 0, 0, 0, 0, imageSize, imageSize );
+        this.setAnimation("leftDash", iw, frameCount, 0, imageSize, 0, 0, imageSize, imageSize );
+        this.setAnimation("rightDash", iw, frameCount, 0, imageSize*2, 0, 0, imageSize, imageSize );
+        this.setAnimation("upDash", iw, frameCount, 0, imageSize*3, 0, 0, imageSize, imageSize );
+    }
     
     private static SpriteSkeleton generatePlayerSkeleton() {
         return null;
