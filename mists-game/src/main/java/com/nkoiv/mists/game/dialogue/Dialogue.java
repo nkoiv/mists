@@ -7,6 +7,11 @@
  */
 package com.nkoiv.mists.game.dialogue;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.HashMap;
 
@@ -19,7 +24,7 @@ import java.util.HashMap;
  * 
  * @author nikok
  */
-public class Dialogue {
+public class Dialogue implements KryoSerializable {
 	private int id;
     private int startingCard;
     private int currentCard;
@@ -123,6 +128,21 @@ public class Dialogue {
     public String toString() {
         return this.cards.size()+" cards in dialogue";
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(this.id);
+		output.writeInt(this.currentCard);
+		
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.id = input.readInt();
+		this.currentCard = input.readInt();
+		this.startingCard = Mists.dialogueLibrary.getDialogue(this.id).startingCard;
+		this.cards = Mists.dialogueLibrary.getDialogue(this.id).cards;
+	}
 
     
 }
