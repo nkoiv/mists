@@ -298,6 +298,9 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
         if (this.templateID != other.templateID) {
             return false;
         }
+        if (this.name != other.name) {
+        	return false;
+        }
         if (this.IDinLocation != other.IDinLocation) {
             return false;
         }
