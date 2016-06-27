@@ -11,6 +11,7 @@ import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.actions.ProjectileSpell;
 import com.nkoiv.mists.game.actions.ProjectileWeaponAttack;
 import com.nkoiv.mists.game.controls.LocationControls;
+import com.nkoiv.mists.game.dialogue.DialogueManager;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.GameState;
@@ -65,6 +66,7 @@ public class Game {
     
     public DungeonGenerator mapGen;
     public QuestManager questManager;
+    public DialogueManager dialogueManager;
     
     private HashMap<Integer,GameState> gameStates;
     public GameState currentState;
@@ -108,6 +110,9 @@ public class Game {
         questManager.addQuest(QuestManager.generateTestFetchQuest());
         questManager.openQuest(1);
         questManager.openQuest(2);
+        
+        //Initialize DialogueManager
+        this.dialogueManager = new DialogueManager();
     }
     
     public void start() {

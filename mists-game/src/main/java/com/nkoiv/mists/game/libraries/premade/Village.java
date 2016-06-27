@@ -76,8 +76,8 @@ public abstract class Village {
     private static void generateNPCs(LocationTemplate villageTemplate) {
         Mists.logger.info("Generating VillageTemplate NPCs");
         Creature villageShopkeeper = Mists.creatureLibrary.create("VillageShopkeeper");
-        villageShopkeeper.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(10));
-        
+        villageTemplate.dialogues.put(villageShopkeeper.getName(), 10);
+        //villageShopkeeper.setCurrentDialogue(Mists.dialogueLibrary.getDialogue(10));
         villageShopkeeper.setPosition(45*Mists.TILESIZE, 17*Mists.TILESIZE);
         CreatureAI shopkeeperAI = new CreatureAI(villageShopkeeper);
         shopkeeperAI.setFlag("homeX", (int)villageShopkeeper.getXPos());

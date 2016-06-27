@@ -60,8 +60,6 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     protected Inventory inventory;
     protected Weapon equippedWeapon; //TODO: Proper inventorymanagement isntead of this
     
-    protected Dialogue currentDialogue;
-    
     /*Attributes are stored in a separate HashMap
     * These are not Flags because they're limited to creatures
     * Would be too easy to accidentally make walls alive if they were
@@ -293,11 +291,13 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
     
     public void setCurrentDialogue(Dialogue d) {
-        this.currentDialogue = d;
+    	if (Mists.MistsGame == null || Mists.MistsGame.dialogueManager == null) return;
+    	else Mists.MistsGame.dialogueManager.setDialogue(this, d);
     }
     
     public Dialogue getCurrentDialogue() {
-        return this.currentDialogue;
+    	if (Mists.MistsGame == null || Mists.MistsGame.dialogueManager == null) return null;
+    	else return Mists.MistsGame.dialogueManager.getDialogue(this);
     }
     
     /**
@@ -307,8 +307,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
      */
     @Override
     public Trigger[] getTriggers() {
-        if (this.currentDialogue != null) {
-            DialogueTrigger dt = new DialogueTrigger(this, this.currentDialogue);
+        if (this.getCurrentDialogue() != null) {
+            DialogueTrigger dt = new DialogueTrigger(this, this.getCurrentDialogue());
             return new Trigger[]{dt};
         }
         else return new Trigger[0];
@@ -844,11 +844,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
             }
         }
         nc.availableActions = newActions;
-        
-        if (this.currentDialogue != null) {
-            nc.setCurrentDialogue(currentDialogue.createFromTemplate());
-        }
-        
+
         //Items
         //TODO: Should items be cloned like this?
         if (!this.inventory.isEmpty()) {
@@ -898,14 +894,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 		if (this.ai instanceof MonsterAI) aiType = 1;
 		if (this.ai instanceof CompanionAI) aiType = 2;
 		output.writeInt(aiType);
-		//Dialogue
-		//TODO: Rethink this. Consider a DialogueManager, akin to Puzzle and Quest managers
-		if (this.currentDialogue == null) output.writeBoolean(false);
-		else {
-			output.writeBoolean(true);
-			output.writeInt(currentDialogue.getID());
-			output.writeInt(currentDialogue.getCardNumber());
-		}
+
 		//Inventory
 		kryo.writeObject(output, this.inventory);
 	}

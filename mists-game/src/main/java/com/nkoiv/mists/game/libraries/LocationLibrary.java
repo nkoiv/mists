@@ -8,6 +8,7 @@
 package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
@@ -101,12 +102,14 @@ public class LocationLibrary  {
             Mists.logger.info("Template map was found: "+template.map.toString());
             l = new Location(template.name, template.map);
         }
-        Mists.logger.info("Location map generated, mobing to template mobs");
+        Mists.logger.info("Location map generated, adding template mobs to location");
         l.loading = true;
         for (MapObject mob : template.mobs) {
             l.addMapObject(mob);
             if (mob.getXPos() == 0 && mob.getYPos() == 0) l.setMobInRandomOpenSpot(mob);
         }
+        Mists.logger.info("Linking dialogue to map objects");
+        addDialoguesToManager(l.getBaseID(), template.dialogues);
         Mists.logger.info("Initializing puzzles for the location");
         for (Puzzle p : template.puzzles) {
             l.getPuzzleManager().addPuzzle(p);
@@ -122,6 +125,7 @@ public class LocationLibrary  {
                 entranceFound = true;
             }
         }
+        Mists.logger.info("Entrance generated");
         //If no MapEntrance waws found, generate one
         /*
         if (!entranceFound) {
@@ -138,6 +142,15 @@ public class LocationLibrary  {
         return l;
     }
     
+    private void addDialoguesToManager(int locationID, HashMap<String, Integer> dialogues) {
+    	if (dialogues.isEmpty()) return;
+    	Mists.logger.info("Linking dialogues: "+dialogues.toString());
+    	for (String mobname : dialogues.keySet()) {
+    		int dialogueID = dialogues.get(mobname);
+    		Mists.logger.info("Adding " + mobname + " with dialogueID " + dialogueID);
+    		Mists.MistsGame.dialogueManager.setDialogue(mobname, dialogueID);	
+    	}
+    }
         
     //TODO: Templates shouldn't be needed outside this class(?)
     /*
@@ -172,6 +185,7 @@ public class LocationLibrary  {
         public ArrayList<MapObject> mobs;
         public ArrayList<Puzzle> puzzles;
         public ArrayList<Roof> roofs;
+        public HashMap<String, Integer> dialogues;
         public double lightlevel;
         public String music;
         
@@ -181,6 +195,7 @@ public class LocationLibrary  {
             this.mobs = new ArrayList();
             this.puzzles = new ArrayList();
             this.roofs = new ArrayList();
+            this.dialogues = new HashMap<>();
             this.music = "none";
         }
 
