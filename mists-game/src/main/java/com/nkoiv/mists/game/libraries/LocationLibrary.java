@@ -109,7 +109,7 @@ public class LocationLibrary  {
             if (mob.getXPos() == 0 && mob.getYPos() == 0) l.setMobInRandomOpenSpot(mob);
         }
         Mists.logger.info("Linking dialogue to map objects");
-        addDialoguesToManager(l.getBaseID(), template.dialogues);
+        addDialoguesToManager(template.dialogues);
         Mists.logger.info("Initializing puzzles for the location");
         for (Puzzle p : template.puzzles) {
             l.getPuzzleManager().addPuzzle(p);
@@ -142,7 +142,7 @@ public class LocationLibrary  {
         return l;
     }
     
-    private void addDialoguesToManager(int locationID, HashMap<String, Integer> dialogues) {
+    private void addDialoguesToManager(HashMap<String, Integer> dialogues) {
     	if (dialogues.isEmpty()) return;
     	Mists.logger.info("Linking dialogues: "+dialogues.toString());
     	for (String mobname : dialogues.keySet()) {

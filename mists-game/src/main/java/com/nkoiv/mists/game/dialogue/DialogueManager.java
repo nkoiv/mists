@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.world.Location;
@@ -26,7 +30,7 @@ import com.nkoiv.mists.game.world.Location;
  * to a map object. When a dialogue is called from there, it's moved to the
  * normal storage.
  */
-public class DialogueManager {
+public class DialogueManager implements KryoSerializable {
 	private TreeMap<Integer, HashMap<Integer, Dialogue>> openDialogues;
 	private HashMap<String, Dialogue> waitingDialogues;
 	
@@ -98,6 +102,38 @@ public class DialogueManager {
 		while (!cleanable.isEmpty()) {
 			int id = cleanable.pop();
 			openDialogues.get(locationID).remove(id);
+		}
+	}
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		//Write the amount of locations dialogue is stored for
+		output.writeInt(this.openDialogues.keySet().size());
+		for (int key : openDialogues.keySet()) {
+			output.writeInt(key);
+			HashMap<Integer, Dialogue> d = openDialogues.get(key);
+			//Write the amount of dialogue tied to this particular location
+			output.write(d.keySet().size());
+			for (int i : d.keySet()) {
+				//Write each dialogue along with the mobID it's tied to
+				output.writeInt(i);
+				kryo.writeObject(output, d.get(i));
+			}
+		}
+		
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		int locationCount = input.readInt();
+		for (int l = 0; l < locationCount; l++) {
+			int locationID = input.readInt();
+			int dialogues = input.readInt();
+			for (int d = 0; d < dialogues; d++) {
+				int mobID = input.readInt();
+				Dialogue dialogue = kryo.readObject(input, Dialogue.class);
+				this.setDialogue(locationID, mobID, dialogue);
+			}
 		}
 	}
 	
