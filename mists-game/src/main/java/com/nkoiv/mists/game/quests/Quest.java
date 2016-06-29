@@ -8,12 +8,17 @@ package com.nkoiv.mists.game.quests;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
 /**
  * A Quest is a task (or a list of tasks) that are tracked
  * for the player. 
  * @author nikok
  */
-public class Quest {
+public class Quest implements KryoSerializable {
     private String title;
     private String textEntry;
     private int questID;
@@ -106,4 +111,28 @@ public class Quest {
     public void addTask(QuestTask task) {
         this.tasks.add(task);
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(questID);
+		output.writeString(title);
+		output.writeString(textEntry);
+		output.writeInt(tasks.size());
+		for (QuestTask t : tasks) {
+			kryo.writeObject(output, t);
+		}
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.questID = input.readInt();
+		this.title = input.readString();
+		this.textEntry = input.readString();
+		int tasks = input.readInt();
+		this.tasks = new ArrayList<>();
+		for (int i = 0; i < tasks; i++) {
+			QuestTask t = kryo.readObject(input, QuestTask.class);
+			this.tasks.add(t);
+		}
+	}
 }

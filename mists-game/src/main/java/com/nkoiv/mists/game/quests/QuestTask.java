@@ -5,11 +5,16 @@
  */
 package com.nkoiv.mists.game.quests;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
 /**
  * QuestTask is a single tracked task within a quest.
  * @author nikok
  */
-public class QuestTask {
+public class QuestTask implements KryoSerializable {
         private String description;
         private int currentCount;
         private int requiredCount;
@@ -98,4 +103,41 @@ public class QuestTask {
         public int getObjectiveID() {
             return this.objectiveID;
         }
+        
+        public static int getQuestTypeID(QuestTaskType qt) {
+        	switch (qt) {
+        	case TRIGGERVALUE: return 1;
+        	case CREATUREKILL:return 2;
+        	case ITEMHAVE: return 3;
+        	case ITEMUSE: return 4;
+        	default: return -1;
+        	}
+        }
+        public static QuestTaskType getQuestTaskType(int typeID) {
+        	switch (typeID) {
+        	case 1: return QuestTaskType.TRIGGERVALUE;
+        	case 2: return QuestTaskType.CREATUREKILL;
+        	case 3: return QuestTaskType.ITEMHAVE;
+        	case 4: return QuestTaskType.ITEMUSE;
+        	default: return null;
+        	}
+        }
+
+		@Override
+		public void write(Kryo kryo, Output output) {
+			output.writeString(description);
+			output.writeInt(objectiveID);
+			output.writeByte(getQuestTypeID(this.type));
+			output.writeInt(requiredCount);
+			output.writeInt(currentCount);
+		}
+
+		@Override
+		public void read(Kryo kryo, Input input) {
+			this.description = input.readString();
+			this.objectiveID = input.readInt();
+			this.type = getQuestTaskType(input.readByte());
+			this.requiredCount = input.readInt();
+			this.currentCount = input.readInt();
+		}
     }

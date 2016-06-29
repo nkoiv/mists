@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.quests;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -24,7 +28,7 @@ import java.util.Map;
  * relayed to relevant quests, where needed.
  * @author nikok
  */
-public class QuestManager {
+public class QuestManager implements KryoSerializable {
     private HashMap<Integer, Quest> allQuests = new HashMap<>();
     private HashMap<Integer, Quest> openQuests;
     private HashMap<Integer, Quest> closedQuests;
@@ -37,6 +41,11 @@ public class QuestManager {
         this.initializeUnneededTypes();
     }
     
+    /**
+     * List all the possible QuestTaskTypes as unneeded (untracked).
+     * This list is them trimmed whenever a quest is added, according
+     * to the tasktypes needed.
+     */
     private void initializeUnneededTypes() {
         this.unneededTasks.add(QuestTaskType.CREATUREKILL);
         this.unneededTasks.add(QuestTaskType.ITEMHAVE);
@@ -172,7 +181,7 @@ public class QuestManager {
      * Check if the given quest can be found
      * on the AllQuests listing
      * @param questID ID of the quest
-     * @return 
+     * @return True if the quest ID links to a valid quest
      */
     public boolean questAvailable(int questID) {
         return (this.allQuests.keySet().contains(questID));
@@ -233,5 +242,41 @@ public class QuestManager {
         q.addTask(qt);
         return q;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(this.allQuests.keySet().size());
+		for (int qID : this.allQuests.keySet()) {
+			kryo.writeObject(output, this.allQuests.get(qID));
+		}
+		output.writeInt(this.openQuests.keySet().size());
+		for (int qID : this.openQuests.keySet()) {
+			output.writeInt(qID);
+		}
+		output.writeInt(this.closedQuests.keySet().size());
+		for (int qID : this.closedQuests.keySet()) {
+			output.writeInt(qID);
+		}
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		int totalQuests = input.readInt();
+		for (int i = 0; i < totalQuests; i++) {
+			Quest q = kryo.readObject(input, Quest.class);
+			this.allQuests.put(q.getID(), q);
+		}
+		int openQuests = input.readInt();
+		for (int i = 0; i < openQuests; i++) {
+			int qID = input.readInt();
+			this.openQuests.put(qID, this.allQuests.get(qID));
+		}
+		int closedQuests = input.readInt();
+		for (int i = 0; i< closedQuests; i++) {
+			int qID = input.readInt();
+			this.closedQuests.put(qID, this.allQuests.get(qID));
+		}
+		this.refreshUnneededTypes();
+	}
     
 }
