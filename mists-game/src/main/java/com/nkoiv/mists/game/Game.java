@@ -54,10 +54,10 @@ public class Game {
     private LoadingScreen loadingScreen;
     private boolean loading;
     
-    private final Canvas gameCanvas;
-    private final Canvas shadowCanvas;
-    private final Canvas uiCanvas;
-    public final Canvas debugCanvas;
+    private Canvas gameCanvas;
+    private Canvas shadowCanvas;
+    private Canvas uiCanvas;
+    public Canvas debugCanvas;
     public double WIDTH; //Dimensions of the screen (render area)
     public double HEIGHT; //Dimensions of the screen (render area)
     public double xOffset; //Offsets are used control which part of the map is drawn
@@ -114,7 +114,7 @@ public class Game {
         //Initialize DialogueManager
         this.dialogueManager = new DialogueManager();
     }
-    
+
     public void start() {
         gameStates.put(MAINMENU, new MainMenuState(this));
         gameStates.put(WORLDMAP, new WorldMapState(this));
@@ -414,5 +414,4 @@ public class Game {
         ((LocationState)getGameState(Game.LOCATION)).loadDefaultUI();
     }
 
-    
 }
