@@ -1,10 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This software (code) is free to use as it is, as long as it's not used for commercial purposes
+ * and as long as you credit the author accordingly. For commercial purposes please contact the author.
+ * The software is provided "as is" with absolutely no warranty of any kind.
+ * Using this software is entirely up to you, and the author is in no way responsible for anything you do with it.
+ * (c) nkoiv / Niko Koivumäki
  */
 package com.nkoiv.mists.game.puzzle;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.triggers.Trigger;
@@ -19,7 +25,7 @@ import java.util.ArrayList;
  * just invisible.
  * @author nikok
  */
-public class Puzzle {
+public class Puzzle implements KryoSerializable {
     private ArrayList<PuzzleRequirement> requirements; //Requirements for the puzzle to be complete
     private ArrayList<Trigger> triggers; //Triggers that trigger when puzzle is complete
     private boolean lockedComplete = false;
@@ -95,5 +101,41 @@ public class Puzzle {
         timesTriggered++;
         return triggered;
     }
+
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(requirements.size());
+		for (PuzzleRequirement pr : requirements) {
+			kryo.writeObject(output, pr);
+		}
+		output.writeInt(triggers.size());
+		for (Trigger t : triggers) {
+			kryo.writeClassAndObject(output, t);;
+		}
+		output.writeBoolean(lockedComplete);
+		output.writeBoolean(locksOnCompletion);
+		output.writeInt(amountOfPossibleTriggerings);
+		output.writeInt(timesTriggered);
+	}
+
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		int reqCount = input.readInt();
+		for (int i = 0; i < reqCount; i++) {
+			PuzzleRequirement pr = kryo.readObject(input, PuzzleRequirement.class);
+			this.requirements.add(pr);
+		}
+		int trigCount = input.readInt();
+		for (int i = 0; i < trigCount; i++) {
+			Trigger t = (Trigger)kryo.readClassAndObject(input);
+			this.triggers.add(t);
+		}
+		this.lockedComplete = input.readBoolean();
+		this.locksOnCompletion = input.readBoolean();
+		this.amountOfPossibleTriggerings = input.readInt();
+		this.timesTriggered = input.readInt();
+	}
     
 }

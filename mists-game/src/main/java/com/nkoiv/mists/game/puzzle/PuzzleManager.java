@@ -1,12 +1,19 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This software (code) is free to use as it is, as long as it's not used for commercial purposes
+ * and as long as you credit the author accordingly. For commercial purposes please contact the author.
+ * The software is provided "as is" with absolutely no warranty of any kind.
+ * Using this software is entirely up to you, and the author is in no way responsible for anything you do with it.
+ * (c) nkoiv / Niko Koivumäki
  */
 package com.nkoiv.mists.game.puzzle;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * PuzzleManager keeps a number of Puzzles in check,
@@ -14,7 +21,7 @@ import java.util.Iterator;
  * as need be.
  * @author nikok
  */
-public class PuzzleManager {
+public class PuzzleManager implements KryoSerializable {
     private ArrayList<Puzzle> openPuzzles;
     private static final double WAIT_TIME = 250; //How often should we check for puzzle completions, in milliseconds
     private double passedTime;
@@ -57,7 +64,7 @@ public class PuzzleManager {
                 if (p.isFinished()) removals = true;
             }
             if (removals) {
-                Iterator puzzleIterator = this.openPuzzles.iterator();
+                Iterator<Puzzle> puzzleIterator = this.openPuzzles.iterator();
                 while (puzzleIterator.hasNext()) {
                     Puzzle p = (Puzzle)puzzleIterator.next();
                     if (p.isFinished()) puzzleIterator.remove();
@@ -65,5 +72,23 @@ public class PuzzleManager {
             }
         }
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(this.openPuzzles.size());
+		for (Puzzle p : this.openPuzzles) {
+			kryo.writeObject(output, p);
+		}
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		int puzzles = input.readInt();
+		this.openPuzzles = new ArrayList<>();
+		for (int i = 0; i < puzzles; i ++) {
+			Puzzle p = kryo.readObject(input, Puzzle.class);
+			this.openPuzzles.add(p);
+		}
+	}
     
 }
