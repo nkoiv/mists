@@ -57,13 +57,15 @@ public abstract class Village {
      */
     private static void addRoofs(LocationTemplate villageTemplate) {
         //A 10x8 thatched house roof
-        Roof roof1 = new Roof(new Image("/images/roof_thatch_10x8.png"));
+    	Roof roof1 = new Roof("roof_thatch_10x8");
+        //Roof roof1 = new Roof(new Image("/images/roof_thatch_10x8.png"));
         roof1.setPosition(10*Mists.TILESIZE, 18*Mists.TILESIZE);
         roof1.setHiddenArea(12*Mists.TILESIZE, 21*Mists.TILESIZE, 8*Mists.TILESIZE, 5*Mists.TILESIZE);
         villageTemplate.roofs.add(roof1);
         
         //A 11x7 brick roof
-        Roof roof2 = new Roof(new Image("/images/roof_brick_11x8.png"));
+        Roof roof2 = new Roof("roof_brick_11x8");
+        //Roof roof2 = new Roof(new Image("/images/roof_brick_11x8.png"));
         roof2.setPosition(38*Mists.TILESIZE, 12*Mists.TILESIZE);
         roof2.setHiddenArea(40*Mists.TILESIZE, 16*Mists.TILESIZE, 9*Mists.TILESIZE, 4*Mists.TILESIZE);
         villageTemplate.roofs.add(roof2);

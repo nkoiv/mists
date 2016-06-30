@@ -249,11 +249,16 @@ public class LibLoader {
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {
+    	//TODO: Load smart! From external (YAML?) file?
         //---Base elements---
         lib.addImage("blank", new Image("/images/blank.png"));
         lib.addImage("black", new Image("/images/black.png"));
         
         lib.addImage("lightspot", new Image("/images/light.png"));
+        
+        //---Roofs---
+        lib.addImage("roof_thatch_10x8", new Image("/images/roof_thatch_10x8.png"));
+        lib.addImage("roof_brick_11x8", new Image("/images/roof_brick_11x8.png"));
         
         //---Floor tiles---
 
