@@ -5,6 +5,12 @@
  */
 package com.nkoiv.mists.game.sprites;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.nkoiv.mists.game.Mists;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -15,7 +21,8 @@ import javafx.scene.image.Image;
  * 
  * @author nikok
  */
-public class Roof {
+public class Roof implements KryoSerializable {
+	private String imageName;
     private Image image;
     private boolean visible;
     private double transparency;
@@ -25,7 +32,12 @@ public class Roof {
     private double graphheight;
     private CollisionBox hiddenArea;
     
-    public Roof(Image roofImage) {
+    public Roof(String roofImageName) {
+    	this(roofImageName, Mists.graphLibrary.getImage(roofImageName));
+    }
+    
+    private Roof(String imageName, Image roofImage) {
+    	this.imageName = imageName;
         this.image = roofImage;
         this.graphwidth = roofImage.getWidth();
         this.graphheight = roofImage.getHeight();
@@ -97,4 +109,36 @@ public class Roof {
     public double getHeigth() {
         return this.graphheight;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeString(this.imageName);
+		output.writeBoolean(visible);
+	    output.writeDouble(transparency);
+	    output.writeDouble(xCoordinate);
+	    output.writeDouble(yCoordinate);
+	    //HiddenArea
+	    output.writeDouble(hiddenArea.minX);
+	    output.writeDouble(hiddenArea.minY);
+	    output.writeDouble(hiddenArea.maxX-hiddenArea.minX);
+	    output.writeDouble(hiddenArea.maxY-hiddenArea.minY);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		this.imageName = input.readString();
+		this.image = Mists.graphLibrary.getImage(imageName);
+		this.visible = input.readBoolean();
+		this.transparency = input.readDouble();
+		this.xCoordinate = input.readDouble();
+		this.yCoordinate = input.readDouble();
+        this.graphwidth = image.getWidth();
+        this.graphheight = image.getHeight();
+        //HiddenArea
+        double haX = input.readDouble();
+        double haY = input.readDouble();
+        double haW = input.readDouble();
+        double haH = input.readDouble();
+        this.setHiddenArea(haX, haY, haW, haH);
+	}
 }
