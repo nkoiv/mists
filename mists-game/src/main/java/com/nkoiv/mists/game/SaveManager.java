@@ -99,7 +99,6 @@ public class SaveManager {
         kryo.writeClassAndObject(output, game.questManager);
         //Save DialogueManager
         kryo.writeClassAndObject(output, game.dialogueManager);
-        //Save puzzles (?)
         
         output.close();
         pool.release(kryo);

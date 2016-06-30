@@ -926,14 +926,6 @@ public class Creature extends MapObject implements Combatant, HasInventory {
 			case 2: this.ai = new CompanionAI(this);
 			default: this.ai = null;
 		}
-		//Dialogue
-		boolean hasDialogue = input.readBoolean();
-		if (hasDialogue) {
-			int dialogueID = input.readInt();
-			Dialogue d = Mists.dialogueLibrary.getDialogue(dialogueID);
-			if (d!=null) d.setCurrentCard(input.readInt());
-			this.setCurrentDialogue(d);
-		}
 		//Inventory
 		Object inv = (Inventory)kryo.readObject(input, Inventory.class);
 		if (inv instanceof Inventory) this.inventory = (Inventory)inv;

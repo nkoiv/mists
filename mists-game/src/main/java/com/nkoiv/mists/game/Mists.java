@@ -8,7 +8,11 @@
 package com.nkoiv.mists.game;
 
 
-import static com.nkoiv.mists.game.Mists.logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.audio.SoundManager;
 import com.nkoiv.mists.game.audio.SoundManagerJavaFX;
@@ -23,13 +27,8 @@ import com.nkoiv.mists.game.libraries.GraphLibrary;
 import com.nkoiv.mists.game.libraries.ItemLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.libraries.LocationLibrary;
-import com.nkoiv.mists.game.libraries.MobLibrary;
 import com.nkoiv.mists.game.libraries.StructureLibrary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;

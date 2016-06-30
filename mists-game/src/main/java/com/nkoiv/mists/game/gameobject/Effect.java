@@ -7,6 +7,10 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.sprites.Sprite;
 import java.util.ArrayList;
@@ -103,5 +107,5 @@ public class Effect extends MapObject {
             oldLinkY = linkedObject.getYPos();
         }
     }
-
+    
 }

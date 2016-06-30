@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.world;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
@@ -50,7 +54,7 @@ import javafx.scene.shape.Line;
  * 
  * @author nkoiv
  */
-public class Location extends Flags implements Global {
+public class Location extends Flags implements KryoSerializable {
     //private QuadTree mobQuadTree; //Used for collision detection //retired idea for now
     private int baseLocationID;
     private HashMap<Integer, HashSet> creatureSpatial; //New idea for lessening collision detection load
@@ -418,7 +422,15 @@ public class Location extends Flags implements Global {
         this.mobs.remove(mob.getID());
     }
     
-    public void clientAddMapObject(MapObject mob, int mobID) {
+    /**
+     * Insert a mob into the Location with given mobID.
+     * If this mobID is already taken by another object,
+     * the previous object is removed to make room for the new one.
+     * @param mob MapObject to add to the Location
+     * @param mobID LocationID to give to the new MapObject
+     */
+    public void addMapObject(MapObject mob, int mobID) {
+    	if (this.getMapObject(mobID) != null) this.removeMapObject(mobID);
         if (mob == null) return;
         mob.setID(mobID);
         if (mob instanceof Structure) {
@@ -1306,7 +1318,7 @@ public class Location extends Flags implements Global {
                 } else {
                     //Mob is in window
                     renderedMOBs.add(mob);
-                    if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
+                    if (Mists.DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
                         this.renderCollisions(mob, gc, xOffset, yOffset);
                     }
                 }
@@ -1339,7 +1351,7 @@ public class Location extends Flags implements Global {
                     //Mob is in window
                     mob.render(xOffset, yOffset, gc); //Draw objects on the ground
                     renderedMOBs.add(mob);
-                    if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
+                    if (Mists.DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
                        this.renderCollisions(mob, gc, xOffset, yOffset);
                     }
                 }
@@ -1401,7 +1413,7 @@ public class Location extends Flags implements Global {
         if (!this.effects.isEmpty()) {
             for (Effect e : this.effects) {
                 e.render(xOffset, yOffset, gc);
-                if (DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
+                if (Mists.DRAW_COLLISIONS) { // Draw collision boxes for debugging purposes, if the Global variable is set
                        this.renderCollisions(e, gc, xOffset, yOffset);
                 }
             }
@@ -1420,15 +1432,15 @@ public class Location extends Flags implements Global {
     private void renderMap(GraphicsContext gc, double xOffset, double yOffset) {
         this.map.render(-xOffset, -yOffset, gc); //First we draw the underlying map
         
-        if (DRAW_GRID) {
+        if (Mists.DRAW_GRID) {
             gc.setStroke(Color.ANTIQUEWHITE);
-            double tileHeight = map.getHeight()/TILESIZE;
-            double tileWidth = map.getWidth()/TILESIZE;
+            double tileHeight = map.getHeight()/Mists.TILESIZE;
+            double tileWidth = map.getWidth()/Mists.TILESIZE;
             for (int i=0; i<tileHeight;i++) {
-                gc.strokeLine(0, (i*TILESIZE)-yOffset, map.getWidth(), (i*TILESIZE)-yOffset);
+                gc.strokeLine(0, (i*Mists.TILESIZE)-yOffset, map.getWidth(), (i*Mists.TILESIZE)-yOffset);
             }
             for (int i=0; i<tileWidth;i++) {
-                gc.strokeLine((i*TILESIZE)-xOffset, 0, (i*TILESIZE)-xOffset, map.getHeight());
+                gc.strokeLine((i*Mists.TILESIZE)-xOffset, 0, (i*Mists.TILESIZE)-xOffset, map.getHeight());
             }
             
         }
@@ -1617,5 +1629,92 @@ public class Location extends Flags implements Global {
         }
         
     }
+    
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeInt(this.baseLocationID);
+		output.writeString(this.name);
+		//Write Map
+		byte mapType = -1;
+		if (this.map instanceof TileMap) mapType = 1;
+		if (this.map instanceof BGMap) mapType = 2;
+		output.writeByte(mapType);
+		if (mapType != -1) kryo.writeObject(output, this.map);
+		//Write Structures
+		output.writeInt(this.structures.size());
+		for (Structure s : this.structures) {
+			kryo.writeClassAndObject(output, s);
+		}
+		//Write Creatures
+		output.writeInt(this.creatures.size());
+		for (Creature c : this.creatures) {
+			kryo.writeClassAndObject(output, c);
+		}
+		//Write TriggerPlates
+		output.writeInt(this.triggerPlates.size());
+		for (TriggerPlate t : this.triggerPlates) {
+			kryo.writeObject(output, t);
+		}
+		//NOTE: Effects are not saved or loaded right now. 
+		//TODO: Consider if it saving Effects would make sense
+		output.writeInt(this.roofs.size());
+		for (Roof r : this.roofs) {
+			kryo.writeObject(output, r);
+		}
+		
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		//Clean base
+        this.creatures = new ArrayList<>();
+        this.structures = new ArrayList<>();
+        this.effects = new ArrayList<>();
+        this.triggerPlates = new ArrayList<>();
+		//Basic info
+		this.baseLocationID = input.readInt();
+		this.name = input.readString();
+		//Read map;
+		byte mapType = input.readByte();
+		switch (mapType) {
+			case 1:  //Map is a TileMap
+				this.map = kryo.readObject(input, TileMap.class);
+				((TileMap)this.map).buildMap();
+				break;
+			case 2: //Map is a BGMap
+				this.map = kryo.readObject(input, BGMap.class);
+				break;
+			default: //Map is of unknown type 
+				Mists.logger.warning("Tried to deserialize a location with unknown maptype!");
+				break;
+		}
+		this.localizeMap();
+		//Read Structures
+		int structureCount = input.readInt();
+		for (int i = 0; i < structureCount; i++) {
+			Structure s = (Structure)kryo.readClassAndObject(input);
+			this.addMapObject(s, s.getID());
+		}
+		//Read Creatures
+		int creatureCount = input.readInt();
+		for (int i = 0; i < creatureCount; i++) {
+			Creature c = (Creature)kryo.readClassAndObject(input);
+			this.addMapObject(c, c.getID());
+		}
+		
+		//Read TriggerPlates
+		int tpCount = input.readInt();
+		for (int i = 0; i < tpCount; i++) {
+			TriggerPlate t = (TriggerPlate)kryo.readObject(input, TriggerPlate.class);
+			this.addMapObject(t, t.getID());
+		}
+		//Read Roofs
+		int roofCount = input.readInt();
+		for (int i = 0; i < roofCount; i++){
+			Roof r = kryo.readObject(input, Roof.class);
+			this.roofs.add(r);
+		}
+
+	}
     
 }
