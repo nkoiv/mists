@@ -12,7 +12,12 @@ import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.controls.WorldMapControls;
 import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.ui.GoMainMenuButton;
+import com.nkoiv.mists.game.ui.LocationButtons;
 import com.nkoiv.mists.game.ui.PopUpMenu;
+import com.nkoiv.mists.game.ui.QuitButton;
+import com.nkoiv.mists.game.ui.TextButton;
+import com.nkoiv.mists.game.ui.TiledPanel;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.world.worldmap.LocationNode;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
@@ -29,6 +34,7 @@ import javafx.scene.input.MouseEvent;
  * @author nikok
  */
 public class WorldMapState implements GameState {
+	public boolean gameMenuOpen;
     private HashMap<String, UIComponent> uiComponents;
     private final TreeSet<UIComponent> drawOrder;
     private final Game game;
@@ -131,7 +137,39 @@ public class WorldMapState implements GameState {
         //Mists.logger.info("PlayerNode is now "+game.getCurrentWorldMap().getPlayerNode().getName());
     }
 
-@Override
+    /**
+     * Toggles open/close the gameMenu, displayed at the middle of the screen.
+     * TODO: Consider making a separate class for this, in case other GameStates utilize the same
+     */
+    public void toggleGameMenu() {
+        Mists.logger.info("Game menu toggled");
+        if (!gameMenuOpen) {
+            gameMenuOpen = true;
+            TiledPanel gameMenu = new TiledPanel(this, "GameMenu", 220, 360, 100, 100,Mists.graphLibrary.getImageSet("panelBeige"));
+            //TextButton resumeButton = new LocationButtons.ResumeButton("Resume", 200, 60, this.game);
+            TextButton saveButton = new LocationButtons.SaveButton("Save player", 200, 60, game);
+            TextButton loadButton = new LocationButtons.LoadButton("Load player", 200, 60, game);
+            TextButton optionsButton = new TextButton("TODO: Options", 200, 60);
+            GoMainMenuButton mainMenuButton = new GoMainMenuButton(this.game, 200, 60);
+            QuitButton quitButton = new QuitButton("Quit game", 200, 60);
+            //gameMenu.addSubComponent(resumeButton);
+            gameMenu.addSubComponent(saveButton);
+            gameMenu.addSubComponent(loadButton);
+            gameMenu.addSubComponent(optionsButton);
+            gameMenu.addSubComponent(mainMenuButton);
+            gameMenu.addSubComponent(quitButton);
+            gameMenu.setRenderZ(-1);
+            this.addUIComponent(gameMenu);
+            Mists.logger.info("GameMenu opened");
+        } else {
+            gameMenuOpen = false;
+            this.removeUIComponent("GameMenu");
+            Mists.logger.info("GameMenu closed");
+        }
+        
+    }
+    
+    @Override
     public void handleMouseEvent(MouseEvent me) {
         //See if there's an UI component to click
         if (me.getEventType() == MouseEvent.MOUSE_CLICKED || me.getEventType() == MouseEvent.MOUSE_PRESSED || me.getEventType() == MouseEvent.MOUSE_RELEASED) this.handleClicks(me);

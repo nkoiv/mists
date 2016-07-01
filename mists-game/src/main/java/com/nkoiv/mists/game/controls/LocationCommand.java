@@ -31,6 +31,7 @@ public enum LocationCommand {
     CONTEXT_TOGGLE,
     CONTEXT_SELECT,
     
+    TOGGLE_SYSTEMMENU,
     TOGGLE_INVENTORY,
     TOGGLE_QUESTPANEL
     

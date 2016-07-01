@@ -422,7 +422,7 @@ public class LocationState implements GameState {
      */
     @Override
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
-        if (this.paused || game.getCurrentLocation() == null) return;
+        if (game.getCurrentLocation() == null) return;
         if (movingWithMouse) {
             if (pressedButtons.contains(KeyCode.SHIFT) && !game.getPlayer().dashOnCooldown()) {
                 game.locControls.playerDash(movingTowardsX, movingTowardsY);

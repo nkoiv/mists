@@ -81,7 +81,7 @@ public class LocationButtons {
         public void handleMouseEvent(MouseEvent me) {
             if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 Mists.logger.info("Trying to toggle game menu");
-                this.game.locControls.toggleLocationMenu();
+                this.game.locControls.toggleSystemMenu();
             }
         }
         
@@ -142,7 +142,7 @@ public class LocationButtons {
             if (me.getEventType() == MouseEvent.MOUSE_RELEASED) {
                 this.pressed = false;
                 Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-                game.locControls.toggleLocationMenu();
+                game.locControls.toggleSystemMenu();
             }
         }
     }

@@ -87,6 +87,7 @@ public class LocationControls {
     public void initializeDefaultKeybinds() {
         Mists.logger.info("Loading default keybinds...");
         //UI buttons
+        this.commands.put(LocationCommand.TOGGLE_SYSTEMMENU, new ToggleSystemMenuCommand(this, new KeyCode[]{KeyCode.ESCAPE}));
         this.commands.put(LocationCommand.TOGGLE_INVENTORY, new ToggleInventoryCommand(this, new KeyCode[]{KeyCode.I}));
         this.commands.put(LocationCommand.TOGGLE_QUESTPANEL, new ToggleQuestPanelCommand(this, new KeyCode[]{KeyCode.L}));
         Mists.logger.info("UI buttons done");
@@ -175,7 +176,7 @@ public class LocationControls {
         game.getCurrentLocation().printLightMapIntoConsole();
     }
     
-    public void toggleLocationMenu() {
+    public void toggleSystemMenu() {
         LocationState LS = (LocationState)this.game.currentState;
         LS.toggleGameMenu();
     }
