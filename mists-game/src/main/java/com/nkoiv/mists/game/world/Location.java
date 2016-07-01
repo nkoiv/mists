@@ -130,7 +130,7 @@ public class Location extends Flags implements KryoSerializable {
      * the map playable (collisionmaps, lights...)
      */
     private void localizeMap() {
-        this.environment = new LocationEnvironment(this);
+        this.environment = new LocationEnvironment();
         this.collisionMap = new CollisionMap(this, Mists.TILESIZE);
         Mists.logger.info("Collisionmap generated");
         this.collisionMap.setStructuresOnly(true);
@@ -1640,6 +1640,8 @@ public class Location extends Flags implements KryoSerializable {
 		if (this.map instanceof BGMap) mapType = 2;
 		output.writeByte(mapType);
 		if (mapType != -1) kryo.writeObject(output, this.map);
+		//Write Environment
+		kryo.writeClassAndObject(output, this.environment);
 		//Write Structures
 		output.writeInt(this.structures.size());
 		for (Structure s : this.structures) {
@@ -1689,6 +1691,8 @@ public class Location extends Flags implements KryoSerializable {
 				break;
 		}
 		this.localizeMap();
+		//Read Environment
+		this.environment = (LocationEnvironment)kryo.readClassAndObject(input);
 		//Read Structures
 		int structureCount = input.readInt();
 		for (int i = 0; i < structureCount; i++) {
@@ -1714,6 +1718,7 @@ public class Location extends Flags implements KryoSerializable {
 			Roof r = kryo.readObject(input, Roof.class);
 			this.roofs.add(r);
 		}
+		
 
 	}
     
