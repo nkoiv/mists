@@ -8,6 +8,8 @@
 package com.nkoiv.mists.game.libraries;
 
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.sprites.SpriteAnimation;
+
 import java.util.HashMap;
 import java.util.logging.Level;
 import javafx.geometry.Rectangle2D;
@@ -26,11 +28,12 @@ import javafx.scene.paint.Color;
 public class GraphLibrary {
     private final HashMap<String, Image> gallery;
     private final HashMap<String, Image[]> setgallery;
-    
+ 
     public GraphLibrary() {
-        this.gallery = new HashMap();
-        this.setgallery = new HashMap();
+        this.gallery = new HashMap<>();
+        this.setgallery = new HashMap<>();
     }
+    
     
     public void addImage(String name, Image i) {
         String lowercasename = name.toLowerCase();
@@ -50,6 +53,7 @@ public class GraphLibrary {
         this.addImage(name, image);
     }
     
+
     public void addImageSet(String name, Image... images) {
         String lowercasename = name.toLowerCase();
         if (this.containsImage(lowercasename)) {

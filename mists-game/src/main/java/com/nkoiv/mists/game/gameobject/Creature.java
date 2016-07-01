@@ -278,9 +278,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
             this.spriteAnimations = new HashMap<>();
         }
         if (this.spriteAnimations.containsKey(animationName)) {
-            this.spriteAnimations.replace(animationName, new SpriteAnimation(imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight));
+            this.spriteAnimations.replace(animationName, new SpriteAnimation(animationName, imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight));
         } else {
-            this.spriteAnimations.put(animationName, new SpriteAnimation(imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight));
+            this.spriteAnimations.put(animationName, new SpriteAnimation(animationName, imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight));
         }    
     }
     

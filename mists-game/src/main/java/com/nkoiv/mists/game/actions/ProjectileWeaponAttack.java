@@ -45,7 +45,7 @@ public class ProjectileWeaponAttack  extends Action implements AttackAction {
     }
     
     public ProjectileWeaponAttack() {
-        this("Shoot", new SpriteAnimation(new ImageView("/images/effects/arrow.png"), 3, 0, 0, 0, 0, 20, 6), null);
+        this("Shoot", new SpriteAnimation("arrowAnimation"), null);
     }
     
     private Sprite createSprite(SpriteAnimation anim, double xPos, double yPos) {

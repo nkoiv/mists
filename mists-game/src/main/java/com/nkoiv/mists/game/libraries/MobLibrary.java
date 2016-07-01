@@ -205,7 +205,7 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     
     protected static SpriteAnimation generateSpriteAnimation(String spritesheet, List<String> spriteSheetParameters) {
         ImageView imageView = new ImageView(spritesheet);
-        SpriteAnimation sa = new SpriteAnimation(imageView, Integer.parseInt(spriteSheetParameters.get(0)),
+        SpriteAnimation sa = new SpriteAnimation(spritesheet+"_animation", imageView, Integer.parseInt(spriteSheetParameters.get(0)),
                     Integer.parseInt(spriteSheetParameters.get(1)),
                     Integer.parseInt(spriteSheetParameters.get(2)),
                     Integer.parseInt(spriteSheetParameters.get(3)),

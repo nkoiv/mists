@@ -29,7 +29,7 @@ public class MeleeAttack extends Action implements AttackAction {
     
     public MeleeAttack() {
         super("melee", ActionType.MELEE_ATTACK);
-        this.attackAnimation = new SpriteAnimation(new ImageView("/images/effects/attackAnimations.png"), 4, 32, 0, 0, 0, 32, 32);
+        this.attackAnimation = new SpriteAnimation("clawAttackAnimation");
         this.attackAnimation.setAnimationSpeed(100);
         this.setFlag("range", 0);
         this.setFlag("animationcycles", 1);
@@ -39,7 +39,7 @@ public class MeleeAttack extends Action implements AttackAction {
     }
     
     public void setAnimation(ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
-        this.attackAnimation = new SpriteAnimation(imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight);
+        this.attackAnimation = new SpriteAnimation("clawAttackAnimation");
     }
     
     public Sprite getSprite(Creature actor) {

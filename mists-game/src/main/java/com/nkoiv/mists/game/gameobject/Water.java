@@ -152,7 +152,7 @@ public class Water extends Structure implements HasNeighbours{
         //Frame2
         Image frame2 = getImageFromImageView(this.waterImages_alt, (int)(x*this.getWidth()), (int)(y*this.getHeight()));
         
-        return new SpriteAnimation(new Image[]{frame1, frame2});
+        return new SpriteAnimation(this.name+"_animation", new Image[]{frame1, frame2});
     }
     
     private Image getImageFromImageView(ImageView imageview, int x, int y) {

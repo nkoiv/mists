@@ -45,8 +45,8 @@ public class ProjectileSpell extends Action implements AttackAction {
     
     public ProjectileSpell() {
         this("Firebolt",
-            new SpriteAnimation(new ImageView("/images/environment/torch_flame.png"), 4, 0, 0, 0, 0, 32, 32), 
-            new SpriteAnimation(new ImageView("/images/effects/explosion-4.png"), 12, 0, 0, 0, 0, 128, 128)
+            new SpriteAnimation("torchFlameAnimation"), 
+            new SpriteAnimation("explosion4Animation")
         );
         this.projectileAnimation.setAnimationSpeed(100);
         this.explosionAnimation.setAnimationSpeed(50);
@@ -54,7 +54,7 @@ public class ProjectileSpell extends Action implements AttackAction {
     }
 
     public void setAnimation(ImageView imageView, int frameCount, int startX, int startY, int offsetX, int offsetY, int frameWidth, int frameHeight) {
-        this.projectileAnimation = new SpriteAnimation(imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight);
+        this.projectileAnimation = new SpriteAnimation(this.name+"_projectile", imageView, frameCount, startX, startY, offsetX, offsetY, frameWidth, frameHeight);
     }
     
     public Sprite createSprite(SpriteAnimation anim, double xPos, double yPos) {

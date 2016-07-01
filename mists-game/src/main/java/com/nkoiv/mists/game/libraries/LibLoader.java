@@ -33,6 +33,7 @@ import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
 import com.nkoiv.mists.game.puzzle.Puzzle;
 import com.nkoiv.mists.game.puzzle.TileLitRequirement;
 import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.triggers.InsertMobTrigger;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.TileMap;
@@ -248,9 +249,23 @@ public class LibLoader {
         
     }
     
+    public static void loadAnimationSheets(GraphLibrary lib) {
+    	Image[] torchFlameAnimation = SpriteAnimation.buildFramesFromImageview(new ImageView("/images/environment/torch_flame.png"), 4, 0, 0, 0, 0, 32, 32);
+    	lib.addImageSet("torchFlameAnimation", torchFlameAnimation);
+        Image[] explosion4Animation = SpriteAnimation.buildFramesFromImageview(new ImageView("/images/effects/explosion-4.png"), 12, 0, 0, 0, 0, 128, 128);
+        lib.addImageSet("explosion4Animation", explosion4Animation);
+        Image[] clawAttackAnimation = SpriteAnimation.buildFramesFromImageview(new ImageView("/images/effects/attackAnimations.png"), 4, 32, 0, 0, 0, 32, 32);
+        lib.addImageSet("clawAttackAnimation", clawAttackAnimation);
+        Image[] arrowAnimation = SpriteAnimation.buildFramesFromImageview(new ImageView("/images/effects/arrow.png"), 3, 0, 0, 0, 0, 20, 6);
+        lib.addImageSet("arrowAnimation", arrowAnimation);
+    }
+    
     public static void initializeGraphLibrary(GraphLibrary lib) {
     	//TODO: Load smart! From external (YAML?) file?
-        //---Base elements---
+    	
+    	loadAnimationSheets(lib);
+
+    	//---Base elements---
         lib.addImage("blank", new Image("/images/blank.png"));
         lib.addImage("black", new Image("/images/black.png"));
         

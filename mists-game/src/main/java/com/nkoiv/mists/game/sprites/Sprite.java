@@ -127,12 +127,18 @@ public class Sprite extends MovingGraphics
         this.height = this.image.getHeight();
     }
     
-    public void setAnimation (ImageView image, int frameCount, int startX, int startY, int offsetX, int offsetY, int width,   int height) {
-        this.animation = new SpriteAnimation (image, frameCount, startX, startY, offsetX, offsetY, width, height);
-        this.animated = true;
-        this.width = animation.getFrameWidth();
-        this.height = animation.getFrameHeight();
+    
+    //Old setAnimation methods (building SpriteAnimation) should be unneeded
+    //Just use setAnimation(SpriteAnimation animation) directly, constructing the animation in the parameter if so desired
+    /*
+    public void setAnimation(String animationName, Image[] frames) {
+    	this.setAnimation(new SpriteAnimation(animationName, frames));
     }
+    
+    public void setAnimation (String animationName, ImageView image, int frameCount, int startX, int startY, int offsetX, int offsetY, int width,   int height) {
+        this.setAnimation(new SpriteAnimation (animationName, image, frameCount, startX, startY, offsetX, offsetY, width, height));
+    }
+    */
     
     /**
      * By default sprites rotate around their center (width/2, height/2)
