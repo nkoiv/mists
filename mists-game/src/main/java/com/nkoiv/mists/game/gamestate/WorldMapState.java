@@ -284,5 +284,10 @@ public class WorldMapState implements GameState {
     public void updateUI() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public int getStateID() {
+    	return Game.WORLDMAP;
+    }
 
 }

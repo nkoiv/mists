@@ -93,7 +93,7 @@ public class MainMenuState implements GameState {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.save();
         gc.setStroke(Color.ORANGERED);
-        gc.strokeText("Version 0.7-Pandarin_Pomelo", game.WIDTH-300, game.HEIGHT-20);
+        gc.strokeText(Mists.gameVersion, game.WIDTH-300, game.HEIGHT-20);
         gc.restore();
     }
 
@@ -199,6 +199,11 @@ public class MainMenuState implements GameState {
     @Override
     public void updateUI() {
         this.uiComponents.get("MainMenu").setPosition((game.WIDTH/2 - 110), 250);
+    }
+    
+    @Override
+    public int getStateID() {
+    	return Game.MAINMENU;
     }
     
 }
