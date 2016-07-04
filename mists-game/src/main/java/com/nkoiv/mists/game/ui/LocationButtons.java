@@ -35,12 +35,7 @@ public class LocationButtons {
         public void handleMouseEvent(MouseEvent me) {
             if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 Mists.logger.info("Trying to save the game");
-                try {
-					SaveManager.testKryoSave(game.getPlayer());
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                SaveManager.saveGame();
             }
         }
         

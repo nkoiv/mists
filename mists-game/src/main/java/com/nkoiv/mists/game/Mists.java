@@ -54,7 +54,7 @@ import javafx.stage.WindowEvent;
  * @author nkoiv
  */
 public class Mists extends Application implements Global {
-     
+	public static final String gameVersion = "Version-0.7-Pandarin_Pomelo";
     public static final Logger logger = Logger.getLogger(Mists.class.getName());
     
     public static Game MistsGame;
@@ -175,10 +175,6 @@ public class Mists extends Application implements Global {
         logger.info("Mists game launching...");
         Application.launch();
         logger.info("Mists game ended");
-    }
-    
-    public Game getGame() {
-        return this.MistsGame;
     }
     
     

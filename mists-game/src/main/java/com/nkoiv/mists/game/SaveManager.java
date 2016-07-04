@@ -19,11 +19,15 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.gameobject.Water;
+import com.nkoiv.mists.game.gamestate.LoadingScreen;
 import com.nkoiv.mists.game.quests.Quest;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.quests.QuestTask;
 import com.nkoiv.mists.game.triggers.*;
+import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
+
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,26 +96,96 @@ public class SaveManager {
         Kryo kryo = SaveManager.pool.borrow();
         Output output = new Output(new FileOutputStream(savefile));
         //TODO: Saving of the game!
-        
+        //Save the game version
+        output.writeString(Mists.gameVersion);
+        //Save the current state of the game
+        output.writeInt(game.currentState.getStateID());
+        int locationID = -1;
+        if (game.getCurrentLocation() != null) locationID = game.getCurrentLocation().getBaseID();
+        output.writeInt(locationID);
         //Save Player
         kryo.writeClassAndObject(output, game.getPlayer());
         //Save QuestManager
         kryo.writeClassAndObject(output, game.questManager);
         //Save DialogueManager
         kryo.writeClassAndObject(output, game.dialogueManager);
+        //Save generated Locations 
+        saveGeneratedLocations(game, kryo, output);
         
+    	//Close the output stream and release the kryo
         output.close();
         pool.release(kryo);
     }
     
     
+    /**
+     * Serialize the generated Locations and push them into output with Kryo
+     * @param game Game to take Generated Locations from
+     * @param kryo Kryo serializer
+     * @param output For pushing the serialized object
+     */
+    private static void saveGeneratedLocations(Game game, Kryo kryo, Output output) {
+    	int generatedLocationCount = game.getGeneratedLocationIDs().size();
+    	output.writeInt(generatedLocationCount);
+    	Iterator<Integer> it = game.getGeneratedLocationIDs().iterator();
+    	while (it.hasNext()) {
+    		Integer locationID = it.next();
+    		Location loc = game.getLocation(locationID);
+    		kryo.writeObject(output, loc);
+    	}
+    }
+    
+    private static void loadGeneratedLocations(Game game, Kryo kryo, Input input) {
+    	int locationID;
+    	Location location;
+    	int locationCount = input.readInt();
+    	for (int i = 0; i < locationCount; i++) {
+    		locationID = input.readInt();
+    		location = kryo.readObject(input, Location.class);
+    		game.setLocation(locationID, location);
+    	}
+    }
+    
     public static void loadGame(Game game, String savefile) throws FileNotFoundException {
+    	//Set up a loading screen for the process
+    	LoadingScreen loadingScreen = new LoadingScreen("Loading game data", 10);
+    	game.setLoadingScreen(loadingScreen);
+    	//Move to a blank gamestate to avoid mutex problems in loading up data that's being used
+    	game.moveToState(Game.LOADSCREEN);
+    	
+    	//Open the savefile and start loading
     	Kryo kryo = SaveManager.pool.borrow();
     	Input input = new Input(new FileInputStream(savefile));
+    	//Load the game version
+    	//TODO: what to do if version has changed?
+    	String version = input.readString();
+    	//Load the gamestateID
+    	int gameStateID = input.readInt();
+    	int currentLocationID = input.readInt();
     	
+    	//Load Player
+    	PlayerCharacter player = (PlayerCharacter)kryo.readClassAndObject(input);
+    	game.setPlayer(player);
+    	//Load QuestManager
+    	QuestManager qm = (QuestManager)kryo.readClassAndObject(input);
+    	game.questManager = qm;
+    	//Load DialogueManager
+    	DialogueManager dm = (DialogueManager)kryo.readClassAndObject(input);
+    	game.dialogueManager = dm;
+    	//Load generated Locations
+    	loadGeneratedLocations(game, kryo, input);
+    	if (currentLocationID != -1) game.moveToLocation(currentLocationID, player.getXPos(), player.getYPos());
+    	
+    	//Close the input stream and release the kryo
     	input.close();
     	pool.release(kryo);
+    	
+    	//Return the game to active state
+    	game.moveToState(gameStateID);
+    	game.clearLoadingScreen();
     }
+    
+    
     
     /**
      * Temporary method for testing Kryo serialization
