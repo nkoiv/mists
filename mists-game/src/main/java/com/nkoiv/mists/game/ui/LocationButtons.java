@@ -53,12 +53,7 @@ public class LocationButtons {
         public void handleMouseEvent(MouseEvent me) {
             if (me.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 Mists.logger.info("Trying to load the game");
-                try {
-					SaveManager.testKryoLoad(game);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+               SaveManager.loadGame();
             }
         }
         

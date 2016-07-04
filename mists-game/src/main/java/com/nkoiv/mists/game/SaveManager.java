@@ -84,9 +84,23 @@ public class SaveManager {
 
     public static final KryoPool pool = new KryoPool.Builder(factory).softReferences().build();
 
+    /**
+     * Testfuction for saving the game to default testfile
+     */
     public static void saveGame() {
         try {
             saveGame(Mists.MistsGame, testfile);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(SaveManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Testfunction for loading the game from default testfile
+     */
+    public static void loadGame() {
+        try {
+            loadGame(Mists.MistsGame, testfile);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SaveManager.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,5 +1,5 @@
 #Compiled project files#
-.sav
+*.sav
 #Netbeans#
 /mists-game/target/
 /mists-game/nbproject/
