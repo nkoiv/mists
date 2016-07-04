@@ -442,10 +442,10 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     */
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible") && this.getLocation() != null) {
+        if (this.isFlagged("visible")) {
             if (this.graphics instanceof SpriteSkeleton) ((SpriteSkeleton)this.graphics).render(xOffset, yOffset, gc, this.facing);
             else this.graphics.render(xOffset, yOffset, gc);
-            if (this.ai != null && this.ai.getPath()!=null && this.getLocation().isFlagged("drawPaths")) {
+            if (this.getLocation() != null && this.ai != null && this.ai.getPath() != null && this.getLocation().isFlagged("drawPaths")) {
                 this.ai.getPath().drawPath(gc, Mists.TILESIZE, xOffset, yOffset);
             }
         }
