@@ -50,6 +50,8 @@ public interface GameState {
     
     public void closePopUpWindows();
     
+    public int getStateID();
+    
     //TODO:
     //Cleanup the stage
     public void exit();

@@ -732,6 +732,9 @@ public class LocationState implements GameState {
         return this.uiComponents.get(uicName);
     }
     
-    
+    @Override
+    public int getStateID() {
+    	return Game.LOCATION;
+    }
     
 }

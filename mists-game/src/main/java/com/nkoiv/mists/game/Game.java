@@ -27,6 +27,7 @@ import com.nkoiv.mists.game.world.worldmap.MapNode;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Level;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -155,7 +156,12 @@ public class Game {
     
     public void moveToState(int gameStateNumber) {
         //TODO: Do some fancy transition?
+    	
         if (currentState != null) currentState.exit();
+        if (gameStateNumber == LOADSCREEN) {
+        	this.currentState = null;
+        	return;
+        }
         if (gameStates.get(gameStateNumber) == null) {
             buildNewState(gameStateNumber);
         } 
@@ -250,6 +256,22 @@ public class Game {
         return l;
     }
     
+    /**
+     * Assign the given location to the given ID,
+     * overwriting any existing location under that ID.
+     * If a location is "generated" this way, it won't
+     * be re-generated from LocationTemplateLibrary
+     * @param locationID ID of the given Location
+     * @param location Location to set to the ID
+     */
+    public void setLocation(int locationID, Location location) {
+    	//TODO: Should the Location baseID be set to the ID? Or just assume they match?
+    	this.generatedLocations.put(locationID, location);
+    }
+    
+    public Set<Integer> getGeneratedLocationIDs() {
+    	return generatedLocations.keySet(); 
+    }
     
     /**
     * Move the player (and the game) to a new location
@@ -343,6 +365,7 @@ public class Game {
     * @param releasedButtons Buttons recently released
     */
     public void tick(double time, ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {
+    	if (currentState == null) return;
         currentState.tick(time, pressedButtons, releasedButtons);
     }
     
