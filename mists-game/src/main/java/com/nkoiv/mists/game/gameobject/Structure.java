@@ -150,27 +150,27 @@ public class Structure extends MapObject {
         return ns;
     }
     
-	@Override
-	public void write(Kryo kryo, Output output) {
-		super.write(kryo, output);
-		output.writeInt(this.collisionLevel);
-	}
+    @Override
+    public void write(Kryo kryo, Output output) {
+            super.write(kryo, output);
+            output.writeInt(this.collisionLevel);
+    }
 
 
-	@Override
-	public void read(Kryo kryo, Input input) {
-		super.read(kryo, input);
-		this.collisionLevel = input.readInt();
-	}
-	
-	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
-		if (Mists.structureLibrary != null) {
-			Structure dummy = Mists.structureLibrary.create(templateID);
-			if (dummy == null) return;
-			this.graphics = dummy.graphics;
-			this.extraSprites = dummy.extraSprites;
-		} else this.graphics = new Sprite();
-		this.graphics.setPosition(xCoor, yCoor);
-	}
+    @Override
+    public void read(Kryo kryo, Input input) {
+            super.read(kryo, input);
+            this.collisionLevel = input.readInt();
+    }
+
+    protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+        if (Mists.structureLibrary != null) {
+            Structure dummy = Mists.structureLibrary.create(templateID);
+            if (dummy == null) return;
+            this.graphics = dummy.graphics;
+            this.extraSprites = dummy.extraSprites;
+        } else this.graphics = new Sprite();
+        this.setPosition(xCoor, yCoor);
+    }
     
 }

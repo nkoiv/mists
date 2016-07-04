@@ -1720,6 +1720,7 @@ public class Location extends Flags implements KryoSerializable {
                 if (s instanceof Structure) this.addMapObject(s, s.getID());
                 //else Mists.logger.warning("Tried to load Structure, got: "+s.toString());
         }
+        this.updateAllVariableGraphicStructures();
         Mists.logger.info("Structures loaded succesfully");
         //Read Creatures
         int creatureCount = input.readInt();
@@ -1746,7 +1747,6 @@ public class Location extends Flags implements KryoSerializable {
                 this.roofs.add(r);
         }
         Mists.logger.info("Roofs loaded succesfully");
-
     }
     
 }

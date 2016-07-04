@@ -20,6 +20,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.gameobject.Water;
 import com.nkoiv.mists.game.gamestate.LoadingScreen;
+import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.quests.Quest;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.quests.QuestTask;
@@ -218,8 +219,10 @@ public class SaveManager {
     	pool.release(kryo);
     	
     	//Return the game to active state
-        
     	game.moveToState(gameStateID);
+        if (game.currentState instanceof LocationState) {
+            ((LocationState)game.currentState).closeGameMenu();
+        }
     	game.clearLoadingScreen();
     }
     
