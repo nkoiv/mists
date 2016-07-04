@@ -119,10 +119,10 @@ public class SaveManager {
         if (game.getCurrentLocation() != null) locationID = game.getCurrentLocation().getBaseID();
         output.writeInt(locationID);
         //Save Player
-        /*
+        
         output.writeString("<PLAYERDATA>");
         kryo.writeClassAndObject(output, game.getPlayer());
-        */
+        
         //Save QuestManager
         output.writeString("<QUESTDATA>");
         kryo.writeClassAndObject(output, game.questManager);
@@ -161,10 +161,12 @@ public class SaveManager {
     	int locationCount = input.readInt();
     	Mists.logger.info(locationCount+" locations to load");
     	for (int i = 0; i < locationCount; i++) {
-    		locationID = input.readInt();
-    		Mists.logger.info("Loading ID: "+locationID+" ("+i+"/"+locationCount+")");
-    		location = kryo.readObject(input, Location.class);
-    		game.setLocation(locationID, location);
+            locationID = input.readInt();
+            Mists.logger.info("Loading ID: "+locationID+" ("+i+"/"+locationCount+")");
+            location = kryo.readObject(input, Location.class);
+            location.setBaseID(locationID);
+            game.setLocation(locationID, location);
+            Mists.logger.info("Set "+location.getName()+" to ID "+locationID);
     	}
     }
     
@@ -186,12 +188,12 @@ public class SaveManager {
     	int currentLocationID = input.readInt();
     	//Load Player
     	loadingScreen.updateProgress(1, "Loading Player data");
-    	/*
+    	
     	check = input.readString();
     	if (!"<PLAYERDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
     	PlayerCharacter player = (PlayerCharacter)kryo.readClassAndObject(input);
     	game.setPlayer(player);
-    	*/
+    	
     	//Load QuestManager
     	loadingScreen.updateProgress(1, "Loading Quests");
     	check = input.readString();
@@ -209,13 +211,14 @@ public class SaveManager {
     	check = input.readString();
     	if (!"<LOCATIONDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
     	loadGeneratedLocations(game, kryo, input);
-    	//if (currentLocationID != -1) game.moveToLocation(currentLocationID, player.getXPos(), player.getYPos());
+    	if (currentLocationID != -1) game.moveToLocation(currentLocationID, player.getXPos(), player.getYPos());
     	
     	//Close the input stream and release the kryo
     	input.close();
     	pool.release(kryo);
     	
     	//Return the game to active state
+        
     	game.moveToState(gameStateID);
     	game.clearLoadingScreen();
     }

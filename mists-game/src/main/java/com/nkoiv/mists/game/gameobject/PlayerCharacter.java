@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.GenericTasks;
@@ -193,6 +196,17 @@ public class PlayerCharacter extends Creature implements Combatant {
             c.location = null;
             c.IDinLocation  = 0;
         }
+    }
+    
+    @Override
+    public void write(Kryo kryo, Output output) {
+        super.write(kryo, output);    
+    }
+
+
+    @Override
+    public void read(Kryo kryo, Input input) {
+        super.read(kryo, input);
     }
     
 }

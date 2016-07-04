@@ -82,6 +82,16 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     private double oldXPos;
     private double oldYPos;
     
+    public Creature() {
+        super();
+        this.initializeAttributes();
+        this.initializeFlags();
+        this.inventory = new Inventory(this);
+        this.crossableTerrain = new ArrayList<>();
+        this.crossableTerrain.add(0);
+        this.availableActions = new HashMap<>();
+    }
+    
     //Constructor for a creature template with one static image
     public Creature (String name, MovingGraphics graphics) {
         super (name, graphics);
@@ -287,7 +297,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     public void think(double time) {
         if (this.location == null) return;
         this.lastTask = this.nextTask;
-        this.setNextTask(this.ai.think(time));
+        if (this.ai != null) this.setNextTask(this.ai.think(time));
     }
     
     public void setCurrentDialogue(Dialogue d) {
@@ -873,78 +883,83 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
     
     @Override
-	public void write(Kryo kryo, Output output) {
-		super.write(kryo, output);
-		//Attributes
-		int attributeCount = this.attributes.keySet().size();
-		output.writeInt(attributeCount);
-		for (String s : this.attributes.keySet()) {
-			output.writeString(s);
-			output.writeInt(this.attributes.get(s));
-		}
-		//Actions
-		int actionCount = this.availableActions.keySet().size();
-		output.writeInt(actionCount);
-		for (String s : this.availableActions.keySet()) {
-			output.writeInt(this.availableActions.get(s).getID());
-		}
-		//AI
-		//TODO: Like with Templates, this needs rethinking
-		int aiType = 0;
-		if (this.ai instanceof MonsterAI) aiType = 1;
-		if (this.ai instanceof CompanionAI) aiType = 2;
-		output.writeInt(aiType);
+    public void write(Kryo kryo, Output output) {
+        super.write(kryo, output);
+        //Attributes
+        int attributeCount = this.attributes.keySet().size();
+        output.writeInt(attributeCount);
+        for (String s : this.attributes.keySet()) {
+                output.writeString(s);
+                output.writeInt(this.attributes.get(s));
+        }
+        //Actions
+        int actionCount = this.availableActions.keySet().size();
+        output.writeInt(actionCount);
+        for (String s : this.availableActions.keySet()) {
+                output.writeInt(this.availableActions.get(s).getID());
+        }
+        //AI
+        //TODO: Like with Templates, this needs rethinking
+        int aiType = 0;
+        if (this.ai instanceof MonsterAI) aiType = 1;
+        if (this.ai instanceof CompanionAI) aiType = 2;
+        output.writeInt(aiType);
 
-		//Inventory
-		kryo.writeObject(output, this.inventory);
-	}
+        //Inventory
+        kryo.writeObject(output, this.inventory);
+    }
 
 
-	@Override
-	public void read(Kryo kryo, Input input) {
-		super.read(kryo, input);
-		//Attributes
-		Mists.logger.info("Reading attributes");
-		int attributeCount = input.readInt();
-		Mists.logger.info("Attribute count: "+attributeCount);
-		for (int i = 0; i < attributeCount; i++) {
-			String attribute = input.readString();
-			int attributeValue = input.readInt();
-			this.attributes.put(attribute, attributeValue);
-		}
-		//Actions
-		int actionCount = input.readInt();
-		for (int i = 0; i < actionCount; i++) {
-			int actionID = input.readInt();
-			Action a = Mists.actionLibrary.create(actionID);
-			this.addAction(a);
-		}
-		//AI
-		int aiType = input.readInt();
-		switch (aiType) {
-			case 1: this.ai = new MonsterAI(this);
-			case 2: this.ai = new CompanionAI(this);
-			default: this.ai = null;
-		}
-		//Inventory
-		Object inv = (Inventory)kryo.readObject(input, Inventory.class);
-		if (inv instanceof Inventory) this.inventory = (Inventory)inv;
-	}
-	
-	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
-		Mists.logger.info("Reading graphics from library, ID: "+templateID+" : "+xCoor+","+yCoor);
-		if (Mists.creatureLibrary != null) {
-			Creature dummy = Mists.creatureLibrary.create(templateID);
-			if (dummy == null) return;
-			this.graphics = dummy.graphics;
-			this.spriteAnimations = new HashMap<>();
-	        for (String s : dummy.spriteAnimations.keySet()) {
-	            this.spriteAnimations.put(s, dummy.spriteAnimations.get(s));
-	        }
-	        Mists.logger.info("Graphics succesfully loaded");
-		} else this.graphics = new Sprite();
-		this.graphics.setPosition(xCoor, yCoor);
-	}
+    @Override
+    public void read(Kryo kryo, Input input) {
+        super.read(kryo, input);
+        //Attributes
+        Mists.logger.info("Reading attributes");
+        int attributeCount = input.readInt();
+        Mists.logger.info("Attribute count: "+attributeCount);
+        for (int i = 0; i < attributeCount; i++) {
+                String attribute = input.readString();
+                int attributeValue = input.readInt();
+                this.attributes.put(attribute, attributeValue);
+        }
+        //Actions
+        int actionCount = input.readInt();
+        for (int i = 0; i < actionCount; i++) {
+                int actionID = input.readInt();
+                Action a = Mists.actionLibrary.create(actionID);
+                this.addAction(a);
+        }
+        Mists.logger.info(actionCount+" actions loaded");
+        //AI
+        int aiType = input.readInt();
+        switch (aiType) {
+                case 1: this.ai = new MonsterAI(this);
+                case 2: this.ai = new CompanionAI(this);
+                default: this.ai = null;
+        }
+        Mists.logger.info("AI type set to "+aiType);
+        //Inventory
+        Object inv = (Inventory)kryo.readObject(input, Inventory.class);
+        Mists.logger.info("Inventory loaded: "+inv.toString());
+        if (inv instanceof Inventory) this.inventory = (Inventory)inv;
+
+        Mists.logger.info("Finished loading "+this.getName());
+    }
+
+    protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+        Mists.logger.info("Reading graphics from library, ID: "+templateID+" : "+xCoor+","+yCoor);
+        if (Mists.creatureLibrary != null) {
+                Creature dummy = Mists.creatureLibrary.create(templateID);
+                if (dummy == null) return;
+                this.graphics = dummy.graphics;
+                this.spriteAnimations = new HashMap<>();
+        for (String s : dummy.spriteAnimations.keySet()) {
+            this.spriteAnimations.put(s, dummy.spriteAnimations.get(s));
+        }
+        Mists.logger.info("Graphics succesfully loaded");
+        } else this.graphics = new Sprite();
+        this.graphics.setPosition(xCoor, yCoor);
+    }
     
     @Override
     public String[] getInfoText() {

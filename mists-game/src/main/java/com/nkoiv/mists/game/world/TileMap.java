@@ -516,6 +516,7 @@ public class TileMap implements GameMap, KryoSerializable {
         this.tileWidth = input.readInt();
         this.tileHeight = input.readInt();
         this.intMap = new int[tileWidth][tileHeight];
+        this.tileMap = new Tile[tileWidth][tileHeight];
         for (int i = 0; i < this.tileWidth; i++) {
             this.intMap[i] = input.readInts(tileHeight);
         }
@@ -534,6 +535,7 @@ public class TileMap implements GameMap, KryoSerializable {
         Mists.logger.info("Loaded " + tileWidth + " x " + tileHeight + " sized TileMap");
         this.loadDefaultStructCodes();
         this.loadDefaultFloorCodes();
+        this.generateTilesFromIntMap(intMap);
         //this.structureCodes = (HashMap<Integer, Structure>)kryo.readClassAndObject(input);
     }
 

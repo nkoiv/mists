@@ -33,6 +33,10 @@ public class Water extends Structure implements HasNeighbours{
     private ImageView waterImages_alt;
     private SpriteAnimation[] animatedTiles;
     
+    public Water() {
+        super();
+    }
+    
     public Water(String name, ImageView shapeImages, ImageView shapeImages_alt) {
         super(name, new Sprite(), 10);
         this.waterImages = shapeImages;

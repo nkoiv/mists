@@ -138,6 +138,7 @@ public class LocationLibrary  {
         if (template.lightlevel > 0) l.getEnvironment().setLightlevel(template.lightlevel);
         l.getEnvironment().setDefaultMusic(template.music);
         l.updateAllVariableGraphicStructures();
+        l.setBaseID(template.baseID);
         l.loading = false;
         return l;
     }

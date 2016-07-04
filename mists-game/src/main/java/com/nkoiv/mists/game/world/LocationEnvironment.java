@@ -78,7 +78,7 @@ public class LocationEnvironment implements KryoSerializable{
 
 	@Override
 	public void write(Kryo kryo, Output output) {
-		kryo.writeObject(output, this.shadowcolor);
+            //kryo.writeObject(output, this.shadowcolor);
 	    output.writeDouble(shadowdepth);
 	    output.writeDouble(lightlevel);
 	    output.writeString(defaultMusic);
@@ -87,7 +87,7 @@ public class LocationEnvironment implements KryoSerializable{
 
 	@Override
 	public void read(Kryo kryo, Input input) {
-		this.shadowcolor = (Color)kryo.readClassAndObject(input);
+		//this.shadowcolor = (Color)kryo.readClassAndObject(input);
 		this.shadowdepth = input.readDouble();
 		this.lightlevel = input.readDouble();
 		this.defaultMusic = input.readString();

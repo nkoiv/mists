@@ -113,7 +113,7 @@ public class LibLoader {
         HashMap<Integer, Structure> structureMap = new HashMap<>();
         File codeYAML = new File(codeFile);
         try {
-            Mists.logger.info("Attempting to read YAML from "+codeYAML.getCanonicalPath());
+            //Mists.logger.info("Attempting to read YAML from "+codeYAML.getCanonicalPath());
             YamlReader reader = new YamlReader(new FileReader(codeYAML));
             while (true) {
                 Object object = reader.read();
@@ -124,7 +124,7 @@ public class LibLoader {
                     Structure structure = LocationLibrary.generateStructureFromYAML(structureDataMap);
                     if (structure !=null) {
                         structureMap.put(tileCode, structure);
-                        Mists.logger.info("Added "+structure.getName()+" on tileCode "+tileCode);
+                        //Mists.logger.info("Added "+structure.getName()+" on tileCode "+tileCode);
                     }
                 } catch (Exception e) {
                     Mists.logger.warning("Failed parsing Structure Code for "+object.toString());

@@ -32,6 +32,10 @@ public class Roof implements KryoSerializable {
     private double graphheight;
     private CollisionBox hiddenArea;
     
+    public Roof() {
+        
+    }
+    
     public Roof(String roofImageName) {
     	this(roofImageName, Mists.graphLibrary.getImage(roofImageName));
     }

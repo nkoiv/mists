@@ -45,8 +45,13 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
     
     protected int IDinLocation;
     
-    public MapObject (String name) {
+    public MapObject() {
+        this.graphics = new Sprite();
         this.flags = new HashMap<>();
+    }
+    
+    public MapObject (String name) {
+        this();
         this.name = name;
         this.flags.put("visible", 1);
     }
@@ -324,13 +329,13 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 	@Override
 	public void read(Kryo kryo, Input input) {
 		super.read(kryo, input);
-		Mists.logger.info("Reading MOB:");
+		//Mists.logger.info("Reading MOB:");
 		this.templateID = input.readInt();
 		this.name = input.readString();
 		this.IDinLocation = input.readInt();
 		double xCoor = input.readDouble();
 		double yCoor = input.readDouble();
-		Mists.logger.info("TemplateID: "+templateID+" name: "+name+" locationID: "+IDinLocation);
+		//Mists.logger.info("TemplateID: "+templateID+" name: "+name+" locationID: "+IDinLocation);
 		this.readGraphicsFromLibrary(templateID, xCoor, yCoor);
 	}
 	

@@ -125,7 +125,7 @@ public class LocationState implements GameState {
         //Move the actionbar to where it should be
         Mists.logger.info("Updating UI. Game dimensions: "+game.WIDTH+"x"+game.HEIGHT);
         uiComponents.get("Actionbar").setPosition(0, (game.HEIGHT - 80));
-        if(gameMenuOpen) uiComponents.get("GameMenu").setPosition((game.WIDTH/2 - 110), 150);
+        if(gameMenuOpen && uiComponents.containsKey("GameMenu")) uiComponents.get("GameMenu").setPosition((game.WIDTH/2 - 110), 150);
     }
     
     public void toggleScale(GraphicsContext gc) {
@@ -377,8 +377,8 @@ public class LocationState implements GameState {
             gameMenuOpen = true;
             TiledPanel gameMenu = new TiledPanel(this, "GameMenu", 220, 360, 100, 100,Mists.graphLibrary.getImageSet("panelBeige"));
             //TextButton resumeButton = new LocationButtons.ResumeButton("Resume", 200, 60, this.game);
-            TextButton saveButton = new LocationButtons.SaveButton("Save player", 200, 60, game);
-            TextButton loadButton = new LocationButtons.LoadButton("Load player", 200, 60, game);
+            TextButton saveButton = new LocationButtons.SaveButton("Save game", 200, 60, game);
+            TextButton loadButton = new LocationButtons.LoadButton("Load game", 200, 60, game);
             TextButton optionsButton = new TextButton("TODO: Options", 200, 60);
             GoMainMenuButton mainMenuButton = new GoMainMenuButton(this.game, 200, 60);
             QuitButton quitButton = new QuitButton("Quit game", 200, 60);

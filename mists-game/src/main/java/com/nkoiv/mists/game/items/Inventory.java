@@ -326,27 +326,27 @@ public class Inventory implements KryoSerializable {
         return hash;
     }
 
-	@Override
-	public void write(Kryo kryo, Output output) {
-		output.writeInt(this.itemSize);
-		for (int i = 0; i < this.itemSize; i++) {
-			if (this.items[i] == null) output.write(-1);
-			else output.write(items[i].baseID);
-		}
-	}
+    @Override
+    public void write(Kryo kryo, Output output) {
+        output.writeInt(this.itemSize);
+        for (int i = 0; i < this.itemSize; i++) {
+            if (this.items[i] == null) output.write(-1);
+            else output.write(items[i].baseID);
+        }
+    }
 
-	@Override
-	public void read(Kryo kryo, Input input) {
-		this.itemSize = input.read();
-		this.items = new Item[itemSize];
-		this.slotnames = new String[itemSize];
-		this.prepareInventory();
-		for (int i = 0; i < itemSize; i++) {
-			int itemID = input.readInt();
-			if (itemID != -1) {
-				this.items[i] =  Mists.itemLibrary.create(itemID);
-			}
-		}
-	}
+    @Override
+    public void read(Kryo kryo, Input input) {
+        this.itemSize = input.read();
+        this.items = new Item[itemSize];
+        this.slotnames = new String[itemSize];
+        this.prepareInventory();
+        for (int i = 0; i < itemSize; i++) {
+            int itemID = input.readInt();
+            if (itemID != -1) {
+                this.items[i] =  Mists.itemLibrary.create(itemID);
+            }
+        }
+    }
     
 }

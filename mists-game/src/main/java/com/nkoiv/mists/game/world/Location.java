@@ -1633,103 +1633,120 @@ public class Location extends Flags implements KryoSerializable {
         
     }
     
-	@Override
-	public void write(Kryo kryo, Output output) {
-		output.writeInt(this.baseLocationID);
-		output.writeString(this.name);
-		//Write Map
-		byte mapType = -1;
-		if (this.map instanceof TileMap) mapType = 1;
-		if (this.map instanceof BGMap) mapType = 2;
-		output.writeByte(mapType);
-		if (mapType != -1) kryo.writeClassAndObject(output, this.map);
-		//Write Environment
-		kryo.writeClassAndObject(output, this.environment);
-		//Write Structures
-		output.writeInt(this.structures.size());
-		for (Structure s : this.structures) {
-			kryo.writeClassAndObject(output, s);
-		}
-		//Write Creatures
-		output.writeInt(this.creatures.size());
-		for (Creature c : this.creatures) {
-			kryo.writeClassAndObject(output, c);
-		}
-		//Write TriggerPlates
-		output.writeInt(this.triggerPlates.size());
-		for (TriggerPlate t : this.triggerPlates) {
-			kryo.writeClassAndObject(output, t);
-		}
-		//NOTE: Effects are not saved or loaded right now. 
-		//TODO: Consider if it saving Effects would make sense
-		output.writeInt(this.roofs.size());
-		for (Roof r : this.roofs) {
-			kryo.writeClassAndObject(output, r);
-		}
-		
-	}
+    @Override
+    public void write(Kryo kryo, Output output) {
+        super.write(kryo, output);
 
-	@Override
-	public void read(Kryo kryo, Input input) {
-		//Clean base
+        output.writeInt(this.baseLocationID);
+        output.writeString(this.name);
+        //Write Map
+        
+        byte mapType = -1;
+        if (this.map instanceof TileMap) mapType = 1;
+        if (this.map instanceof BGMap) mapType = 2;
+        output.writeByte(mapType);
+        if (mapType != -1) kryo.writeClassAndObject(output, this.map);
+        
+        //Write Environment
+        kryo.writeClassAndObject(output, this.environment);
+        //Write Structures
+        output.writeInt(this.structures.size());
+        for (Structure s : this.structures) {
+                kryo.writeClassAndObject(output, s);
+        }
+        //Write Creatures
+        int creatureCount = this.creatures.size();
+        if (this.creatures.contains(this.player)) creatureCount--;
+        output.writeInt(creatureCount);
+        for (Creature c : this.creatures) {
+                if (!c.equals(this.player))kryo.writeClassAndObject(output, c);
+        }
+        //Write TriggerPlates
+        output.writeInt(this.triggerPlates.size());
+        for (TriggerPlate t : this.triggerPlates) {
+                kryo.writeClassAndObject(output, t);
+        }
+        //NOTE: Effects are not saved or loaded right now. 
+        //TODO: Consider if it saving Effects would make sense
+        output.writeInt(this.roofs.size());
+        for (Roof r : this.roofs) {
+                kryo.writeClassAndObject(output, r);
+        }
+
+    }
+
+    @Override
+    public void read(Kryo kryo, Input input) {
+
+        //Clean base
         this.creatures = new ArrayList<>();
         this.structures = new ArrayList<>();
         this.effects = new ArrayList<>();
         this.triggerPlates = new ArrayList<>();
-		//Basic info
-		this.baseLocationID = input.readInt();
-		this.name = input.readString();
-		//Read map;
-		byte mapType = input.readByte();
-		switch (mapType) {
-			case 1:  //Map is a TileMap
-				Mists.logger.info("Reading tilemap");
-				this.map = (TileMap)kryo.readClassAndObject(input);
-				((TileMap)this.map).buildMap();
-				break;
-			case 2: //Map is a BGMap
-				Mists.logger.info("Reading BGMap");
-				this.map = (BGMap)kryo.readClassAndObject(input);
-				break;
-			default: //Map is of unknown type 
-				Mists.logger.warning("Tried to deserialize a location with unknown maptype!");
-				break;
-		}
-		Mists.logger.info("Map loaded succesfully");
-		//this.localizeMap();
-		//Mists.logger.info("Map Localized");
-		//Read Environment
-		this.environment = (LocationEnvironment)kryo.readClassAndObject(input);
-		Mists.logger.info("Environment loaded succesfully");
-		//Read Structures
-		int structureCount = input.readInt();
-		for (int i = 0; i < structureCount; i++) {
-			Structure s = (Structure)kryo.readClassAndObject(input);
-			this.addMapObject(s, s.getID());
-		}
-		Mists.logger.info("Structures loaded succesfully");
-		//Read Creatures
-		int creatureCount = input.readInt();
-		for (int i = 0; i < creatureCount; i++) {
-			Creature c = (Creature)kryo.readClassAndObject(input);
-			this.addMapObject(c, c.getID());
-		}
-		Mists.logger.info("Creatures loaded succesfully");
-		//Read TriggerPlates
-		int tpCount = input.readInt();
-		for (int i = 0; i < tpCount; i++) {
-			TriggerPlate t = (TriggerPlate)kryo.readClassAndObject(input);
-			this.addMapObject(t, t.getID());
-		}
-		Mists.logger.info("TriggerPlates loaded succesfully");
-		//Read Roofs
-		int roofCount = input.readInt();
-		for (int i = 0; i < roofCount; i++){
-			Roof r = (Roof)kryo.readClassAndObject(input);
-			this.roofs.add(r);
-		}
-		Mists.logger.info("Roofs loaded succesfully");
+        super.read(kryo, input);
+        //Basic info
+        this.baseLocationID = input.readInt();
+        this.name = input.readString();
+        Mists.logger.info("Initialized map: "+this.name+" ID: "+this.baseLocationID);
+        //Read map;
+        
+        byte mapType = input.readByte();
+        switch (mapType) {
+            case 1:  //Map is a TileMap
+                Mists.logger.info("Reading tilemap");
+                this.map = (TileMap)kryo.readClassAndObject(input);
+                ((TileMap)this.map).buildMap();
+                break;
+            case 2: //Map is a BGMap
+                Mists.logger.info("Reading BGMap");
+                this.map = (BGMap)kryo.readClassAndObject(input);
+                break;
+            default: //Map is of unknown type 
+                Mists.logger.warning("Tried to deserialize a location with unknown maptype!");
+                break;
+        }
+        Mists.logger.info("Map loaded succesfully");
+        this.localizeMap();
+        
+        //Mists.logger.info("Map Localized");
+        //Read Environment
+        this.environment = (LocationEnvironment)kryo.readClassAndObject(input);
+        Mists.logger.info("Environment loaded succesfully");
+        //Read Structures
+        int structureCount = input.readInt();
+        Mists.logger.info("Loading "+structureCount+" Structures");
+        for (int i = 0; i < structureCount; i++) {
+                Structure s = (Structure)kryo.readClassAndObject(input);
+                if (s instanceof Structure) this.addMapObject(s, s.getID());
+                //else Mists.logger.warning("Tried to load Structure, got: "+s.toString());
+        }
+        Mists.logger.info("Structures loaded succesfully");
+        //Read Creatures
+        int creatureCount = input.readInt();
+        Mists.logger.info("Loading "+creatureCount+" Creatures");
+        for (int i = 0; i < creatureCount; i++) {
+                Creature c = (Creature)kryo.readClassAndObject(input);
+                if (c instanceof Creature) this.addMapObject(c, c.getID());
+                //else Mists.logger.warning("Tried to load Creature, got: "+c.toString());
+        }
+        Mists.logger.info("Creatures loaded succesfully");
+        //Read TriggerPlates
+        int tpCount = input.readInt();
+        Mists.logger.info("Loading "+tpCount+" TriggerPlates");
+        for (int i = 0; i < tpCount; i++) {
+                TriggerPlate t = (TriggerPlate)kryo.readClassAndObject(input);
+                if (t instanceof TriggerPlate) this.addMapObject(t, t.getID());
+                //else Mists.logger.warning("Tried to load TriggerPlate, got: "+t.toString());
+        }
+        Mists.logger.info("TriggerPlates loaded succesfully");
+        //Read Roofs
+        int roofCount = input.readInt();
+        for (int i = 0; i < roofCount; i++){
+                Roof r = (Roof)kryo.readClassAndObject(input);
+                this.roofs.add(r);
+        }
+        Mists.logger.info("Roofs loaded succesfully");
 
-	}
+    }
     
 }

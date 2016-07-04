@@ -28,6 +28,11 @@ public class TriggerPlate extends MapObject {
     private boolean clear;
     private boolean triggerOnlyOnce;
     
+    public TriggerPlate() {
+        super();
+        this.touchTriggers = new ArrayList<>();
+    }
+    
     public TriggerPlate(String name, double width, double height, double triggerCooldown, MapObject target) {
         this(name,width, height, triggerCooldown);
         this.touchTriggers = new ArrayList<>();

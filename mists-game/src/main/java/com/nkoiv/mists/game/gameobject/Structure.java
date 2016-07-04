@@ -27,7 +27,12 @@ public class Structure extends MapObject {
     
     //Extra sprites are used as a non-collision part of the structure
     protected ArrayList<Sprite> extraSprites;
-
+  
+    public Structure() {
+        super();
+        this.extraSprites = new ArrayList<>();
+    }
+    
     public Structure(String name, Image image, int collisionLevel) {
         super(name, image);
         this.collisionLevel = collisionLevel;

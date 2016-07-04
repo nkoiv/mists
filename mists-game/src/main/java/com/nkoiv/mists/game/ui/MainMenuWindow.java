@@ -33,7 +33,8 @@ public class MainMenuWindow extends TiledPanel {
     
     private void initializeMenuButtons() {
         NewGameButton menubutton1 = new NewGameButton(super.getParent().getGame(), this.parent);
-        ResumeGameButton menubutton2 = new ResumeGameButton(super.getParent().getGame());
+        //ResumeGameButton menubutton2 = new ResumeGameButton(super.getParent().getGame());
+        TextButton menubutton2 = new LocationButtons.LoadButton("Load game", 200, 60, Mists.MistsGame);
         OptionsButton menubutton3 = new OptionsButton();
         QuitButton menubutton4 = new QuitButton("Quit game", 200, 60);
         super.addSubComponent(menubutton1);

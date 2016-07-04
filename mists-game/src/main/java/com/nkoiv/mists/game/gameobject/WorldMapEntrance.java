@@ -20,6 +20,10 @@ import com.nkoiv.mists.game.world.worldmap.MapNode;
 public class WorldMapEntrance extends Structure {
     private MapNode exitNode;
     
+    public WorldMapEntrance() {
+        super();
+    }
+    
     public WorldMapEntrance(String name, MovingGraphics graphics, int collisionLevel, MapNode exitNode) {
         super(name, graphics, collisionLevel);
         this.exitNode = exitNode;

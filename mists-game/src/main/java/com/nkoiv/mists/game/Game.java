@@ -284,6 +284,7 @@ public class Game {
     }
     
     public void moveToLocation(int locationID, double xCoor, double yCoor) {
+        Mists.logger.info("Trying to move to Location ID "+locationID);
         Location l = getLocation(locationID);
         moveToLocation(l, xCoor, yCoor);
     }

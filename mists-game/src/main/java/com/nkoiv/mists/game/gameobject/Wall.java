@@ -62,6 +62,10 @@ public class Wall extends Structure implements HasNeighbours {
      [5][6][7]
     */
     
+    public Wall() {
+        super();
+    }
+    
     public Wall(String name, Image image, int collisionLevel, ImageView wallparts) {
         super(name, image, collisionLevel);
         this.wallparts = wallparts;
