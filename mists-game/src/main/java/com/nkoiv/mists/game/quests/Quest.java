@@ -24,6 +24,10 @@ public class Quest implements KryoSerializable {
     private int questID;
     private ArrayList<QuestTask> tasks;
     
+    public Quest() {
+    	
+    }
+    
     public Quest(String title, int ID) {
         this (title, "QUEST TEXT MISSING", ID, new ArrayList<QuestTask>());
     }

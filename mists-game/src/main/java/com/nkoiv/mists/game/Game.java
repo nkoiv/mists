@@ -397,7 +397,7 @@ public class Game {
     
     public void handleMouseEvent(MouseEvent me) {
         //Pass the mouse event to the current gamestate
-        if (!this.running) return;
+        if (!this.running || this.loading || this.currentState == null) return;
         currentState.handleMouseEvent(me);
     }
     

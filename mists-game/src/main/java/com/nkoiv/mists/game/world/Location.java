@@ -95,6 +95,9 @@ public class Location extends Flags implements KryoSerializable {
     * TODO: load this from some XML or somesuch
     */
     
+    public Location() {
+    	
+    }
     
     public Location(String name, String mapFileName, int maptype) {
         this.name = name;
@@ -1639,7 +1642,7 @@ public class Location extends Flags implements KryoSerializable {
 		if (this.map instanceof TileMap) mapType = 1;
 		if (this.map instanceof BGMap) mapType = 2;
 		output.writeByte(mapType);
-		if (mapType != -1) kryo.writeObject(output, this.map);
+		if (mapType != -1) kryo.writeClassAndObject(output, this.map);
 		//Write Environment
 		kryo.writeClassAndObject(output, this.environment);
 		//Write Structures
@@ -1655,13 +1658,13 @@ public class Location extends Flags implements KryoSerializable {
 		//Write TriggerPlates
 		output.writeInt(this.triggerPlates.size());
 		for (TriggerPlate t : this.triggerPlates) {
-			kryo.writeObject(output, t);
+			kryo.writeClassAndObject(output, t);
 		}
 		//NOTE: Effects are not saved or loaded right now. 
 		//TODO: Consider if it saving Effects would make sense
 		output.writeInt(this.roofs.size());
 		for (Roof r : this.roofs) {
-			kryo.writeObject(output, r);
+			kryo.writeClassAndObject(output, r);
 		}
 		
 	}
@@ -1680,45 +1683,52 @@ public class Location extends Flags implements KryoSerializable {
 		byte mapType = input.readByte();
 		switch (mapType) {
 			case 1:  //Map is a TileMap
-				this.map = kryo.readObject(input, TileMap.class);
+				Mists.logger.info("Reading tilemap");
+				this.map = (TileMap)kryo.readClassAndObject(input);
 				((TileMap)this.map).buildMap();
 				break;
 			case 2: //Map is a BGMap
-				this.map = kryo.readObject(input, BGMap.class);
+				Mists.logger.info("Reading BGMap");
+				this.map = (BGMap)kryo.readClassAndObject(input);
 				break;
 			default: //Map is of unknown type 
 				Mists.logger.warning("Tried to deserialize a location with unknown maptype!");
 				break;
 		}
-		this.localizeMap();
+		Mists.logger.info("Map loaded succesfully");
+		//this.localizeMap();
+		//Mists.logger.info("Map Localized");
 		//Read Environment
 		this.environment = (LocationEnvironment)kryo.readClassAndObject(input);
+		Mists.logger.info("Environment loaded succesfully");
 		//Read Structures
 		int structureCount = input.readInt();
 		for (int i = 0; i < structureCount; i++) {
 			Structure s = (Structure)kryo.readClassAndObject(input);
 			this.addMapObject(s, s.getID());
 		}
+		Mists.logger.info("Structures loaded succesfully");
 		//Read Creatures
 		int creatureCount = input.readInt();
 		for (int i = 0; i < creatureCount; i++) {
 			Creature c = (Creature)kryo.readClassAndObject(input);
 			this.addMapObject(c, c.getID());
 		}
-		
+		Mists.logger.info("Creatures loaded succesfully");
 		//Read TriggerPlates
 		int tpCount = input.readInt();
 		for (int i = 0; i < tpCount; i++) {
-			TriggerPlate t = (TriggerPlate)kryo.readObject(input, TriggerPlate.class);
+			TriggerPlate t = (TriggerPlate)kryo.readClassAndObject(input);
 			this.addMapObject(t, t.getID());
 		}
+		Mists.logger.info("TriggerPlates loaded succesfully");
 		//Read Roofs
 		int roofCount = input.readInt();
 		for (int i = 0; i < roofCount; i++){
-			Roof r = kryo.readObject(input, Roof.class);
+			Roof r = (Roof)kryo.readClassAndObject(input);
 			this.roofs.add(r);
 		}
-		
+		Mists.logger.info("Roofs loaded succesfully");
 
 	}
     

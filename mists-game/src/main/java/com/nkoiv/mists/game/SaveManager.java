@@ -55,8 +55,9 @@ public class SaveManager {
             kryo.register(Wall.class, 11);
             kryo.register(Water.class, 12);
             kryo.register(Door.class, 13);
-            //Register maps
-            kryo.register(TileMap.class, 20);
+            //Register locations and maps
+            kryo.register(Location.class, 20);
+            kryo.register(TileMap.class, 21);
             //Register quests and dialogue
             kryo.register(Dialogue.class, 30);
             kryo.register(DialogueManager.class, 31);
@@ -118,12 +119,18 @@ public class SaveManager {
         if (game.getCurrentLocation() != null) locationID = game.getCurrentLocation().getBaseID();
         output.writeInt(locationID);
         //Save Player
+        /*
+        output.writeString("<PLAYERDATA>");
         kryo.writeClassAndObject(output, game.getPlayer());
+        */
         //Save QuestManager
+        output.writeString("<QUESTDATA>");
         kryo.writeClassAndObject(output, game.questManager);
         //Save DialogueManager
+        output.writeString("<DIALOGUEDATA>");
         kryo.writeClassAndObject(output, game.dialogueManager);
         //Save generated Locations 
+        output.writeString("<LOCATIONDATA>");
         saveGeneratedLocations(game, kryo, output);
         
     	//Close the output stream and release the kryo
@@ -141,20 +148,21 @@ public class SaveManager {
     private static void saveGeneratedLocations(Game game, Kryo kryo, Output output) {
     	int generatedLocationCount = game.getGeneratedLocationIDs().size();
     	output.writeInt(generatedLocationCount);
-    	Iterator<Integer> it = game.getGeneratedLocationIDs().iterator();
-    	while (it.hasNext()) {
-    		Integer locationID = it.next();
-    		Location loc = game.getLocation(locationID);
-    		kryo.writeObject(output, loc);
+    	for (Integer id : game.getGeneratedLocationIDs()) {
+    		output.writeInt(id);
+    		kryo.writeObject(output, game.getLocation(id));
     	}
     }
     
     private static void loadGeneratedLocations(Game game, Kryo kryo, Input input) {
+    	Mists.logger.info("Loading locations from save data");
     	int locationID;
     	Location location;
     	int locationCount = input.readInt();
+    	Mists.logger.info(locationCount+" locations to load");
     	for (int i = 0; i < locationCount; i++) {
     		locationID = input.readInt();
+    		Mists.logger.info("Loading ID: "+locationID+" ("+i+"/"+locationCount+")");
     		location = kryo.readObject(input, Location.class);
     		game.setLocation(locationID, location);
     	}
@@ -162,11 +170,11 @@ public class SaveManager {
     
     public static void loadGame(Game game, String savefile) throws FileNotFoundException {
     	//Set up a loading screen for the process
+    	String check;
     	LoadingScreen loadingScreen = new LoadingScreen("Loading game data", 10);
     	game.setLoadingScreen(loadingScreen);
     	//Move to a blank gamestate to avoid mutex problems in loading up data that's being used
     	game.moveToState(Game.LOADSCREEN);
-    	
     	//Open the savefile and start loading
     	Kryo kryo = SaveManager.pool.borrow();
     	Input input = new Input(new FileInputStream(savefile));
@@ -176,19 +184,32 @@ public class SaveManager {
     	//Load the gamestateID
     	int gameStateID = input.readInt();
     	int currentLocationID = input.readInt();
-    	
     	//Load Player
+    	loadingScreen.updateProgress(1, "Loading Player data");
+    	/*
+    	check = input.readString();
+    	if (!"<PLAYERDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
     	PlayerCharacter player = (PlayerCharacter)kryo.readClassAndObject(input);
     	game.setPlayer(player);
+    	*/
     	//Load QuestManager
+    	loadingScreen.updateProgress(1, "Loading Quests");
+    	check = input.readString();
+    	if (!"<QUESTDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
     	QuestManager qm = (QuestManager)kryo.readClassAndObject(input);
     	game.questManager = qm;
     	//Load DialogueManager
+    	loadingScreen.updateProgress(1, "Loading Dialogues");
+    	check = input.readString();
+    	if (!"<DIALOGUEDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
     	DialogueManager dm = (DialogueManager)kryo.readClassAndObject(input);
     	game.dialogueManager = dm;
     	//Load generated Locations
+    	loadingScreen.updateProgress(1, "Loading generated Locations");
+    	check = input.readString();
+    	if (!"<LOCATIONDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
     	loadGeneratedLocations(game, kryo, input);
-    	if (currentLocationID != -1) game.moveToLocation(currentLocationID, player.getXPos(), player.getYPos());
+    	//if (currentLocationID != -1) game.moveToLocation(currentLocationID, player.getXPos(), player.getYPos());
     	
     	//Close the input stream and release the kryo
     	input.close();

@@ -48,6 +48,10 @@ public class TileMap implements GameMap, KryoSerializable {
     protected static final int WALL = 35;
     protected static final int DOOR = 43;
     
+    public TileMap() {
+    	
+    }
+    
     public TileMap(int[][] floorMap, int[][] structureMap, int tilesize) {
         this.tilesize = tilesize;
         this.floorMap = floorMap;
@@ -491,10 +495,8 @@ public class TileMap implements GameMap, KryoSerializable {
             output.writeInts(intColumn);
         }
         //Two bits for floorMap and structMap
-        if (this.floorMap != null) output.writeBoolean(true);
-        else output.writeBoolean(false);
-        if (this.structureMap != null) output.writeBoolean(true);
-        else output.writeBoolean(false);
+        output.writeBoolean(this.floorMap != null);
+        output.writeBoolean(this.structureMap != null);
         if (this.floorMap != null) {
         	for (int[] intColumn : this.floorMap) {
                 output.writeInts(intColumn);
@@ -529,6 +531,7 @@ public class TileMap implements GameMap, KryoSerializable {
                 this.structureMap[i] = input.readInts(tileHeight);
             }
         }
+        Mists.logger.info("Loaded " + tileWidth + " x " + tileHeight + " sized TileMap");
         this.loadDefaultStructCodes();
         this.loadDefaultFloorCodes();
         //this.structureCodes = (HashMap<Integer, Structure>)kryo.readClassAndObject(input);

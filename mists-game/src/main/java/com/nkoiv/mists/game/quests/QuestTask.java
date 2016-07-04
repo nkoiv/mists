@@ -22,6 +22,9 @@ public class QuestTask implements KryoSerializable {
         private QuestTaskType type;
         private int objectiveID;
         
+        public QuestTask() {
+        	
+        }
         
         public QuestTask(String description, QuestTaskType tasktype, int objectiveID, int requiredCount) {
             this.description = description;

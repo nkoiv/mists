@@ -261,17 +261,22 @@ public class QuestManager implements KryoSerializable {
 
 	@Override
 	public void read(Kryo kryo, Input input) {
+		Mists.logger.info("Reading quest data...");
 		int totalQuests = input.readInt();
+		Mists.logger.info(totalQuests+" quests to load");
 		for (int i = 0; i < totalQuests; i++) {
 			Quest q = kryo.readObject(input, Quest.class);
 			this.allQuests.put(q.getID(), q);
+			Mists.logger.info(q.getTitle()+" succesfully loaded and added under ID"+q.getID());
 		}
 		int openQuests = input.readInt();
+		Mists.logger.info(openQuests+" open quests");
 		for (int i = 0; i < openQuests; i++) {
 			int qID = input.readInt();
 			this.openQuests.put(qID, this.allQuests.get(qID));
 		}
 		int closedQuests = input.readInt();
+		Mists.logger.info(closedQuests+" closed quests");
 		for (int i = 0; i< closedQuests; i++) {
 			int qID = input.readInt();
 			this.closedQuests.put(qID, this.allQuests.get(qID));
