@@ -195,6 +195,9 @@ public class WorldMapState implements GameState {
         double clickY = me.getY() + game.getCurrentWorldMap().getLastOffsets()[1];
         MapObject mob = game.getCurrentWorldMap().mobAtCoordinates(clickX, clickY);
         MapNode mn = game.getCurrentWorldMap().nodeAtCoordinates(clickX, clickY);
+        //Check to see if there's a link from currentnode to target node
+        if (!game.getCurrentWorldMap().getPlayerNode().getNeighboursAsAList().contains(mn)) return;
+        //Node was a valid neighbour, so continue
         if (mn.equals(game.getCurrentWorldMap().getPlayerNode())) {
         	if (mn instanceof LocationNode) {
                 game.moveToLocation(((LocationNode)mn).getLocationID(), mn);
@@ -203,6 +206,7 @@ public class WorldMapState implements GameState {
         } else {
         	WorldMapControls.moveToNode(game.getCurrentWorldMap(), mn);
         }
+        me.consume();
         /*
         //Logging for testing
         if (mob != null) Mists.logger.info("Click landed on MOB "+mob.getName());

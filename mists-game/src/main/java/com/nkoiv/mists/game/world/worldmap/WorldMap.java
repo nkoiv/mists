@@ -8,10 +8,12 @@ package com.nkoiv.mists.game.world.worldmap;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  * Worldmap is a background image with a bunch of
@@ -57,9 +59,28 @@ public class WorldMap {
         for (MapNode mn : this.nodesOnMap) {
             mn.render(gc, xOffset, yOffset);
         }
+        renderLinks(gc, xOffset, yOffset);
         for (MapObject mob : this.mobsOnMap) {
             mob.render(xOffset, yOffset, gc);
         }
+    }
+    
+    private void renderLinks(GraphicsContext gc, double xOffset, double yOffset) {
+    	ArrayList<MapNode> handledNodes = new ArrayList<>();
+    	for (MapNode mn : this.nodesOnMap) {
+    		renderLinks(mn, handledNodes, gc, xOffset, yOffset);
+    		handledNodes.add(mn);
+    	}
+    }
+    
+    private void renderLinks(MapNode node, ArrayList<MapNode> ignoredLinks, GraphicsContext gc, double xOffset, double yOffset) {
+
+    	for (MapNode neighbour : node.getNeighboursAsAList()) {
+    		//if (ignoredLinks.contains(neighbour)) continue; //Dont draw paths to ignored nodes
+    		gc.setFill(Color.RED);
+    		gc.fillPolygon(new double[]{node.getCenterXPos()-xOffset, node.getCenterXPos()+3-xOffset,  neighbour.getCenterXPos()-xOffset, neighbour.getCenterXPos()+3-xOffset}, new double[]{node.getCenterYPos()-yOffset, node.getCenterYPos()+3-yOffset,  neighbour.getCenterYPos()-yOffset, neighbour.getCenterYPos()+3-yOffset}, 4 );
+    		//gc.strokeLine(node.getXPos(), node.getYPos(), neighbour.getXPos(), neighbour.getYPos());
+    	}
     }
     
     public void tick(double time) {

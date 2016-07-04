@@ -97,6 +97,14 @@ public class MapNode {
             return this.yPos;
         }
         
+        public double getCenterXPos() {
+        	return this.xPos+(this.getSize()/2);
+        }
+        
+        public double getCenterYPos() {
+        	return this.yPos+(this.getSize()/2);
+        }
+        
         public void setXPos(double xPos) {
             this.xPos = xPos;
         }
