@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
  * @author nikok
  */
 public class MapNode {
+		protected int id;
         protected String name;
         protected Image imageOnMap;
         protected boolean bigNode;
@@ -69,6 +70,14 @@ public class MapNode {
         public double getSize() {
         	if (bigNode) return 64;
         	else return 32;
+        }
+        
+        public int getID() {
+        	return this.id;
+        }
+        
+        public void setID(int id) {
+        	this.id = id;
         }
         
         public String getName() {

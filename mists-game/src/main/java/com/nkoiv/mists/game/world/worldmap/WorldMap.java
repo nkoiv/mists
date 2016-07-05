@@ -10,6 +10,7 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -23,23 +24,49 @@ import javafx.scene.paint.Color;
 public class WorldMap {
     private String name;
     private Image backgroundImage;
-    private ArrayList<MapNode> nodesOnMap;
+    private HashMap<Integer, MapNode> nodesOnMap;
     private ArrayList<MapObject> mobsOnMap;
     private MapNode playerNode;
     private PlayerCharacter player;
     private double lastOffsets[];
+    private int nextFreeNodeID = 0;
     
     public WorldMap(String name, Image backgroundImage) {
         this.name = name;
         this.backgroundImage = backgroundImage;
-        this.nodesOnMap = new ArrayList<>();
+        this.nodesOnMap = new HashMap<>();
         this.mobsOnMap = new ArrayList<>();
         lastOffsets = new double[2];
     }
     
-    public void addNode(MapNode node, double xCoordinate, double yCoordinate) {
-        this.nodesOnMap.add(node);
+    /**
+     * Recursively search for a free nodeID
+     * @param startID identifier to start the search from (going upwards)
+     * @return ID that's not in use by any of the current Nodes On Map
+     */
+    private int getFreeNodeID(int startID) {
+    	//Note: In theory we can overflow integer here...
+    	boolean idTaken = false;
+    	for (Integer mnID : this.nodesOnMap.keySet()) {
+    		if (startID == mnID) {
+    			idTaken = true;
+    			break;
+    		}
+    	}
+    	if (idTaken) return getFreeNodeID(startID);
+    	else return startID;
+    }
+    
+    public void addNode(MapNode node, int nodeID, double xCoordinate, double yCoordinate) {
+    	node.setID(nodeID);
+    	this.nodesOnMap.put(nodeID, node);
         node.setPosition(xCoordinate, yCoordinate);
+    }
+    
+    public void addNode(MapNode node, double xCoordinate, double yCoordinate) {
+    	int idForNode = getFreeNodeID(nextFreeNodeID);
+    	nextFreeNodeID = idForNode+1;
+    	this.addNode(node, idForNode, xCoordinate, yCoordinate);
     }
     
     public void addMapObject(MapObject mob) {
@@ -56,7 +83,7 @@ public class WorldMap {
         double xOffset = this.getxOffset(gc, playerNode.getXPos());
         double yOffset = this.getyOffset(gc, playerNode.getYPos());
         gc.drawImage(backgroundImage, -xOffset, -yOffset);
-        for (MapNode mn : this.nodesOnMap) {
+        for (MapNode mn : this.nodesOnMap.values()) {
             mn.render(gc, xOffset, yOffset);
         }
         renderLinks(gc, xOffset, yOffset);
@@ -67,7 +94,7 @@ public class WorldMap {
     
     private void renderLinks(GraphicsContext gc, double xOffset, double yOffset) {
     	ArrayList<MapNode> handledNodes = new ArrayList<>();
-    	for (MapNode mn : this.nodesOnMap) {
+    	for (MapNode mn : this.nodesOnMap.values()) {
     		renderLinks(mn, handledNodes, gc, xOffset, yOffset);
     		handledNodes.add(mn);
     	}
@@ -101,9 +128,13 @@ public class WorldMap {
         return null;
     }
     
-    public MapNode nodeAtCoordinates (double xCoor, double yCoor) {
+    public MapNode getNodeWithID(int nodeID) {
+    	return nodesOnMap.get(nodeID);
+    }
+    
+    public MapNode getNodeAtCoordinates(double xCoor, double yCoor) {
         //TODO: Results nullpointer on mapnodes without image. Should we target the circle rather?
-        for (MapNode ln : this.nodesOnMap) {
+        for (MapNode ln : this.nodesOnMap.values()) {
             boolean b = true;
             if (xCoor < ln.getXPos() || xCoor > (ln.getXPos()+ln.getSize())) b = false;
             if (yCoor < ln.getYPos() || yCoor > (ln.getYPos()+ln.getSize())) b = false;
@@ -168,7 +199,7 @@ public class WorldMap {
     }
 	
     public List<MapNode> getNodes() {
-        return this.nodesOnMap;
+        return (List<MapNode>) this.nodesOnMap.values();
     }
     
     public MapNode getPlayerNode() {
@@ -177,9 +208,13 @@ public class WorldMap {
     }
     
     public void setPlayerNode(String nodeName) {
-        for (MapNode node : this.nodesOnMap) {
+        for (MapNode node : this.nodesOnMap.values()) {
             if (node.name.equals(nodeName)) this.playerNode = node;
         }
+    }
+    
+    public void setPlayerNode(int nodeID) {
+    	this.playerNode = nodesOnMap.get(nodeID);
     }
     
     public void setPlayerNode(MapNode node) {
