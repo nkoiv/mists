@@ -328,15 +328,18 @@ public class Inventory implements KryoSerializable {
 
     @Override
     public void write(Kryo kryo, Output output) {
+    	/*
         output.writeInt(this.itemSize);
         for (int i = 0; i < this.itemSize; i++) {
             if (this.items[i] == null) output.write(-1);
             else output.write(items[i].baseID);
         }
+        */
     }
 
     @Override
     public void read(Kryo kryo, Input input) {
+    	/*
         this.itemSize = input.read();
         this.items = new Item[itemSize];
         this.slotnames = new String[itemSize];
@@ -347,6 +350,7 @@ public class Inventory implements KryoSerializable {
                 this.items[i] =  Mists.itemLibrary.create(itemID);
             }
         }
+        */
     }
     
 }
