@@ -113,11 +113,12 @@ public class DialogueManager implements KryoSerializable {
 			output.writeInt(key);
 			HashMap<Integer, Dialogue> d = openDialogues.get(key);
 			//Write the amount of dialogue tied to this particular location
-			output.write(d.keySet().size());
+			int dialogueCount = d.keySet().size();
+			output.writeInt(dialogueCount);
 			for (int i : d.keySet()) {
 				//Write each dialogue along with the mobID it's tied to
 				output.writeInt(i);
-				kryo.writeObject(output, d.get(i));
+				kryo.writeClassAndObject(output, d.get(i));
 			}
 		}
 		
@@ -126,13 +127,16 @@ public class DialogueManager implements KryoSerializable {
 	@Override
 	public void read(Kryo kryo, Input input) {
 		int locationCount = input.readInt();
+		Mists.logger.info("Reading dialogues for "+locationCount+" locations");
 		for (int l = 0; l < locationCount; l++) {
 			int locationID = input.readInt();
 			int dialogues = input.readInt();
+			Mists.logger.info("LocationID: "+locationID+" has "+dialogues+" dialogues...");
 			for (int d = 0; d < dialogues; d++) {
 				int mobID = input.readInt();
-				Dialogue dialogue = kryo.readObject(input, Dialogue.class);
+				Dialogue dialogue = (Dialogue)kryo.readClassAndObject(input);
 				this.setDialogue(locationID, mobID, dialogue);
+				Mists.logger.info("Dialogue for mobID "+mobID+" set to "+dialogue.toString());
 			}
 		}
 	}
