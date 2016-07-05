@@ -16,6 +16,7 @@ import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import com.nkoiv.mists.game.ui.InfoPanel;
 import java.util.ArrayList;
@@ -207,6 +208,9 @@ public class PlayerCharacter extends Creature implements Combatant {
     @Override
     public void read(Kryo kryo, Input input) {
         super.read(kryo, input);
+        //TODO: This is temporary graphics setup. Write proper serialization for player graphics!
+        this.setWalkAnimations("/images/lini.png", 3, 32);
+        this.setDashAnimations("/Images/lini_dash.png", 3, 32);
     }
     
 }
