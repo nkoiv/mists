@@ -906,7 +906,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         output.writeInt(aiType);
 
         //Inventory
-        kryo.writeObject(output, this.inventory);
+        kryo.writeClassAndObject(output, this.inventory);
     }
 
 
@@ -939,9 +939,9 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         }
         Mists.logger.info("AI type set to "+aiType);
         //Inventory
-        Object inv = (Inventory)kryo.readObject(input, Inventory.class);
+        Inventory inv = (Inventory)kryo.readClassAndObject(input);
         Mists.logger.info("Inventory loaded: "+inv.toString());
-        if (inv instanceof Inventory) this.inventory = (Inventory)inv;
+        this.inventory = inv;
 
         Mists.logger.info("Finished loading "+this.getName());
     }
