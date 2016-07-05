@@ -151,7 +151,7 @@ public class SaveManager {
     	output.writeInt(generatedLocationCount);
     	for (Integer id : game.getGeneratedLocationIDs()) {
     		output.writeInt(id);
-    		kryo.writeObject(output, game.getLocation(id));
+    		kryo.writeClassAndObject(output, game.getLocation(id));
     	}
     }
     
@@ -164,7 +164,7 @@ public class SaveManager {
     	for (int i = 0; i < locationCount; i++) {
             locationID = input.readInt();
             Mists.logger.info("Loading ID: "+locationID+" ("+i+"/"+locationCount+")");
-            location = kryo.readObject(input, Location.class);
+            location = (Location)kryo.readClassAndObject(input);
             location.setBaseID(locationID);
             game.setLocation(locationID, location);
             Mists.logger.info("Set "+location.getName()+" to ID "+locationID);

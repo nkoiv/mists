@@ -318,7 +318,7 @@ public class Water extends Structure implements HasNeighbours{
 				this.animatedTiles = ((Water)dummy).animatedTiles;
 			}
 		} else this.graphics = new Sprite();
-		this.graphics.setPosition(xCoor, yCoor);
+		this.setPosition(xCoor, yCoor);
 	}
     
 }

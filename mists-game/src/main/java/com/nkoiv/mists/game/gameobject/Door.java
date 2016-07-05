@@ -24,6 +24,9 @@ public class Door  extends Structure {
     private Image openImage;
     private Image closedImage;
     
+    public Door() {
+    	
+    }
     
     public Door(String name, Image closedImage, Image openImage, int collisionLevel) {
         super(name, closedImage, collisionLevel);
@@ -128,6 +131,6 @@ public class Door  extends Structure {
 			this.openImage = d.openImage;
 			this.closedImage = d.closedImage;
 		} else this.graphics = new Sprite();
-		this.graphics.setPosition(xCoor, yCoor);
+		this.setPosition(xCoor, yCoor);
 	}
 } 

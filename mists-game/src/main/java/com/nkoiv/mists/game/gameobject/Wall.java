@@ -422,9 +422,12 @@ public class Wall extends Structure implements HasNeighbours {
 			if (dummy == null) return;
 			this.graphics = dummy.graphics;
 			this.extraSprites = dummy.extraSprites;
-			if (dummy instanceof Wall) this.wallparts = ((Wall)dummy).wallparts;
+			if (dummy instanceof Wall) {
+				this.wallparts = ((Wall)dummy).wallparts;
+				this.wallimages = ((Wall)dummy).wallimages;
+			}
 		} else this.graphics = new Sprite();
-		this.graphics.setPosition(xCoor, yCoor);
+		this.setPosition(xCoor, yCoor);
 	}
 	
 }

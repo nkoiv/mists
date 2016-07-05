@@ -34,6 +34,10 @@ public class ItemContainer extends Structure implements HasInventory {
     private boolean renderContent;
     private boolean permanentInventory;
     
+    public ItemContainer() {
+    	
+    }
+    
     public ItemContainer(String name, MovingGraphics graphics) {
         super(name, graphics, 0);
         this.renderContent = false;
