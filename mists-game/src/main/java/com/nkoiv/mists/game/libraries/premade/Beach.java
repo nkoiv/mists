@@ -36,8 +36,8 @@ public abstract class Beach {
      
    private static void generateStaticStructures(LocationTemplate beachTemplate) {
         
-        Image signpostImage = Mists.structureLibrary.getTemplate("SignpostSmall").getSnapshot();
-        WorldMapEntrance entrance = new WorldMapEntrance("To Worldmap", new Sprite(signpostImage), 0, null);
+        //Image signpostImage = Mists.structureLibrary.getTemplate("SignpostSmall").getSnapshot();
+        WorldMapEntrance entrance = new WorldMapEntrance("To Worldmap", Mists.structureLibrary.getTemplate("SignPostSmall").getTemplateID(), 0, null);
         entrance.setPosition(31*Mists.TILESIZE, 2*Mists.TILESIZE);
         beachTemplate.mobs.add(entrance);
         

@@ -194,7 +194,7 @@ public class WorldMapState implements GameState {
         double clickX = me.getX() + game.getCurrentWorldMap().getLastOffsets()[0];
         double clickY = me.getY() + game.getCurrentWorldMap().getLastOffsets()[1];
         MapObject mob = game.getCurrentWorldMap().mobAtCoordinates(clickX, clickY);
-        MapNode mn = game.getCurrentWorldMap().nodeAtCoordinates(clickX, clickY);
+        MapNode mn = game.getCurrentWorldMap().getNodeAtCoordinates(clickX, clickY);
         //Check to see if there's a link from currentnode to target node
         if (!game.getCurrentWorldMap().getPlayerNode().getNeighboursAsAList().contains(mn)) return;
         //Node was a valid neighbour, so continue

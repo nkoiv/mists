@@ -44,8 +44,8 @@ public abstract class Village {
     }
     
     private static void generateStaticStructures(LocationTemplate villageTemplate) {
-        Image signpostImage = Mists.structureLibrary.getTemplate("SignpostSmall").getSnapshot();
-        WorldMapEntrance entrance = new WorldMapEntrance("To Worldmap", new Sprite(signpostImage), 0, null);
+        //Image signpostImage = Mists.structureLibrary.getTemplate("SignpostSmall").getSnapshot();
+        WorldMapEntrance entrance = new WorldMapEntrance("To Worldmap", Mists.structureLibrary.getTemplate("SignPostSmall").getTemplateID(), 0, null);
         entrance.setPosition(26*Mists.TILESIZE, 34*Mists.TILESIZE);
         villageTemplate.mobs.add(entrance);
         

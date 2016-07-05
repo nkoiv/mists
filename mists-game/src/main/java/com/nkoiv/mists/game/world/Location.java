@@ -22,6 +22,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.Wall;
+import com.nkoiv.mists.game.gameobject.Water;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.puzzle.PuzzleManager;
@@ -1651,8 +1652,11 @@ public class Location extends Flags implements KryoSerializable {
         kryo.writeClassAndObject(output, this.environment);
         //Write Structures
         output.writeInt(this.structures.size());
+        int structureCount = 0;
         for (Structure s : this.structures) {
                 kryo.writeClassAndObject(output, s);
+                if(!(s instanceof Water))Mists.logger.info("Wrote structure "+s.getName()+" in "+this.getName()+" as #"+structureCount);
+                structureCount++;
         }
         //Write Creatures
         int creatureCount = this.creatures.size();
@@ -1714,21 +1718,29 @@ public class Location extends Flags implements KryoSerializable {
         Mists.logger.info("Environment loaded succesfully");
         //Read Structures
         int structureCount = input.readInt();
+        int loadedStructures = 0;
         Mists.logger.info("Loading "+structureCount+" Structures");
         for (int i = 0; i < structureCount; i++) {
                 Structure s = (Structure)kryo.readClassAndObject(input);
+                if (s == null) {
+                	Mists.logger.warning("Error loading unknown Structure #"+i+" in Location "+this.name+" ("+this.baseLocationID+")");
+                	continue;
+                }
                 if (s instanceof Structure) this.addMapObject(s, s.getID());
-                //else Mists.logger.warning("Tried to load Structure, got: "+s.toString());
+                loadedStructures++;
         }
         this.updateAllVariableGraphicStructures();
-        Mists.logger.info("Structures loaded succesfully");
+        Mists.logger.info(loadedStructures+"/"+structureCount+" Structures loaded succesfully");
         //Read Creatures
         int creatureCount = input.readInt();
         Mists.logger.info("Loading "+creatureCount+" Creatures");
         for (int i = 0; i < creatureCount; i++) {
                 Creature c = (Creature)kryo.readClassAndObject(input);
+                if (c == null) {
+                	Mists.logger.warning("Error loading unknown Creature in Location "+this.name+" ("+this.baseLocationID+")");
+                	continue;
+                }
                 if (c instanceof Creature) this.addMapObject(c, c.getID());
-                //else Mists.logger.warning("Tried to load Creature, got: "+c.toString());
         }
         Mists.logger.info("Creatures loaded succesfully");
         //Read TriggerPlates
@@ -1736,8 +1748,11 @@ public class Location extends Flags implements KryoSerializable {
         Mists.logger.info("Loading "+tpCount+" TriggerPlates");
         for (int i = 0; i < tpCount; i++) {
                 TriggerPlate t = (TriggerPlate)kryo.readClassAndObject(input);
+                if (t == null) {
+                	Mists.logger.warning("Error loading unknown TriggerPlate in Location "+this.name+" ("+this.baseLocationID+")");
+                	continue;
+                }
                 if (t instanceof TriggerPlate) this.addMapObject(t, t.getID());
-                //else Mists.logger.warning("Tried to load TriggerPlate, got: "+t.toString());
         }
         Mists.logger.info("TriggerPlates loaded succesfully");
         //Read Roofs

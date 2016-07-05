@@ -91,15 +91,15 @@ public abstract class StarterDungeon {
     
     private static void generateDungeonSkeletonLevelStaticStructures(LocationTemplate dungeon) {
         //Back up
-        Image stairsUpImage = Mists.structureLibrary.getTemplate("DungeonStairsUp").getSprite().getImage();
-        LocationDoorway stairsUp = new LocationDoorway("To Level 1", new Sprite(stairsUpImage), 0, 0, 0, 0);
+        //Image stairsUpImage = Mists.structureLibrary.getTemplate("DungeonStairsUp").getSprite().getImage();
+        LocationDoorway stairsUp = new LocationDoorway("To Level 1", Mists.structureLibrary.getTemplate("DungeonStairsUp").getTemplateID(), 0, 0, 0, 0);
         stairsUp.setTargetLocation(11, 8*Mists.TILESIZE, 27*Mists.TILESIZE);
         stairsUp.setPosition(56*Mists.TILESIZE, 19*Mists.TILESIZE);
         dungeon.mobs.add(stairsUp);
 
         //Deeper into random dungeon
-        Image stairsDownImage = Mists.structureLibrary.getTemplate("DungeonStairsDown").getSprite().getImage();
-        LocationDoorway stairsDown = new LocationDoorway("Deeper into dungeon", new Sprite(stairsDownImage), 0, 0, 0, 0);
+        //Image stairsDownImage = Mists.structureLibrary.getTemplate("DungeonStairsDown").getSprite().getImage();
+        LocationDoorway stairsDown = new LocationDoorway("Deeper into dungeon", Mists.structureLibrary.getTemplate("DungeonStairsDown").getTemplateID(), 0, 0, 0, 0);
         stairsDown.setTargetLocation(1, 100, 100);
         stairsDown.setPosition(18*Mists.TILESIZE, 7*Mists.TILESIZE);
         dungeon.mobs.add(stairsDown);
@@ -228,14 +228,14 @@ public abstract class StarterDungeon {
     
     private static void generateDungeonCaveLevelStaticStructures(LocationTemplate dungeon) {
         //Exit outside
-        Image stairsUpImage = Mists.structureLibrary.getTemplate("DungeonStairsUp").getSprite().getImage();
-        WorldMapEntrance entrance = new WorldMapEntrance("Exit", new Sprite(stairsUpImage), 0, null);
+        //Image stairsUpImage = Mists.structureLibrary.getTemplate("DungeonStairsUp").getSprite().getImage();
+        WorldMapEntrance entrance = new WorldMapEntrance("Exit", Mists.structureLibrary.getTemplate("DungeonStairsUp").getTemplateID(), 0, null);
         entrance.setPosition(25*Mists.TILESIZE, 5*Mists.TILESIZE);
         dungeon.mobs.add(entrance);
         
         //Deeper
-        Image stairsDownImage = Mists.structureLibrary.getTemplate("DungeonStairsDown").getSprite().getImage();
-        LocationDoorway stairsDown = new LocationDoorway("Deeper into dungeon", new Sprite(stairsDownImage), 0, 0, 0, 0);
+        //Image stairsDownImage = Mists.structureLibrary.getTemplate("DungeonStairsDown").getSprite().getImage();
+        LocationDoorway stairsDown = new LocationDoorway("Deeper into dungeon", Mists.structureLibrary.getTemplate("DungeonStairsDown").getTemplateID(), 0, 0, 0, 0);
         stairsDown.setTargetLocation(12, 56*Mists.TILESIZE, 19*Mists.TILESIZE);
         stairsDown.setPosition(8*Mists.TILESIZE, 27*Mists.TILESIZE);
         dungeon.mobs.add(stairsDown);

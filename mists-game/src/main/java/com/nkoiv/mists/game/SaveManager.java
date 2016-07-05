@@ -12,21 +12,32 @@ import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.DialogueManager;
+import com.nkoiv.mists.game.gameobject.CircuitTile;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
+import com.nkoiv.mists.game.gameobject.ItemContainer;
+import com.nkoiv.mists.game.gameobject.LocationDoorway;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.gameobject.Water;
+import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.gamestate.LoadingScreen;
 import com.nkoiv.mists.game.gamestate.LocationState;
+import com.nkoiv.mists.game.items.Inventory;
+import com.nkoiv.mists.game.items.Item;
+import com.nkoiv.mists.game.items.Potion;
+import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.quests.Quest;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.quests.QuestTask;
 import com.nkoiv.mists.game.triggers.*;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
+import com.nkoiv.mists.game.world.util.Flags;
 
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -49,22 +60,20 @@ public class SaveManager {
             Kryo kryo = new Kryo();
             // configure kryo instance, customize settings
             //Register mobs
-            kryo.register(MapObject.class, 1);
-            kryo.register(Creature.class, 2);
+            kryo.register(Flags.class, 1);
+            kryo.register(MapObject.class, 2);
+            kryo.register(Creature.class, 3);
             kryo.register(PlayerCharacter.class, 4);
             kryo.register(Structure.class, 10);
             kryo.register(Wall.class, 11);
             kryo.register(Water.class, 12);
             kryo.register(Door.class, 13);
-            //Register locations and maps
-            kryo.register(Location.class, 20);
-            kryo.register(TileMap.class, 21);
-            //Register quests and dialogue
-            kryo.register(Dialogue.class, 30);
-            kryo.register(DialogueManager.class, 31);
-            kryo.register(Quest.class, 35);
-            kryo.register(QuestManager.class, 36);
-            kryo.register(QuestTask.class, 37);
+            kryo.register(ItemContainer.class, 14);
+            kryo.register(WorldMapEntrance.class, 15);
+            kryo.register(LocationDoorway.class, 16);
+            kryo.register(TriggerPlate.class, 20);
+            kryo.register(PuzzleTile.class, 21);
+            kryo.register(CircuitTile.class, 22);
             //Register triggers
             kryo.register(DialogueTrigger.class, 40);
             kryo.register(DoorTrigger.class, 41);
@@ -80,6 +89,20 @@ public class SaveManager {
             kryo.register(TextPopUpTrigger.class, 51);
             kryo.register(ToggleTrigger.class, 52);
             kryo.register(WorldMapEntranceTrigger.class, 53);
+            //Register inventories and items
+            kryo.register(Inventory.class, 70);
+            kryo.register(Item.class, 71);
+            kryo.register(Weapon.class, 72);
+            kryo.register(Potion.class, 73);
+            //Register locations and maps
+            kryo.register(Location.class, 90);
+            kryo.register(TileMap.class, 91);
+            //Register quests and dialogue
+            kryo.register(Dialogue.class, 100);
+            kryo.register(DialogueManager.class, 101);
+            kryo.register(Quest.class, 105);
+            kryo.register(QuestManager.class, 106);
+            kryo.register(QuestTask.class, 107);
             return kryo;
         }
     };
@@ -163,7 +186,7 @@ public class SaveManager {
     	Mists.logger.info(locationCount+" locations to load");
     	for (int i = 0; i < locationCount; i++) {
             locationID = input.readInt();
-            Mists.logger.info("Loading ID: "+locationID+" ("+i+"/"+locationCount+")");
+            Mists.logger.info("Loading ID: "+locationID+" ("+(i+1)+"/"+locationCount+")");
             location = (Location)kryo.readClassAndObject(input);
             location.setBaseID(locationID);
             game.setLocation(locationID, location);
@@ -224,6 +247,7 @@ public class SaveManager {
             ((LocationState)game.currentState).closeGameMenu();
         }
     	game.clearLoadingScreen();
+    	game.getCurrentLocation().loading = false;
     }
     
     

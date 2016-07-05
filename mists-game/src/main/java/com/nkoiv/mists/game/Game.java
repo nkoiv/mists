@@ -45,7 +45,7 @@ public class Game {
     private PlayerCharacter player;
     private final HashMap<Integer, Location> generatedLocations;
     private final HashMap<Integer, WorldMap> generatedWorldMaps;
-    private int nextFreeLocationID; //Free ID:s start from 10000. First 9999 are reserved.
+    private int nextFreeLocationID = 10000; //Free ID:s start from 10000. First 9999 are reserved.
     
     private Location currentLocation;
     private WorldMap currentWorldMap;
@@ -214,12 +214,14 @@ public class Game {
     }
     
     /**
-     * Get the next free LocationID in the Game and
+     * If the Location has a BaseID, store it under that ID.
+     * Otherwise get the next free LocationID in the Game and
      * add the Location to generatedLocations with it.
      * @param location The location to store in generatedLocations
      */
     public void addLocation(Location location) {
-        this.generatedLocations.put(takeNextFreeLocationID(), location);
+    	if (location.getBaseID() != 0) this.generatedLocations.put(location.getBaseID(), location);
+    	else this.generatedLocations.put(takeNextFreeLocationID(), location);
     }
     
     /**

@@ -94,24 +94,34 @@ public class WorldMapEntrance extends Structure {
     
     @Override
     public void write(Kryo kryo, Output output) {
-            super.write(kryo, output);
-            output.writeInt(exitNodeID);
-            output.writeInt(graphicsTemplateID);
+        super.write(kryo, output);
+        output.writeInt(exitNodeID);
+        output.writeInt(graphicsTemplateID);
     }
 
 
     @Override
     public void read(Kryo kryo, Input input) {
-            super.read(kryo, input);
-            this.exitNodeID = input.readInt();
-            this.graphicsTemplateID = input.readInt();
-            if (Mists.structureLibrary != null) {
-                Structure dummy = Mists.structureLibrary.create(graphicsTemplateID);
-                if (dummy == null) return;
-                dummy.setPosition(this.getXPos(), this.getYPos());
-                this.graphics = dummy.graphics;
-                this.extraSprites = dummy.extraSprites;
+        super.read(kryo, input);
+        this.exitNodeID = input.readInt();
+        this.graphicsTemplateID = input.readInt();
+        if (Mists.structureLibrary != null) {
+            Structure dummy = Mists.structureLibrary.create(graphicsTemplateID);
+            if (dummy == null) {
+            	Mists.logger.warning("Was unable to find graphics for TID#"+graphicsTemplateID+" on "+this.getName());
+            	return;
             }
+            //Save old position
+            double xPos = this.getXPos();
+            double yPos = this.getYPos();
+            //Load new sprite
+            this.graphics = dummy.graphics;
+            this.extraSprites = dummy.extraSprites;
+            //Restore position
+            this.setPosition(xPos, yPos);
+            Mists.logger.info("Swapped "+this.getName()+" graphics with TID#"+graphicsTemplateID+" graphics");
+            Mists.logger.info(this.getName()+" now located at "+this.getXPos()+"x"+this.getYPos());
+        }
     }
     
 
