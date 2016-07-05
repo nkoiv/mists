@@ -6,6 +6,9 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
@@ -18,9 +21,19 @@ import com.nkoiv.mists.game.world.Location;
  * @author nikok
  */
 public class LocationDoorway extends Structure {
+	private int graphicsTemplateID;
     private int targetLocationID;
     private double targetXCoor;
     private double targetYCoor;
+    
+    public LocationDoorway() {
+    	super();
+    }
+    
+    public LocationDoorway(String name, int graphicsTemplateID, int collisionLevel, int targetLocationID, double targetXCoor, double targetYCoor) {
+    	this(name, Mists.structureLibrary.create(graphicsTemplateID).graphics, collisionLevel, targetLocationID, targetXCoor, targetYCoor);
+    	this.graphicsTemplateID = graphicsTemplateID;
+    }
     
     public LocationDoorway(String name, MovingGraphics graphics, int collisionLevel, int targetLocationID, double targetXCoor, double targetYCoor) {
         super(name, graphics, collisionLevel);
@@ -35,6 +48,10 @@ public class LocationDoorway extends Structure {
         this.targetLocationID = targetLocationID;
         this.targetXCoor = targetXCoor;
         this.targetYCoor = targetYCoor;
+    }
+    
+    public void setGraphicsTemplateID(int id) {
+    	this.graphicsTemplateID = id;
     }
     
     @Override
@@ -70,4 +87,29 @@ public class LocationDoorway extends Structure {
         return ld;
     }
     
+    @Override
+    public void write(Kryo kryo, Output output) {
+            super.write(kryo, output);
+            output.writeInt(graphicsTemplateID);
+            output.writeInt(targetLocationID);
+            output.writeDouble(targetXCoor);
+            output.writeDouble(targetYCoor);
+    }
+
+
+    @Override
+    public void read(Kryo kryo, Input input) {
+            super.read(kryo, input);
+            this.graphicsTemplateID = input.readInt();
+            this.targetLocationID = input.readInt();
+            this.targetXCoor = input.readDouble();
+            this.targetYCoor = input.readDouble();
+            if (Mists.structureLibrary != null) {
+                Structure dummy = Mists.structureLibrary.create(graphicsTemplateID);
+                if (dummy == null) return;
+                dummy.setPosition(this.getXPos(), this.getYPos());
+                this.graphics = dummy.graphics;
+                this.extraSprites = dummy.extraSprites;
+            }
+    }
 }
