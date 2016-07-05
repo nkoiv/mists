@@ -298,6 +298,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         if (this.location == null) return;
         this.lastTask = this.nextTask;
         if (this.ai != null) this.setNextTask(this.ai.think(time));
+        //else Mists.logger.info("No AI for "+this.getName()+"!");
     }
     
     public void setCurrentDialogue(Dialogue d) {
@@ -933,8 +934,8 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         //AI
         int aiType = input.readInt();
         switch (aiType) {
-                case 1: this.ai = new MonsterAI(this);
-                case 2: this.ai = new CompanionAI(this);
+                case 1: this.ai = new MonsterAI(this);break;
+                case 2: this.ai = new CompanionAI(this);break;
                 default: this.ai = null;
         }
         Mists.logger.info("AI type set to "+aiType);
