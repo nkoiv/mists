@@ -23,6 +23,10 @@ public class Weapon extends Item {
     //private Enum.WEAPONTYPE wtype; //TODO: Enumerator for weapontypes (sword, axe...)
     //private Enum.DAMAGETYPE dtype; //TODO: Enumerator for damagetypes (piercing, slashing, fire...)
     
+    public Weapon() {
+    	super();
+    }
+    
     public Weapon(int baseID, String name, ItemType itype, Image image) {
         super(baseID, name, itype, image);
     }
@@ -44,29 +48,16 @@ public class Weapon extends Item {
         return w;
     }
     
+    
     @Override
     public void write(Kryo kryo, Output output) {
-        output.writeInt(baseID);
-        output.writeString(name);
-        output.writeString(description);
-        output.writeInt(weight);
-        output.writeInt(damageValue);
+        super.write(kryo, output);
+        output.writeInt(this.damageValue);
     }
 
     @Override
     public void read(Kryo kryo, Input input) {
-        int id = input.readInt();
-        String n = input.readString();
-        String d = input.readString();
-        int w = input.readInt();
-        int dv = input.readInt();
-
-        //-----
-        this.baseID = id;
-        this.name = n;
-        this.image = Mists.itemLibrary.getTemplate(id).getImage();
-        this.description = d;
-        this.weight = w;
-        this.damageValue = dv;
+        super.read(kryo, input);
+        this.damageValue = input.readInt();
     }
 }

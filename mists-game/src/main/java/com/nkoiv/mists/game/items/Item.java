@@ -36,6 +36,14 @@ public class Item implements KryoSerializable {
     protected Image[] equippedImages;
     protected boolean consumedOnUse;
     
+    public Item() {
+    	this.baseID = -1;
+    	this.name = "Unspecified";
+    	this.description = "";
+    	this.weight = 1;
+    	this.consumedOnUse = false;
+    }
+    
     public Item(int baseID, String name, ItemType itype, Image image) {
         this.baseID = baseID;
         this.name = name;
@@ -137,20 +145,16 @@ public class Item implements KryoSerializable {
         output.writeString(name);
         output.writeString(description);
         output.writeInt(weight);
+        output.writeBoolean(consumedOnUse);
     }
 
     @Override
     public void read(Kryo kryo, Input input) {
-        int id = input.readInt();
-        String n = input.readString();
-        String d = input.readString();
-        int w = input.readInt();
-
-        //-----
-        this.baseID = id;
-        this.name = n;
-        this.image = Mists.itemLibrary.getTemplate(id).getImage();
-        this.description = d;
-        this.weight = w;
+        this.baseID = input.readInt();
+        this.name = input.readString();
+        this.image = Mists.itemLibrary.getTemplate(baseID).getImage();
+        this.description = input.readString();
+        this.weight = input.readInt();
+        this.consumedOnUse = input.readBoolean();
     }
 }

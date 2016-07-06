@@ -325,14 +325,25 @@ public class Inventory implements KryoSerializable {
         //Mists.logger.info("Generated inv content hash: "+hash);
         return hash;
     }
+    
+    public int countItemsInInventory() {
+    	int count = 0;
+    	for (Item i : this.items) {
+    		if (i != null) count++;
+    	}
+    	return count;
+    }
 
     @Override
     public void write(Kryo kryo, Output output) {
     	
         output.writeInt(this.itemSize);
+        output.writeInt(this.countItemsInInventory());
         for (int i = 0; i < this.itemSize; i++) {
-            if (this.items[i] == null) output.writeInt(-1);
-            else output.write(items[i].baseID);
+            if (this.items[i] != null) {
+            	output.writeInt(i);
+            	kryo.writeClassAndObject(output, items[i]);
+            }
         }
         
     }
@@ -344,11 +355,11 @@ public class Inventory implements KryoSerializable {
         this.items = new Item[itemSize];
         this.slotnames = new String[itemSize];
         this.prepareInventory();
-        for (int i = 0; i < itemSize; i++) {
-            int itemID = input.readInt();
-            if (itemID != -1) {
-                this.items[i] =  Mists.itemLibrary.create(itemID);
-            }
+        int itemCount = input.readInt();
+        for (int i = 0; i < itemCount; i++) {
+            int itemSlot = input.readInt();
+            Item item = (Item)kryo.readClassAndObject(input);
+            this.addItem(item, itemSlot);
         }
         
     }

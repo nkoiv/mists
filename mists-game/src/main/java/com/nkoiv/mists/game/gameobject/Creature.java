@@ -943,7 +943,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
         Inventory inv = (Inventory)kryo.readClassAndObject(input);
         Mists.logger.info("Inventory loaded: "+inv.toString());
         this.inventory = inv;
-
+        inv.setOwner(this);
         Mists.logger.info("Finished loading "+this.getName());
     }
 
