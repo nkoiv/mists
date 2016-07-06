@@ -163,13 +163,15 @@ public class Structure extends MapObject {
             this.collisionLevel = input.readInt();
     }
 
-    protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+    protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {    	
         if (Mists.structureLibrary != null) {
             Structure dummy = Mists.structureLibrary.create(templateID);
-            if (dummy == null) return;
-            this.graphics = dummy.graphics;
-            this.extraSprites = dummy.extraSprites;
-        } else this.graphics = new Sprite();
+            if (dummy != null) {
+            	this.graphics = dummy.graphics;
+            	this.extraSprites = dummy.extraSprites;
+            }
+        }
+        if (this.graphics == null) this.graphics = new Sprite(); //Blank sprite if generation from Library failed
         this.setPosition(xCoor, yCoor);
     }
     
