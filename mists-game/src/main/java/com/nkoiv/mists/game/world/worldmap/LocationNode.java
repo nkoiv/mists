@@ -18,7 +18,7 @@ public class LocationNode extends MapNode {
     private int locationSeed; //if random generated
 
 
-    public LocationNode(String name, Image image, int locationID) {
+    public LocationNode(String name, String imageName, Image image, int locationID) {
         super(name, image);
         this.locationID = locationID;
     }

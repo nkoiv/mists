@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.world.worldmap;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
@@ -21,8 +25,10 @@ import javafx.scene.paint.Color;
  * Nodes that player can move in.
  * @author nikok
  */
-public class WorldMap {
+public class WorldMap implements KryoSerializable {
+	private int mapID;  
     private String name;
+    private String bgImageName;
     private Image backgroundImage;
     private HashMap<Integer, MapNode> nodesOnMap;
     private ArrayList<MapObject> mobsOnMap;
@@ -31,14 +37,22 @@ public class WorldMap {
     private double lastOffsets[];
     private int nextFreeNodeID = 0;
     
-    public WorldMap(String name, Image backgroundImage) {
-        this.name = name;
-        this.backgroundImage = backgroundImage;
-        this.nodesOnMap = new HashMap<>();
+    public WorldMap() {
+    	this.nodesOnMap = new HashMap<>();
         this.mobsOnMap = new ArrayList<>();
         lastOffsets = new double[2];
     }
     
+    
+    public WorldMap(String name, String bgImageName) {
+    	this.name = name;
+    	this.bgImageName = bgImageName;
+    	this.backgroundImage = Mists.graphLibrary.getImage(bgImageName);
+    	this.nodesOnMap = new HashMap<>();
+        this.mobsOnMap = new ArrayList<>();
+        lastOffsets = new double[2];
+    }
+
     /**
      * Recursively search for a free nodeID
      * @param startID identifier to start the search from (going upwards)
@@ -82,7 +96,7 @@ public class WorldMap {
     public void render(GraphicsContext gc) {
         double xOffset = this.getxOffset(gc, playerNode.getXPos());
         double yOffset = this.getyOffset(gc, playerNode.getYPos());
-        gc.drawImage(backgroundImage, -xOffset, -yOffset);
+        if (this.backgroundImage!=null) gc.drawImage(backgroundImage, -xOffset, -yOffset);
         for (MapNode mn : this.nodesOnMap.values()) {
             mn.render(gc, xOffset, yOffset);
         }
@@ -224,6 +238,23 @@ public class WorldMap {
     public String getName() {
         return this.name;
     }
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		output.writeString(this.name);
+		output.writeInt(this.mapID);
+		output.writeString(this.bgImageName);
+		output.writeInt(nodesOnMap.keySet().size());
+		for (int i = 0; i < nodesOnMap.keySet().size(); i++) {
+			
+		}
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		// TODO Auto-generated method stub
+		
+	}
     
     /**
      * 

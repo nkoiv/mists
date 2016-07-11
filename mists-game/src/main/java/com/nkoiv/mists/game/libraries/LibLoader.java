@@ -261,10 +261,12 @@ public class LibLoader {
     }
     
     public static void initializeGraphLibrary(GraphLibrary lib) {
-    	//TODO: Load smart! From external (YAML?) file?
-    	
+    	//TODO: Load smart! From external (YAML?) file?    	
     	loadAnimationSheets(lib);
 
+    	//---WorldMap background---
+    	lib.addImage("himmuIslandMap", new Image("/images/himmu_island.png"));
+    	
     	//---Base elements---
         lib.addImage("blank", new Image("/images/blank.png"));
         lib.addImage("black", new Image("/images/black.png"));

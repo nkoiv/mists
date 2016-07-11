@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.world.worldmap;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.KryoSerializable;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.world.util.Toolkit;
@@ -16,9 +20,10 @@ import javafx.scene.image.Image;
  *
  * @author nikok
  */
-public class MapNode {
+public class MapNode implements KryoSerializable {
 		protected int id;
         protected String name;
+        protected String imageName;
         protected Image imageOnMap;
         protected boolean bigNode;
         protected double xPos;
@@ -28,7 +33,11 @@ public class MapNode {
         * [8][1][2]
         * [7]   [3]
         * [6][5][4]
-        */
+        */  
+        
+        public MapNode() {
+        	this.neighboursByDirection = new MapNode[9];
+        }
         
         public MapNode(String name, Image image) {
             this.name = name;
@@ -126,6 +135,18 @@ public class MapNode {
             this.xPos = xPos;
             this.yPos = yPos;
         }
+
+		@Override
+		public void write(Kryo kryo, Output output) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void read(Kryo kryo, Input input) {
+			// TODO Auto-generated method stub
+			
+		}
         
         
     }
