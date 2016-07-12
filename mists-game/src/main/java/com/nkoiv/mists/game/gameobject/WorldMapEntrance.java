@@ -43,7 +43,7 @@ public class WorldMapEntrance extends Structure {
     
             
     public MapNode getExitNode() {
-    	if (this.exitNode == null) this.exitNode = Mists.MistsGame.getCurrentWorldMap().getNodeWithID(exitNodeID);
+    	if (this.exitNode == null) this.exitNode = Mists.MistsGame.getCurrentWorldMap().getNode(exitNodeID);
         return this.exitNode;
     }
     
@@ -58,7 +58,7 @@ public class WorldMapEntrance extends Structure {
     
     @Override
     public Trigger[] getTriggers() {
-    	if (this.exitNode == null) this.exitNode = Mists.MistsGame.getCurrentWorldMap().getNodeWithID(exitNodeID);
+    	if (this.exitNode == null) this.exitNode = Mists.MistsGame.getCurrentWorldMap().getNode(exitNodeID);
         if (this.exitNode == null) return new Trigger[1];
         Trigger[] a = new Trigger[]{new WorldMapEntranceTrigger(this, this.exitNode)};
         return a;
@@ -66,7 +66,7 @@ public class WorldMapEntrance extends Structure {
     
     @Override
     public String[] getInfoText() {
-    	if (this.exitNode == null) this.exitNode = Mists.MistsGame.getCurrentWorldMap().getNodeWithID(exitNodeID);
+    	if (this.exitNode == null) this.exitNode = Mists.MistsGame.getCurrentWorldMap().getNode(exitNodeID);
         String exitNodeName;
         if (this.exitNode != null) exitNodeName = this.exitNode.getName();
         else exitNodeName = "Unspecified";

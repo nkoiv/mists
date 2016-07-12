@@ -23,17 +23,47 @@ import javafx.scene.image.Image;
  */
 public class WorldMapLibrary {
     
+	private HashMap<String, MapNode> nodesByName;
+	private HashMap<String, WorldMap> mapsByName;
+	private HashMap<Integer, MapNode> nodesByID;
+	private HashMap<Integer, WorldMap> mapsByID;
+	
+	
+	public WorldMapLibrary() {
+		this.nodesByName = new HashMap<>();
+		this.nodesByID = new HashMap<>();
+		this.mapsByName = new HashMap<>();
+		this.mapsByID = new HashMap<>();
+	}
+	
+	public MapNode getMapNodeTemplate(String nodeName) {
+		String lowercasename = nodeName.toLowerCase();
+		return this.nodesByName.get(lowercasename);
+	}
+	
+	public MapNode getMapNodeTemplate(int nodeID) {
+		return this.nodesByID.get(nodeID);
+	}
+	
+	public MapNode createMapNode(String nodeName) {
+		MapNode n = this.getMapNodeTemplate(nodeName);
+		if (n instanceof MapNode) {
+			
+		}
+		
+		return n;
+	}
+	
     public WorldMap generateWorldMapFromYAML(Map worldmapData) {
         WorldMap wm = null;
-        
-        
+        //TODO: Generate worldmaps from yaml :)
         return wm;
     }
     
     public static void populateWorldMapWithNodesFromYAML(WorldMap worldmap, String mapnodeYaml) {
         Map<Integer, MapNode> nodes = generateWorldMapNodesFromYAML(mapnodeYaml);
         for (int id : nodes.keySet()) {
-            worldmap.addNode(nodes.get(id), nodes.get(id).getXPos(), nodes.get(id).getYPos());
+            worldmap.addNode(nodes.get(id), nodes.get(id).getID(), nodes.get(id).getXPos(), nodes.get(id).getYPos());
         }   
     }
     
@@ -82,6 +112,7 @@ public class WorldMapLibrary {
         MapNode mn;
         String nodeName = (String)nodesData.get("name");
         Image nodeImage;
+        int id = Integer.parseInt((String)nodesData.get("id"));
         int xCoordinate = Integer.parseInt((String)nodesData.get("xCoordinate"));
         int yCoordinate = Integer.parseInt((String)nodesData.get("yCoordinate"));
         if (nodesData.keySet().contains("image")) {
@@ -90,10 +121,11 @@ public class WorldMapLibrary {
             nodeImage = null;
         }
         if (nodesData.keySet().contains("enterLocationID")) {
-            mn = new LocationNode(nodeName, nodeImage, Integer.parseInt((String)nodesData.get("enterLocationID")));
+            mn = new LocationNode(nodeName, "imagename", nodeImage, Integer.parseInt((String)nodesData.get("enterLocationID")));
         } else {
             mn = new MapNode(nodeName, nodeImage);
         }
+        mn.setID(id);
         mn.setXPos(xCoordinate);
         mn.setYPos(yCoordinate);
         return mn;

@@ -8,7 +8,7 @@ public class WorldMapControls {
 	
 	public static boolean moveToDirecition(WorldMap worldmap, Direction dir) {
 		
-		MapNode mn = worldmap.getPlayerNode().getNeighbour(dir);
+		MapNode mn = worldmap.getNode(worldmap.getPlayerNode().getNeighbour(dir));
         if (mn != null) {
         	worldmap.getPlayerNode().exitNode();
         	worldmap.setPlayerNode(mn);

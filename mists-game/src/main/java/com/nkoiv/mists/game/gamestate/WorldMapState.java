@@ -42,6 +42,8 @@ public class WorldMapState implements GameState {
     //private boolean gameMenuOpen;
     private double lastDragX;
     private double lastDragY;
+    private long lastClick; //To prevent doubleclicks - TODO: Is this really a good way to do this?
+    private double doubleClickTressholdMS = 200;
     
     public WorldMapState(Game game) {
         Mists.logger.info("Generating worldmapstate for "+Mists.gameMode);
@@ -178,6 +180,8 @@ public class WorldMapState implements GameState {
     }
     
     private void handleClicks(MouseEvent me) {
+    	if (System.currentTimeMillis() - lastClick < doubleClickTressholdMS) return;
+    	this.lastClick = System.currentTimeMillis();
         this.lastDragX = 0; this.lastDragY = 0;
         if(!mouseClickOnUI(me)){
             //If not, give the click to the underlying gameLocation
@@ -195,15 +199,16 @@ public class WorldMapState implements GameState {
         double clickY = me.getY() + game.getCurrentWorldMap().getLastOffsets()[1];
         MapObject mob = game.getCurrentWorldMap().mobAtCoordinates(clickX, clickY);
         MapNode mn = game.getCurrentWorldMap().getNodeAtCoordinates(clickX, clickY);
-        //Check to see if there's a link from currentnode to target node
-        if (!game.getCurrentWorldMap().getPlayerNode().getNeighboursAsAList().contains(mn)) return;
+        if (!(mn instanceof MapNode)) return;
         //Node was a valid neighbour, so continue
         if (mn.equals(game.getCurrentWorldMap().getPlayerNode())) {
+        	//If the clicked node was current node, move to the Location the node links to
         	if (mn instanceof LocationNode) {
                 game.moveToLocation(((LocationNode)mn).getLocationID(), mn);
                 game.moveToState(Game.LOCATION);
             } 
-        } else {
+        } else  if (game.getCurrentWorldMap().getPlayerNode().getNeighboursAsAList().contains(mn.getID())) {
+            //If the clicked node neighbours the node we're currently at, move to it
         	WorldMapControls.moveToNode(game.getCurrentWorldMap(), mn);
         }
         me.consume();
@@ -254,7 +259,6 @@ public class WorldMapState implements GameState {
             return true;
         }
         return false;
-        
     }
     
     private void handleWorldMapKeyPress(ArrayList<KeyCode> pressedButtons, ArrayList<KeyCode> releasedButtons) {

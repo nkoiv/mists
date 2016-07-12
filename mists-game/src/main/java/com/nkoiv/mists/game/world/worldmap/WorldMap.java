@@ -58,17 +58,21 @@ public class WorldMap implements KryoSerializable {
      * @param startID identifier to start the search from (going upwards)
      * @return ID that's not in use by any of the current Nodes On Map
      */
-    private int getFreeNodeID(int startID) {
+    private int getFreeNodeID() {
     	//Note: In theory we can overflow integer here...
+    	int id = nextFreeNodeID;
     	boolean idTaken = false;
     	for (Integer mnID : this.nodesOnMap.keySet()) {
-    		if (startID == mnID) {
+    		if (id == mnID) {
     			idTaken = true;
     			break;
     		}
     	}
-    	if (idTaken) return getFreeNodeID(startID);
-    	else return startID;
+    	if (!idTaken) return id;
+    	else {
+    		nextFreeNodeID++;
+    		return getFreeNodeID();
+    	}
     }
     
     public void addNode(MapNode node, int nodeID, double xCoordinate, double yCoordinate) {
@@ -78,8 +82,8 @@ public class WorldMap implements KryoSerializable {
     }
     
     public void addNode(MapNode node, double xCoordinate, double yCoordinate) {
-    	int idForNode = getFreeNodeID(nextFreeNodeID);
-    	nextFreeNodeID = idForNode+1;
+    	int idForNode = getFreeNodeID();
+    	
     	this.addNode(node, idForNode, xCoordinate, yCoordinate);
     }
     
@@ -116,7 +120,9 @@ public class WorldMap implements KryoSerializable {
     
     private void renderLinks(MapNode node, ArrayList<MapNode> ignoredLinks, GraphicsContext gc, double xOffset, double yOffset) {
 
-    	for (MapNode neighbour : node.getNeighboursAsAList()) {
+    	for (Integer neighbourID : node.getNeighboursAsAList()) {
+    		MapNode neighbour = this.nodesOnMap.get(neighbourID);
+    		if (neighbour == null) continue;
     		//if (ignoredLinks.contains(neighbour)) continue; //Dont draw paths to ignored nodes
     		gc.setFill(Color.RED);
     		gc.fillPolygon(new double[]{node.getCenterXPos()-xOffset, node.getCenterXPos()+3-xOffset,  neighbour.getCenterXPos()-xOffset, neighbour.getCenterXPos()+3-xOffset}, new double[]{node.getCenterYPos()-yOffset, node.getCenterYPos()+3-yOffset,  neighbour.getCenterYPos()-yOffset, neighbour.getCenterYPos()+3-yOffset}, 4 );
@@ -142,8 +148,16 @@ public class WorldMap implements KryoSerializable {
         return null;
     }
     
-    public MapNode getNodeWithID(int nodeID) {
+    public MapNode getNode(int nodeID) {
+    	if (nodeID == -1) return null;
     	return nodesOnMap.get(nodeID);
+    }
+    
+    public MapNode getNode(String nodeName) {
+    	for (MapNode n : nodesOnMap.values()) {
+    		if (nodeName.equals(n.name)) return n;
+    	}
+    	return null;
     }
     
     public MapNode getNodeAtCoordinates(double xCoor, double yCoor) {

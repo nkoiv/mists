@@ -11,6 +11,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Templatable;
 import com.nkoiv.mists.game.world.util.Toolkit;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,7 +21,7 @@ import javafx.scene.image.Image;
  *
  * @author nikok
  */
-public class MapNode implements KryoSerializable {
+public class MapNode implements KryoSerializable, Templatable {
 		protected int id;
         protected String name;
         protected String imageName;
@@ -28,7 +29,7 @@ public class MapNode implements KryoSerializable {
         protected boolean bigNode;
         protected double xPos;
         protected double yPos;
-        protected MapNode[] neighboursByDirection; //0 is left empty, as the direction would be Direction.STAY
+        protected int[] neighboursByDirection; //0 is left empty, as the direction would be Direction.STAY
         /* Neighbours by direction
         * [8][1][2]
         * [7]   [3]
@@ -36,12 +37,15 @@ public class MapNode implements KryoSerializable {
         */  
         
         public MapNode() {
-        	this.neighboursByDirection = new MapNode[9];
+        	this.neighboursByDirection = new int[9];
+        	for (Integer i : neighboursByDirection) {
+        		neighboursByDirection[i] = -1;
+        	}
         }
         
         public MapNode(String name, Image image) {
             this.name = name;
-            this.neighboursByDirection = new MapNode[9];
+            this.neighboursByDirection = new int[9];
             if (image != null) {
                 this.imageOnMap = image;
                 if (image.getWidth() > 32) bigNode = true;
@@ -56,18 +60,22 @@ public class MapNode implements KryoSerializable {
             Mists.logger.info("Node "+this.name+" exited");
         }
         
-        public MapNode getNeighbour(Direction d) {
+        public int getNeighbour(Direction d) {
             return neighboursByDirection[Toolkit.getDirectionNumber(d)];
         }
         
         public void setNeighbour(MapNode neighbour, Direction d) {
-            this.neighboursByDirection[Toolkit.getDirectionNumber(d)] = neighbour;
+            this.neighboursByDirection[Toolkit.getDirectionNumber(d)] = neighbour.getID();
         }
         
-        public ArrayList<MapNode> getNeighboursAsAList() {
-            ArrayList<MapNode> n = new ArrayList<>();
+        public void setNeighbour(int neighbourID, Direction d) {
+        	this.neighboursByDirection[Toolkit.getDirectionNumber(d)] = neighbourID;
+        }
+        
+        public ArrayList<Integer> getNeighboursAsAList() {
+            ArrayList<Integer> n = new ArrayList<>();
             for (int i = 1; i < neighboursByDirection.length; i++) {
-                if (neighboursByDirection[i] != null) n.add(neighboursByDirection[i]);
+                n.add(neighboursByDirection[i]);
             }
             return n;
         }
@@ -138,14 +146,33 @@ public class MapNode implements KryoSerializable {
 
 		@Override
 		public void write(Kryo kryo, Output output) {
-			// TODO Auto-generated method stub
-			
+			output.writeString(name);
+			output.writeInt(id);
+			output.writeString(imageName);
+			output.writeBoolean(bigNode);
+			for (int i = 0; i < 9; i++) {
+				output.writeInt(neighboursByDirection[i]);
+			}
 		}
 
 		@Override
 		public void read(Kryo kryo, Input input) {
-			// TODO Auto-generated method stub
-			
+			this.name = input.readString();
+			this.id = input.readInt();
+			this.imageName = input.readString();
+			this.bigNode = input.readBoolean();
+			for (int i = 0; i < 9; i++) {
+				int nid = input.readInt();
+			}
+		}
+
+		@Override
+		public MapNode createFromTemplate() {
+			MapNode n = new MapNode(this.name, this.imageOnMap);
+			n.id = this.id;
+			n.imageName = this.imageName;
+			n.bigNode = this.bigNode;
+			return n;
 		}
         
         
