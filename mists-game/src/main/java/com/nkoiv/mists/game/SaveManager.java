@@ -38,6 +38,9 @@ import com.nkoiv.mists.game.triggers.*;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.util.Flags;
+import com.nkoiv.mists.game.world.worldmap.LocationNode;
+import com.nkoiv.mists.game.world.worldmap.MapNode;
+import com.nkoiv.mists.game.world.worldmap.WorldMap;
 
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -97,6 +100,9 @@ public class SaveManager {
             //Register locations and maps
             kryo.register(Location.class, 90);
             kryo.register(TileMap.class, 91);
+            kryo.register(WorldMap.class, 96);
+            kryo.register(MapNode.class, 97);
+            kryo.register(LocationNode.class, 98);
             //Register quests and dialogue
             kryo.register(Dialogue.class, 100);
             kryo.register(DialogueManager.class, 101);
@@ -156,7 +162,9 @@ public class SaveManager {
         //Save generated Locations 
         output.writeString("<LOCATIONDATA>");
         saveGeneratedLocations(game, kryo, output);
-        
+        //Save worldmap
+        output.writeString("<WORLDMAPDATA>");
+        kryo.writeClassAndObject(output, game.getCurrentWorldMap());
     	//Close the output stream and release the kryo
         output.close();
         pool.release(kryo);
@@ -236,7 +244,13 @@ public class SaveManager {
     	if (!"<LOCATIONDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
     	loadGeneratedLocations(game, kryo, input);
     	if (currentLocationID != -1) game.moveToLocation(currentLocationID, player.getXPos(), player.getYPos());
-    	
+    	//Load worldmap
+    	loadingScreen.updateProgress(1, "Loading worldmap");
+    	check = input.readString();
+    	if (!"<WORLDMAPDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
+    	WorldMap wm = (WorldMap)kryo.readClassAndObject(input);
+    	wm.setPlayerCharacter(player);
+    	game.moveToWorldMap(wm);
     	//Close the input stream and release the kryo
     	input.close();
     	pool.release(kryo);

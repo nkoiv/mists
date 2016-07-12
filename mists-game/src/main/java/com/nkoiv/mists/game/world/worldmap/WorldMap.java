@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.world.worldmap;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
@@ -12,12 +16,6 @@ import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -278,23 +276,39 @@ public class WorldMap implements KryoSerializable {
 		output.writeInt(this.mapID);
 		output.writeString(this.bgImageName);
 		output.writeInt(nodesOnMap.keySet().size());
-		for (int i = 0; i < nodesOnMap.keySet().size(); i++) {
-			
+		for (int id : nodesOnMap.keySet()) {
+			kryo.writeClassAndObject(output, nodesOnMap.get(id));
 		}
+		int playerNodeID = -1;
+		if (playerNode instanceof MapNode) playerNodeID = playerNode.getID();
+		output.writeInt(playerNodeID); 
+		output.writeDouble(lastOffsets[0]);
+		output.writeDouble(lastOffsets[1]);
 	}
 
 	@Override
 	public void read(Kryo kryo, Input input) {
-		// TODO Auto-generated method stub
-		
+		this.name = input.readString();
+		this.mapID = input.readInt();
+		this.bgImageName = input.readString();
+		int nodeCount = input.readInt();
+		for (int i = 0; i < nodeCount; i++) {
+			MapNode mn = (MapNode)kryo.readClassAndObject(input);
+			this.nodesOnMap.put(mn.getID(), mn);
+		}
+		this.setPlayerNode(input.readInt());
+		this.lastOffsets = new double[2];
+		this.lastOffsets[0] = input.readDouble();
+		this.lastOffsets[1] = input.readDouble();
+		loadGraphics();
+	}
+	
+	private void loadGraphics() {
+		Image wmi = Mists.graphLibrary.getImage(bgImageName);
+		if (wmi!=null) this.backgroundImage = wmi;
+		else Mists.logger.warning("Could not load backgroundimage for WorldMap "+name+" #"+mapID+ " - missing from graphics library!");
 	}
     
-    /**
-     * 
-     */
-    
-    
-   
-    
+
    
 }

@@ -148,6 +148,8 @@ public class MapNode implements KryoSerializable, Templatable {
 			output.writeInt(id);
 			output.writeString(imageName);
 			output.writeBoolean(bigNode);
+			output.writeDouble(xPos);
+			output.writeDouble(yPos);
 			for (int i = 0; i < 9; i++) {
 				output.writeInt(neighboursByDirection[i]);
 			}
@@ -159,6 +161,8 @@ public class MapNode implements KryoSerializable, Templatable {
 			this.id = input.readInt();
 			this.imageName = input.readString();
 			this.bigNode = input.readBoolean();
+			this.xPos = input.readDouble();
+			this.yPos = input.readDouble();
 			for (int i = 0; i < 9; i++) {
 				int nid = input.readInt();
 				this.neighboursByDirection[i] = nid;
