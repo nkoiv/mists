@@ -35,10 +35,13 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -72,6 +75,7 @@ public class Mists extends Application implements Global {
     public static SoundManager soundManager;
     public static GraphLibrary graphLibrary;
     public static HashMap<String, Font> fonts;
+    public static HashMap<String, ImageCursor> cursors;
     public static ActionLibrary<Action> actionLibrary;
     public static ItemLibrary<Item> itemLibrary;
     public static StructureLibrary<Structure> structureLibrary;
@@ -294,6 +298,32 @@ public class Mists extends Application implements Global {
         fonts.put("romulus20", romulus20); 
         Font romulus12 = Font.loadFont(getClass().getResourceAsStream("/fonts/romulus.ttf"), 12);
         fonts.put("romulus12", romulus12); 
+    }
+    
+    private void loadCursors() {
+    	this.cursors = new HashMap<>();
+    	cursors.put("handblue",new ImageCursor(graphLibrary.getImage("cursorHandblue")));
+    	cursors.put("handbeige", new ImageCursor(graphLibrary.getImage("cursorHandbeige")));
+		cursors.put("handgrey", new ImageCursor(graphLibrary.getImage("cursorHandgrey")));
+    	
+		cursors.put("gauntletblue",new ImageCursor(graphLibrary.getImage("cursorGauntletblue")));
+    	cursors.put("gauntletbronze", new ImageCursor(graphLibrary.getImage("cursorGauntletbronze")));
+		cursors.put("gauntletgrey", new ImageCursor(graphLibrary.getImage("cursorGauntletgrey")));
+    	
+		cursors.put("swordGold",new ImageCursor(graphLibrary.getImage("cursorSwordgold")));
+    	cursors.put("swordSilver", new ImageCursor(graphLibrary.getImage("cursorSwordsilver")));
+		cursors.put("swordBronze", new ImageCursor(graphLibrary.getImage("cursorSwordbronze")));
+    	
+    }
+    
+    public void setCursor(String cursorName) {
+    	String lowercasename = cursorName.toLowerCase();
+    	if (cursors.containsKey(lowercasename)) {
+    		currentScene.setCursor(cursors.get(cursorName));
+    	} else {
+    		//If specified cursor wasn't found, change to default cursor
+    		currentScene.setCursor(Cursor.DEFAULT);
+    	}
     }
     
     private void setupMouseHandles(Group root) {
