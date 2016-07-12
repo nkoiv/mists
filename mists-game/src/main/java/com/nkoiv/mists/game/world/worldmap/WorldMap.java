@@ -15,7 +15,10 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -226,8 +229,16 @@ public class WorldMap implements KryoSerializable {
             return this.lastOffsets;
     }
 	
-    public List<MapNode> getNodes() {
-        return (List<MapNode>) this.nodesOnMap.values();
+    public Set<Integer> getNodeIDs() {
+        return this.nodesOnMap.keySet();
+    }
+    
+    public ArrayList<MapNode> getNodes() {
+    	ArrayList<MapNode> nodes = new ArrayList<>();
+    	for (int key : this.nodesOnMap.keySet()) {
+    		nodes.add(nodesOnMap.get(key));
+    	}
+    	return nodes;
     }
     
     public MapNode getPlayerNode() {
@@ -251,6 +262,14 @@ public class WorldMap implements KryoSerializable {
     
     public String getName() {
         return this.name;
+    }
+    
+    public void setID(int mapID) {
+    	this.mapID = mapID;
+    }
+    
+    public int getID() {
+    	return this.mapID;
     }
 
 	@Override

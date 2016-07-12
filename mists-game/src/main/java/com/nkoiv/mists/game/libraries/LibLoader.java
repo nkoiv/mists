@@ -37,6 +37,9 @@ import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.triggers.InsertMobTrigger;
 import com.nkoiv.mists.game.world.BGMap;
 import com.nkoiv.mists.game.world.TileMap;
+import com.nkoiv.mists.game.world.worldmap.MapNode;
+import com.nkoiv.mists.game.world.worldmap.WorldMap;
+
 import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
@@ -364,6 +367,16 @@ public class LibLoader {
         //Icons
         lib.addImage("circle64", new Image("/images/circle_64.png"));
         lib.addImage("circle32", new Image("/images/circle_32.png"));
+    }
+    
+    public static void initializeWorldMapLibrary(WorldMapLibrary lib) {
+    	WorldMap himmuIsland = new WorldMap("Himmu island", "himmuIslandMap");
+    	himmuIsland.setID(1);
+        WorldMapLibrary.populateWorldMapWithNodesFromYAML(himmuIsland, "libdata/defaultWorldmapNodes.yml");
+        lib.addWorldMapTemplate(himmuIsland);
+        for (MapNode mn : himmuIsland.getNodes()) {
+        	lib.addMapNodeTemplate(mn);
+        }
     }
     
     public static void initializeLocationLibrary(LocationLibrary lib) {

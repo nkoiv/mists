@@ -36,6 +36,24 @@ public class WorldMapLibrary {
 		this.mapsByID = new HashMap<>();
 	}
 	
+	public void addMapNodeTemplate(MapNode mapnode) {
+		if (!(mapnode instanceof MapNode)) return;
+		String key = mapnode.getName().toLowerCase();
+		if (nodesByName.containsKey(mapnode.getName())) Mists.logger.warning("WorldMapLibrary already contains node with name#"+mapnode.getName()+" - overwriting!");
+		nodesByName.put(key, mapnode);
+		if (nodesByID.containsKey(mapnode.getID())) Mists.logger.warning("WorldMapLibrary already contains node with ID#"+mapnode.getID()+" - overwriting!");
+		nodesByID.put(mapnode.getID(), mapnode);
+	}
+	
+	public void addWorldMapTemplate(WorldMap worldmap) {
+		if (!(worldmap instanceof WorldMap)) return;
+		String key = worldmap.getName().toLowerCase();
+		if (mapsByName.containsKey(worldmap.getName())) Mists.logger.warning("WorldMapLibrary already contains node with name#"+worldmap.getName()+" - overwriting!");
+		mapsByName.put(key, worldmap);
+		if (mapsByID.containsKey(worldmap.getID())) Mists.logger.warning("WorldMapLibrary already contains node with ID#"+worldmap.getID()+" - overwriting!");
+		mapsByID.put(worldmap.getID(), worldmap);
+	}
+	
 	public MapNode getMapNodeTemplate(String nodeName) {
 		String lowercasename = nodeName.toLowerCase();
 		return this.nodesByName.get(lowercasename);
@@ -121,7 +139,7 @@ public class WorldMapLibrary {
             nodeImage = null;
         }
         if (nodesData.keySet().contains("enterLocationID")) {
-            mn = new LocationNode(nodeName, "imagename", nodeImage, Integer.parseInt((String)nodesData.get("enterLocationID")));
+            mn = new LocationNode(nodeName, nodeImage, Integer.parseInt((String)nodesData.get("enterLocationID")));
         } else {
             mn = new MapNode(nodeName, nodeImage);
         }

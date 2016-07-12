@@ -28,6 +28,7 @@ import com.nkoiv.mists.game.libraries.ItemLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.libraries.LocationLibrary;
 import com.nkoiv.mists.game.libraries.StructureLibrary;
+import com.nkoiv.mists.game.libraries.WorldMapLibrary;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -81,6 +82,7 @@ public class Mists extends Application implements Global {
     public static StructureLibrary<Structure> structureLibrary;
     public static CreatureLibrary<Creature> creatureLibrary;
     public static LocationLibrary locationLibrary;
+    public static WorldMapLibrary worldmapLibrary;
     public static DialogueLibrary dialogueLibrary;
     public static Stage primaryStage;
     /**
@@ -211,7 +213,7 @@ public class Mists extends Application implements Global {
     }
     
     private void loadLibraries(Canvas gameCanvas, Canvas uiCanvas) {
-        LoadingScreen loadingScreen = new LoadingScreen("Loading game assets",6);
+        LoadingScreen loadingScreen = new LoadingScreen("Loading game assets",8);
         MistsGame.setLoadingScreen(loadingScreen);
         loadingScreen.updateProgress(1, "Initializing graphics");   
         setupGraphLibrary();
@@ -240,6 +242,13 @@ public class Mists extends Application implements Global {
         loadingScreen.render(gameCanvas, uiCanvas);
         setupLocationLibrary();
         logger.info("Location templates initialized");
+        loadingScreen.updateProgress(1, "Generating worldmaps");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        setupWorldmapLibrary();
+        logger.info("Worldmaps initialized");
+        loadingScreen.updateProgress(1, "Loading cursors");
+        loadingScreen.render(gameCanvas, uiCanvas);
+        loadCursors();
         loadingScreen.updateProgress(1, "Done");
         MistsGame.clearLoadingScreen();   
     }
@@ -277,6 +286,11 @@ public class Mists extends Application implements Global {
     private static void setupLocationLibrary() {
         Mists.locationLibrary = new LocationLibrary();
         LibLoader.initializeLocationLibrary(locationLibrary);
+    }
+    
+    private static void setupWorldmapLibrary() {
+    	Mists.worldmapLibrary = new WorldMapLibrary();
+    	LibLoader.initializeWorldMapLibrary(worldmapLibrary);
     }
     
     private static void setupDialogueLibrary() {

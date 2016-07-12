@@ -5,6 +5,10 @@
  */
 package com.nkoiv.mists.game.world.worldmap;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
 import javafx.scene.image.Image;
 
 /**
@@ -18,7 +22,7 @@ public class LocationNode extends MapNode {
     private int locationSeed; //if random generated
 
 
-    public LocationNode(String name, String imageName, Image image, int locationID) {
+    public LocationNode(String name, Image image, int locationID) {
         super(name, image);
         this.locationID = locationID;
     }
@@ -38,6 +42,32 @@ public class LocationNode extends MapNode {
     public void setLocationSeed(int locationSeed) {
         this.locationSeed = locationSeed;
     }
-        
+
+	@Override
+	public void write(Kryo kryo, Output output) {
+		super.write(kryo, output);
+		output.writeInt(locationID);
+		output.writeInt(locationSeed);
+	}
+
+	@Override
+	public void read(Kryo kryo, Input input) {
+		super.read(kryo, input);
+		this.locationID = input.readInt();
+		this.locationSeed = input.readInt();
+	}
+
+	@Override
+	public MapNode createFromTemplate() {
+		LocationNode ln = new LocationNode(this.name, this.imageOnMap, this.locationID);
+		ln.id = this.id;
+		ln.imageName = this.imageName;
+		ln.bigNode = this.bigNode;
+		ln.locationID = this.locationID;
+		ln.locationSeed = this.locationSeed;
+		return ln;
+	}
+    
+  
         
 }

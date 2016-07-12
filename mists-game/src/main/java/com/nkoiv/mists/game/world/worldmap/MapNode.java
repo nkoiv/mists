@@ -38,11 +38,9 @@ public class MapNode implements KryoSerializable, Templatable {
         
         public MapNode() {
         	this.neighboursByDirection = new int[9];
-        	for (Integer i : neighboursByDirection) {
-        		neighboursByDirection[i] = -1;
-        	}
         }
         
+
         public MapNode(String name, Image image) {
             this.name = name;
             this.neighboursByDirection = new int[9];
@@ -163,7 +161,12 @@ public class MapNode implements KryoSerializable, Templatable {
 			this.bigNode = input.readBoolean();
 			for (int i = 0; i < 9; i++) {
 				int nid = input.readInt();
+				this.neighboursByDirection[i] = nid;
 			}
+		}
+		
+		private void loadGraphic() {
+			
 		}
 
 		@Override
