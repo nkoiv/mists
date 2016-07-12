@@ -370,10 +370,10 @@ public class LibLoader {
     }
     
     public static void initializeWorldMapLibrary(WorldMapLibrary lib) {
-    	WorldMap himmuIsland = new WorldMap("Himmu island", "himmuIslandMap");
+    	WorldMap himmuIsland = new WorldMap("HimmuIsland", "himmuIslandMap");
     	himmuIsland.setID(1);
         WorldMapLibrary.populateWorldMapWithNodesFromYAML(himmuIsland, "libdata/defaultWorldmapNodes.yml");
-        lib.addWorldMapTemplate(himmuIsland);
+        lib.addWorldMap(himmuIsland);
         for (MapNode mn : himmuIsland.getNodes()) {
         	lib.addMapNodeTemplate(mn);
         }

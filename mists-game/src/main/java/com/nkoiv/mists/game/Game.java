@@ -132,9 +132,9 @@ public class Game {
         //POC Dialogue
         
         //POC worldmap
-        WorldMap wm = new WorldMap("Himmu island", "himmuIslandMap");
-        WorldMapLibrary.populateWorldMapWithNodesFromYAML(wm, "libdata/defaultWorldmapNodes.yml");
-
+        //WorldMap wm = new WorldMap("Himmu island", "himmuIslandMap");
+        //WorldMapLibrary.populateWorldMapWithNodesFromYAML(wm, "libdata/defaultWorldmapNodes.yml");
+        WorldMap wm = Mists.worldmapLibrary.getWorldMap("HimmuIsland");
         wm.setPlayerNode("Beach");
         wm.setPlayerCharacter(player);
         

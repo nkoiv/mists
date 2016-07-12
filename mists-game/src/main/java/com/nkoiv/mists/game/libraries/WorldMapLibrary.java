@@ -45,11 +45,11 @@ public class WorldMapLibrary {
 		nodesByID.put(mapnode.getID(), mapnode);
 	}
 	
-	public void addWorldMapTemplate(WorldMap worldmap) {
+	public void addWorldMap(WorldMap worldmap) {
 		if (!(worldmap instanceof WorldMap)) return;
-		String key = worldmap.getName().toLowerCase();
-		if (mapsByName.containsKey(worldmap.getName())) Mists.logger.warning("WorldMapLibrary already contains node with name#"+worldmap.getName()+" - overwriting!");
-		mapsByName.put(key, worldmap);
+		String lowercasename = worldmap.getName().toLowerCase();
+		if (mapsByName.containsKey(lowercasename)) Mists.logger.warning("WorldMapLibrary already contains node with name#"+worldmap.getName()+" - overwriting!");
+		mapsByName.put(lowercasename, worldmap);
 		if (mapsByID.containsKey(worldmap.getID())) Mists.logger.warning("WorldMapLibrary already contains node with ID#"+worldmap.getID()+" - overwriting!");
 		mapsByID.put(worldmap.getID(), worldmap);
 	}
@@ -63,13 +63,22 @@ public class WorldMapLibrary {
 		return this.nodesByID.get(nodeID);
 	}
 	
+	public WorldMap getWorldMap(String mapname) {
+		String lowercasename = mapname.toLowerCase();
+		return this.mapsByName.get(lowercasename);
+	}
+	
+	public WorldMap getWorldMap(int mapID) {
+		return this.mapsByID.get(mapID);
+	}
+	
 	public MapNode createMapNode(String nodeName) {
 		MapNode n = this.getMapNodeTemplate(nodeName);
 		if (n instanceof MapNode) {
-			
+			MapNode mn = n.createFromTemplate();
+			return mn;
 		}
-		
-		return n;
+		return null;
 	}
 	
     public WorldMap generateWorldMapFromYAML(Map worldmapData) {
