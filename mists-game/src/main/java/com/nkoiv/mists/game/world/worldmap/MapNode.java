@@ -163,10 +163,13 @@ public class MapNode implements KryoSerializable, Templatable {
 				int nid = input.readInt();
 				this.neighboursByDirection[i] = nid;
 			}
+			loadGraphics();
 		}
 		
-		private void loadGraphic() {
-			
+		private void loadGraphics() {
+			MapNode mn = Mists.worldmapLibrary.getMapNodeTemplate(id);
+			if (mn!=null) this.imageOnMap = mn.getImage();
+			else Mists.logger.warning("Could not load image for MapNode "+name+" #"+id+ " - missing from library!");
 		}
 
 		@Override
