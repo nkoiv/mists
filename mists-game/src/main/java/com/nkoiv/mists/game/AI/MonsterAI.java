@@ -31,10 +31,10 @@ public class MonsterAI extends CreatureAI{
         }
         else {
             Task t;
-            Mists.logger.info(creep.getName()+" is acting");
-            Mists.logger.info(creep.getName()+" has actions: "+creep.getAvailableActionNames());
+            //Mists.logger.info(creep.getName()+" is acting");
+            //Mists.logger.info(creep.getName()+" has actions: "+creep.getAvailableActionNames());
             if (creep.getAttack(ActionType.RANGED_ATTACK) != null && this.isInLineOfSight(creep.getLocation().getPlayer())) {
-                Mists.logger.info(creep.getName()+" wants to go shoot player");
+                //Mists.logger.info(creep.getName()+" wants to go shoot player");
                 t = this.goShoot(creep.getLocation().getPlayer());
             }
             else t = this.goMelee(creep.getLocation().getPlayer());
