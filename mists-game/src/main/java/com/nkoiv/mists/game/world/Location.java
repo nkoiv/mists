@@ -1165,10 +1165,10 @@ public class Location extends Flags implements KryoSerializable {
     
     public EnumSet<Direction> collidedSides (MapObject mob) {
         ArrayList<MapObject> collidingObjects = this.checkCollisions(mob); //Get the colliding object(s)
-        return this.collidedSides(mob, collidingObjects);
+        return collidedSides(mob, collidingObjects, this.map.getWidth(), this.map.getHeight());
     }
     
-    public EnumSet<Direction> collidedSides (MapObject mob, ArrayList<MapObject> collidingObjects) {
+    public static EnumSet<Direction> collidedSides (MapObject mob, ArrayList<MapObject> collidingObjects, double mapWidth, double mapHeight) {
         EnumSet<Direction> collidedDirections = EnumSet.of(Direction.STAY);
         for (MapObject collidingObject : collidingObjects) {
             //Mists.logger.log(Level.INFO, "{0} bumped into {1}", new Object[]{this, collidingObject});
@@ -1200,8 +1200,8 @@ public class Location extends Flags implements KryoSerializable {
         }
         if (mob.getXPos() <= 0) collidedDirections.add(Direction.LEFT);
         if (mob.getYPos() <= 0) collidedDirections.add(Direction.UP);
-        if (mob.getCenterXPos() >= this.map.getWidth()) collidedDirections.add(Direction.RIGHT);
-        if (mob.getCenterYPos() >= this.map.getHeight()) collidedDirections.add(Direction.DOWN);
+        if (mob.getCenterXPos() >= mapWidth) collidedDirections.add(Direction.RIGHT);
+        if (mob.getCenterYPos() >= mapHeight) collidedDirections.add(Direction.DOWN);
         return collidedDirections;
     }
     

@@ -141,13 +141,19 @@ public class Wall extends Structure implements HasNeighbours {
     @Override
     public void updateGraphicsBasedOnNeighbours() {
         if (this.wallimages == null) this.generateWallImages(this.wallparts);
-        if (!this.useExtrasForWalls) {
-            this.getSprite().setImage(this.composeImage());
+        if (!this.useExtrasForWalls) {        	
+            //----NEW stuff, using one Extra for graphics always
+            Image base = Mists.graphLibrary.getImage("black");
+            Image walls = this.composeImage();
+            this.getSprite().setImage(base);
+            this.addExtra(this.composeImage(), 0, walls.getHeight() - base.getHeight());
+            //----OLD stuff ----
+            //this.getSprite().setImage(this.composeImage());
+            //this.removeExtras();
             //Still always use the extra for [1], aka top wall
             //so creatures can move behind it!
-            this.removeExtras();
-            
             //Top Extra is always needed, so creatures can get "behind" the wall
+            /*
             WritableImage snapshot = null;
             SnapshotParameters parameters = new SnapshotParameters();
             parameters.setFill(Color.TRANSPARENT);
@@ -162,6 +168,7 @@ public class Wall extends Structure implements HasNeighbours {
                 }
                 this.addExtra(s, topWallAdjustX, topWallAdjustY);
             }
+            */
         }else {
             updateSpriteExtras();
         }

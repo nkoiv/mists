@@ -494,7 +494,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
             return true;
         } else { 
             //Check which sides we collided on
-            EnumSet<Direction> collidedSides = this.getLocation().collidedSides(this, collidedObjects);
+            EnumSet<Direction> collidedSides = this.getLocation().collidedSides(this, collidedObjects, this.location.getMap().getWidth(), this.location.getMap().getHeight());
             //Mists.logger.info("Checked collisions, found " +collidedSides.toString());
             if (collidedSides.contains(Direction.UP)) {
                 //Block movement up
