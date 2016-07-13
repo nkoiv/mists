@@ -1313,6 +1313,16 @@ public class Location extends Flags implements KryoSerializable {
         //Find the creatures to render
         if (!this.creatures.isEmpty()) {
             for (Creature mob : this.creatures) {
+            	/*Always render any creatures with lights on
+            	* It's probably cheaper to just render them out of screen than it is to iterate
+            	* through the list again to see which creatures have lights
+            	* (lights often shine further than creature graphics do)
+            	*/
+            	if (mob.getLightSize() > 0) {
+            		mob.render(xOffset, yOffset, gc); //Draw objects on the ground
+                    renderedMOBs.add(mob);
+                    continue;
+            	}
                 if (mob.getXPos()-xOffset < -mob.getWidth() ||
                     mob.getXPos()-xOffset > gc.getCanvas().getWidth()) {
                     //Mob is not in window
@@ -1339,12 +1349,20 @@ public class Location extends Flags implements KryoSerializable {
     
     private List<MapObject> renderStructures(GraphicsContext gc, double xOffset, double yOffset) {
         /*
-        * TODO: Consider rendering mobs in order so that those closer to bottom of the screen overlap those higher up.
+        * Structres are in a sorted list, where the comparator is based on Z position.
+        * Thus lower structures should overlap higher structures.
         */
         List<MapObject> renderedMOBs = new ArrayList<>();
         
         if (!this.structures.isEmpty()) {
             for (Structure mob : this.structures) {
+            	//Always render any structures with lights on
+            	//TODO: Possible performance issues if lots of structures have lights on them 
+            	if (mob.getLightSize() > 0) {
+            		mob.render(xOffset, yOffset, gc); //Draw objects on the ground
+                    renderedMOBs.add(mob);
+                    continue;
+            	}
                 if (mob.getXPos()-xOffset < -mob.getWidth() ||
                     mob.getXPos()-xOffset > gc.getCanvas().getWidth()) {
                     //Mob is not in window
