@@ -5,8 +5,10 @@
  */
 package com.nkoiv.mists.game.world;
 
-import com.nkoiv.mists.game.gameobject.Structure;
 import java.util.ArrayList;
+
+import com.nkoiv.mists.game.gameobject.Structure;
+
 import javafx.scene.canvas.GraphicsContext;
 
 /**

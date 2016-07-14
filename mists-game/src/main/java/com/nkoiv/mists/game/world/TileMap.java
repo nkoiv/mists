@@ -5,6 +5,12 @@
  */
 package com.nkoiv.mists.game.world;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.logging.Level;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
@@ -16,11 +22,7 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;
 import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.sprites.Sprite;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.TreeMap;
-import java.util.logging.Level;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 

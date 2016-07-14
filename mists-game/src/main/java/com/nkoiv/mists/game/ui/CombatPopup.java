@@ -7,9 +7,11 @@
  */
 package com.nkoiv.mists.game.ui;
 
-import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.ArrayList;
 import java.util.Random;
+
+import com.nkoiv.mists.game.gameobject.MapObject;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 

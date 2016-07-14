@@ -7,8 +7,10 @@
  */
 package com.nkoiv.mists.game.ui;
 
-import com.nkoiv.mists.game.Mists;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
+
 import javafx.application.Platform;
 import javafx.scene.input.MouseEvent;
 

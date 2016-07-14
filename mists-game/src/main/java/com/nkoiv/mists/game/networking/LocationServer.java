@@ -5,6 +5,15 @@
  */
 package com.nkoiv.mists.game.networking;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Stack;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -37,14 +46,6 @@ import com.nkoiv.mists.game.networking.LocationNetwork.RequestAllItems;
 import com.nkoiv.mists.game.networking.LocationNetwork.RequestLocationClear;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Stack;
 
 /**
  * LocationServer runs a Location and serves the information from it

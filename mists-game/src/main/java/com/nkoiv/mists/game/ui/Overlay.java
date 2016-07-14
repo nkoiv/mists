@@ -7,13 +7,15 @@
  */
 package com.nkoiv.mists.game.ui;
 
+import java.util.List;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.triggers.DialogueTrigger;
 import com.nkoiv.mists.game.triggers.Trigger;
-import java.util.List;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;

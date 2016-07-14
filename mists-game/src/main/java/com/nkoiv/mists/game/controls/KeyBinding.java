@@ -6,8 +6,10 @@
  */
 package com.nkoiv.mists.game.controls;
 
-import com.nkoiv.mists.game.Mists;
 import java.util.ArrayList;
+
+import com.nkoiv.mists.game.Mists;
+
 import javafx.scene.input.KeyCode;
 
 /**

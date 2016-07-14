@@ -7,6 +7,11 @@
  */
 package com.nkoiv.mists.game;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.actions.ProjectileSpell;
 import com.nkoiv.mists.game.actions.ProjectileWeaponAttack;
@@ -19,19 +24,14 @@ import com.nkoiv.mists.game.gamestate.LoadingScreen;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.gamestate.MainMenuState;
 import com.nkoiv.mists.game.gamestate.WorldMapState;
-import com.nkoiv.mists.game.libraries.WorldMapLibrary;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.logging.Level;
+
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 

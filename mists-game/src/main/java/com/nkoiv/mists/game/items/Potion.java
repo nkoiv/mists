@@ -7,13 +7,14 @@
  */
 package com.nkoiv.mists.game.items;
 
+import java.util.HashMap;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import java.util.HashMap;
+
 import javafx.scene.image.Image;
 
 /**

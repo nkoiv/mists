@@ -5,6 +5,9 @@
  */
 package com.nkoiv.mists.game.actions;
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Combatant;
 import com.nkoiv.mists.game.gameobject.Creature;
@@ -15,8 +18,6 @@ import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.util.Toolkit;
-import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
  * Action for swinging whichever (melee)weapon

@@ -6,15 +6,17 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import java.util.Arrays;
+import java.util.Random;
+import java.util.logging.Level;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.logging.Level;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;

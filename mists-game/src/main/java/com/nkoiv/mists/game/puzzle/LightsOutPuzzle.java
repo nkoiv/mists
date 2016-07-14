@@ -5,14 +5,15 @@
  */
 package com.nkoiv.mists.game.puzzle;
 
+import java.util.Random;
+import java.util.Stack;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.triggers.FreezeTilesTrigger;
 import com.nkoiv.mists.game.triggers.PuzzleTrigger;
-import java.util.Random;
-import java.util.Stack;
 
 /**
  * Generate LightsOut style puzzles on set areas

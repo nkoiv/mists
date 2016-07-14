@@ -7,11 +7,12 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import java.util.HashMap;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.AttackAction;
-import java.util.HashMap;
-import java.util.logging.Level;
 
 /**
  * ActionLibrary stores valid generic actions

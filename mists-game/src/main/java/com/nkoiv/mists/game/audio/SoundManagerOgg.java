@@ -5,11 +5,12 @@
  */
 package com.nkoiv.mists.game.audio;
 
-import com.nkoiv.mists.game.Mists;
 import java.io.FileInputStream;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
 
 /**
  *

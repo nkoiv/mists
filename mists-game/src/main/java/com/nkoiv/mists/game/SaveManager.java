@@ -3,6 +3,8 @@ package com.nkoiv.mists.game;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
@@ -34,17 +36,26 @@ import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.quests.Quest;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.quests.QuestTask;
-import com.nkoiv.mists.game.triggers.*;
+import com.nkoiv.mists.game.triggers.DialogueTrigger;
+import com.nkoiv.mists.game.triggers.DoorTrigger;
+import com.nkoiv.mists.game.triggers.FlaggerTrigger;
+import com.nkoiv.mists.game.triggers.FreezeTilesTrigger;
+import com.nkoiv.mists.game.triggers.InsertMobTrigger;
+import com.nkoiv.mists.game.triggers.KillTrigger;
+import com.nkoiv.mists.game.triggers.LocationEntranceTrigger;
+import com.nkoiv.mists.game.triggers.LootTrigger;
+import com.nkoiv.mists.game.triggers.OpenInventoryTrigger;
+import com.nkoiv.mists.game.triggers.PuzzleTrigger;
+import com.nkoiv.mists.game.triggers.RotateTrigger;
+import com.nkoiv.mists.game.triggers.TextPopUpTrigger;
+import com.nkoiv.mists.game.triggers.ToggleTrigger;
+import com.nkoiv.mists.game.triggers.WorldMapEntranceTrigger;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.util.Flags;
 import com.nkoiv.mists.game.world.worldmap.LocationNode;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;
-
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * SaveManager handles saving and loading games.

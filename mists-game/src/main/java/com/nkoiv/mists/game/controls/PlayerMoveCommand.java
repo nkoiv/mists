@@ -7,6 +7,7 @@
 package com.nkoiv.mists.game.controls;
 
 import com.nkoiv.mists.game.Direction;
+
 import javafx.scene.input.KeyCode;
 
 /**

@@ -6,6 +6,10 @@
  */
 package com.nkoiv.mists.game.actions;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Effect;
@@ -16,10 +20,6 @@ import com.nkoiv.mists.game.gameobject.Water;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteAnimation;
 import com.nkoiv.mists.game.world.util.Toolkit;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
-import javafx.scene.image.ImageView;
 
 /**
  * ProjectileWeaponAttack is for shooting with bows and whatnot.

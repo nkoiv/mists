@@ -19,6 +19,7 @@ import com.nkoiv.mists.game.triggers.LootTrigger;
 import com.nkoiv.mists.game.triggers.OpenInventoryTrigger;
 import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.util.Toolkit;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 

@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.items;
 
+import java.util.Arrays;
+import java.util.Stack;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
@@ -15,8 +18,6 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
 import com.nkoiv.mists.game.sprites.Sprite;
-import java.util.Arrays;
-import java.util.Stack;
 
 /**
  * Inventory is a storage container for items

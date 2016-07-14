@@ -7,6 +7,8 @@
  */
 package com.nkoiv.mists.game.triggers;
 
+import java.util.logging.Level;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -15,8 +17,6 @@ import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.world.Location;
-
-import java.util.logging.Level;
 
 /**
  *

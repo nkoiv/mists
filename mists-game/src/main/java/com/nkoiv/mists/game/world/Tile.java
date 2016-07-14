@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world;
 
 import com.nkoiv.mists.game.sprites.Sprite;
+
 import javafx.scene.canvas.GraphicsContext;
 
 /**

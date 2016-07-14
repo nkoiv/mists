@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import java.util.HashMap;
+import java.util.Objects;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
@@ -19,8 +22,7 @@ import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.util.Flags;
-import java.util.HashMap;
-import java.util.Objects;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;

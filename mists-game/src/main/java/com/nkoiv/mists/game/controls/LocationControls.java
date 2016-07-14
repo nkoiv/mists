@@ -7,6 +7,13 @@
  */
 package com.nkoiv.mists.game.controls;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.TreeMap;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
@@ -24,12 +31,7 @@ import com.nkoiv.mists.game.ui.InventoryPanel;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.util.Toolkit;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.TreeMap;
-import java.util.logging.Level;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 

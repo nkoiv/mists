@@ -5,14 +5,15 @@
  */
 package com.nkoiv.mists.game.world.util;
 
+import java.util.Random;
+import java.util.Scanner;
+
 import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
 import com.nkoiv.mists.game.libraries.DialogueLibrary;
 import com.nkoiv.mists.game.libraries.LibLoader;
 import com.nkoiv.mists.game.world.pathfinding.Node;
-import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Testbench is used for testing the performance and utility of the

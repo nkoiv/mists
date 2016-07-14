@@ -7,6 +7,11 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+import java.util.TreeSet;
+
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.Mists;
@@ -21,10 +26,7 @@ import com.nkoiv.mists.game.ui.TiledPanel;
 import com.nkoiv.mists.game.ui.UIComponent;
 import com.nkoiv.mists.game.world.worldmap.LocationNode;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.TreeSet;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;

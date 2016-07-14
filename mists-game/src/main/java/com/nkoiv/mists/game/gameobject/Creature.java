@@ -7,14 +7,19 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
-import com.nkoiv.mists.game.AI.CompanionAI;
-import com.nkoiv.mists.game.AI.CreatureAI;
-import com.nkoiv.mists.game.AI.MonsterAI;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.logging.Level;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.AI.CompanionAI;
+import com.nkoiv.mists.game.AI.CreatureAI;
+import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.actions.ActionType;
 import com.nkoiv.mists.game.actions.AttackAction;
@@ -32,10 +37,7 @@ import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import com.nkoiv.mists.game.triggers.DialogueTrigger;
 import com.nkoiv.mists.game.triggers.Trigger;
 import com.nkoiv.mists.game.world.util.Toolkit;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.logging.Level;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

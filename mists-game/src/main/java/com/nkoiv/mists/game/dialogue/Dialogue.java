@@ -7,13 +7,14 @@
  */
 package com.nkoiv.mists.game.dialogue;
 
+import java.util.HashMap;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import java.util.HashMap;
 
 /**
  * Dialogue is a conversation between participants.

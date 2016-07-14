@@ -12,6 +12,7 @@ import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.DoorTrigger;
 import com.nkoiv.mists.game.triggers.Trigger;
+
 import javafx.scene.image.Image;
 
 /**

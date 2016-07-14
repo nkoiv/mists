@@ -10,7 +10,7 @@ package com.nkoiv.mists.game.items;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.nkoiv.mists.game.Mists;
+
 import javafx.scene.image.Image;
 
 /**

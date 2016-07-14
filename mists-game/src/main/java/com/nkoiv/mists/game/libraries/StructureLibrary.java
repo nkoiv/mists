@@ -5,10 +5,8 @@ import java.util.Map;
 
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.CircuitTile;
-import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
 import com.nkoiv.mists.game.gameobject.ItemContainer;
-import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PuzzleTile;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.gameobject.Wall;

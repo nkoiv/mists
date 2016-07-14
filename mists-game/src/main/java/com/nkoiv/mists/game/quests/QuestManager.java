@@ -5,6 +5,12 @@
  */
 package com.nkoiv.mists.game.quests;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
@@ -16,11 +22,6 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.ui.InfoPanel;
-import java.io.File;
-import java.io.FileReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 /**
  * QuestManager handles the quests currently active in the game.

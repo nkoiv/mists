@@ -6,6 +6,9 @@
  */
 package com.nkoiv.mists.game.libraries.premade;
 
+import java.util.Arrays;
+import java.util.Random;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.Door;
@@ -18,12 +21,8 @@ import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.puzzle.LightsOutPuzzle;
 import com.nkoiv.mists.game.puzzle.Puzzle;
-import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.DoorTrigger;
 import com.nkoiv.mists.game.world.TileMap;
-import java.util.Arrays;
-import java.util.Random;
-import javafx.scene.image.Image;
 
 /**
  *

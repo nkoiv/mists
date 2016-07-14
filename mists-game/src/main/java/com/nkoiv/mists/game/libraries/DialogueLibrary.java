@@ -7,6 +7,11 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
@@ -14,10 +19,6 @@ import com.nkoiv.mists.game.dialogue.Link;
 import com.nkoiv.mists.game.dialogue.linktriggers.LinkChangeDialogueOnOwnerTrigger;
 import com.nkoiv.mists.game.dialogue.linktriggers.LinkGiveItemToTalkerTrigger;
 import com.nkoiv.mists.game.dialogue.linktriggers.LinkTrigger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * DialogueLibrary stores the game dialogues in "unlocalized" state.

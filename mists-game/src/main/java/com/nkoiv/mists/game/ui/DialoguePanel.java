@@ -7,15 +7,17 @@
  */
 package com.nkoiv.mists.game.ui;
 
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.world.util.Toolkit;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.logging.Level;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;

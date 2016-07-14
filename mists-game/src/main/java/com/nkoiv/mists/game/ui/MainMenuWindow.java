@@ -7,6 +7,8 @@
  */
 package com.nkoiv.mists.game.ui;
 
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
@@ -15,7 +17,7 @@ import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.gamestate.LoadingScreen;
 import com.nkoiv.mists.game.world.Location;
-import java.util.logging.Level;
+
 import javafx.concurrent.Task;
 
 /**

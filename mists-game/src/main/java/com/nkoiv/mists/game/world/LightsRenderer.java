@@ -5,10 +5,12 @@
  */
 package com.nkoiv.mists.game.world;
 
-import com.nkoiv.mists.game.Mists;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
+
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

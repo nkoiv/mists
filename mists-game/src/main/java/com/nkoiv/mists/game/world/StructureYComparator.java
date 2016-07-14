@@ -5,8 +5,9 @@
  */
 package com.nkoiv.mists.game.world;
 
-import com.nkoiv.mists.game.gameobject.Structure;
 import java.util.Comparator;
+
+import com.nkoiv.mists.game.gameobject.Structure;
 
 /**
  *

@@ -7,8 +7,10 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
-import com.nkoiv.mists.game.Mists;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

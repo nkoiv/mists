@@ -7,6 +7,12 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+import java.util.TreeSet;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
@@ -36,11 +42,7 @@ import com.nkoiv.mists.game.ui.TextPanel;
 import com.nkoiv.mists.game.ui.TiledPanel;
 import com.nkoiv.mists.game.ui.TiledWindow;
 import com.nkoiv.mists.game.ui.UIComponent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.TreeSet;
-import java.util.logging.Level;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

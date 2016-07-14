@@ -5,6 +5,8 @@
  */
 package com.nkoiv.mists.game.world.worldmap;
 
+import java.util.ArrayList;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
@@ -13,7 +15,7 @@ import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Templatable;
 import com.nkoiv.mists.game.world.util.Toolkit;
-import java.util.ArrayList;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 

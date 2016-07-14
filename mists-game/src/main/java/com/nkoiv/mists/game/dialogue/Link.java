@@ -7,11 +7,12 @@
  */
 package com.nkoiv.mists.game.dialogue;
 
+import java.util.ArrayList;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.dialogue.linktriggers.LinkTrigger;
 import com.nkoiv.mists.game.gameobject.HasInventory;
 import com.nkoiv.mists.game.gameobject.MapObject;
-import java.util.ArrayList;
 
 /**
  * Dialogue Links take Dialogue from one Card

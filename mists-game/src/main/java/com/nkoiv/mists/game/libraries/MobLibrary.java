@@ -7,30 +7,22 @@
  */
 package com.nkoiv.mists.game.libraries;
 
-import com.nkoiv.mists.game.AI.MonsterAI;
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.actions.MeleeAttack;
-import com.nkoiv.mists.game.actions.ProjectileWeaponAttack;
-import com.nkoiv.mists.game.gameobject.CircuitTile;
-import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.Door;
-import com.nkoiv.mists.game.gameobject.Effect;
-import com.nkoiv.mists.game.gameobject.ItemContainer;
-import com.nkoiv.mists.game.gameobject.MapObject;
-import com.nkoiv.mists.game.gameobject.PuzzleTile;
-import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.gameobject.Wall;
-import com.nkoiv.mists.game.gameobject.Water;
-import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
-import com.nkoiv.mists.game.sprites.Sprite;
-import com.nkoiv.mists.game.sprites.SpriteAnimation;
-import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.util.Flags;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Creature;
+import com.nkoiv.mists.game.gameobject.Effect;
+import com.nkoiv.mists.game.gameobject.MapObject;
+import com.nkoiv.mists.game.gameobject.Structure;
+import com.nkoiv.mists.game.sprites.Sprite;
+import com.nkoiv.mists.game.sprites.SpriteAnimation;
+import com.nkoiv.mists.game.world.Location;
+import com.nkoiv.mists.game.world.util.Flags;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;

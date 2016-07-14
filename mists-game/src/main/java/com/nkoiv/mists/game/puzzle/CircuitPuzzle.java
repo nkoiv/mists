@@ -5,11 +5,12 @@
  */
 package com.nkoiv.mists.game.puzzle;
 
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gameobject.CircuitTile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.CircuitTile;
 
 /**
  * In Circuit tiles must be rotated to convey

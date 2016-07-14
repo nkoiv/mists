@@ -7,10 +7,12 @@
  */
 package com.nkoiv.mists.game.ui;
 
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gamestate.GameState;
 import java.util.ArrayList;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gamestate.GameState;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;

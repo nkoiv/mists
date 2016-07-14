@@ -11,10 +11,8 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.TriggerPlate;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
-import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.DialogueTrigger;
 import com.nkoiv.mists.game.world.TileMap;
-import javafx.scene.image.Image;
 
 /**
  * Starting beach, where the player lands in originally

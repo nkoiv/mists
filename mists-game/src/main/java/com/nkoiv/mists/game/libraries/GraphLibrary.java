@@ -7,11 +7,11 @@
  */
 package com.nkoiv.mists.game.libraries;
 
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.sprites.SpriteAnimation;
-
 import java.util.HashMap;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;

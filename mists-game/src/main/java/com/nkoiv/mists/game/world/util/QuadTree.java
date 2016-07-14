@@ -5,9 +5,11 @@
  */
 package com.nkoiv.mists.game.world.util;
 
-import com.nkoiv.mists.game.gameobject.MapObject;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.nkoiv.mists.game.gameobject.MapObject;
+
 import javafx.scene.shape.Rectangle;
 
 

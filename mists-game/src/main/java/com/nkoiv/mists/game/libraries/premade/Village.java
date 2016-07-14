@@ -5,15 +5,13 @@
  */
 package com.nkoiv.mists.game.libraries.premade;
 
-import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.AI.CreatureAI;
 import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.WorldMapEntrance;
 import com.nkoiv.mists.game.libraries.LocationLibrary.LocationTemplate;
 import com.nkoiv.mists.game.sprites.Roof;
-import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.TileMap;
-import javafx.scene.image.Image;
 
 /**
  * Village is a premade village for the POC

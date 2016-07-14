@@ -7,6 +7,10 @@
  */
 package com.nkoiv.mists.game.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -18,9 +22,6 @@ import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
 import com.nkoiv.mists.game.gameobject.Templatable;
 import com.nkoiv.mists.game.world.util.Flags;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
 
 /**
  * Action is something that someone triggers on a call.

@@ -7,9 +7,11 @@
  */
 package com.nkoiv.mists.game.gamestate;
 
+import java.util.ArrayList;
+
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.ui.UIComponent;
-import java.util.ArrayList;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;

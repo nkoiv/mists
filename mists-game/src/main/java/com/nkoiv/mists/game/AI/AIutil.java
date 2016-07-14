@@ -7,11 +7,13 @@
  */
 package com.nkoiv.mists.game.AI;
 
+import java.util.ArrayList;
+
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Location;
-import java.util.ArrayList;
+
 import javafx.scene.shape.Circle;
 
 /**

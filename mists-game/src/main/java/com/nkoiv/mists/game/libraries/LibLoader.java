@@ -7,9 +7,17 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.logging.Level;
+
 import com.esotericsoftware.yamlbeans.YamlReader;
-import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.AI.CompanionAI;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.actions.MeleeWeaponAttack;
 import com.nkoiv.mists.game.actions.ProjectileSpell;
@@ -40,13 +48,6 @@ import com.nkoiv.mists.game.world.TileMap;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.logging.Level;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 

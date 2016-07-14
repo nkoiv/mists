@@ -7,14 +7,16 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.items.Item;
 import com.nkoiv.mists.game.items.ItemType;
 import com.nkoiv.mists.game.items.Potion;
 import com.nkoiv.mists.game.items.Weapon;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
+
 import javafx.scene.image.Image;
 
 /**

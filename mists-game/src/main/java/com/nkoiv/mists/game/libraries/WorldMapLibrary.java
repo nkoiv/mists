@@ -5,16 +5,18 @@
  */
 package com.nkoiv.mists.game.libraries;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.world.worldmap.LocationNode;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;
-import java.io.File;
-import java.io.FileReader;
-import java.util.HashMap;
-import java.util.Map;
+
 import javafx.scene.image.Image;
 
 /**

@@ -7,6 +7,8 @@
  */
 package com.nkoiv.mists.game.ui;
 
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
@@ -14,7 +16,7 @@ import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.items.Inventory;
 import com.nkoiv.mists.game.items.Weapon;
 import com.nkoiv.mists.game.ui.PopUpMenu.MenuButton;
-import java.util.logging.Level;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;

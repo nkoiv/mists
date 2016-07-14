@@ -5,6 +5,11 @@
  */
 package com.nkoiv.mists.game.networking;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Stack;
+import java.util.logging.Level;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -41,10 +46,7 @@ import com.nkoiv.mists.game.networking.LocationNetwork.RequestLocationClear;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Stack;
-import java.util.logging.Level;
+
 import javafx.application.Platform;
 
 /**

@@ -5,14 +5,16 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import java.util.Arrays;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.puzzle.Circuit;
 import com.nkoiv.mists.game.sprites.MovingGraphics;
 import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.triggers.RotateTrigger;
 import com.nkoiv.mists.game.triggers.Trigger;
-import java.util.Arrays;
-import java.util.logging.Level;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 

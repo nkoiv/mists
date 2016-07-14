@@ -7,12 +7,14 @@
  */
 package com.nkoiv.mists.game.ui;
 
+import java.util.HashMap;
+
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gamestate.GameState;
 import com.nkoiv.mists.game.quests.Quest;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.quests.QuestTask;
-import java.util.HashMap;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;

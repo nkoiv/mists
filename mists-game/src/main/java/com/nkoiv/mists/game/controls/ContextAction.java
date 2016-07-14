@@ -7,6 +7,12 @@
  */
 package com.nkoiv.mists.game.controls;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.GenericTasks;
@@ -15,11 +21,7 @@ import com.nkoiv.mists.game.gameobject.Creature;
 import com.nkoiv.mists.game.gameobject.MapObject;
 import com.nkoiv.mists.game.networking.LocationClient;
 import com.nkoiv.mists.game.triggers.Trigger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
+
 import javafx.scene.image.Image;
 
 /**

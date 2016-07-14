@@ -5,12 +5,14 @@
  */
 package com.nkoiv.mists.game.audio;
 
-import com.nkoiv.mists.game.Mists;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
+
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

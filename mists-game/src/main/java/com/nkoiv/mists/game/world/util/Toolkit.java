@@ -6,6 +6,7 @@
 package com.nkoiv.mists.game.world.util;
 
 import com.nkoiv.mists.game.Direction;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;

@@ -5,12 +5,13 @@
  */
 package com.nkoiv.mists.game.world.pathfinding;
 
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.world.util.MinHeap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
+
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.world.util.MinHeap;
 
 /**
  * AStarPathfinder with clearance maps for different sized objects.

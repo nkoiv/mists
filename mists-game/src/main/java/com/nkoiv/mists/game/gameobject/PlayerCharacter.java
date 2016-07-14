@@ -7,6 +7,10 @@
  */
 package com.nkoiv.mists.game.gameobject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -16,12 +20,9 @@ import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;
 import com.nkoiv.mists.game.gamestate.LocationState;
 import com.nkoiv.mists.game.items.Item;
-import com.nkoiv.mists.game.sprites.Sprite;
 import com.nkoiv.mists.game.sprites.SpriteSkeleton;
 import com.nkoiv.mists.game.ui.InfoPanel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;

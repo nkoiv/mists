@@ -15,7 +15,6 @@ import com.nkoiv.mists.game.AI.MonsterAI;
 import com.nkoiv.mists.game.actions.MeleeAttack;
 import com.nkoiv.mists.game.actions.ProjectileWeaponAttack;
 import com.nkoiv.mists.game.gameobject.Creature;
-import com.nkoiv.mists.game.gameobject.MapObject;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

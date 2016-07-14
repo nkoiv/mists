@@ -5,8 +5,6 @@
  */
 package com.nkoiv.mists.game.world;
 
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.gameobject.Structure;
 import java.awt.Shape;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
@@ -19,6 +17,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+
+import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.gameobject.Structure;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
