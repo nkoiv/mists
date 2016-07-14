@@ -70,7 +70,6 @@ public class Mists extends Application implements Global {
     public final ArrayList<KeyCode> pressedButtons = new ArrayList<>();
     public final ArrayList<KeyCode> releasedButtons = new ArrayList<>();
     public final double[] mouseClickCoordinates = new double[2];
-    public Scene currentScene;
     
     public static SoundManager soundManager;
     public static GraphLibrary graphLibrary;
@@ -314,7 +313,7 @@ public class Mists extends Application implements Global {
     }
     
     private void loadCursors() {
-    	this.cursors = new HashMap<>();
+    	cursors = new HashMap<>();
     	cursors.put("handblue",new ImageCursor(graphLibrary.getImage("cursorHandblue")));
     	cursors.put("handbeige", new ImageCursor(graphLibrary.getImage("cursorHandbeige")));
 		cursors.put("handgrey", new ImageCursor(graphLibrary.getImage("cursorHandgrey")));
@@ -329,13 +328,15 @@ public class Mists extends Application implements Global {
     	
     }
     
-    public void setCursor(String cursorName) {
+    public static void setCursor(String cursorName) {
     	String lowercasename = cursorName.toLowerCase();
-    	if (cursors.containsKey(lowercasename)) {
-    		currentScene.setCursor(cursors.get(cursorName));
+    	Cursor cur = cursors.get(lowercasename);
+    	if (cur!=null) {
+    		if (primaryStage.getScene() == null) Mists.logger.warning("NULL scene!");
+    		primaryStage.getScene().setCursor(cur);
     	} else {
     		//If specified cursor wasn't found, change to default cursor
-    		currentScene.setCursor(Cursor.DEFAULT);
+    		primaryStage.getScene().setCursor(Cursor.DEFAULT);
     	}
     }
     

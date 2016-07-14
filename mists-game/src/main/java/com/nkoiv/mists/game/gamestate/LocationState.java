@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import com.nkoiv.mists.game.Game;
 import com.nkoiv.mists.game.GameMode;
 import com.nkoiv.mists.game.Mists;
+import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.controls.ContextAction;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.gameobject.MapObject;
@@ -63,14 +64,11 @@ public class LocationState implements GameState {
     private LocationClient client;
 
     private final Game game;
-    //private UIComponent currentMenu;
     public boolean gameMenuOpen;
     public boolean paused;
     public double lastDragX;
     public double lastDragY;
     public boolean infoBoxOpen;
-    //private final AudioControls audioControls = new AudioControls();
-    //private final LocationButtons locationControls = new LocationButtons();
     private boolean inConsole;
     private final HashMap<String, UIComponent> uiComponents;
     private final TreeSet<UIComponent> drawOrder;
@@ -85,6 +83,8 @@ public class LocationState implements GameState {
     private boolean movingWithMouse = false;
     private double movingTowardsX;
     private double movingTowardsY;
+    
+    private String castingWithMouse;
     
     public LocationState (Game game) {
         Mists.logger.info("Generating locationstate for "+Mists.gameMode);
@@ -469,15 +469,60 @@ public class LocationState implements GameState {
     @Override
     public void handleMouseEvent(MouseEvent me) {
         if (game.getCurrentLocation() !=null ) {
-            double xOffset = this.game.getCurrentLocation().getLastxOffset();
-            double yOffset = this.game.getCurrentLocation().getLastyOffset();
-            movingTowardsX = me.getSceneX()+xOffset;
-            movingTowardsY = me.getSceneY()+yOffset;
+            if (castingWithMouse == null) moveWithMouse(me);
+            else castWithMouse(me);
         }
         //See if there's an UI component to click
         if (me.getEventType() == MouseEvent.MOUSE_CLICKED || me.getEventType() == MouseEvent.MOUSE_PRESSED || me.getEventType() == MouseEvent.MOUSE_RELEASED) this.handleClicks(me);
         if (me.getEventType() == MouseEvent.MOUSE_DRAGGED) this.handleMouseDrags(me);
         me.consume();
+    }
+    
+    /**
+     * Use the current MouseEvent to direct the movement of the player towards
+     * the mouse cursor.
+     * The event movement target is later referred at a game tick() to actually
+     * transfer it into movement.
+     * @param me
+     */
+    private void moveWithMouse(MouseEvent me) {
+        double xOffset = this.game.getCurrentLocation().getLastxOffset();
+        double yOffset = this.game.getCurrentLocation().getLastyOffset();
+        movingTowardsX = me.getSceneX()+xOffset;
+        movingTowardsY = me.getSceneY()+yOffset;
+    }
+    
+    /**
+     * Activate a waiting action towards the mouse cursor if a button is pressed
+     * @param me
+     */
+    private void castWithMouse(MouseEvent me) {
+    	if ((me.getEventType() == MouseEvent.MOUSE_CLICKED || me.getEventType() == MouseEvent.MOUSE_PRESSED || me.getEventType() == MouseEvent.MOUSE_RELEASED) && me.getButton() == MouseButton.PRIMARY) {
+    		game.getPlayer().useAction(castingWithMouse, me.getSceneX()+game.getPlayer().getLocation().getLastxOffset(), me.getSceneY()+game.getPlayer().getLocation().getLastyOffset());
+    		cancelCastingWithMouse();
+    	} else if (me.getButton() == MouseButton.SECONDARY) {
+    		cancelCastingWithMouse();
+    	}
+    }
+    
+    /**
+     * Start casting an action with mouse, activating the action with mouseclick
+     * @param action The action to trigger with mouseclick
+     */
+    public void castWithMouse(String actionName) {
+    	this.castingWithMouse = actionName;
+    	//TODO: Take the preferred cursor from config
+    	Mists.setCursor("handblue");
+    }
+    
+    /**
+     * Cancel the casting of an action, changing
+     * the cursor back to default.
+     */
+    public void cancelCastingWithMouse() {
+    	this.castingWithMouse = null;
+    	//TODO: Take the default cursor from config
+    	Mists.setCursor("default");
     }
     
     private void handleClicks(MouseEvent me) {

@@ -7,7 +7,6 @@
  */
 package com.nkoiv.mists.game.AI;
 
-import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.ActionType;
 import com.nkoiv.mists.game.actions.GenericTasks;
 import com.nkoiv.mists.game.actions.Task;

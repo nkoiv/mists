@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.Action;
 import com.nkoiv.mists.game.gameobject.PlayerCharacter;
+import com.nkoiv.mists.game.gamestate.LocationState;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -27,6 +28,7 @@ import javafx.scene.paint.Color;
 public class ActionButton extends TextButton {
     private PlayerCharacter player;
     private String actionName;
+    private boolean quickCast = false;
     
     public ActionButton (PlayerCharacter player, String actionName, double width, double height) {
         this(player, actionName, width, height, 0, 0);
@@ -36,6 +38,14 @@ public class ActionButton extends TextButton {
         super(actionName, width, height, xPosition, yPosition);
         this.player = player;
         this.actionName = actionName;
+    }
+    
+    public void setQuickCast(boolean quickCast) {
+    	this.quickCast = quickCast;
+    }
+    
+    public boolean isQuickCast() {
+    	return this.quickCast;
     }
 
     @Override
@@ -55,21 +65,26 @@ public class ActionButton extends TextButton {
     @Override
     public void buttonPress() {
         Mists.logger.log(Level.INFO, "{0} was clicked", this.getName());
-        Point p = MouseInfo.getPointerInfo().getLocation();
-        
-        double mouseX = p.getX() - Mists.primaryStage.getX();
-        double mouseY = p.getY() - Mists.primaryStage.getY();
-        //Mists.logger.info("Using action "+actionName+" towards "+mouseX+player.getLocation().getLastxOffset()+"x"+ mouseY+player.getLocation().getLastyOffset());
-        player.useAction(actionName, mouseX+player.getLocation().getLastxOffset(), mouseY+player.getLocation().getLastyOffset());
-        /*
-        if (!player.getLocation().getTargets().isEmpty()) {
-            Mists.logger.log(Level.INFO, "ActionButton: Using {0} towards {1}", new Object[]{actionName, player.getLocation().getTargets().get(0).getName()});
-            player.useAction(actionName, player.getLocation().getTargets().get(0));
-        } else {
-            player.useAction(actionName);
-            Mists.logger.log(Level.INFO, "ActionButton: Using {0}", actionName);
+        if (player.getAvailableActions().get(actionName) == null) {
+        	Mists.logger.warning("Action button "+this.getName()+" was tied to an Action the player doesn't have ("+actionName+")");
+        	return;
         }
-        */
+        if (player.getAvailableActions().get(actionName).isOnCooldown()) {
+        	Mists.logger.info("Tried to activate "+actionName+" by ActionButton, but it was on cooldown");
+        	return;
+        }
+        if (quickCast) {
+        	//If we're quickcasting, just fire skill at current mouse position
+	        Point p = MouseInfo.getPointerInfo().getLocation();
+	        double mouseX = p.getX() - Mists.primaryStage.getX();
+	        double mouseY = p.getY() - Mists.primaryStage.getY();
+	        //Mists.logger.info("Using action "+actionName+" towards "+mouseX+player.getLocation().getLastxOffset()+"x"+ mouseY+player.getLocation().getLastyOffset());
+	        player.useAction(actionName, mouseX+player.getLocation().getLastxOffset(), mouseY+player.getLocation().getLastyOffset());
+        } else {
+        	//If we're not quickcasting, the skill target needs to be verified with mouse click
+        	if (Mists.MistsGame.currentState instanceof LocationState) ((LocationState)Mists.MistsGame.currentState).castWithMouse(actionName);
+        }
+        
     }
     
     
