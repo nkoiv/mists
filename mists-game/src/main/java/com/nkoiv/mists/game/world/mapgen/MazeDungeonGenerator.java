@@ -7,6 +7,9 @@
  */
 package com.nkoiv.mists.game.world.mapgen;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 import com.nkoiv.mists.game.world.TileMap;
 
 public class MazeDungeonGenerator implements DungeonGenerator {
@@ -41,6 +44,66 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 		}
 	}
 	
-
+	/**
+	 * 
+	 * @param dc DungeonContainer to grow maze in
+	 * @param xStart X starting point of the maze
+	 * @param yStart Y starting point of the maze
+	 * @param mazeID TileID to carve the maze with
+	 * @param clearID TileID to create maze over (everything else is blocked)
+	 * @return
+	 */
+	public static boolean growMaze(DungeonContainer dc, int xStart, int yStart, int mazeID, int clearID) {
+		if (dc.getRoomID(xStart, yStart) != clearID) return false;
+		Stack<int[]> cells = new Stack<>(); 
+		int[] current = new int[]{xStart, yStart};
+		dc.setRoomID(current[0], current[1], mazeID);
+		cells.add(current);
+		while (!cells.isEmpty()) {
+			current = cells.pop();
+			if (hasClearNeighbour(dc, current[0], current[1], clearID)) cells.push(current);
+			current = randomClearNeighbour(dc, current[0], current[1], clearID);
+			if (current != null) dc.setRoomID(current[0], current[1], mazeID);
+		}
+		return true;
+	}
+	
+	private int[] randomPathDirection(DungeonContainer dc, int xPos, int yPos, int clearID, int lastDirection, int straightCorridorPreference) {
+		return null
+	}
+	
+	private static int[] randomClearNeighbour(DungeonContainer dc, int xPos, int yPos, int clearID) {
+		int randomDirection = DungeonGenerator.RND.nextInt(4);
+		int tries = 0;
+		while(tries < 4) {
+			switch(randomDirection) {
+			case 0: if (dc.getRoomID(xPos, yPos-1) == clearID) return new int[]{xPos, yPos-1}; break;
+			case 1: if (dc.getRoomID(xPos+1, yPos) == clearID) return new int[]{xPos+1, yPos}; break;
+			case 2: if (dc.getRoomID(xPos, yPos+1) == clearID) return new int[]{xPos, yPos+1}; break;
+			case 3: if (dc.getRoomID(xPos-1, yPos) == clearID) return new int[]{xPos-1, yPos}; break;
+			default: break;
+			}
+			tries++;
+			randomDirection++;
+			if (randomDirection > 3) randomDirection = 0;
+		}
+		return null;
+	}
+	
+	/**
+	 * Check if there's any clear tiles next to the given one
+	 * @param dc DungeonContainer to check
+	 * @param xPos X Position to check around
+	 * @param yPos Y Position to check around
+	 * @param clearID TileID of what constitutes as "clear"
+	 * @return true if at least one of the four surrounding cardinal directions was clear
+	 */
+	private static boolean hasClearNeighbour(DungeonContainer dc, int xPos, int yPos, int clearID) {
+		if (xPos > 0 && dc.getRoomID(xPos-1, yPos) == clearID) return true;
+		if (yPos > 0 && dc.getRoomID(xPos, yPos-1) == clearID) return true;
+		if (xPos < dc.getWidth()-1 && dc.getRoomID(xPos+1, yPos) == clearID) return true;
+		if (yPos < dc.getHeight()-1  && dc.getRoomID(xPos, yPos+1) == clearID) return true;
+		return false;
+	}
 	
 }

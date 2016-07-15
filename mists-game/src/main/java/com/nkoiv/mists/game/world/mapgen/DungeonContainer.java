@@ -125,11 +125,18 @@ public class DungeonContainer {
 	}
 	
 	public void setRoomID(int x, int y, int roomID) {
+		if (x < 0 || x > tileWidth-1 || y < 0 || y > tileWidth-1) return;
 		this.roomMap[x][y] = roomID;
 	}
 	
-	
+	/**
+	 * Get the room/tileID of the given coordinates
+	 * @param x xCoordinate
+	 * @param y yCoordinate
+	 * @return return roomID at the given coordinates, or -1 if accessing out of bounds area.
+	 */
 	public int getRoomID(int x, int y) {
+		if (x < 0 || x > tileWidth-1 || y < 0 || y > tileWidth-1) return -1;
 		return this.roomMap[x][y];
 	}
 	
