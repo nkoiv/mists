@@ -40,7 +40,6 @@ import com.nkoiv.mists.game.networking.LocationServer;
 import com.nkoiv.mists.game.puzzle.PuzzleManager;
 import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.ui.Overlay;
-import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 import com.nkoiv.mists.game.world.pathfinding.CollisionMap;
 import com.nkoiv.mists.game.world.pathfinding.PathFinder;
 import com.nkoiv.mists.game.world.util.Flags;
@@ -81,7 +80,6 @@ public class Location extends Flags implements KryoSerializable {
     private LocationEnvironment environment;
     private CollisionMap collisionMap;
     private PathFinder pathFinder;
-    private DungeonGenerator mapGen;
     private PuzzleManager puzzleManager;
     private LightsRenderer lights;
     private RayShadows shadows;
@@ -581,14 +579,6 @@ public class Location extends Flags implements KryoSerializable {
     
     public void clearRoofs() {
         this.roofs.clear();
-    }
-    
-    public void setMapGen (DungeonGenerator mg) {
-        this.mapGen = mg;
-    }
-    
-    public DungeonGenerator getMapGen() {
-        return this.mapGen;
     }
     
     public Set<Integer> getAllMobsIDs() {

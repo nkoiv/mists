@@ -26,7 +26,7 @@ import com.nkoiv.mists.game.gamestate.MainMenuState;
 import com.nkoiv.mists.game.gamestate.WorldMapState;
 import com.nkoiv.mists.game.quests.QuestManager;
 import com.nkoiv.mists.game.world.Location;
-import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
+import com.nkoiv.mists.game.world.mapgen.BSPDungeonGenerator;
 import com.nkoiv.mists.game.world.worldmap.MapNode;
 import com.nkoiv.mists.game.world.worldmap.WorldMap;
 
@@ -65,7 +65,7 @@ public class Game {
     public double yOffset; //If/when a map is larger than display-area, it should be centered on player
     public boolean toggleScale = false;
     
-    public DungeonGenerator mapGen;
+    public BSPDungeonGenerator mapGen;
     public QuestManager questManager;
     public DialogueManager dialogueManager;
     
