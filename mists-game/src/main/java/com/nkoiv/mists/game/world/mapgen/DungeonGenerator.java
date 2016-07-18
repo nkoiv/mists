@@ -70,7 +70,7 @@ public interface DungeonGenerator {
 	 * @return True if all three checked blocks are marked as clear
 	 */
 	public static boolean isClearRoute(DungeonContainer dc, int xPos, int yPos, int direction, int clearID) {
-		if (direction != -1) {
+		if (clearID != -1) {
 			switch(direction) {
 			case 0: {
 				if (dc.getRoomID(xPos, yPos-1) != clearID) return false;
@@ -117,6 +117,7 @@ public interface DungeonGenerator {
 	public static boolean carveCorridor(DungeonContainer dc, int xPosition, int yPosition, int direction, int corridorID, int wallID, int clearID) {
 		if (dc.getRoomID(xPosition, yPosition) != clearID) return false;
 		dc.setRoomID(xPosition, yPosition, corridorID);
+		/*
 		if (direction != -1) {
 			switch(direction) {
 			case 0: {
@@ -142,6 +143,7 @@ public interface DungeonGenerator {
 			default: break;
 			}
 		}
+		*/
 		return true;
 	}
 	

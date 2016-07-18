@@ -70,37 +70,32 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 		while (!cells.isEmpty()) {
 			if (count> mazeLength && mazeLength != -1) break;
 			current = cells.pop();
-			int[] neighbour = null;
+			int[] next = null;
 			if (DungeonGenerator.RND.nextFloat() < corridorFocus && current[2] != -1) {
-				neighbour = DungeonGenerator.neighbouringCell(current[2], current);
+				next = DungeonGenerator.neighbouringCell(current[2], current);
 			}
-			if (neighbour == null) neighbour = randomClearNeighbour(dc, current[0], current[1], clearID, true);
-			if (neighbour != null) {
-				cells.push(current);
-				cells.push(neighbour);
-				current = neighbour;
+			else next = randomClearNeighbour(dc, current[0], current[1], clearID);
+			
+			if (next != null && DungeonGenerator.isClearRoute(dc, next[0], next[1], next[2], clearID)) {
+				DungeonGenerator.carveCorridor(dc, next[0], next[1], next[2], mazeID, wallID, clearID);
+				if (current != null && hasClearNeighbour(dc, current[0], current[1], clearID)) cells.push(current); 
+				if (next != null && hasClearNeighbour(dc, next[0], next[1], clearID)) cells.push(next);
 			}
-			else continue; //Given cell was depleted of valid routes, discard it
-
-			if (current != null) {
-				//dc.setRoomID(current[0], current[1], mazeID);
-				DungeonGenerator.carveCorridor(dc, current[0], current[1], current[2], mazeID, wallID, clearID);
-				
-			}
-			if (mazeLength != -1) count++;
+			
+			count++;
 			dc.printMap();
-			System.out.println(cells);
+			System.out.println("cells:" + cells.size());
+			
 		}
 		return true;
 	}
 	
-	private static int[] randomClearNeighbour(DungeonContainer dc, int xPos, int yPos, int clearID, boolean requireRoute) {
+	private static int[] randomClearNeighbour(DungeonContainer dc, int xPos, int yPos, int clearID) {
 		int randomDirection = DungeonGenerator.RND.nextInt(4);
 		int tries = 0;
 		while(tries < 4) {
 			int[] newPath = DungeonGenerator.neighbouringCell(randomDirection, new int[]{xPos, yPos, randomDirection});
-			if (!requireRoute && dc.getRoomID(newPath[0], newPath[1]) == clearID) return newPath;
-			if (requireRoute && DungeonGenerator.isClearRoute(dc, newPath[0], newPath[1], newPath[2], clearID)) return newPath;
+			if (dc.getRoomID(newPath[0], newPath[1]) == clearID && DungeonGenerator.isClearRoute(dc, newPath[0], newPath[1], newPath[2], clearID)) return newPath;
 			tries++;
 			randomDirection++;
 			if (randomDirection > 3) randomDirection = 0;
@@ -118,10 +113,10 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 	 * @return true if at least one of the four surrounding cardinal directions was clear
 	 */
 	private static boolean hasClearNeighbour(DungeonContainer dc, int xPos, int yPos, int clearID) {
-		if (xPos > 0 && dc.getRoomID(xPos-1, yPos) == clearID) return true;
-		if (yPos > 0 && dc.getRoomID(xPos, yPos-1) == clearID) return true;
-		if (xPos < dc.getWidth()-1 && dc.getRoomID(xPos+1, yPos) == clearID) return true;
-		if (yPos < dc.getHeight()-1  && dc.getRoomID(xPos, yPos+1) == clearID) return true;
+		if (DungeonGenerator.isClearRoute(dc, xPos, yPos-1, 0, clearID)) return true;
+		if (DungeonGenerator.isClearRoute(dc, xPos+1, yPos, 1, clearID)) return true;
+		if (DungeonGenerator.isClearRoute(dc, xPos, yPos+1, 2, clearID)) return true;
+		if (DungeonGenerator.isClearRoute(dc, xPos-1, yPos, 3, clearID)) return true;
 		return false;
 	}
 	
