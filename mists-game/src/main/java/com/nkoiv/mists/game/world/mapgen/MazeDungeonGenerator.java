@@ -7,7 +7,6 @@
  */
 package com.nkoiv.mists.game.world.mapgen;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 import com.nkoiv.mists.game.world.TileMap;
@@ -38,8 +37,11 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 	public static void addRooms(DungeonContainer dc, int minDistance, int maxTries, int maxRooms) {
 		int roomsPlaced = 0;
 		for (int i = 0; i < maxTries; i++) {
-			DungeonRoom room = DungeonGenerator.generateRandomRoom(4, 10, 4, 10);
-			if (DungeonGenerator.tryAddingRoom(dc, room, minDistance)) roomsPlaced++;
+			DungeonRoom room = DungeonGenerator.generateRandomRoom(4, 10, 4, 10); //TODO: Replace with proper room generation
+			if (DungeonGenerator.roomFits(dc, room, minDistance)) {
+				roomsPlaced++;
+				dc.addRoom(room);
+			}
 			if(maxRooms != 0 && roomsPlaced >= maxRooms) break;
 		}
 	}
@@ -47,42 +49,58 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 	/**
 	 * 
 	 * @param dc DungeonContainer to grow maze in
+	 * @param mazeLength number of tiles to carve. -1 for no restriction
 	 * @param xStart X starting point of the maze
 	 * @param yStart Y starting point of the maze
 	 * @param mazeID TileID to carve the maze with
 	 * @param clearID TileID to create maze over (everything else is blocked)
-	 * @return
+	 * @param corridorFocus the chance (0 to 1) to try and go down straight path 
+	 * @return True if dungeon was carved, False if not (in case starting tile was not clear)
 	 */
-	public static boolean growMaze(DungeonContainer dc, int xStart, int yStart, int mazeID, int clearID) {
-		if (dc.getRoomID(xStart, yStart) != clearID) return false;
+	public static boolean growMaze(DungeonContainer dc, int mazeLength, int xStart, int yStart, int mazeID, int wallID, int clearID, float corridorFocus) {
+		if (dc.getRoomID(xStart, yStart) != clearID) {
+			System.out.println("starting room was not clear (was '"+dc.getRoomID(xStart, yStart) +"', aborting");
+			return false;
+		}
 		Stack<int[]> cells = new Stack<>(); 
-		int[] current = new int[]{xStart, yStart};
+		int[] current = new int[]{xStart, yStart, -1};
 		dc.setRoomID(current[0], current[1], mazeID);
 		cells.add(current);
+		int count = 0;
 		while (!cells.isEmpty()) {
+			if (count> mazeLength && mazeLength != -1) break;
 			current = cells.pop();
-			if (hasClearNeighbour(dc, current[0], current[1], clearID)) cells.push(current);
-			current = randomClearNeighbour(dc, current[0], current[1], clearID);
-			if (current != null) dc.setRoomID(current[0], current[1], mazeID);
+			int[] neighbour = null;
+			if (DungeonGenerator.RND.nextFloat() < corridorFocus && current[2] != -1) {
+				neighbour = DungeonGenerator.neighbouringCell(current[2], current);
+			}
+			if (neighbour == null) neighbour = randomClearNeighbour(dc, current[0], current[1], clearID, true);
+			if (neighbour != null) {
+				cells.push(current);
+				cells.push(neighbour);
+				current = neighbour;
+			}
+			else continue; //Given cell was depleted of valid routes, discard it
+
+			if (current != null) {
+				//dc.setRoomID(current[0], current[1], mazeID);
+				DungeonGenerator.carveCorridor(dc, current[0], current[1], current[2], mazeID, wallID, clearID);
+				
+			}
+			if (mazeLength != -1) count++;
+			dc.printMap();
+			System.out.println(cells);
 		}
 		return true;
 	}
 	
-	private int[] randomPathDirection(DungeonContainer dc, int xPos, int yPos, int clearID, int lastDirection, int straightCorridorPreference) {
-		return null
-	}
-	
-	private static int[] randomClearNeighbour(DungeonContainer dc, int xPos, int yPos, int clearID) {
+	private static int[] randomClearNeighbour(DungeonContainer dc, int xPos, int yPos, int clearID, boolean requireRoute) {
 		int randomDirection = DungeonGenerator.RND.nextInt(4);
 		int tries = 0;
 		while(tries < 4) {
-			switch(randomDirection) {
-			case 0: if (dc.getRoomID(xPos, yPos-1) == clearID) return new int[]{xPos, yPos-1}; break;
-			case 1: if (dc.getRoomID(xPos+1, yPos) == clearID) return new int[]{xPos+1, yPos}; break;
-			case 2: if (dc.getRoomID(xPos, yPos+1) == clearID) return new int[]{xPos, yPos+1}; break;
-			case 3: if (dc.getRoomID(xPos-1, yPos) == clearID) return new int[]{xPos-1, yPos}; break;
-			default: break;
-			}
+			int[] newPath = DungeonGenerator.neighbouringCell(randomDirection, new int[]{xPos, yPos, randomDirection});
+			if (!requireRoute && dc.getRoomID(newPath[0], newPath[1]) == clearID) return newPath;
+			if (requireRoute && DungeonGenerator.isClearRoute(dc, newPath[0], newPath[1], newPath[2], clearID)) return newPath;
 			tries++;
 			randomDirection++;
 			if (randomDirection > 3) randomDirection = 0;
@@ -90,6 +108,7 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 		return null;
 	}
 	
+
 	/**
 	 * Check if there's any clear tiles next to the given one
 	 * @param dc DungeonContainer to check

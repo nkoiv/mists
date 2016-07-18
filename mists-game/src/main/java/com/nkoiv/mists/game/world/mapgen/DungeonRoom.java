@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.gameobject.Structure;
-import com.nkoiv.mists.game.sprites.CollisionBox;
 
 /**
  * Rooms are the most basic components of a dungeon.
@@ -90,7 +89,6 @@ public class DungeonRoom {
 		//If not, return the distance
 		return (Math.max(0, xDist))+(Math.max(0, yDist));
 	}
-	
 
 	public int getWidth() {
 		return this.tileWidth;

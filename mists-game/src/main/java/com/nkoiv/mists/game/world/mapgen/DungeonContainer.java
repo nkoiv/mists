@@ -32,17 +32,38 @@ public class DungeonContainer {
 	private int nextRoomID;
 	
 	public DungeonContainer() {
+		this.rooms = new HashMap<>();
 		nextRoomID = 1;
 	}
 	
+	public DungeonContainer(int width, int height) {
+		this();
+		this.tileWidth = width;
+		this.tileHeight = height;
+		this.roomMap = new int[width][height];
+		//initializeRoomMap();
+	}
+	
+	private void initializeRoomMap(int floorID) {
+		for (int y = 0; y < tileHeight; y++) {
+			for (int x = 0; x < tileWidth; x++) {
+				roomMap[x][y] = floorID;
+			}
+		}
+	}
+	
 	/**
-	 * Add a room to the DungeonContainer at the specified position
+	 * Add a room to the DungeonContainer at the specified position.
+	 * Any existing structure on the roomMap will be overwritten.
+	 * Can result in overlay with different rooms, but rooms will
+	 * never be placed outside container bounds.
 	 * @param room Room to add to the container
 	 * @param xPos X Positioning (upper left corner) of the room
 	 * @param yPos Y Positioning (upper left corner) of the room
 	 * @return True if room was added succesfully
 	 */
 	public boolean addRoom(DungeonRoom room, int xPosition, int yPosition) {
+		if (room.getXPos() < 0 || room.getYPos() < 0 || room.getXPos()+room.getWidth() > this.tileWidth || room.getYPos()+room.getHeight() > this.tileHeight) return false;
 		int roomID = nextRoomID;
 		nextRoomID++;
 		room.setPosition(xPosition, yPosition);
@@ -67,10 +88,10 @@ public class DungeonContainer {
 	
 	/**
 	 * Fill every empty tile in the container with the given tile
-	 * @param tileID
 	 * @param emptyID
+	 * @param tileID
 	 */
-	public void fill(int tileID, int emptyID) {
+	public void fill(int emptyID, int tileID) {
 		for (int x = 0; x < tileWidth; x++) {
 			for (int y = 0; y < tileHeight; y++) {
 				if (roomMap[x][y] == emptyID) roomMap[x][y] = tileID;
@@ -124,6 +145,26 @@ public class DungeonContainer {
 		return id;
 	}
 	
+	/**
+	 * Carve the selected tile with give roomID,
+	 * but only if it's of the clear ID.
+	 * Checks are done for out of bounds.
+	 * @param x X position of the tile to carve
+	 * @param y Y position of the tile to carve
+	 * @param roomID ID to carve on the container
+	 * @param clearID ID to carve over. -1 means any ID is okay to carve over.
+	 * @return
+	 */
+	public boolean carveIfClear(int x, int y, int roomID, int clearID) {
+		int id = getRoomID(x,y);
+		if (id != -1 && (id == clearID || -1 == clearID)) {
+			setRoomID(x, y, roomID);
+			return true;
+		} else {
+			return false;
+		}	
+	}
+	
 	public void setRoomID(int x, int y, int roomID) {
 		if (x < 0 || x > tileWidth-1 || y < 0 || y > tileWidth-1) return;
 		this.roomMap[x][y] = roomID;
@@ -171,6 +212,22 @@ public class DungeonContainer {
 	
 	public int[][] getIntMap() {
 		return new int[tileWidth][tileHeight];
+	}
+	
+	/**
+	 * Print the map in char representations into
+	 * standard system.out
+	 */
+	public void printMap() {
+		System.out.println("--------MAP--------");
+		for (int y = 0; y < this.tileHeight; y++) {
+			System.out.println();
+			for (int x = 0; x < this.tileWidth; x++) {
+				System.out.print((char)roomMap[x][y]);
+			}
+		}
+		System.out.println();
+		System.out.println("-------------------");
 	}
 
 }

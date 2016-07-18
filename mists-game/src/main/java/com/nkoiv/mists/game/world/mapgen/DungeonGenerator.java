@@ -40,7 +40,7 @@ public interface DungeonGenerator {
 	 * @param minDistance minimum required distance to be left between rooms
 	 * @return room True if room fit, False if it couldn't be added
 	 */
-	public static boolean tryAddingRoom(DungeonContainer dc, DungeonRoom room, int minDistance) {
+	public static boolean roomFits(DungeonContainer dc, DungeonRoom room, int minDistance) {
 		boolean fits = true;
 		int xPos = DungeonGenerator.RND.nextInt(dc.getWidth());
 		int yPos = DungeonGenerator.RND.nextInt(dc.getHeight());
@@ -50,11 +50,119 @@ public interface DungeonGenerator {
 				fits = false;
 				break;
 			}
-		}
-		if (fits) dc.addRoom(room);
+		}		
 		return fits;
 	}
+	
+	/**
+	 * Check if it's clear to go to the given location
+	 * Clear samples (x means checked block, . is position x/y)
+	 * dir 0(up)   dir 2(down) dir 3(left) 
+	 * [ ][x][ ]   [ ][ ][ ]   [ ][x][ ]
+	 * [x][.][x]   [x][.][x]   [x][.][ ]
+	 * [ ][ ][ ]   [ ][x][ ]   [ ][x][ ]
+	 *  
+	 * @param dc DungeonContainer to query for the position
+	 * @param xPos X coordinate of the checked position
+	 * @param yPos Y coordinate of the checked position
+	 * @param direction direction route is heading
+	 * @param clearID id of what constitutes as clear
+	 * @return True if all three checked blocks are marked as clear
+	 */
+	public static boolean isClearRoute(DungeonContainer dc, int xPos, int yPos, int direction, int clearID) {
+		if (direction != -1) {
+			switch(direction) {
+			case 0: {
+				if (dc.getRoomID(xPos, yPos-1) != clearID) return false;
+				if (dc.getRoomID(xPos+1, yPos) != clearID) return false;
+				if (dc.getRoomID(xPos-1, yPos) != clearID) return false;
+				break;
+			}
+			case 1: {
+				if (dc.getRoomID(xPos, yPos-1) != clearID) return false;
+				if (dc.getRoomID(xPos+1, yPos) != clearID) return false;
+				if (dc.getRoomID(xPos, yPos+1) != clearID) return false;
+				break;
+			}
+			case 2: {
+				if (dc.getRoomID(xPos, yPos+1) != clearID) return false;
+				if (dc.getRoomID(xPos+1, yPos) != clearID) return false;
+				if (dc.getRoomID(xPos-1, yPos) != clearID) return false;
+				break;
+			}
+			case 3: {
+				if (dc.getRoomID(xPos, yPos-1) != clearID) return false;
+				if (dc.getRoomID(xPos-1, yPos) != clearID) return false;
+				if (dc.getRoomID(xPos, yPos+1) != clearID) return false;
+				break;
+			}
+			default: return false;
+			}
+		}
+		
+		return true;
+	}
+	
 
+	/**
+	 * Draw a corridor towards given location.
+	 * Walls will be carved behind the corridor, where it came from. 
+	 * @param xStart xPosition to draw at
+	 * @param yStart yPosition to draw at
+	 * @param direction the direction corridor is heading towards go towards, 0: up, 1: right, 2: down, 3: left. At -1, no walls will be carved
+	 * @param wallID tileID of walls to leave behind
+	 * @param clearID clearID for overwriting with walls. -1 for overwriting anything
+	 * @return
+	 */
+	public static boolean carveCorridor(DungeonContainer dc, int xPosition, int yPosition, int direction, int corridorID, int wallID, int clearID) {
+		if (dc.getRoomID(xPosition, yPosition) != clearID) return false;
+		dc.setRoomID(xPosition, yPosition, corridorID);
+		if (direction != -1) {
+			switch(direction) {
+			case 0: {
+				dc.carveIfClear(xPosition-1, yPosition+1, wallID, clearID);
+				dc.carveIfClear(xPosition+1, yPosition+1, wallID, clearID);
+				break;
+			}
+			case 1: {
+				dc.carveIfClear(xPosition-1, yPosition+1, wallID, clearID);
+				dc.carveIfClear(xPosition-1, yPosition-1, wallID, clearID);
+				break;
+			}
+			case 2: {
+				dc.carveIfClear(xPosition+1, yPosition-1, wallID, clearID);
+				dc.carveIfClear(xPosition-1, yPosition-1, wallID, clearID);
+				break;
+			}
+			case 3: {
+				dc.carveIfClear(xPosition+1, yPosition+1, wallID, clearID);
+				dc.carveIfClear(xPosition+1, yPosition-1, wallID, clearID);
+				break;
+			}
+			default: break;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Return a cell that's next from the current one, going by
+	 * the cardinal directions
+	 * 
+	 * @param direction Direction of the desired neighbour: 0: up, 1: right, 2: down, 3: left.
+	 * @param cell Cell to get the neighbour from ([0] = xCoor, [1] = yCoor)
+	 * @return Neighbouring cell coordinates([0] = xCoor, [1] = yCoor, [2] = direction)
+	 */
+	public static int[] neighbouringCell(int direction, int[] cell) {
+		switch(direction) {
+			case 0: return new int[]{cell[0], cell[1]-1, 0};
+			case 1: return new int[]{cell[0]+1, cell[1], 1};
+			case 2: return new int[]{cell[0], cell[1]+1, 2};
+			case 3: return new int[]{cell[0]-1, cell[1], 3};
+		default: return cell;
+		}
+	}
+	
 	/**
 	 * Generate a random sized room within the given parameters
 	 * @return A room from given range. Null if given minSize is larger than given maxSize.
