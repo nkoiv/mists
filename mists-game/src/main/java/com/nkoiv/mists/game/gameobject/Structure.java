@@ -38,14 +38,12 @@ public class Structure extends MapObject {
     public Structure(String name, Image image, int collisionLevel) {
         super(name, image);
         this.collisionLevel = collisionLevel;
-        this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
     }
     
     public Structure(String name, MovingGraphics graphics, int collisionLevel) {
         super(name, graphics);
         this.collisionLevel = collisionLevel;
-        this.setFlag("visible", 1);
         this.extraSprites = new ArrayList<>();
     }
     
@@ -82,7 +80,7 @@ public class Structure extends MapObject {
     
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
+        if (this.isVisible()) {
             super.render(xOffset, yOffset, gc);
             this.renderExtras(xOffset, yOffset, gc);
         }

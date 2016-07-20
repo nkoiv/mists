@@ -134,13 +134,14 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     }
     
     
-    protected static void addFlagsFromYAML(Map mobData, Flags mob) {
+    protected static void addFlagsFromYAML(Map mobData, MapObject mob) {
         if (mobData.containsKey("flags")) {
             Map flags = (Map)mobData.get("flags");
             for (Object f : flags.keySet()) {
                 String flagName = (String)f;
                 int flagValue = Integer.parseInt((String)flags.get(flagName));
-                mob.setFlag(flagName, flagValue);
+                if ("collisionLevel".equals(flagName)) mob.setCollisionLevel(flagValue);
+                else mob.setFlag(flagName, flagValue);
             }
         }
     }

@@ -88,7 +88,7 @@ public class Effect extends MapObject {
     
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
+        if (this.isVisible()) {
             if (this.linkedLocation) this.updatePosition();
             this.getSprite().render(xOffset, yOffset, gc);
         }

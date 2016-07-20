@@ -140,7 +140,6 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
     
     private void initializeFlags() {
-        this.setFlag("visible", 1);
         this.setCollisionLevel(5);
     }
     
@@ -455,7 +454,7 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     */
     @Override
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
+        if (this.isVisible()) {
             if (this.graphics instanceof SpriteSkeleton) ((SpriteSkeleton)this.graphics).render(xOffset, yOffset, gc, this.facing);
             else this.graphics.render(xOffset, yOffset, gc);
             if (this.getLocation() != null && this.ai != null && this.ai.getPath() != null && this.getLocation().isFlagged("drawPaths")) {

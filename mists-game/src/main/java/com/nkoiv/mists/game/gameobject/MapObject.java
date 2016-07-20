@@ -38,6 +38,7 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
     protected int templateID;
     protected String name;
     protected MovingGraphics graphics;
+    protected boolean visible;
     
     protected int collisionLevel;
     protected boolean removable;
@@ -55,7 +56,7 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
     public MapObject (String name) {
         this();
         this.name = name;
-        this.flags.put("visible", 1);
+        this.visible = true;
     }
 
     
@@ -168,13 +169,13 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
     * @param yOffset Used to shift the objects yCoordinate so its drawn where the screen is
     */
     public void render(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
+        if (this.isVisible()) {
             this.graphics.render(xOffset, yOffset, gc);
         }
     }
     
     public void renderCollisions(double xOffset, double yOffset, GraphicsContext gc) {
-        if (this.isFlagged("visible")) {
+        if (this.isVisible()) {
             this.graphics.renderCollisions(xOffset, yOffset, gc);
         }
     }
@@ -222,6 +223,14 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
     
     public Image getSnapshot() {
         return this.graphics.getImage();
+    }
+    
+    public boolean isVisible() {
+    	return this.visible;
+    }
+    
+    public void setVisibility(boolean visible) {
+    	this.visible = visible;
     }
     
     /**
@@ -323,6 +332,7 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 		output.writeInt(templateID);
 		output.writeString(this.name);
 		output.writeInt(this.IDinLocation);
+		output.writeBoolean(this.visible);
 		output.writeDouble(this.getXPos());
 		output.writeDouble(this.getYPos());
 	}
@@ -335,6 +345,7 @@ public class MapObject extends Flags implements Templatable, KryoSerializable {
 		this.templateID = input.readInt();
 		this.name = input.readString();
 		this.IDinLocation = input.readInt();
+		this.visible = input.readBoolean();
 		double xCoor = input.readDouble();
 		double yCoor = input.readDouble();
 		//Mists.logger.info("TemplateID: "+templateID+" name: "+name+" locationID: "+IDinLocation);
