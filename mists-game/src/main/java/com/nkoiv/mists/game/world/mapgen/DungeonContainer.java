@@ -164,9 +164,28 @@ public class DungeonContainer {
 			return false;
 		}	
 	}
+
+	/**
+	* Check to see if given point on the room map (and raidius around it)
+	* is marked as clear
+	* @param x Center of the checked area
+	* @param y Center of the checked area
+	* @param radius Radius of the checked area (diagonal distance counts as 1, so effectively box is checked every time)
+	* @param clearID identifier of what counts as "clear"
+	* @return True if designated area contained only clear tiles, false otherwise
+	*/
+	public boolean isClearArea(int x, int y, int radius, int clearID) {
+		for (int row = y-radius; row < (y+radius); row++) {
+			for (int column = x-radius; column < (x+radius); column++) {
+				if (column < 0 || column > tileWidth-1 || row < 0 || row > tileHeight-1) return false;
+				else if (roomMap[column][row] != clearID) return false;
+			}
+		}
+		return true;
+	}
 	
 	public void setRoomID(int x, int y, int roomID) {
-		if (x < 0 || x > tileWidth-1 || y < 0 || y > tileWidth-1) return;
+		if (x < 0 || x > tileWidth-1 || y < 0 || y > tileHeight-1) return;
 		this.roomMap[x][y] = roomID;
 	}
 	
@@ -177,7 +196,7 @@ public class DungeonContainer {
 	 * @return return roomID at the given coordinates, or -1 if accessing out of bounds area.
 	 */
 	public int getRoomID(int x, int y) {
-		if (x < 0 || x > tileWidth-1 || y < 0 || y > tileWidth-1) return -1;
+		if (x < 0 || x > tileWidth-1 || y < 0 || y > tileHeight-1) return -1;
 		return this.roomMap[x][y];
 	}
 	
@@ -223,7 +242,8 @@ public class DungeonContainer {
 		for (int y = 0; y < this.tileHeight; y++) {
 			System.out.println();
 			for (int x = 0; x < this.tileWidth; x++) {
-				System.out.print((char)roomMap[x][y]);
+				if (roomMap[x][y] < 10) System.out.print((char)(48+roomMap[x][y])); 
+				else System.out.print((char)roomMap[x][y]);
 			}
 		}
 		System.out.println();

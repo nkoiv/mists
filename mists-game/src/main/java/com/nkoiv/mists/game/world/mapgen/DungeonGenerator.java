@@ -46,7 +46,7 @@ public interface DungeonGenerator {
 		int yPos = DungeonGenerator.RND.nextInt(dc.getHeight());
 		room.setPosition(xPos, yPos);
 		for (Integer id : dc.getRoomIDs()) {
-			if (room.distanceTo(dc.getRoom(id)) < minDistance) {
+			if (room.intersects(dc.getRoom(id))) {
 				fits = false;
 				break;
 			}

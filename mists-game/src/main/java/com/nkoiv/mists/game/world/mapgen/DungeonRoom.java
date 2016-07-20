@@ -87,7 +87,13 @@ public class DungeonRoom {
 		//Check if we're actually intersecting with the other room;
 		if (xDist < 0 && yDist < 0) return -1;
 		//If not, return the distance
-		return (Math.max(0, xDist))+(Math.max(0, yDist));
+		return (Math.max(xDist, yDist));
+	}
+
+	public boolean intersects(DungeonRoom anotherRoom) {
+		return xPosition < anotherRoom.getXPos() + anotherRoom.getWidth() 
+		&& xPosition + tileWidth > anotherRoom.xPosition && yPosition < anotherRoom.getYPos() + anotherRoom.getHeight() 
+		&& yPosition + tileHeight > anotherRoom.getYPos();
 	}
 
 	public int getWidth() {

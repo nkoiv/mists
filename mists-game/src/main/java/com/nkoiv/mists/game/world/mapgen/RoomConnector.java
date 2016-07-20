@@ -14,20 +14,24 @@ package com.nkoiv.mists.game.world.mapgen;
  * create puzzles that block access to separate parts
  * of a dungeon.
  * A connector is always either horizontal or vertical 
+ * TODO: Consider diagonal connectors
  * @author nkoiv
  *
  */
 public class RoomConnector {
 	private int xPosition;
 	private int yPosition;
+	private int width;
+	private int height;
 	private boolean horizontal; //if false, the connector is vertical
-	private int neighbours[]; //0:up, 1:right, 2:down, 3:left
 	
-	public RoomConnector(int xPos, int yPos, boolean horizontal, int[]neighbours) {
+	
+	public RoomConnector(int xPos, int yPos, int width, int height, boolean horizontal) {
 		this.xPosition = xPos;
 		this.yPosition = yPos;
+		this.width = width;
+		this.height = height;
 		this.horizontal = horizontal;
-		this.neighbours = neighbours;
 	}
 	
 	

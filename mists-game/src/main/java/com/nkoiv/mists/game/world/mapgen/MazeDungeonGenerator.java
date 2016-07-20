@@ -46,6 +46,15 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 		}
 	}
 	
+	public static void fillWithMaze(DungeonContainer dc, int mazeID, int wallID, int clearID, float corridorFocus) {
+		for(int y = 0; y < dc.getHeight(); y++) {
+			for (int x = 0; x < dc.getWidth(); x++) {
+				if (dc.isClearArea(x, y, 1, clearID)) growMaze(dc, -1, x, y, mazeID, wallID, clearID, corridorFocus);
+			}
+		}
+
+	}
+
 	/**
 	 * 
 	 * @param dc DungeonContainer to grow maze in
