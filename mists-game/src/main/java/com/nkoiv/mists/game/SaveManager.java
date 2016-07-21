@@ -236,7 +236,8 @@ public class SaveManager {
     	if (!"<PLAYERDATA>".equals(check)) Mists.logger.warning("Mismatch on save loading:"+check);
     	PlayerCharacter player = (PlayerCharacter)kryo.readClassAndObject(input);
     	game.setPlayer(player);
-    	
+    	double playerX = player.getXPos();
+    	double playerY = player.getYPos();
     	//Load QuestManager
     	loadingScreen.updateProgress(1, "Loading Quests");
     	check = input.readString();
@@ -271,6 +272,7 @@ public class SaveManager {
         if (game.currentState instanceof LocationState) {
             ((LocationState)game.currentState).closeGameMenu();
         }
+        player.setPosition(playerX, playerY);
     	game.clearLoadingScreen();
     	game.getCurrentLocation().loading = false;
     }
