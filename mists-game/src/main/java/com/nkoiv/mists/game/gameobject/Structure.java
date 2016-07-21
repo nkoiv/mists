@@ -108,7 +108,7 @@ public class Structure extends MapObject {
     @Override
     public String[] getInfoText() {
         ArrayList<String> a = new ArrayList<>();
-        a.add(this.name);
+        a.add(this.name+" - TID#"+this.templateID);
         a.add("ID "+this.IDinLocation+" @ "+this.location.getName());
         a.add("X:"+((int)this.getXPos())+" Y:"+((int)this.getYPos()));
         a.add("Flags:");

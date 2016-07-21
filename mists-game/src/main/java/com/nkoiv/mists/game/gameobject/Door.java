@@ -93,6 +93,7 @@ public class Door  extends Structure {
     @Override
     public Door createFromTemplate() {
         Door nd = new Door(this.name, this.closedImage, this.openImage, this.collisionLevel);
+        nd.templateID = this.templateID;
         for (String f : this.flags.keySet()) {
             nd.setFlag(f, this.flags.get(f));
         }
@@ -123,15 +124,26 @@ public class Door  extends Structure {
 	
 	@Override
 	protected void readGraphicsFromLibrary(int templateID, double xCoor, double yCoor) {
+		Mists.logger.info("Reading door graphics from library (id: "+templateID+")");
 		if (Mists.structureLibrary != null) {
 			Structure dummy = Mists.structureLibrary.create(templateID);
-			if (!(dummy instanceof Door)) return;
-			Door d = (Door)dummy;
-			this.graphics = d.graphics;
-			this.extraSprites = d.extraSprites;
-			this.openImage = d.openImage;
-			this.closedImage = d.closedImage;
-		} else this.graphics = new Sprite();
+			if (dummy instanceof Door) {
+				Mists.logger.info("Found door template "+this.templateID);
+				Door d = (Door)dummy;
+				this.graphics = d.graphics;
+				this.extraSprites = d.extraSprites;
+				this.openImage = d.openImage;
+				this.closedImage = d.closedImage;
+			}
+		} 
+		if (this.graphics == null) {
+			Mists.logger.info("Blank sprite generated for "+this.getName());
+			this.graphics = new Sprite();
+			this.openImage = Mists.graphLibrary.getImage("blank");
+			this.closedImage = Mists.graphLibrary.getImage("blank");
+		}
+		if (this.open) this.open();
+		else this.close();
 		this.setPosition(xCoor, yCoor);
 	}
 } 

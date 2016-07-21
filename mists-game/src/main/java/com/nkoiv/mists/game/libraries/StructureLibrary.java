@@ -155,7 +155,7 @@ public class StructureLibrary<E extends Structure> extends MobLibrary<Structure>
         Image imageOpen = new Image((String)doorData.get("imageOpen"));
         Image imageClosed = new Image((String)doorData.get("imageClosed"));
         Door door = new Door(mobname, imageOpen, imageClosed, collisionLevel); 
-        Map extras = (Map)doorData.get("extras");
+        //Map extras = (Map)doorData.get("extras");
         addExtras(doorData, door);
         addFlagsFromYAML(doorData, door);
         return door;

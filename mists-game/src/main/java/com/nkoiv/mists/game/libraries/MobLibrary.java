@@ -99,7 +99,8 @@ public class MobLibrary <E extends MapObject> implements Serializable, Cloneable
     public void setTemplateID(Map mobData, MapObject mob) {
         if (mobData.containsKey("templateID")) {
             int templateID = Integer.parseInt((String)mobData.get("templateID"));
-            mob.setTemplateID(templateID);
+            if (templateID < 1) mob.setTemplateID(getNextFreeID()); 
+            else mob.setTemplateID(templateID);
         } else {
             mob.setTemplateID(getNextFreeID());
         }
