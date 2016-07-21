@@ -1,5 +1,8 @@
-#Compiled project files#
+#Savegame data
 *.sav
+
+#Compiled project files#
+
 #Netbeans#
 /mists-game/target/
 /mists-game/nbproject/
