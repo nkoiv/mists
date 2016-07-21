@@ -11,8 +11,7 @@ import java.util.Scanner;
 import com.nkoiv.mists.game.dialogue.Card;
 import com.nkoiv.mists.game.dialogue.Dialogue;
 import com.nkoiv.mists.game.dialogue.Link;
-import com.nkoiv.mists.game.libraries.DialogueLibrary;
-import com.nkoiv.mists.game.libraries.LibLoader;
+import com.nkoiv.mists.game.world.mapgen.*;
 import com.nkoiv.mists.game.world.pathfinding.Node;
 
 /**
@@ -105,26 +104,14 @@ public class TestBench {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        DialogueLibrary dl = new DialogueLibrary();
-        LibLoader.initializeDialogueLibrary(dl);
-        Dialogue d = dl.getDialogue(1);
-        
-        Scanner sc = new Scanner(System.in);
-        while (d.getCardNumber() > 0) {
-            System.out.println("-------CARD--------");
-            System.out.println(d.getCurrentCard().getText());
-            System.out.println("-------LINKS-------");
-            int i = 1;
-            for (Link l : d.getCurrentCard().getLinks()) {
-                System.out.println("["+i+"] "+l.getText());
-                i++;
-            }
-            System.out.println("--------------------");
-            String s = sc.nextLine();
-            i = Integer.parseInt(s);
-            if (!d.moveToCard(d.getCurrentCard().getLinkDestination(i-1))) break;
-        }
-        
+    	System.out.println("Starting maze generation...");
+    	DungeonContainer dc = new DungeonContainer(30, 30);
+    	MazeDungeonGenerator.addRooms(dc, 3, 1000, 10);
+    	MazeDungeonGenerator.fillWithMaze(dc, DungeonGenerator.FLOOR, DungeonGenerator.CLEAR, DungeonGenerator.CLEAR, 0.8f);
+    	//MazeDungeonGenerator.growMaze(dc, 1000, 10, 10, DungeonGenerator.FLOOR, DungeonGenerator.CLEAR, DungeonGenerator.CLEAR, 0.3f);
+    	dc.fill(DungeonGenerator.CLEAR, DungeonGenerator.WALL);
+    	System.out.println("Maze generation done. Printing map...");
+    	dc.printMap();
     }
     
     private static Dialogue buildTestDialogue() {

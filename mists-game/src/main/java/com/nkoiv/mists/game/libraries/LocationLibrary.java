@@ -21,6 +21,7 @@ import com.nkoiv.mists.game.sprites.Roof;
 import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.Location;
 import com.nkoiv.mists.game.world.TileMap;
+import com.nkoiv.mists.game.world.mapgen.BSPDungeonGenerator;
 import com.nkoiv.mists.game.world.mapgen.DungeonGenerator;
 
 /**
@@ -90,11 +91,10 @@ public class LocationLibrary  {
             Mists.logger.info("LocationTemplate had a null Map - generating");
             int tileWidth = (int)template.width/Mists.TILESIZE;
             int tileHeight = (int)template.height/Mists.TILESIZE;
-            DungeonGenerator dgen = new DungeonGenerator();
             if (template.randomSeed!=0) {
                 DungeonGenerator.setRandomSeed(template.randomSeed);
             }
-            TileMap tmap = DungeonGenerator.generateDungeon(dgen, tileWidth, tileHeight);
+            TileMap tmap = BSPDungeonGenerator.generateBSPDungeon(tileWidth, tileHeight);
             Mists.logger.info("Random dungeonmap generated, constructing location...");
             l = new Location (template.name, tmap);
         } 
