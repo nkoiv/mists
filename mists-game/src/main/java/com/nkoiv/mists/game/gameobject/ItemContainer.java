@@ -158,6 +158,7 @@ public class ItemContainer extends Structure implements HasInventory {
     @Override
     public ItemContainer createFromTemplate() {
         ItemContainer nic = new ItemContainer(this.name, new Sprite(this.getSprite().getImage()));
+        nic.templateID = this.templateID;
         nic.setCollisionLevel(this.collisionLevel);
         if (this.getSprite().isAnimated()) {
             nic.getSprite().setAnimation(this.getSprite().getAnimation());

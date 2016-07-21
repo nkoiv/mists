@@ -25,6 +25,10 @@ public class PuzzleTile extends Structure implements Shapechanger {
     protected boolean isLit;
     protected boolean frozen;
     
+    public PuzzleTile() {
+    	
+    }
+    
     public PuzzleTile(String name, MovingGraphics litUpGraphics, MovingGraphics unLitGraphics) {
         super(name, unLitGraphics, 0);
         this.litUpGraphics = litUpGraphics;

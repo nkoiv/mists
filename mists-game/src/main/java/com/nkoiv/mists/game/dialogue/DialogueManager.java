@@ -121,7 +121,12 @@ public class DialogueManager implements KryoSerializable {
 				kryo.writeClassAndObject(output, d.get(i));
 			}
 		}
-		
+		output.writeInt(this.waitingDialogues.keySet().size());
+		for (String key : waitingDialogues.keySet()) {
+			output.writeString(key);
+			Dialogue d = waitingDialogues.get(key);
+			kryo.writeClassAndObject(output, d);
+		}
 	}
 
 	@Override
@@ -136,8 +141,15 @@ public class DialogueManager implements KryoSerializable {
 				int mobID = input.readInt();
 				Dialogue dialogue = (Dialogue)kryo.readClassAndObject(input);
 				this.setDialogue(locationID, mobID, dialogue);
-				Mists.logger.info("Dialogue for mobID "+mobID+" set to "+dialogue.toString());
+				if(dialogue instanceof Dialogue )Mists.logger.info("Dialogue for mobID "+mobID+" set to "+dialogue.toString());
+				else Mists.logger.info("Save loading: Encoutered null dialogue for mobID#"+mobID);
 			}
+		}
+		int waitingDialoguesCount = input.readInt();
+		for (int i = 0; i < waitingDialoguesCount; i++) {
+			String mobKey = input.readString();
+			Dialogue d = (Dialogue)kryo.readClassAndObject(input);
+			this.waitingDialogues.put(mobKey, d);
 		}
 	}
 	

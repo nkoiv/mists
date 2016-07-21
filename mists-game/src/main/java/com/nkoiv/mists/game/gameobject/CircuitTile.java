@@ -35,6 +35,11 @@ public class CircuitTile extends PuzzleTile {
     private Circuit circuit;
     private double gRotation;
     
+    public CircuitTile() {
+    	super();
+    	
+    }
+    
     public CircuitTile(String name, boolean[] orientation, MovingGraphics litUpGraphics, MovingGraphics unLitGraphics) {
         super(name, litUpGraphics, unLitGraphics);
         this.openPaths = orientation;

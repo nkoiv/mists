@@ -308,7 +308,10 @@ public class Creature extends MapObject implements Combatant, HasInventory {
     }
     
     public Dialogue getCurrentDialogue() {
-    	if (Mists.MistsGame == null || Mists.MistsGame.dialogueManager == null) return null;
+    	if (Mists.MistsGame == null || Mists.MistsGame.dialogueManager == null) {
+    		Mists.logger.warning("Found no DialogueManager when accessing "+this.name+" for dialogue");
+    		return null;
+    	}
     	else return Mists.MistsGame.dialogueManager.getDialogue(this);
     }
     
