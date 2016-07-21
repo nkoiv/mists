@@ -395,6 +395,7 @@ public class Sprite extends MovingGraphics
     
     public static boolean pixelCollision(double x1, double y1, Image image1, double x2, double y2, Image image2) {
         //Mists.logger.log(Level.INFO, "pixel collision detection at {0}x{1} - {2}x{3}", new Object[]{x1, y2, x2, y2});
+    	if (image1 == null || image2 == null) return false;
         PixelReader pr1 = image1.getPixelReader();
         PixelReader pr2 = image2.getPixelReader();
 
