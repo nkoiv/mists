@@ -104,14 +104,13 @@ public class TestBench {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    	System.out.println("Starting maze generation...");
-    	DungeonContainer dc = new DungeonContainer(30, 30);
-    	MazeDungeonGenerator.addRooms(dc, 3, 1000, 10);
-    	MazeDungeonGenerator.fillWithMaze(dc, DungeonGenerator.FLOOR, DungeonGenerator.CLEAR, DungeonGenerator.CLEAR, 0.8f);
-    	//MazeDungeonGenerator.growMaze(dc, 1000, 10, 10, DungeonGenerator.FLOOR, DungeonGenerator.CLEAR, DungeonGenerator.CLEAR, 0.3f);
-    	dc.fill(DungeonGenerator.CLEAR, DungeonGenerator.WALL);
-    	System.out.println("Maze generation done. Printing map...");
+    	DungeonContainer dc = new DungeonContainer(40,20);
+    	DungeonRoom r1 = new DungeonRoom(6, 5);
+    	DungeonRoom r2 = new DungeonRoom(5, 5);
+    	dc.addRoom(r1, 10, 5);
+    	dc.addRoom(r2, 19, 12);
     	dc.printMap();
+    	System.out.print("Distance: "+r1.distanceTo(r2));
     }
     
     private static Dialogue buildTestDialogue() {

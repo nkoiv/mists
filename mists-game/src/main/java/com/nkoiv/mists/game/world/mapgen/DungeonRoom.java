@@ -71,23 +71,21 @@ public class DungeonRoom {
 	}
 	
 	/**
-	 * Get the wall-to-wall distance of two rooms
+	 * Get the wall-to-wall diagonal distance of two rooms
 	 * @param anotherRoom Room to compare this room to
-	 * @return Shortest wall-to-wall link from this room to anotherRoom. Return -1 if the rooms intersect. 
+	 * @return Shortest wall-to-wall link from this room to anotherRoom. Return negative numbers if the rooms intersect. 
 	 */
 	public int distanceTo(DungeonRoom anotherRoom) {
 		//calculate distance from the center of this room to the center of the other room
 		int xSpace = this.tileWidth/2 + anotherRoom.tileWidth/2; //Any closer than this and we're intersecting
+		if (this.tileWidth%2 != 0 && anotherRoom.tileWidth %2 != 0) xSpace++; //Add one if odd number
 		int ySpace = this.tileHeight/2 + anotherRoom.tileHeight/2;
-		int xDist = this.xPosition+(this.tileWidth/2) - anotherRoom.xPosition+(anotherRoom.tileWidth/2);
-		int yDist = this.yPosition+(this.tileHeight/2) - anotherRoom.yPosition+(anotherRoom.tileHeight/2);
-		//Calculate the space between the walls
-		xDist = (Math.abs(xDist) - xSpace);
-		yDist = (Math.abs(yDist) - ySpace);
-		//Check if we're actually intersecting with the other room;
-		if (xDist < 0 && yDist < 0) return -1;
-		//If not, return the distance
-		return (Math.max(xDist, yDist));
+		if (this.tileHeight%2 != 0 && anotherRoom.tileHeight %2 != 0) ySpace++;
+		int xDist =(this.xPosition+(this.tileWidth/2)) - (anotherRoom.xPosition+(anotherRoom.tileWidth/2));
+		int yDist =(this.yPosition+(this.tileHeight/2)) - (anotherRoom.yPosition+(anotherRoom.tileHeight/2));
+		//System.out.println("xSpace: "+xSpace+" ySpace: "+ySpace);
+		//System.out.println("xDist: "+xDist+" yDist: "+yDist);
+		return Math.max((Math.abs(xDist)-xSpace), (Math.abs(yDist)-ySpace)); 
 	}
 
 	public boolean intersects(DungeonRoom anotherRoom) {
