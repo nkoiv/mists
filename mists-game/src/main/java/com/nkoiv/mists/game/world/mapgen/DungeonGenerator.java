@@ -33,6 +33,10 @@ public interface DungeonGenerator {
      */
     public GameMap generateDungeon(int xSize, int ySize);
     
+    public static GameMap generateDungeon(DungeonGenerator dg, int xSize, int ySize) {
+    	return dg.generateDungeon(xSize, ySize);
+    }
+    
 	/**
 	 * Try to add room to a random position.
 	 * @param dc DungeonContainer to place the room in
@@ -170,7 +174,7 @@ public interface DungeonGenerator {
 	 * @return A room from given range. Null if given minSize is larger than given maxSize.
 	 */
 	public static DungeonRoom generateRandomRoom(int minXsize, int maxXsize, int minYsize, int maxYsize) {
-		if (minXsize > maxXsize || minYsize > maxYsize) return null;
+		if (minXsize > maxXsize || minYsize > maxYsize || minXsize <= 0 || maxXsize <= 0 || minYsize <= 0 || maxYsize <= 0) return null;
 		int width;
 		int height;
 		width = DungeonGenerator.RND.nextInt(maxXsize-minXsize)+minXsize;

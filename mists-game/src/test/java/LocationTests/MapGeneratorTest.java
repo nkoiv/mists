@@ -48,7 +48,7 @@ public class MapGeneratorTest {
     @After
     public void tearDown() {
     }
-
+    /*
     @Test
     public void generatedMapIsOfTheDesiredSize() {
         Random rng = new Random();
@@ -81,5 +81,5 @@ public class MapGeneratorTest {
         ArrayList<BSPDungeonGenerator.BSParea> testBSP = BSPDungeonGenerator.bspDungeon(testMapGen, randomXSize, randomYSize, 20, 0.3f, 0.7f, absMinSize, false);
         assertTrue(testBSP.size() > 1);
     }
-    
+    */
 }

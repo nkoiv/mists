@@ -104,6 +104,9 @@ public class TestBench {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+    	BSPDungeonGenerator bspg = new BSPDungeonGenerator();
+    	bspg.generateDungeon(40, 30);
+    	/*
     	DungeonContainer dc = new DungeonContainer(40,20);
     	DungeonRoom r1 = new DungeonRoom(6, 5);
     	DungeonRoom r2 = new DungeonRoom(5, 5);
@@ -111,6 +114,7 @@ public class TestBench {
     	dc.addRoom(r2, 19, 12);
     	dc.printMap();
     	System.out.print("Distance: "+r1.distanceTo(r2));
+    	*/
     }
     
     private static Dialogue buildTestDialogue() {

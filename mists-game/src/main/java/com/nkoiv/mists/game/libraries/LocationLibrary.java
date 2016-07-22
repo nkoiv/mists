@@ -94,9 +94,9 @@ public class LocationLibrary  {
             if (template.randomSeed!=0) {
                 DungeonGenerator.setRandomSeed(template.randomSeed);
             }
-            TileMap tmap = BSPDungeonGenerator.generateBSPDungeon(tileWidth, tileHeight);
+            GameMap gmap = DungeonGenerator.generateDungeon(new BSPDungeonGenerator(), tileWidth, tileHeight);
             Mists.logger.info("Random dungeonmap generated, constructing location...");
-            l = new Location (template.name, tmap);
+            l = new Location (template.name, gmap);
         } 
         else {
             Mists.logger.info("Template map was found: "+template.map.toString());

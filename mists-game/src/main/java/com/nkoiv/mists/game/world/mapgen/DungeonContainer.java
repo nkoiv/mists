@@ -241,9 +241,11 @@ public class DungeonContainer {
 		System.out.println("--------MAP--------");
 		for (int y = 0; y < this.tileHeight; y++) {
 			System.out.println();
+			System.out.print("|");
 			for (int x = 0; x < this.tileWidth; x++) {
 				if (roomMap[x][y] < 10) System.out.print((char)(48+roomMap[x][y])); 
 				else System.out.print((char)roomMap[x][y]);
+				System.out.print("|");
 			}
 		}
 		System.out.println();
