@@ -74,7 +74,8 @@ public class BSPDungeonGenerator implements DungeonGenerator {
 				leaves.push(current.leftChild);
 				leaves.push(current.rightChild);
 			} else {
-				boolean roomAdded = current.setRoom(DungeonGenerator.generateRandomRoom(minRoomSize, minRoomSize, current.width, current.height));
+				System.out.println("Populating room: "+minRoomSize+" "+current.x+" "+current.y+" "+current.width+" "+current.height);
+				boolean roomAdded = current.setRoom(DungeonGenerator.generateRandomRoom(minRoomSize, current.width, minRoomSize , current.height));
 				if (!roomAdded) System.out.println("Room setting failed in BSP!");
 			}
 		}
@@ -112,7 +113,7 @@ public class BSPDungeonGenerator implements DungeonGenerator {
 		}
 		
 		public boolean hasChildren() {
-			return (this.leftChild != null || this.rightChild != null);
+			return (!(this.leftChild == null && this.rightChild == null));
 		}
 		
 		public DungeonRoom getRoom() {
@@ -121,8 +122,12 @@ public class BSPDungeonGenerator implements DungeonGenerator {
 		
 		public boolean setRoom(DungeonRoom room) {			
 			if (room == null || room.getWidth()>this.width || room.getHeight() > this.height) return false;
-			int xPos = DungeonGenerator.RND.nextInt(this.width - room.getWidth());
-			int yPos = DungeonGenerator.RND.nextInt(this.height - room.getHeight());
+			int xPos;
+			int yPos;
+			if (width  == room.getWidth()) xPos = 0;
+			else xPos = DungeonGenerator.RND.nextInt(this.width - room.getWidth());
+			if (height  == room.getHeight()) yPos = 0;
+			else yPos = DungeonGenerator.RND.nextInt(this.height - room.getHeight());
 			room.setPosition(xPos, yPos);
 			this.room = room;
 			return true;
@@ -137,29 +142,31 @@ public class BSPDungeonGenerator implements DungeonGenerator {
 			if (leftChild != null || rightChild != null) return false;
 			if (this.width <= 0 || this.height <= 0) return false;
 			boolean splitHorizontal = true; 
-			float splitDirection;
+			float splitDirection = 0f;
 			
 			//If very uneven rooms are allowed, it's up to random to see how the split happens
 			if (allowUnevenRooms) {
 				splitDirection = DungeonGenerator.RND.nextFloat();
 			} else { //If we're disallowing uneven rooms, we force split direction in case of uneven areas
-				if (width > height && (width / height) > unevenRoom) splitDirection =  1;
-				else if (height > width && (height / width) > unevenRoom)  splitDirection = 0;  
+				if (width > height && (width / height) > unevenRoom) splitDirection =  1f;
+				else if (height > width && (height / width) > unevenRoom)  splitDirection = 0f;  
 				else splitDirection = DungeonGenerator.RND.nextFloat(); 
 			}
-			if (splitDirection <= 0.5) splitHorizontal = false;
+			if (splitDirection <= 0.5f) splitHorizontal = false;
 			
 			
-			int maxLeafSize = (splitHorizontal ? width : height) - minLeafSize;
-			if (maxLeafSize <= minLeafSize) return false;
-			System.out.println("Splitting room with minSize "+minLeafSize);
-			int splitPosition = DungeonGenerator.RND.nextInt(maxLeafSize-minLeafSize)+minLeafSize;
+			
+			int splitPosition;
 			
 			//Generate the children based on the split
 			if (splitHorizontal) {
+				if (this.height <= minLeafSize*2) return false;
+				splitPosition = DungeonGenerator.RND.nextInt(this.height - (minLeafSize*2))+minLeafSize;
 				this.leftChild = new BSPLeaf(this.x, this.y, this.width, splitPosition);
 				this.rightChild = new BSPLeaf(this.x, this.y+splitPosition, this.width, this.height - splitPosition);
 			} else {
+				if (this.width <= minLeafSize*2) return false;
+				splitPosition = DungeonGenerator.RND.nextInt(this.width - (minLeafSize*2))+minLeafSize;
 				this.leftChild = new BSPLeaf(this.x, this.y, splitPosition, this.height);
 				this.rightChild = new BSPLeaf(this.x + splitPosition, this.y, this.width - splitPosition, this.height);
 			}

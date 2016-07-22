@@ -177,8 +177,10 @@ public interface DungeonGenerator {
 		if (minXsize > maxXsize || minYsize > maxYsize || minXsize <= 0 || maxXsize <= 0 || minYsize <= 0 || maxYsize <= 0) return null;
 		int width;
 		int height;
-		width = DungeonGenerator.RND.nextInt(maxXsize-minXsize)+minXsize;
-		height = DungeonGenerator.RND.nextInt(maxYsize-minYsize)+minYsize;
+		if (minXsize==maxXsize) width = minXsize;
+		else width = DungeonGenerator.RND.nextInt(maxXsize-minXsize)+minXsize; 
+		if (minYsize==maxYsize) height = minYsize;
+		else height = DungeonGenerator.RND.nextInt(maxYsize-minYsize)+minYsize;
 		return new DungeonRoom(width, height);
 	}
     
