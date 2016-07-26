@@ -100,14 +100,14 @@ public class GeneralLocationTest {
         testLocation.update(0.15f);
         assertFalse(testLocation.getCreatures().contains(testCreature));
     }
-    
+    /*
     @Test
     public void movingIntoLocationUpdatesCurrentPlayer() {
         PlayerCharacter testPlayer = new PlayerCharacter("Lini",new Image("/images/himmutoy.png"));
         testLocation.enterLocation(testPlayer, null);
         assertTrue(testLocation.getPlayer()==testPlayer);
     }
-    
+    */
     @Test
     public void creaturesCanBeFoundByName() {
         Creature rotta = new Creature("Rotta", new ImageView("/images/monster3.png"), 3, 0, 0, 64, 64);

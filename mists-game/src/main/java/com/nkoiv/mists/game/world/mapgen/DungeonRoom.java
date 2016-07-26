@@ -94,6 +94,59 @@ public class DungeonRoom {
 		&& yPosition + tileHeight > anotherRoom.getYPos();
 	}
 
+/**
+	* Set the given structure to the given tile
+	* @param xCoor xCoordinate to set the structure to
+	* @param yCoor yCoordinate to set the structure to
+	* @param structureID tileID of the structure
+	* @return true if the structure was set succesfully, false if the tile was out of bounds
+	*/
+	public boolean setStructure(int xCoor, int yCoor, int structureID) {
+		if(xCoor < 0 || yCoor < 0 || xCoor >= this.tileWidth || yCoor >= this.tileHeight) return false;
+		this.structureMap[xCoor][yCoor] = structureID;
+		return true;
+	}
+
+		/**
+	* Set the given floor to the given tile
+	* @param xCoor xCoordinate to set the floor to
+	* @param yCoor yCoordinate to set the floor to
+	* @param structureID tileID of the floor
+	* @return true if the floor was set succesfully, false if the tile was out of bounds
+	*/
+	public boolean setFloor(int xCoor, int yCoor, int floorID) {
+		if(xCoor < 0 || yCoor < 0 || xCoor >= this.tileWidth || yCoor >= this.tileHeight) return false;
+		this.floorMap[xCoor][yCoor] = floorID;
+		return true;
+	}
+
+	/**
+	* Build walls around the edges of the room
+	* |0|0|0|0|0|    |#|#|#|#|#|
+	* |0|0|0|0|0|    |#|0|0|0|#|
+	* |0|0|0|0|0| -> |#|0|0|0|#|
+	* |0|0|0|0|0|    |#|0|0|0|#|
+	* |0|0|0|0|0|    |#|#|#|#|#|
+	* @param wallID the ID of the walltile to use
+	*/
+	public void buildWalls(int wallID) {
+		for (int row = 0; row < this.tileHeight; row++) {
+			for (int column = 0; column < this.tileWidth; column++) {
+				if (row == 0 || row == (this.tileHeight-1) || column == 0 || column == (this.tileWidth-1))
+					this.setStructure(column, row, wallID);
+			}
+		}
+	}
+	
+
+	public int[][] getFloorMap() {
+		return this.floorMap;
+	}
+
+	public int[][] getStructureMap() {
+		return this.structureMap;
+	}
+
 	public int getWidth() {
 		return this.tileWidth;
 	}

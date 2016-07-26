@@ -51,6 +51,37 @@ public class DungeonContainer {
 			}
 		}
 	}
+
+	private int[][] compileStructureMap() {
+		int[][] structMap = new int[tileWidth][tileHeight];
+
+		for (int roomID : this.rooms.keySet()) {
+			DungeonRoom room = this.rooms.get(roomID);
+			int[][] rs = room.getStructureMap();
+			for (int x = 0; x < rs.length; x++) {
+				for (int y = 0; y < rs[0].length; y++) {
+					structMap[x+room.getXPos()][y+room.getYPos()] = rs[x][y];
+				}
+			}
+		}
+
+		return structMap;
+	}
+
+	private int[][] compileFloorMap() {
+		int[][] floorMap = new int[tileWidth][tileHeight];
+		for (int roomID : this.rooms.keySet()) {
+			DungeonRoom room = this.rooms.get(roomID);
+			int[][] rf = room.getFloorMap();
+			for (int x = 0; x < rf.length; x++) {
+				for (int y = 0; y < rf[0].length; y++) {
+					floorMap[x+room.getXPos()][y+room.getYPos()] = rf[x][y];
+				}
+			}
+		}
+
+		return floorMap;
+	}
 	
 	/**
 	 * Add a room to the DungeonContainer at the specified position.
@@ -98,6 +129,7 @@ public class DungeonContainer {
 			}
 		}
 	}
+
 	
 	/**
 	 * Four way floodfill the container from the given position, replacing every empty
@@ -243,8 +275,9 @@ public class DungeonContainer {
 			System.out.println();
 			System.out.print("|");
 			for (int x = 0; x < this.tileWidth; x++) {
-				if (roomMap[x][y] < 10) System.out.print((char)(48+roomMap[x][y])); 
-				else System.out.print((char)roomMap[x][y]);
+				//if (roomMap[x][y] < 10) System.out.print("0"+(char)(48+roomMap[x][y]));
+				//else System.out.println(roomMap[x][y] / 10 +""+ roomMap[x][y] % 10);
+				System.out.print(roomMap[x][y]);
 				System.out.print("|");
 			}
 		}
