@@ -104,8 +104,10 @@ public class TestBench {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    	BSPDungeonGenerator bspg = new BSPDungeonGenerator();
-    	bspg.generateDungeon(40, 30);
+    	DungeonGenerator dg;
+        //dg = new BSPDungeonGenerator();
+        dg = new MazeDungeonGenerator();
+    	dg.generateDungeon(40, 30);
     	/*
     	DungeonContainer dc = new DungeonContainer(40,20);
     	DungeonRoom r1 = new DungeonRoom(6, 5);

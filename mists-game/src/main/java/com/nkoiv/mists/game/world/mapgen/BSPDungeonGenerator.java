@@ -5,13 +5,8 @@
  */
 package com.nkoiv.mists.game.world.mapgen;
 
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Stack;
 
-import com.nkoiv.mists.game.Direction;
-import com.nkoiv.mists.game.Mists;
-import com.nkoiv.mists.game.world.GameMap;
 import com.nkoiv.mists.game.world.TileMap;
 
 /**

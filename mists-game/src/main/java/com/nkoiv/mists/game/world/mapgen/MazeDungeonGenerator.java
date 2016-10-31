@@ -12,7 +12,11 @@ import java.util.Stack;
 import com.nkoiv.mists.game.world.TileMap;
 
 public class MazeDungeonGenerator implements DungeonGenerator {
-
+        
+    
+        public MazeDungeonGenerator() {
+            
+        }
 	
 	/**
 	 * A dungeon generator that uses Growing Tree algorithm to connect the rooms with maze-like structure
@@ -20,10 +24,10 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 	 */
 	@Override
 	public TileMap generateDungeon(int xSize, int ySize) {
-		
-		
-		
-		return null;
+		DungeonContainer dc = new DungeonContainer(xSize, ySize);
+		addRooms(dc, 1, 100, (xSize*ySize / 10));
+                fillWithMaze(dc, DungeonGenerator.FLOOR, DungeonGenerator.WALL, DungeonGenerator.CLEAR, 0.5f);
+		return new TileMap(xSize, ySize, 32, dc.getIntMap());
 	}
 	
 	/**
@@ -79,7 +83,7 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 		while (!cells.isEmpty()) {
 			if (count> mazeLength && mazeLength != -1) break;
 			current = cells.pop();
-			int[] next = null;
+			int[] next;
 			if (DungeonGenerator.RND.nextFloat() < corridorFocus && current[2] != -1) {
 				next = DungeonGenerator.neighbouringCell(current[2], current);
 			}
@@ -88,12 +92,12 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 			if (next != null && DungeonGenerator.isClearRoute(dc, next[0], next[1], next[2], clearID)) {
 				DungeonGenerator.carveCorridor(dc, next[0], next[1], next[2], mazeID, wallID, clearID);
 				if (current != null && hasClearNeighbour(dc, current[0], current[1], clearID)) cells.push(current); 
-				if (next != null && hasClearNeighbour(dc, next[0], next[1], clearID)) cells.push(next);
+				if (hasClearNeighbour(dc, next[0], next[1], clearID)) cells.push(next);
 			}
 			
 			count++;
-			dc.printMap();
-			System.out.println("cells:" + cells.size());
+			//dc.printMap();
+			//System.out.println("cells:" + cells.size());
 			
 		}
 		return true;
