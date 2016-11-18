@@ -188,6 +188,26 @@ public class DungeonContainer {
 		if (x < 0 || x > tileWidth-1 || y < 0 || y > tileHeight-1) return;
 		this.roomMap[x][y] = roomID;
 	}
+        
+        /**
+         * Give the amount of neighbours the given tile has with the
+         * [ ][C][ ]
+         * [C][X][C]
+         * [ ][C][ ]
+         * given tileID
+         * @param x tile X
+         * @param y tile Y
+         * @param tileID surrounding ID to count
+         * @return number of surrounding tiles with given ID
+         */
+        public int countCardialNeighbours(int x, int y, int tileID) {
+            int idNeighbours = 0;
+            if (x > 0 && roomMap[x-1][y] == tileID) idNeighbours++;
+            if (x < tileWidth-1 && roomMap[x+1][y] == tileID) idNeighbours++;
+            if (y > 0 && roomMap[x][y-1] == tileID) idNeighbours++;
+            if (y < tileHeight-1 && roomMap[x][y+1] == tileID) idNeighbours++;
+            return idNeighbours;
+        }
 	
 	/**
 	 * Get the room/tileID of the given coordinates

@@ -107,9 +107,12 @@ public class TestBench {
     	System.out.println("Starting maze generation...");
     	DungeonContainer dc = new DungeonContainer(30, 30);
     	MazeDungeonGenerator.addRooms(dc, 3, 1000, 10);
+        dc.printMap();
     	MazeDungeonGenerator.fillWithMaze(dc, DungeonGenerator.FLOOR, DungeonGenerator.CLEAR, DungeonGenerator.CLEAR, 0.8f);
-    	//MazeDungeonGenerator.growMaze(dc, 1000, 10, 10, DungeonGenerator.FLOOR, DungeonGenerator.CLEAR, DungeonGenerator.CLEAR, 0.3f);
+        dc.printMap();
     	dc.fill(DungeonGenerator.CLEAR, DungeonGenerator.WALL);
+        dc.printMap();
+        MazeDungeonGenerator.clearDeadEnds(dc, 1f, DungeonGenerator.WALL, DungeonGenerator.FLOOR);
     	System.out.println("Maze generation done. Printing map...");
     	dc.printMap();
     }
