@@ -58,9 +58,9 @@ public class DungeonContainer {
 	 * Can result in overlay with different rooms, but rooms will
 	 * never be placed outside container bounds.
 	 * @param room Room to add to the container
-	 * @param xPos X Positioning (upper left corner) of the room
-	 * @param yPos Y Positioning (upper left corner) of the room
-	 * @return True if room was added succesfully
+	 * @param xPosition X Positioning (upper left corner) of the room
+	 * @param yPosition Y Positioning (upper left corner) of the room
+	 * @return True if room was added successfully, False if room was out of bounds
 	 */
 	public boolean addRoom(DungeonRoom room, int xPosition, int yPosition) {
 		if (room.getXPos() < 0 || room.getYPos() < 0 || room.getXPos()+room.getWidth() > this.tileWidth || room.getYPos()+room.getHeight() > this.tileHeight) return false;
