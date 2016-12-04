@@ -105,7 +105,7 @@ public class TestBench {
      */
     public static void main(String[] args) {
     	System.out.println("Starting maze generation...");
-    	DungeonContainer dc = new DungeonContainer(30, 30);
+    	DungeonContainer dc = new DungeonContainer(50, 50);
     	MazeDungeonGenerator.addRooms(dc, 3, 1000, 10);
         dc.printMap();
     	MazeDungeonGenerator.fillWithMaze(dc, DungeonGenerator.FLOOR, DungeonGenerator.CLEAR, DungeonGenerator.CLEAR, 0.8f);

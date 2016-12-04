@@ -15,6 +15,7 @@ import java.util.Stack;
 
 import com.nkoiv.mists.game.gameobject.Structure;
 import com.nkoiv.mists.game.world.Tile;
+import java.util.ArrayList;
 
 /**
  * DungeonContainer hosts the dungeon during a generation phase.
@@ -28,7 +29,8 @@ public class DungeonContainer {
 	private int tileWidth;
 	private int tileHeight;
 	private int[][] roomMap;
-	private HashMap<Integer, DungeonRoom> rooms;	
+	private HashMap<Integer, DungeonRoom> rooms;
+        private ArrayList<RoomConnector> connectors;
 	private int nextRoomID;
 	
 	public DungeonContainer() {
@@ -80,12 +82,45 @@ public class DungeonContainer {
 	 * Shorthand for adding room to the coordinates it
 	 * already has (room.getXPos(), room.getYPos())
 	 * @param room Room to add to the container
-	 * @return True if room was added successfully
+	 * @return True if room was added successfully, False if room was out of bounds
 	 */
 	public boolean addRoom(DungeonRoom room) {
 		return addRoom(room, room.getXPos(), room.getYPos());
 	}
 	
+        /**
+         * Create a connector for the room and connect
+         * it to a nearby corridor
+         * @param roomID ID of the room to connect
+         * @return True if room was found and connected. False if room wasn't found or connection failed.
+         */
+        public boolean connectRoom(int roomID) {
+            Stack<RoomConnector> possibleConnectors = new Stack();
+            DungeonRoom room = this.rooms.get(roomID);
+            if (room == null) return false;
+            //Would be enough to check the room edges, wouldn't it?
+            for (int y = room.getYPos(); y < room.getYPos()+room.getHeight(); y++) {
+                for (int x = room.getXPos(); x  < room.getXPos()+room.getWidth(); x++) {
+                    if (room.isEntrypoint(x, y)) {
+                        boolean horizontal = false;
+                        if (x == room.getXPos() || x == room.getXPos()+room.getWidth()) horizontal = true;
+                        RoomConnector rc = new RoomConnector(x, y, 1, 1, horizontal);
+                    }
+                }
+            }
+            
+            return true;
+        }
+        
+        /**
+         * Run connectRoom() on all the rooms in the container
+         */
+        public void connectRooms() {
+            for (int id : this.rooms.keySet()) {
+                connectRoom(id);
+            }
+        }
+        
 	/**
 	 * Fill every empty tile in the container with the given tile
 	 * @param emptyID
@@ -166,13 +201,13 @@ public class DungeonContainer {
 	}
 
 	/**
-	* Check to see if given point on the room map (and raidius around it)
+	* Check to see if given point on the room map (and radius around it)
 	* is marked as clear
 	* @param x Center of the checked area
 	* @param y Center of the checked area
 	* @param radius Radius of the checked area (diagonal distance counts as 1, so effectively box is checked every time)
 	* @param clearID identifier of what counts as "clear"
-	* @return True if designated area contained only clear tiles, false otherwise
+	* @return True if designated area contained only clear tiles, False otherwise
 	*/
 	public boolean isClearArea(int x, int y, int radius, int clearID) {
 		for (int row = y-radius; row < (y+radius); row++) {
@@ -198,7 +233,7 @@ public class DungeonContainer {
          * @param x tile X
          * @param y tile Y
          * @param tileID surrounding ID to count
-         * @return number of surrounding tiles with given ID
+         * @return number of surrounding tiles with given ID (0-4)
          */
         public int countCardialNeighbours(int x, int y, int tileID) {
             int idNeighbours = 0;
