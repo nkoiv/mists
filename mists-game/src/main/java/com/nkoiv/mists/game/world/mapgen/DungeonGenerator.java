@@ -14,10 +14,10 @@ import com.nkoiv.mists.game.world.GameMap;
 public interface DungeonGenerator {
 	//Static ints are given for ASCII codes used in default dungeon formations
 	//TODO: Consider loading these from external source, though probably best to keep these bare DEFAULTS as it is.
-    public static final int CLEAR = 0;
-    public static final int FLOOR = 46;
-    public static final int WALL = 35;
-    public static final int DOOR = 43;
+    public static final int CLEAR = 0; //ASCII:[ ]
+    public static final int FLOOR = 46; //ASCII:[.]
+    public static final int WALL = 35; //ASCII:[#]
+    public static final int DOOR = 43; //ASCII:[+]
     public static final Random RND = new Random();
 	
     public static void setRandomSeed(long seed) {
@@ -107,9 +107,11 @@ public interface DungeonGenerator {
 	/**
 	 * Draw a corridor towards given location.
 	 * Walls will be carved behind the corridor, where it came from. 
-	 * @param xStart xPosition to draw at
-	 * @param yStart yPosition to draw at
+         * @param dc DungeonContainer to do the work on
+	 * @param xPosition xPosition to draw at
+	 * @param yPosition yPosition to draw at
 	 * @param direction the direction corridor is heading towards go towards, 0: up, 1: right, 2: down, 3: left. At -1, no walls will be carved
+         * @param corridorID the id of the corridor tile to carve as floor
 	 * @param wallID tileID of walls to leave behind
 	 * @param clearID clearID for overwriting with walls. -1 for overwriting anything
 	 * @return
@@ -117,33 +119,6 @@ public interface DungeonGenerator {
 	public static boolean carveCorridor(DungeonContainer dc, int xPosition, int yPosition, int direction, int corridorID, int wallID, int clearID) {
 		if (dc.getRoomID(xPosition, yPosition) != clearID) return false;
 		dc.setRoomID(xPosition, yPosition, corridorID);
-		/*
-		if (direction != -1) {
-			switch(direction) {
-			case 0: {
-				dc.carveIfClear(xPosition-1, yPosition+1, wallID, clearID);
-				dc.carveIfClear(xPosition+1, yPosition+1, wallID, clearID);
-				break;
-			}
-			case 1: {
-				dc.carveIfClear(xPosition-1, yPosition+1, wallID, clearID);
-				dc.carveIfClear(xPosition-1, yPosition-1, wallID, clearID);
-				break;
-			}
-			case 2: {
-				dc.carveIfClear(xPosition+1, yPosition-1, wallID, clearID);
-				dc.carveIfClear(xPosition-1, yPosition-1, wallID, clearID);
-				break;
-			}
-			case 3: {
-				dc.carveIfClear(xPosition+1, yPosition+1, wallID, clearID);
-				dc.carveIfClear(xPosition+1, yPosition-1, wallID, clearID);
-				break;
-			}
-			default: break;
-			}
-		}
-		*/
 		return true;
 	}
 	

@@ -55,6 +55,27 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 
 	}
 
+        /**
+         * Find dead end corridors in the dungeon and clear them out.
+         * Dead end is something that has walls on all but one side.
+         * @param dc Dungeon Container to clean
+         * @param tidyness What percentage of dead ends are cleared. 1 for clearing every dead end.
+         * @param wallID ID of the walls to figure out what's a dead end
+         * @param floorID ID of the floor to figure out what's a dead end
+         */
+        public static void clearDeadEnds(DungeonContainer dc, float tidyness, int wallID, int floorID) {
+            
+            for(int y = 0; y < dc.getHeight(); y++) {
+                for (int x = 0; x < dc.getWidth(); x++) {
+                        if (dc.getRoomID(x, y) == floorID && dc.countCardialNeighbours(x, y, floorID) <= 1) {
+                            if (RND.nextFloat() < tidyness) {
+                                dc.setRoomID(x, y, wallID);
+                            }
+                        }
+                }
+            }
+        }
+        
 	/**
 	 * 
 	 * @param dc DungeonContainer to grow maze in
@@ -87,13 +108,13 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 			
 			if (next != null && DungeonGenerator.isClearRoute(dc, next[0], next[1], next[2], clearID)) {
 				DungeonGenerator.carveCorridor(dc, next[0], next[1], next[2], mazeID, wallID, clearID);
-				if (current != null && hasClearNeighbour(dc, current[0], current[1], clearID)) cells.push(current); 
-				if (next != null && hasClearNeighbour(dc, next[0], next[1], clearID)) cells.push(next);
+				if (current != null && countClearNeighbours(dc, current[0], current[1], clearID) > 0) cells.push(current); 
+				if (countClearNeighbours(dc, next[0], next[1], clearID) > 0) cells.push(next);
 			}
 			
 			count++;
-			dc.printMap();
-			System.out.println("cells:" + cells.size());
+			//dc.printMap();
+			//System.out.println("cells:" + cells.size());
 			
 		}
 		return true;
@@ -119,14 +140,15 @@ public class MazeDungeonGenerator implements DungeonGenerator {
 	 * @param xPos X Position to check around
 	 * @param yPos Y Position to check around
 	 * @param clearID TileID of what constitutes as "clear"
-	 * @return true if at least one of the four surrounding cardinal directions was clear
+	 * @return amount of clear tiles adjacent to the given one
 	 */
-	private static boolean hasClearNeighbour(DungeonContainer dc, int xPos, int yPos, int clearID) {
-		if (DungeonGenerator.isClearRoute(dc, xPos, yPos-1, 0, clearID)) return true;
-		if (DungeonGenerator.isClearRoute(dc, xPos+1, yPos, 1, clearID)) return true;
-		if (DungeonGenerator.isClearRoute(dc, xPos, yPos+1, 2, clearID)) return true;
-		if (DungeonGenerator.isClearRoute(dc, xPos-1, yPos, 3, clearID)) return true;
-		return false;
+	private static int countClearNeighbours(DungeonContainer dc, int xPos, int yPos, int clearID) {
+            int clearNeighbours = 0;
+		if (DungeonGenerator.isClearRoute(dc, xPos, yPos-1, 0, clearID)) clearNeighbours++;
+		if (DungeonGenerator.isClearRoute(dc, xPos+1, yPos, 1, clearID)) clearNeighbours++;
+		if (DungeonGenerator.isClearRoute(dc, xPos, yPos+1, 2, clearID)) clearNeighbours++;
+		if (DungeonGenerator.isClearRoute(dc, xPos-1, yPos, 3, clearID)) clearNeighbours++;
+		return clearNeighbours;
 	}
 	
 }

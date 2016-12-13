@@ -93,6 +93,24 @@ public class DungeonRoom {
 		&& xPosition + tileWidth > anotherRoom.xPosition && yPosition < anotherRoom.getYPos() + anotherRoom.getHeight() 
 		&& yPosition + tileHeight > anotherRoom.getYPos();
 	}
+        
+        /**
+         * Check the room if given X and Y coordinates
+         * are okay as an entrypoint.
+         * @param x local room X for the entrypoint
+         * @param y local room Y for the entrypoint
+         * @return True if it's okay to put an entrance on the given location
+         */
+        public boolean isEntrypoint(int x, int y) {
+            //check out of bounds
+            if (x < 0 || x > this.tileWidth || y < 0 || y > this.tileHeight) return false;
+            
+            //check if the point is on the room 
+            //TODO: this works only on rectangular rooms; override if other shapes?
+            if (x == 0 || x == this.tileWidth || y == 0 || y == this.tileHeight) return true;
+            
+            return false;
+        }
 
 	public int getWidth() {
 		return this.tileWidth;
