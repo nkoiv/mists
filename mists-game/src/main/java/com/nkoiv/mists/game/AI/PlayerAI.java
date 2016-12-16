@@ -48,7 +48,6 @@ public class PlayerAI {
     }
     
     public void orderMovement(double xTarget, double yTarget) {
-        taskQueue.clear();
         Path movementPath = player.getLocation().getPathFinder().findPath(32, player.getCrossableTerrain(), player.getXPos(), player.getYPos(), xTarget, yTarget);
         Mists.logger.info("Setting movement to:" +movementPath.toString());
         for (int i = 1; i < movementPath.getLength(); i++) {

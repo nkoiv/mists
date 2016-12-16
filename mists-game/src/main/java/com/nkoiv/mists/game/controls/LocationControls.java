@@ -259,7 +259,7 @@ public class LocationControls {
     public void playerMove(double xTarget, double yTarget) {
         //Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
         //game.getPlayer().setNextTask(move);   
-        game.getPlayer().queueMovement(xTarget, yTarget);
+        game.getPlayer().orderMovement(xTarget, yTarget);
     }
     
     

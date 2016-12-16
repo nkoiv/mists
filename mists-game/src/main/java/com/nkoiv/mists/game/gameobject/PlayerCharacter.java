@@ -139,7 +139,8 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.playerAI.addTask(t);
     }
     
-    public void queueMovement(double xTarget, double yTarget) {
+    public void orderMovement(double xTarget, double yTarget) {
+        this.playerAI.clearTasks();
         this.playerAI.orderMovement(xTarget, yTarget);
     }
     
