@@ -14,16 +14,16 @@ import javafx.scene.input.KeyCode;
  *
  * @author nikok
  */
-public class PlayerMoveCommand extends KeyBinding {
+public class PlayerMoveTowardsCommand extends KeyBinding {
     private LocationControls loc;
     private Direction d;
     
-    public PlayerMoveCommand(LocationControls loc, Direction d, KeyCode[] kc) {
+    public PlayerMoveTowardsCommand(LocationControls loc, Direction d, KeyCode[] kc) {
         this(loc, d);
         this.primaryKey = kc;
     }
     
-    public PlayerMoveCommand(LocationControls loc, Direction d) {
+    public PlayerMoveTowardsCommand(LocationControls loc, Direction d) {
         this.loc = loc;
         this.d = d;
         this.enableExecuteOnKeyDown = true;

@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.nkoiv.mists.game.AI.PlayerAI;
 import com.nkoiv.mists.game.Direction;
 import com.nkoiv.mists.game.Mists;
 import com.nkoiv.mists.game.actions.GenericTasks;
@@ -33,7 +34,7 @@ import javafx.scene.paint.Color;
  */
 public class PlayerCharacter extends Creature implements Combatant {
     private ArrayList<Creature> companions;
-    
+    private PlayerAI playerAI;
     
     public PlayerCharacter() {
         //Dummy player for testing
@@ -41,7 +42,7 @@ public class PlayerCharacter extends Creature implements Combatant {
         //SpriteSkeleton playerSkeleton = new SpriteSkeleton();
         //playerSkeleton.addPart("body", new Sprite(new Image("/images/lini_test.png"),0,0));
         //this.graphics = playerSkeleton;
-
+        this.playerAI = new PlayerAI(this);
         this.setWalkAnimations("/images/lini.png", 3, 32);
         this.setDashAnimations("/Images/lini_dash.png", 3, 32);
         
@@ -60,6 +61,7 @@ public class PlayerCharacter extends Creature implements Combatant {
     
     public PlayerCharacter(String name) {
         super (name,new Image("/images/himmu.png"));
+        this.playerAI = new PlayerAI(this);
         this.spriteAnimations = new HashMap<>();
         this.setAnimation("downMovement", new ImageView("/images/himmu_walk_down.png"), 4, 0, 0, 0, 0, 64, 64 );
         this.setAnimation("upMovement", new ImageView("/images/himmu_walk_up.png"), 4, 0, 0, 0, 0, 64, 64 );       
@@ -132,6 +134,16 @@ public class PlayerCharacter extends Creature implements Combatant {
     }
     
     @Override
+    public void setNextTask(Task t) {
+        this.playerAI.clearTasks();
+        this.playerAI.addTask(t);
+    }
+    
+    public void queueMovement(double xTarget, double yTarget) {
+        this.playerAI.orderMovement(xTarget, yTarget);
+    }
+    
+    @Override
     public void think(double time) {
         //dont call any AI subroutine
     }
@@ -170,15 +182,25 @@ public class PlayerCharacter extends Creature implements Combatant {
         this.updateGraphics();
     }
     
+    
+    /**
+     * Queue up the next assigned task for action
+     * (in practice do whatever player input tells you to do)
+     * @param time time assigned for task at hand
+     */
     private void handleNextTask(double time) {
-        if (this.nextTask!=null) {
+        playerAI.updateTasks();
+        if (this.playerAI.hasTasks()) {
+            this.nextTask = playerAI.getTask();
+        }
+        if (this.nextTask!=null) { //Has an assigned next task
             if (this.nextTask.taskID != GenericTasks.ID_IDLE) {
                 GenericTasks.performTask(location, nextTask, time);
                 this.lastTask = nextTask;
                 this.nextTask = new Task(GenericTasks.ID_IDLE, this.IDinLocation, null);
-            } else {
-                this.lastTask = this.nextTask;
-                this.nextTask = null;
+            } else { //There is no task lined up to do
+                this.lastTask = nextTask; //Pick up the new task for active (should be null)
+                this.nextTask = null; //Clear the upcoming task to null as well
             }
         }
     }

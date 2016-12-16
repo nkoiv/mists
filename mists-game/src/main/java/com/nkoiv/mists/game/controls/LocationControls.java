@@ -105,14 +105,14 @@ public class LocationControls {
         this.commands.put(LocationCommand.ACTIONBAR5, new ActionBarButtonCommand(this, 4, new KeyCode[]{KeyCode.DIGIT5}));
 
         //Movement (arrows)
-        this.commands.put(LocationCommand.MOVE_UP, new PlayerMoveCommand(this, Direction.UP, new KeyCode[]{KeyCode.UP}));
-        this.commands.put(LocationCommand.MOVE_DOWN, new PlayerMoveCommand(this, Direction.DOWN, new KeyCode[]{KeyCode.DOWN}));
-        this.commands.put(LocationCommand.MOVE_LEFT, new PlayerMoveCommand(this, Direction.LEFT, new KeyCode[]{KeyCode.LEFT}));
-        this.commands.put(LocationCommand.MOVE_RIGHT, new PlayerMoveCommand(this, Direction.RIGHT, new KeyCode[]{KeyCode.RIGHT}));
-        this.commands.put(LocationCommand.MOVE_UPRIGHT, new PlayerMoveCommand(this, Direction.UPRIGHT, new KeyCode[]{KeyCode.UP, KeyCode.RIGHT}));
-        this.commands.put(LocationCommand.MOVE_DOWNRIGHT, new PlayerMoveCommand(this, Direction.DOWNRIGHT, new KeyCode[]{KeyCode.DOWN, KeyCode.RIGHT}));
-        this.commands.put(LocationCommand.MOVE_DOWNLEFT, new PlayerMoveCommand(this, Direction.DOWNLEFT, new KeyCode[]{KeyCode.LEFT, KeyCode.DOWN}));
-        this.commands.put(LocationCommand.MOVE_UPLEFT, new PlayerMoveCommand(this, Direction.UPLEFT, new KeyCode[]{KeyCode.LEFT, KeyCode.UP}));
+        this.commands.put(LocationCommand.MOVE_UP, new PlayerMoveTowardsCommand(this, Direction.UP, new KeyCode[]{KeyCode.UP}));
+        this.commands.put(LocationCommand.MOVE_DOWN, new PlayerMoveTowardsCommand(this, Direction.DOWN, new KeyCode[]{KeyCode.DOWN}));
+        this.commands.put(LocationCommand.MOVE_LEFT, new PlayerMoveTowardsCommand(this, Direction.LEFT, new KeyCode[]{KeyCode.LEFT}));
+        this.commands.put(LocationCommand.MOVE_RIGHT, new PlayerMoveTowardsCommand(this, Direction.RIGHT, new KeyCode[]{KeyCode.RIGHT}));
+        this.commands.put(LocationCommand.MOVE_UPRIGHT, new PlayerMoveTowardsCommand(this, Direction.UPRIGHT, new KeyCode[]{KeyCode.UP, KeyCode.RIGHT}));
+        this.commands.put(LocationCommand.MOVE_DOWNRIGHT, new PlayerMoveTowardsCommand(this, Direction.DOWNRIGHT, new KeyCode[]{KeyCode.DOWN, KeyCode.RIGHT}));
+        this.commands.put(LocationCommand.MOVE_DOWNLEFT, new PlayerMoveTowardsCommand(this, Direction.DOWNLEFT, new KeyCode[]{KeyCode.LEFT, KeyCode.DOWN}));
+        this.commands.put(LocationCommand.MOVE_UPLEFT, new PlayerMoveTowardsCommand(this, Direction.UPLEFT, new KeyCode[]{KeyCode.LEFT, KeyCode.UP}));
         //Movement (wasd)
         this.commands.get(LocationCommand.MOVE_UP).secondaryKey = new KeyCode[]{KeyCode.W};
         this.commands.get(LocationCommand.MOVE_DOWN).secondaryKey = new KeyCode[]{KeyCode.S};
@@ -257,8 +257,9 @@ public class LocationControls {
      * @param yTarget yCoordinate of the target in location
      */
     public void playerMove(double xTarget, double yTarget) {
-        Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
-        game.getPlayer().setNextTask(move);   
+        //Task move = new Task(GenericTasks.ID_MOVE_TOWARDS_COORDINATES, game.getPlayer().getID(), new double[]{(int)xTarget, (int)yTarget});
+        //game.getPlayer().setNextTask(move);   
+        game.getPlayer().queueMovement(xTarget, yTarget);
     }
     
     

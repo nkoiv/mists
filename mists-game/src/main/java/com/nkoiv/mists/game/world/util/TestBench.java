@@ -104,15 +104,15 @@ public class TestBench {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-<<<<<<< HEAD
+
     	DungeonContainer dc = new DungeonContainer(40,20);
     	DungeonRoom r1 = new DungeonRoom(6, 5);
     	DungeonRoom r2 = new DungeonRoom(5, 5);
     	dc.addRoom(r1, 10, 5);
     	dc.addRoom(r2, 19, 12);
-=======
+
     	System.out.println("Starting maze generation...");
-    	DungeonContainer dc = new DungeonContainer(50, 50);
+
     	MazeDungeonGenerator.addRooms(dc, 3, 1000, 10);
         dc.printMap();
     	MazeDungeonGenerator.fillWithMaze(dc, DungeonGenerator.FLOOR, DungeonGenerator.CLEAR, DungeonGenerator.CLEAR, 0.8f);
@@ -121,7 +121,7 @@ public class TestBench {
         dc.printMap();
         MazeDungeonGenerator.clearDeadEnds(dc, 1f, DungeonGenerator.WALL, DungeonGenerator.FLOOR);
     	System.out.println("Maze generation done. Printing map...");
->>>>>>> dungeon_generation
+
     	dc.printMap();
     	System.out.print("Distance: "+r1.distanceTo(r2));
     }
